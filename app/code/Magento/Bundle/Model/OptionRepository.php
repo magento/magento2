@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use \Magento\Framework\App\ObjectManager;
 
 /**
  * Repository for performing CRUD operations for a bundle product's options.
@@ -85,7 +86,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         SaveAction $optionSave,
-        StockRegistryStorage $stockRegistryStorage
+        StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
@@ -95,7 +96,8 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $this->productOptionList = $productOptionList;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->optionSave = $optionSave;
-        $this->stockRegistryStorage = $stockRegistryStorage;
+        $this->stockRegistryStorage = $stockRegistryStorage
+            ?: ObjectManager::getInstance()->get(StockRegistryStorage::class);
     }
 
     /**
