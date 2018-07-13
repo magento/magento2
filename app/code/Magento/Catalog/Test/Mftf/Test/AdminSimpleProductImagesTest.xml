@@ -107,7 +107,7 @@
 
         <!-- Save the first product and go to the storefront -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <amOnPage url="$$firstProduct.name$$.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$firstProduct.name$$)}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront1"/>
 
         <!-- See all of the images that we uploaded -->
@@ -119,7 +119,7 @@
         <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
 
         <!-- Go to the category page and see a placeholder image for the second product -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryMainSection.categoryPageProductImagePlaceholderSmall}}" stepKey="seePlaceholder"/>
 
         <!-- Go to the second product edit page -->
@@ -156,12 +156,12 @@
         <seeElement selector="{{AdminProductGridSection.adminImgGridThumbnail('large')}}" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage2"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
         <seeElement selector="{{StorefrontCategoryMainSection.categoryPageProductImage('large')}}" stepKey="seeUploadedImg"/>
 
         <!-- Go to the product page and see the uploaded image -->
-        <amOnPage url="$$secondProduct.name$$.html" stepKey="goToStorefront2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$secondProduct.name$$)}}" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefront3"/>
         <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
