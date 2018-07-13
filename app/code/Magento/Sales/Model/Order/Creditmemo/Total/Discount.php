@@ -77,7 +77,7 @@ class Discount extends AbstractTotal
     }
 
     /**
-     * Get base shipping amount
+     * Get base shipping amount.
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return float

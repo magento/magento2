@@ -11,21 +11,21 @@
     <actionGroup name="SetTaxClassForShipping">
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
         <waitForPageLoad stepKey="waitForAdminSalesTaxClassPageLoad"/>
-        <conditionalClick selector="{{SalesTaxConfigSection.TaxClassesTab}}" dependentSelector="{{SalesTaxConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
-        <waitForElementVisible selector="{{SalesTaxConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass"/>
-        <uncheckOption selector="{{SalesTaxConfigSection.EnableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
-        <selectOption selector="{{SalesTaxConfigSection.ShippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
-        <click selector="{{SalesTaxConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <conditionalClick selector="{{SalesTaxConfigSection.taxClassesTab}}" dependentSelector="{{SalesTaxConfigSection.checkIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
+        <waitForElementVisible selector="{{SalesTaxConfigSection.shippingTaxClass}}" stepKey="seeShippingTaxClass"/>
+        <uncheckOption selector="{{SalesTaxConfigSection.enableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{SalesTaxConfigSection.shippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
+        <click selector="{{SalesTaxConfigSection.taxClassesTab}}" stepKey="collapseTaxClassesTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
     </actionGroup>
     <actionGroup name="ResetTaxClassForShipping">
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxConfigPagetoReset"/>
         <waitForPageLoad stepKey="waitForAdminSalesTaxClassPageLoad2"/>
-        <conditionalClick selector="{{SalesTaxConfigSection.TaxClassesTab}}" dependentSelector="{{SalesTaxConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="openTaxClassTab"/>
-        <waitForElementVisible selector="{{SalesTaxConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass2"/>
-        <selectOption selector="{{SalesTaxConfigSection.ShippingTaxClass}}" userInput="None" stepKey="resetShippingTaxClass"/>
-        <checkOption selector="{{SalesTaxConfigSection.EnableTaxClassForShipping}}" stepKey="useSystemValue"/>
-        <click selector="{{SalesTaxConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <conditionalClick selector="{{SalesTaxConfigSection.taxClassesTab}}" dependentSelector="{{SalesTaxConfigSection.checkIfTaxClassesTabExpand}}" visible="true" stepKey="openTaxClassTab"/>
+        <waitForElementVisible selector="{{SalesTaxConfigSection.shippingTaxClass}}" stepKey="seeShippingTaxClass2"/>
+        <selectOption selector="{{SalesTaxConfigSection.shippingTaxClass}}" userInput="None" stepKey="resetShippingTaxClass"/>
+        <checkOption selector="{{SalesTaxConfigSection.enableTaxClassForShipping}}" stepKey="useSystemValue"/>
+        <click selector="{{SalesTaxConfigSection.taxClassesTab}}" stepKey="collapseTaxClassesTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
     </actionGroup>
 </actionGroups>
