@@ -6,11 +6,21 @@
 
 namespace Magento\Framework\ObjectManager\TestAsset;
 
+/**
+ * Test asset used to test invalid argument types on the constructor invocation.
+ */
 class ConstructorWithTypeError
 {
-    public function __construct()
+    /**
+     * @var Basic
+     */
+    private $testArgument;
+
+    /**
+     * @param Basic $testArgument
+     */
+    public function __construct(Basic $testArgument)
     {
-        // set non-exists property to trigger TypeError
-        throw new \TypeError('test error');
+        $this->testArgument = $testArgument;
     }
 }

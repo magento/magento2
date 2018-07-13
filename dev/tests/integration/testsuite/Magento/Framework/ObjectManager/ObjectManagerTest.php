@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-use TypeError;
-
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -147,13 +145,15 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test create instance with TypeError
+     * Test creating an object and passing incorrect type of arguments to the constructor.
      *
-     * @expectedException TypeError
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Error occurred when creating object
      */
     public function testNewInstanceWithTypeError()
     {
-        self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR);
-        $this->fail('No instance for class with TypeError should be created');
+        self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR, [
+            'testArgument' => new \stdClass()
+        ]);
     }
 }
