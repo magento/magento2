@@ -174,10 +174,10 @@
     <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
+    <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
+    <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
-    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher" />
-    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
@@ -249,7 +249,13 @@
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
                 <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
+                <item name="syslog" xsi:type="object">Magento\Framework\Logger\Handler\Syslog</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Logger\Handler\Syslog">
+        <arguments>
+            <argument name="ident" xsi:type="string">Magento</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Model\Context">
@@ -273,12 +279,24 @@
             <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <arguments>
+            <argument name="sessionConfig" xsi:type="object">Magento\Framework\Session\Config\ConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
     <type name="Magento\Framework\Session\SaveHandlerFactory">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="db" xsi:type="string">Magento\Framework\Session\SaveHandler\DbTable</item>
                 <item name="redis" xsi:type="string">Magento\Framework\Session\SaveHandler\Redis</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\FeedFactory">
+        <arguments>
+            <argument name="formats" xsi:type="array">
+                <item name="rss" xsi:type="string">Magento\Framework\App\Feed</item>
             </argument>
         </arguments>
     </type>
@@ -1385,11 +1403,6 @@
             <argument name="ignoredUpdateColumns" xsi:type="array">
                 <item name="updated_at" xsi:type="string">updated_at</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver">
-        <arguments>
-            <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory">

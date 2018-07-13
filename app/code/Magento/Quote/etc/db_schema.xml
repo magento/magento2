@@ -61,7 +61,7 @@
                 identity="false" default="1" comment="Customer Note Notify"/>
         <column xsi:type="smallint" name="customer_is_guest" padding="5" unsigned="true" nullable="true"
                 identity="false" default="0" comment="Customer Is Guest"/>
-        <column xsi:type="varchar" name="remote_ip" nullable="true" length="32" comment="Remote Ip"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
         <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="255" comment="Applied Rule Ids"/>
         <column xsi:type="varchar" name="reserved_order_id" nullable="true" length="64" comment="Reserved Order Id"/>
         <column xsi:type="varchar" name="password_hash" nullable="true" length="255" comment="Password Hash"/>

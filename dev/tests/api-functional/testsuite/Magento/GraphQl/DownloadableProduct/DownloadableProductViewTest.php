@@ -48,7 +48,6 @@ class DownloadableProductViewTest extends GraphQlAbstract
           }
         }
       }          
-           category_ids                
            ... on DownloadableProduct {
             links_title
             links_purchased_separately
@@ -139,7 +138,6 @@ QUERY;
           }
         }
       }
-           category_ids
            ... on DownloadableProduct {
             links_title
             links_purchased_separately

@@ -398,7 +398,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * Regenerate full index
      *
      * @return void
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function reindexAll()
     {
@@ -414,16 +414,11 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
-            } catch (\Error $error) {
-                $state->setStatus(StateInterface::STATUS_INVALID);
-                $state->save();
-                $this->getView()->resume();
-                throw $error;
             }
         }
     }

@@ -64,6 +64,13 @@ define([
             });
         });
 
+        afterEach(function () {
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {}
+        });
+
         it('The PayPal::initAuthFlow throws an exception.', function () {
 
             spyOn(additionalValidator, 'validate').and.returnValue(true);

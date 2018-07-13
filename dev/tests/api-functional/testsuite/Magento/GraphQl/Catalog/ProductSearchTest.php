@@ -512,6 +512,15 @@ QUERY;
           page_size
           current_page
         }
+        sort_fields 
+        {
+          default
+          options 
+          {
+            value
+            label
+          }
+        }
     }
 }
 QUERY;
@@ -530,6 +539,13 @@ QUERY;
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertArrayHasKey('sort_fields', $response['products']);
+        $this->assertArrayHasKey('options', $response['products']['sort_fields']);
+        $this->assertArrayHasKey('default', $response['products']['sort_fields']);
+        $this->assertEquals('position', $response['products']['sort_fields']['default']);
+        $this->assertArrayHasKey('value', $response['products']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('label', $response['products']['sort_fields']['options'][0]);
+        $this->assertEquals('position', $response['products']['sort_fields']['options'][0]['value']);
     }
 
     /**
@@ -616,7 +632,9 @@ QUERY;
      sku
      name
      attribute_set_id
-     category_ids
+     categories {
+        id
+     }
    }
  }
 }
@@ -630,11 +648,11 @@ QUERY;
         $product = $productRepository->get('simple333');
         $categoryIds  = $product->getCategoryIds();
         foreach ($categoryIds as $index => $value) {
-            $categoryIds[$index] = (int)$value;
+            $categoryIds[$index] = [ 'id' => (int)$value];
         }
-        $this->assertNotEmpty($response['products']['items'][0]['category_ids'], "Category_ids must not be empty");
-        $this->assertNotNull($response['products']['items'][0]['category_ids'], "categoy_ids must not be null");
-        $this->assertEquals($categoryIds, $response['products']['items'][0]['category_ids']);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");
+        $this->assertEquals($categoryIds, $response['products']['items'][0]['categories']);
         /** @var MetadataPool $metaData */
         $metaData = ObjectManager::getInstance()->get(MetadataPool::class);
         $linkField = $metaData->getMetadata(ProductInterface::class)->getLinkField();
@@ -661,7 +679,7 @@ QUERY;
   products(
         filter:
         {
-            category_ids:{eq:"{$queryCategoryId}"}
+            category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
             
@@ -672,14 +690,12 @@ QUERY;
        sku
        name
        type_id
-       category_ids
        categories{
           name
           id
           path
           children_count
           product_count
-          is_active
         }
       }
        total_count
@@ -710,7 +726,6 @@ QUERY;
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
             }
-            $this->assertEquals($response['products']['items'][$itemIndex]['category_ids'], $categoryIds);
             $categoryInResponse = array_map(
                 null,
                 $categoryIds,
@@ -728,7 +743,6 @@ QUERY;
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
-                        'is_active' => $category->getIsActive(),
                     ]
                 );
             }
@@ -1144,7 +1158,6 @@ QUERY;
            ... on PhysicalProductInterface {
                weight
            }
-           category_ids
        }
    }
 }
@@ -1178,7 +1191,6 @@ QUERY;
       {
        sku
        name
-       category_ids
       }
        total_count
         

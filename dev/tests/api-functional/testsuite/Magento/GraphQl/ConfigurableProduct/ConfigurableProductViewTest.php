@@ -89,7 +89,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
           }
         }
       }
-      category_ids
       ... on ConfigurableProduct {
         configurable_options {
           id
@@ -110,7 +109,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         variants {
           product {
             id
-            category_ids
             name
             sku
             attribute_set_id
@@ -306,10 +304,6 @@ QUERY;
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
             $this->assertTrue(
-                isset($variantArray['product']['category_ids']),
-                'variant product doesn\'t contain category_ids key'
-            );
-            $this->assertTrue(
                 isset($variantArray['product']['categories']),
                 'variant product doesn\'t contain categories key'
             );
@@ -326,12 +320,6 @@ QUERY;
                 = $actualResponse['variants'][$variantKey]['product']['categories'][0];
             $this->assertEquals($actualValue, ['id' => $id]);
             unset($variantArray['product']['categories']);
-
-            $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
-            $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-            $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-            $this->assertEquals($categoryIdsAttributeValue, $variantArray['product']['category_ids']);
-            unset($variantArray['product']['category_ids']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
             $this->assertCount(

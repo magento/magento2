@@ -83,7 +83,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'product/list/toolbar.phtml';
+    protected $_template = 'Magento_Catalog::product/list/toolbar.phtml';
 
     /**
      * Catalog config
@@ -196,7 +196,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                 $this->_collection->addAttributeToSort(
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
-                )->addAttributeToSort('entity_id', $this->getCurrentDirection());
+                );
             } else {
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }
@@ -689,7 +689,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
             'modeDefault' => $defaultMode,
             'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
-            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'orderDefault' => $this->getOrderField(),
             'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
         ];

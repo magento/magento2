@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerSignInFormSection">
+        <element name="emailField" type="input" selector="#email"/>
+        <element name="passwordField" type="input" selector="#pass"/>
+        <element name="signInAccountButton" type="button" selector="#send2" timeout="30"/>
+    </section>
+</sections>

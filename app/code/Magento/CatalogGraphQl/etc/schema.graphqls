@@ -10,9 +10,9 @@ type Query {
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
      ): Products
      @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
-    categories (
-        filter: CategoryFilterInput @doc(description: "Filter for categories")
-    ): Categories
+    category (
+        id: Int @doc(description: "Id of the category")
+    ): CategoryTree
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -263,9 +263,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached")
-    custom_layout_update: String @doc(description: "XML code that is applied as a layout update to the product page")
-    custom_layout: String @doc(description: "The name of a custom layout")
-    category_ids: [Int] @doc(description: "An array of category IDs the product belongs to")
     options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page")
     image_label: String @doc(description: "The label assigned to a product image")
     small_image_label: String @doc(description: "The label assigned to a product's small image")
@@ -281,7 +278,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
+    canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "PhysicalProductInterface contains attributes specific to tangible products") {
@@ -300,11 +298,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option")
 }
 
-type Categories @doc(description: "Categories aggregates the category tree of a product") {
-    category_tree: CategoryTree @doc(description: "Tree of categories")
-}
-
-type CategoryTree implements CategoryInterface @doc(description: "Category Tree") {
+type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation") {
     children: [CategoryTree] @doc(description: "Child categories tree") @resolve(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -376,13 +370,17 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     path_in_store: String @doc(description: "Category path in store")
     url_key: String @doc(description: "The url key assigned to the category")
     url_path: String @doc(description: "The url path assigned to the category")
-    is_active: Boolean @doc(description: "Indicates whether the category is enabled")
     position: Int @doc(description: "The position of the category relative to other categories at the same level in tree")
     level: Int @doc(description: "Indicates the depth of the category within the tree")
     created_at: String @doc(description: "Timestamp indicating when the category was created")
     updated_at: String @doc(description: "Timestamp indicating when the category was updated")
     product_count: Int @doc(description: "The number of products in the category")
     default_sort_by: String @doc(description: "The attribute to use for sorting")
+    products(
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
+    ): CategoryProducts @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option") {
@@ -410,10 +408,13 @@ type Products @doc(description: "The Products object is the top-level object ret
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
     filters: [LayerFilter] @doc(description: "Layered navigation filters array")
+    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
 }
 
-input CategoryFilterInput @doc(description: "Identifies which category attributes to search for and return.") {
-    root_category_id: Int @doc(description: "Id of the root category in the category tree to use as the starting point of your search.")
+type CategoryProducts @doc(description: "The category products object returned in the Category query") {
+    items: [ProductInterface] @doc(description: "An array of products that are assigned to the category")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
+    total_count: Int @doc(description: "The number of products returned")
 }
 
 input ProductFilterInput @doc(description: "ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
@@ -440,7 +441,7 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
     max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
     special_price: FilterTypeInput @doc(description:"The numeric special price of the product. Do not include the currency code.")
-    category_ids: FilterTypeInput @doc(description: "An array of category IDs the product belongs to")
+    category_id: FilterTypeInput @doc(description: "Category ID the product belongs to")
     options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page")
     required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options")
     has_options: FilterTypeInput @doc(description: "Indicates whether additional attributes have been created for the product")
@@ -491,7 +492,6 @@ input ProductSortInput  @doc(description: "ProductSortInput specifies the attrib
     news_from_date: SortEnum @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product")
     news_to_date: SortEnum @doc(description: "The end date for new product listings")
     custom_layout_update: SortEnum @doc(description: "XML code that is applied as a layout update to the product page")
-    category_ids: SortEnum @doc(description: "An array of category IDs the product belongs to")
     options_container: SortEnum @doc(description: "If the product has multiple options, determines where they appear on the product page")
     required_options: SortEnum @doc(description: "Indicates whether the product has required options")
     has_options: SortEnum @doc(description: "Indicates whether additional attributes have been created for the product")
@@ -532,4 +532,14 @@ interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl
 
 type LayerFilterItem implements LayerFilterItemInterface {
 
+}
+
+type SortField {
+    value: String @doc(description: "Attribute code of sort field")
+    label: String @doc(description: "Label of sort field")
+}
+
+type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields") {
+    default: String @doc(description: "Default value of sort fields") 
+    options: [SortField] @doc(description: "Available sort fields")
 }
