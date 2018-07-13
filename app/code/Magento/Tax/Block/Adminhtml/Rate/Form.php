@@ -31,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var string
      */
-    protected $_template = 'rate/form.phtml';
+    protected $_template = 'Magento_Tax::rate/form.phtml';
 
     /**
      * Tax data

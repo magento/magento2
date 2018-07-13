@@ -20,7 +20,7 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      *
      * @var string
      */
-    protected $_template = 'order/create/totals/subtotal.phtml';
+    protected $_template = 'Magento_Sales::order/create/totals/subtotal.phtml';
 
     /**
      * Tax config
