@@ -46,7 +46,6 @@ class CmsPageDataProvider
             if (!$cmsPageModel->isActive()) {
                 throw new NoSuchEntityException();
             }
-
         } catch (NoSuchEntityException $e) {
             // No error should be thrown, null result should be returned
             return [];
