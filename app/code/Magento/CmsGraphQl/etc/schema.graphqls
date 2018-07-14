@@ -14,6 +14,6 @@ type CmsPage @doc(description: "CMS page defines all CMS page information") {
     content_heading: String @doc(description: "CMS page content heading")
     layout: String @doc(description: "CMS page content heading")
     mate_title: String @doc(description: "CMS page meta title")
-    mate_description: String @doc(description: "CMS page meta description")
-    mate_keywords: String @doc(description: "CMS page meta keywords")
+    meta_description: String @doc(description: "CMS page meta description")
+    meta_keywords: String @doc(description: "CMS page meta keywords")
 }

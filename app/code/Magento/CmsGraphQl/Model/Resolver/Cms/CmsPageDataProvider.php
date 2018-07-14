@@ -70,8 +70,8 @@ class CmsPageDataProvider
             'content_heading' => $cmsPageModel->getContentHeading(),
             'layout' => $cmsPageModel->getPageLayout(),
             'mate_title' => $cmsPageModel->getMetaTitle(),
-            'mate_description' => $cmsPageModel->getMetaDescription(),
-            'mate_keywords' => $cmsPageModel->getMetaKeywords(),
+            'meta_description' => $cmsPageModel->getMetaDescription(),
+            'meta_keywords' => $cmsPageModel->getMetaKeywords(),
         ];
 
         return $cmsPageData;
