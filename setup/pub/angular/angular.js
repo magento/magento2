@@ -6613,7 +6613,7 @@
                  * looks up the directive and decorates it with exception handling and proper parameters. We
                  * call this the boundDirective.
                  *
-                 * @param {string} name name of the directive to look up.
+                 * @param {string} name The name of the directive to look up.
                  * @param {string} location The directive must be found in specific format.
                  *   String containing any of theses characters:
                  *
@@ -14258,7 +14258,7 @@
      * @description
      * Register filter factory function.
      *
-     * @param {String} name Name of the filter.
+     * @param {string} name The name of the filter.
      * @param {Function} fn The filter factory function which is injectable.
      */
 
@@ -14274,7 +14274,7 @@
      *
      *         {{ expression [| filter_name[:parameter_value] ... ] }}
      *
-     * @param {String} name Name of the filter function to retrieve
+     * @param {string} name The name of the filter function to retrieve
      * @return {Function} the filter function
      */
     $FilterProvider.$inject = ['$provide'];
