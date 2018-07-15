@@ -108,6 +108,13 @@ class Bootstrap
     private $factory;
 
     /**
+     * Logger
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Static method so that client code does not have to create Object Manager Factory every time Bootstrap is called
      *
      * @param string $rootDir
@@ -207,6 +214,7 @@ class Bootstrap
         $this->rootDir = $rootDir;
         $this->server = $initParams;
         $this->objectManager = $this->factory->create($this->server);
+        $this->logger = $this->objectManager->create(LoggerInterface::class);
     }
 
     /**
@@ -259,6 +267,7 @@ class Bootstrap
                 \Magento\Framework\Profiler::stop('magento');
             } catch (\Exception $e) {
                 \Magento\Framework\Profiler::stop('magento');
+                $this->logger->error($e->getMessage());
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
