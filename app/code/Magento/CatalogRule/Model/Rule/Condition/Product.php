@@ -95,13 +95,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareDatetimeValue($value, \Magento\Framework\Model\AbstractModel $model)
+    protected function _prepareDatetimeValue($value, $object)
     {
-        $attribute = $model->getResource()->getAttribute($this->getAttribute());
+        $attribute = $object->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
+            if (!$value) {
+                return null;
+            }
+            $this->setValue(strtotime($this->getValue()));
             $value = strtotime($value);
         }
-
         return $value;
     }
 
