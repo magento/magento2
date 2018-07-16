@@ -390,13 +390,13 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         if ($this->_request->isSecure()) {
             if ($this->getRouteParamsResolver()->hasData('secure')) {
-                return (bool) $this->getRouteParamsResolver()->getData('secure');
+                return (bool)$this->getRouteParamsResolver()->getData('secure');
             }
             return true;
         }
 
         if ($this->getRouteParamsResolver()->hasData('secure_is_forced')) {
-            return (bool) $this->getRouteParamsResolver()->getData('secure');
+            return (bool)$this->getRouteParamsResolver()->getData('secure');
         }
 
         if (!$this->_getScope()->isUrlSecure()) {
@@ -552,7 +552,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return '';
         }
 
-        $hasParams = (bool) $this->_getRouteParams();
+        $hasParams = (bool)$this->_getRouteParams();
         $path = $this->_getRouteFrontName() . '/';
 
         if ($this->_getControllerName()) {

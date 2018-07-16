@@ -109,7 +109,7 @@ class Configurable
 
         $this->setLinkedProducts($product, $extensionAttributes);
         $product->setCanSaveConfigurableAttributes(
-            (bool) $this->request->getPost('affect_configurable_product_attributes')
+            (bool)$this->request->getPost('affect_configurable_product_attributes')
         );
 
         $product->setExtensionAttributes($extensionAttributes);
