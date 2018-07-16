@@ -162,13 +162,18 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'getCustomer'
+                'getCustomer',
+                'getData'
             ])
             ->getMock();
 
         $this->customerSession->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customerMock);
+
+        $this->customerSession->expects($this->any())
+            ->method('getData')
+            ->willReturn(false);
 
         $this->wishlistProvider = $this->getMockBuilder(\Magento\Wishlist\Controller\WishlistProviderInterface::class)
             ->getMockForAbstractClass();
@@ -183,7 +188,8 @@ class SendTest extends \PHPUnit\Framework\TestCase
         $this->captchaModel = $this->getMockBuilder(CaptchaModel::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'isRequired'
+                'isRequired',
+                'logAttempt'
             ])
             ->getMock();
 
