@@ -105,6 +105,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $this->setValue(strtotime($this->getValue()));
             $value = strtotime($value);
         }
+
         return $value;
     }
 
