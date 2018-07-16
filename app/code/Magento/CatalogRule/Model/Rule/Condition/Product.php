@@ -95,9 +95,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareDatetimeValue($value, $object)
+    protected function _prepareDatetimeValue($value, \Magento\Framework\Model\AbstractModel $model)
     {
-        $attribute = $object->getResource()->getAttribute($this->getAttribute());
+        $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
             if (!$value) {
                 return null;
