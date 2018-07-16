@@ -67,7 +67,7 @@ class Read implements ReadInterface
      *
      * @return void
      */
-    protected final function validatePath(
+    protected function validatePath(
         ?string $path,
         ?string $scheme = null,
         bool $absolutePath = false

@@ -177,7 +177,12 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             );
         }
 
-        $filePath = $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName);
+        if ($this->getTmpDir()) {
+            $filePath = $this->getTmpDir() . '/';
+        } else {
+            $filePath = '';
+        }
+        $filePath = $this->_directory->getRelativePath($filePath . $fileName);
         $this->_setUploadFile($filePath);
         $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);
