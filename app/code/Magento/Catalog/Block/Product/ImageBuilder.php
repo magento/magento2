@@ -129,9 +129,43 @@ class ImageBuilder
      */
     public function create(Product $product = null, string $imageId = null, array $attributes = null)
     {
-        $product = $product ?? $this->product;
-        $imageId = $imageId ?? $this->imageId;
-        $attributes = $attributes ?? $this->attributes;
-        return $this->imageFactory->create($product, $imageId, $attributes);
+        /** @var \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface $simpleOption */
+        $simpleOption = $this->product->getOptionById('simple_product');
+
+        if ($simpleOption !== null) {
+            $optionProduct = $simpleOption->getProduct();
+            $this->setProduct($optionProduct);
+        }
+
+        /** @var \Magento\Catalog\Helper\Image $helper */
+        $helper = $this->helperFactory->create()
+            ->init($this->product, $this->imageId);
+
+        $template = $helper->getFrame()
+            ? 'Magento_Catalog::product/image.phtml'
+            : 'Magento_Catalog::product/image_with_borders.phtml';
+
+        try {
+            $imagesize = $helper->getResizedImageInfo();
+        } catch (NotLoadInfoImageException $exception) {
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
+        }
+
+        $data = [
+            'data' => [
+                'template' => $template,
+                'image_url' => $helper->getUrl(),
+                'width' => $helper->getWidth(),
+                'height' => $helper->getHeight(),
+                'label' => $helper->getLabel(),
+                'ratio' =>  $this->getRatio($helper),
+                'custom_attributes' => $this->getCustomAttributes(),
+                'resized_image_width' => $imagesize[0],
+                'resized_image_height' => $imagesize[1],
+                'product_id' => $this->product->getId()
+            ],
+        ];
+
+        return $this->imageFactory->create($data);
     }
 }
