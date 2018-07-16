@@ -16,8 +16,12 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Layout as ResultLayout;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Captcha\Model\DefaultModel as CaptchaModel;
+use Magento\Captcha\Model\ResourceModel\Log as CaptchaResourceModel;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,6 +89,11 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     protected $captchaStringResolver;
 
     /**
+     * @var CaptchaResourceModel
+     */
+    protected $captchaResourceModel;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
@@ -98,6 +107,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param StoreManagerInterface $storeManager
      * @param CaptchaHelper|null $captchaHelper
      * @param CaptchaStringResolver|null $captchaStringResolver
+     * @param CaptchaResourceModel|null $captchaResourceModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +123,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         CaptchaHelper $captchaHelper = null,
-        CaptchaStringResolver $captchaStringResolver = null
+        CaptchaStringResolver $captchaStringResolver = null,
+        CaptchaResourceModel $captchaResourceModel = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
@@ -128,17 +139,15 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->get(CaptchaHelper::class);
         $this->captchaStringResolver = $captchaStringResolver ?
             : ObjectManager::getInstance()->get(CaptchaStringResolver::class);
+        $this->captchaResourceModel = $captchaResourceModel ?
+            : ObjectManager::getInstance()->get(CaptchaResourceModel::class);
         parent::__construct($context);
     }
 
     /**
-     * Share wishlist
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResponseInterface|Redirect|ResultInterface
      * @throws NotFoundException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws LocalizedException
      * @throws \Zend_Validate_Exception
      */
     public function execute()
@@ -154,8 +163,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect;
         }
 
-        $this->logCaptchaAttempt($captchaModel);
-
         if ($captchaModel->isRequired()) {
             $word = $this->captchaStringResolver->resolve(
                 $this->getRequest(),
@@ -164,9 +171,14 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
 
             if (!$captchaModel->isCorrect($word)) {
                 $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
-                $resultRedirect->setPath('*/*/share');
-                return $resultRedirect;
             }
+        }
+
+        $this->logCaptchaAttempt($captchaModel);
+
+        if ($this->_customerSession->getData('share_wishlist_form_show_captcha')) {
+            $resultRedirect->setPath('*/*/share');
+            return $resultRedirect;
         }
 
         $wishlist = $this->wishlistProvider->getWishlist();
