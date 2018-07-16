@@ -15,7 +15,7 @@ class Radio extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/radio.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/radio.phtml';
 
     /**
      * @param  string $elementId
