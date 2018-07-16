@@ -44,15 +44,15 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
-                'getDiscountRefunded', 'getQtyRefunded'
+                'getDiscountRefunded', 'getQtyRefunded',
             ]);
         $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
-                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount'
+                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount',
             ]);
         $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
-                'setBaseDiscountAmount', 'isLast'
+                'setBaseDiscountAmount', 'isLast',
             ]);
         $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount();
     }
