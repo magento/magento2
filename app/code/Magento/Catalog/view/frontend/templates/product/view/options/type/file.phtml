@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\File */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData(); ?>
@@ -19,7 +20,7 @@
 <div class="field file<?= /* @escapeNotVerified */ $class ?>">
     <label class="label" for="<?= /* @noEscape */ $_fileName ?>" id="<?= /* @noEscape */ $_fileName ?>-label">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
-        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
