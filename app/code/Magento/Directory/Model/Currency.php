@@ -225,7 +225,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         if ($toCurrency === null) {
             return $price;
         } elseif ($rate = $this->getRate($toCurrency)) {
-            return floatval($price) * floatval($rate);
+            return (float)$price * (float)$rate;
         }
 
         throw new \Exception(__(
