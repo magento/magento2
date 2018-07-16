@@ -22,6 +22,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <click selector="{{AdminManageSwatchSection.nthDelete('1')}}" stepKey="deleteSwatch1"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('2')}}" stepKey="deleteSwatch2"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('3')}}" stepKey="deleteSwatch3"/>
+            <waitForPageLoad stepKey="waitToClickSave2"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -35,28 +40,44 @@
         <!-- Change to visual swatches -->
         <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_visual" stepKey="selectVisualSwatch"/>
 
-        <!-- Set three swatches using the color picker -->
-        <click selector="{{AdminManageSwatchSection.nthSwatch('1')}}" stepKey="clickSwatch1"/>
+        <!-- Set swatch #1 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+            <argument name="index" value="0"/>
+        </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
         <actionGroup ref="setColorPickerByHex" stepKey="fillHex1">
             <argument name="nthColorPicker" value="1"/>
             <argument name="hexColor" value="e74c3c"/>
         </actionGroup>
-        <click selector="{{AdminManageSwatchSection.nthSwatch('2')}}" stepKey="clickSwatch2"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="red" stepKey="fillAdmin1"/>
+        <!-- Set swatch #2 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+            <argument name="index" value="1"/>
+        </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
         <actionGroup ref="setColorPickerByHex" stepKey="fillHex2">
             <argument name="nthColorPicker" value="2"/>
             <argument name="hexColor" value="2ecc71"/>
         </actionGroup>
-        <click selector="{{AdminManageSwatchSection.nthSwatch('3')}}" stepKey="clickSwatch3"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="green" stepKey="fillAdmin2"/>
+        <!-- Set swatch #3 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch3">
+            <argument name="index" value="2"/>
+        </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
         <actionGroup ref="setColorPickerByHex" stepKey="fillHex3">
             <argument name="nthColorPicker" value="3"/>
             <argument name="hexColor" value="3498db"/>
         </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}" userInput="blue" stepKey="fillAdmin3"/>
+        <waitForPageLoad stepKey="waitToClickSave"/>
 
         <!-- Save -->
-        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.successMessage}}" stepKey="waitForSuccess"/>
 
         <!-- Assert that the Save was successful after round trip to server -->
         <actionGroup ref="assertSwatchColor" stepKey="assertSwatch1">

@@ -28,4 +28,11 @@
             <expectedResult type="string">{{expectedStyle}}</expectedResult>
         </assertEquals>
     </actionGroup>
+    <actionGroup name="openSwatchMenuByIndex">
+        <arguments>
+            <argument name="index" type="string" defaultValue="0"/>
+        </arguments>
+        <!-- I had to use executeJS to perform the click to get around the use of CSS ::before and ::after -->
+        <executeJS function="jQuery('#swatch_window_option_option_{{index}}').click()" stepKey="clickSwatch1"/>
+    </actionGroup>
 </actionGroups>

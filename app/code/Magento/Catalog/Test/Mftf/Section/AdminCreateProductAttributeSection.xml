@@ -16,6 +16,7 @@
         <element name="DefaultValue" type="input" selector="#default_value_text"/>
         <element name="Save" type="button" selector="#save"/>
         <element name="SaveAndEdit" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="successMessage" type="block" selector="div.message.message-success.success"/>
         <element name="TinyMCE4" type="button" selector="//span[text()='Default Value']/parent::label/following-sibling::div//div[@class='mce-branding-powered-by']"/>
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
     </section>
