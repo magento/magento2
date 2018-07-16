@@ -7,7 +7,7 @@
 /**
  * Wishlist block customer items
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer;
 
@@ -68,7 +68,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Add wishlist conditions to collection
      *
-     * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return $this
      */
     protected function _prepareCollection($collection)

@@ -271,8 +271,8 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve URL to item Product
      *
-     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
-     * @param  array $additional
+     * @param \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param array $additional
      * @return string
      */
     public function getProductUrl($item, $additional = [])

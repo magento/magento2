@@ -7,7 +7,7 @@
 /**
  * Wishlist for item column in customer wishlist
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 

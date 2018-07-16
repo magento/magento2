@@ -7,7 +7,7 @@
 /**
  * Wishlist model collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Model\ResourceModel\Wishlist;
 
