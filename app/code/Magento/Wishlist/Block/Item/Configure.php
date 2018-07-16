@@ -8,7 +8,7 @@
  * Wishlist Item Configure block
  * Serves for configuring item on product view page
  *
- * @module     Wishlist
+ * @module Wishlist
  */
 namespace Magento\Wishlist\Block\Item;
 

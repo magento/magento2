@@ -398,7 +398,7 @@ class Item extends AbstractModel implements ItemInterface
      * Return false for disabled or unvisible products
      *
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param bool $delete  delete the item after successful add to cart
+     * @param bool $delete delete the item after successful add to cart
      * @return bool
      * @throws \Magento\Catalog\Model\Product\Exception
      */

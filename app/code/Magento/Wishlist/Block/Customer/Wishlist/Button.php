@@ -7,7 +7,7 @@
 /**
  * Wishlist block customer item cart column
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist;
 

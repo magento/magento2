@@ -11,7 +11,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 /**
  * Wishlist Data Helper
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -351,7 +351,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      *
-     * @return  string|false
+     * @return string|false
      */
     public function getUpdateParams($item)
     {
@@ -378,7 +378,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @return string
      */
     public function getAddToCartUrl($item)
     {
@@ -421,7 +421,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve URL for adding item to shopping cart from shared wishlist
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @return string
      */
     public function getSharedAddToCartUrl($item)
     {
@@ -606,8 +606,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve URL to item Product
      *
-     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
-     * @param  array $additional
+     * @param \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param array $additional
      * @return string
      */
     public function getProductUrl($item, $additional = [])
