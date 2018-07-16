@@ -131,7 +131,7 @@ class Ftp
             throw new \Exception("Cannot connect to host: {$params['host']}");
         }
         if (isset($params['user']) && isset($params['pass'])) {
-            $this->login($params['user'], $params['pass']);
+            $this->login(urldecode($params['user']), urldecode($params['pass']));
         } else {
             $this->login();
         }
