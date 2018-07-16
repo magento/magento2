@@ -43,4 +43,13 @@
         <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeProductNameInGrid"/>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
     </actionGroup>
+
+    <!--Fill product min quantity in group products grid-->
+    <actionGroup name="fillDefaultQuantityForLinkedToGroupProductInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
+    </actionGroup>
 </actionGroups>
