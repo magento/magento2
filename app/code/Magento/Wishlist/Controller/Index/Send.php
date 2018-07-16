@@ -163,16 +163,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect;
         }
 
-        if ($captchaModel->isRequired()) {
-            $word = $this->captchaStringResolver->resolve(
-                $this->getRequest(),
-                $captchaFormName
-            );
-
-            if (!$captchaModel->isCorrect($word)) {
-                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
-            }
-        }
+        $this->validateCaptcha($captchaModel, $captchaFormName);
 
         $this->logCaptchaAttempt($captchaModel);
 
@@ -359,5 +350,23 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $captchaModel->logAttempt($email);
+    }
+
+    /**
+     * @param CaptchaModel $captchaModel
+     * @param string $captchaFormName
+     */
+    private function validateCaptcha(CaptchaModel $captchaModel, string $captchaFormName)
+    {
+        if ($captchaModel->isRequired()) {
+            $word = $this->captchaStringResolver->resolve(
+                $this->getRequest(),
+                $captchaFormName
+            );
+
+            if (!$captchaModel->isCorrect($word)) {
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
+            }
+        }
     }
 }
