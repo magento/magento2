@@ -2523,5 +2523,6 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+    ['strval', ''],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed']
 ];
