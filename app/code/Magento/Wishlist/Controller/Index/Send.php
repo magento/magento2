@@ -148,6 +148,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @return ResponseInterface|Redirect|ResultInterface
      * @throws NotFoundException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws \Zend_Validate_Exception
      */
     public function execute()
