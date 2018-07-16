@@ -55,7 +55,7 @@ class AllowedCountries
         $scope = ScopeInterface::SCOPE_WEBSITE,
         $scopeCode = null
     ) {
-        if (empty($scopeCode)) {
+        if ($scopeCode === null) {
             $scopeCode = $this->getDefaultScopeCode($scope);
         }
 
