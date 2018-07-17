@@ -41,6 +41,10 @@
                 <field id="number_items_to_display_pager" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of Items to Display Pager</label>
                 </field>
+                <field id="crosssell_enabled" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Cross-sell Items in the Shopping Cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>My Cart Link</label>
