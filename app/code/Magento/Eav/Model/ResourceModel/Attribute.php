@@ -62,7 +62,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         $websiteId = (int)$object->getWebsite()->getId();
-        if ($websiteId) {
+        if ($websiteId && $this->_getEavWebsiteTable()) {
             $connection = $this->getConnection();
             $columns = [];
             $scopeTable = $this->_getEavWebsiteTable();
@@ -115,7 +115,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
 
         // save scope attributes
         $websiteId = (int)$object->getWebsite()->getId();
-        if ($websiteId) {
+        if ($websiteId && $this->_getEavWebsiteTable()) {
             $table = $this->_getEavWebsiteTable();
             $describe = $this->getConnection()->describeTable($table);
             $data = [];
@@ -148,20 +148,22 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
-        $connection = $this->getConnection();
-        $bind = ['attribute_id' => (int)$object->getId(), 'website_id' => (int)$object->getWebsite()->getId()];
-        $select = $connection->select()->from(
-            $this->_getEavWebsiteTable()
-        )->where(
-            'attribute_id = :attribute_id'
-        )->where(
-            'website_id = :website_id'
-        )->limit(
-            1
-        );
-        $result = $connection->fetchRow($select, $bind);
+        if ($this->_getEavWebsiteTable()){
+            $connection = $this->getConnection();
+            $bind = ['attribute_id' => (int)$object->getId(), 'website_id' => (int)$object->getWebsite()->getId()];
+            $select = $connection->select()->from(
+                $this->_getEavWebsiteTable()
+            )->where(
+                'attribute_id = :attribute_id'
+            )->where(
+                'website_id = :website_id'
+            )->limit(
+                1
+            );
+            $result = $connection->fetchRow($select, $bind);
+        }
 
-        if (!$result) {
+        if (empty($result)) {
             $result = [];
         }
 
