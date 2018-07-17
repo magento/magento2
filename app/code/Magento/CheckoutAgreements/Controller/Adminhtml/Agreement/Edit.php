@@ -11,8 +11,7 @@ use Magento\CheckoutAgreements\Model\AgreementFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\App\ObjectManager;
-use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
-use Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
+use Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit as BlockEdit;
 
 class Edit extends Agreement
 {
@@ -65,7 +64,7 @@ class Edit extends Agreement
             $id ? __('Edit Condition') : __('New Condition')
         )->_addContent(
             $this->_view->getLayout()->createBlock(
-                Edit::class
+                BlockEdit::class
             )->setData(
                 'action',
                 $this->getUrl('checkout/*/save')
