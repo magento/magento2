@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit;
 
@@ -38,7 +39,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      */
     private $xmlPersistor;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
@@ -60,7 +61,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      * @param array $tables
      * @param string $expectedXML
      */
-    public function testPersist(array $tables, $expectedXML)
+    public function testPersist(array $tables, $expectedXML) : void
     {
         $moduleName = 'First_Module';
         /** @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject $schemaListenerMock */
@@ -88,7 +89,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function schemaListenerTablesDataProvider()
+    public function schemaListenerTablesDataProvider() : array
     {
         return [
             [
