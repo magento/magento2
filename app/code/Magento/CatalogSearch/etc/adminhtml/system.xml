@@ -27,7 +27,7 @@
                     <label>Maximum Query Length</label>
                     <validate>validate-digits</validate>
                 </field>
-                <field id="max_count_cacheable_search_terms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="max_count_cacheable_search_terms" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of top search results to cache</label>
                     <comment>Number of popular search terms to be cached for faster response. Use “0” to cache all results after a term is searched for the second time.</comment>
                     <validate>validate-digits</validate>
