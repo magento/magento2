@@ -46,6 +46,6 @@ class IndexSwitcherMock extends \PHPUnit\Framework\Assert implements IndexSwitch
      */
     public function isSwitched()
     {
-        return (bool) $this->isSwitched;
+        return (bool)$this->isSwitched;
     }
 }
