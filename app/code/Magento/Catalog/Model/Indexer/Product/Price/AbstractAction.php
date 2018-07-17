@@ -381,7 +381,7 @@ abstract class AbstractAction
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
-                    $indexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
+                    $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
                     // copy to index
                     $this->_insertFromTable(
                         $temporaryTable,

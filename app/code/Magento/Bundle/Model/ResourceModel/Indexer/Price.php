@@ -10,7 +10,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
@@ -21,18 +20,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 /**
  * Bundle products Price indexer resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
- * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price implements DimensionalIndexerInterface
 {
-    /**
-     * @var BaseFinalPrice
-     */
-    private $baseFinalPrice;
-
     /**
      * @var IndexTableStructureFactory
      */
@@ -89,14 +80,9 @@ class Price implements DimensionalIndexerInterface
     private $joinAttributeProcessor;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    private $eavConfig;
-
-    /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    private $eventManager = null;
+    private $eventManager;
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -104,14 +90,12 @@ class Price implements DimensionalIndexerInterface
     private $moduleManager;
 
     /**
-     * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param BasePriceModifier $basePriceModifier
      * @param JoinAttributeProcessor $joinAttributeProcessor
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param bool $fullReindexAction
@@ -120,20 +104,17 @@ class Price implements DimensionalIndexerInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        BaseFinalPrice $baseFinalPrice,
         IndexTableStructureFactory $indexTableStructureFactory,
         TableMaintainer $tableMaintainer,
         MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
         BasePriceModifier $basePriceModifier,
         JoinAttributeProcessor $joinAttributeProcessor,
-        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
         $fullReindexAction = false,
         $connectionName = 'indexer'
     ) {
-        $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->connectionName = $connectionName;
@@ -142,7 +123,6 @@ class Price implements DimensionalIndexerInterface
         $this->fullReindexAction = $fullReindexAction;
         $this->basePriceModifier = $basePriceModifier;
         $this->joinAttributeProcessor = $joinAttributeProcessor;
-        $this->eavConfig = $eavConfig;
         $this->eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
     }
@@ -152,7 +132,7 @@ class Price implements DimensionalIndexerInterface
      *
      * @throws \Exception
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
@@ -261,15 +241,13 @@ class Price implements DimensionalIndexerInterface
      * @param array $dimensions
      * @param int $priceType
      * @param int|array $entityIds the entity ids limitation
-     * @return $this
+     * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function prepareBundlePriceByType($priceType, array $dimensions, $entityIds = null)
     {
         $connection = $this->getConnection();
-        $table = $this->getBundlePriceTable();
-
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
@@ -393,10 +371,8 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $query = $select->insertFromSelect($table);
+        $query = $select->insertFromSelect($this->getBundlePriceTable());
         $connection->query($query);
-
-        return $this;
     }
 
     /**
@@ -405,7 +381,7 @@ class Price implements DimensionalIndexerInterface
      * @param IndexTableStructure $priceTable
      * @param array $dimensions
      *
-     * @return $this
+     * @return void
      * @throws \Exception
      */
     private function calculateBundleOptionPrice($priceTable, $dimensions)
@@ -442,8 +418,6 @@ class Price implements DimensionalIndexerInterface
         $this->getConnection()->delete($priceTable->getTableName());
         $this->applyBundlePrice($priceTable);
         $this->applyBundleOptionPrice($priceTable);
-
-        return $this;
     }
 
     /**
@@ -451,7 +425,7 @@ class Price implements DimensionalIndexerInterface
      *
      * @param array $dimensions
      * @param int $priceType
-     * @return $this
+     * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -562,19 +536,17 @@ class Price implements DimensionalIndexerInterface
 
         $query = $select->insertFromSelect($this->getBundleSelectionTable());
         $connection->query($query);
-
-        return $this;
     }
 
     /**
      * Prepare percentage tier price for bundle products
      *
      * @param array $dimensions
-     * @param int|array $entityIds
-     * @return $this
+     * @param array $entityIds
+     * @return void
      * @throws \Exception
      */
-    private function prepareTierPriceIndex($dimensions, $entityIds = null)
+    private function prepareTierPriceIndex($dimensions, $entityIds)
     {
         $connection = $this->getConnection();
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -634,8 +606,6 @@ class Price implements DimensionalIndexerInterface
 
         $query = $select->insertFromSelect($this->getTable('catalog_product_index_tier_price'));
         $connection->query($query);
-
-        return $this;
     }
 
     /**

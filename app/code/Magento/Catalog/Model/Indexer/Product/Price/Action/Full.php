@@ -276,7 +276,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
             $this->_emptyTable($temporaryTable);
 
-            $priceIndexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
+            $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
             // Sync data from temp table to index table
             $this->_insertFromTable(
