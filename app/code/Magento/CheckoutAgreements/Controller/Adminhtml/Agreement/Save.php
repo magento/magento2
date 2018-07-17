@@ -11,7 +11,6 @@ use Magento\CheckoutAgreements\Model\AgreementFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\App\ObjectManager;
-use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
