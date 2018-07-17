@@ -47,7 +47,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $context->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
 
         $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()

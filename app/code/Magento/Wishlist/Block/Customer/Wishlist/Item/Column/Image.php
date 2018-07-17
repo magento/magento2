@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Wishlist block customer item cart column
- */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
@@ -15,6 +13,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
+ * Wishlist block customer item cart column
+ *
  * @api
  * @since 100.0.2
  */
@@ -54,7 +54,7 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      *
      * @return \Magento\Catalog\Model\Product
      */
-    public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item)
+    public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item) : \Magento\Catalog\Model\Product
     {
         return $this->itemResolver->getFinalProduct($item);
     }

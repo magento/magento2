@@ -46,23 +46,23 @@ class ItemProductResolver implements ItemResolverInterface
          * Show parent product thumbnail if it must be always shown according to the related setting in system config
          * or if child thumbnail is not available.
          */
-        $parentItem = $item->getProduct();
-        $config = $this->scopeConfig->getValue(
+        $parentProduct = $item->getProduct();
+        $configValue = $this->scopeConfig->getValue(
             self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         $childProduct = $this->getChildProduct($item);
-        $childThumbnail = $childProduct->getData('thumbnail');
+        $childThumb = $childProduct->getData('thumbnail');
         $finalProduct =
-            ($config == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumbnail || $childThumbnail == 'no_selection')
-            ? $parentItem
+            ($configValue == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumb || $childThumb == 'no_selection')
+            ? $parentProduct
             : $childProduct;
         return $finalProduct;
     }
 
     /**
-     * Get item configurable child product
+     * Get item configurable child product.
      *
      * @param ItemInterface $item
      * @return Product

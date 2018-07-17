@@ -18,6 +18,9 @@ class ItemResolverComposite implements ItemResolverInterface
     /** @var string[] */
     private $itemResolvers = [];
 
+    /** @var ItemResolverInterface[] */
+    private $itemResolversInstances = [];
+
     /**
      * @param string[] $itemResolvers
      */
@@ -43,13 +46,16 @@ class ItemResolverComposite implements ItemResolverInterface
     }
 
     /**
-     * Get the instance of the item resolver by class name
+     * Get the instance of the item resolver by class name.
      *
      * @param string $className
      * @return ItemResolverInterface
      */
     private function getItemResolverInstance(string $className)
     {
-        return ObjectManager::getInstance()->get($className);
+        if (!isset($this->itemResolversInstances[$className])) {
+            $this->itemResolversInstances[$className] = ObjectManager::getInstance()->get($className);
+        }
+        return $this->itemResolversInstances[$className];
     }
 }
