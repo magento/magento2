@@ -22,6 +22,7 @@
         <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
         <element name="productNameInNameColumn" type="input" selector="//td[4]/div[@class='data-grid-cell-content']"/>
         <element name="checkbox" type="checkbox" selector="//div[contains(text(),'{{product}}')]/ancestor::tr[@class='data-row']//input[@class='admin__control-checkbox']" parameterized="true" />
+        <element name="firstRowCheckbox" type="checkbox" selector="tr.data-row:nth-of-type(1) input.admin__control-checkbox"/>
         <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
         <element name="productGridNameProduct" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
     </section>
