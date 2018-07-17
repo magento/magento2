@@ -20,57 +20,25 @@
             <group value="product"/>
         </annotations>
 
-        <!-- Login as admin -->
+        <!-- Create Category And Login As Admin -->
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Delete Created Products And Category Then Logout -->
         <after>
-            <!-- Before deleting first found product of 4 products that have the same name starting,
-                delete 3 virtual products of them -->
-            <actionGroup ref="DeleteProductOnProductsGridPageByFilteredName" stepKey="deleteVirtualProduct1">
-                <argument name="product" value="colorProductAttribute1"/>
-            </actionGroup>
-            <actionGroup ref="DeleteProductOnProductsGridPageByFilteredName" stepKey="deleteVirtualProduct2">
-                <argument name="product" value="colorProductAttribute2"/>
-            </actionGroup>
-            <actionGroup ref="DeleteProductOnProductsGridPageByFilteredName" stepKey="deleteVirtualProduct3">
-                <argument name="product" value="colorProductAttribute3"/>
-            </actionGroup>
-
-            <!-- Delete actually configurable product -->
-            <actionGroup ref="DeleteProductOnProductsGridPageByName" stepKey="deleteCreatedProducts">
+            <!-- Delete all created products (including virtual) -->
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteCreatedProductAttribute">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
-
-            <!-- Tryna delete category via API -->
-            <!--actionGroup ref="DeleteCategory" stepKey="deleteCreatedCategory">
-                <argument name="categoryEntity" value="_defaultCategory"/>
-            </actionGroup-->
-
-            <!-- Delete created product attribute -->
-            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
-                <argument name="productAttribute" value="colorProductAttribute"/>
-            </actionGroup>
-
+            <!-- Logout -->
             <actionGroup ref="logout" stepKey="logout"/>
-
+            <!-- Delete created category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <!-- Tryna create category via API -->
-        <!--amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="enterCategoryName"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSeoSection"/>
-        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterUrlKey"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickOnSaveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/-->
-
         <!-- Create configurable product... -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>

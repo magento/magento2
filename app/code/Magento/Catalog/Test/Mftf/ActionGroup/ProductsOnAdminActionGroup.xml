@@ -27,7 +27,7 @@
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="clickOkInConfirmation"/>
     </actionGroup>
 
-    <actionGroup name="DeleteProductOnProductsGridPageByFilteredName">
+    <actionGroup name="DeleteAllProductsOnProductsGridPageFilteredByName">
         <arguments>
             <argument name="product"/>
         </arguments>
@@ -37,7 +37,8 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.name}}" userInput="{{product.name}}" stepKey="fillNameFieldInFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters"/>
-        <click selector="{{AdminProductGridSection.firstRowCheckbox}}" stepKey="selectFirstFilteredProduct"/>
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="clickMulticheckDropDown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllFilteredProducts"/>
         <click selector="{{AdminProductGridActionSection.actionsSelectBox}}" stepKey="openActionsSelectBox"/>
         <click selector="{{AdminProductGridActionSection.deleteOptionInActionsSelectBox}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
