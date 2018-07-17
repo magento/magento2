@@ -842,16 +842,5 @@ class InstallData implements InstallDataInterface
                 'value' => 1
             ]
         );
-
-        $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
-        $setup->getConnection()->insert(
-            $setup->getTable('core_config_data'),
-            [
-                'scope' => 'default',
-                'scope_id' => 0,
-                'path' => Data::XML_PATH_STATES_REQUIRED,
-                'value' => implode(',', array_keys($countries))
-            ]
-        );
     }
 }
