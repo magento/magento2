@@ -5,14 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\SourceDeduction;
+namespace Magento\InventorySourceDeductionApi\Model;
 
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface;
-use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\InventorySalesApi\Api\Data\ItemToSellInterfaceFactory;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -42,38 +38,21 @@ class SourceDeductionService implements SourceDeductionServiceInterface
     private $stockResolver;
 
     /**
-     * @var ItemToSellInterfaceFactory
-     */
-    private $itemsToSellFactory;
-
-    /**
-     * @var PlaceReservationsForSalesEventInterface
-     */
-    private $placeReservationsForSalesEvent;
-
-    /**
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param StockResolverInterface $stockResolver
-     * @param ItemToSellInterfaceFactory $itemsToSellFactory
-     * @param PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
-     * @internal param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
         SourceItemsSaveInterface $sourceItemsSave,
         GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        StockResolverInterface $stockResolver,
-        ItemToSellInterfaceFactory $itemsToSellFactory,
-        PlaceReservationsForSalesEventInterface $placeReservationsForSalesEvent
+        StockResolverInterface $stockResolver
     ) {
         $this->sourceItemsSave = $sourceItemsSave;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->stockResolver = $stockResolver;
-        $this->itemsToSellFactory = $itemsToSellFactory;
-        $this->placeReservationsForSalesEvent = $placeReservationsForSalesEvent;
     }
 
     /**
@@ -81,7 +60,7 @@ class SourceDeductionService implements SourceDeductionServiceInterface
      */
     public function execute(SourceDeductionRequestInterface $sourceDeductionRequest): void
     {
-        $itemsToSell = $sourceItems = [];
+        $sourceItems = [];
         $sourceCode = $sourceDeductionRequest->getSourceCode();
         $salesChannel = $sourceDeductionRequest->getSalesChannel();
 
@@ -106,10 +85,6 @@ class SourceDeductionService implements SourceDeductionServiceInterface
             if (($sourceItem->getQuantity() - $qty) >= 0) {
                 $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
                 $sourceItems[] = $sourceItem;
-                $itemsToSell[] = $this->itemsToSellFactory->create([
-                    'sku' => $itemSku,
-                    'qty' => (float)$qty
-                ]);
             } else {
                 throw new LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
@@ -119,10 +94,6 @@ class SourceDeductionService implements SourceDeductionServiceInterface
 
         if (!empty($sourceItems)) {
             $this->sourceItemsSave->execute($sourceItems);
-
-            $salesEvent = $sourceDeductionRequest->getSalesEvent();
-
-            $this->placeReservationsForSalesEvent->execute($itemsToSell, $salesChannel, $salesEvent);
         }
     }
 }
