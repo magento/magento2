@@ -29,8 +29,12 @@
         <!-- Delete Created Products And Category Then Logout -->
         <after>
             <!-- Delete all created products (including virtual) -->
-            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteCreatedProductAttribute">
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
                 <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <!-- Delete created product attribute -->
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
+                <argument name="productAttribute" value="colorProductAttribute"/>
             </actionGroup>
             <!-- Logout -->
             <actionGroup ref="logout" stepKey="logout"/>
