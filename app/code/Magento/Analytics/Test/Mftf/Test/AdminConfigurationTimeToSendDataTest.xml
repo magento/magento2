@@ -23,6 +23,7 @@
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminConfig"/>
         <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
         <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
         <selectOption stepKey="selectAdvancedReportingHour" selector="{{AdminConfigSection.advancedReportingHour}}" userInput="11"/>
