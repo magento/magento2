@@ -147,15 +147,17 @@ class Factory
         $result = $this->_objectManager->create(
             \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
-                'frontend' => \Zend_Cache::factory(
-                    $frontend['type'],
-                    $backend['type'],
-                    $frontend,
-                    $backend['options'],
-                    true,
-                    true,
-                    true
-                )
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return \Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                }
             ]
         );
         $result = $this->_applyDecorators($result);
