@@ -124,6 +124,7 @@
         <!-- Login Customer Storefront -->
 
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad stepKey="waitForSignInPage"/>
         <fillField  userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
         <fillField  userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
         <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
@@ -131,7 +132,7 @@
         <!-- Go to Product Page -->
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct1Page"/>
-
+        <waitForPageLoad stepKey="waitForProductPage"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeproductOptionDropDownOptionTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option2')}}" stepKey="seeproductOptionDropDownOptionTitle2"/>
@@ -194,13 +195,14 @@
         <!-- Switch to FR Store View Storefront -->
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <waitForPageLoad stepKey="waitForStorefrontHomePage"/>
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
         <click selector="{{StorefrontHeaderSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
-
+        <waitForPageLoad stepKey="waitForProductPage2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('FR Custom Options 1')}}" stepKey="seeProductFrOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option1')}}" stepKey="productFrOptionDropDownOptionTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option2')}}" stepKey="productFrOptionDropDownOptionTitle2"/>
@@ -281,7 +283,7 @@
         <!--Go to Product Page-->
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page2"/>
-
+        <waitForPageLoad stepKey="waitForProductPage3"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeProductOptionDropDownOptionTitle3"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option2')}}" stepKey="seeProductOptionDropDownOptionTitle4"/>
