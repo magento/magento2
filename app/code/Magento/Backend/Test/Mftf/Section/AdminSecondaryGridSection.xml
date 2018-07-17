@@ -11,7 +11,9 @@
     <section name="AdminSecondaryGridSection">
         <element name="resetFilters" type="button" selector="[title='Reset Filter']"/>
         <element name="taxIdentifierSearch" type="input" selector=".col-code .admin__control-text"/>
+        <element name="catalogRuleIdentifierSearch" type="input" selector=".col-name .admin__control-text"/>
         <element name="searchButton" type="input" selector=".admin__filter-actions [title='Search']"/>
         <element name="firstRow" type="block" selector="tr[data-role='row']"/>
     </section>
 </sections>
+
