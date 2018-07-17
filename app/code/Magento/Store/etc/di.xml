@@ -99,9 +99,9 @@
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoresData">
-    <arguments>
-    <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-    </arguments>
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
     </type>
     <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
         <arguments>
