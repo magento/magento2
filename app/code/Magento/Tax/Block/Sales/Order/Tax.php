@@ -256,11 +256,11 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return null
+     * @return void
      */
     protected function _initDiscount()
     {
-        return null;
+        return;
     }
 
     /**
