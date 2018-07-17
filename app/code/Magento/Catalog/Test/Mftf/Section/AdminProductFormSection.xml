@@ -58,7 +58,7 @@
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
-        <element name="v4" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
+        <element name="v436" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 4.3.6']" />
         <element name="v3" type ="button" selector="//select[@id='dropdown-switcher']/option[text()='TinyMCE 3.6(Deprecated)']" />
         <element name="TinymceDescription3" type ="button" selector="//span[text()='Description']" />
         <element name="SaveConfig" type ="button" selector="#save" />
