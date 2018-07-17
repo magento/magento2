@@ -49,16 +49,13 @@ define([
                 filePathname = $buttonEl.val(),
                 fileBasename = filePathname.split('/').pop();
 
-            if (filePathname.length > 0) {
-                this.addFile({
-                    id: fileId,
-                    type: fileMimeType,
-                    name: fileBasename,
-                    size: fileSize,
-                    url: filePathname
-                });
-            }
-
+            this.addFile({
+                id: fileId,
+                type: fileMimeType,
+                name: fileBasename,
+                size: fileSize,
+                url: filePathname
+            });
         },
 
         /**
