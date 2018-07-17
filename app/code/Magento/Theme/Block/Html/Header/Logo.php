@@ -19,7 +19,7 @@ class Logo extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'html/header/logo.phtml';
+    protected $_template = 'Magento_Theme::html/header/logo.phtml';
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
