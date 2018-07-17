@@ -18,17 +18,32 @@ class SimpleConstructor
      * @var string
      */
     private $name;
+    /**
+     * @var \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]
+     */
+    private $customers;
 
     /**
      * @param int $entityId
      * @param string $name
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[] $customers
      */
     public function __construct(
         int $entityId,
-        string $name
+        string $name,
+        array $customers = null
     ) {
         $this->entityId = $entityId;
         $this->name = $name;
+        $this->customers = $customers;
+    }
+
+    /**
+     * @param int $entityId
+     */
+    public function setEntityId(int $entityId)
+    {
+        $this->entityId = $entityId;
     }
 
     /**
@@ -40,10 +55,34 @@ class SimpleConstructor
     }
 
     /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @return string|null
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]
+     */
+    public function getCustomers(): array
+    {
+        return $this->customers;
+    }
+
+    /**
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[] $customers
+     */
+    public function setCustomers(array $customers)
+    {
+        $this->customers = $customers;
     }
 }
