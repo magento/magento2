@@ -43,17 +43,22 @@ define([
          */
         addFileFromMediaGallery: function (imageUploader, e) {
             var $buttonEl = $(e.target),
+                fileId = $buttonEl.data('id'),
                 fileSize = $buttonEl.data('size'),
                 fileMimeType = $buttonEl.data('mime-type'),
                 filePathname = $buttonEl.val(),
                 fileBasename = filePathname.split('/').pop();
 
-            this.addFile({
-                type: fileMimeType,
-                name: fileBasename,
-                size: fileSize,
-                url: filePathname
-            });
+            if (filePathname.length > 0) {
+                this.addFile({
+                    id: fileId,
+                    type: fileMimeType,
+                    name: fileBasename,
+                    size: fileSize,
+                    url: filePathname
+                });
+            }
+
         },
 
         /**
