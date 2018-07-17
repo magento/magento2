@@ -222,6 +222,9 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->massAction->isActionAllowed($actionType));
     }
 
+    /**
+     * @return array
+     */
     public function isActionAllowedDataProvider()
     {
         return [
