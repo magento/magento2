@@ -157,7 +157,7 @@ class ParamsBuilder
      */
     private function hasDefaultFrame(): bool
     {
-        return (bool) $this->viewConfig->getViewConfig()->getVarValue(
+        return (bool)$this->viewConfig->getViewConfig()->getVarValue(
             'Magento_Catalog',
             'product_image_white_borders'
         );

@@ -131,7 +131,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isCvvEnabled($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_USE_CVV, $storeId);
+        return (bool)$this->getValue(self::KEY_USE_CVV, $storeId);
     }
 
     /**
@@ -142,7 +142,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isVerify3DSecure($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_VERIFY_3DSECURE, $storeId);
+        return (bool)$this->getValue(self::KEY_VERIFY_3DSECURE, $storeId);
     }
 
     /**
@@ -232,7 +232,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function hasFraudProtection($storeId = null)
     {
-        return (bool) $this->getValue(Config::FRAUD_PROTECTION, $storeId);
+        return (bool)$this->getValue(Config::FRAUD_PROTECTION, $storeId);
     }
 
     /**
@@ -243,7 +243,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isActive($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_ACTIVE, $storeId);
+        return (bool)$this->getValue(self::KEY_ACTIVE, $storeId);
     }
 
     /**

@@ -63,7 +63,7 @@ class ProductFrontendActionSection implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        if (!(bool) $this->appConfig->getValue(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
+        if (!(bool)$this->appConfig->getValue(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
             return [
                 'count' => 0,
                 'items' => [],

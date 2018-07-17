@@ -575,7 +575,7 @@ class Eav extends AbstractModifier
      */
     private function isProductExists()
     {
-        return (bool) $this->locator->getProduct()->getId();
+        return (bool)$this->locator->getProduct()->getId();
     }
 
     /**

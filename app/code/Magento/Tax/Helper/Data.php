@@ -690,7 +690,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isCrossBorderTradeEnabled($store = null)
     {
-        return (bool) $this->_config->crossBorderTradeEnabled($store);
+        return (bool)$this->_config->crossBorderTradeEnabled($store);
     }
 
     /**

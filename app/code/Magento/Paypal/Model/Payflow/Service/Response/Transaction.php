@@ -89,7 +89,7 @@ class Transaction
         $this->logger->debug(
             (array) $gatewayTransactionResponse,
             (array) $this->transparent->getDebugReplacePrivateDataKeys(),
-            (bool) $this->transparent->getDebugFlag()
+            (bool)$this->transparent->getDebugFlag()
         );
 
         return $response;
