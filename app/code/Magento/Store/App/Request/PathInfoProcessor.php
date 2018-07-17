@@ -23,23 +23,15 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     private $config;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
      * @param \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      */
     public function __construct(
         \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
-        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config
     ) {
         $this->storePathInfoValidator = $storePathInfoValidator;
         $this->config = $config;
-        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -52,18 +44,16 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      */
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
     {
+        //can store code be used in url
         if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
             $storeCode = $this->storePathInfoValidator->getValidStoreCode($request, $pathInfo);
-            if ($storeCode) {
-                try {
-                    /** @var \Magento\Store\Api\Data\StoreInterface $store */
-                    $this->storeRepository->getActiveStoreByCode($storeCode);
-                } catch (\Magento\Store\Model\StoreIsInactiveException $e) {
-                    //no route in case we're trying to access a store that's disabled
+            if (!empty($storeCode)) {
+                if (!$request->isDirectAccessFrontendName($storeCode)) {
+                    $pathInfo = $this->trimStoreCodeFromPathInfo($pathInfo, $storeCode);
+                } else {
+                    //no route in case we're trying to access a store that has the same code as a direct access
                     $request->setActionName(\Magento\Framework\App\Router\Base::NO_ROUTE);
                 }
-
-                $pathInfo = $this->trimStoreCodeFromPathInfo($pathInfo, $storeCode);
             }
         }
         return $pathInfo;

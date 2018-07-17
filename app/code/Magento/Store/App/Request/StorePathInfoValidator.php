@@ -65,26 +65,24 @@ class StorePathInfoValidator
             );
         }
         $storeCode = $this->getStoreCode($pathInfo);
-        if (!$request->isDirectAccessFrontendName($storeCode)
-            && !empty($storeCode)
+        if (!empty($storeCode)
             && $storeCode != Store::ADMIN_CODE
             && (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
         ) {
             try {
-                /** @var \Magento\Store\Api\Data\StoreInterface $store */
                 $this->storeRepository->getActiveStoreByCode($storeCode);
-            } catch (NoSuchEntityException $e) {
-                return null;
-            } catch (\Magento\Store\Model\StoreIsInactiveException $e) {
-                return null;
-            }
 
-            if ((bool)$this->config->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeCode
-            )) {
-                return $storeCode;
+                if ((bool)$this->config->getValue(
+                    \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $storeCode
+                )) {
+                    return $storeCode;
+                }
+            } catch (NoSuchEntityException $e) {
+                //return null;
+            } catch (\Magento\Store\Model\StoreIsInactiveException $e) {
+                //return null;
             }
         }
         return null;
