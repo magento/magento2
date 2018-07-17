@@ -89,7 +89,6 @@ class Tax extends \Magento\Framework\View\Element\Template
 
         $this->_initSubtotal();
         $this->_initShipping();
-        $this->_initDiscount();
         $this->_initGrandTotal();
         return $this;
     }
@@ -257,19 +256,6 @@ class Tax extends \Magento\Framework\View\Element\Template
             }
         }
         return $this;
-    }
-
-    /**
-     * @return void
-     */
-    protected function _initDiscount()
-    {
-        //        $store  = $this->getStore();
-        //        $parent = $this->getParentBlock();
-        //        if ($this->_config->displaySales) {
-        //
-        //        } elseif ($this->_config->displaySales) {
-        //        }
     }
 
     /**
