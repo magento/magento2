@@ -235,7 +235,7 @@ define([
             controlLabelId: '',
 
             // text for more button
-            moreButtonText: 'More',
+            moreButtonText: $t('More'),
 
             // Callback url for media
             mediaCallback: '',
