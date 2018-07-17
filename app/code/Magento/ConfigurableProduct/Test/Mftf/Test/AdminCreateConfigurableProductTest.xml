@@ -22,7 +22,7 @@
 
         <!-- Login as admin -->
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>
 
         <!-- Delete Created Products And Category Then Logout -->
@@ -44,20 +44,33 @@
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
 
+            <!-- Tryna delete category via API -->
+            <!--actionGroup ref="DeleteCategory" stepKey="deleteCreatedCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup-->
+
+            <!-- Delete created product attribute -->
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
+                <argument name="productAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <!-- Create category -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
+        <!-- Tryna create category via API -->
+        <!--amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="enterCategoryName"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSeoSection"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterUrlKey"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickOnSaveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/-->
 
         <!-- Create configurable product... -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
