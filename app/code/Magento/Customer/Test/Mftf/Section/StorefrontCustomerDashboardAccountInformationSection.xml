@@ -22,6 +22,6 @@
         <element name="stateProvince" type="select" selector="#region_id"/>
         <element name="zip" type="input" selector="#zip"/>
         <element name="country" type="select" selector="#country"/>
-        <element name="saveAddress" type="button" selector="[data-action='save-address']"/>
+        <element name="saveAddress" type="button" selector="[data-action='save-address']" timeout="30"/>
     </section>
 </sections>
