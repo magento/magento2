@@ -107,6 +107,11 @@ class Ftp
         if ($data['scheme'] != 'ftp') {
             throw new \Exception("Support for scheme unsupported: '{$data['scheme']}'");
         }
+        
+        // Decode user & password strings from URL
+        if ( array_key_exists('user', $data) ) $data['user'] = urldecode($data['user']);
+        if ( array_key_exists('pass', $data) ) $data['pass'] = urldecode($data['pass']);
+        
         return $data;
     }
 
