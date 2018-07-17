@@ -25,6 +25,7 @@
         <data key="default_quantity2">20</data>
         <data key="set">4</data>
         <data key="type">bundle</data>
+        <data key="price">10</data>
         <data key="fixedPrice">10</data>
         <data key="fixedPriceFormatted">$10.00</data>
         <data key="defaultAttribute">Default</data>
