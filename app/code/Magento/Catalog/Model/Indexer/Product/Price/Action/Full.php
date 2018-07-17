@@ -426,7 +426,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function moveDataFromReplicaTableToReplicaTables(array $dimensions)
     {
         if (!$dimensions) {
-            return ;
+            return;
         }
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(
             $this->dimensionTableMaintainer->getMainReplicaTable([])
