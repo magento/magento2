@@ -34,15 +34,15 @@ class ItemResolverComposite implements ItemResolverInterface
      */
     public function getFinalProduct(ItemInterface $item) : ProductInterface
     {
-        $product = $item->getProduct();
+        $finalProduct = $item->getProduct();
         foreach ($this->itemResolvers as $resolver) {
             $resolvedProduct = $this->getItemResolverInstance($resolver)->getFinalProduct($item);
-            if ($resolvedProduct !== $product) {
-                $product = $resolvedProduct;
+            if ($resolvedProduct !== $finalProduct) {
+                $finalProduct = $resolvedProduct;
                 break;
             }
         }
-        return $product;
+        return $finalProduct;
     }
 
     /**
@@ -51,7 +51,7 @@ class ItemResolverComposite implements ItemResolverInterface
      * @param string $className
      * @return ItemResolverInterface
      */
-    private function getItemResolverInstance(string $className)
+    private function getItemResolverInstance(string $className) : ItemResolverInterface
     {
         if (!isset($this->itemResolversInstances[$className])) {
             $this->itemResolversInstances[$className] = ObjectManager::getInstance()->get($className);

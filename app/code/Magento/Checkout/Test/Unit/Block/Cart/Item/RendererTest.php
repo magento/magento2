@@ -86,16 +86,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             Product::class,
             ['getName', '__wakeup', 'getIdentities']
         );
-        $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
+        $product->expects($this->any())->method('getName')->willReturn('Parent Product');
 
         /** @var Item|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->any())->method('getProduct')->willReturn($product);
 
         $this->itemResolver->expects($this->any())
             ->method('getFinalProduct')
             ->with($item)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->renderer->setItem($item);
         return $product;
@@ -107,7 +107,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $identities = [1 => 1, 2 => 2, 3 => 3];
         $product->expects($this->exactly(2))
             ->method('getIdentities')
-            ->will($this->returnValue($identities));
+            ->willReturn($identities);
 
         $this->assertEquals($product->getIdentities(), $this->renderer->getIdentities());
     }
@@ -135,7 +135,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->layout->expects($this->atLeastOnce())
             ->method('getBlock')
             ->with('product.price.render.default')
-            ->will($this->returnValue($priceRender));
+            ->willReturn($priceRender);
 
         $priceRender->expects($this->once())
             ->method('render')
@@ -147,7 +147,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                     'display_minimal_price' => true,
                     'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                 ]
-            )->will($this->returnValue($priceHtml));
+            )->willReturn($priceHtml);
 
         $this->assertEquals($priceHtml, $this->renderer->getProductPriceHtml($product));
     }
