@@ -23,6 +23,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminGridOrdersClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
         </before>
         <after>
@@ -30,6 +31,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
+            <actionGroup ref="AdminGridOrdersClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
