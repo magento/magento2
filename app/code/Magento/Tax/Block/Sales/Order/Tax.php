@@ -260,7 +260,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initDiscount()
     {
-        return;
     }
 
     /**
