@@ -46,17 +46,22 @@ class ItemProductResolver implements ItemResolverInterface
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
          * or if child product thumbnail is not available.
          */
-        $configValue = $this->scopeConfig->getValue(
-            self::CONFIG_THUMBNAIL_SOURCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $childProduct = $item->getProduct();
-        $childThumb = $childProduct->getData('thumbnail');
 
-        $finalProduct =
-            ($configValue == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumb || $childThumb == 'no_selection')
-            ?  $this->getParentProduct($item)
-            : $childProduct;
+        $childProduct = $item->getProduct();
+        $finalProduct = $childProduct;
+        $parentProduct = $this->getParentProduct($item);
+        if ($childProduct !== $parentProduct) {
+            $configValue = $this->scopeConfig->getValue(
+                self::CONFIG_THUMBNAIL_SOURCE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $childThumb = $childProduct->getData('thumbnail');
+
+            $finalProduct =
+                ($configValue == Thumbnail::OPTION_USE_PARENT_IMAGE) || (!$childThumb || $childThumb == 'no_selection')
+                    ? $parentProduct
+                    : $childProduct;
+        }
         return $finalProduct;
     }
 
