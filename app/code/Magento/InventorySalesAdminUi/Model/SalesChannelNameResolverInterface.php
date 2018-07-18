@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySalesAdminUi\Ui;
+namespace Magento\InventorySalesAdminUi\Model;
 
 /**
  * Resolve sales channel name by type and code
