@@ -205,7 +205,7 @@ class Gallery extends AbstractView
     {
         $attributes =
             $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
-        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+        return $attributes[$attributeName] ?? $default;
     }
 
     /**
