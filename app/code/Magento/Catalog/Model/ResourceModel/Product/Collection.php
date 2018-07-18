@@ -931,7 +931,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             'eq' => 'in',
             'neq' => 'nin'
         ];
-        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
+        return $conditionsMap[$conditionType] ??  $conditionType;
     }
 
     /**
