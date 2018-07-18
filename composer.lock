@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6ae2be0f066e566e8280b2954aad257",
+    "content-hash": "cdf4694e8bb57c981a3d4e87669ca392",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1025,16 +1025,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.15",
+            "version": "v2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "10bcb46e8f3d365170f6de9d05245aa066b81f09"
+                "reference": "29af24f25bab834fcbb38ad2a69fa93b867e070d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/10bcb46e8f3d365170f6de9d05245aa066b81f09",
-                "reference": "10bcb46e8f3d365170f6de9d05245aa066b81f09",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/29af24f25bab834fcbb38ad2a69fa93b867e070d",
+                "reference": "29af24f25bab834fcbb38ad2a69fa93b867e070d",
                 "shasum": ""
             },
             "require": {
@@ -1070,7 +1070,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2018-06-08T15:26:40+00:00"
+            "time": "2018-07-04T16:31:37+00:00"
         },
         {
             "name": "pelago/emogrifier",
@@ -2728,16 +2728,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "11c9c1835e60eef6f9234377a480fcec096ebd9e"
+                "reference": "63d920d1c9ebc009d860c3666593a66298727dd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/11c9c1835e60eef6f9234377a480fcec096ebd9e",
-                "reference": "11c9c1835e60eef6f9234377a480fcec096ebd9e",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/63d920d1c9ebc009d860c3666593a66298727dd6",
+                "reference": "63d920d1c9ebc009d860c3666593a66298727dd6",
                 "shasum": ""
             },
             "require": {
@@ -2787,7 +2787,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2018-06-27T18:52:43+00:00"
+            "time": "2018-07-09T21:17:27+00:00"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -4667,16 +4667,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "beef6cbe6dec7205edcd143842a49f9a691859a6"
+                "reference": "dcc87d5414e9d0bd316fce81a5bedb9ce720b183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/beef6cbe6dec7205edcd143842a49f9a691859a6",
-                "reference": "beef6cbe6dec7205edcd143842a49f9a691859a6",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/dcc87d5414e9d0bd316fce81a5bedb9ce720b183",
+                "reference": "dcc87d5414e9d0bd316fce81a5bedb9ce720b183",
                 "shasum": ""
             },
             "require": {
@@ -4710,7 +4710,7 @@
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.0.1",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.0.1",
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1",
-                "phpunitgoodpractices/traits": "^1.5",
+                "phpunitgoodpractices/traits": "^1.5.1",
                 "symfony/phpunit-bridge": "^4.0"
             },
             "suggest": {
@@ -4754,7 +4754,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2018-06-10T08:26:56+00:00"
+            "time": "2018-07-06T10:37:40+00:00"
         },
         {
             "name": "lusitanian/oauth",
@@ -5596,16 +5596,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.8",
+            "version": "6.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b"
+                "reference": "093ca5508174cd8ab8efe44fd1dde447adfdec8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
-                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/093ca5508174cd8ab8efe44fd1dde447adfdec8f",
+                "reference": "093ca5508174cd8ab8efe44fd1dde447adfdec8f",
                 "shasum": ""
             },
             "require": {
@@ -5676,20 +5676,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-04-10T11:38:34+00:00"
+            "time": "2018-07-03T06:40:40+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "5.0.7",
+            "version": "5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce"
+                "reference": "6f9a3c8bf34188a2b53ce2ae7a126089c53e0a9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
-                "reference": "3eaf040f20154d27d6da59ca2c6e28ac8fd56dce",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/6f9a3c8bf34188a2b53ce2ae7a126089c53e0a9f",
+                "reference": "6f9a3c8bf34188a2b53ce2ae7a126089c53e0a9f",
                 "shasum": ""
             },
             "require": {
@@ -5735,7 +5735,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-05-29T13:50:43+00:00"
+            "time": "2018-07-13T03:27:23+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
