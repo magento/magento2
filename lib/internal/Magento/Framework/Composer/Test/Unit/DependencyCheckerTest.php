@@ -69,7 +69,7 @@ class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
                 $buffer->writeln($output);
             }
         );
-        $composerApp->Expects($this->at(6))->method('run')->willReturnCallback(
+        $composerApp->expects($this->at(6))->method('run')->willReturnCallback(
             function ($input, $buffer) {
                 $output = 'magento/package-d requires magento/package-c (1.0)' . PHP_EOL .
                     'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL;

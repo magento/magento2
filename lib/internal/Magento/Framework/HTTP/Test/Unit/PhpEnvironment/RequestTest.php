@@ -50,6 +50,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $_SERVER = $this->serverArray;
     }
 
+    /**
+     * @param null $uri
+     * @return Request
+     */
     private function getModel($uri = null)
     {
         return new Request($this->cookieReader, $this->converter, $uri);
