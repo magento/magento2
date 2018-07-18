@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesAdminUi\Ui\Component\Listing\Column;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySalesAdminUi\Ui\SalesChannelNameResolverInterface;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\InventorySalesAdminUi\Model\SalesChannelNameResolverInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Add grid column for sales channels. Prepare data
