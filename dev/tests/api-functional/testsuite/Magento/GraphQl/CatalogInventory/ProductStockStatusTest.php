@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryGraphQl\Test\CatalogInventory;
+namespace Magento\GraphQl\CatalogInventory;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -46,10 +46,7 @@ QUERY;
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('stock_status', $response['products']['items'][0]);
-        $this->assertEquals(
-            StockStatusInterface::STATUS_IN_STOCK,
-            $response['products']['items'][0]['stock_status']
-        );
+        $this->assertEquals('IN_STOCK', $response['products']['items'][0]['stock_status']);
     }
 
     /**
@@ -79,9 +76,6 @@ QUERY;
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('stock_status', $response['products']['items'][0]);
-        $this->assertEquals(
-            StockStatusInterface::STATUS_OUT_OF_STOCK,
-            $response['products']['items'][0]['stock_status']
-        );
+        $this->assertEquals('OUT_OF_STOCK', $response['products']['items'][0]['stock_status']);
     }
 }

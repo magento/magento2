@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryGraphQl\Test\CatalogInventory;
+namespace Magento\GraphQl\CatalogInventory;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 

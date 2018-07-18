@@ -18,6 +18,9 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * {@inheritdoc}
+ */
 class OnlyXLeftInStockResolver implements ResolverInterface
 {
     /**
@@ -51,7 +54,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): Value
     {
@@ -75,12 +78,22 @@ class OnlyXLeftInStockResolver implements ResolverInterface
     }
 
     /**
+     * Get product qty left when "Catalog > Inventory > Stock Options > Only X left Threshold" is greater than 0
+     *
      * @param ProductInterface $product
      *
      * @return null|float
      */
     private function getOnlyXLeftQty(ProductInterface $product): ?float
     {
+        $thresholdQty = (float)$this->scopeConfig->getValue(
+            Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
+            ScopeInterface::SCOPE_STORE
+        );
+        if($thresholdQty === 0){
+            return null;
+        }
+
         $stockItem = $this->stockRegistry->getStockItem($product->getId());
 
         $stockCurrentQty = $this->stockRegistry->getStockStatus(
