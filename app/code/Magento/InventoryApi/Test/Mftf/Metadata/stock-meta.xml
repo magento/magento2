@@ -12,6 +12,7 @@
                auth="adminOauth" url="/V1/inventory/stocks" method="POST">
         <contentType>application/json</contentType>
         <object dataType="stock" key="stock">
+            <field key="id">integer</field>
             <field key="stock_id">integer</field>
             <field key="name">string</field>
             <object dataType="stock_extension_attribute" key="extension_attributes">

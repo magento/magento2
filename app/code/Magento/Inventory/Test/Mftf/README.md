@@ -1,3 +1,3 @@
-# Magento 2 Functional Tests
+# Inventory Functional Tests
 
-The Functional Tests Module for **Magento_Inventory** Module.
+The Functional Test Module for **Magento Inventory** module.
