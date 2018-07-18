@@ -39,7 +39,9 @@ class StoreConfigsDataProvider
     {
         $storeConfigs = $this->storeConfigManager->getStoreConfigs($storeCodes);
 
-        return ['items' => $this->hidrateStoreConfigs($storeConfigs)];
+        return [
+            'items' => $this->hidrateStoreConfigs($storeConfigs)
+        ];
     }
 
     /**
@@ -66,6 +68,7 @@ class StoreConfigsDataProvider
                 'base_link_url' => $storeConfig->getBaseLinkUrl(),
                 'base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
                 'base_media_url' => $storeConfig->getBaseMediaUrl(),
+                'secure_base_url' => $storeConfig->getSecureBaseUrl(),
                 'secure_base_link_url' => $storeConfig->getSecureBaseLinkUrl(),
                 'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
                 'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl()

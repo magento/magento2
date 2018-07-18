@@ -70,11 +70,11 @@ class StoreConfigs implements ResolverInterface
      * @return array
      * @throws GraphQlInputException
      */
-    private function getStoreCodes($args) : array
+    private function getStoreCodes($args)
     {
-        if (isset($args['store_codes'])) {
-            if (is_array($args['store_codes'])) {
-                return $args['store_codes'];
+        if (isset($args['storeCodes'])) {
+            if (is_array($args['storeCodes'])) {
+                return $args['storeCodes'];
             }
             throw new GraphQlInputException(__('"store codes should contain a valid array'));
         }
