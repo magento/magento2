@@ -69,10 +69,9 @@
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 
-    <actionGroup name="AdminGridOrdersClearFiltersActionGroup">
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="GoToGridOrdersPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad2"/>
+    <actionGroup name="AdminOrdersGridClearFiltersActionGroup">
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
 </actionGroups>

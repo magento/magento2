@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="VerifyDynamicBundleProductPricesForCombinationOfOptions">
+    <test name="VerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
         <annotations>
             <features value="Bundle"/>
             <title value="Verify dynamic bundle product prices for combination of options"/>
             <description value="Verify prices for various configurations of Dynamic Bundle product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-43619"/>
-            <group value="Bundle"/>
+            <group value="bundle"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -39,9 +39,9 @@
 
             <!--Add special price to simple product-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
-                <argument name="product" value="$$simpleProduct5$$"/>
-            </actionGroup>
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct5.id$$)}}" stepKey="openAdminEditPage"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
+            <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
 
             <!--Create Bundle product-->
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
@@ -144,19 +144,19 @@
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
             <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.calculationSettings}}.open" visible="false" stepKey="openCalculationSettingsTab"/>
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationMethodBasedCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.calculationMethodBased}}[disabled='disabled']" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
-            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.calculationMethodBased}}" stepKey="fillCalculationMethodBased"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBased}}[disabled='disabled']" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedDisabled}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
             <selectOption userInput="Shipping Origin" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationPricesCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.calculationPrices}}[disabled='disabled']" visible="true" stepKey="clickCalculationPricesCheckBox"/>
-            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.calculationPrices}}" stepKey="clickCalculationPrices"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.priceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.priceDisplaySettings}}.open" visible="false" stepKey="openPriceDisplaySettings"/>
-            <conditionalClick selector="{{AdminConfigureTaxSection.displayProductPricesCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayProductPrices}}[disabled='disabled']" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
-            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.displayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettingsOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
@@ -171,19 +171,19 @@
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
             <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.calculationSettings}}.open" visible="false" stepKey="openCalculationSettingsTab"/>
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationMethodBasedCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.calculationMethodBased}}[disabled='disabled']" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
-            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.calculationMethodBased}}" stepKey="fillCalculationMethodBased"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettings}}.open" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBased}}[disabled='disabled']" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedDisabled}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
             <selectOption userInput="Shipping Address" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.calculationPricesCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.calculationPrices}}[disabled='disabled']" visible="true" stepKey="clickCalculationPricesCheckBox"/>
-            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.calculationPrices}}" stepKey="clickCalculationPrices"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.priceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.priceDisplaySettings}}.open" visible="false" stepKey="openPriceDisplaySettings"/>
-            <conditionalClick selector="{{AdminConfigureTaxSection.displayProductPricesCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayProductPrices}}[disabled='disabled']" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
-            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.displayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}.open" visible="false" stepKey="openPriceDisplaySettings"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
@@ -233,5 +233,5 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="From $8.00 Regular Price $10.00" selector="{{StorefrontProductInfoMainSection.priceFrom}}" stepKey="seePriceFromBundle3"/>
         <see userInput="To $33.58 Regular Price $35.58" selector="{{StorefrontProductInfoMainSection.priceTo}}" stepKey="seePriceToBundle3"/>
-        </test>
+    </test>
 </tests>
