@@ -171,7 +171,7 @@
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
             <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="false" stepKey="openCalculationSettingsTab"/>
             <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
             <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
 
