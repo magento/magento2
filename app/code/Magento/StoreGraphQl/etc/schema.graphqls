@@ -1,5 +1,11 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
+type Query {
+    storeConfigs (
+    storeCodes: [String] @doc(description: "Store Codes of the store configs")
+): StoreConfigs
+    @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigs") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes")
+}
 
 type Website @doc(description: "The type contains information about a website") {
     id : Int @doc(description: "The ID number assigned to the website")
@@ -8,4 +14,27 @@ type Website @doc(description: "The type contains information about a website") 
     sort_order : Int @doc(description: "The attribute to use for sorting websites")
     default_group_id : String @doc(description: "The default group id that the website has")
     is_default : Boolean @doc(description: "Specifies if this is the default website")
+}
+
+type StoreConfigs @doc(description: "The Store Configs object") {
+    items: [StoreConfig] @doc(description: "An array containing store configs")
+}
+
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    id : Int @doc(description: "The ID number assigned to the store")
+    code : String @doc(description: "A code assigned to the store to identify it")
+    website_id : Int @doc(description: "The ID number assigned to the website store belongs")
+    locale : String @doc(description: "Store locale")
+    base_currency_code : String @doc(description: "Base currency code")
+    default_display_currency_code : String @doc(description: "Default display currency code")
+    timezone : String @doc(description: "Timezone of the store")
+    weight_unit : String @doc(description: "The unit of weight")
+    base_url : String @doc(description: "Base URL for the store")
+    base_link_url : String @doc(description: "Base link URL for the store")
+    base_static_url : String @doc(description: "Base static URL for the store")
+    base_media_url : String @doc(description: "Base media URL for the store")
+    secure_base_url : String @doc(description: "Secure base URL for the store")
+    secure_base_link_url : String @doc(description: "Secure base link URL for the store")
+    secure_base_static_url : String @doc(description: "Secure base static URL for the store")
+    secure_base_media_url : String @doc(description: "Secure base media URL for the store")
 }
