@@ -20,7 +20,7 @@
         <fillField selector="{{CheckoutShippingSection.addPostcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingSection.addTelephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
         <click selector="{{CheckoutShippingSection.addSaveButton}}" stepKey="clickSaveAdressAdd"/>
-        <see stepKey="seeRegionSelected" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.state}}"/>
         <waitForPageLoad stepKey="waitPageLoad"/>
+        <see stepKey="seeRegionSelected" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.state}}"/>
     </actionGroup>
 </actionGroups>

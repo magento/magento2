@@ -60,7 +60,7 @@
         <click selector="{{CheckoutPaymentSection.editAddressButton}}"  stepKey="clickEditButton"/>
         <selectOption selector="{{CheckoutPaymentSection.newAddressSelect}}" userInput="New Address" stepKey="selectNewAddress"/>
         <!--  Step 6: Fill form with valid data and set: California -->
-        <actionGroup ref="CustomerCheckoutFillNewBillingAddressActionGroup" stepKey="guestCheckoutFillingShippingAddress">
+        <actionGroup ref="LoggedInUserCheckoutFillNewBillingAddressActionGroup" stepKey="guestCheckoutFillingShippingAddress">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="US_Address_CA" />
         </actionGroup>
