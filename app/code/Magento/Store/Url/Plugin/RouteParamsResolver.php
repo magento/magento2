@@ -6,6 +6,7 @@
 namespace Magento\Store\Url\Plugin;
 
 use \Magento\Store\Model\Store;
+use \Magento\Store\Api\Data\StoreInterface;
 use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
@@ -65,9 +66,9 @@ class RouteParamsResolver
             unset($data['_scope']);
         }
         if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
-            /** @var Store $currentScope */
+            /** @var StoreInterface $currentScope */
             $currentScope = $subject->getScope();
-            $storeCode = $currentScope && $currentScope instanceof Store ?
+            $storeCode = $currentScope && $currentScope instanceof StoreInterface ?
                 $currentScope->getCode() :
                 $this->storeManager->getStore()->getCode();
 
