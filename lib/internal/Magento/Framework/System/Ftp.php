@@ -109,8 +109,9 @@ class Ftp
         }
         
         // Decode user & password strings from URL
-        if ( array_key_exists('user', $data) ) $data['user'] = urldecode($data['user']);
-        if ( array_key_exists('pass', $data) ) $data['pass'] = urldecode($data['pass']);
+        foreach (array_intersect(array_keys($data), ['user','pass']) as $key) {
+            $data[$key] = urldecode($data[$key]);
+        }
         
         return $data;
     }
