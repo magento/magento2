@@ -35,9 +35,9 @@
             <click selector="{{AdminGridConfirmActionSection.ok}}" stepKey="confirmStocksDeleteToDeleteAllNeedlesslyStocks"/>
 
             <createData entity="BasicMsiStock1" stepKey="createCustomStock1"/>
-            <createData entity="BasicMsiStock1" stepKey="createCustomStock2"/>
-            <createData entity="BasicMsiStock2" stepKey="createCustomStock3"/>
-            <createData entity="BasicMsiStock2" stepKey="createCustomStock4"/>
+            <createData entity="BasicMsiStock2" stepKey="createCustomStock2"/>
+            <createData entity="BasicMsiStock3" stepKey="createCustomStock3"/>
+            <createData entity="BasicMsiStock4" stepKey="createCustomStock4"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>

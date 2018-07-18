@@ -39,7 +39,7 @@
         <data key="description">Test Source 1</data>
         <data key="latitude">0</data>
         <data key="longitude">0</data>
-        <data key="priority">0</data>
+        <data key="priority">100</data>
         <data key="contact_name">First Last</data>
         <data key="email" unique="prefix">test@test.com</data>
         <data key="phone">123-456-7890</data>
@@ -61,7 +61,7 @@
         <data key="description">Test Source 2</data>
         <data key="latitude">0</data>
         <data key="longitude">0</data>
-        <data key="priority">0</data>
+        <data key="priority">200</data>
         <data key="contact_name">New First New Last</data>
         <data key="email" unique="prefix">new@test.com</data>
         <data key="phone">987-654-3210</data>
@@ -83,7 +83,7 @@
         <data key="description">Test Source 3</data>
         <data key="latitude">0</data>
         <data key="longitude">0</data>
-        <data key="priority">0</data>
+        <data key="priority">300</data>
         <data key="contact_name">New First New Last</data>
         <data key="email" unique="prefix">new@test.com</data>
         <data key="phone">987-654-3210</data>
@@ -105,7 +105,7 @@
         <data key="description">Test Source 4</data>
         <data key="latitude">0</data>
         <data key="longitude">0</data>
-        <data key="priority">0</data>
+        <data key="priority">400</data>
         <data key="contact_name">New First New Last</data>
         <data key="email" unique="prefix">new@test.com</data>
         <data key="phone">987-654-3210</data>

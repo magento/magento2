@@ -21,6 +21,15 @@
         </annotations>
 
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheManageStockPageToCleanUpBefore"/>
+            <waitForPageLoad stepKey="waitPageToCleanUpBefore" />
+            <waitForLoadingMaskToDisappear stepKey="waitLoadMaskToCleanUpBefore" />
+            <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAllToCleanUpBefore"/>
+            <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAllToCleanUpBefore"/>
+            <click selector="//button[@class='action-select']" stepKey="massActionsToCleanUpBefore"/>
+            <click selector="//span[text()='Delete']" stepKey="massDeleteToCleanUpBefore"/>
+            <click selector=".action-accept" stepKey="okToCleanUpBefore"/>
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="BasicMsiStock1" stepKey="createStock2"/>
             <createData entity="BasicMsiStock1" stepKey="createStock3"/>
@@ -43,7 +52,6 @@
             <createData entity="BasicMsiStock1" stepKey="createStock20"/>
             <createData entity="BasicMsiStock1" stepKey="createStock21"/>
             <createData entity="BasicMsiStock1" stepKey="createStock22"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- @TODO: Refactor hardcoded selectors and create action group to remove all Stocks -->
