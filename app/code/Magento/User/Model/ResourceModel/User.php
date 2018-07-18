@@ -208,7 +208,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'role_type' => RoleUser::ROLE_TYPE,
                     'user_id' => $user->getId(),
                     'user_type' => UserContextInterface::USER_TYPE_ADMIN,
-                    'role_name' => $user->getFirstname(),
+                    'role_name' => $user->getFirstName(),
                 ]
             );
 
