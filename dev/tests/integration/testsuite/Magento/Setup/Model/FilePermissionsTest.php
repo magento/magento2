@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace integration\testsuite\Magento\Setup\Model;
+namespace Magento\Setup\Model;
 
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Filesystem;
