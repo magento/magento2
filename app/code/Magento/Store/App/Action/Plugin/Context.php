@@ -131,14 +131,14 @@ class Context
      */
     private function updateContext(StoreInterface $store)
     {
+        /** @var StoreInterface $defaultStore */
+        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
-            $this->storeManager->getDefaultStoreView()->getCode()
+            $defaultStore->getCode()
         );
 
-        /** @var StoreInterface $defaultStore */
-        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
             $this->session->getCurrencyCode()
