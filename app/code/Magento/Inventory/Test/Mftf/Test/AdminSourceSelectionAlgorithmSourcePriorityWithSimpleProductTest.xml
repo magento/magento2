@@ -18,6 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <group value="skip" />
         </annotations>
 
         <before>

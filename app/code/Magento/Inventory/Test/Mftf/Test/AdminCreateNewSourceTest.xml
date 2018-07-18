@@ -30,7 +30,8 @@
 
         <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="amOnTheSourcesListPage1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnTheAddButton1"/>
-
+        <waitForPageLoad stepKey="waitPageLoad" />
+        <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
         <fillField userInput="{{FullSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField1"/>
         <fillField userInput="{{FullSource1.source_code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField1"/>
         <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled1"/>
