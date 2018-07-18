@@ -157,7 +157,7 @@
         <click selector="{{AdminSourceSelectionFormSection.sourceSelectionAlgorithmToggle}}" stepKey="openSourceSelectionAlgorithmList"/>
         <click selector="{{AdminSourceSelectionFormSection.selectSourcePriority}}" stepKey="selectSourcePriorityAlgorithm"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
-
+        <wait time="30" stepKey="waiting" />
         <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowProductSku('0')}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="checkProductSku"/>
         <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowQtyToShip('0')}}" userInput="5" stepKey="checkQtyToShip"/>
         <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','0')}}" userInput="$$createSource4.source[name]$$" stepKey="checkCustomSource4Name"/>
