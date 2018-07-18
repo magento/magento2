@@ -77,7 +77,7 @@
 
         <!-- Save -->
         <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
-        <waitForElementVisible selector="{{AttributePropertiesSection.successMessage}}" stepKey="waitForSuccess"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
         <!-- Assert that the Save was successful after round trip to server -->
         <actionGroup ref="assertSwatchColor" stepKey="assertSwatch1">
