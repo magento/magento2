@@ -143,6 +143,10 @@ class CategoryTree
 
         /** @var FieldNode $node */
         foreach ($subSelection as $node) {
+            if ($node->kind === 'InlineFragment') {
+                continue;
+            }
+
             $this->joinAttributesRecursively($collection, $node);
         }
     }
