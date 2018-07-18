@@ -27,7 +27,7 @@
         <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
         <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
         <element name="dropdownDefaultState" type="select" selector="#row_tax_defaults_region select"/>
-        <element name="defaultPostCode" type="input" selector="#tax_defaults_postcode"/>
+        <element name="defaultPostCode" type="checkbox" selector="#tax_defaults_postcode"/>
         
         <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
         <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
