@@ -107,7 +107,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     {
         $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException(__('This user has no tokens.'));
+            return true;
         }
         try {
             foreach ($tokenCollection as $token) {
