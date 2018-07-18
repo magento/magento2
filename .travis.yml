@@ -17,7 +17,6 @@ services:
 language: php
 php:
   - 7.1
-  - 7.2
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
@@ -25,14 +24,9 @@ env:
     - NODE_JS_VERSION=8
     - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
-    - TEST_SUITE=unit
-    - TEST_SUITE=static
-    - TEST_SUITE=js GRUNT_COMMAND=spec
-    - TEST_SUITE=js GRUNT_COMMAND=static
     - TEST_SUITE=integration INTEGRATION_INDEX=1
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
-    - TEST_SUITE=functional
 matrix:
   exclude:
     - php: 7.1
