@@ -61,5 +61,4 @@ class StockStatusProvider implements ResolverInterface
 
         return $this->valueFactory->create($result);
     }
-
 }

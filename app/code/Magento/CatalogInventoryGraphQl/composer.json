@@ -7,7 +7,7 @@
     "magento/framework": "*"
   },
   "suggest": {
-    "magento/module-catalog-inventory": "*",
+    "magento/module-catalog-inventory": "*"
   },
   "license": [
     "OSL-3.0",

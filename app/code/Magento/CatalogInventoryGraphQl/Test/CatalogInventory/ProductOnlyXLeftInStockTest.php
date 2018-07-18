@@ -59,6 +59,6 @@ QUERY;
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('only_x_left_in_stock', $response['products']['items'][0]);
-        $this->assertEquals(20, $response['products']['items'][0]['only_x_left_in_stock']);
+        $this->assertEquals(100, $response['products']['items'][0]['only_x_left_in_stock']);
     }
 }
