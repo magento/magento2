@@ -171,7 +171,7 @@
             <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
             <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettings}}.open" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}" visible="false" stepKey="openCalculationSettingsTab"/>
             <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
             <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
 
@@ -181,7 +181,7 @@
             <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
             <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
 
-            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}.open" visible="false" stepKey="openPriceDisplaySettings"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettingsOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
             <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
             <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
 
