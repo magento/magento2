@@ -111,6 +111,7 @@
         "magento/module-catalog-analytics": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-catalog-inventory": "*",
+        "magento/module-catalog-inventory-graph-ql": "*",
         "magento/module-catalog-rule": "*",
         "magento/module-catalog-rule-configurable": "*",
         "magento/module-catalog-search": "*",
