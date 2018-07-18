@@ -17,6 +17,10 @@
                     <argument name="button_title" xsi:type="string">Assign sources</argument>
                     <argument name="submit_url" xsi:type="string">inventorycatalog/source/bulkAssignPost</argument>
                 </arguments>
+
+                <block name="inventory-bulk-source-assignment-notice"
+                       as="notice"
+                       template="Magento_InventoryCatalogAdminUi::assign_notice.phtml" />
             </block>
         </referenceContainer>
     </body>

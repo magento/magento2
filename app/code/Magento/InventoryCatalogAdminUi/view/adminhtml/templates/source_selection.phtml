@@ -51,6 +51,8 @@ $sources = $viewModel->getSources();
             <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>">
         </div>
 
+        <?= $block->getChildHtml('notice') ?>
+
         <fieldset class="fieldset admin__fieldset" id="base_fieldset">
             <legend class="admin__legend legend">
                 <span><?= /* @noEscape */ __('Bulk operation') ?></span>
