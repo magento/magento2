@@ -45,6 +45,8 @@
         <!--Step4. Fill in all data according to data set-->
         <actionGroup ref="CreateBundleProductForTwoSimpleProducts" stepKey="CreateBundleProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
+            <argument name="simpleProductFirst" value="SimpleProduct"/>
+            <argument name="simpleProductSecond" value="SimpleProduct2"/>
         </actionGroup>
 
         <!--Step5. Save product-->
