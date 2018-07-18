@@ -90,7 +90,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
             Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
             ScopeInterface::SCOPE_STORE
         );
-        if($thresholdQty === 0){
+        if ($thresholdQty === 0) {
             return null;
         }
 
