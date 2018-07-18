@@ -21,7 +21,7 @@
         <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickFirstRow"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
-        <click selector="{{AdminProductAttributeEditMenuSection.deleteAttribute}}" stepKey="deleteProductAttribute"/>
+        <click selector="{{AdminProductAttributeEditSection.deleteAttribute}}" stepKey="deleteProductAttribute"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitingForWarningModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreDelete"/>
     </actionGroup>
