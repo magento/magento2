@@ -1,0 +1,7 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    only_x_left_in_stock: Float @doc(description: "Product stock only x left count") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
+    stock_status: Int @doc(description: "Stock status of the product") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\StockStatusProvider")
+}
