@@ -34,7 +34,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->will($this->returnValue($intData));
         // verify success message
         $this->_messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME]));
 
         $this->_escaper->expects($this->once())
@@ -56,7 +56,9 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->with(self::INTEGRATION_ID)
             ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage))));
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -81,7 +83,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->method('escapeHtml')
             ->willReturnArgument(0);
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -174,7 +176,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         // Use real translate model
         $this->_translateModelMock = null;
         // Verify success message
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $integrationController = $this->_createIntegrationController('Save');
         $integrationController->execute();
     }
@@ -205,7 +207,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->willReturnArgument(0);
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -277,7 +279,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->will($this->throwException(new AuthenticationException(__($exceptionMessage))));
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

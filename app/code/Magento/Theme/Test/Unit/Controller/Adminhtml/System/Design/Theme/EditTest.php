@@ -48,7 +48,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->with(\Magento\Framework\View\Design\ThemeInterface::class)
             ->willReturn($theme);
         $this->messageManager->expects($this->once())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->session->expects($this->once())
             ->method('setIsUrlNotice')
             ->with(true);
@@ -114,7 +114,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->willReturn($logger);
 
         $this->messageManager->expects($this->once())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->session->expects($this->once())
             ->method('setIsUrlNotice')
             ->with(true);

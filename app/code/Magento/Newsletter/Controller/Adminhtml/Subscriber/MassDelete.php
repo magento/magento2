@@ -17,7 +17,7 @@ class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-            $this->messageManager->addError(__('Please select one or more subscribers.'));
+            $this->messageManager->addErrorMessage(__('Please select one or more subscribers.'));
         } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
@@ -28,9 +28,12 @@ class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
                     );
                     $subscriber->delete();
                 }
-                $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted.', count($subscribersIds)));
+                $this->messageManager->addSuccessMessage(
+                    __('Total of %1 record(s) were deleted.',
+                       count($subscribersIds))
+                );
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 

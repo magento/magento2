@@ -153,7 +153,7 @@ class PlaceOrderTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
                 ->with($redirectUrl);
         } else {
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with('User Message');
             $this->_expectRedirect('checkout/cart');
         }

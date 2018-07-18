@@ -276,11 +276,11 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->with($labelContent)
             ->will($this->returnValue(false));
         $this->messageManagerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId))
             ->will($this->throwException(new \Exception()));
         $this->messageManagerMock->expects($this->at(1))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('An error occurred while creating shipping label.')
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
@@ -306,7 +306,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
-        $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage')->will($this->returnSelf());
         $this->redirectSection();
 
         $this->assertNull($this->controller->execute());

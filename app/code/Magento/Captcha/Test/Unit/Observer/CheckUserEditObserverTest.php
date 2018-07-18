@@ -146,7 +146,7 @@ class CheckUserEditObserverTest extends \PHPUnit\Framework\TestCase
 
         $message = __('The account is locked. Please wait and try again or contact %1.', $email);
         $this->messageManagerMock->expects($this->exactly(2))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->withConsecutive([$message], [__('Incorrect CAPTCHA')]);
 
         $this->actionFlagMock->expects($this->once())

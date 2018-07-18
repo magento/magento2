@@ -172,34 +172,34 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     );
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                     $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
                         . 'Please wait and try again later.'
                     );
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                     $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
                         . 'Please wait and try again later.'
                     );
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                     $this->session->setUsername($login['username']);
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
                 }
             } else {
-                $this->messageManager->addError(__('A login and a password are required.'));
+                $this->messageManager->addErrorMessage(__('A login and a password are required.'));
             }
         }
 

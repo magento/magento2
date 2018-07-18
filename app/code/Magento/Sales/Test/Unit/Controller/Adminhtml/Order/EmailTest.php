@@ -171,7 +171,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the order email.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -200,7 +200,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 )
             );
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This order no longer exists.');
 
         $this->actionFlag->expects($this->once())

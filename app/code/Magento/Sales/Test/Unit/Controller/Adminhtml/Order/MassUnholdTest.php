@@ -196,11 +196,11 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
         $this->orderManagementMock->expects($this->atLeastOnce())->method('unHold')->willReturn(true);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) were not released from on hold status.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 order(s) have been released from on hold status.');
 
         $this->resultRedirectMock->expects($this->once())
@@ -239,7 +239,7 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('No order(s) were released from on hold status.');
 
         $this->resultRedirectMock->expects($this->once())

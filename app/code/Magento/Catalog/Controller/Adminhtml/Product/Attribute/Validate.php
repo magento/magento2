@@ -92,7 +92,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
                 $setName = $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($setName);
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('A "%1" attribute set name already exists. Create a new name and try again.', $setName)
                 );
 

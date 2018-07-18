@@ -221,7 +221,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->setParams($requestParams);
 
-        $this->_messagesMock->expects($this->once())->method('addSuccess')->with($this->equalTo($testedMessage));
+        $this->_messagesMock->expects($this->once())->method('addSuccessMessage')->with($this->equalTo($testedMessage));
 
         $this->_controller->execute();
     }

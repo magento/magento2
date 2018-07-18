@@ -117,7 +117,7 @@ class UnholdTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Can\'t unhold order.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')

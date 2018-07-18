@@ -86,7 +86,7 @@ class SwitchAction extends Action
         }
 
         if (isset($error)) {
-            $this->messageManager->addError($error);
+            $this->messageManager->addErrorMessage($error);
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             return;
         }

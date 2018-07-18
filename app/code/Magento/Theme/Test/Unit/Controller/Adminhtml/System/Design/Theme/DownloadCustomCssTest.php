@@ -205,7 +205,7 @@ class DownloadCustomCssTest extends \PHPUnit\Framework\TestCase
             ->with($themeId)
             ->willReturn(null);
         $this->messageManager->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $logger->expects($this->once())
             ->method('critical');
         $this->redirect->expects($this->once())
