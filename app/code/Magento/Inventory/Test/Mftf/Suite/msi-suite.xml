@@ -19,6 +19,9 @@
             <group name="skip"/>
             <group name="multi_mode"/>
         </exclude>
+        <after>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+        </after>
     </suite>
     <suite name="MSI_Multi_Mode">
         <before>
@@ -31,5 +34,8 @@
             <group name="skip"/>
             <group name="single_mode"/>
         </exclude>
+        <after>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+        </after>
     </suite>
 </suites>
