@@ -383,7 +383,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * @return string|int|bool|float
+     * @return string|null
      * @codeCoverageIgnore
      */
     public function getDefaultValue()
