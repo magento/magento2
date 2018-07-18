@@ -9,6 +9,9 @@
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
     <suite name="MSI_Single_Mode">
+        <before>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+        </before>
         <include>
             <group name="single_mode"/>
         </include>
@@ -18,6 +21,9 @@
         </exclude>
     </suite>
     <suite name="MSI_Multi_Mode">
+        <before>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+        </before>
         <include>
             <group name="multi_mode"/>
         </include>

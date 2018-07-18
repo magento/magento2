@@ -88,6 +88,9 @@
         <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillTheQuantityField1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton5"/>
+        <click selector="[data-action='confirm']" stepKey="clickOnConfirmButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear" />
+        <waitForPageLoad stepKey="waitUntilPageIsReady" />
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
