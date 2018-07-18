@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Filter order grid by order id field-->
+    <actionGroup name="filterOrderGridById">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrderGridLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+    </actionGroup>
+
+    <!--Filter order grid by the billing name field-->
+    <actionGroup name="filterOrderGridByBillingName">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrderGridLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('billing_name')}}" userInput="{{customer.fullname}}" stepKey="fillBillToNameFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+    </actionGroup>
+
+    <!--Filter order grid by order total range-->
+    <actionGroup name="filterOrderGridByBaseTotalRange">
+        <arguments>
+            <argument name="from"/>
+            <argument name="to"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('base_grand_total[from]')}}" userInput="{{from}}" stepKey="fillOrderTotalFrom"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('base_grand_total[to]')}}" userInput="{{to}}" stepKey="fillOrderTotalTo"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+    
+    <actionGroup name="filterOrderGridByPurchaseDate">
+        <arguments>
+            <argument name="from"/>
+            <argument name="to"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" userInput="{{from}}" stepKey="fillOrderPurchaseDateFrom"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[to]')}}" userInput="{{to}}" stepKey="fillOrderPurchaseDateTo"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+
+    <actionGroup name="filterOrderGridByStatus">
+        <arguments>
+            <argument name="status"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{status}}" stepKey="fillOrderStatusFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+</actionGroups>

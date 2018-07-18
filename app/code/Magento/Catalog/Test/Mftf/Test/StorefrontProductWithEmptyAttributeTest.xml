@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontProductWithEmptyAttributeTest">
+        <annotations>
+            <title value="Product attribute is not visible on storefront if it is empty"/>
+            <description value="Product attribute should not be visible on storefront if it is empty"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-91893"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
+        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <seeElement selector=".message-success" stepKey="assertSuccess"/>
+        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="goProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <dontSeeElement selector="//table[@id='product-attribute-specs-table']/tbody/tr/th[contains(text(),'testattribute')]" stepKey="seeAttribute2"/>
+    </test>
+    </tests>
