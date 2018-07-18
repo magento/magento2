@@ -219,7 +219,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             '_getCustomerGroupById',
             'correctExportData'
         ]);
-        $this->advancedPricing = $this->getMockbuilder(
+        $this->advancedPricing = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
         )
             ->setMethods($mockMethods)
