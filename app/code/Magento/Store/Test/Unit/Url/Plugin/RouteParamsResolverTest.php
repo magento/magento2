@@ -82,7 +82,6 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam');
 
-
         $this->model->beforeSetRouteParams(
             $routeParamsResolverMock,
             $data
