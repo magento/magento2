@@ -67,12 +67,11 @@ class Attributes extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * $excludeAttr is optional array of attribute codes to
-     * exclude them from additional data array
+     * $excludeAttr is optional array of attribute codes to exclude them from additional data array
      *
      * @param array $excludeAttr
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAdditionalData(array $excludeAttr = [])
     {
@@ -80,7 +79,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+            if ($this->shouldDisplay($attribute, $excludeAttr)) {
                 $value = $attribute->getFrontend()->getValue($product);
 
                 if ($value instanceof Phrase) {
@@ -99,5 +98,19 @@ class Attributes extends \Magento\Framework\View\Element\Template
             }
         }
         return $data;
+    }
+
+    /**
+     * Determine if we should display the attribute on the front-end
+     *
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param array $excludeAttr
+     * @return bool
+     */
+    protected function shouldDisplay(
+        \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
+        array $excludeAttr
+    ) {
+        return ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr));
     }
 }
