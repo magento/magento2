@@ -44,7 +44,6 @@ class Config
         if (empty($fieldsets)) {
             return null;
         }
-        
         return $fieldsets[$name] ??  null;
     }
 }
