@@ -24,9 +24,9 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 class CategoryTree
 {
     /**
-     * In depth we need to calculate only children nodes, so 2 first wrapped nodes should be ignored
+     * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
      */
-    const DEPTH_OFFSET = 2;
+    const DEPTH_OFFSET = 1;
 
     /**
      * @var CollectionFactory
