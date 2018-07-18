@@ -7,6 +7,7 @@ namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * @magentoAppArea adminhtml
@@ -80,6 +81,11 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     public function testDeleteActionNoGroupId()
     {
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setParam('form_key', $formKey->getFormKey());
         $this->dispatch('backend/customer/group/delete');
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL));
     }
@@ -90,7 +96,17 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testDeleteActionExistingGroup()
     {
         $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
-        $this->getRequest()->setParam('id', $groupId);
+
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setParams(
+            [
+                'id' => $groupId,
+                'form_key' => $formKey->getFormKey()
+            ]
+        );
         $this->dispatch('backend/customer/group/delete');
 
         /**
@@ -108,7 +124,16 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     public function testDeleteActionNonExistingGroupId()
     {
-        $this->getRequest()->setParam('id', 10000);
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setParams(
+            [
+                'id' => 10000,
+                'form_key' => $formKey->getFormKey()
+            ]
+        );
         $this->dispatch('backend/customer/group/delete');
 
         /**
