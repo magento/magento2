@@ -70,6 +70,7 @@ class DocBlock
             new \Magento\TestFramework\Annotation\Cache($application),
             new \Magento\TestFramework\Annotation\AdminConfigFixture(),
             new \Magento\TestFramework\Annotation\ConfigFixture(),
+            new \Magento\TestFramework\Annotation\IndexerDimensionMode($application),
         ];
     }
 }

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Indexer\Product\Price;
+namespace Magento\Catalog\Model\Indexer\Product\Price\Dimension;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 
-class SimpleWithOptionsTierPriceTest extends \Magento\TestFramework\Indexer\TestCase
+class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -35,11 +35,11 @@ class SimpleWithOptionsTierPriceTest extends \Magento\TestFramework\Indexer\Test
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->productCollectionFactory = $this->objectManager->create(CollectionFactory::class);
-        $this->setDimensionMode();
     }
 
     /**
      * @magentoDbIsolation disabled
+     * @magentoIndexerDimensionMode price
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testTierPrice()
