@@ -4,7 +4,7 @@ type Query {
     storeConfigs (
     storeCodes: [String] @doc(description: "Store Codes of the store configs")
 ): StoreConfigs
-    @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigs") @doc(description: "The store configs query")
+    @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigsResolver") @doc(description: "The store configs query")
 }
 
 type Website @doc(description: "The type contains information about a website") {

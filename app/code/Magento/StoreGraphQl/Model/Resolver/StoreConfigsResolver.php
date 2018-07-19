@@ -18,7 +18,7 @@ use Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigsDataProvider;
 /**
  * StoreConfig page field resolver, used for GraphQL request processing.
  */
-class StoreConfigs implements ResolverInterface
+class StoreConfigsResolver implements ResolverInterface
 {
     /**
      * @var StoreConfigsDataProvider
