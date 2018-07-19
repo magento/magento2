@@ -6,8 +6,7 @@
 var config = {
     map: {
         '*': {
-            captcha: 'Magento_Captcha/js/captcha',
-            'Magento_Captcha/captcha': 'Magento_Captcha/js/captcha'
+            'Magento_SendFriend/back-event': 'Magento_SendFriend/js/back-event'
         }
     }
 };
