@@ -11,5 +11,6 @@
         <element name="storeViewSwitcher" type="button" selector="#switcher-language-trigger"/>
         <element name="storeViewDropdown" type="button" selector="ul.switcher-dropdown"/>
         <element name="storeViewOption" type="button" selector="li.view-{{var1}}>a" parameterized="true"/>
+        <element name="mainTitle" type="text" selector="#maincontent .page-title"/>
     </section>
 </sections>
