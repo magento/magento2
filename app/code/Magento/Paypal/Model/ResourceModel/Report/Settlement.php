@@ -90,7 +90,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
                 $connection->commit();
             } catch (\Exception $e) {
-                $connection->rollback();
+                $connection->rollBack();
             }
         }
 
