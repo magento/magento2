@@ -90,6 +90,9 @@ class RegionTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('required-entry', $html);
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

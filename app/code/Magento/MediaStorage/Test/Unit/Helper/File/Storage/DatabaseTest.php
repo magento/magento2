@@ -75,6 +75,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->checkDbUsage());
     }
 
+    /**
+     * @return array
+     */
     public function checkDbUsageDataProvider()
     {
         return [
@@ -144,6 +147,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->helper->saveFile('media-dir/filename');
     }
 
+    /**
+     * @return array
+     */
     public function updateFileDataProvider()
     {
         return [
@@ -226,6 +232,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->fileExists('media-dir/file'));
     }
 
+    /**
+     * @return array
+     */
     public function fileExistsDataProvider()
     {
         return [
@@ -264,6 +273,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->helper->getUniqueFilename('media-dir/directory/', 'filename.ext'));
     }
 
+    /**
+     * @return array
+     */
     public function getUniqueFilenameDataProvider()
     {
         return [
@@ -308,6 +320,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->saveFileToFilesystem('media-dir/filename'));
     }
 
+    /**
+     * @return array
+     */
     public function saveFileToFileSystemDataProvider()
     {
         return [
@@ -430,6 +445,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->saveUploadedFile($result));
     }
 
+    /**
+     * @return array
+     */
     public function saveUploadedFileDataProvider()
     {
         return [

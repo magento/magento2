@@ -120,6 +120,7 @@
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
             </argument>
         </arguments>
     </type>
@@ -323,6 +324,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\OrderSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\OrderIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderInvoiceSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -330,6 +332,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\InvoiceSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Invoice\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\InvoiceIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderShipmentSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -337,6 +340,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\ShipmentSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Shipment\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\ShipmentIdentity</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesOrderCreditmemoSendEmails" type="Magento\Sales\Model\EmailSenderHandler">
@@ -344,6 +348,7 @@
             <argument name="emailSender" xsi:type="object">Magento\Sales\Model\Order\Email\Sender\CreditmemoSender</argument>
             <argument name="entityResource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection</argument>
+            <argument name="identityContainer" xsi:type="object" shared="false">Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity</argument>
         </arguments>
     </virtualType>
 
