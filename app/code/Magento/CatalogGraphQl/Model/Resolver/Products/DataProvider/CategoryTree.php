@@ -17,6 +17,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
+use Magento\Catalog\Model\Category;
 
 /**
  * Category tree data provider
@@ -96,7 +97,7 @@ class CategoryTree
         $level = $this->levelCalculator->calculate($rootCategoryId);
 
         // If root category is being filter, we've to remove first slash
-        if ($rootCategoryId == 1) {
+        if ($rootCategoryId == Category::TREE_ROOT_ID) {
             $regExpPathFilter = sprintf('.*%s/[/0-9]*$', $rootCategoryId);
         } else {
             $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
