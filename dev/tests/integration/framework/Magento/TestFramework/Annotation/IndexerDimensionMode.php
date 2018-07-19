@@ -32,9 +32,6 @@ class IndexerDimensionMode
     public function __construct(Application $application)
     {
         $this->db = $application->getDbInstance();
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->modeSwithcer = $this->objectManager->get(ModeSwitcher::class);
-        $this->configWriter = $this->objectManager->get(ConfigInterface::class);
     }
 
     private function restoreDb()
@@ -42,11 +39,21 @@ class IndexerDimensionMode
         $this->db->restoreFromDbDump();
     }
 
+    private function initSwicher()
+    {
+        if (!$this->modeSwithcer) {
+            $this->objectManager = Bootstrap::getObjectManager();
+            $this->modeSwithcer = $this->objectManager->get(ModeSwitcher::class);
+            $this->configWriter = $this->objectManager->get(ConfigInterface::class);
+        }
+    }
+
     /**
      * @param string $mode
      */
     private function setDimensionMode($mode = DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP)
     {
+        $this->initSwicher();
         $this->modeSwithcer->createTables($mode);
         $this->modeSwithcer->moveData($mode, DimensionModeConfiguration::DIMENSION_NONE);
         $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $mode);
