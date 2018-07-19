@@ -30,6 +30,7 @@
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="30" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
         <click selector="{{StoreConfigSection.Save}}" stepKey="clickOnSaveWebSite1"/>
