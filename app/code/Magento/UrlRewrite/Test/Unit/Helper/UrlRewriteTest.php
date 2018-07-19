@@ -55,6 +55,9 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
         $this->_helper->validateSuffix($suffix);
     }
 
+    /**
+     * @return array
+     */
     public function requestPathDataProvider()
     {
         return [
@@ -63,6 +66,9 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function requestPathExceptionDataProvider()
     {
         return [

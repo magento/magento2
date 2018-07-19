@@ -109,6 +109,9 @@ HTML;
         );
     }
 
+    /**
+     * @return Topmenu
+     */
     protected function getTopmenu()
     {
         return new Topmenu($this->context, $this->nodeFactory, $this->treeFactory);
