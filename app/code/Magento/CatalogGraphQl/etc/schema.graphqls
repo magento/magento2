@@ -259,6 +259,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     meta_description: String @doc(description: "A brief overview of the product for search results listings, maximum 255 characters")
     image: String @doc(description: "The relative path to the main image on the product page")
     small_image: String @doc(description: "The relative path to the small image, which is used on catalog pages")
+    small_image_url: String @doc(description: "The small image URL, which is used on catalog pages") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\SmallImageUrl")
     thumbnail: String @doc(description: "The relative path to the product's thumbnail image")
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
