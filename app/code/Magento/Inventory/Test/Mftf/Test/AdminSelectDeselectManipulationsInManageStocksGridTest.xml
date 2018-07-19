@@ -30,6 +30,7 @@
             <click selector="//button[@class='action-select']" stepKey="massActionsToCleanUpBefore"/>
             <click selector="//span[text()='Delete']" stepKey="massDeleteToCleanUpBefore"/>
             <click selector=".action-accept" stepKey="okToCleanUpBefore"/>
+            <waitForPageLoad stepKey="waitForPageLoaded" time="30" />
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="BasicMsiStock1" stepKey="createStock2"/>
             <createData entity="BasicMsiStock1" stepKey="createStock3"/>

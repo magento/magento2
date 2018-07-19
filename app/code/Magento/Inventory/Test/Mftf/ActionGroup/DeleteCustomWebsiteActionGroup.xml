@@ -22,6 +22,7 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterClickEditExistingWebsite" time="30"/>
         <wait stepKey="wait" time="30" />
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditStorePage"/>
+        <waitForPageLoad stepKey="waitForDeleteAppears" time="30" />
         <selectOption userInput="No" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteButtonOnDeleteWebsitePage"/>
     </actionGroup>
