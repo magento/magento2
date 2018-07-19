@@ -380,7 +380,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                         ),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
                         'value' => $rowData[self::COL_TIER_PRICE],
-                        'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
+                        'website_id' => $this->getWebSiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                 }
             }

@@ -128,7 +128,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Framework\Filesystem\DriverPool $result */
         $this->assertInstanceOf('Magento\Framework\Filesystem\DriverPool', $result);
-        $this->assertInstanceof($driverClass, $result->getDriver('custom'));
+        $this->assertInstanceOf($driverClass, $result->getDriver('custom'));
     }
 
     public function testGetParams()

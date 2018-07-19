@@ -29,7 +29,7 @@
                 data-mage-init='{"dropdown":{}}'
                 data-toggle="dropdown">
                 <span class="admin__action-dropdown-text">
-                    <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
+                    <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUserName()); ?></span>
                 </span>
             </a>
             <ul class="admin__action-dropdown-menu">
@@ -39,7 +39,7 @@
                         href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
                         <?php /* @escapeNotVerified */ echo $block->getUiId('user', 'account', 'settings')?>
                         title="<?php echo $block->escapeHtml(__('Account Setting')) ?>">
-                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>)
+                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUserName()); ?></span>)
                     </a>
                 </li>
                 <?php endif; ?>
