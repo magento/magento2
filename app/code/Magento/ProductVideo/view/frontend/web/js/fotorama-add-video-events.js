@@ -72,6 +72,7 @@ define([
         } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
             id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
             type = 'youtube';
+
             if (href.host.match(/youtube-nocookie.com/)) {
                 useYoutubeNocookie = true;
             }

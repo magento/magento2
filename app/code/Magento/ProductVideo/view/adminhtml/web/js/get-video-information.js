@@ -169,6 +169,7 @@ define([
                         if (self.useYoutubeNocookie) {
                             host = 'https://www.youtube-nocookie.com';
                         }
+
                         if (self._player !== undefined) {
                             return;
                         }
