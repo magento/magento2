@@ -45,6 +45,7 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
