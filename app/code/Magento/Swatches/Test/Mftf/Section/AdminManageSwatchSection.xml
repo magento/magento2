@@ -12,6 +12,9 @@
         <element name="adminInputByIndex" type="input" selector="optionvisual[value][option_{{var}}][0]" parameterized="true"/>
         <element name="addSwatch" type="button" selector="#add_new_swatch_visual_option_button" timeout="30"/>
         <element name="nthSwatch" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_window" parameterized="true"/>
+        <element name="addSwatchText" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="swatchTextByIndex" type="input" selector="input[name='swatchtext[value][option_{{index}}][0]']" parameterized="true"/>
+        <element name="swatchAdminDescriptionByIndex" type="input" selector="input[name='optiontext[value][option_{{index}}][0]']" parameterized="true"/>
         <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
         <element name="nthDelete" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
     </section>

@@ -63,5 +63,8 @@
         <element name="productAddToCompare" type="button" selector="a.action.tocompare"/>
         <element name="productOptionDropDownTitle" type="text" selector="//label[contains(.,'{{var1}}')]" parameterized="true"/>
         <element name="productOptionDropDownOptionTitle" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[contains(.,'{{var2}}')]" parameterized="true"/>
+
+        <element name="swatchAttributeOptions" type="text" selector="div.swatch-attribute-options"/>
+        <element name="nthSwatchOptionText" type="button" selector="div.swatch-option.text:nth-of-type({{n}})" parameterized="true"/>
     </section>
 </sections>
