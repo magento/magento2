@@ -30,24 +30,28 @@
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite1.name}}" stepKey="enterWebsiteName1"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite1.code}}" stepKey="enterWebsiteCode1"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite1"/>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage2"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite2.name}}" stepKey="enterWebsiteName2"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite2.code}}" stepKey="enterWebsiteCode2"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite2"/>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage3"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite3.name}}" stepKey="enterWebsiteName3"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite3.code}}" stepKey="enterWebsiteCode3"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite3"/>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="shouldBeOnTheSourceGridPage4"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite4"/>
+        <waitForPageLoad stepKey="waitForPageLoad4" />
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{BasicMsiWebsite4.name}}" stepKey="enterWebsiteName4"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{BasicMsiWebsite4.code}}" stepKey="enterWebsiteCode4"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickOnSaveWebSite4"/>
