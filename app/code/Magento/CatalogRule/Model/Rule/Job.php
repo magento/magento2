@@ -34,18 +34,18 @@ class Job extends \Magento\Framework\DataObject
      */
     protected $ruleProcessor;
 
-	/**
-	 * Basic object initialization
-	 *
-	 * @param RuleProductProcessor $ruleProcessor
-	 * @param array $data
-	 */
+    /**
+     * Basic object initialization
+     *
+     * @param RuleProductProcessor $ruleProcessor
+     * @param array $data
+     */
     public function __construct(
     	RuleProductProcessor $ruleProcessor,
-		array $data = []
+    	array $data = []
     ) {
-	    $this->ruleProcessor = $ruleProcessor;
-	    parent::__construct($data);
+        $this->ruleProcessor = $ruleProcessor;
+        parent::__construct($data);
     }
 
     /**
