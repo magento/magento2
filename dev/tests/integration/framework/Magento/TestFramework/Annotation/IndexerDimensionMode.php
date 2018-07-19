@@ -6,46 +6,40 @@
 
 namespace Magento\TestFramework\Annotation;
 
-use PHPUnit\Framework\Exception;
-use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\TestFramework\Application;
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Console\Command\PriceIndexerDimensionsModeSetCommand as SetModeCommand;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Implementation of the @magentoIndexerDimensionMode DocBlock annotation
  */
 class IndexerDimensionMode
 {
-    private $db;
-    private $isDimensionMode = false;
+    private $modeSwithcer;
 
-    private $setModeCommand;
+    private $configWriter;
+
+    private $db;
+
+    private $isDimensionMode = false;
 
     private $objectManager;
 
-    public function __construct($application)
+    public function __construct(Application $application)
     {
         $this->db = $application->getDbInstance();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->modeSwithcer = $this->objectManager->get(ModeSwitcher::class);
+        $this->configWriter = $this->objectManager->get(ConfigInterface::class);
     }
 
     private function restoreDb()
     {
-        $this->db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
-
         $this->db->restoreFromDbDump();
-    }
-
-    private function initCommand()
-    {
-        if (!$this->setModeCommand) {
-            $this->objectManager = Bootstrap::getObjectManager();
-            $command = $this->objectManager->create(SetModeCommand::class);
-            $this->setModeCommand = new CommandTester($command);
-        }
     }
 
     /**
@@ -53,19 +47,19 @@ class IndexerDimensionMode
      */
     private function setDimensionMode($mode = DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP)
     {
-        $this->initCommand();
-        $this->objectManager->get(Config::class)->clean();
-        $this->setModeCommand->execute([SetModeCommand::INPUT_KEY_MODE => $mode]);
+        $this->modeSwithcer->createTables($mode);
+        $this->modeSwithcer->moveData($mode, DimensionModeConfiguration::DIMENSION_NONE);
+        $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $mode);
         $this->objectManager->get(Config::class)->clean();
     }
 
      /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
         $source = $test->getAnnotations();
 
@@ -91,10 +85,10 @@ class IndexerDimensionMode
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest(TestCase $test)
     {
         if ($this->isDimensionMode) {
             $this->restoreDb();
@@ -107,10 +101,10 @@ class IndexerDimensionMode
      * Fails the test with specified error message
      *
      * @param string $message
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @throws \Exception
      */
-    private function fail($message, \PHPUnit\Framework\TestCase $test)
+    private function fail($message, TestCase $test)
     {
         $test->fail("{$message} in the test '{$test->toString()}'");
     }
