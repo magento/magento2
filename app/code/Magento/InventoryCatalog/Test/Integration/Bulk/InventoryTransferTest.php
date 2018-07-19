@@ -91,27 +91,24 @@ class InventoryTransferTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDbIsolation enabled
      */
-    public function testBulkInventoryTransfer()
+    public function testBulkInventoryTransferAndUnassign()
     {
         $skus = ['SKU-1'];
-        $this->bulkInventoryTransfer->execute($skus, 'eu-3', false);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->bulkInventoryTransfer->execute($skus, 'eu-1', 'eu-2', true);
 
         $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
-        self::assertContains(
-            'eu-3',
+        self::assertNotContains(
+            'eu-1',
             $sourceItemCodes,
-            'Products are not transferred to sources they are not assigned to'
+            'Products are not unassigned from origin source'
         );
 
         self::assertEquals(
-            0,
-            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
-            'Items were not removed from source during inventory transfer'
-        );
-        self::assertEquals(
-            28.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-3'),
-            'Items were not moved to destination source'
+            8.5,
+            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            'Items were not correctly moved to destination source'
         );
     }
 
@@ -119,34 +116,98 @@ class InventoryTransferTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDbIsolation enabled
      */
-    public function testBulkInventoryTransferFromDefaultSource()
+    public function testBulkInventoryTransferToNewSource()
     {
         $skus = ['SKU-1'];
-        $this->bulkInventoryTransfer->execute($skus, 'eu-3', true);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->bulkInventoryTransfer->execute($skus, 'eu-1', 'us-1', false);
 
         $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
         self::assertContains(
-            'eu-3',
+            'us-1',
             $sourceItemCodes,
-            'Products are not transferred to sources they are not assigned to'
+            'Products are not assigned to a new source if transferred'
         );
+
         self::assertEquals(
             0,
-            $this->getSourceItemQuantity('SKU-1', $this->defaultSourceProvider->getCode()),
-            'Items were not removed from Default Source while using the Default Source Only option'
+            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
+            'Items were not removed from source during inventory transfer'
         );
+
+        self::assertEquals(
+            5.5,
+            $this->getSourceItemQuantity('SKU-1', 'us-1'),
+            'Items were not correctly moved to destination source'
+        );
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDbIsolation enabled
+     */
+    public function testBulkInventoryTransferFromUnassignedSourceSource()
+    {
+        $skus = ['SKU-1'];
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->bulkInventoryTransfer->execute($skus, 'us-1', 'eu-1', false);
+
+        $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
+        self::assertNotContains(
+            'us-1',
+            $sourceItemCodes,
+            'Products are assigned to origin source even if they were not'
+        );
+
         self::assertEquals(
             5.5,
             $this->getSourceItemQuantity('SKU-1', 'eu-1'),
-            'Items were removed from sources while using the Default Source Only option'
+            'Destination source is changed even if origin source was not assigned'
         );
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDbIsolation enabled
+     */
+    public function testBulkInventoryTransferToAssignedSource()
+    {
+        $skus = ['SKU-1'];
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->bulkInventoryTransfer->execute($skus, 'eu-1', 'eu-2', false);
+
+        $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
+        self::assertContains(
+            'eu-2',
+            $sourceItemCodes,
+            'Products are not assigned to destination source'
+        );
+
         self::assertEquals(
-            15.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-3'),
-            'Items were not moved correctly while using the Default Source Only option'
+            0,
+            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
+            'Items were not removed from source during inventory transfer'
+        );
+
+        self::assertNotEquals(
+            5.5,
+            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            'Item quantity on destination source is not incremented by origin source'
+        );
+
+        self::assertEquals(
+            8.5,
+            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            'Items were not correctly moved to destination source'
         );
     }
 }

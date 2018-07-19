@@ -69,13 +69,30 @@ $sources = $viewModel->getSources();
 
         <fieldset class="fieldset admin__fieldset" id="base_fieldset">
             <legend class="admin__legend legend">
-                <span><?= /* @noEscape */ __('Transfer to source') ?></span>
+                <span><?= /* @noEscape */ __('Transfer source') ?></span>
             </legend>
 
             <div class="admin__field field field-entity">
                 <div class="admin__field-control control">
                     <div class="admin__field">
-                        <select class="admin__control-select" name="source">
+                        <label class="label admin__field-label" for="origin-source">
+                            <?= /* @noEscape */ __('Transfer from source') ?>
+                        </label>&nbsp;
+
+                        <select class="admin__control-select" name="origin_source" id="origin-source">
+                            <?php foreach ($sources as $source) : ?>
+                                <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
+                                <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
+                                    <?= $block->escapeHtml($source->getName())?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>&nbsp;
+
+                        <label class="label admin__field-label" for="destination-source">
+                            <?= /* @noEscape */ __('to source') ?>
+                        </label>&nbsp;
+
+                        <select class="admin__control-select" name="destination_source" id="destination-source">
                             <?php foreach ($sources as $source) : ?>
                                 <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
                                 <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
@@ -84,17 +101,19 @@ $sources = $viewModel->getSources();
                             <?php endforeach; ?>
                         </select>
                     </div>
+                </div>
+            </div>
+
+            <div class="admin__field field field-entity">
+                <div class="admin__field-control control">
                     <div class="admin__field">
                         <input
-                            class="admin__control-checkbox"
-                            type="checkbox"
-                            name="default_source_only"
-                            id="default-source-only"
-                            value="1" />
-                        <label for="default-source-only">&nbsp;
-                            <?= /* @noEscape */ __('Transfer from <strong>%1</strong> Only', [$viewModel->getDefaultSourceName()]) ?>
-                        </label>
-                        <br />
+                                class="admin__control-checkbox"
+                                id="unassign-origin-source"
+                                type="checkbox"
+                                name="unassign_origin_source"
+                                value="1" />
+                        <label for="unassign-origin-source">&nbsp;<?= /* @noEscape */ __('Unassign from origin source after transfer.') ?></label><br />
                     </div>
                 </div>
             </div>

@@ -17,10 +17,16 @@ interface BulkInventoryTransferInterface
     /**
      * Run bulk inventory transfer
      * @param string[] $skus
+     * @param string $originSource
      * @param string $destinationSource
-     * @param bool $defaultSourceOnly
+     * @param bool $unassignFromOrigin
      * @return bool
      * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): bool;
+    public function execute(
+        array $skus,
+        string $originSource,
+        string $destinationSource,
+        bool $unassignFromOrigin
+    ): bool;
 }

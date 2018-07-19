@@ -20,9 +20,9 @@ interface BulkInventoryTransferValidatorInterface
      * Validates a mass un-assignment request
      *
      * @param array $skus
+     * @param string $originSource
      * @param string $destinationSource
-     * @param bool $defaultSourceOnly
      * @return ValidationResult
      */
-    public function validate(array $skus, string $destinationSource, bool $defaultSourceOnly = false): ValidationResult;
+    public function validate(array $skus, string $originSource, string $destinationSource): ValidationResult;
 }

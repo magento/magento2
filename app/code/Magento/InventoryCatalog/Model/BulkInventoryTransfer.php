@@ -53,12 +53,16 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $skus, string $destinationSource, bool $defaultSourceOnly = false): bool
-    {
+    public function execute(
+        array $skus,
+        string $originSource,
+        string $destinationSource,
+        bool $unassignFromOrigin
+    ): bool {
         $validationResult = $this->bulkInventoryTransferValidator->validate(
             $skus,
-            $destinationSource,
-            $defaultSourceOnly
+            $originSource,
+            $destinationSource
         );
 
         if (!$validationResult->isValid()) {
@@ -67,8 +71,9 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
 
         $this->bulkInventoryTransfer->execute(
             $skus,
+            $originSource,
             $destinationSource,
-            $defaultSourceOnly
+            $unassignFromOrigin
         );
 
         $this->inventoryIndexer->executeFull();

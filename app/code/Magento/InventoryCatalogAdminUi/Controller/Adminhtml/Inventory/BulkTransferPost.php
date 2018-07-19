@@ -52,12 +52,14 @@ class BulkTransferPost extends Action
      */
     public function execute()
     {
-        $sourceCode = $this->getRequest()->getParam('source', '');
+        $originSource = $this->getRequest()->getParam('origin_source', '');
+        $destinationSource = $this->getRequest()->getParam('destination_source', '');
+
         $skus = $this->bulkSessionProductsStorage->getProductsSkus();
-        $defaultOnly = (bool) $this->getRequest()->getParam('default_source_only', false);
+        $unassignSource = (bool) $this->getRequest()->getParam('unassign_origin_source', false);
 
         try {
-            $this->bulkInventoryTransfer->execute($skus, $sourceCode, $defaultOnly);
+            $this->bulkInventoryTransfer->execute($skus, $originSource, $destinationSource, $unassignSource);
             $this->messageManager->addSuccessMessage(__('Bulk inventory transfer was successful.'));
         } catch (ValidationException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

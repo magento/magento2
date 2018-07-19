@@ -11,14 +11,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorInterface;
 
 /**
  * Check if sources exist and is available for transfer
  * Do not perform any source/product cross check
  */
-class DestinationSourceValidator implements BulkInventoryTransferValidatorInterface
+class TransferSourceValidator implements BulkInventoryTransferValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -31,41 +30,39 @@ class DestinationSourceValidator implements BulkInventoryTransferValidatorInterf
     private $sourceRepository;
 
     /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @param ValidationResultFactory $validationResultFactory
      * @param SourceRepositoryInterface $sourceRepository
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
-        SourceRepositoryInterface $sourceRepository,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        SourceRepositoryInterface $sourceRepository
     ) {
         $this->validationResultFactory = $validationResultFactory;
         $this->sourceRepository = $sourceRepository;
-        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
      * @inheritdoc
      */
-    public function validate(array $skus, string $destinationSource, bool $defaultSourceOnly = false): ValidationResult
+    public function validate(array $skus, string $originSource, string $destinationSource): ValidationResult
     {
         $errors = [];
 
-        if (($destinationSource === $this->defaultSourceProvider->getCode()) && $defaultSourceOnly) {
-            $errors[] = __('Cannot transfer default source to itself');
+        try {
+            $this->sourceRepository->get($originSource);
+        } catch (NoSuchEntityException $e) {
+            $errors[] = __('Origin source %sourceCode does not exist', ['sourceCode' => $originSource]);
         }
 
         try {
             $this->sourceRepository->get($destinationSource);
         } catch (NoSuchEntityException $e) {
-            $errors[] = __('Source %sourceCode does not exist', ['sourceCode' => $destinationSource]);
+            $errors[] = __('Destination source %sourceCode does not exist', ['sourceCode' => $destinationSource]);
+        }
+
+        if ($originSource === $destinationSource) {
+            $errors[] = __('Cannot transfer a source on itself');
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);

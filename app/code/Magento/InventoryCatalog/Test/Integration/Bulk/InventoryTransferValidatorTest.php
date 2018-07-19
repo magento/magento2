@@ -39,7 +39,12 @@ class InventoryTransferValidatorTest extends TestCase
     {
         $skus = ['SKU-1'];
 
-        $validationResult = $this->bulkInventoryTransferValidator->validate($skus, 'non-existing-source', false);
+        $validationResult = $this->bulkInventoryTransferValidator->validate(
+            $skus,
+            'non-existing-source',
+            'another-non-existing-source',
+            false
+        );
 
         self::assertFalse(
             $validationResult->isValid(),
@@ -49,8 +54,13 @@ class InventoryTransferValidatorTest extends TestCase
         $errors = $validationResult->getErrors();
 
         self::assertEquals(
-            'Source %sourceCode does not exist',
+            'Origin source %sourceCode does not exist',
             $errors[0]->getText(),
+            'Unexpected error message from validator'
+        );
+        self::assertEquals(
+            'Destination source %sourceCode does not exist',
+            $errors[1]->getText(),
             'Unexpected error message from validator'
         );
     }
@@ -62,7 +72,12 @@ class InventoryTransferValidatorTest extends TestCase
     {
         $skus = ['SKU-1'];
 
-        $validationResult = $this->bulkInventoryTransferValidator->validate($skus, 'eu-1', false);
+        $validationResult = $this->bulkInventoryTransferValidator->validate(
+            $skus,
+            'eu-1',
+            'eu-2',
+            false
+        );
 
         self::assertTrue(
             $validationResult->isValid(),
@@ -79,8 +94,9 @@ class InventoryTransferValidatorTest extends TestCase
 
         $validationResult = $this->bulkInventoryTransferValidator->validate(
             $skus,
-            $this->defaultSourceProvider->getCode(),
-            true
+            'eu-1',
+            'eu-1',
+            false
         );
 
         $errors = $validationResult->getErrors();
@@ -91,7 +107,7 @@ class InventoryTransferValidatorTest extends TestCase
         );
 
         self::assertEquals(
-            'Cannot transfer default source to itself',
+            'Cannot transfer a source on itself',
             $errors[0]->getText(),
             'Unexpected error message from validator'
         );

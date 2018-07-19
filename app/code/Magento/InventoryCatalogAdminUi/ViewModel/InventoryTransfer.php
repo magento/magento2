@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
-use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 class InventoryTransfer implements ArgumentInterface
 {
@@ -26,24 +25,16 @@ class InventoryTransfer implements ArgumentInterface
     private $bulkSessionProductsStorage;
 
     /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @param SourceRepositoryInterface $sourceRepository
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @SuppressWarnings(PHPMD.LongVariables)
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
-        BulkSessionProductsStorage $bulkSessionProductsStorage,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        BulkSessionProductsStorage $bulkSessionProductsStorage
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->bulkSessionProductsStorage = $bulkSessionProductsStorage;
-        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -61,15 +52,5 @@ class InventoryTransfer implements ArgumentInterface
     public function getProductsCount(): int
     {
         return count($this->bulkSessionProductsStorage->getProductsSkus());
-    }
-
-    /**
-     * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getDefaultSourceName(): string
-    {
-        $defaultSource = $this->sourceRepository->get($this->defaultSourceProvider->getCode());
-        return $defaultSource->getName();
     }
 }

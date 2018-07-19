@@ -116,7 +116,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="sources"
-                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\DestinationSourceValidator</item>
+                      xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\TransferSourceValidator</item>
             </argument>
         </arguments>
     </type>
