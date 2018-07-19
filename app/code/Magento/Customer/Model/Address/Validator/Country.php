@@ -88,6 +88,8 @@ class Country implements ValidatorInterface
      *
      * @param AbstractAddress $address
      * @return array
+     * @throws \Zend_Validate_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateRegion(AbstractAddress $address)
     {
@@ -107,7 +109,7 @@ class Country implements ValidatorInterface
             //If country actually has regions and requires you to
             //select one then it must be selected.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);
-        } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+        } elseif ($allowedRegions && $regionId && !in_array($regionId, $allowedRegions, true)) {
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',

@@ -4,6 +4,10 @@
 type Query {
 }
 
+type Mutation {
+    placeholderMutation: String @doc(description: "Mutation type cannot be declared without fields. The placeholder will be removed when at least one mutation field is declared.")
+}
+
 input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
     eq: String @doc(description: "Equals")
     finset: [String] @doc(description: "Find in set. The value can contain a set of comma-separated values")
