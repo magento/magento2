@@ -144,6 +144,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
+
         if ($this->getRequest()->isPost()) {
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
@@ -166,35 +167,34 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     }
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
-                    $messages[] = __(
+                    $message = __(
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     );
                 } catch (UserLockedException $e) {
-                    $messages[] = __(
+                    $message = __(
                         'You did not sign in correctly or your account is temporarily disabled.'
                     );
                 } catch (AuthenticationException $e) {
-                    $messages[] = __('You did not sign in correctly or your account is temporarily disabled.');
+                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
                 } catch (LocalizedException $e) {
-                    $messages[] = $e->getMessage();
+                    $message = $e->getMessage();
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
                 } finally {
-                    if (isset($messages)) {
-                        foreach ($messages as $message) {
-                            $this->messageManager->addError($message);
-                            $this->session->setUsername($login['username']);
-                        }
+                    if (isset($message)) {
+                        $this->messageManager->addError($message);
+                        $this->session->setUsername($login['username']);
                     }
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));
             }
         }
+
         return $this->accountRedirect->getRedirect();
     }
 }
