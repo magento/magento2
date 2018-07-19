@@ -246,7 +246,7 @@ html input[disabled] {
 //  Remove inner padding and border in Firefox 4+.
 button,
 input {
-    &::-moz-focus-inner {
+    &:-moz-focus-inner {
         border: 0;
         padding: 0;
     }
@@ -266,8 +266,8 @@ input[type='radio'] {
 
 //  Fix the cursor style for Chrome's increment/decrement buttons. For certain 'font-size' values of the 'input', it causes the cursor style of the decrement button to change from 'default' to 'text'.
 input[type='number'] {
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
+    &:-webkit-inner-spin-button,
+    &:-webkit-outer-spin-button {
         height: auto;
     }
 }
@@ -280,8 +280,8 @@ input[type='search'] {
 //  Remove inner padding and search cancel button in Safari and Chrome on OS X.
 //  Safari (but not Chrome) clips the cancel button when the search input has padding (and 'textfield' appearance).
 input[type='search'] {
-    &::-webkit-search-cancel-button,
-    &::-webkit-search-decoration {
+    &:-webkit-search-cancel-button,
+    &:-webkit-search-decoration {
         -webkit-appearance: none;
     }
 }
