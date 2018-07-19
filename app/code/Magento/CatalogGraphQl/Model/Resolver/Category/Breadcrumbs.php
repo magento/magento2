@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
+use \Magento\CatalogGraphQl\Model\Resolver\Category\DataProvider\Breadcrumbs as BreadcrumbsDataProvider;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Retrieves breadcrumbs
@@ -20,9 +20,9 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 class Breadcrumbs implements ResolverInterface
 {
     /**
-     * @var CollectionFactory
+     * @var BreadcrumbsDataProvider
      */
-    private $collectionFactory;
+    private $breadcrumbsDataProvider;
 
     /**
      * @var ValueFactory
@@ -30,24 +30,22 @@ class Breadcrumbs implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @param BreadcrumbsDataProvider $breadcrumbsDataProvider
      * @param ValueFactory $valueFactory
-     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        CollectionFactory $collectionFactory
+        BreadcrumbsDataProvider $breadcrumbsDataProvider,
+        ValueFactory $valueFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
+        $this->breadcrumbsDataProvider = $breadcrumbsDataProvider;
         $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): Value
     {
-        $breadcrumbs = [];
-
         if (!isset($value['path'])) {
             $result = function () {
                 return null;
@@ -55,29 +53,10 @@ class Breadcrumbs implements ResolverInterface
             return $this->valueFactory->create($result);
         }
 
-        $categoryPath = $value['path'];
-        $pathCategoryIds = explode('/', $categoryPath);
-        $parentCategoryIds = array_slice($pathCategoryIds, 2, count($pathCategoryIds) - 3);
-
-        if (count($parentCategoryIds)) {
-            $collection = $this->collectionFactory->create();
-            $collection->addAttributeToSelect(['name', 'url_key']);
-            $collection->addAttributeToFilter('entity_id', $parentCategoryIds);
-
-            foreach ($collection as $category) {
-                $breadcrumbs[] = [
-                    'category_id'      => $category->getId(),
-                    'category_name'    => $category->getName(),
-                    'category_level'   => $category->getLevel(),
-                    'category_url_key' => $category->getUrlKey(),
-                ];
-            }
-        }
-
-        $result = function () use ($breadcrumbs) {
-            return count($breadcrumbs) ? $breadcrumbs : null;
+        $result = function () use ($value) {
+            $breadcrumbsData = $this->breadcrumbsDataProvider->getData($value['path']);
+            return count($breadcrumbsData) ? $breadcrumbsData : null;
         };
-
         return $this->valueFactory->create($result);
     }
 }
