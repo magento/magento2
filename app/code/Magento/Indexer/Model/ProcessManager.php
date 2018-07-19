@@ -44,7 +44,7 @@ class ProcessManager
             );
         }
         $this->registry = $registry;
-        $this->threadsCount = $threadsCount;
+        $this->threadsCount = (int)$threadsCount;
     }
 
     /**
