@@ -1,10 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Query {
-    storeConfigs (
-    storeCodes: [String] @doc(description: "Store Codes of the store configs")
-): StoreConfigs
-    @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigsResolver") @doc(description: "The store configs query")
+    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query")
 }
 
 type Website @doc(description: "The type contains information about a website") {
@@ -14,10 +11,6 @@ type Website @doc(description: "The type contains information about a website") 
     sort_order : Int @doc(description: "The attribute to use for sorting websites")
     default_group_id : String @doc(description: "The default group id that the website has")
     is_default : Boolean @doc(description: "Specifies if this is the default website")
-}
-
-type StoreConfigs @doc(description: "The Store Configs object") {
-    items: [StoreConfig] @doc(description: "An array containing store configs")
 }
 
 type StoreConfig @doc(description: "The type contains information about a store config") {
