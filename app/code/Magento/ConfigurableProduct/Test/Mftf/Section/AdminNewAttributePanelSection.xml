@@ -14,6 +14,7 @@
         <element name="newAttributeIFrame" type="iframe" selector="create_new_attribute_container"/>
         <element name="defaultLabel" type="input" selector="input[name='frontend_label[0]']"/>
         <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
+        <element name="valuesRequired" type="select" selector="select#is_required"/>
         <element name="addOption" type="button" selector="#add_new_option_button"/>
         <element name="isDefault" type="radio" selector="[data-role='options-container'] tr:nth-of-type({{row}}) input[name='default[]']" parameterized="true"/>
         <element name="optionAdminValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][0]']" parameterized="true"/>
