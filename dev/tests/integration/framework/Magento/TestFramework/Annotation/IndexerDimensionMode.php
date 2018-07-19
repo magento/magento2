@@ -32,9 +32,10 @@ class IndexerDimensionMode
 
     private function restoreDb()
     {
-        if (!$this->db->isDbDumpExists()) {
-            throw new \LogicException('DB dump does not exist.');
-        }
+        $this->db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+
         $this->db->restoreFromDbDump();
     }
 
@@ -55,6 +56,7 @@ class IndexerDimensionMode
         $this->initCommand();
         $this->objectManager->get(Config::class)->clean();
         $this->setModeCommand->execute([SetModeCommand::INPUT_KEY_MODE => $mode]);
+        $this->objectManager->get(Config::class)->clean();
     }
 
      /**
@@ -96,6 +98,7 @@ class IndexerDimensionMode
     {
         if ($this->isDimensionMode) {
             $this->restoreDb();
+            $this->objectManager->get(Config::class)->clean();
             $this->isDimensionMode = false;
         }
     }
