@@ -158,19 +158,27 @@ define([
             var hasErrors = false;
 
             if (!message) {
-                hasErrors = this.isChildrenHasErrors(hasErrors, this);
+                hasErrors = this._isChildrenHasErrors(hasErrors, this);
             }
 
             this.error(hasErrors || message);
         },
 
-        isChildrenHasErrors: function (hasErrors, container) {
+        /**
+         * Returns errors of children if exist
+         *
+         * @param {boolean} hasErrors
+         * @param {*} container
+         * @return {boolean}
+         * @private
+         */
+        _isChildrenHasErrors: function (hasErrors, container) {
             if (hasErrors === false && container.hasOwnProperty('elems')) {
                 hasErrors = container.elems.some('error');
                 if (hasErrors === false && container.hasOwnProperty('_elems')) {
                     container._elems.each(function (child) {
                         if (hasErrors === false) {
-                            hasErrors = this.isChildrenHasErrors(hasErrors, child);
+                            hasErrors = this._isChildrenHasErrors(hasErrors, child);
                         }
                     });
                 }
