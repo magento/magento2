@@ -53,9 +53,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -67,9 +67,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Quote\Model\ResourceModel\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Quote\Model\Quote\Config $quoteConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct(
             $entityFactory,
