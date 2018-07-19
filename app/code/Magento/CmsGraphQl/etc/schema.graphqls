@@ -2,9 +2,23 @@
 # See COPYING.txt for license details.
 
 type Query {
+    cmsPage (
+        id: Int @doc(description: "Id of the CMS page")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\PageResolver") @doc(description: "The CMS page query returns information about a CMS page")
     cmsBlocks (
-        identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
-    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CmsBlocks") @doc(description: "The CMS block query returns information about CMS blocks")
+            identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
+        ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CmsBlocks") @doc(description: "The CMS block query returns information about CMS blocks")
+}
+
+type CmsPage @doc(description: "CMS page defines all CMS page information") {
+    url_key: String @doc(description: "URL key of CMS page")
+    title: String @doc(description: "CMS page title")
+    content: String @doc(description: "CMS page content")
+    content_heading: String @doc(description: "CMS page content heading")
+    page_layout: String @doc(description: "CMS page content heading")
+    meta_title: String @doc(description: "CMS page meta title")
+    meta_description: String @doc(description: "CMS page meta description")
+    meta_keywords: String @doc(description: "CMS page meta keywords")
 }
 
 type CmsBlocks @doc(description: "CMS blocks information") {

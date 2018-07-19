@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CheckCheckoutSuccessPageAsRegisterCustomer">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Success page elements are presented for placed order as Customer"/>
+            <title value="Customer Checkout"/>
+            <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-60345"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+        </before>
+
+        <after>
+            <!--Logout from customer account-->
+            <amOnPage url="customer/account/logout/" stepKey="logoutCustomerOne"/>
+            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+        </actionGroup>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest3"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
+
+        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerOrderPage.url}}" stepKey="seeMyOrderPage"/>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton2"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest4"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage3"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad3"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage3">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart3"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod3"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton3"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext3"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoadedTest5"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder3"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage3"/>
+
+        <!--Check "Print Receipt" button is presented (desktop only)-->
+        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint"/>
+        <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
+        <waitForElementNotVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitInvisiblePrint"/>
+        <dontSeeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeInvisiblePrint"/>
+        <resizeWindow width="1360" height="1020" stepKey="maximizeWindowKey1"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2" />
+
+        <!--See print page-->
+        <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
+        <switchToWindow stepKey="switchToWindow"/>
+        <switchToNextTab stepKey="switchToTab"/>
+        <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
+        <switchToWindow stepKey="switchToWindow2"/>
+    </test>
+    <test name="CheckCheckoutSuccessPageAsGuest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Success page elements are presented for placed order as Guest"/>
+            <title value="Customer Checkout"/>
+            <description value="To be sure that other elements of Success page are presented for placed order as Guest."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-60346"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+        </before>
+
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+
+        <!--Check register section-->
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessNotify"/>
+        <see selector="{{CheckoutSuccessRegisterSection.registerMessage}}" userInput="You can track your order status by creating an account." stepKey="seeRegisterMessage"/>
+        <see selector="{{CheckoutSuccessRegisterSection.customerEmail}}" userInput="Email Address: {{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
+        <seeElement selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="seeVisibleCreateAccountButton"/>
+        <click selector="{{CheckoutSuccessRegisterSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerCreatePage.url}}" stepKey="seeCreateAccountPage"/>
+        <see userInput="Create New Customer Account" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeCreateAccountPageTitle"/>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection2">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
+
+        <!--Continue shopping-->
+        <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePageUrl"/>
+        <see userInput="Home Page" selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="seeHomePageTitle"/>
+    </test>
+</tests>

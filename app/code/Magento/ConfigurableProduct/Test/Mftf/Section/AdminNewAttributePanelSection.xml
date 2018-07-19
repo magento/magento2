@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminNewAttributePanel">
+        <element name="container" type="text" selector="#create_new_attribute"/>
+        <element name="saveAttribute" type="button" selector="#save"/>
+        <element name="newAttributeIFrame" type="iframe" selector="create_new_attribute_container"/>
+        <element name="defaultLabel" type="input" selector="input[name='frontend_label[0]']"/>
+        <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
+        <element name="addOption" type="button" selector="#add_new_option_button"/>
+        <element name="isDefault" type="radio" selector="[data-role='options-container'] tr:nth-of-type({{row}}) input[name='default[]']" parameterized="true"/>
+        <element name="optionAdminValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="optionDefaultStoreValue" type="input" selector="[data-role='options-container'] input[name='option[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="deleteOption" type="button" selector="#delete_button_option_{{row}}" parameterized="true"/>
+    </section>
+</sections>
