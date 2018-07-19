@@ -121,21 +121,13 @@ class ImageBuilder
      */
     public function create()
     {
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface $simpleOption */
-        $simpleOption = $this->product->getCustomOption('simple_product');
-
-        if ($simpleOption !== null) {
-            $optionProduct = $simpleOption->getProduct();
-            $this->setProduct($optionProduct);
-        }
-
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->helperFactory->create()
             ->init($this->product, $this->imageId);
 
         $template = $helper->getFrame()
-            ? 'Magento_Catalog::product/image.phtml'
-            : 'Magento_Catalog::product/image_with_borders.phtml';
+        ? 'Magento_Catalog::product/image.phtml'
+        : 'Magento_Catalog::product/image_with_borders.phtml';
 
         try {
             $imagesize = $helper->getResizedImageInfo();
@@ -150,11 +142,11 @@ class ImageBuilder
                 'width' => $helper->getWidth(),
                 'height' => $helper->getHeight(),
                 'label' => $helper->getLabel(),
-                'ratio' =>  $this->getRatio($helper),
+                'ratio' => $this->getRatio($helper),
                 'custom_attributes' => $this->getCustomAttributes(),
                 'resized_image_width' => $imagesize[0],
                 'resized_image_height' => $imagesize[1],
-                'product_id' => $this->product->getId()
+                'product_id' => $this->product->getId(),
             ],
         ];
 
