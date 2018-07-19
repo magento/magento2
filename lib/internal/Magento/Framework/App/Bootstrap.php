@@ -259,7 +259,7 @@ class Bootstrap
                 \Magento\Framework\Profiler::stop('magento');
             } catch (\Exception $e) {
                 \Magento\Framework\Profiler::stop('magento');
-                $this->objectManager->get(LoggerInterface::class)->error($e);
+                $this->objectManager->get(LoggerInterface::class)->error($e->getMessage());
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
