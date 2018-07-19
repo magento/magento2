@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CmsGraphQl\Model;
+namespace Magento\CmsGraphQl\Model\Resolver\DataProvider;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Get CMS page data by Id
+ * Cms page data provider
  */
-class PageDataProvider
+class Page
 {
     /**
      * @var PageRepositoryInterface
@@ -35,7 +35,7 @@ class PageDataProvider
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(int $pageId) : array
+    public function getData(int $pageId): array
     {
         $page = $this->pageRepository->getById($pageId);
 

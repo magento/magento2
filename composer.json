@@ -162,6 +162,7 @@
         "magento/module-grouped-import-export": "*",
         "magento/module-grouped-product": "*",
         "magento/module-grouped-product-graph-ql": "*",
+        "magento/module-cms-graph-ql": "*",
         "magento/module-import-export": "*",
         "magento/module-indexer": "*",
         "magento/module-instant-purchase": "*",
