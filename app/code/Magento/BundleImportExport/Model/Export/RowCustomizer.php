@@ -322,7 +322,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getTypeValue($type)
     {
-        return $this->typeMapping[$type]??  self::VALUE_DYNAMIC;
+        return $this->typeMapping[$type] ?? self::VALUE_DYNAMIC;
     }
 
     /**

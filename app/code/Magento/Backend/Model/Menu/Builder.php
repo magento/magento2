@@ -102,6 +102,6 @@ class Builder
      */
     protected function _getParam($params, $paramName, $defaultValue = null)
     {
-        return $params[$paramName]?? $defaultValue;
+        return $params[$paramName] ?? $defaultValue;
     }
 }
