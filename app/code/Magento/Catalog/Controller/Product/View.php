@@ -81,13 +81,16 @@ class View extends \Magento\Catalog\Controller\Product
             && $this->_request->getParam(self::PARAM_NAME_URL_ENCODED)
         ) {
             $product = $this->_initProduct();
+            
             if (!$product) {
                 return $this->noProductRedirect();
             }
+            
             if ($specifyOptions) {
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
-                $this->messageManager->addNotice($notice);
+                $this->messageManager->addNoticeMessage($notice);
             }
+            
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(
                     $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
