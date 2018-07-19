@@ -4,10 +4,10 @@
 type Query {
     cmsPage (
         id: Int @doc(description: "Id of the CMS page")
-    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\PageResolver") @doc(description: "The CMS page query returns information about a CMS page")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page")
     cmsBlocks (
-            identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
-        ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\CmsBlocks") @doc(description: "The CMS block query returns information about CMS blocks")
+        identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks")
 }
 
 type CmsPage @doc(description: "CMS page defines all CMS page information") {
