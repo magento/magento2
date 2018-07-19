@@ -65,7 +65,11 @@ class Configurable extends Renderer implements IdentityInterface
             self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
-            !($this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
+            !(
+                $this->getChildProduct() &&
+                $this->getChildProduct()->getThumbnail() &&
+                $this->getChildProduct()->getThumbnail() != 'no_selection'
+            )
         ) {
             $product = $this->getProduct();
         } else {
