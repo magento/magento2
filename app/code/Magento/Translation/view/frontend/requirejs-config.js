@@ -8,7 +8,7 @@ var config = {
         '*': {
             editTrigger: 'mage/edit-trigger',
             addClass: 'Magento_Translation/js/add-class',
-            'Magento_Translation/addClass': 'Magento_Translation/js/add-class'
+            'Magento_Translation/add-class': 'Magento_Translation/js/add-class'
         }
     },
     deps: [

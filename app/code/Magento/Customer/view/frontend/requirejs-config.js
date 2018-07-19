@@ -13,7 +13,7 @@ var config = {
             zxcvbn: 'Magento_Customer/js/zxcvbn',
             addressValidation: 'Magento_Customer/js/addressValidation',
             'Magento_Customer/address': 'Magento_Customer/js/address',
-            'Magento_Customer/changeEmailPassword': 'Magento_Customer/js/change-email-password',
+            'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password',
         }
     }
 };
