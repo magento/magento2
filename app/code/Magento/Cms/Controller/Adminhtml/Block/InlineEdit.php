@@ -43,7 +43,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->blockRepository = $blockRepository;
         $this->jsonFactory = $jsonFactory;
     }
-    
+
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
