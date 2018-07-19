@@ -396,7 +396,7 @@
     @_input-placeholder-color: @form-element-input-placeholder__color,
     @_input-placeholder-font-weight: @form-element-input__font-weight
 ) {
-    &::-webkit-input-placeholder {
+    &:-webkit-input-placeholder {
         .lib-css(color, @_input-placeholder-color);
         .lib-css(font-weight, @_input-placeholder-font-weight);
     }
@@ -406,7 +406,7 @@
         .lib-css(font-weight, @_input-placeholder-font-weight);
     }
 
-    &::-moz-placeholder {
+    &:-moz-placeholder {
         .lib-css(color, @_input-placeholder-color);
         .lib-css(font-weight, @_input-placeholder-font-weight);
     }

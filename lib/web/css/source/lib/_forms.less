@@ -103,8 +103,8 @@
 }
 
 .lib-form-element-number-reset() {
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
+    &:-webkit-inner-spin-button,
+    &:-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
@@ -114,10 +114,10 @@
 
 .lib-form-element-search-reset() {
     -webkit-appearance: none;
-    &::-webkit-search-cancel-button,
-    &::-webkit-search-decoration,
-    &::-webkit-search-results-button,
-    &::-webkit-search-results-decoration {
+    &:-webkit-search-cancel-button,
+    &:-webkit-search-decoration,
+    &:-webkit-search-results-button,
+    &:-webkit-search-results-decoration {
         -webkit-appearance: none;
     }
 }
@@ -154,11 +154,11 @@
         ._lib-form-element-state-add-font-color(@_disabled-color, @_color);
     }
 
-    &::-moz-placeholder {
+    &:-moz-placeholder {
         .lib-css(color, @_placeholder-color);
     }
 
-    &::-webkit-input-placeholder {
+    &:-webkit-input-placeholder {
         .lib-css(color, @_placeholder-color);
     }
 
@@ -411,12 +411,12 @@
     @_font-style-default,
     @_font-style-state
 ) when not (@_type = select) {
-    &::-moz-placeholder {
+    &:-moz-placeholder {
         .lib-css(color, @_color);
         ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 
-    &::-webkit-input-placeholder {
+    &:-webkit-input-placeholder {
         .lib-css(color, @_color);
         ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
