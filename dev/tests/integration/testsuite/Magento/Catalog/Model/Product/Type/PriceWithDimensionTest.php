@@ -10,9 +10,10 @@ use Magento\Catalog\Model\Product;
 /**
  * @magentoDbIsolation disabled
  * @magentoIndexerDimensionMode price
+ * @group indexer_dimension
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\Price

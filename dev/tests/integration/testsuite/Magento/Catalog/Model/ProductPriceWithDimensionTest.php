@@ -13,11 +13,11 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 /**
  * Tests product model:
  * - pricing behaviour is tested
- *
+ * @group indexer_dimension
  * @see \Magento\Catalog\Model\ProductTest
  * @see \Magento\Catalog\Model\ProductExternalTest
  */
-class ProductPriceTest extends \PHPUnit\Framework\TestCase
+class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product
