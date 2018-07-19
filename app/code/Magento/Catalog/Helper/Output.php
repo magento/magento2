@@ -105,7 +105,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
     public function getHandlers($method)
     {
         $method = strtolower($method);
-        return $this->_handlers[$method] ?? : [];
+        return $this->_handlers[$method] ?? [];
     }
 
     /**
