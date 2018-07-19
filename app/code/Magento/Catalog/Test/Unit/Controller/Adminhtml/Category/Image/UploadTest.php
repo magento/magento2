@@ -45,20 +45,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($name, $savedName)
     {
-        $cookieName = 'testName';
-        $sessionId = 'testSessionId';
-        $lifetime = 'testLifetime';
-        $path = 'testPath';
-        $domain = 'testDomain';
-        $data = [
-            'cookie' => [
-                'name' => $cookieName,
-                'value' => $sessionId,
-                'lifetime' => $lifetime,
-                'path' => $path,
-                'domain' => $domain
-            ]
-        ];
         $request = $this->objectManager->getObject(Request::class);
         $uploader = $this->getMockBuilder(ImageUploader::class)
             ->disableOriginalConstructor()
@@ -71,29 +57,11 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $resultFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue(new DataObject()));
-        $session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $session->expects($this->once())
-            ->method('getName')
-            ->willReturn($cookieName);
-        $session->expects($this->once())
-            ->method('getSessionId')
-            ->willReturn($sessionId);
-        $session->expects($this->once())
-            ->method('getCookieLifeTime')
-            ->willReturn($lifetime);
-        $session->expects($this->once())
-            ->method('getCookiePath')
-            ->willReturn($path);
-        $session->expects($this->once())
-            ->method('getCookieDomain')
-            ->willReturn($domain);
+
         $model = $this->objectManager->getObject(Model::class, [
             'request' => $request,
             'resultFactory' => $resultFactory,
-            'imageUploader' => $uploader,
-            '_session' => $session
+            'imageUploader' => $uploader
         ]);
         $uploader->expects($this->once())
             ->method('saveFileToTmpDir')
@@ -101,7 +69,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
         $request->setParam('param_name', $name);
         $result = $model->execute();
-        $this->assertSame($data, $result->getData());
+        $this->assertSame([], $result->getData());
     }
 
     /**
