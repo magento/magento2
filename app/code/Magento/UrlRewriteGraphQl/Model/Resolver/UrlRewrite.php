@@ -21,7 +21,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
  */
 class UrlRewrite implements ResolverInterface
 {
+    /**
+     * @var UrlFinderInterface
+     */
     private $urlFinder;
+
     /**
      * @var ValueFactory
      */
