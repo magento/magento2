@@ -9,7 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
-        <element name="subtotal" type="text" selector="#cart-totals tr.totals.sub span.price"/>
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+        <element name="subtotal" type="text" selector="span.price[data-th='Subtotal']"/>
+        <element name="total" type="text" selector=".amount[data-th='Order Total'] span"/>
     </section>
 </sections>
