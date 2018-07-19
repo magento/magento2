@@ -18,5 +18,7 @@
         <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
         <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
         <element name="productsList" type="text" selector="//ol[@class='products list items product-items']"/>
+        <element name="categoryPageProductImagePlaceholderSmall" type="text" selector=".products-grid img[src*='placeholder/small_image.jpg']"/>
+        <element name="categoryPageProductImage" type="text" selector=".products-grid img[src*='/{{var1}}']" parameterized="true"/>
     </section>
 </sections>
