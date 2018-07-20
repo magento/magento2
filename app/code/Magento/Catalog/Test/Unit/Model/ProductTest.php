@@ -6,15 +6,13 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Product Test
@@ -200,11 +198,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $extensionAttributes;
 
     /**
-     * @var GetCustomAttributeCodesInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $getCustomAttributeCodes;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -375,10 +368,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($this->extensionAttributes);
-        $this->getCustomAttributeCodes = $this->getMockBuilder(GetCustomAttributeCodesInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['execute'])
-            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -409,7 +398,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1],
-                'getCustomAttributeCodes' => $this->getCustomAttributeCodes
             ]
         );
     }
@@ -1276,15 +1264,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $interfaceAttributeCode = 'price';
+        $priceCode = 'price';
         $customAttributeCode = 'color';
         $initialCustomAttributeValue = 'red';
         $newCustomAttributeValue = 'blue';
 
-        $this->getCustomAttributeCodes->expects($this->exactly(3))
-            ->method('execute')
-            ->willReturn([$customAttributeCode]);
-        $this->model->setData($interfaceAttributeCode, 10);
+        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($priceCode);
+        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $colorAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+
+        $this->metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+        $this->model->setData($priceCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->model->getCustomAttributes());

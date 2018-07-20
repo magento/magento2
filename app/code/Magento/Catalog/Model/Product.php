@@ -9,12 +9,9 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
-use Magento\Catalog\Model\Entity\GetProductCustomAttributeCodes;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
@@ -345,12 +342,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $linkTypeProvider;
 
     /**
-     * @var GetCustomAttributeCodesInterface
-     */
-    private $getCustomAttributeCodes;
-
-    /**
-     * Product constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -386,7 +377,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
-     * @param GetCustomAttributeCodesInterface|null $getCustomAttributeCodes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -425,8 +415,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         EntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        array $data = [],
-        GetCustomAttributeCodesInterface $getCustomAttributeCodes = null
+        array $data = []
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -455,9 +444,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
-        $this->getCustomAttributeCodes = $getCustomAttributeCodes ?? ObjectManager::getInstance()->get(
-            GetProductCustomAttributeCodes::class
-        );
         parent::__construct(
             $context,
             $registry,
@@ -497,7 +483,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        return $this->getCustomAttributeCodes->execute($this->metadataService);
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+        }
+
+        return $this->customAttributesCodes;
     }
 
     /**
