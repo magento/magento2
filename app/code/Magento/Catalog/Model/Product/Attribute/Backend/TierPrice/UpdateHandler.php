@@ -84,33 +84,13 @@ class UpdateHandler implements ExtensionInterface
             $websiteId = $this->storeManager->getStore($entity->getStoreId())->getWebsiteId();
             $isGlobal = $attribute->isScopeGlobal() || $websiteId === 0;
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
-            $priceRows = array_filter($priceRows);
             $productId = $entity->getData($identifierField);
-            $old = [];
-            $new = [];
 
-            // prepare original data for compare
+            // prepare original data to compare
             $origPrices = $entity->getOrigData($attribute->getName());
-            if (is_array($origPrices)) {
-                foreach ($origPrices as $data) {
-                    if ($isGlobal === $this->isWebsiteGlobal((int)$data['website_id'])) {
-                        $key = $this->getPriceKey($data);
-                        $old[$key] = $data;
-                    }
-                }
-            }
-
+            $old = $this->prepareOriginalDataToCompare($origPrices, $isGlobal);
             // prepare data for save
-            foreach ($priceRows as $data) {
-                if (empty($data['delete'])
-                    && (!empty($data['price_qty'])
-                        || isset($data['cust_group'])
-                        || $isGlobal === $this->isWebsiteGlobal((int)$data['website_id']))
-                ) {
-                    $key = $this->getPriceKey($data);
-                    $new[$key] = $this->prepareTierPrice($data);
-                }
-            }
+            $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
 
             $delete = array_diff_key($old, $new);
             $insert = array_diff_key($new, $old);
@@ -278,5 +258,49 @@ class UpdateHandler implements ExtensionInterface
     private function isWebsiteGlobal(int $websiteId): bool
     {
         return $websiteId === 0;
+    }
+
+    /**
+     * @param $origPrices
+     * @param bool $isGlobal
+     * @return array
+     */
+    private function prepareOriginalDataToCompare($origPrices, $isGlobal = true): array
+    {
+        $old = [];
+        if (is_array($origPrices)) {
+            foreach ($origPrices as $data) {
+                if ($isGlobal === $this->isWebsiteGlobal((int)$data['website_id'])) {
+                    $key = $this->getPriceKey($data);
+                    $old[$key] = $data;
+                }
+            }
+        }
+
+        return $old;
+    }
+
+    /**
+     * @param $priceRows
+     * @param bool $isGlobal
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function prepareNewDataForSave($priceRows, $isGlobal = true): array
+    {
+        $new = [];
+        $priceRows = array_filter($priceRows);
+        foreach ($priceRows as $data) {
+            if (empty($data['delete'])
+                && (!empty($data['price_qty'])
+                    || isset($data['cust_group'])
+                    || $isGlobal === $this->isWebsiteGlobal((int)$data['website_id']))
+            ) {
+                $key = $this->getPriceKey($data);
+                $new[$key] = $this->prepareTierPrice($data);
+            }
+        }
+
+        return $new;
     }
 }
