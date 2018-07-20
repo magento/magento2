@@ -11,7 +11,6 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface;
 use Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkSourceAssign as BulkSourceAssignResource;
-use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
 /**
