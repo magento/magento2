@@ -14,7 +14,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
 
 /**
- * Test of getting child products info of configurable product on category request
+ * Test of getting URL rewrites data from products
  */
 class UrlRewritesTest extends GraphQlAbstract
 {
@@ -70,6 +70,60 @@ QUERY;
                 "parameters" => $this->getUrlParameters($urlRewrite->getTargetPath())
             ]
         );
+    }
+
+    /**
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testProductWithOneCategoryAssigned()
+    {
+
+        $query
+            = <<<QUERY
+{
+    products (search:"Simple Product") {
+        items {
+            name,
+            sku,
+            description,
+          	url_rewrites {
+              url,
+              parameters {
+                name,
+                value
+              }
+            }
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple', false, null, true);
+
+        $urlFinder = ObjectManager::getInstance()->get(UrlFinderInterface::class);
+
+        $rewritesCollection = $urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $product->getId()]);
+        $rewritesCount = count($rewritesCollection);
+
+        $this->assertArrayHasKey('url_rewrites', $response['products']['items'][0]);
+        $this->assertCount($rewritesCount, $response['products']['items'][0]['url_rewrites']);
+
+        for ($i = 0; $i < $rewritesCount; $i++) {
+            $urlRewrite = $rewritesCollection[$i];
+            $this->assertResponseFields(
+                $response['products']['items'][0]['url_rewrites'][$i],
+                [
+                    "url" => $urlRewrite->getRequestPath(),
+                    "parameters" => $this->getUrlParameters($urlRewrite->getTargetPath())
+                ]
+            );
+        }
     }
 
     /**
