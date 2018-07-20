@@ -203,7 +203,26 @@ class Subscription implements SubscriptionInterface
 
             case Trigger::EVENT_UPDATE:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                $trigger = $this->getTriggerWithCondition($trigger);
+                if ($this->connection->isTableExists($this->getTableName())
+                    && $describe = $this->connection->describeTable($this->getTableName())
+                ) {
+                    $columnNames = array_column($describe, 'COLUMN_NAME');
+                    $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
+                    if ($columnNames) {
+                        $columns = [];
+                        foreach ($columnNames as $columnName) {
+                            $columns[] = sprintf(
+                                'NEW.%1$s <=> OLD.%1$s',
+                                $this->connection->quoteIdentifier($columnName)
+                            );
+                        }
+                        $trigger = sprintf(
+                            "IF (%s) THEN %s END IF;",
+                            implode(' OR ', $columns),
+                            $trigger
+                        );
+                    }
+                }
                 break;
 
             case Trigger::EVENT_DELETE:
@@ -220,38 +239,6 @@ class Subscription implements SubscriptionInterface
             $this->connection->quoteIdentifier($changelog->getColumnName()),
             $this->connection->quoteIdentifier($this->getColumnName())
         );
-    }
-
-    /**
-     * Add condition for data change validation to a trigger
-     *
-     * @param string $trigger
-     * @return string
-     */
-    protected function getTriggerWithCondition($trigger)
-    {
-        if ($this->connection->isTableExists($this->getTableName())
-            && $describe = $this->connection->describeTable($this->getTableName())
-        ) {
-            $columnNames = array_column($describe, 'COLUMN_NAME');
-            $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
-            if ($columnNames) {
-                $columns = [];
-                foreach ($columnNames as $columnName) {
-                    $columns[] = sprintf(
-                        'NEW.%1$s <=> OLD.%1$s',
-                        $this->connection->quoteIdentifier($columnName)
-                    );
-                }
-                $trigger = sprintf(
-                    "IF (%s) THEN %s END IF;",
-                    implode(' OR ', $columns),
-                    $trigger
-                );
-            }
-        }
-
-        return $trigger;
     }
 
     /**
