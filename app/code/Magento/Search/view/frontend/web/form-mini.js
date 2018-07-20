@@ -43,7 +43,8 @@ define([
                 '</li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]',
-            isExpandable: null
+            isExpandable: null,
+            suggestionDelay: 300
         },
 
         /** @inheritdoc */
@@ -55,7 +56,7 @@ define([
             this.autoComplete = $(this.options.destinationSelector);
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
-            this.searchLabel = $(this.options.searchLabel);
+            this.searchLabel = this.searchForm.find(this.options.searchLabel);
             this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
@@ -104,7 +105,8 @@ define([
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
-            this.element.on('input propertychange', this._onPropertyChange);
+            // Prevent spamming the server with requests by waiting till the user has stopped typing for period of time
+            this.element.on('input propertychange', _.debounce(this._onPropertyChange, this.options.suggestionDelay));
 
             this.searchForm.on('submit', $.proxy(function (e) {
                 this._onSubmit(e);
@@ -226,6 +228,7 @@ define([
 
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
 
                 case $.ui.keyCode.DOWN:

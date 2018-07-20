@@ -48,7 +48,9 @@
                 </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+        <massaction name="listing_massaction"
+                    component="Magento_Ui/js/grid/tree-massactions"
+                    class="\Magento\Catalog\Ui\Component\Product\MassAction">
             <action name="delete">
                 <settings>
                     <confirm>

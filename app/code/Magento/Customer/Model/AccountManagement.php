@@ -610,6 +610,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $this->getAuthentication()->unlock($customer->getId());
         $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
         $this->customerRepository->save($customer);
@@ -1429,9 +1430,7 @@ class AccountManagement implements AccountManagementInterface
         /** @var \Magento\Customer\Model\Visitor $visitor */
         foreach ($visitorCollection->getItems() as $visitor) {
             $sessionId = $visitor->getSessionId();
-            $this->sessionManager->start();
             $this->saveHandler->destroy($sessionId);
-            $this->sessionManager->writeClose();
         }
     }
 }

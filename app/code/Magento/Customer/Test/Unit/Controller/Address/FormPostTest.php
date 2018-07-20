@@ -549,7 +549,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the address.'))
             ->willReturnSelf();
 
@@ -578,6 +578,9 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderTestExecute()
     {
         return [
@@ -637,7 +640,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new InputException(__('InputException')));
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('InputException')
             ->willReturnSelf();
 
@@ -700,7 +703,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('We can\'t save the address.'))
             ->willReturnSelf();
 

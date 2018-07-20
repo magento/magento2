@@ -216,7 +216,7 @@ class ImagesResizeCommand extends Command
             ]);
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
-                $uniqIndex = $this->getUniqImageIndex($imageData);
+                $uniqIndex = $this->getUniqueImageIndex($imageData);
                 $imageData['id'] = $imageId;
                 $viewImages[$uniqIndex] = $imageData;
             }
@@ -225,11 +225,11 @@ class ImagesResizeCommand extends Command
     }
 
     /**
-     * Get uniq image index
+     * Get unique image index
      * @param array $imageData
      * @return string
      */
-    private function getUniqImageIndex(array $imageData): string
+    private function getUniqueImageIndex(array $imageData): string
     {
         ksort($imageData);
         unset($imageData['type']);

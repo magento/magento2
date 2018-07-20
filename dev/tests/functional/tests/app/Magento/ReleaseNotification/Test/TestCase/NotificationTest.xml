@@ -9,11 +9,13 @@
     <testCase name="Magento\ReleaseNotification\Test\TestCase\NotificationTest" summary="Magento Release Notification Popup will appear to every admin user during the first login only" ticketId="MAGETWO-80786">
         <variation name="UserWithoutSubscriptionPermissionsTestVariation1" summary="User without subscription permissions">
             <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_subscription_permissions</data>
+            <data name="releaseContentVersion" xsi:type="string">2.2.4</data>
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertLoginAgainReleaseNotificationPopupNotExist" />
         </variation>
         <variation name="UserWithSubscriptionPermissionsTestVariation2" summary="User with subscription permissions">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="releaseContentVersion" xsi:type="string">2.2.4</data>
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertLoginAgainReleaseNotificationPopupNotExist" />
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertLoginAgainAfterFlushCacheReleaseNotificationPopupExist" />

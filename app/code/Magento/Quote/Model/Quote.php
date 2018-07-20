@@ -1400,7 +1400,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            if (!$item->isDeleted() && !$item->getParentItemId()) {
+            if (!$item->isDeleted() && !$item->getParentItemId() && !$item->getParentItem()) {
                 $items[] = $item;
             }
         }
@@ -2022,7 +2022,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getMessages() as $message) {
             /* @var $error \Magento\Framework\Message\AbstractMessage */
             if ($message->getType() == \Magento\Framework\Message\MessageInterface::TYPE_ERROR) {
-                array_push($errors, $message);
+                $errors[] = $message;
             }
         }
         return $errors;

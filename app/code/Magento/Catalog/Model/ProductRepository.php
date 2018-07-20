@@ -6,8 +6,11 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductExtension;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
@@ -16,8 +19,10 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -232,26 +237,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
-        if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
-            $product = $this->productFactory->create();
-
+        $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
+        if ($cachedProduct === null || $forceReload) {
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
                 throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
-            if ($editMode) {
-                $product->setData('_edit_mode', true);
-            }
-            if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
-            }
-            $product->load($productId);
+
+            $product = $this->getById($productId, $editMode, $storeId, $forceReload);
+
             $this->cacheProduct($cacheKey, $product);
+            $cachedProduct = $product;
         }
-        if (!isset($this->instances[$sku])) {
-            $sku = trim($sku);
-        }
-        return $this->instances[$sku][$cacheKey];
+        return $cachedProduct;
     }
 
     /**
@@ -301,13 +299,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Add product to internal cache and truncate cache if it has more than cacheLimit elements.
      *
      * @param string $cacheKey
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductInterface $product
      * @return void
      */
-    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
+    private function cacheProduct($cacheKey, ProductInterface $product)
     {
         $this->instancesById[$product->getId()][$cacheKey] = $product;
-        $this->instances[$product->getSku()][$cacheKey] = $product;
+        $this->saveProductInLocalCache($product, $cacheKey);
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
@@ -321,7 +319,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      *
      * @param array $productData
      * @param bool $createNew
-     * @return \Magento\Catalog\Api\Data\ProductInterface|Product
+     * @return ProductInterface|Product
      * @throws NoSuchEntityException
      */
     protected function initializeProductData(array $productData, $createNew)
@@ -329,18 +327,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
+            $this->assignProductToWebsites($product);
             if (isset($productData['price']) && !isset($productData['product_type'])) {
                 $product->setTypeId(Product\Type::TYPE_SIMPLE);
-            }
-            if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
             if (!empty($productData['id'])) {
                 unset($this->instancesById[$productData['id']]);
                 $product = $this->getById($productData['id']);
             } else {
-                unset($this->instances[$productData['sku']]);
+                $this->removeProductFromLocalCache($productData['sku']);
                 $product = $this->get($productData['sku']);
             }
         }
@@ -348,31 +344,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = $product->getWebsiteIds();
-
-        if (!$this->storeManager->hasSingleStore()) {
-            $websiteIds = array_unique(
-                array_merge(
-                    $websiteIds,
-                    [$this->storeManager->getStore()->getWebsiteId()]
-                )
-            );
-        }
-
-        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+        if ($this->storeManager->getStore(true)->getCode() === \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
+        } else {
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
         }
 
         $product->setWebsiteIds($websiteIds);
@@ -381,12 +366,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Process product links, creating new links, updating and deleting existing links
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductInterface $product
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $newLinks
      * @return $this
      * @throws NoSuchEntityException
      */
-    private function processLinks(\Magento\Catalog\Api\Data\ProductInterface $product, $newLinks)
+    private function processLinks(ProductInterface $product, $newLinks)
     {
         if ($newLinks === null) {
             // If product links were not specified, don't do anything
@@ -441,7 +426,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false)
+    public function save(ProductInterface $product, $saveOptions = false)
     {
         $tierPrices = $product->getData('tier_price');
 
@@ -455,12 +440,18 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if (!$product->hasData(Product::STATUS)) {
                 $product->setStatus($existingProduct->getStatus());
             }
+
+            /** @var ProductExtension $extensionAttributes */
+            $extensionAttributes = $product->getExtensionAttributes();
+            if (empty($extensionAttributes->__toArray())) {
+                $product->setExtensionAttributes($existingProduct->getExtensionAttributes());
+            }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
         }
 
         $productDataArray = $this->extensibleDataObjectConverter
-            ->toNestedArray($product, [], \Magento\Catalog\Api\Data\ProductInterface::class);
+            ->toNestedArray($product, [], ProductInterface::class);
         $productDataArray = array_replace($productDataArray, $product->getData());
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
@@ -491,58 +482,26 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
 
-        try {
-            if ($tierPrices !== null) {
-                $product->setData('tier_price', $tierPrices);
-            }
-            unset($this->instances[$product->getSku()]);
-            unset($this->instancesById[$product->getId()]);
-            $this->resourceModel->save($product);
-        } catch (ConnectionException $exception) {
-            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
-                __('Database connection error'),
-                $exception,
-                $exception->getCode()
-            );
-        } catch (DeadlockException $exception) {
-            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
-                __('Database deadlock found when trying to get lock'),
-                $exception,
-                $exception->getCode()
-            );
-        } catch (LockWaitException $exception) {
-            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
-                __('Database lock wait timeout exceeded'),
-                $exception,
-                $exception->getCode()
-            );
-        } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
-            throw \Magento\Framework\Exception\InputException::invalidFieldValue(
-                $exception->getAttributeCode(),
-                $product->getData($exception->getAttributeCode()),
-                $exception
-            );
-        } catch (ValidatorException $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
-        } catch (LocalizedException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
+        if ($tierPrices !== null) {
+            $product->setData('tier_price', $tierPrices);
         }
-        unset($this->instances[$product->getSku()]);
+
+        $this->saveProduct($product);
+        $this->removeProductFromLocalCache($product->getSku());
         unset($this->instancesById[$product->getId()]);
+
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Catalog\Api\Data\ProductInterface $product)
+    public function delete(ProductInterface $product)
     {
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
-            unset($this->instances[$product->getSku()]);
+            $this->removeProductFromLocalCache($product->getSku());
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
@@ -552,7 +511,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 __('Unable to remove product %1', $sku)
             );
         }
-        unset($this->instances[$sku]);
+        $this->removeProductFromLocalCache($sku);
         unset($this->instancesById[$productId]);
         return true;
     }
@@ -674,5 +633,105 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         return $this->collectionProcessor;
+    }
+
+    /**
+     * Gets product from the local cache by SKU.
+     *
+     * @param string $sku
+     * @param string $cacheKey
+     * @return Product|null
+     */
+    private function getProductFromLocalCache(string $sku, string $cacheKey)
+    {
+        $preparedSku = $this->prepareSku($sku);
+        if (!isset($this->instances[$preparedSku])) {
+            return null;
+        }
+
+        return $this->instances[$preparedSku][$cacheKey] ?? null;
+    }
+
+    /**
+     * Removes product in the local cache.
+     *
+     * @param string $sku
+     * @return void
+     */
+    private function removeProductFromLocalCache(string $sku)
+    {
+        $preparedSku = $this->prepareSku($sku);
+        unset($this->instances[$preparedSku]);
+    }
+
+    /**
+     * Saves product in the local cache.
+     *
+     * @param Product $product
+     * @param string $cacheKey
+     */
+    private function saveProductInLocalCache(Product $product, string $cacheKey)
+    {
+        $preparedSku = $this->prepareSku($product->getSku());
+        $this->instances[$preparedSku][$cacheKey] = $product;
+    }
+
+    /**
+     * Converts SKU to lower case and trims.
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function prepareSku(string $sku): string
+    {
+        return mb_strtolower(trim($sku));
+    }
+
+    /**
+     * Save product resource model.
+     *
+     * @param ProductInterface|Product $product
+     * @throws TemporaryCouldNotSaveException
+     * @throws InputException
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
+     */
+    private function saveProduct($product)
+    {
+        try {
+            $this->removeProductFromLocalCache($product->getSku());
+            unset($this->instancesById[$product->getId()]);
+            $this->resourceModel->save($product);
+        } catch (ConnectionException $exception) {
+            throw new TemporaryCouldNotSaveException(
+                __('Database connection error'),
+                $exception,
+                $exception->getCode()
+            );
+        } catch (DeadlockException $exception) {
+            throw new TemporaryCouldNotSaveException(
+                __('Database deadlock found when trying to get lock'),
+                $exception,
+                $exception->getCode()
+            );
+        } catch (LockWaitException $exception) {
+            throw new TemporaryCouldNotSaveException(
+                __('Database lock wait timeout exceeded'),
+                $exception,
+                $exception->getCode()
+            );
+        } catch (AttributeException $exception) {
+            throw InputException::invalidFieldValue(
+                $exception->getAttributeCode(),
+                $product->getData($exception->getAttributeCode()),
+                $exception
+            );
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
+        } catch (LocalizedException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Unable to save product'), $e);
+        }
     }
 }

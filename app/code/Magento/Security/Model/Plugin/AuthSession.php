@@ -95,6 +95,6 @@ class AuthSession
      */
     private function isAjaxRequest()
     {
-        return (bool) $this->request->getParam('isAjax');
+        return (bool)$this->request->getParam('isAjax');
     }
 }

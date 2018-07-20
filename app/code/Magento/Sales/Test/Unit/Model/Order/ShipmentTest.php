@@ -25,7 +25,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     private $commentCollection;
 
     /**
-     * @var \Magento\Sales\Model\Order\shipment
+     * @var Shipment
      */
     private $shipmentModel;
 
@@ -46,9 +46,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test_increment_id', $this->shipmentModel->getIncrementId());
     }
 
-    /**
-     * @covers \Magento\Sales\Model\Order\Shipment::getCommentsCollection
-     */
     public function testGetCommentsCollection()
     {
         $shipmentId = 1;
@@ -58,21 +55,16 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setShipment'])
             ->getMock();
-        $shipmentItem->expects(static::once())
-            ->method('setShipment')
+        $shipmentItem->method('setShipment')
             ->with($this->shipmentModel);
         $collection = [$shipmentItem];
 
-        $this->commentCollection->expects(static::once())
+        $this->commentCollection->expects(self::once())
             ->method('setShipmentFilter')
             ->with($shipmentId)
             ->willReturnSelf();
-        $this->commentCollection->expects(static::once())
+        $this->commentCollection->expects(self::once())
             ->method('setCreatedAtOrder')
-            ->willReturnSelf();
-
-        $this->commentCollection->expects(static::once())
-            ->method('load')
             ->willReturnSelf();
 
         $reflection = new \ReflectionClass(Collection::class);
@@ -80,14 +72,12 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
 
-        $expected = $this->shipmentModel->getCommentsCollection();
+        $actual = $this->shipmentModel->getCommentsCollection();
 
-        static::assertEquals($expected, $this->commentCollection);
+        self::assertTrue(is_object($actual));
+        self::assertEquals($this->commentCollection, $actual);
     }
 
-    /**
-     * @covers \Magento\Sales\Model\Order\Shipment::getComments
-     */
     public function testGetComments()
     {
         $shipmentId = 1;
@@ -97,18 +87,13 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setShipment'])
             ->getMock();
-        $shipmentItem->expects(static::once())
+        $shipmentItem->expects(self::once())
             ->method('setShipment')
             ->with($this->shipmentModel);
         $collection = [$shipmentItem];
 
-        $this->commentCollection->expects(static::once())
-            ->method('setShipmentFilter')
+        $this->commentCollection->method('setShipmentFilter')
             ->with($shipmentId)
-            ->willReturnSelf();
-
-        $this->commentCollection->expects(static::once())
-            ->method('load')
             ->willReturnSelf();
 
         $reflection = new \ReflectionClass(Collection::class);
@@ -116,11 +101,13 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
 
-        $this->commentCollection->expects(static::once())
+        $this->commentCollection->expects(self::once())
             ->method('getItems')
             ->willReturn($collection);
 
-        static::assertEquals($this->shipmentModel->getComments(), $collection);
+        $actual = $this->shipmentModel->getComments();
+        self::assertTrue(is_array($actual));
+        self::assertEquals($collection, $actual);
     }
 
     /**
@@ -131,7 +118,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     {
         $this->commentCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setShipmentFilter', 'setCreatedAtOrder', 'getItems', 'load', '__wakeup'])
+            ->setMethods(['setShipmentFilter', 'setCreatedAtOrder', 'getItems', 'load'])
             ->getMock();
 
         $this->commentCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -139,8 +126,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->commentCollectionFactory->expects(static::any())
-            ->method('create')
+        $this->commentCollectionFactory->method('create')
             ->willReturn($this->commentCollection);
     }
 }

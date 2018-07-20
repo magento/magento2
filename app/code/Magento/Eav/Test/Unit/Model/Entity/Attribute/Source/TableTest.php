@@ -207,6 +207,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
     }
 
+    /**
+     * @return array
+     */
     public function specificOptionsProvider()
     {
         return [
@@ -266,6 +269,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getOptionText($value));
     }
 
+    /**
+     * @return array
+     */
     public function getOptionTextProvider()
     {
         return [
