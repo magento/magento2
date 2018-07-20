@@ -267,6 +267,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->method('setAreaCode')
             ->with(\Magento\Framework\App\Area::AREA_GLOBAL);
         $moduleResource = $this->createMock(\Magento\Framework\Module\ModuleResource::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->setupFactory->expects($this->atLeastOnce())->method('create')->willReturn($setup);
         $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
         $this->objectManager->expects($this->any())
@@ -281,7 +282,8 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
                 [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
-                [\Magento\Framework\Module\ModuleResource::class, [], $moduleResource]
+                [\Magento\Framework\Module\ModuleResource::class, [], $moduleResource],
+                [\Magento\Framework\Registry::class, $registry]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->createMock(\Magento\Setup\Model\AdminAccount::class)
