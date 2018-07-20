@@ -261,7 +261,7 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * @param $origPrices
+     * @param array|null $origPrices
      * @param bool $isGlobal
      * @return array
      */
@@ -281,7 +281,7 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * @param $priceRows
+     * @param array|null $priceRows
      * @param bool $isGlobal
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
