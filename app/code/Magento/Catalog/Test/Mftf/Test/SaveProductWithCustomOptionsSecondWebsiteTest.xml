@@ -21,14 +21,25 @@
 
         <after>
             <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
 
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
-        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="addnewWebsite"/>
-        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="addNewStoreGroup"/>
+        <!--Create new website -->
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+            <argument name="newWebsiteName" value="Second Website"/>
+            <argument name="websiteCode" value="second_website"/>
+        </actionGroup>
+        <!--Create new Store Group -->
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+            <argument name="website" value="Second Website"/>
+            <argument name="storeGroupName" value="Second Store"/>
+            <argument name="storeGroupCode" value="second_store"/>
+        </actionGroup>
 
         <!--Create Store view -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>

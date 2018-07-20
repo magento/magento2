@@ -10,13 +10,13 @@
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateStoreViewActionGroup">
         <arguments>
-            <argument name="storeGroup" defaultValue="_defaultStoreGroup"/>
+            <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
             <argument name="customStore" defaultValue="customStore"/>
         </arguments>
         <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <!--Create Store View-->
-        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{storeGroup.name}}" stepKey="selectStore" />
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{StoreGroup.name}}" stepKey="selectStore" />
         <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName" />
         <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode" />
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
