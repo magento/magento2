@@ -167,9 +167,9 @@ define([
         /**
          * Returns errors of children if exist
          *
-         * @param {boolean} hasErrors
+         * @param {Boolean} hasErrors
          * @param {*} container
-         * @return {boolean}
+         * @return {Boolean}
          * @private
          */
         _isChildrenHasErrors: function (hasErrors, container) {
