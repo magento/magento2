@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutWithTaxForVirtulQuoteTest">
+        <annotations>
+            <features value="Tax rules creation"/>
+            <stories value="Create a Tax rules via Admin"/>
+            <title value="Tax for virtual quote is recalculated according to inputted data on Checkout flow for Customer"/>
+            <description value="Tax for virtual quote is recalculated according to inputted data on Checkout flow for Customer"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-78902"/>
+            <group value="recalculatedTaxVirtual"/>
+            <group value="checkoutTax"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <createData entity="TaxConfig" stepKey="configTaxSettings"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="price">40.00</field>
+            </createData>
+            <createData entity="Simple_US_NY_Customer" stepKey="simpleUsNyCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        </before>
+        <after>
+          <createData entity="DefaultTaxConfig" stepKey="defaultTaxSettings"/>
+          <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+          <deleteData createDataKey="simpleUsNyCustomer" stepKey="deleteCustomer"/>
+          <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+          <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--  Step 1: Go to Storefront as Customer -->
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
+            <argument name="customer" value="$$simpleUsNyCustomer$$" />
+        </actionGroup>
+        <!--  Step 2: Add virtual product to shopping cart -->
+       <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.name$$)}}" stepKey="viewProduct"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddVirtualProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--  Step 3: Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartActionGroup"/>
+        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" stepKey="seePaymentStep"/>
+        <see userInput="$40.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="seeCartSubtotalCa" />
+        <see userInput="$3.35" selector="{{CheckoutPaymentSection.tax}}" stepKey="seeTaxInfo" />
+        <click selector="{{CheckoutPaymentSection.taxRateTab}}"  stepKey="clickTaxTabsButton" />
+        <see userInput="US-NY-*-Rate 1 (8.375%)" selector="{{CheckoutPaymentSection.taxRate}}" stepKey="seeTaxInfoRatesNy" />
+        <see userInput="$43.35" selector="{{CheckoutPaymentSection.orderTotalInclTax}}" stepKey="seeTotalInclTaxNy"/>
+        <see userInput="$40.00" selector="{{CheckoutPaymentSection.orderTotalExclTax}}" stepKey="seeTotalExclTaxNy"/>
+        <!--  Step 4: Select payment -->
+        <!--  Step 5: Click Edit for and select new address value -->
+        <click selector="{{CheckoutPaymentSection.editAddressButton}}"  stepKey="clickEditButton"/>
+        <selectOption selector="{{CheckoutPaymentSection.newAddressSelect}}" userInput="New Address" stepKey="selectNewAddress"/>
+        <!--  Step 6: Fill form with valid data and set: California -->
+        <actionGroup ref="LoggedInUserCheckoutFillNewBillingAddressActionGroup" stepKey="guestCheckoutFillingShippingAddress">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="US_Address_CA" />
+        </actionGroup>
+        <!--  Step 7: Click update -->
+        <click selector="{{CheckoutPaymentSection.update}}"  stepKey="clickUpdateButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading4" />
+        <see userInput="California" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="seeBillingCa"/>
+        <click selector="{{CheckoutPaymentSection.taxRateTab}}"  stepKey="clickTaxTabsButtonCa" />
+        <see userInput="US-CA-*-Rate 1 (8.25%)" selector="{{CheckoutPaymentSection.taxRate}}" stepKey="seeTaxInfoRatesCa" />
+    </test>
+</tests>
