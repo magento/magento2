@@ -272,7 +272,13 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.normal-price .price-label'
+            normalPriceLabelSelector: '.normal-price .price-label',
+
+            // Local sku cache
+            skuCache: "",
+
+            // A sku value selector
+            productSkuSelector: '.product-info-stock-sku .sku .value'
         },
 
         /**
@@ -723,6 +729,7 @@ define([
             }
 
             $widget._loadMedia(eventName);
+            $widget._UpdateSku();
             $input.trigger('change');
         },
 
@@ -780,6 +787,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
+            $widget._UpdateSku();
             $widget._loadMedia();
             $input.trigger('change');
         },
@@ -949,6 +957,38 @@ define([
                     }
                 }
             }.bind(this));
+        },
+
+        /**
+         * Update Sku value
+         *
+         * @private
+         */
+
+        _UpdateSku: function(){
+
+            var $widget = this,
+                result,
+                options = _.object(_.keys($widget.optionsMap), {});
+
+            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
+                var attributeId = $(this).attr('attribute-id');
+
+                options[attributeId] = $(this).attr('option-selected');
+            });
+
+            if($widget.options.skuCache == ""){
+                $widget.options.skuCache = $($widget.options.productSkuSelector).text();
+            }
+
+            result = $widget.options.jsonConfig.optionSkus[_.findKey($widget.options.jsonConfig.index, options)];
+
+            if(typeof result != 'undefined'){
+                $($widget.options.productSkuSelector).text(result.sku);
+            }else{
+                $($widget.options.productSkuSelector).text($widget.options.skuCache);
+            }
+
         },
 
         /**

@@ -230,6 +230,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
+            'optionSkus' => $this->getOptionSkus(),
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
@@ -318,6 +319,21 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                  ];
         }
         return $prices;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptionSkus()
+    {
+        $skus = [];
+        foreach ($this->getAllowProducts() as $product) {
+            $skus[$product->getId()] =
+                [
+                    'sku' => $product->getSku()
+                ];
+        }
+        return $skus;
     }
 
     /**
