@@ -16,4 +16,8 @@
         <element name="name" type="input" selector="#attribute_set_name"/>
         <element name="basedOn" type="select" selector="#skeleton_set"/>
     </section>
+    <section name="ModifyAttributesSection">
+        <!-- Parameter is the attribute name -->
+        <element name="nthExistingAttribute" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+    </section>
 </sections>

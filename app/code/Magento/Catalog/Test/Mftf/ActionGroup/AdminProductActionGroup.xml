@@ -48,4 +48,13 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
+
+    <!--Open product for edit by clicking row X and column Y in product grid-->
+    <actionGroup name="openProducForEditByClickingRowXColumnYInProductGrid">
+        <arguments>
+            <argument name="X" type="string" defaultValue="1"/>
+            <argument name="Y" type="string" defaultValue="2"/>
+        </arguments>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton(X, Y)}}" stepKey="openProductForEdit"/>
+    </actionGroup>
 </actionGroups>
