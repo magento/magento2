@@ -92,11 +92,6 @@
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Allow Dynamic Media URLs</label>
-                    <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
             <group id="placeholder" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Product Image Placeholders</label>
