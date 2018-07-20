@@ -36,7 +36,15 @@ class ReadFactory
     public function create($path, $driverCode = DriverPool::FILE)
     {
         $driver = $this->driverPool->getDriver($driverCode);
-        $factory = new \Magento\Framework\Filesystem\File\ReadFactory($this->driverPool);
-        return new Read($factory, $driver, $path);
+        $factory = new \Magento\Framework\Filesystem\File\ReadFactory(
+            $this->driverPool
+        );
+
+        return new Read(
+            $factory,
+            $driver,
+            $path,
+            new PathValidator($driver)
+        );
     }
 }
