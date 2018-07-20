@@ -14,7 +14,7 @@
             <stories value="Sales-Backorder"/>
             <title value="Admin user set negative 'Out-of-Stock Threshold' in combination with backorders for Simple product in Single Stock mode"/>
             <description value="In Single Stock mode you should be able to create order with backorders in combination with negative out of stock threshold."/>
-            <testCaseId value="1465"/>
+            <testCaseId value="1469"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
