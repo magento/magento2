@@ -59,12 +59,12 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $redirectResultMock->expects($this->once())
             ->method('setUrl');
 
-        $resultRedirectFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
+        $redirectFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultRedirectFactoryMock->expects($this->any())
+        $redirectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($redirectResultMock);
 
@@ -111,7 +111,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ->willReturn($eventManagerMock);
         $contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->willReturn($resultRedirectFactoryMock);
+            ->willReturn($redirectFactoryMock);
 
         $urlMock = $this->createMock(\Magento\Framework\Url::class);
         $urlMock->expects($this->once())
