@@ -93,8 +93,8 @@ abstract class GraphQlAbstract extends WebapiAbstract
     {
         if ($this->graphQlClient === null) {
             return Bootstrap::getObjectManager()->get(\Magento\TestFramework\TestCase\GraphQl\Client::class);
-        } else {
-            $this->graphQlClient;
         }
+
+        return $this->graphQlClient;
     }
 }
