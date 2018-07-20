@@ -166,11 +166,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect;
         }
 
-        $this->validateCaptcha($captchaModel, $captchaFormName);
+        $isCorrectCaptcha = $this->validateCaptcha($captchaModel, $captchaFormName);
 
         $this->logCaptchaAttempt($captchaModel);
 
-        if ($this->_customerSession->getData('share_wishlist_form_show_captcha')) {
+        if (!$isCorrectCaptcha) {
+            $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
         }
@@ -358,8 +359,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     /**
      * @param CaptchaModel $captchaModel
      * @param string $captchaFormName
+     * @return bool
      */
-    private function validateCaptcha(CaptchaModel $captchaModel, string $captchaFormName)
+    private function validateCaptcha(CaptchaModel $captchaModel, string $captchaFormName) : bool
     {
         if ($captchaModel->isRequired()) {
             $word = $this->captchaStringResolver->resolve(
@@ -368,8 +370,10 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             );
 
             if (!$captchaModel->isCorrect($word)) {
-                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
+                return false;
             }
         }
+
+        return true;
     }
 }
