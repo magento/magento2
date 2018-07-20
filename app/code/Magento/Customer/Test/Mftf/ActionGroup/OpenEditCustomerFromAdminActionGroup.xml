@@ -20,4 +20,22 @@
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad2" />
     </actionGroup>
+    <actionGroup name="DeleteCustomerFromAdminActionGroup">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <fillField userInput="{{customer.email}}" selector="{{AdminOrdersGridSection.search}}" stepKey="fillSearch"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="clickSubmit"/>
+        <waitForAjaxLoad stepKey="waitForLoadAjax"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="selectAll"/>
+        <click selector="{{AdminCompaniesSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
+        <click selector="{{CatalogWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteLoad"/>
+        <click selector="{{AdminCompaniesSection.clearAllFilters}}" stepKey="clickClearAllFilters"/>
+        <wait time="3" stepKey="waitDisappear"/>
+    </actionGroup>
 </actionGroups>

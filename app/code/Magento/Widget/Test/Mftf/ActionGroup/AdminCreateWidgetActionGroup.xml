@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateProductsListWidgetActionGroup">
+      <arguments>
+          <argument name="widget"/>
+      </arguments>
+      <amOnPage stepKey="amOnAdminDashboard" url="{{AdminDashboardPage.url}}"/>
+      <click selector="{{AdminMenuSection.content}}" stepKey="clickContent"/>
+      <waitForLoadingMaskToDisappear stepKey="waitForWidgets" />
+      <click selector="{{AdminMenuSection.widgets}}" stepKey="clickWidgets"/>
+      <click selector="{{AdminGridMainControls.add}}" stepKey="addNewWidget"/>
+      <waitForPageLoad stepKey="waitLoadPage"/>
+      <selectOption stepKey="setWidgetType" selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}"/>
+      <selectOption stepKey="setWidgetDesignTheme" selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}"/>
+      <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+      <fillField stepKey="fillTitle" selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}"/>
+      <selectOption stepKey="setWidgetStoreIds" selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}"/>
+      <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+      <selectOption stepKey="setDisplayOn" selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}"/>
+      <waitForAjaxLoad stepKey="waitForLoad"/>
+      <selectOption stepKey="setContainer" selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}"/>
+      <waitForAjaxLoad stepKey="waitForPageLoad"/>
+      <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+      <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
+      <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
+      <selectOption stepKey="selectCondition" selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}"/>
+      <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+      <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
+      <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
+      <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+      <click selector="{{AdminNewWidgetSection.selectAll}}" stepKey="clickSelectAll"/>
+      <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
+      <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+      <waitForPageLoad stepKey="waitForSaveLoad"/>
+    </actionGroup>
+    <actionGroup name="AdminDeleteWidgetActionGroup">
+      <arguments>
+          <argument name="widget"/>
+      </arguments>
+      <amOnPage stepKey="amOnAdmin" url="{{AdminWidgetsPage.url}}"/>
+      <waitForPageLoad stepKey="waitWidgetsLoad"/>
+      <fillField stepKey="fillTitle" selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}"/>
+      <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
+      <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
+      <waitForPageLoad stepKey="waitForResultLoad"/>
+      <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDelete"/>
+      <click selector="{{CatalogWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete"/>
+      <waitForPageLoad stepKey="waitForDeleteLoad"/>
+    </actionGroup>
+</actionGroups>
