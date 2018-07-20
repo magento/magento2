@@ -7,7 +7,9 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Application;
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -19,7 +21,10 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexerDimensionMode
 {
-    private $modeSwithcer;
+    protected $cacheTypeList;
+    private $configReader;
+
+    private $modeSwitcher;
 
     private $configWriter;
 
@@ -36,28 +41,53 @@ class IndexerDimensionMode
 
     private function restoreDb()
     {
+        $this->db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
         $this->db->restoreFromDbDump();
+        $this->cacheTypeList->cleanType('config');
+        $this->objectManager->get(Config::class)->clean();
     }
 
     private function initSwicher()
     {
-        if (!$this->modeSwithcer) {
+        if (!$this->modeSwitcher) {
             $this->objectManager = Bootstrap::getObjectManager();
-            $this->modeSwithcer = $this->objectManager->get(ModeSwitcher::class);
+            $this->modeSwitcher = $this->objectManager->get(ModeSwitcher::class);
             $this->configWriter = $this->objectManager->get(ConfigInterface::class);
+            $this->configReader = $this->objectManager->get(ScopeConfigInterface::class);
+            $this->cacheTypeList = $this->objectManager->get(TypeListInterface::class);
         }
     }
 
     /**
      * @param string $mode
      */
-    private function setDimensionMode($mode = DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP)
+    private function setDimensionMode($mode, $test)
     {
         $this->initSwicher();
-        $this->modeSwithcer->createTables($mode);
-        $this->modeSwithcer->moveData($mode, DimensionModeConfiguration::DIMENSION_NONE);
-        $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $mode);
-        $this->objectManager->get(Config::class)->clean();
+
+        $this->configReader->clean();
+        $previousMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?:
+            DimensionModeConfiguration::DIMENSION_NONE;
+
+        if ($previousMode !== $mode) {
+            //Create new tables and move data
+            $this->modeSwitcher->createTables($mode);
+            $this->modeSwitcher->moveData($mode, $previousMode);
+
+            //Change config options
+            $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $mode);
+            $this->cacheTypeList->cleanType('config');
+            $this->objectManager->get(Config::class)->clean();
+
+            //Delete old tables
+            $this->modeSwitcher->dropTables($previousMode);
+
+        } else {
+            $this->fail('Dimensions mode for indexer has not been changed', $test);
+        }
+
     }
 
      /**
@@ -85,7 +115,7 @@ class IndexerDimensionMode
 
         if ($annotations[0] == 'price') {
             $this->isDimensionMode = true;
-            $this->setDimensionMode();
+            $this->setDimensionMode(DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP, $test);
         }
     }
 
@@ -99,7 +129,6 @@ class IndexerDimensionMode
     {
         if ($this->isDimensionMode) {
             $this->restoreDb();
-            $this->objectManager->get(Config::class)->clean();
             $this->isDimensionMode = false;
         }
     }
