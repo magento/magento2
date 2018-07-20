@@ -8,7 +8,7 @@ namespace Magento\Bundle\Model\Product;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode price
+ * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * @magentoAppArea frontend
  */

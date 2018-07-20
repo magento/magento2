@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode price
+ * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * Test price rendering according to is_product_list flag for Configurable product
  */

@@ -7,10 +7,11 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\TestFramework\Application;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
@@ -21,29 +22,30 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexerDimensionMode
 {
-    protected $cacheTypeList;
+    /** @var TypeListInterface */
+    private $cacheTypeList;
+
+    /** @var ScopeConfigInterface */
     private $configReader;
 
+    /** @var ModeSwitcher */
     private $modeSwitcher;
 
+    /** @var ConfigInterface */
     private $configWriter;
 
-    private $db;
-
-    private $isDimensionMode = false;
-
+    /** @var ObjectManagerInterface */
     private $objectManager;
 
-    public function __construct(Application $application)
-    {
-        $this->db = $application->getDbInstance();
-    }
+    /** @var \Magento\TestFramework\Db\Mysql */
+    private $db;
+
+    /** @var bool */
+    private $isDimensionMode = false;
 
     private function restoreDb()
     {
-        $this->db = Bootstrap::getInstance()->getBootstrap()
-            ->getApplication()
-            ->getDbInstance();
+        $this->db = Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();
         $this->db->restoreFromDbDump();
         $this->cacheTypeList->cleanType('config');
         $this->objectManager->get(Config::class)->clean();
@@ -87,10 +89,9 @@ class IndexerDimensionMode
         } else {
             $this->fail('Dimensions mode for indexer has not been changed', $test);
         }
-
     }
 
-     /**
+    /**
      * Handler for 'startTest' event
      *
      * @param TestCase $test
@@ -108,12 +109,15 @@ class IndexerDimensionMode
             return;
         }
 
-        $dbIsolation = $source['method']['magentoDbIsolation'] ?? $source['class']['magentoDbIsolation'] ?? ['disabled'];
+        $dbIsolation = $source['method']['magentoDbIsolation']
+            ?? $source['class']['magentoDbIsolation']
+            ?? ['disabled'];
+
         if ($dbIsolation[0] != 'disabled') {
             $this->fail("Invalid @magentoDbIsolation declaration: $dbIsolation[0]", $test);
         }
 
-        if ($annotations[0] == 'price') {
+        if ($annotations[0] == Processor::INDEXER_ID) {
             $this->isDimensionMode = true;
             $this->setDimensionMode(DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP, $test);
         }

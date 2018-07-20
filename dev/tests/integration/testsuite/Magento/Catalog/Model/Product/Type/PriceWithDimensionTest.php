@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode price
+ * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */

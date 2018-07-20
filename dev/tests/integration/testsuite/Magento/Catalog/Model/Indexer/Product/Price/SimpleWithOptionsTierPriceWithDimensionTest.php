@@ -42,7 +42,7 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
 
     /**
      * @magentoDbIsolation disabled
-     * @magentoIndexerDimensionMode price
+     * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testTierPrice()

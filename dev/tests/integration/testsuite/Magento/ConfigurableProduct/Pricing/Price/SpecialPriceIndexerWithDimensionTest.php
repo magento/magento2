@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation disabled
  * @group indexer_dimension
- * @magentoIndexerDimensionMode price
+ * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  */
 class SpecialPriceIndexerWithDimensionTest extends \PHPUnit\Framework\TestCase
 {
