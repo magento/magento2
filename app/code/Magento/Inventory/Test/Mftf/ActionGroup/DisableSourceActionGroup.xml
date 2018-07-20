@@ -28,7 +28,7 @@
         <waitForPageLoad time="30" stepKey="waitForCustomSourceEditPageLoad"/>
         <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableCustomSource"/>
         <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
-        <click selector="{{AdminProductFormActionSection.saveAndCloseFromSelect}}" stepKey="clickOnSaveAndClose"/>
+        <click selector="span[title='Save &amp; Close']" stepKey="clickOnSaveAndClose"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         <waitForPageLoad time="30" stepKey="waitForSavedAndClosed"/>
     </actionGroup>
