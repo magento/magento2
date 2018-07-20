@@ -8,8 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="StorefrontCategoryProductSection">
-        <element name="ProductAddToCartByNumber" type="button" selector="//main//li[{{var1}}]//button[contains(@class, 'tocart')]" parameterized="true"/>
-        <element name="productAddToCartByName" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//button[contains(@class, 'tocart')]" parameterized="true"/>
+    <section name="AdminDataGridHeaderSection">
+        <element name="attributeCodeFilterInput" type="input" selector=".admin__data-grid-filters input[name='attribute_code']"/>
     </section>
 </sections>

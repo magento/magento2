@@ -54,7 +54,7 @@
         <amOnPage url="" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForFrontendLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="clickCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle"/>
         <seeInCurrentUrl stepKey="verifyUrlKey" url="{{_defaultCategory.name_lwr}}-hattest.html"/>
         <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend -->
@@ -71,7 +71,7 @@
         <amOnPage url="" stepKey="goToStorefrontAfterOriginalSeoKey"/>
         <waitForPageLoad stepKey="waitForFrontendLoadAfterOriginalSeoKey"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="clickCategoryAfterOriginalSeoKey"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront2"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront2"/>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle2"/>
         <seeInCurrentUrl url="{{_defaultCategory.name_lwr}}.html" stepKey="verifyUrlKeyAfterOriginalSeoKey"/>
     </test>

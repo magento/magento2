@@ -31,10 +31,10 @@
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc($$createProduct.name$$, $$createProduct.product[media_gallery_entries][0][content][name]$$)}}" stepKey="seeCorrectImageCategoryPage"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createProduct.name$$)}}" userInput="$$createProduct.name$$" stepKey="seeCorrectNameCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.productTitleByName($$createProduct.name$$)}}" userInput="$$createProduct.name$$" stepKey="seeCorrectNameCategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createProduct.name$$)}}" userInput="$$createProduct.price$$" stepKey="seeCorrectPriceCategoryPage"/>
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createProduct.name$$)}}" stepKey="clickProductToGoProductPage"/>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createProduct.name$$)}}" stepKey="clickProductToGoProductPage"/>
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeCorrectName"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createProduct.sku$$" stepKey="seeCorrectSku"/>

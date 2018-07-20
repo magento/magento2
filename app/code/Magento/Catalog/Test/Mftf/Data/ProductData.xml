@@ -177,4 +177,13 @@
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
+    <entity name="MagentoLogo" type="image">
+        <data key="title" unique="suffix">MagentoLogo</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento-logo.png</data>
+        <data key="filename">magento-logo</data>
+        <data key="file_extension">png</data>
+    </entity>
 </entities>
