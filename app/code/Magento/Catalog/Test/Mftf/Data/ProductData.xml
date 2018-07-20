@@ -64,6 +64,17 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProduct3" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
     <entity name="SimpleOne" type="product2">
         <data key="sku" unique="suffix">SimpleOne</data>
         <data key="type_id">simple</data>
@@ -123,17 +134,6 @@
         <data key="status">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
-    <entity name="VirtualProduct" type="product">
-        <data key="sku" unique="suffix">virtualproduct</data>
-        <data key="type_id">virtual</data>
-        <data key="attribute_set_id">4</data>
-        <data key="name" unique="suffix">VirtualProduct</data>
-        <data key="price">99.99</data>
-        <data key="quantity">250</data>
-        <data key="weight">0</data>
-        <data key="status">1</data>
-        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
-    </entity>
     <entity name="SimpleProductWithNewFromDate" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
@@ -162,5 +162,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="media_gallery_entries">ProductAttributeMediaGalleryEntryMagentoLogo</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiProductWithDescription" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
 </entities>
