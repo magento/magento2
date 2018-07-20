@@ -67,7 +67,7 @@ class Input extends AbstractFilter
         if (isset($this->filterData[$this->getName()])) {
             $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
 
-            if (!empty($value)) {
+            if (!$this->isEmptyValue($value)) {
                 $filter = $this->filterBuilder->setConditionType('like')
                     ->setField($this->getName())
                     ->setValue(sprintf('%%%s%%', $value))
@@ -76,5 +76,16 @@ class Input extends AbstractFilter
                 $this->getContext()->getDataProvider()->addFilter($filter);
             }
         }
+    }
+
+    /**
+     * Empty values are null, empty string and empty array.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    private function isEmptyValue($value)
+    {
+        return $value === null || $value === '' || (is_array($value) && empty($value));
     }
 }
