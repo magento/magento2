@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Framework\Test\Unit\Setup;
+namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\SchemaListener;
@@ -14,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for schema persistor.
  *
- * @package Magento\Framework\Test\Unit\Setup
+ * @package Magento\Framework\Setup\Test\Unit
  */
 class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,7 +39,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      */
     private $xmlPersistor;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
@@ -60,7 +61,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      * @param array $tables
      * @param string $expectedXML
      */
-    public function testPersist(array $tables, $expectedXML)
+    public function testPersist(array $tables, $expectedXML) : void
     {
         $moduleName = 'First_Module';
         /** @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject $schemaListenerMock */
@@ -88,7 +89,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function schemaListenerTablesDataProvider()
+    public function schemaListenerTablesDataProvider() : array
     {
         return [
             [
@@ -143,6 +144,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
+                // @codingStandardsIgnoreStart
                 'XMLResult' => '<?xml version="1.0"?>
                         <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                             xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
@@ -161,6 +163,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                                 </index>
                             </table>
                         </schema>'
+                // @codingStandardsIgnoreEnd
             ]
         ];
     }
