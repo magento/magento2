@@ -41,8 +41,8 @@ class Job extends \Magento\Framework\DataObject
      * @param array $data
      */
     public function __construct(
-    	RuleProductProcessor $ruleProcessor,
-    	array $data = []
+        RuleProductProcessor $ruleProcessor,
+        array $data = []
     ) {
         $this->ruleProcessor = $ruleProcessor;
         parent::__construct($data);
