@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
@@ -37,19 +38,43 @@ class BulkInventoryTransfer
     private $isSourceItemManagementAllowedForProductType;
 
     /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
+     * @var SetDataToLegacyStockItem
+     */
+    private $setDataToLegacyStockItem;
+
+    /**
+     * @var BulkZeroLegacyStockItem
+     */
+    private $bulkZeroLegacyStockItem;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
+     * @param BulkZeroLegacyStockItem $bulkZeroLegacyStockItem
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType,
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        SetDataToLegacyStockItem $setDataToLegacyStockItem,
+        BulkZeroLegacyStockItem $bulkZeroLegacyStockItem
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
+        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
+        $this->bulkZeroLegacyStockItem = $bulkZeroLegacyStockItem;
     }
 
     /**
@@ -93,22 +118,30 @@ class BulkInventoryTransfer
 
         $finalQuantity = (float) $originQuantity + (float) $destinationQuantity;
 
+        $status = $finalQuantity > 0 ?
+            SourceItemInterface::STATUS_IN_STOCK :
+            SourceItemInterface::STATUS_OUT_OF_STOCK;
+
+        $infoUpdate = [
+            SourceItemInterface::QUANTITY => $finalQuantity,
+            SourceItemInterface::STATUS => $status,
+        ];
+
         if ($destinationQuantity === null) {
-            $connection->insert($tableName, [
-                SourceItemInterface::SOURCE_CODE => $destinationSource,
-                SourceItemInterface::SKU => $sku,
-                SourceItemInterface::QUANTITY => (float) $originQuantity,
-                SourceItemInterface::STATUS => $finalQuantity > 0 ?
-                    SourceItemInterface::STATUS_IN_STOCK :
-                    SourceItemInterface::STATUS_OUT_OF_STOCK
-            ]);
+            $infoUpdate[SourceItemInterface::SOURCE_CODE] = $destinationSource;
+            $infoUpdate[SourceItemInterface::SKU] = $sku;
+
+            $connection->insert($tableName, $infoUpdate);
         } elseif ($originQuantity !== null) {
-            $connection->update($tableName, [
-                SourceItemInterface::QUANTITY => $finalQuantity
-            ], [
+            $connection->update($tableName, $infoUpdate, [
                 SourceItemInterface::SOURCE_CODE . '=?' => $destinationSource,
                 SourceItemInterface::SKU . '=?' => $sku,
             ]);
+        }
+
+        // Align legacy stock
+        if ($destinationSource === $this->defaultSourceProvider->getCode()) {
+            $this->setDataToLegacyStockItem->execute($sku, $finalQuantity, $status);
         }
     }
 
@@ -116,6 +149,7 @@ class BulkInventoryTransfer
      * @param string[] $skus
      * @param string $source
      * @param bool $unassign
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function clearSource(array $skus, string $source, bool $unassign)
     {
@@ -136,6 +170,11 @@ class BulkInventoryTransfer
                 SourceItemInterface::SKU . ' IN(?)' => $skus,
             ]);
         }
+
+        // Align legacy stock
+        if ($source === $this->defaultSourceProvider->getCode()) {
+            $this->bulkZeroLegacyStockItem->execute($skus);
+        }
     }
 
     /**
@@ -145,6 +184,7 @@ class BulkInventoryTransfer
      * @param string $destinationSource
      * @param bool $unassignFromOrigin
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(
         array $skus,
