@@ -47,8 +47,7 @@ class ScopeCodeResolver
         if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
-        }
-        else {
+        } else {
             $resolverScopeCode = $scopeCode;
         }
 
