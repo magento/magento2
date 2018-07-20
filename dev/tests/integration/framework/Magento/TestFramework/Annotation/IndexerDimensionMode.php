@@ -85,7 +85,6 @@ class IndexerDimensionMode
 
             //Delete old tables
             $this->modeSwitcher->dropTables($previousMode);
-
         } else {
             $this->fail('Dimensions mode for indexer has not been changed', $test);
         }
@@ -126,10 +125,9 @@ class IndexerDimensionMode
     /**
      * Handler for 'endTest' event
      *
-     * @param TestCase $test
      * @return void
      */
-    public function endTest(TestCase $test)
+    public function endTest()
     {
         if ($this->isDimensionMode) {
             $this->restoreDb();
