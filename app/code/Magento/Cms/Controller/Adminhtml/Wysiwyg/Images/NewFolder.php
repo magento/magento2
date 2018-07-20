@@ -51,10 +51,11 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         try {
-            if (!$this->getRequest()->isPost()) {
-                throw new NotFoundException(__('Page not found'));
-            }
             $this->_initAction();
             $name = $this->getRequest()->getPost('name');
             $path = $this->getStorage()->getSession()->getCurrentPath();
