@@ -19,7 +19,7 @@ interface BulkInventoryTransferValidatorInterface
     /**
      * Validates a mass un-assignment request
      *
-     * @param array $skus
+     * @param string[] $skus
      * @param string $originSource
      * @param string $destinationSource
      * @return ValidationResult
