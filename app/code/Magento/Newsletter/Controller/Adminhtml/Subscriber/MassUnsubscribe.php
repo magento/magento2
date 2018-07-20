@@ -22,6 +22,7 @@ class MassUnsubscribe extends Subscriber
     /**
      * @param Context $context
      * @param FileFactory $fileFactory
+     * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
         Context $context,
