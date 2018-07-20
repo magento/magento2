@@ -138,6 +138,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      * @dataProvider stockConfigDataProvider
      * @covers \Magento\Catalog\Model\Product::isSalable
      */
