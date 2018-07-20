@@ -413,7 +413,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function moveDataFromReplicaTableToReplicaTables(array $dimensions)
     {
         if (!$dimensions) {
-            return ;
+            return;
         }
         //TODO: need to update logic for run this move only when replica table is not empty
         $select = $this->dimensionTableMaintainer->getConnection()->select()->from(

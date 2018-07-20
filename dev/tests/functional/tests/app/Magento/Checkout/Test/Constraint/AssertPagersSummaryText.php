@@ -49,6 +49,6 @@ class AssertPagersSummaryText extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Pagers summary text on the shopping cart is correct.' ;
+        return 'Pagers summary text on the shopping cart is correct.';
     }
 }

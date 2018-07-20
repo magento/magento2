@@ -37,6 +37,6 @@ class BoolResult implements ResultInterface
      */
     public function get()
     {
-        return (bool) $this->result;
+        return (bool)$this->result;
     }
 }
