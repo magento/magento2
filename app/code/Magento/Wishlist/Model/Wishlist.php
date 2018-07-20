@@ -339,11 +339,9 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getItemCollection()
     {
         if ($this->_itemCollection === null) {
-            $this->_itemCollection = $this->_wishlistCollectionFactory->create()->addWishlistFilter(
-                $this
-            )->addStoreFilter(
-                $this->getSharedStoreIds()
-            )->setVisibilityFilter();
+            $this->_itemCollection = $this->_wishlistCollectionFactory->create()
+                ->addWishlistFilter($this)
+                ->addStoreFilter($this->getSharedStoreIds());
         }
 
         return $this->_itemCollection;
