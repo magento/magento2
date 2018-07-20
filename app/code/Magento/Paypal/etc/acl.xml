@@ -33,6 +33,11 @@
                                 <resource id="Magento_Paypal::use" title="Place Order Using Billing Agreements" translate="title" sortOrder="15" />
                             </resource>
                         </resource>
+                        <resource id="Magento_Sales::sales_order"  title="Orders" translate="title" sortOrder="10">
+                            <resource id="Magento_Sales::actions" title="Actions" translate="title" sortOrder="10">
+                                <resource id="Magento_Paypal::authorization" title="Payment Amount Authorization" translate="title" sortOrder="160" />
+                            </resource>
+                        </resource>
                     </resource>
                 </resource>
             </resource>

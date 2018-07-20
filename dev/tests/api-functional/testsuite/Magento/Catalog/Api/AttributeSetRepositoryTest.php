@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class AttributeSetRepositoryTest extends WebapiAbstract
@@ -71,20 +72,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     {
         $attributeSetName = 'empty_attribute_set';
         $attributeSet = $this->getAttributeSetByName($attributeSetName);
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/attribute-sets/' . $attributeSet->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => 'catalogAttributeSetRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'catalogAttributeSetRepositoryV1Save',
-            ],
-        ];
-
         $updatedSortOrder = $attributeSet->getSortOrder() + 200;
-
         $arguments = [
             'attributeSet' => [
                 'attribute_set_id' => $attributeSet->getId(),
@@ -94,15 +82,29 @@ class AttributeSetRepositoryTest extends WebapiAbstract
                 'sort_order' => $updatedSortOrder,
             ],
         ];
-        $result = $this->_webApiCall($serviceInfo, $arguments);
-        $this->assertNotNull($result);
-        // Reload attribute set data
-        $attributeSet = $this->getAttributeSetByName($attributeSetName);
-        $this->assertEquals($attributeSet->getAttributeSetId(), $result['attribute_set_id']);
-        $this->assertEquals($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
-        $this->assertEquals($attributeSet->getEntityTypeId(), $result['entity_type_id']);
-        $this->assertEquals($updatedSortOrder, $result['sort_order']);
-        $this->assertEquals($attributeSet->getSortOrder(), $result['sort_order']);
+        $result = $this->save($attributeSet, $arguments);
+        $this->assertAttributeSetData($result, $attributeSetName, $updatedSortOrder);
+    }
+
+    /**
+     * Test update attribute set without specified optional "entity_type_id" param.
+     *
+     * @magentoApiDataFixture Magento/Eav/_files/empty_attribute_set.php
+     */
+    public function testUpdateWithoutEntityType()
+    {
+        $attributeSetName = 'empty_attribute_set';
+        $attributeSet = $this->getAttributeSetByName('empty_attribute_set');
+        $updatedSortOrder = $attributeSet->getSortOrder() + 200;
+        $arguments = [
+            'attributeSet' => [
+                'attribute_set_id' => $attributeSet->getId(),
+                'attribute_set_name' => $attributeSet->getAttributeSetName(),
+                'sort_order' => $updatedSortOrder,
+            ],
+        ];
+        $result = $this->save($attributeSet, $arguments);
+        $this->assertAttributeSetData($result, $attributeSetName, $updatedSortOrder);
     }
 
     /**
@@ -214,5 +216,51 @@ class AttributeSetRepositoryTest extends WebapiAbstract
             return null;
         }
         return $attributeSet;
+    }
+
+    /**
+     * Save given attribute set with specified arguments.
+     *
+     * @param AttributeSetInterface $attributeSet
+     * @param array $arguments
+     * @return array
+     */
+    private function save(AttributeSetInterface $attributeSet, array $arguments)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/attribute-sets/' . $attributeSet->getAttributeSetId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => 'catalogAttributeSetRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'catalogAttributeSetRepositoryV1Save',
+            ],
+        ];
+
+        return $this->_webApiCall($serviceInfo, $arguments);
+    }
+
+    /**
+     * Check attribute set data.
+     *
+     * @param string $attributeSetName
+     * @param array $result
+     * @param int $updatedSortOrder
+     */
+    private function assertAttributeSetData(
+        array $result,
+        string $attributeSetName,
+        int $updatedSortOrder
+    ) {
+        $this->assertNotNull($result);
+        // Reload attribute set data
+        $attributeSet = $this->getAttributeSetByName($attributeSetName);
+        $this->assertEquals($attributeSet->getAttributeSetId(), $result['attribute_set_id']);
+        $this->assertEquals($attributeSet->getAttributeSetName(), $result['attribute_set_name']);
+        $this->assertEquals($attributeSet->getEntityTypeId(), $result['entity_type_id']);
+        $this->assertEquals($updatedSortOrder, $result['sort_order']);
+        $this->assertEquals($attributeSet->getSortOrder(), $result['sort_order']);
     }
 }

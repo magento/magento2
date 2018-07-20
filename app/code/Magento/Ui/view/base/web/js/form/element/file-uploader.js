@@ -133,7 +133,7 @@ define([
 
         /**
          * Retrieves from the list file which matches
-         * search criteria implemented in itertor function.
+         * search criteria implemented in iterator function.
          *
          * @param {Function} fn - Function that will be invoked
          *      for each file in the list.
@@ -193,7 +193,7 @@ define([
         },
 
         /**
-         * Returns path to the files' preview image.
+         * Returns path to the file's preview image.
          *
          * @param {Object} file
          * @returns {String}
@@ -310,7 +310,7 @@ define([
 
         /**
          * Abstract handler which is invoked when files are choosed for upload.
-         * May be used for implementation of aditional validation rules,
+         * May be used for implementation of additional validation rules,
          * e.g. total files and a total size rules.
          *
          * @abstract

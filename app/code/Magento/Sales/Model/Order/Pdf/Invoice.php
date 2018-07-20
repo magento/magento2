@@ -96,7 +96,7 @@ class Invoice extends AbstractPdf
 
         $lines[0][] = ['text' => __('Qty'), 'feed' => 435, 'align' => 'right'];
 
-        $lines[0][] = ['text' => __('Price'), 'feed' => 360, 'align' => 'right'];
+        $lines[0][] = ['text' => __('Price'), 'feed' => 375, 'align' => 'right'];
 
         $lines[0][] = ['text' => __('Tax'), 'feed' => 495, 'align' => 'right'];
 

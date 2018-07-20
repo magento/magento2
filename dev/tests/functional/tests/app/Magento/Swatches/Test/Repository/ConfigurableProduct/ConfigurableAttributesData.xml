@@ -85,6 +85,84 @@
                 </item>
             </field>
         </dataset>
+        <dataset name="visual_swatch">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">11.11</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">22.22</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_2" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">33.33</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="attribute_key_1" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">44.44</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">55.55</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_2" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">66.66</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="attributes" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="string">swatchesProductAttribute::attribute_type_visual_swatch</item>
+                <item name="attribute_key_1" xsi:type="string">swatchesProductAttribute::attribute_type_visual_swatch</item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_2" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_2" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_2" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
         <dataset name="text_swatch_with_dropdown">
             <field name="attributes_data" xsi:type="array">
                 <item name="attribute_key_0" xsi:type="array">

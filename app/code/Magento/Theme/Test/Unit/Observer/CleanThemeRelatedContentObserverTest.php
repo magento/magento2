@@ -105,7 +105,8 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, 'Theme isn\'t deletable.');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Theme isn\'t deletable.');
         $this->themeObserver->execute($observerMock);
     }
 

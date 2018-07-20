@@ -15,12 +15,12 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_observerMock;
 
@@ -48,7 +48,7 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getStatus', '__wakeup']
         );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
-        $this->_quoteMock->expects($this->once())->method('substractProductFromQuotes')->with($productMock);
+        $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
         $this->_model->execute($this->_observerMock);
     }
 }

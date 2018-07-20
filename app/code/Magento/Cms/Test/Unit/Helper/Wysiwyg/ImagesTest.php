@@ -231,6 +231,15 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Path is invalid
+     */
+    public function testConvertIdToPathInvalid()
+    {
+        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
+    }
+
+    /**
      * @param string $fileName
      * @param int $maxLength
      * @param string $expectedFilename
@@ -293,7 +302,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $this->imagesHelper->setStoreId($storeId);
-        $checkResult = new \StdClass();
+        $checkResult = new \stdClass();
         $checkResult->isAllowed = false;
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
@@ -375,6 +384,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->fail('An expected exception has not been raised.');
     }
 
+    /**
+     * @return array
+     */
     public function providerGetCurrentPath()
     {
         return [
@@ -422,6 +434,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
@@ -456,6 +471,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclaration()
     {
         return [

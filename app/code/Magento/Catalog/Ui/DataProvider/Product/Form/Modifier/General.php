@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -36,15 +37,24 @@ class General extends AbstractModifier
     private $localeCurrency;
 
     /**
+     * @var AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param AttributeRepositoryInterface|null $attributeRepository
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->attributeRepository = $attributeRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
     }
 
     /**
@@ -58,7 +68,12 @@ class General extends AbstractModifier
         $modelId = $this->locator->getProduct()->getId();
 
         if (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS])) {
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = '1';
+            $attributeStatus = $this->attributeRepository->get(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                ProductAttributeInterface::CODE_STATUS
+            );
+            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] =
+                $attributeStatus->getDefaultValue() ?: 1;
         }
 
         return $data;
@@ -106,7 +121,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -264,23 +279,36 @@ class General extends AbstractModifier
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
+            $commonFieldsMeta = [
+                'outputDateTimeToISO' => false,
+                'inputDateTimeFormat' => 'YYYY-MM-DD h:mm',
+                'options' => [
+                    'showsTime' => true,
+                ]
+            ];
 
             $meta = $this->arrayManager->merge(
                 $fromFieldPath . self::META_CONFIG_PATH,
                 $meta,
-                [
-                    'label' => __('Set Product as New From'),
-                    'additionalClasses' => 'admin__field-date',
-                ]
+                array_merge(
+                    [
+                        'label' => __('Set Product as New From'),
+                        'additionalClasses' => 'admin__field-date',
+                    ],
+                    $commonFieldsMeta
+                )
             );
             $meta = $this->arrayManager->merge(
                 $toFieldPath . self::META_CONFIG_PATH,
                 $meta,
-                [
-                    'label' => __('To'),
-                    'scopeLabel' => null,
-                    'additionalClasses' => 'admin__field-date',
-                ]
+                array_merge(
+                    [
+                        'label' => __('To'),
+                        'scopeLabel' => null,
+                        'additionalClasses' => 'admin__field-date',
+                    ],
+                    $commonFieldsMeta
+                )
             );
             $meta = $this->arrayManager->merge(
                 $fromContainerPath . self::META_CONFIG_PATH,

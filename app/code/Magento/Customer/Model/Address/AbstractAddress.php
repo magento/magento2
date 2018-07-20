@@ -30,6 +30,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -263,7 +264,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param array|string $key
      * @param null $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -562,9 +563,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Validate address attribute values
-     *
-     *
+     * Validate address attribute values.
      *
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -619,23 +618,53 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'postcode']);
         }
 
-        if (!\Zend_Validate::is($this->getCountryId(), 'NotEmpty')) {
+        $countryId = $this->getCountryId();
+        if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
-        }
-
-        if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
-            $this->getRegionId(),
-            'NotEmpty'
-        ) && $this->_directoryData->isRegionRequired(
-            $this->getCountryId()
-        )
-        ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
+        } else {
+            //Checking if such country exists.
+            $countryCollection = $this->_directoryData->getCountryCollection($this->getStoreId());
+            if (!in_array($countryId, $countryCollection->getAllIds(), true)) {
+                $errors[] = __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    [
+                        'fieldName' => 'countryId',
+                        'value' => htmlspecialchars($countryId)
+                    ]
+                );
+            } else {
+                //If country is valid then validating selected region ID.
+                $countryModel = $this->getCountryModel();
+                $regionCollection = $countryModel->getRegionCollection();
+                $region = $this->getRegion();
+                $regionId = (string)$this->getRegionId();
+                $allowedRegions = $regionCollection->getAllIds();
+                $isRegionRequired = $this->_directoryData->isRegionRequired($countryId);
+                if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {
+                    //If region is required for country and country doesn't provide regions list
+                    //region must be provided.
+                    $errors[] = __('%fieldName is a required field.', ['fieldName' => 'region']);
+                } elseif ($allowedRegions && !\Zend_Validate::is($regionId, 'NotEmpty') && $isRegionRequired) {
+                    //If country actually has regions and requires you to
+                    //select one then it must be selected.
+                    $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
+                } elseif ($regionId && !in_array($regionId, $allowedRegions, true)) {
+                    //If a region is selected then checking if it exists.
+                    $errors[] = __(
+                        'Invalid value of "%value" provided for the %fieldName field.',
+                        [
+                            'fieldName' => 'regionId',
+                            'value' => htmlspecialchars($regionId)
+                        ]
+                    );
+                }
+            }
         }
 
         if (empty($errors) || $this->getShouldIgnoreValidation()) {
             return true;
         }
+
         return $errors;
     }
 

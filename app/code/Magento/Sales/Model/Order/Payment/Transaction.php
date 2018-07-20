@@ -733,7 +733,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     public function getOrderWebsiteId()
     {
-        if (is_null($this->_orderWebsiteId)) {
+        if ($this->_orderWebsiteId === null) {
             $this->_orderWebsiteId = (int)$this->getResource()->getOrderWebsiteId($this->getOrderId());
         }
         return $this->_orderWebsiteId;

@@ -32,6 +32,9 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
     }
 
+    /**
+     * @return array
+     */
     public function handlerProvider()
     {
         return [
@@ -54,11 +57,15 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $errorLine = 'test_error_line';
 
         $exceptedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
-        $this->expectException('Exception', $exceptedExceptionMessage);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($exceptedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
     }
 
+    /**
+     * @return array
+     */
     public function handlerProviderException()
     {
         return [

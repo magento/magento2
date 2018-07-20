@@ -5,79 +5,95 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
+class Save extends Attribute
 {
     /**
-     * @var \Magento\Catalog\Model\Product\AttributeSet\BuildFactory
+     * @var BuildFactory
      */
     protected $buildFactory;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filterManager;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
     protected $productHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @var AttributeFactory
      */
     protected $attributeFactory;
 
     /**
-     * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory
+     * @var ValidatorFactory
      */
     protected $validatorFactory;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
+     * @var CollectionFactory
      */
     protected $groupCollectionFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     private $layoutFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
-     * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param Context $context
+     * @param FrontendInterface $attributeLabelCache
+     * @param Registry $coreRegistry
+     * @param BuildFactory $buildFactory
+     * @param PageFactory $resultPageFactory
+     * @param AttributeFactory $attributeFactory
+     * @param ValidatorFactory $validatorFactory
+     * @param CollectionFactory $groupCollectionFactory
+     * @param FilterManager $filterManager
+     * @param Product $productHelper
+     * @param LayoutFactory $layoutFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory,
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
-        \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
-        \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        Context $context,
+        FrontendInterface $attributeLabelCache,
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        BuildFactory $buildFactory,
+        AttributeFactory $attributeFactory,
+        ValidatorFactory $validatorFactory,
+        CollectionFactory $groupCollectionFactory,
+        FilterManager $filterManager,
+        Product $productHelper,
+        LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -90,7 +106,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -99,6 +115,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
+            $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
 
             $attributeSet = null;
@@ -107,36 +124,51 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $name = trim($name);
 
                 try {
-                    /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
+                    /** @var $attributeSet Set */
                     $attributeSet = $this->buildFactory->create()
                         ->setEntityTypeId($this->_entityTypeId)
                         ->setSkeletonId($setId)
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $name));
+                    $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
                     $this->_session->setAttributeData($data);
+
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->messageManager->addError($e->getMessage());
+                } catch (LocalizedException $e) {
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
+                    $this->messageManager->addExceptionMessage(
+                        $e,
+                        __('Something went wrong while saving the attribute.')
+                    );
                 }
             }
 
             $attributeId = $this->getRequest()->getParam('attribute_id');
-            $attributeCode = $this->getRequest()->getParam('attribute_code')
-                ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
+
+            /** @var $model ProductAttributeInterface */
+            $model = $this->attributeFactory->create();
+            if ($attributeId) {
+                $model->load($attributeId);
+            }
+            $attributeCode = $model && $model->getId()
+                ? $model->getAttributeCode()
+                : $this->getRequest()->getParam('attribute_code');
+            $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
             if (strlen($attributeCode) > 0) {
-                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
+                $validatorAttrCode = new \Zend_Validate_Regex(
+                    ['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']
+                );
                 if (!$validatorAttrCode->isValid($attributeCode)) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
                             'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
                             $attributeCode
                         )
                     );
+
                     return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $attributeId, '_current' => true],
@@ -148,12 +180,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             //validate frontend_input
             if (isset($data['frontend_input'])) {
-                /** @var $inputType \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator */
+                /** @var $inputType Validator */
                 $inputType = $this->validatorFactory->create();
                 if (!$inputType->isValid($data['frontend_input'])) {
                     foreach ($inputType->getMessages() as $message) {
-                        $this->messageManager->addError($message);
+                        $this->messageManager->addErrorMessage($message);
                     }
+
                     return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $attributeId, '_current' => true],
@@ -162,25 +195,23 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 }
             }
 
-            /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            $model = $this->attributeFactory->create();
-
             if ($attributeId) {
-                $model->load($attributeId);
                 if (!$model->getId()) {
-                    $this->messageManager->addError(__('This attribute no longer exists.'));
+                    $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
+
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                    $this->messageManager->addError(__('We can\'t update the attribute.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
+
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
+                $data['frontend_input'] = $data['frontend_input'] ?? $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties
@@ -195,7 +226,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
 
-            if (is_null($model->getIsUserDefined()) || $model->getIsUserDefined() != 0) {
+            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
 
@@ -241,7 +272,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             try {
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the product attribute.'));
+                $this->messageManager->addSuccessMessage(__('You saved the product attribute.'));
 
                 $this->_attributeLabelCache->clean();
                 $this->_session->setAttributeData(false);
@@ -252,9 +283,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         '_current' => true,
                         'product_tab' => $this->getRequest()->getParam('product_tab'),
                     ];
-                    if (!is_null($attributeSet)) {
+                    if ($attributeSet !== null) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
+
                     return $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);
                 } elseif ($this->getRequest()->getParam('back', false)) {
                     return $this->returnResult(
@@ -263,10 +295,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ['error' => false]
                     );
                 }
+
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_session->setAttributeData($data);
+
                 return $this->returnResult(
                     'catalog/*/edit',
                     ['attribute_id' => $attributeId, '_current' => true],
@@ -274,14 +308,37 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 );
             }
         }
+
         return $this->returnResult('catalog/*/', [], ['error' => true]);
+    }
+
+    /**
+     * Extract options data from serialized options field and append to data array.
+     *
+     * This logic is required to overcome max_input_vars php limit
+     * that may vary and/or be inaccessible to change on different instances.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function preprocessOptionsData(&$data)
+    {
+        if (isset($data['serialized_options'])) {
+            $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
+            foreach ($serializedOptions as $serializedOption) {
+                $option = [];
+                parse_str($serializedOption, $option);
+                $data = array_replace_recursive($data, $option);
+            }
+        }
+        unset($data['serialized_options']);
     }
 
     /**
      * @param string $path
      * @param array $params
      * @param array $response
-     * @return \Magento\Framework\Controller\Result\Json|\Magento\Backend\Model\View\Result\Redirect
+     * @return Json|Redirect
      */
     private function returnResult($path = '', array $params = [], array $response = [])
     {
@@ -291,8 +348,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
             $response['params'] = $params;
+
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
+
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
     }
 

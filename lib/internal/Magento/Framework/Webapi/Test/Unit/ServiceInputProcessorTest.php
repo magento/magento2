@@ -533,6 +533,9 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function invalidCustomAttributesDataProvider()
     {
         return [
@@ -567,6 +570,44 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Test if $data == '', then we have to get the same ''.
+     *
+     * @param string $data
+     * @param string $type
+     *
+     * @dataProvider convertValueWithEmptyValueDataProvider
+     */
+    public function testConvertValueWithEmptyValue($data, $type)
+    {
+        $actualData = $this->serviceInputProcessor->convertValue($data, $type);
+
+        $this->assertEquals($data, $actualData);
+    }
+
+    /**
+     * DataProvider for testConvertValueWithEmptyValue.
+     *
+     * @return array
+     */
+    public function convertValueWithEmptyValueDataProvider()
+    {
+        return [
+            [
+                '',
+                'string'
+            ],
+            [
+                '',
+                'int'
+            ],
+            [
+                '',
+                'float'
+            ],
         ];
     }
 }

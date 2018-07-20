@@ -165,6 +165,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->target->validateFilter($filter));
     }
 
+    /**
+     * @return array
+     */
     public function validateFilterDataProvider()
     {
         return [

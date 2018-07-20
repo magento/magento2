@@ -235,7 +235,7 @@ define([
             controlLabelId: '',
 
             // text for more button
-            moreButtonText: 'More',
+            moreButtonText: $t('More'),
 
             // Callback url for media
             mediaCallback: '',
@@ -268,8 +268,11 @@ define([
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
             // tier prise selectors end
+
+            // A price label selector
+            normalPriceLabelSelector: '.normal-price .price-label'
         },
 
         /**
@@ -312,7 +315,7 @@ define([
          */
         _sortAttributes: function () {
             this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
-                return attribute.position;
+                return parseInt(attribute.position, 10);
             });
         },
 
@@ -930,6 +933,22 @@ define([
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
+
+            $(this.options.normalPriceLabelSelector).hide();
+
+            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+                if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
+                    if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
+                            if ($(dropdown).val() === '0') {
+                                $(this.options.normalPriceLabelSelector).show();
+                            }
+                        }.bind(this));
+                    } else {
+                        $(this.options.normalPriceLabelSelector).show();
+                    }
+                }
+            }.bind(this));
         },
 
         /**

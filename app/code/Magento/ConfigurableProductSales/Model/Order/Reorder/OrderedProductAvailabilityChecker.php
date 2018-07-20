@@ -5,11 +5,12 @@
  */
 namespace Magento\ConfigurableProductSales\Model\Order\Reorder;
 
-use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
-use Magento\Sales\Model\Order\Item;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -28,15 +29,23 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
     private $metadataPool;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param MetadataPool $metadataPool
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->metadataPool = $metadataPool;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -45,10 +54,12 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
     public function isAvailable(Item $item)
     {
         $buyRequest = $item->getBuyRequest();
-        $superAttribute = $buyRequest->getData()['super_attribute'];
+        $superAttribute = $buyRequest->getData()['super_attribute'] ?? [];
         $connection = $this->getConnection();
         $select = $connection->select();
-        $orderItemParentId = $item->getParentItem()->getProductId();
+        $linkField = $this->getMetadata()->getLinkField();
+        $parentItem = $this->productRepository->getById($item->getParentItem()->getProductId());
+        $orderItemParentId = $parentItem->getData($linkField);
         $select->from(
             ['cpe' => $this->resourceConnection->getTableName('catalog_product_entity')],
             ['cpe.entity_id']
@@ -67,7 +78,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
                 ['cpid' . $attributeId => $this->resourceConnection->getTableName('catalog_product_entity_int')],
                 sprintf(
                     'cpe.%1$s = cpid%2$d.%1$s AND cpid%2$d.attribute_id = %2$d AND cpid%2$d.store_id = %3$d',
-                    $this->getMetadata()->getLinkField(),
+                    $linkField,
                     $attributeId,
                     Store::DEFAULT_STORE_ID
                 ),
@@ -77,7 +88,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
                     ['cpis' . $attributeId => $this->resourceConnection->getTableName('catalog_product_entity_int')],
                     sprintf(
                         'cpe.%1$s = cpis%2$d.%1$s AND cpis%2$d.attribute_id = %2$d AND cpis%2$d.store_id = %3$d',
-                        $this->getMetadata()->getLinkField(),
+                        $linkField,
                         $attributeId,
                         $item->getStoreId()
                     ),

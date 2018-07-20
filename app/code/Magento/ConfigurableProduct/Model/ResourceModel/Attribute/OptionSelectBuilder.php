@@ -91,6 +91,12 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
+        )->joinInner(
+            ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
+            'attribute_option.option_id = entity_value.value',
+            []
+        )->order(
+            'attribute_option.sort_order ASC'
         )->where(
             'super_attribute.product_id = ?',
             $productId

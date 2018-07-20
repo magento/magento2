@@ -81,7 +81,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
         try {
             $this->_multiplyBunchInsert($ruleIds, $entityIds, $entityType);
         } catch (\Exception $e) {
-            $this->getConnection()->rollback();
+            $this->getConnection()->rollBack();
             throw $e;
         }
 

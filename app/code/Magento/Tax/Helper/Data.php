@@ -9,7 +9,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 use Magento\Tax\Model\Config;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -691,7 +690,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isCrossBorderTradeEnabled($store = null)
     {
-        return (bool) $this->_config->crossBorderTradeEnabled($store);
+        return (bool)$this->_config->crossBorderTradeEnabled($store);
     }
 
     /**

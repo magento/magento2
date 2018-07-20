@@ -103,6 +103,9 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
         $this->setupSelectionPrice();
     }
 
+    /**
+     * @param bool $useRegularPrice
+     */
     protected function setupSelectionPrice($useRegularPrice = false)
     {
         $this->selectionPrice = new \Magento\Bundle\Pricing\Price\BundleSelectionPrice(
@@ -201,6 +204,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
                     [
                         ['qty', null, 1],
                         ['final_price', null, 100],
+                        ['price', null, 100],
                     ]
                 )
             );
@@ -338,6 +342,9 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedPrice, $selectionPrice->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function useRegularPriceDataProvider()
     {
         return [

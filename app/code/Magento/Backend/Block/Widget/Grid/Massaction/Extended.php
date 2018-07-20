@@ -218,9 +218,8 @@ class Extended extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -233,9 +232,8 @@ class Extended extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
-        } else {
-            return [];
         }
+        return [];
     }
 
     /**
@@ -275,13 +273,13 @@ class Extended extends \Magento\Backend\Block\Widget
 
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        
+
         if ($this->getMassactionIdField()) {
             $massActionIdField = $this->getMassactionIdField();
         } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
-        
+
         $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
 
         if (!empty($gridIds)) {

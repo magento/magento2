@@ -111,7 +111,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $error = "Duplicated translation is found, but it is not allowed.\n"
             . "The phrase \"phrase1\" is translated in 1 places.\n"
             . "The phrase \"phrase2\" is translated in 1 places.\n";
-        $this->expectException('\RuntimeException', $error);
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage($error);
 
         $allowDuplicates = false;
 

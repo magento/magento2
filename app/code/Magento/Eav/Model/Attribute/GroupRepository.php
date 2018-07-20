@@ -117,16 +117,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $attributeSetId = $this->retrieveAttributeSetIdFromSearchCriteria($searchCriteria);
-        if (!$attributeSetId) {
-            throw InputException::requiredField('attribute_set_id');
-        }
-        try {
-            $this->setRepository->get($attributeSetId);
-        } catch (\Exception $exception) {
-            throw NoSuchEntityException::singleField('attributeSetId', $attributeSetId);
-        }
-
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $collection */
         $collection = $this->groupListFactory->create();
         $this->joinProcessor->process($collection);
@@ -188,6 +178,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
+     * @deprecated
      */
     protected function retrieveAttributeSetIdFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

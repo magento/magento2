@@ -266,8 +266,6 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetList()
     {
-        $attributeSetId = 'filter';
-
         $filterInterfaceMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -275,24 +273,18 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getValue',
             ])
             ->getMock();
-        $filterInterfaceMock->expects($this->once())
-            ->method('getField')
-            ->willReturn('attribute_set_id');
-        $filterInterfaceMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($attributeSetId);
 
         $filterGroupMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filterGroupMock->expects($this->once())
+        $filterGroupMock->expects($this->any())
             ->method('getFilters')
             ->willReturn([$filterInterfaceMock]);
 
         $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchCriteriaMock->expects($this->once())
+        $searchCriteriaMock->expects($this->any())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
@@ -322,52 +314,6 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
-    }
-
-    /**
-     * Test get list with invalid input exception
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage attribute_set_id is a required field.
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
-     */
-    public function testGetListWithInvalidInputException()
-    {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
-        $this->model->getList($searchCriteriaMock);
-    }
-
-    /**
-     * Test get list with no such entity exception
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeSetId = filter
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
-     */
-    public function testGetListWithNoSuchEntityException()
-    {
-        $attributeSetId = 'filter';
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $filterGroupMock = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
-        $filterInterfaceMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterInterfaceMock]);
-        $filterInterfaceMock->expects($this->once())->method('getField')->willReturn('attribute_set_id');
-        $filterInterfaceMock->expects($this->once())->method('getValue')->willReturn($attributeSetId);
-
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
-        $this->setRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($attributeSetId)
-            ->willThrowException(new \Exception());
-        $this->model->getList($searchCriteriaMock);
     }
 
     /**

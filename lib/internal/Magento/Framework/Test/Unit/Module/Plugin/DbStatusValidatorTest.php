@@ -114,11 +114,14 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects(static::never())
             ->method('save');
 
-        $this->expectException(LocalizedException::class, $expectedMessage);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($expectedMessage);
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 
+    /**
+     * @return array
+     */
     public static function beforeDispatchOutOfDateWithErrorsDataProvider()
     {
         return [

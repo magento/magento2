@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\Product\Exception;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -21,10 +22,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addSupportVideoMediaAttributes($setup);
             $this->removeGroupPrice($setup);
@@ -124,6 +128,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.2.2', '<')) {
             $this->fixCustomerGroupIdColumn($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.4', '<')) {
+            $this->removeAttributeSetRelation($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->addGeneralIndexOnGalleryValueTable($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->enableSegmentation($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.6', '<')) {
+            $this->addStoreIdFieldForWebsiteIndexTable($setup);
+            $this->removeIndexFromPriceIndexTable($setup);
         }
 
         $setup->endSetup();
@@ -517,6 +538,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             'value_id'
         );
+
         $this->addForeignKeys($setup);
     }
 
@@ -698,5 +720,125 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
         );
         $setup->getConnection()->query($sql);
+    }
+
+    /**
+     * Remove foreign key between catalog_product_entity and eav_attribute_set tables.
+     * Drop foreign key to delegate cascade on delete to plugin.
+     * @see \Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function removeAttributeSetRelation(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropForeignKey(
+            $setup->getTable('catalog_product_entity'),
+            $setup->getFkName('catalog_product_entity', 'attribute_set_id', 'eav_attribute_set', 'attribute_set_id')
+        );
+    }
+
+    /**
+     * Adds index for table catalog_product_entity_media_gallery_value
+     * It was added because it suits best for selecting media data for products
+     *
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Gallery::createBatchBaseSelect
+     * @param SchemaSetupInterface $setup
+     * @return void
+     * @throws \Exception
+     */
+    private function addGeneralIndexOnGalleryValueTable(SchemaSetupInterface $setup)
+    {
+        $existingKeys = $setup->getConnection()->getIndexList(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE)
+        );
+
+        $newIndexName = $setup->getConnection()->getIndexName(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+            ['entity_id', 'value_id', 'store_id']
+        );
+
+        if (!array_key_exists($newIndexName, $existingKeys)) {
+            $entityIdKeyName = $setup->getConnection()->getIndexName(
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                ['entity_id']
+            );
+
+            if (array_key_exists($entityIdKeyName, $existingKeys)) {
+                $keyColumns = $existingKeys[$entityIdKeyName]['COLUMNS_LIST'];
+                $linkField = reset($keyColumns);
+
+                $setup->getConnection()->addIndex(
+                    $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                    $newIndexName,
+                    [$linkField, 'value_id', 'store_id']
+                );
+            }
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function enableSegmentation(SchemaSetupInterface $setup)
+    {
+        $storeSelect = $setup->getConnection()->select()->from($setup->getTable('store'))->where('store_id > 0');
+        foreach ($setup->getConnection()->fetchAll($storeSelect) as $store) {
+            $indexTable = $setup->getTable('catalog_category_product_index') .
+                '_' .
+                \Magento\Store\Model\Store::ENTITY .
+                $store['store_id'];
+
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable
+                )
+            );
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl(
+                    $setup->getTable('catalog_category_product_index'),
+                    $indexTable . '_replica'
+                )
+            );
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     */
+    private function addStoreIdFieldForWebsiteIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addColumn(
+            $setup->getTable('catalog_product_index_website'),
+            'default_store_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                'nullable' => false,
+                'comment' => 'Default store id for website '
+            ]
+        );
+    }
+
+    /**
+     * Table "catalog_product_index_price_tmp" used as template of "catalog_product_index_price" table
+     * for create temporary tables during indexation. Indexes are removed from performance perspective
+     * @param SchemaSetupInterface $setup
+     */
+    private function removeIndexFromPriceIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['customer_group_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['website_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['min_price'])
+        );
     }
 }

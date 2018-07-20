@@ -270,7 +270,13 @@ class InstallSchema implements InstallSchemaInterface
          */
         $connection->insertForce(
             $installer->getTable('store_group'),
-            ['group_id' => 0, 'website_id' => 0, 'name' => 'Default', 'root_category_id' => 0, 'default_store_id' => 0]
+            [
+                'group_id' => 0,
+                'website_id' => 0,
+                'name' => 'Default',
+                'root_category_id' => 0,
+                'default_store_id' => 0
+            ]
         );
         $connection->insertForce(
             $installer->getTable('store_group'),

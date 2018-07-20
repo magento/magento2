@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Text */ ?>
 <?php
 $_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
@@ -17,7 +18,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 } ?><?= /* @escapeNotVerified */ $class ?>">
     <label class="label" for="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
-        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
 
     <div class="control">
@@ -29,6 +30,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             if ($_option->getMaxCharacters()) {
                 $_textValidate['maxlength'] = $_option->getMaxCharacters();
             }
+            $_textValidate['validate-no-utf8mb4-characters'] = true;
             ?>
             <input type="text"
                    id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
@@ -47,6 +49,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             if ($_option->getMaxCharacters()) {
                 $_textAreaValidate['maxlength'] = $_option->getMaxCharacters();
             }
+            $_textAreaValidate['validate-no-utf8mb4-characters'] = true;
             ?>
             <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                       class="product-custom-option"
@@ -59,8 +62,23 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                       cols="25"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
-            <p class="note"><?= /* @escapeNotVerified */ __('Maximum number of characters:') ?>
-                <strong><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></strong></p>
+            <p class="note note_<?= /* @escapeNotVerified */ $_option->getId() ?>">
+                <?= /* @escapeNotVerified */ __('Maximum %1 characters', $_option->getMaxCharacters()) ?>
+                <span class="character-counter no-display"></span>
+            </p>
         <?php endif; ?>
     </div>
+    <?php if ($_option->getMaxCharacters()): ?>
+        <script type="text/x-magento-init">
+        {
+            "[data-selector='options[<?= /* @escapeNotVerified */ $_option->getId() ?>]']": {
+                "Magento_Catalog/js/product/remaining-characters": {
+                    "maxLength":  "<?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?>",
+                    "noteSelector": ".note_<?= /* @escapeNotVerified */ $_option->getId() ?>",
+                    "counterSelector": ".note_<?= /* @escapeNotVerified */ $_option->getId() ?> .character-counter"
+                }
+            }
+        }
+    </script>
+    <?php endif; ?>
 </div>

@@ -38,7 +38,10 @@
         </span>
         <span class="message-text">Checking for a new version...</span>
     </div>
-    <div class="message message-error" ng-show="upgradeProcessError">
+    <div
+        class="message"
+        ng-class="upgradeAlreadyLatestVersion ? 'message-success' : 'message-error'"
+        ng-show="upgradeProcessError">
             <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
     </div>
     <div class="message" ng-show="upgradeProcessed && !upgradeProcessError && currentVersion">

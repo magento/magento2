@@ -140,7 +140,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
          * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
          * @see https://github.com/magento/magento2/issues/5897
          */
-        if (is_null($this->_itemCollection)) {
+        if ($this->_itemCollection === null) {
             $this->_prepareData();
         }
         return $this->_itemCollection;
@@ -151,7 +151,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = $this->getItemCollection()->getItems();
         }
         return $this->_items;

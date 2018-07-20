@@ -101,15 +101,15 @@ class EditTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testSetLayoutWithOwnAddressAndPostedData()
+    /**
+     * @param array $postedData
+     * @dataProvider postedDataProvider
+     */
+    public function testSetLayoutWithOwnAddressAndPostedData(array $postedData)
     {
         $addressId = 1;
         $customerId = 1;
         $title = __('Edit Address');
-        $postedData = [
-            'region_id' => 1,
-            'region' => 'region',
-        ];
         $newPostedData = $postedData;
         $newPostedData['region'] = $postedData;
 
@@ -167,6 +167,21 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->model, $this->model->setLayout($layoutMock));
         $this->assertEquals($layoutMock, $this->model->getLayout());
+    }
+
+    /**
+     * @return array
+     */
+    public function postedDataProvider()
+    {
+        return [
+            [
+                ['region_id' => 1, 'region' => 'region']
+            ],
+            [
+                ['region' => 'region without id']
+            ]
+        ];
     }
 
     /**

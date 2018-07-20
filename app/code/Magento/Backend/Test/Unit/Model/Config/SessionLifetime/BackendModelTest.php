@@ -20,13 +20,17 @@ class BackendModelTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Config\SessionLifetime\BackendModel::class
         );
         if ($errorMessage !== null) {
-            $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $errorMessage);
+            $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+            $this->expectExceptionMessage($errorMessage);
         }
         $model->setValue($value);
         $object = $model->beforeSave();
         $this->assertEquals($model, $object);
     }
 
+    /**
+     * @return array
+     */
     public function adminSessionLifetimeDataProvider()
     {
         return [

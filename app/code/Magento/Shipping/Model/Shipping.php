@@ -252,14 +252,14 @@ class Shipping implements RateCollectorInterface
     public function collectCarrierRates($carrierCode, $request)
     {
         /* @var $carrier \Magento\Shipping\Model\Carrier\AbstractCarrier */
-        $carrier = $this->_carrierFactory->createIfActive($carrierCode, $request->getStoreId());
+        $carrier = $this->_carrierFactory->createIfActive($carrierCode, $request->getQuoteStoreId());
         if (!$carrier) {
             return $this;
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
         if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
-            $result = $carrier->proccessAdditionalValidation($request);
+            $result = $carrier->processAdditionalValidation($request);
         }
         /*
          * Result will be false if the admin set not to show the shipping module

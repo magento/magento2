@@ -54,6 +54,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function prepareAttributesWithDefaultValueForSaveDataProvider()
     {
         return [
@@ -136,7 +140,39 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                     'options_container' => 'container2',
                     'msrp_display_actual_price_type' => 2
                 ],
-            ]
+            ],
+            'Adding new product with empty attribute value for attribute_type = select' => [
+                [
+                    'sku' => 'simple_product_5',
+                    'store_view_code' => '',
+                    '_attribute_set' => 'Default',
+                    'product_type' => 'simple',
+                    'categories' => '_root_category',
+                    'website_code' => '',
+                    'name' => 'Simple Product 5',
+                    'price' => 150,
+                    'status' => 1,
+                    'tax_class_id' => ' ',
+                    'weight' => 1,
+                    'description' => 'a',
+                    'short_description' => 'a',
+                    'visibility' => 'not visible individually',
+                    'addition_attribute' => '',
+                ],
+                true,
+                [
+                    'name' => 'Simple Product 5',
+                    'price' => 150,
+                    'status' => 1,
+                    'tax_class_id' => ' ',
+                    'weight' => 1,
+                    'description' => 'a',
+                    'short_description' => 'a',
+                    'visibility' => 1,
+                    'options_container' => 'container2',
+                    'msrp_display_actual_price_type' => 0,
+                ],
+            ],
         ];
     }
 
