@@ -27,7 +27,7 @@ class ItemProductResolver implements ItemResolverInterface
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
