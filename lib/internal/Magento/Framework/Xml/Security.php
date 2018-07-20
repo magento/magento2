@@ -72,7 +72,7 @@ class Security
             E_WARNING
         );
 
-        $result = (bool)$document->loadXml($xmlContent, LIBXML_NONET);
+        $result = (bool)$document->loadXML($xmlContent, LIBXML_NONET);
         restore_error_handler();
         // Entity load to previous setting
         libxml_disable_entity_loader($loadEntities);
