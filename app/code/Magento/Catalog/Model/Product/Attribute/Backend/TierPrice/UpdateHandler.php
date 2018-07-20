@@ -281,7 +281,7 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
-     * @param array|null $priceRows
+     * @param array $priceRows
      * @param bool $isGlobal
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
