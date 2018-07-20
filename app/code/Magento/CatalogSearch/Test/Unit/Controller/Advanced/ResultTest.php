@@ -136,6 +136,6 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             'urlFactory' => $urlFactoryMock
             ]
         );
-        $instance->execute();
+        $this->assertEquals($redirectResultMock, $instance->execute());
     }
 }
