@@ -173,12 +173,13 @@ define([
          * @private
          */
         _isChildrenHasErrors: function (hasErrors, container) {
+            var self = this;
             if (hasErrors === false && container.hasOwnProperty('elems')) {
                 hasErrors = container.elems.some('error');
                 if (hasErrors === false && container.hasOwnProperty('_elems')) {
                     container._elems.each(function (child) {
                         if (hasErrors === false) {
-                            hasErrors = this._isChildrenHasErrors(hasErrors, child);
+                            hasErrors = self._isChildrenHasErrors(hasErrors, child);
                         }
                     });
                 }
