@@ -67,7 +67,7 @@ AddType application/xml xml
 
 <IfModule mod_headers.c>
 
-    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$>
+    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$>
         Header append Cache-Control public
     </FilesMatch>
 
@@ -97,12 +97,13 @@ AddType application/xml xml
     ExpiresByType application/x-bzip2 "access plus 0 seconds"
 
     # CSS, JavaScript, html
-    <FilesMatch \.(css|js|html)$>
+    <FilesMatch \.(css|js|html|json)$>
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType text/html "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/json "access plus 1 year"
 
     # Favicon, images, flash
     <FilesMatch \.(ico|gif|png|jpg|jpeg|swf|svg)$>
