@@ -570,7 +570,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 $count = $collection->getItemsQty();
             } else {
-                $count = $collection->getSize();
+                $count = $collection->count();
             }
             $this->_customerSession->setWishlistDisplayType(
                 $this->scopeConfig->getValue(
