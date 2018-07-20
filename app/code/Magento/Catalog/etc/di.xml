@@ -173,8 +173,15 @@
     </type>
     <type name="Magento\Catalog\Helper\Data">
         <arguments>
-            <argument name="templateFilterModel" xsi:type="string">Magento\Catalog\Model\Template\Filter</argument>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Output">
+        <arguments>
+            <argument name="directivePatterns" xsi:type="array">
+                <item name="construct" xsi:type="const">\Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\GridPerPage">
