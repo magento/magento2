@@ -88,6 +88,9 @@
             <column name="nonce"/>
             <column name="consumer_id"/>
         </constraint>
+        <index name="OAUTH_NONCE_TIMESTAMP" indexType="btree">
+            <column name="timestamp"/>
+        </index>
     </table>
     <table name="integration" resource="default" engine="innodb" comment="integration">
         <column xsi:type="int" name="integration_id" padding="10" unsigned="true" nullable="false" identity="true"
