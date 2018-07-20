@@ -55,7 +55,7 @@ class ScopeCodeResolver
             $resolverScopeCode = $resolverScopeCode->getCode();
         }
 
-        if ($scopeCode == null) {
+        if ($scopeCode === null) {
             $scopeCode = $resolverScopeCode;
         }
 
