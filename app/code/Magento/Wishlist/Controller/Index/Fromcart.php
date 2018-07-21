@@ -7,7 +7,6 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CheckoutCart;
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
