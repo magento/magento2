@@ -77,8 +77,8 @@ class Fulltext implements
      * @param IndexSwitcherInterface $indexSwitcher
      * @param StateFactory $indexScopeStateFactory
      * @param DimensionProviderInterface $dimensionProvider
-     * @param ProcessManager $processManager
      * @param array $data
+     * @param ProcessManager $processManager
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -87,8 +87,8 @@ class Fulltext implements
         IndexSwitcherInterface $indexSwitcher,
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
-        ProcessManager $processManager,
-        array $data
+        array $data,
+        ProcessManager $processManager = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -97,7 +97,9 @@ class Fulltext implements
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeStateFactory->create();
         $this->dimensionProvider = $dimensionProvider;
-        $this->processManager = $processManager;
+        $this->processManager = $processManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            ProcessManager::class
+        );
     }
 
     /**
