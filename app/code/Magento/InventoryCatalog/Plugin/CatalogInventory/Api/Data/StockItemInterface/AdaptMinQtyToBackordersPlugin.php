@@ -16,14 +16,12 @@ class AdaptMinQtyToBackordersPlugin
      * @param callable $proceed
      * @return int
      */
-    public function aroundGetMinQty(StockItemInterface $subject, callable $proceed)
+    public function afterGetMinQty(StockItemInterface $subject, float $result)
     {
-        $originalMinQty = $proceed();
-
         if ($subject->getBackorders()) {
-            return $originalMinQty >= 0 ? 0 : $originalMinQty;
+            return $result >= 0 ? 0 : $result;
         }
 
-        return $originalMinQty > 0 ? $originalMinQty : 0;
+        return $result > 0 ? $result : 0;
     }
 }

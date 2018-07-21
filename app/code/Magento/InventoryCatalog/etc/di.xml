@@ -96,4 +96,9 @@
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"
                 sortOrder="1"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\StockStateProvider">
+        <plugin name="adapt_verify_stock_to_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"
+                sortOrder="1"/>
+    </type>
 </config>

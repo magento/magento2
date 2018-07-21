@@ -19,15 +19,14 @@ class AllowNegativeMinQtyPlugin
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundFilter(
+    public function afterFilter(
         StockDataFilter $subject,
-        callable $proceed,
+        array $result,
         array $stockData
     ) {
-        $originalStockData = $proceed($stockData);
         if (isset($stockData['min_qty'])) {
-            $originalStockData['min_qty'] = $stockData['min_qty'];
+            $result['min_qty'] = $stockData['min_qty'];
         }
-        return $originalStockData;
+        return $result;
     }
 }
