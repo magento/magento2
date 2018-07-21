@@ -267,6 +267,9 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testInstall()
     {
         $request = [
