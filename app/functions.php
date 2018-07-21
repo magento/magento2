@@ -1,22 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @deprecated The global function __() is now loaded via Composer in the Magento Framework, the below require is only
+ *             for backwards compatibility reasons and this file will be removed in a future version
+ * @see        Magento\Framework\Phrase\__.php
  */
 
-/**
- * Create value-object \Magento\Framework\Phrase
- *
- * @return \Magento\Framework\Phrase
- */
-function __()
-{
-    $argc = func_get_args();
-
-    $text = array_shift($argc);
-    if (!empty($argc) && is_array($argc[0])) {
-        $argc = $argc[0];
+$vendorDir = require VENDOR_PATH;
+if (!function_exists('__')) {
+    if (file_exists(BP . '/lib/internal/Magento/Framework/Phrase/__.php')) {
+        require BP . '/lib/internal/Magento/Framework/Phrase/__.php';
+    } elseif (file_exists(BP . "/{$vendorDir}/magento/framework/Phrase/__.php")) {
+        require BP . "/{$vendorDir}/magento/framework/Phrase/__.php";
     }
-
-    return new \Magento\Framework\Phrase($text, $argc);
 }
