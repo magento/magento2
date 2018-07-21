@@ -2189,7 +2189,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create the base results for the the multi rules test
+     * Create the base results for the multi rules test
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
