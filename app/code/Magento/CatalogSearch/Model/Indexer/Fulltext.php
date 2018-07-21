@@ -15,6 +15,8 @@ use Magento\Indexer\Model\ProcessManager;
 /**
  * Provide functionality for Fulltext Search indexing.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  * @api
  * @since 100.0.2
  */
