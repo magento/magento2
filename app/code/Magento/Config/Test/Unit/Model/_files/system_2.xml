@@ -76,6 +76,7 @@
                     <config_path>section/group/field4</config_path>
                 </field>
                 <field id="field_5" translate="label" showInWebsite="1" type="text">
+                    <label></label>
                 </field>
             </group>
             <group id="group_4" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
