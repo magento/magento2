@@ -10,6 +10,7 @@ use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
 use Magento\Store\Model\StoreDimensionProvider;
+use Magento\Indexer\Model\ProcessManager;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -63,13 +64,19 @@ class Fulltext implements
     private $dimensionProvider;
 
     /**
+     * @var ProcessManager
+     */
+    private $processManager;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
-     * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
      * @param StateFactory $indexScopeStateFactory
      * @param DimensionProviderInterface $dimensionProvider
+     * @param ProcessManager $processManager
+     * @param array $data
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -78,6 +85,7 @@ class Fulltext implements
         IndexSwitcherInterface $indexSwitcher,
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
+        ProcessManager $processManager,
         array $data
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
@@ -87,6 +95,7 @@ class Fulltext implements
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeStateFactory->create();
         $this->dimensionProvider = $dimensionProvider;
+        $this->processManager = $processManager;
     }
 
     /**
@@ -145,9 +154,13 @@ class Fulltext implements
      */
     public function executeFull()
     {
+        $userFunctions = [];
         foreach ($this->dimensionProvider->getIterator() as $dimension) {
-            $this->executeByDimension($dimension);
+            $userFunctions[] = function () use ($dimension) {
+                $this->executeByDimension($dimension);
+            };
         }
+        $this->processManager->execute($userFunctions);
     }
 
     /**
