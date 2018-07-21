@@ -242,7 +242,8 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         if ($this->_activeTab === null && !empty($this->_tabs)) {
             /** @var TabInterface $tab */
-            $this->_activeTab = (reset($this->_tabs))->getId();
+            $tab = reset($this->_tabs);
+            $this->_activeTab = $tab->getId();
         }
         
         $this->assign('tabs', $this->_tabs);
