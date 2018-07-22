@@ -104,6 +104,7 @@ class MediaGalleryProcessor
      * Save product media gallery.
      *
      * @param $mediaGalleryData
+     *
      * @return void
      */
     public function saveMediaGallery(array $mediaGalleryData)
@@ -149,6 +150,7 @@ class MediaGalleryProcessor
      * Update media gallery labels.
      *
      * @param array $labels
+     *
      * @return void
      */
     public function updateMediaGalleryLabels(array $labels)
@@ -191,6 +193,7 @@ class MediaGalleryProcessor
      * Get existing images for current bunch.
      *
      * @param array $bunch
+     *
      * @return array
      */
     public function getExistingImages(array $bunch)
@@ -267,6 +270,7 @@ class MediaGalleryProcessor
      * @param array $mediaGalleryData
      * @param array $newMediaValues
      * @param array $valueToProductId
+     *
      * @return void
      */
     private function processMediaPerStore(
@@ -328,6 +332,8 @@ class MediaGalleryProcessor
      * Get product entity link field.
      *
      * @return string
+     *
+     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {

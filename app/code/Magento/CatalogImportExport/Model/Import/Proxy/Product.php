@@ -7,7 +7,7 @@
 /**
  * Import proxy product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogImportExport\Model\Import\Proxy;
 
