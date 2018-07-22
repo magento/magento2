@@ -68,7 +68,7 @@ class AttributeOptions implements ResolverInterface
         if (is_array($attributeOptions)) {
             /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $option */
             foreach ($attributeOptions as $option) {
-                if (!$option->getValue()) {
+                if ($option->getValue() === '') {
                     continue;
                 }
 
