@@ -6,8 +6,6 @@
 
 namespace Magento\SalesRule\Model\Rule\Condition;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-
 /**
  * Product rule condition data model
  *
@@ -32,34 +30,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $model
-     *
-     * @return \Magento\Catalog\Api\Data\ProductInterface|\Magento\Catalog\Model\Product
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getProductToValidate(\Magento\Framework\Model\AbstractModel $model)
-    {
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $model->getProduct();
-        if (!$product instanceof \Magento\Catalog\Model\Product) {
-            $product = $this->productRepository->getById($model->getProductId());
-        }
-
-        $attrCode = $this->getAttribute();
-
-        /* Check for attributes which are not available for configurable products */
-        if ($product->getTypeId() == Configurable::TYPE_CODE && !$product->hasData($attrCode)) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $childProduct */
-            $childProduct = current($model->getChildren())->getProduct();
-            if ($childProduct->hasData($attrCode)) {
-                $product = $childProduct;
-            }
-        }
-
-        return $product;
-    }
-
-    /**
      * Validate Product Rule Condition
      *
      * @param \Magento\Framework\Model\AbstractModel $model
@@ -71,7 +41,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->getProductToValidate($model);
+        $product = $model->getProduct();
+        if (!$product instanceof \Magento\Catalog\Model\Product) {
+            $product = $this->productRepository->getById($model->getProductId());
+        }
 
         $product->setQuoteItemQty(
             $model->getQty()
