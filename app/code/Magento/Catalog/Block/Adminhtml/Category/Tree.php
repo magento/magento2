@@ -29,7 +29,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'catalog/category/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/tree.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session

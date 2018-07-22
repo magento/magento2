@@ -623,7 +623,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
         } else {
             //Checking if such country exists.
-            if (!in_array($countryId, $this->_directoryData->getCountryCollection()->getAllIds(), true)) {
+            $countryCollection = $this->_directoryData->getCountryCollection($this->getStoreId());
+            if (!in_array($countryId, $countryCollection->getAllIds(), true)) {
                 $errors[] = __(
                     'Invalid value of "%value" provided for the %fieldName field.',
                     [

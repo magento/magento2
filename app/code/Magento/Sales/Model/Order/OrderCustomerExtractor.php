@@ -15,10 +15,10 @@ use Magento\Framework\DataObject\Copy as CopyService;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as AddressFactory;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerFactory;
 use Magento\Quote\Api\Data\AddressInterfaceFactory as QuoteAddressFactory;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 
 /**
  * Extract customer data from an order.
@@ -88,8 +88,9 @@ class OrderCustomerExtractor
     }
 
     /**
-     * @param int $orderId
+     * Extract customer data from order.
      *
+     * @param int $orderId
      * @return CustomerInterface
      */
     public function extract(int $orderId): CustomerInterface
@@ -108,35 +109,44 @@ class OrderCustomerExtractor
             $order->getBillingAddress(),
             []
         );
-        $addresses = $order->getAddresses();
-        foreach ($addresses as $address) {
-            $addressData = $this->objectCopyService->copyFieldsetToTarget(
-                'order_address',
-                'to_customer_address',
-                $address,
-                []
-            );
-            /** @var AddressInterface $customerAddress */
-            $customerAddress = $this->addressFactory->create(['data' => $addressData]);
-            switch ($address->getAddressType()) {
-                case QuoteAddress::ADDRESS_TYPE_BILLING:
-                    $customerAddress->setIsDefaultBilling(true);
-                    break;
-                case QuoteAddress::ADDRESS_TYPE_SHIPPING:
-                    $customerAddress->setIsDefaultShipping(true);
-                    break;
+
+        $processedAddressData = [];
+        $customerAddresses = [];
+        foreach ($order->getAddresses() as $orderAddress) {
+            $addressData = $this->objectCopyService
+                ->copyFieldsetToTarget('order_address', 'to_customer_address', $orderAddress, []);
+
+            $index = array_search($addressData, $processedAddressData);
+            if ($index === false) {
+                // create new customer address only if it is unique
+                $customerAddress = $this->addressFactory->create(['data' => $addressData]);
+                $customerAddress->setIsDefaultBilling(false);
+                $customerAddress->setIsDefaultBilling(false);
+                if (is_string($orderAddress->getRegion())) {
+                    /** @var RegionInterface $region */
+                    $region = $this->regionFactory->create();
+                    $region->setRegion($orderAddress->getRegion());
+                    $region->setRegionCode($orderAddress->getRegionCode());
+                    $region->setRegionId($orderAddress->getRegionId());
+                    $customerAddress->setRegion($region);
+                }
+
+                $processedAddressData[] = $addressData;
+                $customerAddresses[] = $customerAddress;
+                $index = count($processedAddressData) - 1;
             }
 
-            if (is_string($address->getRegion())) {
-                /** @var RegionInterface $region */
-                $region = $this->regionFactory->create();
-                $region->setRegion($address->getRegion());
-                $region->setRegionCode($address->getRegionCode());
-                $region->setRegionId($address->getRegionId());
-                $customerAddress->setRegion($region);
+            $customerAddress = $customerAddresses[$index];
+            // make sure that address type flags from equal addresses are stored in one resulted address
+            if ($orderAddress->getAddressType() == OrderAddress::TYPE_BILLING) {
+                $customerAddress->setIsDefaultBilling(true);
             }
-            $customerData['addresses'][] = $customerAddress;
+            if ($orderAddress->getAddressType() == OrderAddress::TYPE_SHIPPING) {
+                $customerAddress->setIsDefaultShipping(true);
+            }
         }
+
+        $customerData['addresses'] = $customerAddresses;
 
         return $this->customerFactory->create(['data' => $customerData]);
     }

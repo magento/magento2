@@ -44,7 +44,7 @@
                         <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
-                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
+                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -77,25 +77,25 @@
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
                     </group>
-                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
                         <label>Advanced Braintree Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="braintree_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
                         </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="merchant_account_id" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Merchant Account ID</label>
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintree/merchant_account_id</config_path>
                         </field>
-                        <field id="fraudprotection" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="fraudprotection" translate="label comment" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Advanced Fraud Protection</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
                         </field>
-                        <field id="kount_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="kount_id" translate="label comment" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Kount Merchant ID</label>
                             <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
                             <depends>
@@ -108,7 +108,7 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree/debug</config_path>
                         </field>
-                        <field id="useccv" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="useccv" translate="label comment" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>CVV Verification</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <comment>Be sure to Enable AVS and/or CVV in Your Braintree Account in Settings/Processing Section.</comment>
@@ -125,7 +125,7 @@
                             <config_path>payment/braintree/sort_order</config_path>
                         </field>
                     </group>
-                    <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
+                    <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="30">
                         <label>Country Specific Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="allowspecific" translate="label" type="allowspecific" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -146,10 +146,10 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
-                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
+                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintree_paypal/title</config_path>
                             <comment>It is recommended to set this value to "PayPal" per store views.</comment>
@@ -187,7 +187,7 @@
                             <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree_paypal/specificcountry</config_path>
                         </field>
-                        <field id="require_billing_address" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="require_billing_address" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Require Customer's Billing Address</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/require_billing_address</config_path>
@@ -203,7 +203,7 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/debug</config_path>
                         </field>
-                        <field id="display_on_shopping_cart" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="display_on_shopping_cart" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Display on Shopping Cart</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/display_on_shopping_cart</config_path>
@@ -215,7 +215,7 @@
                             <config_path>payment/braintree_paypal/skip_order_review</config_path>
                         </field>
                     </group>
-                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
+                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="41">
                         <label>3D Secure Verification Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="verify_3dsecure" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -239,14 +239,14 @@
                             <config_path>payment/braintree/verify_specific_countries</config_path>
                         </field>
                     </group>
-                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="50">
+                    <group id="braintree_dynamic_descriptor" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                         <label>Dynamic Descriptors</label>
                         <comment><![CDATA[Dynamic descriptors are sent on a per-transaction basis and define what will appear on your customers credit card statements for a specific purchase.
                             The clearer the description of your product, the less likely customers will issue chargebacks due to confusion or non-recognition.
                             Dynamic descriptors are not enabled on all accounts by default. If you receive a validation error of 92203 or if your dynamic descriptors are not displaying as expected,
                             please <a href="mailto:support@getbraintree.com">Braintree Support</a>.]]></comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="name" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Name</label>
                             <config_path>payment/braintree/descriptor_name</config_path>
                             <comment>
@@ -254,14 +254,14 @@
                                 and the product descriptor can be up to 18, 14, or 9 characters respectively (with an * in between for a total descriptor name of 22 characters).
                             </comment>
                         </field>
-                        <field id="phone" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="phone" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Phone</label>
                             <config_path>payment/braintree/descriptor_phone</config_path>
                             <comment>
                                 The value in the phone number field of a customer's statement. Phone must be 10-14 characters and can only contain numbers, dashes, parentheses and periods.
                             </comment>
                         </field>
-                        <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
                             <config_path>payment/braintree/descriptor_url</config_path>
                             <comment>

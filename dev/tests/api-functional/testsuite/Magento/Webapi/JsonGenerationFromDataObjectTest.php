@@ -80,7 +80,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Request does not match any route.
+     * @expectedExceptionMessage Specified request cannot be processed.
      */
     public function testInvalidRestUrlNoServices()
     {

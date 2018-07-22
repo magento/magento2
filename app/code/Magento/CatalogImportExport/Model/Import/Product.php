@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -2580,7 +2581,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $useConfigFields = [];
         foreach ($rowData as $key => $value) {
-            $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
+            $useConfigName = $key === StockItemInterface::ENABLE_QTY_INCREMENTS
+                ? StockItemInterface::USE_CONFIG_ENABLE_QTY_INC
+                : self::INVENTORY_USE_CONFIG_PREFIX . $key;
+
             if (isset($this->defaultStockData[$key])
                 && isset($this->defaultStockData[$useConfigName])
                 && !empty($value)
@@ -2675,7 +2679,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
-                $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
+                $message = sprintf(
+                    $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
+                    $entityData['request_path'],
+                    $entityData['sku']
+                );
+                $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum, 'url_key', $message);
             }
         }
     }
