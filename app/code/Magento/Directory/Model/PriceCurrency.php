@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Model;
 
 use Magento\Framework\App\ScopeInterface;
@@ -48,7 +50,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     /**
      * {@inheritdoc}
      */
-    public function convert($amount, $scope = null, $currency = null)
+    public function convert(float $amount, $scope = null, $currency = null): float
     {
         $currentCurrency = $this->getCurrency($scope, $currency);
 
@@ -60,8 +62,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     /**
      * {@inheritdoc}
      */
-    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
-    {
+    public function convertAndRound(
+        float $amount,
+        $scope = null,
+        $currency = null,
+        int $precision = self::DEFAULT_PRECISION
+    ): float {
         $currentCurrency = $this->getCurrency($scope, $currency);
         $convertedValue = $this->getStore($scope)->getBaseCurrency()->convert($amount, $currentCurrency);
         return round($convertedValue, $precision);
@@ -71,12 +77,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * {@inheritdoc}
      */
     public function format(
-        $amount,
-        $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        float $amount,
+        bool $includeContainer = true,
+        int $precision = self::DEFAULT_PRECISION,
         $scope = null,
         $currency = null
-    ) {
+    ): string {
         return $this->getCurrency($scope, $currency)
             ->formatPrecision($amount, $precision, [], $includeContainer);
     }
@@ -85,12 +91,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * {@inheritdoc}
      */
     public function convertAndFormat(
-        $amount,
-        $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        float $amount,
+        bool $includeContainer = true,
+        int $precision = self::DEFAULT_PRECISION,
         $scope = null,
         $currency = null
-    ) {
+    ): string {
         $amount = $this->convert($amount, $scope, $currency);
 
         return $this->format($amount, $includeContainer, $precision, $scope, $currency);
@@ -99,7 +105,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrency($scope = null, $currency = null)
+    public function getCurrency($scope = null, $currency = null): \Magento\Framework\Model\AbstractModel
     {
         if ($currency instanceof Currency) {
             $currentCurrency = $currency;
@@ -122,7 +128,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
      */
-    public function getCurrencySymbol($scope = null, $currency = null)
+    public function getCurrencySymbol($scope = null, $currency = null): string
     {
         return $this->getCurrency($scope, $currency)->getCurrencySymbol();
     }
@@ -153,7 +159,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param float $price
      * @return float
      */
-    public function round($price)
+    public function round(float $price): float
     {
         return round($price, 2);
     }

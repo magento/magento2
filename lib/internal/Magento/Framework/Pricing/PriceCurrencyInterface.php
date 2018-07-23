@@ -26,7 +26,7 @@ interface PriceCurrencyInterface
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return float
      */
-    public function convert($amount, $scope = null, $currency = null);
+    public function convert(float $amount, $scope = null, $currency = null): float;
 
     /**
      * Convert and round price value
@@ -37,7 +37,12 @@ interface PriceCurrencyInterface
      * @param int $precision
      * @return float
      */
-    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION);
+    public function convertAndRound(
+        float $amount,
+        $scope = null,
+        $currency = null,
+        int $precision = self::DEFAULT_PRECISION
+    ): float;
 
     /**
      * Format price value
@@ -50,12 +55,12 @@ interface PriceCurrencyInterface
      * @return string
      */
     public function format(
-        $amount,
-        $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        float $amount,
+        bool $includeContainer = true,
+        int $precision = self::DEFAULT_PRECISION,
         $scope = null,
         $currency = null
-    );
+    ): string;
 
     /**
      * Convert and format price value
@@ -68,12 +73,12 @@ interface PriceCurrencyInterface
      * @return string
      */
     public function convertAndFormat(
-        $amount,
-        $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        float $amount,
+        bool $includeContainer = true,
+        int $precision = self::DEFAULT_PRECISION,
         $scope = null,
         $currency = null
-    );
+    ): string;
 
     /**
      * Round price
@@ -81,7 +86,7 @@ interface PriceCurrencyInterface
      * @param float $price
      * @return float
      */
-    public function round($price);
+    public function round(float $price): float;
 
     /**
      * Get currency model
@@ -90,12 +95,12 @@ interface PriceCurrencyInterface
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return \Magento\Framework\Model\AbstractModel
      */
-    public function getCurrency($scope = null, $currency = null);
+    public function getCurrency($scope = null, $currency = null): \Magento\Framework\Model\AbstractModel;
 
     /**
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
      */
-    public function getCurrencySymbol($scope = null, $currency = null);
+    public function getCurrencySymbol($scope = null, $currency = null): string;
 }
