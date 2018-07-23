@@ -177,8 +177,10 @@ define([
 
             if (hasErrors === false && container.hasOwnProperty('elems')) {
                 hasErrors = container.elems.some('error');
+
                 if (hasErrors === false && container.hasOwnProperty('_elems')) {
                     container._elems.each(function (child) {
+
                         if (hasErrors === false) {
                             hasErrors = self._isChildrenHasErrors(hasErrors, child);
                         }
