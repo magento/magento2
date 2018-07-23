@@ -81,12 +81,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     /**
      * @var CaptchaHelper
      */
-    protected $captchaHelper;
+    private $captchaHelper;
 
     /**
      * @var CaptchaStringResolver
      */
-    protected $captchaStringResolver;
+    private $captchaStringResolver;
 
     /**
      * @param Action\Context $context
