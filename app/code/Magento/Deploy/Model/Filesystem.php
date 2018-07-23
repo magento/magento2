@@ -115,7 +115,7 @@ class Filesystem
         $this->userCollection = $userCollection;
         $this->locale = $locale;
         $this->functionCallPath =
-            '"' . PHP_BINARY . '"' . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+            PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     /**

@@ -107,7 +107,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->cmdPrefix = '"' . PHP_BINARY . "'" . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+        $this->cmdPrefix = PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     public function testRegenerateStatic()
