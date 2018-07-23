@@ -34,21 +34,14 @@
                     <can_be_empty>1</can_be_empty>
                 </field>
             </group>
-            <group id="yahoofinance" translate="label" sortOrder="33" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Yahoo Finance Exchange</label>
-                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Connection Timeout in Seconds</label>
-                </field>
-            </group>
             <group id="fixerio" translate="label" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Fixer.io</label>
-                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Connection Timeout in Seconds</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Key</label>
+                    <config_path>currency/fixerio/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-            </group>
-            <group id="webservicex" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Webservicex</label>
-                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Connection Timeout in Seconds</label>
                 </field>
             </group>
