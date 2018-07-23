@@ -138,6 +138,6 @@ class Head implements Layout\ReaderInterface
             $metadataName = $node->getAttribute('name');
         }
 
-        $pageConfigStructure->setMetaData($metadataName, $node->getAttribute('content'));
+        $pageConfigStructure->setMetadata($metadataName, $node->getAttribute('content'));
     }
 }

@@ -30,6 +30,7 @@ $config = [
        class="action-braintree-paypal-logo" disabled>
         <img class="braintree-paypal-button-hidden"
              src="https://checkout.paypal.com/pwpp/2.17.6/images/pay-with-paypal.png"
-             alt="Pay with PayPal"/>
+             alt="<?php echo $block->escapeHtml(__('Pay with PayPal')); ?>"
+             title="<?php echo $block->escapeHtml(__('Pay with PayPal')); ?>"/>
     </button>
 </div>

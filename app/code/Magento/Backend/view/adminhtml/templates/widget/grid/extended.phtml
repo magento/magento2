@@ -72,7 +72,7 @@ $numColumns = sizeof($block->getColumns());
             <?php if ($block->getPagerVisibility()): ?>
                 <div class="admin__data-grid-pager-wrap">
                     <select name="<?php /* @escapeNotVerified */ echo $block->getVarNameLimit() ?>"
-                            id="<?php echo $block->escapeHTML($block->getHtmlId())?>_page-limit"
+                            id="<?php echo $block->escapeHtml($block->getHtmlId())?>_page-limit"
                             onchange="<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.loadByElement(this)"
                             class="admin__control-select">
                         <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
@@ -91,7 +91,7 @@ $numColumns = sizeof($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?php echo $block->escapeHTML($block->getHtmlId())?><?php echo $block->escapeHTML($block->getHtmlId())?>_page-limit"
+                    <label for="<?php echo $block->escapeHtml($block->getHtmlId())?><?php echo $block->escapeHtml($block->getHtmlId())?>_page-limit"
                         class="admin__control-support-text"><?php /* @escapeNotVerified */ echo __('per page') ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -107,12 +107,12 @@ $numColumns = sizeof($block->getColumns());
                             <button type="button" class="action-previous disabled"><span><?php /* @escapeNotVerified */ echo __('Previous page') ?></span></button>
                         <?php endif; ?>
                         <input type="text"
-                               id="<?php echo $block->escapeHTML($block->getHtmlId())?>_page-current"
+                               id="<?php echo $block->escapeHtml($block->getHtmlId())?>_page-current"
                                name="<?php /* @escapeNotVerified */ echo $block->getVarNamePage() ?>"
                                value="<?php /* @escapeNotVerified */ echo $_curPage ?>"
                                class="admin__control-text"
                                onkeypress="<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.inputPage(event, '<?php /* @escapeNotVerified */ echo $_lastPage ?>')" <?php /* @escapeNotVerified */ echo $block->getUiId('current-page') ?> />
-                        <label class="admin__control-support-text" for="<?php echo $block->escapeHTML($block->getHtmlId())?>_page-current">
+                        <label class="admin__control-support-text" for="<?php echo $block->escapeHtml($block->getHtmlId())?>_page-current">
                             <?php /* @escapeNotVerified */ echo __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
