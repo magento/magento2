@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -49,7 +51,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $quote->load('test01', 'reserved_order_id');
 
         $productRepository = $this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+            ProductRepositoryInterface::class
         );
         $product = $productRepository->get('virtual-product', false, null, true);
         $quote->addProduct($product);
@@ -318,7 +320,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $productStockQty = 100;
 
         $productRepository = $this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+            ProductRepositoryInterface::class
         );
         $product = $productRepository->get('simple-1', false, null, true);
 
@@ -474,7 +476,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         $quoteItem = $this->objectManager->create(\Magento\Quote\Model\Quote\Item::class);
 
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
 
         $quoteItem->setProduct($product);
@@ -488,21 +490,77 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests of quotes merging.
      *
+     * @param int|null $guestItemGiftMessageId
+     * @param int|null $customerItemGiftMessageId
+     * @param int|null $guestOrderGiftMessageId
+     * @param int|null $customerOrderGiftMessageId
+     * @param int|null $expectedItemGiftMessageId
+     * @param int|null $expectedOrderGiftMessageId
+     *
      * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @dataProvider giftMessageDataProvider
+     * @throws LocalizedException
      */
-    public function testMerge()
-    {
-        $giftMessageId = 1;
+    public function testMerge(
+        $guestItemGiftMessageId,
+        $customerItemGiftMessageId,
+        $guestOrderGiftMessageId,
+        $customerOrderGiftMessageId,
+        $expectedItemGiftMessageId,
+        $expectedOrderGiftMessageId
+    ) {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple', false, null, true);
 
         /** @var Quote  $quote */
         $guestQuote = $this->getQuote('test01');
-        $guestQuote->setGiftMessageId($giftMessageId);
+        $guestQuote->setGiftMessageId($guestOrderGiftMessageId);
 
         /** @var Quote  $customerQuote */
         $customerQuote = $this->objectManager->create(Quote::class);
-        $customerQuote->merge($guestQuote);
+        $customerQuote->setReservedOrderId('test02')
+            ->setStoreId($guestQuote->getStoreId())
+            ->addProduct($product);
+        $customerQuote->setGiftMessageId($customerOrderGiftMessageId);
 
-        self::assertEquals($giftMessageId, $customerQuote->getGiftMessageId());
+        $guestItem = $guestQuote->getItemByProduct($product);
+        $guestItem->setGiftMessageId($guestItemGiftMessageId);
+
+        $customerItem = $customerQuote->getItemByProduct($product);
+        $customerItem->setGiftMessageId($customerItemGiftMessageId);
+
+        $customerQuote->merge($guestQuote);
+        $mergedItemItem = $customerQuote->getItemByProduct($product);
+
+        self::assertEquals($expectedOrderGiftMessageId, $customerQuote->getGiftMessageId());
+        self::assertEquals($expectedItemGiftMessageId, $mergedItemItem->getGiftMessageId());
+    }
+
+    /**
+     * Provides order- and item-level gift message Id.
+     *
+     * @return array
+     */
+    public function giftMessageDataProvider(): array
+    {
+        return [
+            [
+                'guestItemId' => null,
+                'customerItemId' => 1,
+                'guestOrderId' => null,
+                'customerOrderId' => 11,
+                'expectedItemId' => 1,
+                'expectedOrderId' => 11
+            ],
+            [
+                'guestItemId' => 1,
+                'customerItemId' => 2,
+                'guestOrderId' => 11,
+                'customerOrderId' => 22,
+                'expectedItemId' => 1,
+                'expectedOrderId' => 11
+            ]
+        ];
     }
 
     /**
