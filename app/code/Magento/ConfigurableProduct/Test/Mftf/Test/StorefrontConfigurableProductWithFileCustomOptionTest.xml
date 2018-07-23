@@ -60,6 +60,7 @@
         <!--Try invalid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
+        <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
         <!--Option remains selected-->
@@ -67,8 +68,9 @@
         <!--Try valid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$11.99" stepKey="seePriceUpdated"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartValidFile"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="BaseConfigurableProduct.name"/>
+        </actionGroup>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
 
         <!--Check item in cart-->
