@@ -375,9 +375,6 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave($object)
