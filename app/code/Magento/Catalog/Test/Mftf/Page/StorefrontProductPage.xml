@@ -11,6 +11,7 @@
     <page name="StorefrontProductPage" url="/{{var1}}.html" area="storefront" module="Magento_Catalog" parameterized="true">
         <section name="StorefrontProductPageSection"/>
         <section name="StorefrontProductAdditionalInformationSection"/>
+        <section name="StorefrontProductMediaSection"/>
         <section name="StorefrontProductInfoMainSection"/>
     </page>
 </pages>
