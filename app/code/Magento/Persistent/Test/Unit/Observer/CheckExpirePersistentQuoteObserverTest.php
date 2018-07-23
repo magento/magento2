@@ -113,18 +113,18 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $refererUri
      * @param string $requestUri
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expireCounter
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $dispatchCounter
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCustomerIdCounter
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
      * @return void
      * @dataProvider requestDataProvider
      */
     public function testExecuteWhenPersistentIsEnabled(
         string $refererUri,
         string $requestUri,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expireCounter,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $dispatchCounter,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCustomerIdCounter
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
     ): void {
         $this->persistentHelperMock
             ->expects($this->once())
