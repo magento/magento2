@@ -273,9 +273,6 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('addStoreFilter')
             ->will($this->returnSelf());
         $items->expects($this->once())
-            ->method('setVisibilityFilter')
-            ->will($this->returnSelf());
-        $items->expects($this->once())
             ->method('getItemById')
             ->will($this->returnValue($item));
         $items->expects($this->any())
