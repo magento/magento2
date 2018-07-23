@@ -8,12 +8,14 @@ namespace Magento\Sales\Helper;
 
 use Magento\Framework\App as App;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use \Magento\Sales\Model\Order;
 
 /**
  * Sales module base helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Guest extends \Magento\Framework\App\Helper\AbstractHelper
@@ -130,20 +132,21 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $searchCriteria?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        parent::__construct(
-            $context
-        );
+
+        parent::__construct($context);
     }
 
     /**
      * Try to load valid order by $_POST or $_COOKIE
      *
      * @param App\RequestInterface $request
+     *
      * @return \Magento\Framework\Controller\Result\Redirect|bool
+     *
      * @throws \RuntimeException
-     * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
+     * @throws NoSuchEntityException
      */
     public function loadValidOrder(App\RequestInterface $request)
     {
@@ -174,7 +177,10 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Breadcrumbs for current controller action
      *
      * @param \Magento\Framework\View\Result\Page $resultPage
+     *
      * @return void
+     *
+     * @throws NoSuchEntityException
      */
     public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
     {
@@ -217,10 +223,13 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Load order from cookie
      *
      * @param string $fromCookie
-     * @return Order
+     *
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     *
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
+     * @throws NoSuchEntityException
      */
     private function loadFromCookie($fromCookie)
     {
@@ -241,10 +250,13 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Load order data from post
      *
      * @param array $postData
+     *
      * @return Order
-     * @throws InputException
+     *
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     private function loadFromPost(array $postData)
     {
@@ -263,6 +275,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Order $order
      * @param array $postData
+     *
      * @return bool
      */
     private function compareStoredBillingDataWithInput(Order $order, array $postData)
@@ -281,13 +294,13 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Check post data for empty fields
      *
      * @param array $postData
+     *
      * @return bool
      */
     private function hasPostDataEmptyFields(array $postData)
     {
         return empty($postData['oar_order_id']) || empty($postData['oar_billing_lastname']) ||
-            empty($postData['oar_type']) || empty($this->storeManager->getStore()->getId()) ||
-            !in_array($postData['oar_type'], ['email', 'zip'], true) ||
+            empty($postData['oar_type']) || !in_array($postData['oar_type'], ['email', 'zip'], true) ||
             ('email' === $postData['oar_type'] && empty($postData['oar_email'])) ||
             ('zip' === $postData['oar_type'] && empty($postData['oar_zip']));
     }
@@ -296,8 +309,11 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Get order by increment_id and store_id
      *
      * @param string $incrementId
+     *
      * @return \Magento\Sales\Api\Data\OrderInterface
+     *
      * @throws InputException
+     * @throws NoSuchEntityException
      */
     private function getOrderRecord($incrementId)
     {
