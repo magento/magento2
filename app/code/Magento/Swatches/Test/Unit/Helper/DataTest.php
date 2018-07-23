@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\SwatchAttributesProvider;
-use Magento\Swatches\Model\SwatchAttributeType;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,9 +62,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributesProvider;
 
     /**
-     * @var SwatchAttributeType|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Image\UrlBuilder
      */
-    private $swatchTypeCheckerMock;
+    private $imageUrlBuilderMock;
 
     protected function setUp()
     {
@@ -122,9 +123,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->swatchTypeCheckerMock = $this->getMockBuilder(SwatchAttributeType::class)
+        $this->imageUrlBuilderMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\UrlBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVisualSwatch', 'isTextSwatch', 'isSwatchAttribute'])
+            ->setMethods(['getUrl'])
             ->getMock();
 
         $this->swatchHelperObject = $this->objectManager->getObject(
@@ -135,10 +136,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'productRepository' => $this->productRepoMock,
                 'storeManager' => $this->storeManagerMock,
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
-                'imageHelper' => $this->imageHelperMock,
+                'imageUrlBuilder' => $this->imageUrlBuilderMock,
                 'serializer' => $serializer,
                 'swatchAttributesProvider' => $this->swatchAttributesProvider,
-                'swatchTypeChecker' => $this->swatchTypeCheckerMock,
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
@@ -232,7 +232,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts($imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, $requiredAttributes);
 
@@ -295,7 +295,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts($imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, $requiredAttributes);
 
@@ -333,23 +333,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadFirstVariationWithImageNoProduct()
     {
-        $this->swatchAttributesProvider
-            ->method('provide')
-            ->with($this->productMock)
-            ->willReturn([]);
         $result = $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
-
         $this->assertFalse($result);
     }
 
     public function testLoadVariationByFallbackWithoutProduct()
     {
-        $this->swatchAttributesProvider
-            ->method('provide')
-            ->with($this->productMock)
-            ->willReturn([]);
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, ['color' => 31]);
-
         $this->assertFalse($result);
     }
 
@@ -358,44 +348,50 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductMediaGallery($mediaGallery, $image)
     {
-        $this->productMock->expects($this->once())->method('getMediaAttributeValues')->willReturn($mediaGallery);
-        $this->productMock->expects($this->any())->method('getId')->willReturn(95);
+        $mediaGalleryEntries = [];
+        $id = 0;
+        $mediaUrls = [];
+        foreach ($mediaGallery as $mediaType => $mediaFile) {
+            $mediaGalleryEntryMock = $this->getMockBuilder(
+                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+            )->getMock();
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('isDisabled')
+                ->willReturn(false);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getTypes')
+                ->willReturn([$mediaType]);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getFile')
+                ->willReturn($mediaFile);
+            $mediaGalleryEntryMock->expects($this->atLeastOnce())
+                ->method('getId')
+                ->willReturn(++$id);
 
-        $this->imageHelperMock->expects($this->any())
-            ->method('init')
-            ->willReturnMap([
-                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
-            ]);
+            $mediaGalleryEntries[] = $mediaGalleryEntryMock;
+            $mediaUrls[] = [$mediaFile, 'product_swatch_image_large', 'http://full_path_to_image' . $mediaFile];
+            $mediaUrls[] = [$mediaFile, 'product_swatch_image_medium' ,'http://full_path_to_image' . $mediaFile];
+            $mediaUrls[] = [$mediaFile, 'product_swatch_image_small','http://full_path_to_image' . $mediaFile];
+        }
 
-        $this->imageHelperMock->expects($this->any())
-            ->method('setImageFile')
-            ->with($image)
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('getUrl')
-            ->willReturn('http://full_path_to_image/magento1.png');
+        $this->productMock->expects($this->once())
+            ->method('getMediaGalleryEntries')
+            ->willReturn($mediaGalleryEntries);
 
-        $this->productRepoMock->expects($this->any())
-            ->method('getById')
-            ->with(95)
-            ->willReturn($this->productMock);
+        if ($mediaGallery) {
+            $this->imageUrlBuilderMock->expects($this->any())
+                ->method('getUrl')
+                ->willReturnMap($mediaUrls);
+        }
 
-        $mediaObject = $this->createMock(\Magento\Framework\DataObject::class);
-        $iterator = new \ArrayIterator([$mediaObject]);
-        $mediaCollectionMock = $this->createMock(\Magento\Framework\Data\Collection::class);
-        $mediaCollectionMock->expects($this->any())->method('getIterator')->willReturn($iterator);
-        $mediaObject->method('getData')->withConsecutive(
-            ['value_id'],
-            ['file']
-        )->willReturnOnConsecutiveCalls(
-            0,
-            $image
-        );
-        $this->productMock->method('getMediaGalleryImages')->willReturn($mediaCollectionMock);
-
-        $this->swatchHelperObject->getProductMediaGallery($this->productMock);
+        $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
+        if ($mediaGallery) {
+            $this->assertContains($image, $productMediaGallery['large']);
+            $this->assertContains($image, $productMediaGallery['medium']);
+            $this->assertContains($image, $productMediaGallery['small']);
+        } else {
+            $this->assertEmpty($productMediaGallery);
+        }
     }
 
     public function dataForMediaGallery()
@@ -408,7 +404,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'thumbnail' => '/m/a/magento3.png',
                     'swatch_image' => '/m/a/magento4.png',
                 ],
-                '/m/a/magento1.png'
+                '/m/a/magento1.png',
             ],
             [
                 [
@@ -416,7 +412,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'thumbnail' => '/m/a/magento5.png',
                     'swatch_image' => '/m/a/magento6.png',
                 ],
-                '/m/a/magento4.png'
+                '/m/a/magento4.png',
             ],
             [
                 [],
@@ -435,22 +431,45 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($returnFromProvideMethod);
     }
 
-    protected function getUsedProducts(array $attributes)
+    protected function getUsedProducts(array $attributes, array $imageTypes)
     {
         $this->productMock
             ->expects($this->atLeastOnce())
             ->method('getTypeInstance')
             ->willReturn($this->configurableMock);
 
-        $product1 = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['hasData']);
-        $product1->setData($attributes);
+        $simpleProducts = [];
+        for ($i = 0; $i < 2; $i++) {
+            $simpleProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['hasData', 'getMediaGalleryEntries'])
+                ->getMock();
+            $simpleProduct->setData($attributes);
 
-        $product2 = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['hasData']);
-        $product2->setData($attributes);
+            $mediaGalleryEntries = [];
+            foreach (array_keys($imageTypes) as $mediaType) {
+                $mediaGalleryEntryMock = $this->getMockBuilder(
+                    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+                )->getMock();
+                $mediaGalleryEntryMock->expects($this->any())
+                    ->method('isDisabled')
+                    ->willReturn(false);
+                $mediaGalleryEntryMock->expects($this->any())
+                    ->method('getTypes')
+                    ->willReturn([$mediaType]);
 
-        $simpleProducts = [$product2, $product1];
+                $mediaGalleryEntries[] = $mediaGalleryEntryMock;
+            }
+            $simpleProduct->expects($this->any())
+                ->method('getMediaGalleryEntries')
+                ->willReturn($mediaGalleryEntries);
 
-        $this->configurableMock->expects($this->once())->method('getUsedProducts')->with($this->productMock)
+            $simpleProducts[] = $simpleProduct;
+        }
+
+        $this->configurableMock->expects($this->once())
+            ->method('getUsedProducts')
+            ->with($this->productMock)
             ->willReturn($simpleProducts);
     }
 
@@ -760,80 +779,5 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
         $this->assertEquals(true, $result);
-    }
-
-    /**
-     * @param bool $boolResult
-     * @return void
-     * @dataProvider dataIsSwatch
-     */
-    public function testIsVisualSwatch(bool $boolResult) : void
-    {
-        $this->swatchTypeCheckerMock
-            ->expects($this->once())
-            ->method('isVisualSwatch')
-            ->with($this->attributeMock)
-            ->willReturn($boolResult);
-        $result = $this->swatchHelperObject->isVisualSwatch($this->attributeMock);
-
-        if ($boolResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function dataIsSwatch() : array
-    {
-        return [
-            [true],
-            [false],
-        ];
-    }
-
-    /**
-     * @param bool $boolResult
-     * @return void
-     * @dataProvider dataIsSwatch
-     */
-    public function testIsTextSwatch(bool $boolResult) : void
-    {
-        $this->swatchTypeCheckerMock
-            ->expects($this->once())
-            ->method('isTextSwatch')
-            ->with($this->attributeMock)
-            ->willReturn($boolResult);
-
-        $result = $this->swatchHelperObject->isTextSwatch($this->attributeMock);
-
-        if ($boolResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
-    }
-
-    /**
-     * @param bool $boolResult
-     * @return void
-     * @dataProvider dataIsSwatch
-     */
-    public function testIsSwatchAttribute(bool $boolResult) : void
-    {
-        $this->swatchTypeCheckerMock
-            ->expects($this->once())
-            ->method('isSwatchAttribute')
-            ->with($this->attributeMock)
-            ->willReturn($boolResult);
-
-        $result = $this->swatchHelperObject->isSwatchAttribute($this->attributeMock);
-        if ($boolResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
     }
 }

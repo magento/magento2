@@ -22,11 +22,14 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     /**
      * @inheritdoc
      */
-    public function getConfig($config)
+    public function getConfig(\Magento\Framework\DataObject $config): \Magento\Framework\DataObject
     {
-        $config['height'] = self::CONFIG_HEIGHT;
-        $config['content_css'] = self::CONFIG_CONTENT_CSS;
-
+        $config->addData(
+            [
+                'height' => self::CONFIG_HEIGHT,
+                'content_css' => self::CONFIG_CONTENT_CSS
+            ]
+        );
         return $config;
     }
 }

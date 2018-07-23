@@ -93,7 +93,6 @@
                 type="Magento\InventoryCatalog\Model\BulkSourceUnassign"/>
     <preference for="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface"
                 type="Magento\InventoryCatalog\Model\BulkInventoryTransfer"/>
-
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -102,7 +101,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="\Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -111,7 +109,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="\Magento\InventoryCatalogApi\Model\BulkInventoryTransferValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -119,5 +116,18 @@
                       xsi:type="object">Magento\InventoryCatalog\Model\Source\Validator\Bulk\TransferSourceValidator</item>
             </argument>
         </arguments>
+    </type>
+    <!-- Negative Min Quantity Threshold for Backorders -->
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
+        <plugin name="allow_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter\AllowNegativeMinQtyPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
+        <plugin name="adapt_min_qty_to_backorders"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
+        <plugin name="adapt_verify_stock_to_negative_min_qty"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
 </config>
