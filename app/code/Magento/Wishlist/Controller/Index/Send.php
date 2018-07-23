@@ -357,7 +357,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param string $captchaFormName
      * @return bool
      */
-    private function validateCaptcha(CaptchaModel $captchaModel, string $captchaFormName) : bool
+    private function validateCaptcha(CaptchaModel $captchaModel, $captchaFormName)
     {
         if ($captchaModel->isRequired()) {
             $word = $this->captchaStringResolver->resolve(
