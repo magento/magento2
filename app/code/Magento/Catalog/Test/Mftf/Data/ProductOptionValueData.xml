@@ -49,4 +49,16 @@
         <data key="price">2</data>
         <data key="price_type">fixed</data>
     </entity>
+    <entity name="ProductOptionValueDropdownLongTitle1" type="product_option_value">
+        <data key="title">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueDropdownLongTitle2" type="product_option_value">
+        <data key="title">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj22222Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj22222</data>
+        <data key="sort_order">2</data>
+        <data key="price">20</data>
+        <data key="price_type">percent</data>
+    </entity>
 </entities>
