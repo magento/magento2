@@ -198,6 +198,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $extensionAttributes;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -360,6 +365,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->mediaConfig = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
@@ -398,6 +404,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1],
+                'eavConfig' => $this->eavConfig
             ]
         );
     }
@@ -1268,19 +1275,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $customAttributeCode = 'color';
         $initialCustomAttributeValue = 'red';
         $newCustomAttributeValue = 'blue';
-
-        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($priceCode);
-        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $colorAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($customAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
-
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
+        $customAttributesMetadata = [$priceCode => 'attribute1', $customAttributeCode => 'attribute2'];
+        $this->metadataServiceMock->expects($this->never())->method('getCustomAttributesMetadata');
+        $this->eavConfig->expects($this->once())
+            ->method('getEntityAttributes')
             ->willReturn($customAttributesMetadata);
         $this->model->setData($priceCode, 10);
 
