@@ -194,7 +194,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     private function handleImageRemoveError($postData, $productId)
     {
-        
         if (isset($postData['product']['media_gallery']['images'])) {
             $removedImagesAmount = 0;
             foreach ($postData['product']['media_gallery']['images'] as $image) {
@@ -205,12 +204,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
-                if (is_array($product->getMediaGallery('images'))) {
-                    if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
-                        $this->messageManager->addNoticeMessage(
-                            __('The image cannot be removed as it has been assigned to the other image role')
-                        );
-                    }
+                $images = $product->getMediaGallery('images');
+                if (is_array($images) && $expectedImagesAmount != count($images)) {
+                    $this->messageManager->addNoticeMessage(
+                        __('The image cannot be removed as it has been assigned to the other image role')
+                    );
                 }
             }
         }
