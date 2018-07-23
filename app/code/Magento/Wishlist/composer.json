@@ -14,7 +14,8 @@
         "magento/module-sales": "100.1.*",
         "magento/module-grouped-product": "100.1.*",
         "magento/framework": "100.1.*",
-        "magento/module-ui": "100.1.*"
+        "magento/module-ui": "100.1.*",
+        "magento/module-captcha": "100.1.4"
     },
     "suggest": {
         "magento/module-configurable-product": "100.1.*",
