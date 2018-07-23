@@ -57,7 +57,7 @@ class ReportProvider
     private function getIteratorName(Query $query)
     {
         $config = $query->getConfig();
-        return isset($config['iterator']) ? $config['iterator'] : null;
+        return $config['iterator'] ?? null;
     }
 
     /**
