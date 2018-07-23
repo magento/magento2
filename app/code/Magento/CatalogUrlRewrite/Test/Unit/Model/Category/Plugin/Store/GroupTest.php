@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group as GroupPlugin;
+use Magento\CatalogUrlRewrite\Plugin\Model\Category\Store\Group as GroupPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View as StoreViewPlugin;
+use Magento\CatalogUrlRewrite\Plugin\Model\Category\Store\View as StoreViewPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ResourceModel\Store;
