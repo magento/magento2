@@ -23,16 +23,16 @@
         </before>
         <after>
             <!-- Clean up our modifications to the existing color attribute -->
-            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes2"/>
-            <waitForPageLoad stepKey="waitForProductAttributes2"/>
-            <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter2"/>
-            <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch2"/>
-            <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit2"/>
+            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+            <waitForPageLoad stepKey="waitForProductAttributes"/>
+            <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+            <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+            <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
             <click selector="{{AdminManageSwatchSection.nthDelete('1')}}" stepKey="deleteSwatch1"/>
             <click selector="{{AdminManageSwatchSection.nthDelete('2')}}" stepKey="deleteSwatch2"/>
             <click selector="{{AdminManageSwatchSection.nthDelete('3')}}" stepKey="deleteSwatch3"/>
-            <waitForPageLoad stepKey="waitToClickSave2"/>
-            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
+            <waitForPageLoad stepKey="waitToClickSave"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
             <!-- Logout -->
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
