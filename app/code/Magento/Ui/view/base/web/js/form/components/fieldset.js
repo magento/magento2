@@ -187,6 +187,7 @@ define([
                     });
                 }
             }
+
             return hasErrors;
         },
 
