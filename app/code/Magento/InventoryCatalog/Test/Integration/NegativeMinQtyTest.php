@@ -61,8 +61,13 @@ class NegativeMinQtyTest extends TestCase
      *
      * @magentoDbIsolation disabled
      */
-    public function testIsProductSalableForRequestedQtyWithBackordersEnabledAtProductLevel($sku, $stockId, $minQty, $requestedQty, $expectedSalability)
-    {
+    public function testIsProductSalableForRequestedQtyWithBackordersEnabledAtProductLevel(
+        $sku,
+        $stockId,
+        $minQty,
+        $requestedQty,
+        $expectedSalability
+    ) {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $stockItemConfiguration->setUseConfigBackorders(false);
         $stockItemConfiguration->setBackorders(StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY);
@@ -96,8 +101,12 @@ class NegativeMinQtyTest extends TestCase
      *
      * @magentoDbIsolation disabled
      */
-    public function testIsProductSalableForRequestedQtyWithBackordersEnabledGlobally($sku, $stockId, $requestedQty, $expectedSalability)
-    {
+    public function testIsProductSalableForRequestedQtyWithBackordersEnabledGlobally(
+        $sku,
+        $stockId,
+        $requestedQty,
+        $expectedSalability
+    ) {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $stockItemConfiguration->setUseConfigBackorders(true);
         $stockItemConfiguration->setUseConfigMinQty(true);

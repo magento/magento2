@@ -88,17 +88,14 @@
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter">
         <plugin name="allow_negative_min_qty"
-                type="Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter\AllowNegativeMinQtyPlugin"
-                sortOrder="1"/>
+                type="Magento\InventoryCatalog\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter\AllowNegativeMinQtyPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Api\Data\StockItemInterface">
         <plugin name="adapt_min_qty_to_backorders"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"
-                sortOrder="1"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Api\Data\StockItemInterface\AdaptMinQtyToBackordersPlugin"/>
     </type>
-    <type name="Magento\CatalogInventory\Model\StockStateProvider">
+    <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
         <plugin name="adapt_verify_stock_to_negative_min_qty"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"
-                sortOrder="1"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
 </config>

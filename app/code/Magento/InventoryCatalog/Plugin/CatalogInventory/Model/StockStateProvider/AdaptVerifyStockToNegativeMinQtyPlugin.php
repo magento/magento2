@@ -21,16 +21,12 @@ class AdaptVerifyStockToNegativeMinQtyPlugin
      */
     public function afterVerifyStock(StockStateProvider $subject, bool $result, StockItemInterface $stockItem)
     {
-        if ($stockItem->getQty() === null && $stockItem->getManageStock()) {
-            return false;
-        }
-        if (($stockItem->getBackorders() === StockItemInterface::BACKORDERS_NO
-                || $stockItem->getBackorders() !== StockItemInterface::BACKORDERS_NO
-                && $stockItem->getMinQty() < 0)
-            && $stockItem->getQty() <= $stockItem->getMinQty()
+        if ($stockItem->getBackorders() !== StockItemInterface::BACKORDERS_NO
+            && $stockItem->getMinQty() < 0
+            && $stockItem->getQty() < $stockItem->getMinQty()
         ) {
             return false;
         }
-        return true;
+        return $result;
     }
 }
