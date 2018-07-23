@@ -41,7 +41,7 @@ class SetupCache implements DataCacheInterface
     public function get($table, $parentId, $rowId, $field = null)
     {
         if (null === $field) {
-            return $this->data[$table][$parentId][$rowId]) ?? false;
+            return $this->data[$table][$parentId][$rowId] ?? false;
         } else {
             return $this->data[$table][$parentId][$rowId][$field] ?? false;
         }
