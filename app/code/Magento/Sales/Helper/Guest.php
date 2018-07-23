@@ -139,7 +139,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Try to load valid order by $_POST or $_COOKIE
      *
      * @param App\RequestInterface $request
+     *
      * @return \Magento\Framework\Controller\Result\Redirect|bool
+     *
      * @throws \RuntimeException
      * @throws InputException
      * @throws CookieSizeLimitReachedException
@@ -174,6 +176,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Breadcrumbs for current controller action
      *
      * @param \Magento\Framework\View\Result\Page $resultPage
+     *
      * @return void
      */
     public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
@@ -200,7 +203,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Set guest-view cookie
      *
      * @param string $cookieValue
+     *
      * @return void
+     *
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
@@ -217,7 +222,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Load order from cookie
      *
      * @param string $fromCookie
+     *
      * @return Order
+     *
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
@@ -225,8 +232,8 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     private function loadFromCookie($fromCookie)
     {
         $cookieData = explode(':', base64_decode($fromCookie));
-        $protectCode = isset($cookieData[0]) ? $cookieData[0] : null;
-        $incrementId = isset($cookieData[1]) ? $cookieData[1] : null;
+        $protectCode = $cookieData[0] ?? : null;
+        $incrementId = $cookieData[1] ?? : null;
         if (!empty($protectCode) && !empty($incrementId)) {
             $order = $this->getOrderRecord($incrementId);
             if (hash_equals((string)$order->getProtectCode(), $protectCode)) {
@@ -242,6 +249,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param array $postData
      * @return Order
+     *
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
@@ -263,6 +271,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Order $order
      * @param array $postData
+     *
      * @return bool
      */
     private function compareStoredBillingDataWithInput(Order $order, array $postData)
@@ -281,6 +290,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Check post data for empty fields
      *
      * @param array $postData
+     *
      * @return bool
      */
     private function hasPostDataEmptyFields(array $postData)
@@ -296,7 +306,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Get order by increment_id and store_id
      *
      * @param string $incrementId
+     *
      * @return \Magento\Sales\Api\Data\OrderInterface
+     *
      * @throws InputException
      */
     private function getOrderRecord($incrementId)
