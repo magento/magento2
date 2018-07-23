@@ -83,6 +83,10 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionCA</requiredEntity>
     </entity>
+    <!--If required other field can be added to UK_Address entity, dont modify any existing data-->
+    <entity name="UK_Address" type="address">
+        <data key="country_id">GB</data>
+    </entity>
     <entity name="UK_Not_Default_Address" type="address">
         <data key="firstname">Jane</data>
         <data key="lastname">Doe</data>
