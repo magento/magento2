@@ -232,7 +232,7 @@ class CategoryProcessor
      */
     public function getCategoryById($categoryId)
     {
-        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+        return $this->categoriesCache[$categoryId] ?? null;
     }
 
     /**
