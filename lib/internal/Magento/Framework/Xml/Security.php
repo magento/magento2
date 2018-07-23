@@ -6,7 +6,6 @@
 namespace Magento\Framework\Xml;
 
 use DOMDocument;
-use Magento\Framework\Phrase;
 
 /**
  * Class Security
