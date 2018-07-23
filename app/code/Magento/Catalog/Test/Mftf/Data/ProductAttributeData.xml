@@ -53,7 +53,7 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
-    <entity name="productAttributeMultiselectTwoOptions" type="ProductAttribute">
+    <entity name="ProductAttributeMultiselectTwoOptions" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">multiselect</data>
         <data key="scope">global</data>
