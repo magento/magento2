@@ -46,20 +46,11 @@ class IndexerDimensionMode
     private function restoreDb()
     {
         $this->db = Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->db->restoreFromDbDump();
+        $this->cacheTypeList = $this->objectManager->get(TypeListInterface::class);
         $this->cacheTypeList->cleanType('config');
         $this->objectManager->get(Config::class)->clean();
-    }
-
-    private function initSwicher()
-    {
-        if (!$this->modeSwitcher) {
-            $this->objectManager = Bootstrap::getObjectManager();
-            $this->modeSwitcher = $this->objectManager->get(ModeSwitcher::class);
-            $this->configWriter = $this->objectManager->get(ConfigInterface::class);
-            $this->configReader = $this->objectManager->get(ScopeConfigInterface::class);
-            $this->cacheTypeList = $this->objectManager->get(TypeListInterface::class);
-        }
     }
 
     /**
@@ -67,7 +58,11 @@ class IndexerDimensionMode
      */
     private function setDimensionMode($mode, $test)
     {
-        $this->initSwicher();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->modeSwitcher = $this->objectManager->get(ModeSwitcher::class);
+        $this->configWriter = $this->objectManager->get(ConfigInterface::class);
+        $this->configReader = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->cacheTypeList = $this->objectManager->get(TypeListInterface::class);
 
         $this->configReader->clean();
         $previousMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?:

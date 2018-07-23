@@ -14,6 +14,8 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
  * Tests product model:
  * - pricing behaviour is tested
  * @group indexer_dimension
+ * @magentoDbIsolation disabled
+ * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @see \Magento\Catalog\Model\ProductTest
  * @see \Magento\Catalog\Model\ProductExternalTest
  */
@@ -82,8 +84,6 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      */
     public function testGetMinPrice()
@@ -99,8 +99,6 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      */
     public function testGetMinPriceForComposite()

@@ -48,7 +48,6 @@ class SpecialPriceIndexerWithDimensionTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/Catalog/_files/enable_price_index_schedule.php
-     * @magentoDbIsolation disabled
      */
     public function testFullReindexIfChildHasSpecialPrice()
     {
