@@ -11,7 +11,6 @@
     <test name="AddressStateFieldForUKCustomerRemainOptionAfterRefreshTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="MAGETWO-90970"/>
             <title value="Guest Checkout"/>
             <description value="Address State Field For UK Customers Remain Option even After Browser Refresh"/>
             <severity value="MAJOR"/>
