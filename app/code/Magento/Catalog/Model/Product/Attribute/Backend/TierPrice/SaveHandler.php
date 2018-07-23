@@ -72,7 +72,7 @@ class SaveHandler implements ExtensionInterface
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Magento\Framework\Exception\InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
