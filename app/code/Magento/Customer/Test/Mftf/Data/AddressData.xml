@@ -13,7 +13,7 @@
         <data key="customer_id">12</data>
         <requiredEntity type="region">CustomerRegionOne</requiredEntity>
         <data key="region_id">0</data>
-        <data key="country_id">USA</data>
+        <data key="country_id">US</data>
         <array key="street">
             <item>7700 W Parmer Ln</item>
             <item>Bld D</item>
