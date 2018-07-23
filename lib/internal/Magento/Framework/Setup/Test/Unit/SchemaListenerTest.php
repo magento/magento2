@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Framework\Test\Unit\Setup;
+namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition;
@@ -16,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for schema listener.
  *
- * @package Magento\Framework\Test\Unit\Setup
+ * @package Magento\Framework\Setup\Test\Unit
  */
 class SchemaListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,7 +31,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -51,7 +52,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return Table
      */
-    private function getCreateTableDDL($tableName)
+    private function getCreateTableDDL($tableName) : Table
     {
         $table = new Table();
         $table->setName($tableName);
@@ -91,7 +92,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenameTable()
+    public function testRenameTable() : void
     {
         $this->model->setModuleName('First_Module');
         $this->model->createTable($this->getCreateTableDDL('old_table'));
@@ -101,7 +102,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         self::assertArrayNotHasKey('old_table', $tables['First_Module']);
     }
 
-    public function testDropIndex()
+    public function testDropIndex() : void
     {
         $this->model->setModuleName('First_Module');
         $this->model->createTable($this->getCreateTableDDL('index_table'));
@@ -109,7 +110,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($this->model->getTables()['First_Module']['index_table']['indexes']['INDEX_KEY']['disabled']);
     }
 
-    public function testCreateTable()
+    public function testCreateTable() : void
     {
         $this->model->setModuleName('First_Module');
         $this->model->createTable($this->getCreateTableDDL('new_table'));
@@ -125,7 +126,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'nullable' => false,
                         'default' => 'CURRENT_TIMESTAMP',
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
                 'integer' =>
                     [
@@ -135,9 +136,9 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'unsigned' => false,
                         'nullable' => false,
                         'identity' => true,
-                        'default' => NULL,
+                        'default' => null,
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
                 'decimal' =>
                     [
@@ -147,9 +148,9 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'precision' => '25',
                         'unsigned' => false,
                         'nullable' => false,
-                        'default' => NULL,
+                        'default' => null,
                         'disabled' => false,
-                        'onCreate' => NULL,
+                        'onCreate' => null,
                     ],
             ],
             $tables['First_Module']['new_table']['columns']
@@ -201,7 +202,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testDropTable()
+    public function testDropTable() : void
     {
         $this->model->setModuleName('Old_Module');
         $this->model->createTable($this->getCreateTableDDL('old_table'));
@@ -210,7 +211,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($this->model->getTables()['New_Module']['old_table']['disabled']);
     }
 
-    public function testDropTableInSameModule()
+    public function testDropTableInSameModule() : void
     {
         $this->model->setModuleName('Old_Module');
         $this->model->createTable($this->getCreateTableDDL('old_table'));
