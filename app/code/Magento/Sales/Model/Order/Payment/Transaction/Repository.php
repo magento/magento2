@@ -13,14 +13,11 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Api\OrderPaymentRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\EntityStorage;
 use Magento\Sales\Model\EntityStorageFactory;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionResource;
 
 /**
