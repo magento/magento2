@@ -130,7 +130,7 @@
             <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
             <!-- Edit the attribute for the first simple product -->
-            <selectOption selector="{{AdminModifyAttributesSection.dropDown($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="editSelectAttribute"/>
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="editSelectAttribute"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
@@ -144,7 +144,7 @@
             <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit2"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
             <!-- Edit the attribute for the first second product -->
-            <selectOption selector="{{AdminModifyAttributesSection.dropDown($$createConfigProductAttributeMultiSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="editSelectAttribute2"/>
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeMultiSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="editSelectAttribute2"/>
             <scrollToTopOfPage stepKey="scrollToTop2"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess2"/>
