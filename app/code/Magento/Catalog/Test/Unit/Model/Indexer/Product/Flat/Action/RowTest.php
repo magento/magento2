@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */ 
+ */
 class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -75,7 +75,9 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
         $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
-        $this->flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
+        $this->flatTableBuilder = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
+        );
         $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -101,18 +103,23 @@ class RowTest extends \PHPUnit\Framework\TestCase
         )->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
-        $this->connection->expects($this->any())->method('query')->with($selectMock)->will($this->returnValue($pdoMock));
+        $this->connection->expects($this->any())
+            ->method('query')
+            ->with($selectMock)
+            ->will($this->returnValue($pdoMock));
         $pdoMock->expects($this->any())->method('fetch')->will($this->returnValue(['value' => 1]));
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
-            'resource' => $this->resource,
-            'storeManager' => $this->storeManager,
-            'productHelper' => $this->productIndexerHelper,
-            'flatItemEraser' => $this->flatItemEraser,
-            'flatItemWriter' => $this->flatItemWriter,
-            'flatTableBuilder' => $this->flatTableBuilder,
-        ]);
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
+                'resource' => $this->resource,
+                'storeManager' => $this->storeManager,
+                'productHelper' => $this->productIndexerHelper,
+                'flatItemEraser' => $this->flatItemEraser,
+                'flatItemWriter' => $this->flatItemWriter,
+                'flatTableBuilder' => $this->flatTableBuilder
+            ]
+        );
     }
 
     /**
