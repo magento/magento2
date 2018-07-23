@@ -174,6 +174,7 @@ define([
          */
         _isChildrenHasErrors: function (hasErrors, container) {
             var self = this;
+
             if (hasErrors === false && container.hasOwnProperty('elems')) {
                 hasErrors = container.elems.some('error');
                 if (hasErrors === false && container.hasOwnProperty('_elems')) {
