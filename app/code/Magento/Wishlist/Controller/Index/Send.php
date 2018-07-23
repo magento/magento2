@@ -20,8 +20,8 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Captcha\Model\DefaultModel as CaptchaModel;
-use Magento\Captcha\Model\ResourceModel\Log as CaptchaResourceModel;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Customer\Model\Customer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,11 +89,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     protected $captchaStringResolver;
 
     /**
-     * @var CaptchaResourceModel
-     */
-    protected $captchaResourceModel;
-
-    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
@@ -107,7 +102,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param StoreManagerInterface $storeManager
      * @param CaptchaHelper|null $captchaHelper
      * @param CaptchaStringResolver|null $captchaStringResolver
-     * @param CaptchaResourceModel|null $captchaResourceModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,8 +117,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         CaptchaHelper $captchaHelper = null,
-        CaptchaStringResolver $captchaStringResolver = null,
-        CaptchaResourceModel $captchaResourceModel = null
+        CaptchaStringResolver $captchaStringResolver = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
@@ -139,8 +132,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->get(CaptchaHelper::class);
         $this->captchaStringResolver = $captchaStringResolver ?
             : ObjectManager::getInstance()->get(CaptchaStringResolver::class);
-        $this->captchaResourceModel = $captchaResourceModel ?
-            : ObjectManager::getInstance()->get(CaptchaResourceModel::class);
+
         parent::__construct($context);
     }
 
@@ -158,7 +150,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $captchaFormName = 'share_wishlist_form';
-        /** @var \Magento\Captcha\Model\DefaultModel $captchaModel */
+        /** @var CaptchaModel $captchaModel */
         $captchaModel = $this->captchaHelper->getCaptcha($captchaFormName);
 
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
@@ -340,12 +332,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
 
     /**
      * Log customer action attempts
-     * @param \Magento\Captcha\Model\DefaultModel $captchaModel
+     * @param CaptchaModel $captchaModel
      * @return void
      */
     private function logCaptchaAttempt(CaptchaModel $captchaModel)
     {
-        /** @var  \Magento\Customer\Model\Customer $customer */
+        /** @var  Customer $customer */
         $customer = $this->_customerSession->getCustomer();
         $email = '';
 
