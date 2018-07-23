@@ -235,7 +235,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $cookieData = explode(':', base64_decode($fromCookie));
         $protectCode = $cookieData[0] ?? null;
-	    $incrementId = $cookieData[1] ?? null;
+        $incrementId = $cookieData[1] ?? null;
         if (!empty($protectCode) && !empty($incrementId)) {
             $order = $this->getOrderRecord($incrementId);
             if (hash_equals((string)$order->getProtectCode(), $protectCode)) {
