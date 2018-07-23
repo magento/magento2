@@ -70,6 +70,7 @@ class UpdateHandler implements ExtensionInterface
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
     {
