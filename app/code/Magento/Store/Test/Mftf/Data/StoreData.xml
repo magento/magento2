@@ -39,4 +39,10 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
+    <entity name="secondStore" type="store">
+        <data key="name">Second Store View</data>
+        <data key="code">second_store_view</data>
+        <data key="is_active">1</data>
+        <requiredEntity type="storeGroup">secondStoreGroup</requiredEntity>
+    </entity>
 </entities>
