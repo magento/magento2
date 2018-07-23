@@ -77,6 +77,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
 
     /** @var CaptchaModel |\PHPUnit_Framework_MockObject_MockObject */
     protected $captchaModel;
+
     /** @var Session |\PHPUnit_Framework_MockObject_MockObject */
     protected $customerSession;
 
