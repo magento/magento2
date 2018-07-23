@@ -21,4 +21,10 @@
         <data key="store_action">add</data>
         <data key="store_type">group</data>
     </entity>
+    <entity name="secondStoreGroup" type="group">
+        <data key="name">Second Store</data>
+        <data key="code">main_website_store</data>
+        <data key="root_category_id">2</data>
+        <data key="website_id">1</data>
+    </entity>
 </entities>
