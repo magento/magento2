@@ -56,8 +56,7 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <!-- Place Order -->
-        <waitForElement selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" time="30" stepKey="waitCheckMoneyOrderPayment"/>
-        <click selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="clickCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Login to Admin and open Order -->
