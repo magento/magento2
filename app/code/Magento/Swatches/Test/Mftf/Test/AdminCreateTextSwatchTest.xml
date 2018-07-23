@@ -41,19 +41,27 @@
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('2')}}" userInput="Something blue." stepKey="fillDescription2"/>
         <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
         <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
+        <!-- Save and verify -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+        <seeInField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('1')}}" userInput="red" stepKey="seeSwatch0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('1')}}" userInput="Something red." stepKey="seeDescription0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('2')}}" userInput="green" stepKey="seeSwatch1"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('2')}}" userInput="Something green." stepKey="seeDescription1"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('3')}}" userInput="blue" stepKey="seeSwatch2"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('3')}}" userInput="Something blue." stepKey="seeDescription2"/>
 
         <!-- Create a configurable product to verify the storefront with -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
-        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
-        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
-        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
 
         <!-- Create configurations based off the Text Swatch we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
