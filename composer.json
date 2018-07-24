@@ -82,7 +82,7 @@
         "sebastian/phpcpd": "2.0.4"
     },
     "suggest": {
-        "ext-pcntl": "Need for parallel indexing"
+        "ext-pcntl": "Need for run processes in parallel mode"
     },
     "replace": {
         "magento/module-marketplace": "100.2.2",
