@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\CustomerData;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Wishlist\Block\Customer\Sidebar;
@@ -23,21 +23,39 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection;
  */
 class WishlistTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Wishlist */
-    protected $model;
+    /**
+     * @var Wishlist
+     */
+    private $model;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $wishlistHelperMock;
+    /**
+     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $wishlistHelperMock;
 
-    /** @var Sidebar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $sidebarMock;
+    /**
+     * @var Sidebar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sidebarMock;
 
-    /** @var Image|\PHPUnit_Framework_MockObject_MockObject */
-    protected $catalogImageHelperMock;
+    /**
+     * @var Image|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogImageHelperMock;
 
-    /** @var ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $viewMock;
+    /**
+     * @var ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $viewMock;
 
+    /**
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemResolver;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->wishlistHelperMock = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
@@ -60,11 +78,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->catalogImageHelperMock);
 
+        $this->itemResolver = $this->createMock(ItemResolverInterface::class);
+
         $this->model = new Wishlist(
             $this->wishlistHelperMock,
             $this->sidebarMock,
             $imageHelperFactory,
-            $this->viewMock
+            $this->viewMock,
+            $this->itemResolver
         );
     }
 
@@ -156,6 +177,10 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->once())
             ->method('getProduct')
+            ->willReturn($productMock);
+
+        $this->itemResolver->expects($this->once())
+            ->method('getFinalProduct')
             ->willReturn($productMock);
 
         $this->catalogImageHelperMock->expects($this->once())
@@ -341,6 +366,10 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->exactly(2))
             ->method('getProduct')
+            ->willReturn($productMock);
+
+        $this->itemResolver->expects($this->exactly(2))
+            ->method('getFinalProduct')
             ->willReturn($productMock);
 
         $this->catalogImageHelperMock->expects($this->exactly(2))

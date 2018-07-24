@@ -5,8 +5,10 @@
  */
 namespace Magento\Wishlist\CustomerData;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Wishlist section
@@ -39,21 +41,29 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+     * @var ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+     * @param ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
-        \Magento\Framework\App\ViewInterface $view
+        \Magento\Framework\App\ViewInterface $view,
+        ItemResolverInterface $itemResolver = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -122,7 +132,7 @@ class Wishlist implements SectionSourceInterface
     {
         $product = $wishlistItem->getProduct();
         return [
-            'image' => $this->getImageData($product),
+            'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(
@@ -147,14 +157,6 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getImageData($product)
     {
-        /*Set variant product if it is configurable product.
-        It will show variant product image in sidebar instead of configurable product image.*/
-        $simpleOption = $product->getCustomOption('simple_product');
-        if ($simpleOption !== null) {
-            $optionProduct = $simpleOption->getProduct();
-            $product = $optionProduct;
-        }
-
         /** @var \Magento\Catalog\Helper\Image $helper */
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');

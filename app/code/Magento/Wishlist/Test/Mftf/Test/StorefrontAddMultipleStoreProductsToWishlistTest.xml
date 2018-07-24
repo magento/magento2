@@ -75,7 +75,7 @@
         <!-- Add product visible on default store to wishlist -->
         <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$product.name$$" stepKey="assertFirstProductNameTitle"/>
-        <click stepKey="addFirstProductToWishlist" selector="{{StorefrontProductPageSection.AddToWishlist}}"/>
+        <click stepKey="addFirstProductToWishlist" selector="{{StorefrontProductPageSection.addToWishlist}}"/>
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click stepKey="ClickSwitchStoreButtonOnDefaultStore" selector="{{StorefrontFooterSection.SwitchStoreButton}}"/>
         <click stepKey="SelectSecondStoreToSwitchOn" selector="{{StorefrontFooterSection.StoreLink($$storeGroup.group[name]$$)}}"/>
@@ -83,7 +83,7 @@
         <see stepKey="seeProduct1InWishlist" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
         <amOnPage url="$$secondProduct.name$$.html" stepKey="navigateToProductPageOnSecondStore"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$secondProduct.name$$" stepKey="assertSecondProductNameTitle"/>
-        <click stepKey="addSecondProductToWishlist" selector="{{StorefrontProductPageSection.AddToWishlist}}"/>
+        <click stepKey="addSecondProductToWishlist" selector="{{StorefrontProductPageSection.addToWishlist}}"/>
         <see stepKey="seeProduct1InWishlistOnSecondStore" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
         <see stepKey="seeProduct2InWishlistOnSecondStore" userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
         <click stepKey="ClickSwitchStoreButtonOnSecondStore" selector="{{StorefrontFooterSection.SwitchStoreButton}}"/>
