@@ -444,7 +444,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve configurable attributes data
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[]
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
      */
     public function getConfigurableAttributes($product)
     {
