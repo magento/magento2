@@ -7,6 +7,8 @@
 
 namespace Magento\Tax\Model\Plugin;
 
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
+
 class OrderSave
 {
     /**
@@ -123,7 +125,9 @@ class OrderSave
         foreach ($taxes as $row) {
             $id = $row['id'];
             if (isset($row['extension_attributes'])) {
-                $taxRates = $row['extension_attributes']['rates'];
+                $taxRates = $row['extension_attributes'] instanceof OrderTaxDetailsAppliedTaxExtension
+                    ? $row['extension_attributes']->getRates()
+                    : $row['extension_attributes']['rates'];
                 if (is_array($taxRates)) {
                     foreach ($taxRates as $tax) {
                         if ($row['percent'] == null) {
