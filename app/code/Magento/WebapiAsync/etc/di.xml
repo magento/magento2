@@ -42,9 +42,6 @@
             <argument name="processorPath" xsi:type="const">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor::BULK_PROCESSOR_PATH</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\Communication\Config\CompositeReader">
-        <plugin name="forceTopicsTypeToAsync" type="Magento\WebapiAsync\Plugin\Communication\Config\CompositeReader" />
-    </type>
     <type name="Magento\Webapi\Controller\Rest">
         <plugin name="webapiContorllerRestAsync" type="Magento\WebapiAsync\Plugin\ControllerRest" />
     </type>
