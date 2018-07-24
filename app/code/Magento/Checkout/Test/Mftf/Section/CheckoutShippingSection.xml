@@ -22,5 +22,13 @@
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
         <element name="next" type="button" selector="[data-role='opc-continue']"/>
+        <element name="newAdress" type="button" selector="button.action.action-show-popup"/>
+        <element name="addStreet" type="input" selector="#shipping-new-address-form input[name='street[0]']"/>
+        <element name="addCity" type="input" selector="#shipping-new-address-form input[name='city']"/>
+        <element name="addState" type="select" selector="#shipping-new-address-form select[name='region_id']"/>
+        <element name="addPostcode" type="input" selector="#shipping-new-address-form input[name='postcode']"/>
+        <element name="addTelephone" type="input" selector="#shipping-new-address-form input[name='telephone']"/>
+        <element name="addcCountry" type="select" selector="#shipping-new-address-form select[name='country_id']"/>
+        <element name="addSaveButton" type="button" selector=".action.primary.action-save-address"/>
     </section>
 </sections>

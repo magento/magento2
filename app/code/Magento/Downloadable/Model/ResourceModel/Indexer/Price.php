@@ -104,7 +104,7 @@ class Price implements DimensionalIndexerInterface
      *
      * @throws \Exception
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $temporaryPriceTable = $this->indexTableStructureFactory->create([
             'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
