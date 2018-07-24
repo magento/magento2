@@ -9,22 +9,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Wishlist\Block\Customer\Sharing" name="wishlist.sharing" template="Magento_Wishlist::sharing.phtml" cacheable="false">
-                <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
-                    <action method="setFormId">
-                        <argument name="formId" xsi:type="string">share_wishlist_form</argument>
-                    </action>
-                        <action method="setImgWidth">
-                            <argument name="width" xsi:type="string">230</argument>
-                        </action>
-                        <action method="setImgHeight">
-                            <argument name="width" xsi:type="string">50</argument>
-                        </action>
-                </block>
-            </block>
+            <block class="Magento\Wishlist\Block\Customer\Sharing" name="wishlist.sharing" template="Magento_Wishlist::sharing.phtml" cacheable="false"/>
         </referenceContainer>
-        <referenceBlock name="head.components">
-            <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
-        </referenceBlock>
     </body>
 </page>
