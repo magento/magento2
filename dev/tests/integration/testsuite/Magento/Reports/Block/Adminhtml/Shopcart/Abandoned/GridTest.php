@@ -23,7 +23,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
      */
     public function testGridContent()
     {
-        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
         /** @var Grid $grid */
         $grid = $layout->createBlock(Grid::class);
@@ -42,7 +42,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
      */
     public function testPageSizeIsSetToNullWhenExportCsvFile()
     {
-        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
         /** @var Grid $grid */
         $grid = $layout->createBlock(Grid::class);
