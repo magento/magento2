@@ -31,7 +31,7 @@ define([
             this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
 
             // We need to look outside the module for backward compatibility, since someone can already use the module.
-            // @todo Narrow this selector in 2.3 so it doesn't accidentally finds the the email field from the
+            // @todo Narrow this selector in 2.3 so it doesn't accidentally finds the email field from the
             // newsletter email field or any other "email" field.
             this.options.cache.email = $(this.options.formSelector).find(this.options.emailSelector);
             this._bind();
