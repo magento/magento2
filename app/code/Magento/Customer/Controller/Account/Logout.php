@@ -11,8 +11,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Customer\Controller\AbstractAccount;
 
-class Logout extends \Magento\Customer\Controller\AbstractAccount
+class Logout extends AbstractAccount
 {
     /**
      * @var Session
