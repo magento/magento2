@@ -17,12 +17,12 @@
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <waitForPageLoad stepKey="waitForIndividualRulePage"/>
 
         <!-- Fill the form according the the attributes of the entity -->
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
         <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
-        <selectOption stepKey="selectCustomerGroups" selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{catalogRule.customer_group_ids[0]}}"/>
         <click stepKey="clickFromCalender" selector="{{AdminNewCatalogPriceRule.fromDateButton}}"/>
         <click stepKey="clickFromToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
         <click stepKey="clickToCalender" selector="{{AdminNewCatalogPriceRule.toDateButton}}"/>
@@ -30,11 +30,14 @@
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <selectOption stepKey="discountType" selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
+        <selectOption stepKey="discardSubsequentRules" selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes"/>
 
         <!-- Scroll to top and either save or save and apply after the action group -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
 
+    <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>

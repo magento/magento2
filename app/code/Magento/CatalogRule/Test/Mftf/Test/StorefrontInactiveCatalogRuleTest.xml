@@ -24,7 +24,8 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
+            <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
             <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
