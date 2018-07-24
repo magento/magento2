@@ -3,7 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Model;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Simplexml\Element;
 
 /**
  * Widget model for different purposes
@@ -88,7 +94,7 @@ class Widget
      *
      * @deprecated 100.1.0
      */
-    private function getMathRandom()
+    private function getMathRandom(): Random
     {
         if ($this->mathRandom === null) {
             $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
@@ -103,7 +109,7 @@ class Widget
      * @param string $type Widget type
      * @return null|array
      */
-    public function getWidgetByClassType($type)
+    public function getWidgetByClassType(string $type): ?array
     {
         $widgets = $this->getWidgets();
         /** @var array $widget */
@@ -127,7 +133,7 @@ class Widget
      *
      * @deprecated 100.2.0
      */
-    public function getConfigAsXml($type)
+    public function getConfigAsXml(string $type): ?Element
     {
         return $this->getXmlElementByType($type);
     }
@@ -138,11 +144,11 @@ class Widget
      * @param string $type Widget type
      * @return \Magento\Framework\DataObject
      */
-    public function getConfigAsObject($type)
+    public function getConfigAsObject(string $type): DataObject
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         if ($widget === null) {
             return $object;
         }
@@ -163,9 +169,9 @@ class Widget
      * Prepare widget parameters
      *
      * @param \Magento\Framework\DataObject $object
-     * @return array
+     * @return \Magento\Framework\DataObject[]
      */
-    protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
+    protected function prepareWidgetParameters(DataObject $object): array
     {
         $params = $object->getData('parameters');
         $newParams = [];
@@ -176,7 +182,7 @@ class Widget
                     $data = $this->prepareDropDownValues($data, $key, $sortOrder);
                     $data = $this->prepareHelperBlock($data);
 
-                    $newParams[$key] = new \Magento\Framework\DataObject($data);
+                    $newParams[$key] = new DataObject($data);
                     $sortOrder++;
                 }
             }
@@ -194,7 +200,7 @@ class Widget
      * @param int $sortOrder
      * @return array
      */
-    protected function prepareDropDownValues(array $data, $key, $sortOrder)
+    protected function prepareDropDownValues(array $data, string $key, int $sortOrder): array
     {
         $data['key'] = $key;
         $data['sort_order'] = isset($data['sort_order']) ? (int)$data['sort_order'] : $sortOrder;
@@ -218,10 +224,10 @@ class Widget
      * @param array $data
      * @return array
      */
-    protected function prepareHelperBlock(array $data)
+    protected function prepareHelperBlock(array $data): array
     {
         if (isset($data['helper_block'])) {
-            $helper = new \Magento\Framework\DataObject();
+            $helper = new DataObject();
             if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
                 $helper->addData($data['helper_block']['data']);
             }
@@ -240,7 +246,7 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgets($filters = [])
+    public function getWidgets(array $filters = []): array
     {
         $widgets = $this->dataStorage->get();
         $result = $widgets;
@@ -270,7 +276,7 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgetsArray($filters = [])
+    public function getWidgetsArray(array $filters = []): array
     {
         if (empty($this->widgetsArray)) {
             $result = [];
@@ -296,7 +302,7 @@ class Widget
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
      */
-    public function getWidgetDeclaration($type, $params = [], $asIs = true)
+    public function getWidgetDeclaration(string $type, array $params = [], bool $asIs = true): string
     {
         $directive = '{{widget type="' . $type . '"';
         $widget = $this->getConfigAsObject($type);
@@ -343,7 +349,7 @@ class Widget
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getWidgetPageVarName($params = [])
+    private function getWidgetPageVarName(array $params = []): string
     {
         $pageVarName = '';
         if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
@@ -362,7 +368,7 @@ class Widget
      * @param string $type
      * @return string
      */
-    public function getPlaceholderImageUrl($type)
+    public function getPlaceholderImageUrl(string $type): string
     {
         $placeholder = false;
         $widget = $this->getWidgetByClassType($type);
@@ -386,7 +392,7 @@ class Widget
      *
      * @return array
      */
-    public function getPlaceholderImageUrls()
+    public function getPlaceholderImageUrls(): array
     {
         $result = [];
         $widgets = $this->getWidgets();
@@ -408,7 +414,7 @@ class Widget
      * @param array $inputArray
      * @return array
      */
-    protected function getAsCanonicalArray($inputArray)
+    protected function getAsCanonicalArray(array $inputArray): array
     {
         if (array_key_exists('@', $inputArray)) {
             unset($inputArray['@']);
@@ -428,7 +434,7 @@ class Widget
      * @param string $string
      * @return string
      */
-    protected function idEncode($string)
+    protected function idEncode(string $string): string
     {
         return strtr(base64_encode($string), '+/=', ':_-');
     }
@@ -438,11 +444,11 @@ class Widget
      *
      * @param array $firstElement
      * @param array $secondElement
-     * @return bool
+     * @return int
      */
-    protected function sortWidgets($firstElement, $secondElement)
+    protected function sortWidgets(array $firstElement, array $secondElement): int
     {
-        return strcmp($firstElement["name"], $secondElement["name"]);
+        return strcmp($firstElement['name'], $secondElement['name']);
     }
 
     /**
@@ -452,10 +458,8 @@ class Widget
      * @param \Magento\Framework\DataObject $secondElement
      * @return int
      */
-    protected function sortParameters($firstElement, $secondElement)
+    protected function sortParameters(DataObject $firstElement, DataObject $secondElement): int
     {
-        $aOrder = (int)$firstElement->getData('sort_order');
-        $bOrder = (int)$secondElement->getData('sort_order');
-        return $aOrder < $bOrder ? -1 : ($aOrder > $bOrder ? 1 : 0);
+        return (int)$firstElement->getData('sort_order') <=> (int)$secondElement->getData('sort_order');
     }
 }
