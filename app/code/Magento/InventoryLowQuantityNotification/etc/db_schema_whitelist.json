@@ -7,7 +7,7 @@
     },
     "constraint": {
       "FK_B83B2F43C515D94DE6B92EEF9143CBA8": true,
-      "IDX_PRIMARY": true
+      "PRIMARY": true
     }
   },
   "patch_list": {
