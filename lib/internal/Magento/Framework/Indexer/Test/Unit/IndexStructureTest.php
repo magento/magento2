@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
