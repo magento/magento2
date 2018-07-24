@@ -62,6 +62,8 @@
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <scrollToTopOfPage stepKey="scrollToPageTopToSeeStoreSwitcher2"/>
+        <waitForElementVisible selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="waitForStoreSwitcherToBeVisible"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
 
         <!-- Check if Use Default Value checkboxes are checked -->
