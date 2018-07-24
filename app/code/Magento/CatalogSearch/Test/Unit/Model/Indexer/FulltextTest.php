@@ -44,6 +44,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     private $dimensionProviderMock;
 
+    /**
+     * @var \Magento\Indexer\Model\ProcessManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $processManager;
+
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
@@ -70,6 +75,11 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $stateMock = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\State::class)
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->processManager = new \Magento\Indexer\Model\ProcessManager(
+            $this->getClassMock(\Magento\Framework\App\ResourceConnection::class)
+        );
+
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
             [
@@ -80,6 +90,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
                 'indexSwitcher' => $this->indexSwitcher,
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
+                'processManager' => $this->processManager,
             ]
         );
     }
