@@ -7,12 +7,6 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:magento/magento2-functional-testing-framework.git"
-        }
-    ],
     "require": {
         "php": "~7.0.13|~7.1.0",
         "zendframework/zend-stdlib": "^2.7.7",
@@ -79,7 +73,7 @@
         "ramsey/uuid": "~3.7.3"
     },
     "require-dev": {
-        "magento/magento2-functional-testing-framework": "dev-develop",
+        "magento/magento2-functional-testing-framework": "2.3.0",
         "phpunit/phpunit": "~6.2.0",
         "squizlabs/php_codesniffer": "3.2.2",
         "phpmd/phpmd": "@stable",
