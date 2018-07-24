@@ -1,0 +1,22 @@
+{
+    "name": "magento/functional-test-module-customer-import-export",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "2.2.0",
+        "magento/functional-test-module-backend": "100.0.0-dev",
+        "magento/functional-test-module-customer": "100.0.0-dev",
+        "magento/functional-test-module-directory": "100.0.0-dev",
+        "magento/functional-test-module-eav": "100.0.0-dev",
+        "magento/functional-test-module-import-export": "100.0.0-dev",
+        "magento/functional-test-module-store": "100.0.0-dev"
+    },
+    "type": "magento2-test",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ]
+}

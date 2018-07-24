@@ -8,6 +8,7 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Customer entity import
@@ -346,6 +347,40 @@ class Customer extends AbstractCustomer
     }
 
     /**
+     * Prepare customers data for existing customers checks to perform mass validation/import efficiently.
+     *
+     * @param array|AbstractSource $rows
+     *
+     * @return void
+     */
+    public function prepareCustomerData($rows): void
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = $rowData[static::COLUMN_EMAIL] ?? null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId,
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Prepare customer data for update
      *
      * @param array $rowData
@@ -456,6 +491,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $this->prepareCustomerData($bunch);
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];
@@ -557,6 +593,18 @@ class Customer extends AbstractCustomer
                 if (in_array($attributeCode, $this->_ignoredAttributes)) {
                     continue;
                 }
+
+                $isFieldRequired = $attributeParams['is_required'];
+                $isFieldNotSetAndCustomerDoesNotExist =
+                    !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
+                $isFieldSetAndTrimmedValueIsEmpty
+                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+
+                if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
+                    $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
+                    continue;
+                }
+
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
                     $this->isAttributeValid(
                         $attributeCode,
@@ -567,8 +615,6 @@ class Customer extends AbstractCustomer
                             ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
                             : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
-                } elseif ($attributeParams['is_required'] && !$this->_getCustomerId($email, $website)) {
-                    $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                 }
             }
         }

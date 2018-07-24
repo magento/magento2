@@ -41,6 +41,9 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->_filter->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function sampleTokenizeStringProvider()
     {
         return [
@@ -51,6 +54,9 @@ class ParameterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function sampleGetValueStringProvider()
     {
         return [

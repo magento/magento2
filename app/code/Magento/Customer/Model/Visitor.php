@@ -6,8 +6,6 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Indexer\StateInterface;
-
 /**
  * Class Visitor
  * @package Magento\Customer\Model

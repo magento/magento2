@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="SetPaypalConfigurationTest">
         <annotations>
+            <features value="SampleTests"/>
             <group value="skip"/>
         </annotations>
         <createData entity="SamplePaypalConfig" stepKey="createSamplePaypalConfig"/>
@@ -17,6 +18,7 @@
     </test>
     <test name="SetBraintreeConfigurationTest">
         <annotations>
+            <features value="SampleTests"/>
             <group value="skip"/>
         </annotations>
         <createData entity="SampleBraintreeConfig" stepKey="createSampleBraintreeConfig"/>

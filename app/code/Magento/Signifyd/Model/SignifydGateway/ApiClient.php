@@ -36,12 +36,13 @@ class ApiClient
      *
      * @param string $url
      * @param string $method
-     * @param array  $params
+     * @param array $params
+     * @param int|null $storeId
      * @return array
      */
-    public function makeApiCall($url, $method, array $params = [])
+    public function makeApiCall($url, $method, array $params = [], $storeId = null): array
     {
-        $result = $this->requestBuilder->doRequest($url, $method, $params);
+        $result = $this->requestBuilder->doRequest($url, $method, $params, $storeId);
 
         return $result;
     }

@@ -50,7 +50,7 @@ class MigrateDataFrom implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $columnHistory) : Callable
+    public function getCallback(ElementHistory $columnHistory) : callable
     {
         /** @var Column $column */
         $column = $columnHistory->getNew();

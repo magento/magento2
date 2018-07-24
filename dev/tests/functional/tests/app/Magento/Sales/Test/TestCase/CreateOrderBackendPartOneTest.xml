@@ -19,10 +19,10 @@
                 <item name="grandTotal" xsi:type="string">425.00</item>
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
-            <data name="status" xsi:type="string">Pending</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Hold, Invoice, Ship, Edit</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Invoice, Edit</data>
             <data name="configData" xsi:type="string">cashondelivery</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
@@ -42,7 +42,6 @@
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
@@ -59,10 +58,10 @@
                 <item name="grandTotal" xsi:type="string">565.00</item>
             </data>
             <data name="payment/method" xsi:type="string">banktransfer</data>
-            <data name="status" xsi:type="string">Pending</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Reorder, Invoice, Edit</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Reorder, Invoice, Edit</data>
             <data name="configData" xsi:type="string">banktransfer</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
@@ -84,7 +83,6 @@
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">freeshipping_specificcountry_gb, banktransfer</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
@@ -103,10 +101,10 @@
             </data>
             <data name="payment/method" xsi:type="string">purchaseorder</data>
             <data name="payment/po_number" xsi:type="string">123456</data>
-            <data name="status" xsi:type="string">Pending</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Reorder, Edit</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Invoice, Reorder, Edit</data>
             <data name="configData" xsi:type="string">purchaseorder</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
@@ -127,7 +125,7 @@
                 <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="CreateOrderBackendTestVariation7" summary="Create Order for New Customer in Admin with Offline Payment Method" ticketId="MAGETWO-12520">
@@ -145,7 +143,7 @@
                 <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>

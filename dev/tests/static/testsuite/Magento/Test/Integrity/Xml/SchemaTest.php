@@ -68,7 +68,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
         $componentRegistrar = new ComponentRegistrar();
         $codeXml = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/Unit/'));
+            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/./'));
         }
         $this->_filterSpecialCases($codeXml);
         $designXml = [];
@@ -108,7 +108,8 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
             '#layout/swagger_index_index.xml$#',
             '#Doc/etc/doc/vars.xml$#',
             '#phpunit.xml$#',
-            '#etc/db_schema.xml$#'
+            '#etc/db_schema.xml$#',
+            '#Test/Mftf#',
         ];
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {
