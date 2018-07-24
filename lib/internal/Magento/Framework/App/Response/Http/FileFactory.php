@@ -41,6 +41,7 @@ class FileFactory
      * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength explicit content length, if strlen($content) isn't applicable
+     * @param string $dispositionType defines where to show content e.g. attachment or inline
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\App\ResponseInterface
@@ -54,7 +55,8 @@ class FileFactory
         $content,
         $baseDir = DirectoryList::ROOT,
         $contentType = 'application/octet-stream',
-        $contentLength = null
+        $contentLength = null,
+        $dispositionType = 'attachment'
     ) {
         $dir = $this->_filesystem->getDirectoryWrite($baseDir);
         $isFile = false;
@@ -77,7 +79,7 @@ class FileFactory
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', $contentType, true)
             ->setHeader('Content-Length', $contentLength === null ? strlen($content) : $contentLength, true)
-            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
+            ->setHeader('Content-Disposition', $dispositionType . '; filename="' . $fileName . '"', true)
             ->setHeader('Last-Modified', date('r'), true);
 
         if ($content !== null) {

@@ -95,6 +95,7 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
      * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
+     * @param string $dispositionType defines where to show content e.g. attachment or inline
      * @return \Magento\Framework\App\ResponseInterface
      */
     public function create(
@@ -102,11 +103,12 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
         $content,
         $baseDir = DirectoryList::ROOT,
         $contentType = 'application/octet-stream',
-        $contentLength = null
+        $contentLength = null,
+        $dispositionType = 'attachment'
     ) {
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::create($fileName, $content, $baseDir, $contentType, $contentLength);
+        return parent::create($fileName, $content, $baseDir, $contentType, $contentLength, $dispositionType);
     }
 }
