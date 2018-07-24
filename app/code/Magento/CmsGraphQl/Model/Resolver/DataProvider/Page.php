@@ -10,6 +10,7 @@ namespace Magento\CmsGraphQl\Model\Resolver\DataProvider;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Widget\Model\Template\FilterEmulate;
 
 /**
  * Cms page data provider
