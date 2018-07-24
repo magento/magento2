@@ -26,11 +26,13 @@ class Cache implements ConfigOptionsListInterface
     const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
     const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PORT = 'cache-backend-redis-port';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD = 'cache-backend-redis-password';
 
     const CONFIG_PATH_CACHE_BACKEND = 'cache/frontend/default/backend';
     const CONFIG_PATH_CACHE_BACKEND_SERVER = 'cache/frontend/default/backend_options/server';
     const CONFIG_PATH_CACHE_BACKEND_DATABASE = 'cache/frontend/default/backend_options/database';
     const CONFIG_PATH_CACHE_BACKEND_PORT = 'cache/frontend/default/backend_options/port';
+    const CONFIG_PATH_CACHE_BACKEND_PASSWORD = 'cache/frontend/default/backend_options/password';
 
     /**
      * @var array
@@ -38,7 +40,8 @@ class Cache implements ConfigOptionsListInterface
     private $defaultConfigValues = [
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => '127.0.0.1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => '0',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379'
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => ''
     ];
 
     /**
@@ -55,6 +58,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_CACHE_BACKEND_SERVER,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD
     ];
 
     /**
@@ -102,6 +106,12 @@ class Cache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_PORT,
                 'Redis server listen port'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
+                'Redis server password'
             )
         ];
     }
@@ -189,6 +199,13 @@ class Cache implements ConfigOptionsListInterface
             : $deploymentConfig->get(
                 self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
                 $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
+            );
+        
+        $config['password'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD])
+            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
+                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
             );
 
         return $this->redisValidator->isValidConnection($config);
