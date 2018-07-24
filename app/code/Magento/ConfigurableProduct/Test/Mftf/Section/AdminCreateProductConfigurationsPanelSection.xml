@@ -22,9 +22,7 @@
         <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
         <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
-        <element name="attribute1" type="input" selector="#apply-single-price-input-0"/>
-        <element name="attribute2" type="input" selector="#apply-single-price-input-1"/>
-        <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
+        <element name="attribute" type="input" selector="#apply-single-price-input-{{var1}}" parameterized="true"/>
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
         <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
     </section>

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\GroupedProduct\Test\Unit\Model\Product\Configuration;
+namespace Magento\GroupedProduct\Test\Unit\Model\Product\Configuration\Item;
 
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
 use Magento\Catalog\Model\Product;
