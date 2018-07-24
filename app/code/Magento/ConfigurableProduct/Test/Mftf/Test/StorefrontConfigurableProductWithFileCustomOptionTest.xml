@@ -16,7 +16,7 @@
             <description value="Configurable product has file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93318"/>
-            <group value="ConfigurableProduct"/>
+            <group value="configurableProduct"/>
         </annotations>
 
         <before>

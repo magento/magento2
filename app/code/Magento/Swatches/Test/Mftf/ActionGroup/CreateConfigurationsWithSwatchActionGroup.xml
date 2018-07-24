@@ -8,13 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddVisualSwatchToProductActionGroup">
+    <actionGroup name="CreateConfigurationsWithVisualSwatch">
         <arguments>
-            <argument name="attribute" defaultValue="visualSwatchAttribute"/>
-            <argument name="option1" defaultValue="visualSwatchOption1"/>
-            <argument name="option2" defaultValue="visualSwatchOption2"/>
+            <argument name="attribute" defaultValue="VisualSwatchAttribute"/>
+            <argument name="option1" defaultValue="VisualSwatchOption1"/>
+            <argument name="option2" defaultValue="VisualSwatchOption2"/>
         </arguments>
-        <seeInCurrentUrl url="{{ProductCatalogPage.url}}" stepKey="seeOnProductEditPage"/>
+        <seeInCurrentUrl url="{{AdminCatalogProductPage.url}}" stepKey="seeOnProductEditPage"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanelSection.createNewAttribute}}" stepKey="waitForSlideOut"/>
@@ -42,7 +42,7 @@
         <!--Find attribute in grid and select-->
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
-        <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{attribute.default_label}}" stepKey="fillFilterAttributeCodeField"/>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}" userInput="{{attribute.default_label}}" stepKey="fillFilterAttributeCodeField"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
 

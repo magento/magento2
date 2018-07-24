@@ -61,9 +61,9 @@
         <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton2"/>
         <click selector="{{AdminCreateProductConfigurationsPanelSection.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
         <selectOption selector="{{AdminCreateProductConfigurationsPanelSection.selectAttribute}}" userInput="{{colorProductAttribute.default_label}}" stepKey="selectAttributes"/>
-        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute1}}" userInput="{{colorProductAttribute1.price}}" stepKey="fillAttributePrice1"/>
-        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute2}}" userInput="{{colorProductAttribute2.price}}" stepKey="fillAttributePrice2"/>
-        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute3}}" userInput="{{colorProductAttribute3.price}}" stepKey="fillAttributePrice3"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('0')}}" userInput="{{colorProductAttribute1.price}}" stepKey="fillAttributePrice1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('1')}}" userInput="{{colorProductAttribute2.price}}" stepKey="fillAttributePrice2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.attribute('2')}}" userInput="{{colorProductAttribute3.price}}" stepKey="fillAttributePrice3"/>
         <click selector="{{AdminCreateProductConfigurationsPanelSection.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanelSection.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
         <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextButton3"/>

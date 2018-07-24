@@ -51,6 +51,7 @@ define([
 
         /**
          * @private
+         * @param {String} url
          */
         _redirect: function (url) {
             var urlParts = url.split('#'),

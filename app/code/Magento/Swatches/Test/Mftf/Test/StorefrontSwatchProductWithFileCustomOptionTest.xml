@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93331"/>
             <group value="ConfigurableProduct"/>
-            <group value="Swatches"/>
+            <group value="swatches"/>
         </annotations>
 
         <before>
@@ -30,7 +30,7 @@
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
             <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
-                <argument name="productAttribute" value="visualSwatchAttribute"/>
+                <argument name="productAttribute" value="VisualSwatchAttribute"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
         </after>
@@ -48,7 +48,7 @@
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
         <!--Add swatch attribute to configurable product-->
-        <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
+        <actionGroup ref="CreateConfigurationsWithVisualSwatch" stepKey="createConfigurationsWithVisualSwatch"/>
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
@@ -64,16 +64,17 @@
         <click selector="{{StorefrontCategoryProductSection.productAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
         <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
         <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.name)}}" stepKey="seeOnProductPage"/>
-        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSwatchOption"/>
-        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchIsSelected"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(VisualSwatchOption2.default_label)}}" stepKey="clickSwatchOption"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSwatchIsSelected"/>
 
         <!--Try invalid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="lorem_ipsum.docx" stepKey="attachInvalidFile"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartInvalidFile"/>
+        <waitForPageLoad time="30" stepKey="waitForAddToCartWithError"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForErrorMessageInvalidFile"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="The file 'lorem_ipsum.docx' for '{{ProductOptionFile.title}}' has an invalid extension." stepKey="seeMessageInvalidFile"/>
         <!--Swatch remains selected-->
-        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSwatchRemainsSelected"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue(VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSwatchRemainsSelected"/>
         <!--Try valid file-->
         <attachFile selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="attachValidFile"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$132.99" stepKey="seePriceUpdated"/>
@@ -85,7 +86,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
         <waitForPageLoad stepKey="waitForCartPageLoad"/>
         <seeElement selector="{{CheckoutCartProductSection.productLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
-        <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
+        <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, VisualSwatchAttribute.default_label)}}" userInput="{{VisualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
         <see selector="{{CheckoutCartProductSection.productOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
         <!--Delete cart item-->
         <click selector="{{CheckoutCartProductSection.removeItem}}" stepKey="deleteCartItem"/>

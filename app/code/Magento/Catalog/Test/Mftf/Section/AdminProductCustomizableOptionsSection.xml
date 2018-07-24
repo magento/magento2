@@ -28,5 +28,6 @@
         <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true" />
         <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price]']"/>
         <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][price_type]']"/>
-        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][file_extension]']"/>    </section>
+        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][0][file_extension]']"/>
+    </section>
 </sections>

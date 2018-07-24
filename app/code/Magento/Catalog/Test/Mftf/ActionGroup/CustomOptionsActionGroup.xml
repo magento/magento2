@@ -24,5 +24,4 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
     </actionGroup>
-
 </actionGroups>
