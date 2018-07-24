@@ -50,7 +50,7 @@ class CronCommand extends Command
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         DeploymentConfig $deploymentConfig = null
-    ){
+    ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(
             DeploymentConfig::class
