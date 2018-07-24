@@ -47,7 +47,7 @@ define([
                             var buttons = controlButtonArea.childElements();
                             for (var i = 0; i < buttons.length; i++) {
                                 if (buttons[i].innerHTML.include(button.label)) {
-                                    return ;
+                                    return;
                                 }
                             }
                             button.insertIn(controlButtonArea, 'top');
