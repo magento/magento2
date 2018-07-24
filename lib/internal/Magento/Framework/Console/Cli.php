@@ -20,7 +20,6 @@ use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Magento 2 CLI Application.
