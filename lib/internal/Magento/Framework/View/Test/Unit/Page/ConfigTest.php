@@ -140,8 +140,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'title' => null,
             'name' => 'test_value',
             'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
+            'title' => 'metatitle'
         ];
         $this->model->setMetadata('name', 'test_value');
+        $this->model->setMetadata('title', 'metatitle');
         $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
