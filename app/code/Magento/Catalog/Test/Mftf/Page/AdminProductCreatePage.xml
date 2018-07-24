@@ -16,5 +16,6 @@
         <section name="AdminAddProductsToOptionPanel"/>
         <section name="AdminProductMessagesSection"/>
         <section name="AdminProductFormRelatedUpSellCrossSellSection"/>
+        <section name="AdminProductFormAdvancedPricingSection"/>
     </page>
 </pages>
