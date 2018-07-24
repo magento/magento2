@@ -111,9 +111,11 @@ class IndexerDimensionMode
             $this->fail("Invalid @magentoDbIsolation declaration: $dbIsolation[0]", $test);
         }
 
-        if ($annotations[0] == Processor::INDEXER_ID) {
+        list($indexerType, $indexerMode) = explode(' ', $annotations[0]);
+
+        if ($indexerType == Processor::INDEXER_ID) {
             $this->isDimensionMode = true;
-            $this->setDimensionMode(DimensionModeConfiguration::DIMENSION_WEBSITE_AND_CUSTOMER_GROUP, $test);
+            $this->setDimensionMode($indexerMode, $test);
         }
     }
 
