@@ -232,7 +232,7 @@ class Type implements OptionSourceInterface
     public function getOptionText($optionId)
     {
         $options = $this->getOptionArray();
-        return isset($options[$optionId]) ? $options[$optionId] : null;
+        return $options[$optionId] ?? null;
     }
 
     /**

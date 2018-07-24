@@ -6,7 +6,6 @@
 namespace Magento\Framework\DB;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 
 /**
  * Class TemporaryTableService creates a temporary table in mysql from a Magento\Framework\DB\Select.

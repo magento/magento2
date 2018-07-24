@@ -399,10 +399,19 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Initialize connection and define main table name
-     * @deprecated
+     *
      * @return void
      */
     protected function _construct()
+    {
+        $this->_init('catalog_product_index_price', 'entity_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return string
+     */
+    public function getMainTable()
     {
         $storeKey = $this->httpContext->getValue(StoreManagerInterface::CONTEXT_STORE);
         $priceTableName = $this->priceTableResolver->resolve(
@@ -418,7 +427,8 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 )
             ]
         );
-        $this->_init($priceTableName, 'entity_id');
+
+        return $this->getTable($priceTableName);
     }
 
     /**
