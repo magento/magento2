@@ -19,7 +19,7 @@
             <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
                 <requiredEntity createDataKey="categoryHandle"/>
             </createData>
-            <createData stepKey="productAttributeHandle" entity="productAttributeWithTwoOptions"/>
+            <createData stepKey="productAttributeHandle" entity="productAttributeWithDropdownTwoOptions"/>
 
             <createData stepKey="productAttributeOption1Handle" entity="productAttributeOption1">
                 <requiredEntity createDataKey="productAttributeHandle"/>
