@@ -234,10 +234,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                             $copyFrom = $store['copy_from'];
                             $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
                             if ($copyTo) {
+                                $canSaveCustomOptions = (!empty($data['product']['affect_product_custom_options']))
+                                    ? (bool)$data['product']['affect_product_custom_options']
+                                    : false;
                                 $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
                                     ->setStoreId($copyFrom)
                                     ->load($productId)
                                     ->setStoreId($copyTo)
+                                    ->setCanSaveCustomOptions($canSaveCustomOptions)
                                     ->setCopyFromView(true)
                                     ->save();
                             }
