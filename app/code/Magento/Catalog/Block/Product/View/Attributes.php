@@ -79,7 +79,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($this->shouldDisplay($attribute, $excludeAttr)) {
+            if ($this->isVisibleOnFrontend($attribute, $excludeAttr)) {
                 $value = $attribute->getFrontend()->getValue($product);
 
                 if ($value instanceof Phrase) {
@@ -107,7 +107,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
      * @param array $excludeAttr
      * @return bool
      */
-    protected function shouldDisplay(
+    protected function isVisibleOnFrontend(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
         array $excludeAttr
     ) {
