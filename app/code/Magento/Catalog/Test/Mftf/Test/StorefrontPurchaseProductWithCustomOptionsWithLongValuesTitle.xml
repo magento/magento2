@@ -52,8 +52,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.productOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
+        <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <!-- Place Order -->
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
@@ -75,7 +75,11 @@
             <expectedResult type="string">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 ...</expectedResult>
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
-        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.productNameOptions}} span:nth-child(2)" stepKey="productOptionValueTruncatedText"/>
+        <assertEquals stepKey="checkProductOptionTruncatedValue">
+            <actualResult type="variable">productOptionValueTruncatedText</actualResult>
+            <expectedResult type="string">11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111</expectedResult>
+        </assertEquals>
+        <seeElement selector="{{AdminOrderItemsOrderedSection.productNameOptions}} span:nth-child(2)" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>

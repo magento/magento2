@@ -14,11 +14,5 @@
         <element name="orderTotalInclTax" type="text" selector="#opc-sidebar>div.opc-block-summary>table>tbody>tr.grand.totals.incl>td>strong>span"/>
         <element name="taxRateTab" type="select" selector="table.data.table.table-totals tbody tr.totals-tax-summary"  />
         <element name="taxRate" type="text" selector="#opc-sidebar>div.opc-block-summary>table>tbody>tr.totals-tax-details.shown>th"/>
-        <element name="cartItems" type="text" selector="ol.minicart-items"/>
-        <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
-        <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active"/>
-        <element name="ProductOptionsByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true" />
-        <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
-        <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
     </section>
 </sections>
