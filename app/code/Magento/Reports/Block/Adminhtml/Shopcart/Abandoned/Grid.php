@@ -67,6 +67,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $this->setCollection($collection);
         parent::_prepareCollection();
+        if ($this->_isExport) {
+            $collection->setPageSize(null);
+        }
         $this->getCollection()->resolveCustomerNames();
         return $this;
     }
