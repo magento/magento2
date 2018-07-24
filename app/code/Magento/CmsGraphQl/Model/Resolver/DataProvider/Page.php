@@ -17,17 +17,25 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Page
 {
     /**
+     * @var FilterEmulate
+     */
+    protected $widgetFilter;
+
+    /**
      * @var PageRepositoryInterface
      */
-    private $pageRepository;
+    protected $pageRepository;
 
     /**
      * @param PageRepositoryInterface $pageRepository
+     * @param FilterEmulate $widgetFilter
      */
     public function __construct(
-        PageRepositoryInterface $pageRepository
+        PageRepositoryInterface $pageRepository,
+        FilterEmulate $widgetFilter
     ) {
         $this->pageRepository = $pageRepository;
+        $this->widgetFilter = $widgetFilter;
     }
 
     /**
@@ -43,10 +51,12 @@ class Page
             throw new NoSuchEntityException();
         }
 
+        $renderedContent = $this->widgetFilter->filter($page->getContent());
+
         $pageData = [
             'url_key' => $page->getIdentifier(),
             PageInterface::TITLE => $page->getTitle(),
-            PageInterface::CONTENT => $page->getContent(),
+            PageInterface::CONTENT => $renderedContent,
             PageInterface::CONTENT_HEADING => $page->getContentHeading(),
             PageInterface::PAGE_LAYOUT => $page->getPageLayout(),
             PageInterface::META_TITLE => $page->getMetaTitle(),

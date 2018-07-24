@@ -10,6 +10,7 @@ namespace Magento\CmsGraphQl\Model\Resolver\DataProvider;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Widget\Model\Template\FilterEmulate;
 
 /**
  * Cms block data provider
@@ -22,12 +23,20 @@ class Block
     private $blockRepository;
 
     /**
+     * @var FilterEmulate
+     */
+    private $widgetFilter;
+
+    /**
      * @param BlockRepositoryInterface $blockRepository
+     * @param FilterEmulate $widgetFilter
      */
     public function __construct(
-        BlockRepositoryInterface $blockRepository
+        BlockRepositoryInterface $blockRepository,
+        FilterEmulate $widgetFilter
     ) {
         $this->blockRepository = $blockRepository;
+        $this->widgetFilter = $widgetFilter;
     }
 
     /**
@@ -43,10 +52,12 @@ class Block
             throw new NoSuchEntityException();
         }
 
+        $renderedContent = $this->widgetFilter->filter($block->getContent());
+
         $blockData = [
             BlockInterface::IDENTIFIER => $block->getIdentifier(),
             BlockInterface::TITLE => $block->getTitle(),
-            BlockInterface::CONTENT => $block->getContent(),
+            BlockInterface::CONTENT => $renderedContent,
         ];
         return $blockData;
     }
