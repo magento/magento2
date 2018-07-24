@@ -27,7 +27,7 @@
         <data key="identifier" unique="suffix">testpage-</data>
     </entity>
     <entity name="simpleCmsPage" type="cms_page">
-        <data key="title">Test CMS Page</data>
+        <data key="title" unique="suffix">Test CMS Page</data>
         <data key="content_heading">Test Content Heading</data>
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
