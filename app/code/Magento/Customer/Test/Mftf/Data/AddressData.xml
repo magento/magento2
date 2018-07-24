@@ -87,4 +87,16 @@
     <entity name="UK_Address" type="address">
         <data key="country_id">GB</data>
     </entity>
+    <entity name="UK_Not_Default_Address" type="address">
+        <data key="firstname">Jane</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+        </array>
+        <data key="city">London</data>
+        <data key="postcode">SE1 7RW</data>
+        <data key="country_id">GB</data>
+        <data key="telephone">444-44-444-44</data>
+    </entity>
 </entities>
