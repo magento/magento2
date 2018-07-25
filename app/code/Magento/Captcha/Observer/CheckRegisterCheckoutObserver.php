@@ -66,15 +66,14 @@ class CheckRegisterCheckoutObserver implements ObserverInterface
         $formId = 'register_during_checkout';
         $captchaModel = $this->_helper->getCaptcha($formId);
         $checkoutMethod = $this->_typeOnepage->getQuote()->getCheckoutMethod();
-        if ($checkoutMethod == \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER) {
-            if ($captchaModel->isRequired()) {
-                $controller = $observer->getControllerAction();
-                if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
-                ) {
-                    $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                    $result = ['error' => 1, 'message' => __('Incorrect CAPTCHA')];
-                    $controller->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
-                }
+        if ($checkoutMethod == \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER
+            && $captchaModel->isRequired()
+        ) {
+            $controller = $observer->getControllerAction();
+            if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
+                $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+                $result = ['error' => 1, 'message' => __('Incorrect CAPTCHA')];
+                $controller->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
             }
         }
 
