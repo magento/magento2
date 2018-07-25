@@ -21,6 +21,7 @@ define([
             container: '.video-player-container',
             videoClass: 'product-video',
             reset: false,
+            useYoutubeNocookie: false,
             metaData: {
                 DOM: {
                     title: '.video-information.title span',
@@ -90,13 +91,17 @@ define([
                 uploaderLink;
 
             this.reset();
-            this.element.find(this.options.container).append('<div class="' +
-            this.options.videoClass +
-            '" data-type="' +
-            this.options.videoProvider +
-            '" data-code="' +
-            this.options.videoId +
-            '" data-width="100%" data-height="100%"></div>');
+            this.element.find(this.options.container).append(
+                '<div class="' +
+                this.options.videoClass +
+                '" data-type="' +
+                this.options.videoProvider +
+                '" data-code="' +
+                this.options.videoId +
+                '" data-youtubenocookie="' +
+                this.options.useYoutubeNocookie +
+                '" data-width="100%" data-height="100%"></div>'
+            );
             this.element.find(this.options.metaData.DOM.wrapper).show();
             this.element.find(this.options.metaData.DOM.title).text(this.options.metaData.data.title);
             this.element.find(this.options.metaData.DOM.uploaded).text(this.options.metaData.data.uploaded);
@@ -335,6 +340,7 @@ define([
                 .createVideoPlayer({
                     videoId: data.videoId,
                     videoProvider: data.videoProvider,
+                    useYoutubeNocookie: data.useYoutubeNocookie,
                     reset: false,
                     metaData: {
                         DOM: {
