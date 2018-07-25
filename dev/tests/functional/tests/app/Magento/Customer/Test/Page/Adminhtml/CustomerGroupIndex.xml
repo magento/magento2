@@ -9,6 +9,6 @@
   <page name="CustomerGroupIndex" area="Adminhtml" mca="customer/group/index" module="Magento_Customer">
     <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
     <block name="gridPageActions" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
-    <block name="customerGroupGrid" class="Magento\Customer\Test\Block\Adminhtml\Group\CustomerGroupGrid" locator="#customerGroupGrid" strategy="css selector"/>
+    <block name="customerGroupGrid" class="Magento\Customer\Test\Block\Adminhtml\Group\CustomerGroupGrid" locator="//div[contains(@data-bind, 'customer_group_listing')]" strategy="xpath"/>
   </page>
 </config>

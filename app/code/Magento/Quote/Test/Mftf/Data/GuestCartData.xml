@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="GuestCart" type="GuestCart">
+    </entity>
+
+    <entity name="GuestAddressInformation" type="AddressInformation">
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <requiredEntity type="shipping_address">ShippingAddressTX</requiredEntity>
+        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+        <data key="shipping_method_code">flatrate</data>
+        <data key="shipping_carrier_code">flatrate</data>
+    </entity>
+
+    <entity name="GuestOrderPaymentMethod" type="PaymentInformation">
+        <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
+        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+    </entity>
+</entities>

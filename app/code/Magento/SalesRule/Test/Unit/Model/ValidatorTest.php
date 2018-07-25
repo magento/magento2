@@ -495,6 +495,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderActions()
     {
         return [

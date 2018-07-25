@@ -1,0 +1,28 @@
+{
+    "name": "magento/functional-test-module-swatches",
+    "description": "Add Swatches to Products",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "2.2.0",
+        "magento/functional-test-module-backend": "100.0.0-dev",
+        "magento/functional-test-module-catalog": "100.0.0-dev",
+        "magento/functional-test-module-config": "100.0.0-dev",
+        "magento/functional-test-module-configurable-product": "100.0.0-dev",
+        "magento/functional-test-module-customer": "100.0.0-dev",
+        "magento/functional-test-module-eav": "100.0.0-dev",
+        "magento/functional-test-module-media-storage": "100.0.0-dev",
+        "magento/functional-test-module-store": "100.0.0-dev",
+        "magento/functional-test-module-theme": "100.0.0-dev"
+    },
+    "suggest": {
+        "magento/functional-test-module-layered-navigation": "100.0.0-dev",
+        "magento/functional-test-module-swatches-sample-data": "100.0.0-dev"
+    },
+    "type": "magento2-test",
+    "license": [
+        "proprietary"
+    ]
+}

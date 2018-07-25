@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ShippingAddressTX" type="shipping_address">
+        <data key="firstname">Joe</data>
+        <data key="lastname">Buyer</data>
+        <data key="fullname">Joe Buyer</data>
+        <array key="street">
+            <item>11501 Domain Dr</item>
+            <item>#150</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="region">Texas</data>
+        <data key="region_code">TX</data>
+        <data key="region_id">1</data>
+        <data key="country_id">US</data>
+        <data key="postcode">78758</data>
+        <data key="email" unique="prefix">joe.buyer@email.com</data>
+        <data key="telephone">512-345-6789</data>
+    </entity>
+    <entity name="BillingAddressTX" type="billing_address">
+        <data key="firstname">Joe</data>
+        <data key="lastname">Buyer</data>
+        <data key="fullname">Joe Buyer</data>
+        <array key="street">
+            <item>11501 Domain Dr</item>
+            <item>#150</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="region">Texas</data>
+        <data key="region_code">TX</data>
+        <data key="region_id">1</data>
+        <data key="country_id">US</data>
+        <data key="postcode">78758</data>
+        <data key="email" unique="prefix">joe.buyer@email.com</data>
+        <data key="telephone">512-345-6789</data>
+    </entity>
+</entities>
