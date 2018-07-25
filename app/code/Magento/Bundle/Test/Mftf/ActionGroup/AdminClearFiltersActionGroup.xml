@@ -12,6 +12,5 @@
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
         <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-        <wait time="3" stepKey="waitDisappear"/>
     </actionGroup>
 </actionGroups>

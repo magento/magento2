@@ -12,26 +12,26 @@
       <arguments>
           <argument name="widget"/>
       </arguments>
-      <amOnPage stepKey="amOnAdminDashboard" url="{{AdminDashboardPage.url}}"/>
+      <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnAdminDashboard"/>
       <click selector="{{AdminMenuSection.content}}" stepKey="clickContent"/>
       <waitForLoadingMaskToDisappear stepKey="waitForWidgets" />
       <click selector="{{AdminMenuSection.widgets}}" stepKey="clickWidgets"/>
+      <waitForPageLoad stepKey="waitForWidgetsLoad"/>
       <click selector="{{AdminGridMainControls.add}}" stepKey="addNewWidget"/>
-      <waitForPageLoad stepKey="waitLoadPage"/>
-      <selectOption stepKey="setWidgetType" selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}"/>
-      <selectOption stepKey="setWidgetDesignTheme" selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}"/>
+      <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+      <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
       <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
-      <fillField stepKey="fillTitle" selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}"/>
-      <selectOption stepKey="setWidgetStoreIds" selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}"/>
+      <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+      <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
       <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
-      <selectOption stepKey="setDisplayOn" selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}"/>
+      <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
       <waitForAjaxLoad stepKey="waitForLoad"/>
-      <selectOption stepKey="setContainer" selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}"/>
+      <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
       <waitForAjaxLoad stepKey="waitForPageLoad"/>
       <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
       <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
       <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
-      <selectOption stepKey="selectCondition" selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}"/>
+      <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
       <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
       <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
       <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
@@ -40,19 +40,22 @@
       <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
       <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
       <waitForPageLoad stepKey="waitForSaveLoad"/>
+      <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
     <actionGroup name="AdminDeleteWidgetActionGroup">
       <arguments>
           <argument name="widget"/>
       </arguments>
-      <amOnPage stepKey="amOnAdmin" url="{{AdminWidgetsPage.url}}"/>
+      <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
       <waitForPageLoad stepKey="waitWidgetsLoad"/>
-      <fillField stepKey="fillTitle" selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}"/>
+      <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
       <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
       <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
       <waitForPageLoad stepKey="waitForResultLoad"/>
       <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDelete"/>
-      <click selector="{{CatalogWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete"/>
+      <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+      <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
       <waitForPageLoad stepKey="waitForDeleteLoad"/>
+      <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

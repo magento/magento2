@@ -26,16 +26,20 @@
         </arguments>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
-        <fillField userInput="{{customer.email}}" selector="{{AdminOrdersGridSection.search}}" stepKey="fillSearch"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="clickSubmit"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSubmit"/>
         <waitForAjaxLoad stepKey="waitForLoadAjax"/>
         <click selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="selectAll"/>
-        <click selector="{{AdminCompaniesSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
         <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
         <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
-        <click selector="{{CatalogWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete"/>
-        <waitForPageLoad stepKey="waitForDeleteLoad"/>
-        <click selector="{{AdminCompaniesSection.clearAllFilters}}" stepKey="clickClearAllFilters"/>
-        <wait time="3" stepKey="waitDisappear"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+    </actionGroup>
+    <actionGroup name="AdminClearCustomersFiltersActionGroup">
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
 </actionGroups>
