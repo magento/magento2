@@ -20,6 +20,8 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <createData entity="SimpleProduct3" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct3" stepKey="simpleProduct2"/>
         </before>
