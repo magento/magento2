@@ -7,7 +7,6 @@
 namespace Magento\Framework\Model\ResourceModel\Db\Relation;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\Framework\Model\ResourceModel\Db\ProcessEntityRelationInterface;
 
 /**
  * Class ActionPool
