@@ -14,6 +14,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
 
@@ -40,6 +41,9 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
+    /** @var InlineInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $inlineTranslateMock;
+
     protected function setUp()
     {
         $this->cookieManagerMock = $this->getMockBuilder(CookieManagerInterface::class)
@@ -53,13 +57,15 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
+        $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)->getMockForAbstractClass();
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,
             $this->cookieMetadataFactoryMock,
             $this->managerMock,
             $this->interpretationStrategyMock,
-            $this->serializerMock
+            $this->serializerMock,
+            $this->inlineTranslateMock
         );
     }
 
@@ -434,6 +440,95 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->method('interpret')
             ->with($messageMock)
             ->willReturn($messageText);
+
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$messageMock]);
+
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterRenderResultWithAllowedInlineTranslate()
+    {
+        $messageType = 'message1type';
+        $messageText = '{{{message1text}}{{message1text}}{{message1text}}{{theme/luma}}}';
+        $expectedMessages = [
+            [
+                'type' => $messageType,
+                'text' => 'message1text',
+            ],
+        ];
+
+        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        $resultMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($cookieMetadataMock);
+
+        $this->cookieManagerMock->expects($this->once())
+            ->method('setPublicCookie')
+            ->with(
+                MessagePlugin::MESSAGES_COOKIES_NAME,
+                json_encode($expectedMessages),
+                $cookieMetadataMock
+            );
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
+            ->with(
+                MessagePlugin::MESSAGES_COOKIES_NAME
+            )
+            ->willReturn(json_encode([]));
+
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($data) {
+                    return json_decode($data, true);
+                }
+            );
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($data) {
+                    return json_encode($data);
+                }
+            );
+
+        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
+            ->getMock();
+        $messageMock->expects($this->once())
+            ->method('getType')
+            ->willReturn($messageType);
+
+        $this->interpretationStrategyMock->expects($this->once())
+            ->method('interpret')
+            ->with($messageMock)
+            ->willReturn($messageText);
+
+        $this->inlineTranslateMock->expects($this->once())
+            ->method('isAllowed')
+            ->willReturn(true);
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
