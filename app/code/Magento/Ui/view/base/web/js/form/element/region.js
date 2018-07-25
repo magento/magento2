@@ -49,6 +49,10 @@ define([
                 if (option && !option['is_region_required']) {
                     this.error(false);
                     this.validation = _.omit(this.validation, 'required-entry');
+                    registry.get(this.customName, function (input) {
+                        input.validation['required-entry'] = false;
+                        input.required(false);
+                    });
                 } else {
                     this.validation['required-entry'] = true;
                 }
@@ -57,6 +61,7 @@ define([
                     registry.get(this.customName, function (input) {
                         isRegionRequired = !!option['is_region_required'];
                         input.validation['required-entry'] = isRegionRequired;
+                        input.validation['validate-not-number-first'] = true;
                         input.required(isRegionRequired);
                     });
                 }
