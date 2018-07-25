@@ -83,7 +83,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptions()
@@ -108,7 +108,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptionsWithErrors()
