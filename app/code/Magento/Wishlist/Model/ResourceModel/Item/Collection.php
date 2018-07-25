@@ -307,7 +307,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
 
-        foreach ($this as $itemKey => $item) {
+        /** @var \Magento\Wishlist\Model\Item $item */
+        foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
                 if ($checkInStock && !$product->isInStock()) {
@@ -320,7 +321,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     $item->setPrice($product->getPrice());
                 }
             } else {
-                $this->removeItemByKey($itemKey);
+                $this->removeItemByKey($item->getId());
             }
         }
 
