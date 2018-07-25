@@ -166,7 +166,8 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
+                '{"breadcrumbs":'
+                . '{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
         ];
     }
