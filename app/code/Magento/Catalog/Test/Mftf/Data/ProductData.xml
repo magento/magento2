@@ -197,6 +197,15 @@
         <data key="filename">magento-logo</data>
         <data key="file_extension">png</data>
     </entity>
+    <entity name="TestImageNew" type="image">
+        <data key="title" unique="suffix">magento-again</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento-again.jpg</data>
+        <data key="filename">magento-again</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -279,6 +288,10 @@
         <requiredEntity type="product_option">ProductOptionDate</requiredEntity>
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
+    </entity>
+    <entity name="productWithOptions2" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
         <data key="sku" unique="suffix">api-virtual-product</data>
