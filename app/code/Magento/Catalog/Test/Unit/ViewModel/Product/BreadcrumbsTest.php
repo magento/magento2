@@ -53,11 +53,14 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
+
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
+                'escaper' => $escaper
             ]
         );
     }
@@ -154,16 +157,16 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test \""}}',
+                '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
                 '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":'
-                . '"Test \u003Cb\u003Ex\u003C\/b\u003E"}}',
+                . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
                 $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
-                '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test \'abc\'"}}'
+                '{"breadcrumbs":{"categoryUrlSuffix":".\"html","userCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
         ];
     }
