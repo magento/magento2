@@ -158,12 +158,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->shippingAssignment->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([$this->cartItem]);
-        $this->freeShipping->expects($this->once())
-            ->method('isFreeShipping')
+        $this->freeShipping->method('isFreeShipping')
             ->with($this->quote, [$this->cartItem])
             ->willReturn(true);
-        $this->address->expects($this->once())
-            ->method('setFreeShipping')
+        $this->address->method('setFreeShipping')
             ->with(true);
         $this->total->expects($this->atLeastOnce())
             ->method('setTotalAmount');
@@ -175,24 +173,19 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->cartItem->expects($this->atLeastOnce())
             ->method('isVirtual')
             ->willReturn(false);
-        $this->cartItem->expects($this->once())
-            ->method('getParentItem')
+        $this->cartItem->method('getParentItem')
             ->willReturn(false);
-        $this->cartItem->expects($this->once())
-            ->method('getHasChildren')
+        $this->cartItem->method('getHasChildren')
             ->willReturn(false);
-        $this->cartItem->expects($this->once())
-            ->method('getWeight')
+        $this->cartItem->method('getWeight')
             ->willReturn(2);
         $this->cartItem->expects($this->atLeastOnce())
             ->method('getQty')
             ->willReturn(2);
         $this->freeShippingAssertions();
-        $this->cartItem->expects($this->once())
-            ->method('setRowWeight')
+        $this->cartItem->method('setRowWeight')
             ->with(0);
-        $this->address->expects($this->once())
-            ->method('setItemQty')
+        $this->address->method('setItemQty')
             ->with(2);
         $this->address->expects($this->atLeastOnce())
             ->method('setWeight');

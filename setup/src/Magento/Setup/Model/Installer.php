@@ -755,9 +755,15 @@ class Installer
      * Installs DB schema
      *
      * @return void
+     * @throws \Exception
      */
     public function installSchema()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->setupFactory->create();
@@ -765,6 +771,8 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -775,12 +783,19 @@ class Installer
      */
     public function installDataFixtures()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**

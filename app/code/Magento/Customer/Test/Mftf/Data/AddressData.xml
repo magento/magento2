@@ -49,4 +49,40 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_CA" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">qa</data>
+        <data key="telephone">13456768768</data>
+        <data key="fax">987654321</data>
+        <array key="street">
+            <item>Main st1</item>
+            <item>ap.66</item>
+        </array>
+        <data key="city">Culver City</data>
+        <data key="state">California</data>
+        <data key="postcode">90230</data>
+        <data key="country_id">US</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
+    <entity name="US_Address_NY" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">qa</data>
+        <data key="telephone">13456768768</data>
+        <data key="fax">987654321</data>
+        <array key="street">
+            <item>Main st1</item>
+            <item>ap.66</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="postcode">11001</data>
+        <data key="country_id">US</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+    </entity>
 </entities>
