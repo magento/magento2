@@ -81,6 +81,9 @@
         "lusitanian/oauth": "~0.8.10",
         "sebastian/phpcpd": "2.0.4"
     },
+    "suggest": {
+        "ext-pcntl": "Need for run processes in parallel mode"
+    },
     "replace": {
         "magento/module-marketplace": "100.2.2",
         "magento/module-admin-notification": "100.2.3",
@@ -242,7 +245,8 @@
         },
         "psr-0": {
             "": [
-                "app/code/"
+                "app/code/",
+                "generated/code/"
             ]
         },
         "files": [

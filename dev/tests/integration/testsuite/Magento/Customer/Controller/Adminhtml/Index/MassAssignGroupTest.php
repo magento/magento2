@@ -63,13 +63,18 @@ class MassAssignGroupTest extends AbstractBackendController
         $customer = $this->customerRepository->get($customerEmail);
         $this->assertEquals(1, $customer->getGroupId());
 
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
         $params = [
             'group' => 0,
             'namespace' => 'customer_listing',
-            'selected' => [$customer->getId()]
+            'selected' => [$customer->getId()],
+            'form_key' => $formKey->getFormKey()
         ];
 
         $this->getRequest()->setParams($params);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             self::equalTo(['A total of 1 record(s) were updated.']),
@@ -96,14 +101,18 @@ class MassAssignGroupTest extends AbstractBackendController
             $this->assertEquals(1, $customer->getGroupId());
             $ids[] = $customer->getId();
         }
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
 
         $params = [
             'group' => 0,
             'namespace' => 'customer_listing',
             'selected' => $ids,
+            'form_key' => $formKey->getFormKey()
         ];
 
         $this->getRequest()->setParams($params);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             self::equalTo(['A total of 5 record(s) were updated.']),
@@ -124,11 +133,17 @@ class MassAssignGroupTest extends AbstractBackendController
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
         $params = [
             'group' => 0,
             'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
         ];
+
         $this->getRequest()->setParams($params);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['Please select item(s).']),

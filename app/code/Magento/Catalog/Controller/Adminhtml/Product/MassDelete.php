@@ -73,7 +73,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         if ($productDeleted) {
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) have been deleted.', $productDeleted)
             );
         }
