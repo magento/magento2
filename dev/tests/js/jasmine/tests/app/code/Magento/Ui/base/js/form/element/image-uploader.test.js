@@ -35,7 +35,6 @@ define([
                 spyOn(component, 'addFile');
 
                 $el.data({
-                    id: 'ABC123--',
                     'size': 1024,
                     'mime-type': 'image/png'
                 });
@@ -47,7 +46,6 @@ define([
                 });
 
                 expect(component.addFile).toHaveBeenCalledWith({
-                    id: 'ABC123--',
                     type: 'image/png',
                     name: 'something.png',
                     url: '/pub/media/something.png',
