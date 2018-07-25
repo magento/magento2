@@ -181,6 +181,19 @@
         </arguments>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openTab"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
-        <see selector="{{element}}" userInput="{{expectedText}}" stepKey="AssertText"/>
+        <see selector="{{element}}" userInput="{{expectedText}}" stepKey="assertText"/>
     </actionGroup>
+
+    <!--Add special price to product in Admin product page-->
+    <actionGroup name="AddSpecialPriceToProductActionGroup">
+        <arguments>
+            <argument name="price" type="string" defaultValue="8"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
+        <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
+      </actionGroup>
 </actionGroups>
