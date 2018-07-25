@@ -168,6 +168,10 @@ define([
         processFile: function (file) {
             file.previewType = this.getFilePreviewType(file);
 
+            if (!file.id && file.name) {
+                file.id = Base64.mageEncode(file.name).replace(/g/);
+            }
+
             this.observe.call(file, true, [
                 'previewWidth',
                 'previewHeight'
