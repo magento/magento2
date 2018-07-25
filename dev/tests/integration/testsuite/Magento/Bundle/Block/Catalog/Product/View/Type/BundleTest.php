@@ -7,6 +7,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 /**
  * @magentoDataFixture Magento/Bundle/_files/product.php
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class BundleTest extends \PHPUnit\Framework\TestCase
