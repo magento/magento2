@@ -160,7 +160,7 @@ abstract class AbstractAction
     {
         // for backward compatibility split data from old idx table on dimension tables
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-            $insertSelect = $this->_connection->select()->from(
+            $insertSelect = $this->getConnection()->select()->from(
                 ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()]
             );
 
@@ -174,7 +174,7 @@ abstract class AbstractAction
             }
 
             $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
-            $this->_connection->query($query);
+            $this->getConnection()->query($query);
         }
         return $this;
     }
@@ -191,7 +191,7 @@ abstract class AbstractAction
     {
         $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
 
-        $select = $this->_connection->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
             ['website_id']
         )->join(
@@ -203,7 +203,7 @@ abstract class AbstractAction
         );
 
         $data = [];
-        foreach ($this->_connection->fetchAll($select) as $item) {
+        foreach ($this->getConnection()->fetchAll($select) as $item) {
             /** @var $website \Magento\Store\Model\Website */
             $website = $this->_storeManager->getWebsite($item['website_id']);
 
@@ -237,7 +237,7 @@ abstract class AbstractAction
         $this->_emptyTable($table);
         if ($data) {
             foreach ($data as $row) {
-                $this->_connection->insertOnDuplicate($table, $row, array_keys($row));
+                $this->getConnection()->insertOnDuplicate($table, $row, array_keys($row));
             }
         }
 
@@ -260,11 +260,13 @@ abstract class AbstractAction
     /**
      * Retrieve price indexers per product type
      *
+     * @param bool $fullReindexAction
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getTypeIndexers()
+    public function getTypeIndexers($fullReindexAction = false)
     {
         if ($this->_indexers === null) {
             $this->_indexers = [];
@@ -275,7 +277,10 @@ abstract class AbstractAction
                 ) ? $typeInfo['price_indexer'] : get_class($this->_defaultIndexerResource);
 
                 $indexer = $this->_indexerPriceFactory->create(
-                    $modelName
+                    $modelName,
+                    [
+                        'fullReindexAction' => $fullReindexAction
+                    ]
                 );
                 // left setters for backward compatibility
                 if ($indexer instanceof DefaultPrice) {
@@ -320,19 +325,19 @@ abstract class AbstractAction
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
-        $sourceColumns = array_keys($this->_connection->describeTable($sourceTable));
-        $targetColumns = array_keys($this->_connection->describeTable($destTable));
-        $select = $this->_connection->select()->from($sourceTable, $sourceColumns);
+        $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
+        $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
+        $select = $this->getConnection()->select()->from($sourceTable, $sourceColumns);
         if ($where) {
             $select->where($where);
         }
-        $query = $this->_connection->insertFromSelect(
+        $query = $this->getConnection()->insertFromSelect(
             $select,
             $destTable,
             $targetColumns,
             \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
         );
-        $this->_connection->query($query);
+        $this->getConnection()->query($query);
     }
 
     /**
@@ -343,7 +348,7 @@ abstract class AbstractAction
      */
     protected function _emptyTable($table)
     {
-        $this->_connection->delete($table);
+        $this->getConnection()->delete($table);
     }
 
     /**
@@ -376,7 +381,7 @@ abstract class AbstractAction
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
-                    $indexer->executeByDimension($dimensions, \SplFixedArray::fromArray($entityIds, false));
+                    $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
                     // copy to index
                     $this->_insertFromTable(
                         $temporaryTable,
@@ -402,12 +407,12 @@ abstract class AbstractAction
     private function deleteIndexData(array $entityIds)
     {
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-            $select = $this->_connection->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
                 null
             )->where('index_price.entity_id IN (?)', $entityIds);
             $query = $select->deleteFromSelect('index_price');
-            $this->_connection->query($query);
+            $this->getConnection()->query($query);
         }
     }
 
@@ -425,7 +430,7 @@ abstract class AbstractAction
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
         $linkField = $this->getProductIdFieldName();
-        $select = $this->_connection->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->_defaultIndexerResource->getTable('catalog_product_relation'),
             ['child_id']
         )->join(
@@ -440,18 +445,18 @@ abstract class AbstractAction
             $select->where('child_id NOT IN(?)', $excludeIds);
         }
 
-        $children = $this->_connection->fetchCol($select);
+        $children = $this->getConnection()->fetchCol($select);
 
         if ($children) {
             foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-                $select = $this->_connection->select()->from(
+                $select = $this->getConnection()->select()->from(
                     $this->getIndexTargetTableByDimension($dimensions)
                 )->where(
                     'entity_id IN(?)',
                     $children
                 );
                 $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
-                $this->_connection->query($query);
+                $this->getConnection()->query($query);
             }
         }
 
@@ -497,8 +502,8 @@ abstract class AbstractAction
     protected function getProductIdFieldName()
     {
         $table = $this->_defaultIndexerResource->getTable('catalog_product_entity');
-        $indexList = $this->_connection->getIndexList($table);
-        return $indexList[$this->_connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
+        $indexList = $this->getConnection()->getIndexList($table);
+        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 
     /**
@@ -509,14 +514,14 @@ abstract class AbstractAction
      */
     private function getProductsTypes(array $changedIds = [])
     {
-        $select = $this->_connection->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->_defaultIndexerResource->getTable('catalog_product_entity'),
             ['entity_id', 'type_id']
         );
         if ($changedIds) {
             $select->where('entity_id IN (?)', $changedIds);
         }
-        $pairs = $this->_connection->fetchPairs($select);
+        $pairs = $this->getConnection()->fetchPairs($select);
 
         $byType = [];
         foreach ($pairs as $productId => $productType) {
@@ -535,7 +540,7 @@ abstract class AbstractAction
      */
     private function getParentProductsTypes(array $productsIds)
     {
-        $select = $this->_connection->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
             ''
         )->join(
@@ -546,7 +551,7 @@ abstract class AbstractAction
             'l.child_id IN(?)',
             $productsIds
         );
-        $pairs = $this->_connection->fetchPairs($select);
+        $pairs = $this->getConnection()->fetchPairs($select);
 
         $byType = [];
         foreach ($pairs as $productId => $productType) {
@@ -554,5 +559,15 @@ abstract class AbstractAction
         }
 
         return $byType;
+    }
+
+    /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        return $this->_defaultIndexerResource->getConnection();
     }
 }

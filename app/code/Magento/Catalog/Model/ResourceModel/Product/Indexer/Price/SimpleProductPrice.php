@@ -36,35 +36,35 @@ class SimpleProductPrice implements DimensionalIndexerInterface
     private $productType;
 
     /**
-     * @var PriceModifierInterface[]
+     * @var BasePriceModifier
      */
-    private $priceModifiers;
+    private $basePriceModifier;
 
     /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
+     * @param BasePriceModifier $basePriceModifier
      * @param string $productType
-     * @param array $priceModifiers
      */
     public function __construct(
         BaseFinalPrice $baseFinalPrice,
         IndexTableStructureFactory $indexTableStructureFactory,
         TableMaintainer $tableMaintainer,
-        $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-        array $priceModifiers = []
+        BasePriceModifier $basePriceModifier,
+        $productType = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
         $this->productType = $productType;
-        $this->priceModifiers = $priceModifiers;
+        $this->basePriceModifier = $basePriceModifier;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
@@ -84,19 +84,6 @@ class SimpleProductPrice implements DimensionalIndexerInterface
         $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
         $this->tableMaintainer->getConnection()->query($query);
 
-        $this->applyPriceModifiers($temporaryPriceTable);
-    }
-
-    /**
-     * Apply price modifiers to temporary price index table
-     *
-     * @param IndexTableStructure $temporaryPriceTable
-     * @return void
-     */
-    private function applyPriceModifiers(IndexTableStructure $temporaryPriceTable)
-    {
-        foreach ($this->priceModifiers as $priceModifier) {
-            $priceModifier->modifyPrice($temporaryPriceTable);
-        }
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
     }
 }

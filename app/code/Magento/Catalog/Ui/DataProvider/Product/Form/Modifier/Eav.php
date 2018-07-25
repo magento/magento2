@@ -589,7 +589,7 @@ class Eav extends AbstractModifier
      */
     private function isProductExists()
     {
-        return (bool) $this->locator->getProduct()->getId();
+        return (bool)$this->locator->getProduct()->getId();
     }
 
     /**
@@ -853,7 +853,7 @@ class Eav extends AbstractModifier
     {
         $valueMap = $this->formElementMapper->getMappings();
 
-        return isset($valueMap[$value]) ? $valueMap[$value] : $value;
+        return $valueMap[$value] ?? $value;
     }
 
     /**

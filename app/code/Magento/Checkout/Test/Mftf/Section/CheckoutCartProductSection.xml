@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartProductSection">
+        <element name="itemOptionsBlock" type="block" selector=".item:nth-of-type({{numElement}}) .item-options" parameterized="true"/>
+        <element name="editItemParametersButton" type="block" selector=".item:nth-of-type({{numElement}}) .action-edit" parameterized="true"/>
+        <element name="productQuantityByName" type="input" selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'qty')]//input[contains(@class, 'qty')]" parameterized="true"/>
+        <element name="productSubtotalByName" type="input" selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'subtotal')]//span[@class='price']" parameterized="true"/>
+        <element name="updateShoppingCartButton" type="button" selector="#form-validate button[type='submit'].update" timeout="30"/>
+    </section>
+</sections>

@@ -19,7 +19,7 @@ use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
-use Zend\ServiceManager\ServiceManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
@@ -158,6 +158,7 @@ class Cli extends Console\Application
     {
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        $params = $this->documentRootResolver($params);
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 
@@ -236,5 +237,28 @@ class Cli extends Console\Application
         }
 
         return $commands;
+    }
+
+    /**
+     * Provides updated configuration in
+     * accordance to document root settings.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function documentRootResolver(array $config = []): array
+    {
+        $params = [];
+        $deploymentConfig = $this->serviceManager->get(DeploymentConfig::class);
+        if ((bool)$deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB)) {
+            $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
+                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+                DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+                DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+                DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
+            ];
+        }
+
+        return array_merge_recursive($config, $params);
     }
 }

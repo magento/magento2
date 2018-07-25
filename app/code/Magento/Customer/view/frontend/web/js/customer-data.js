@@ -27,7 +27,8 @@ define([
 
     //TODO: remove global change, in this case made for initNamespaceStorage
     $.cookieStorage.setConf({
-        path: '/'
+        path: '/',
+        expires: 1
     });
 
     storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
@@ -232,11 +233,9 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 
-                countryData.subscribe(function () {
-                    if (_.isEmpty(countryData())) {
-                        customerData.reload(['directory-data'], false);
-                    }
-                }, this);
+                if (_.isEmpty(countryData())) {
+                    customerData.reload(['directory-data'], false);
+                }
             }
         },
 

@@ -234,6 +234,11 @@
             <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <arguments>
+            <argument name="sessionConfig" xsi:type="object">Magento\Framework\Session\Config\ConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
     <type name="Magento\Framework\Session\SaveHandlerFactory">
         <arguments>

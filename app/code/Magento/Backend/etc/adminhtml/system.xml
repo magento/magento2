@@ -181,7 +181,7 @@
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Image Processing Settings</label>
-                <field id="default_adapter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="default_adapter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Image Adapter</label>
                     <source_model>Magento\Config\Model\Config\Source\Image\Adapter</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
@@ -298,11 +298,11 @@
                     <label>Disable Email Communications</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="host" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="host" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Host</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="port" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="port" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Port (25)</label>
                     <comment>For Windows server only.</comment>
                 </field>
@@ -429,10 +429,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]>
+                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]>
                     </comment>
                 </field>
-                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="redirect_to_base" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Auto-redirect to Base URL</label>
                     <source_model>Magento\Config\Model\Config\Source\Web\Redirect</source_model>
                     <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>
@@ -445,7 +445,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="unsecure" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="unsecure" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Base URLs</label>
                 <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -453,7 +453,7 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>Specify URL or {{base_url}} placeholder.</comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May start with {{unsecure_base_url}} placeholder.</comment>
@@ -463,13 +463,13 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_media_url" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL for User Media Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
             </group>
-            <group id="secure" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="secure" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Base URLs (Secure)</label>
                 <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -477,7 +477,7 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Secure Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.</comment>
@@ -487,24 +487,24 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_media_url" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for User Media Files</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="use_in_frontend" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="use_in_frontend" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Secure URLs on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs on Storefront.</comment>
                 </field>
-                <field id="use_in_adminhtml" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="use_in_adminhtml" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Secure URLs in Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
-                <field id="enable_hsts" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_hsts" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable HTTP Strict Transport Security (HSTS)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
@@ -514,7 +514,7 @@
                         <field id="use_in_adminhtml">1</field>
                     </depends>
                 </field>
-                <field id="enable_upgrade_insecure" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_upgrade_insecure" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Upgrade Insecure Requests</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>

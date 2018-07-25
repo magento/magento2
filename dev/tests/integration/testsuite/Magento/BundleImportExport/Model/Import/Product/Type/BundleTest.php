@@ -5,12 +5,12 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleTest extends \PHPUnit\Framework\TestCase
 {
@@ -49,7 +49,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testBundleImport()
@@ -80,12 +80,17 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
 
+        $indexerRegistry = $this->objectManager->get(IndexerRegistry::class);
+        $indexerRegistry->get('cataloginventory_stock')->reindexAll();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertTrue(is_numeric($productId));
+
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->load($productId);
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get(self::TEST_PRODUCT_NAME, false, null, true);
 
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
@@ -106,6 +111,17 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals($optionSku, $productLink->getData('sku'));
             }
         }
+
+        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertTrue(
+            $stockItem->getIsInStock(),
+            'Imported bundle product should be in stock'
+        );
+        $this->assertTrue(
+            $product->isSalable(),
+            'Imported bundle product should be available for sale'
+        );
     }
 
     /**

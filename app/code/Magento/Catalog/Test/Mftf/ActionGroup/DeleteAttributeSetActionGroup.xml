@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Delete attribute set -->
+    <actionGroup name="DeleteAttributeSetActionGroup">
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.attributeSetNameFilter}}" userInput="{{name}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.applyFilterButton}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.attributeSetRowByIndex('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminProductAttributeSetSection.deleteBtn}}" stepKey="clickDelete"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+    </actionGroup>
+</actionGroups>

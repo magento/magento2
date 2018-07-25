@@ -55,6 +55,7 @@ class ModeSwitcher
      * @param string $currentMode
      *
      * @return void
+     * @throws \Zend_Db_Exception
      */
     public function createTables(string $currentMode)
     {
@@ -154,7 +155,12 @@ class ModeSwitcher
             }
         }
         $this->tableMaintainer->getConnection()->query(
-            $this->tableMaintainer->getConnection()->insertFromSelect($select, $newTable)
+            $this->tableMaintainer->getConnection()->insertFromSelect(
+                $select,
+                $newTable,
+                [],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            )
         );
     }
 }
