@@ -18,7 +18,7 @@
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
 
-        <!-- Fill the form according the the attributes of the entity -->
+        <!-- Fill the form according the attributes of the entity -->
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
         <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
