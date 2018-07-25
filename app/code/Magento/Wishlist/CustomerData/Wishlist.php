@@ -133,8 +133,8 @@ class Wishlist implements SectionSourceInterface
             ),
             'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
             'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
-            'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem, true),
-            'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem, true),
+            'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
+            'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
         ];
     }
 
