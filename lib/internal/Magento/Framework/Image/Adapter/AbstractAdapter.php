@@ -555,8 +555,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
         // define position in center
         // TODO: add positions option
-        $dstY = (int) round(($frameHeight - $dstHeight) / 2);
-        $dstX = (int) round(($frameWidth - $dstWidth) / 2);
+        $dstY = round(($frameHeight - $dstHeight) / 2);
+        $dstX = round(($frameWidth - $dstWidth) / 2);
 
         // get rid of frame (fallback to zero position coordinates)
         if (!$this->_keepFrame) {
@@ -595,9 +595,9 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = (int) round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
+                $dstHeight = round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
             } else {
-                $dstWidth = (int) round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
+                $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
         }
         return [$dstWidth, $dstHeight];
