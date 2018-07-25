@@ -7,6 +7,7 @@ namespace Magento\Cms\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\Forward;
@@ -47,8 +48,8 @@ class Index extends \Magento\Framework\App\Action\Action
         Page $page = null
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->scopeConfig = $scopeConfig ? : $this->_objectManager->get(ScopeConfigInterface::class);
-        $this->page = $page ? : $this->_objectManager->get(Page::class);
+        $this->scopeConfig = $scopeConfig ? : ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->page = $page ? : ObjectManager::getInstance()->get(Page::class);
         parent::__construct($context);
     }
 
