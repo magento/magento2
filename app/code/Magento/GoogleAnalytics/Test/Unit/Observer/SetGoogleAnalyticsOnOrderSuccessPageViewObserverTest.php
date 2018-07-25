@@ -63,7 +63,6 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
         $this->observerMock = $this->getMockBuilder(Observer::class)->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)->getMock();
 
-
         $objectManager = new ObjectManager($this);
 
         $this->orderSuccessObserver = $objectManager->getObject(
