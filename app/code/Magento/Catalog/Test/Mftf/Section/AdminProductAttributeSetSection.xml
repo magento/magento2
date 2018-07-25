@@ -16,4 +16,8 @@
         <element name="name" type="input" selector="#attribute_set_name"/>
         <element name="basedOn" type="select" selector="#skeleton_set"/>
     </section>
+    <section name="AdminModifyAttributesSection">
+        <!-- Parameter is the attribute name -->
+        <element name="dropDownAttributeByName" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+    </section>
 </sections>
