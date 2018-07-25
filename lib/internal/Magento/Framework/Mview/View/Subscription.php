@@ -203,8 +203,8 @@ class Subscription implements SubscriptionInterface
 
             case Trigger::EVENT_UPDATE:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                if ($this->connection->isTableExists($this->getTableName())
-                    && $describe = $this->connection->describeTable($this->getTableName())
+                if ($this->connection->isTableExists($this->resource->getTableName($this->getTableName())) &&
+                    $describe = $this->connection->describeTable($this->resource->getTableName($this->getTableName()))
                 ) {
                     $columnNames = array_column($describe, 'COLUMN_NAME');
                     $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
