@@ -109,7 +109,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 $originalSku = $product->getSku();
                 $canSaveCustomOptions = $product->getCanSaveCustomOptions();
-
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
                 $this->getCategoryLinkManagement()->assignProductToCategories(
@@ -119,7 +118,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
-
                 $extendedData = $data;
                 $extendedData['can_save_custom_options'] = $canSaveCustomOptions;
                 $this->copyToStores($extendedData, $productId);
