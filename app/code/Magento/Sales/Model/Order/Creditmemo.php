@@ -471,13 +471,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function setShippingAmount($amount)
     {
-        // base shipping amount calculated in total model
-        //        $amount = $this->getStore()->round($amount);
-        //        $this->setData('base_shipping_amount', $amount);
-        //
-        //        $amount = $this->getStore()->round(
-        //            $amount*$this->getOrder()->getStoreToOrderRate()
-        //        );
         return $this->setData(CreditmemoInterface::SHIPPING_AMOUNT, $amount);
     }
 
