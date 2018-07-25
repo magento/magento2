@@ -400,7 +400,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(
             $this->_object->get(\Magento\Test\Di\Child::class),
-            $this->_object->get(\Magento\Test\Di\Child::class)
+            $this->_object->get('\\' . \Magento\Test\Di\Child::class)
         );
     }
 }
