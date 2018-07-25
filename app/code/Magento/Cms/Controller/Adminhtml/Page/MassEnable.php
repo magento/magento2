@@ -59,7 +59,9 @@ class MassEnable extends \Magento\Backend\App\Action
             $item->save();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been enabled.', $collection->getSize()));
+        $this->messageManager->addSuccessMessage(
+            __('A total of %1 record(s) have been enabled.', $collection->getSize())
+        );
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
