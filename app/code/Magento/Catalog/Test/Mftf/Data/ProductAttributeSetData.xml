@@ -12,6 +12,6 @@
         <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
         <data key="attributeSetId">4</data>
         <data key="attributeGroupId">7</data>
-        <data key="sortOrder">0</data>
+        <data key="sortOrder">25</data>
     </entity>
 </entities>
