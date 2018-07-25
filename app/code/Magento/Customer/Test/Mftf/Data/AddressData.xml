@@ -85,6 +85,12 @@
     </entity>
     <!--If required other field can be added to UK_Address entity, dont modify any existing data-->
     <entity name="UK_Address" type="address">
+        <array key="street">
+        <item>7700 xyz street</item>
+        <item>113</item>
+        </array>
+        <data key="city">London</data>
         <data key="country_id">GB</data>
+        <data key="telephone">512-345-6789</data>
     </entity>
 </entities>
