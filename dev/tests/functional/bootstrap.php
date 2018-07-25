@@ -6,6 +6,7 @@
 
 defined('MTF_BOOT_FILE') || define('MTF_BOOT_FILE', __FILE__);
 defined('MTF_BP') || define('MTF_BP', str_replace('\\', '/', (__DIR__)));
+defined('BP') || define('BP', str_replace('\\', '/', dirname(dirname(dirname((__DIR__))))));
 defined('MTF_TESTS_PATH') || define('MTF_TESTS_PATH', MTF_BP . '/tests/app/');
 defined('MTF_STATES_PATH') || define('MTF_STATES_PATH', MTF_BP . '/lib/Magento/Mtf/App/State/');
 
