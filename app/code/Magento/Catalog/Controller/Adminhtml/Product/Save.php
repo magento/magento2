@@ -108,6 +108,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
 
                 $originalSku = $product->getSku();
+                $canSaveCustomOptions = $product->getCanSaveCustomOptions();
+
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
                 $this->getCategoryLinkManagement()->assignProductToCategories(
@@ -118,7 +120,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
-                $this->copyToStores($data, $productId);
+                $extendedData = $data;
+                $extendedData['can_save_custom_options'] = $canSaveCustomOptions;
+                $this->copyToStores($extendedData, $productId);
 
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
@@ -234,14 +238,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                             $copyFrom = $store['copy_from'];
                             $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
                             if ($copyTo) {
-                                $canSaveCustomOptions = !empty($data['product']['affect_product_custom_options']);
-
-                                $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
+                                $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
                                     ->setStoreId($copyFrom)
-                                    ->load($productId);
-
-                                $product->setStoreId($copyTo)
-                                    ->setCanSaveCustomOptions($canSaveCustomOptions)
+                                    ->load($productId)
+                                    ->setCanSaveCustomOptions($data['can_save_custom_options'])
                                     ->setCopyFromView(true)
                                     ->save();
                             }
