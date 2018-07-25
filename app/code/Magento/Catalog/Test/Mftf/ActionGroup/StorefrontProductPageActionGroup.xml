@@ -13,7 +13,6 @@
             <argument name="productName"/>
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
