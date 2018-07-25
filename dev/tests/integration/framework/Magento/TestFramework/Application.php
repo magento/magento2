@@ -485,7 +485,7 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists()) {
+        if (!$db->isDbDumpExists() || $cleanup) {
             $this->getDbInstance()->storeDbDump();
         }
     }
