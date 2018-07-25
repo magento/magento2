@@ -69,8 +69,13 @@ class ReflectionGenerator
      * @param bool|null $isSynchronous
      * @return array
      */
-    public function generateTopicConfigForServiceMethod($topicName, $serviceType, $serviceMethod, $handlers = [], $isSynchronous = null)
-    {
+    public function generateTopicConfigForServiceMethod(
+        $topicName,
+        $serviceType,
+        $serviceMethod,
+        $handlers = [],
+        $isSynchronous = null
+    ) {
         $methodMetadata = $this->extractMethodMetadata($serviceType, $serviceMethod);
         $returnType = $methodMetadata[Config::SCHEMA_METHOD_RETURN_TYPE];
         $returnType = ($returnType != 'void' && $returnType != 'null') ? $returnType : null;
