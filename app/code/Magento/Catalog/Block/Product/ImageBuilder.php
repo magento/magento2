@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
-use Magento\Catalog\Helper\ImageFactory as HelperFactory;
+use Magento\Catalog\Block\Product\ImageFactory as HelperFactory;
 use Magento\Catalog\Model\Product;
 
 /**
