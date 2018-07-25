@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateTaxRule" dataType="taxRule" type="create" auth="adminOauth" url="/V1/taxRules" method="POST">
+        <contentType>application/json</contentType>
+        <object key="rule" dataType="taxRule">
+            <field key="id">integer</field>
+            <field key="code" required="true">string</field>
+            <field key="priority">integer</field>
+            <field key="position">integer</field>
+            <array key="customer_tax_class_ids">
+                <value>integer</value>
+            </array>
+            <array key="product_tax_class_ids">
+                <value>integer</value>
+            </array>
+            <array key="tax_rate_ids">
+                <value>integer</value>
+            </array>
+            <field key="calculate_subtotal">boolean</field>
+            <field key="extension_attributes">empty_extension_attribute</field>
+        </object>
+    </operation>
+    <operation name="DeleteTaxRule" dataType="taxRule" type="delete" auth="adminOauth" url="/V1/taxRules/{id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

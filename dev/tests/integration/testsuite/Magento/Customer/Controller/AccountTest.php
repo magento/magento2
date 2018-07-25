@@ -219,6 +219,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testNoFormKeyCreatePostAction()
     {
         $this->fillRequestWithAccountData('test1@email.com');
+        $this->getRequest()->setPostValue('form_key', null);
         $this->dispatch('customer/account/createPost');
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
