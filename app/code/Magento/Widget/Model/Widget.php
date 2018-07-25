@@ -448,7 +448,7 @@ class Widget
      */
     protected function sortWidgets(array $firstElement, array $secondElement): int
     {
-        return strcmp($firstElement['name'], $secondElement['name']);
+        return strcmp((string)$firstElement['name'], (string)$secondElement['name']);
     }
 
     /**
