@@ -142,7 +142,7 @@
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are deleted"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-79939"/>
-            <group value="ConfigurableProduct"/>
+            <group value="configurableProduct"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -244,7 +244,7 @@
             <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are a combination of 'Out of Stock' and deleted"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-79939"/>
-            <group value="ConfigurableProduct"/>
+            <group value="configurableProduct"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
