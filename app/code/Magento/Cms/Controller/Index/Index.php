@@ -18,35 +18,37 @@ use Magento\Store\Model\ScopeInterface;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @var ForwardFactory
      */
-    protected $resultForwardFactory;
+    private $resultForwardFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var Page
      */
-    protected $page;
+    private $page;
 
     /**
+     * Index constructor.
+     *
      * @param Context $context
-     * @param ScopeConfigInterface $scopeConfig
      * @param ForwardFactory $resultForwardFactory
-     * @param Page $page
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param Page|null $page
      */
     public function __construct(
         Context $context,
-        ScopeConfigInterface $scopeConfig,
         ForwardFactory $resultForwardFactory,
-        Page $page
+        ScopeConfigInterface $scopeConfig = null,
+        Page $page = null
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->page = $page;
+        $this->scopeConfig = $scopeConfig ? : $this->_objectManager->get(ScopeConfigInterface::class);
+        $this->page = $page ? : $this->_objectManager->get(Page::class);
         parent::__construct($context);
     }
 
@@ -64,7 +66,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $pageId = $this->scopeConfig->getValue(Page::XML_PATH_HOME_PAGE, ScopeInterface::SCOPE_STORE);
         $resultPage = $this->page->prepareResultPage($this, $pageId);
         if (!$resultPage) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            /** @var Forward $resultForward */
             $resultForward = $this->resultForwardFactory->create();
             $resultForward->forward('defaultIndex');
             return $resultForward;
