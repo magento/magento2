@@ -124,10 +124,10 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('delete');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The page has been deleted.'));
         $this->messageManagerMock->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
@@ -151,10 +151,10 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We can\'t find a page to delete.'));
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -195,10 +195,10 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorMsg);
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
