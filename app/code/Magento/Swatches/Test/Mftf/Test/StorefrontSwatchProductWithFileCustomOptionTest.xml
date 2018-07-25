@@ -54,7 +54,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
 
         <!--Go to storefront-->
-        <amOnPage url="" stepKey="goToHomePage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
