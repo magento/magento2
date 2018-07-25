@@ -19,4 +19,8 @@
         <data key="attribute_code">price_view</data>
         <data key="value">1</data>
     </entity>
+    <entity name="CustomAttributePriceViewRange" type="custom_attribute">
+        <data key="attribute_code">price_view</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
