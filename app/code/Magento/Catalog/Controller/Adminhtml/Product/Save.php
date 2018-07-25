@@ -102,7 +102,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->productBuilder->build($this->getRequest())
                 );
                 $this->productTypeManager->processProduct($product);
-
                 if (isset($data['product'][$product->getIdFieldName()])) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save product'));
                 }
