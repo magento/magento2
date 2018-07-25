@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Validator\DocumentValidator;
-use GraphQL\Validator\Rules\DisableIntrospection;
-use GraphQL\Validator\Rules\QueryDepth;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Schema;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -25,11 +22,20 @@ class QueryProcessor
     private $exceptionFormatter;
 
     /**
-     * @param ExceptionFormatter $exceptionFormatter
+     * @var QueryComplexityLimiter
      */
-    public function __construct(ExceptionFormatter $exceptionFormatter)
-    {
+    protected $queryComplexityLimiter;
+
+    /**
+     * @param ExceptionFormatter $exceptionFormatter
+     * @param QueryComplexityLimiter $queryComplexityChecker
+     */
+    public function __construct(
+        ExceptionFormatter $exceptionFormatter,
+        QueryComplexityLimiter $queryComplexityChecker
+    ) {
         $this->exceptionFormatter = $exceptionFormatter;
+        $this->queryComplexityLimiter = $queryComplexityChecker;
     }
 
     /**
@@ -49,10 +55,9 @@ class QueryProcessor
         array $variableValues = null,
         string $operationName = null
     ) : array {
-        if (!$this->exceptionFormatter->shouldShowDetail()) {
-            DocumentValidator::addRule(new QueryDepth(10));
-            DocumentValidator::addRule(new DisableIntrospection());
-        }
+        $disableIntrospection = $this->exceptionFormatter->shouldShowDetail();
+        $this->queryComplexityLimiter->execute($disableIntrospection);
+
         $rootValue = null;
         return \GraphQL\GraphQL::executeQuery(
             $schema,
