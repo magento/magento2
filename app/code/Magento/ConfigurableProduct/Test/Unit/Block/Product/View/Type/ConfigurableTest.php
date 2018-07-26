@@ -381,6 +381,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ],
+            'optionSkus' => [],
             'priceFormat' => [],
             'prices' => [
                 'oldPrice' => [

@@ -275,7 +275,7 @@ define([
             normalPriceLabelSelector: '.normal-price .price-label',
 
             // Local sku cache
-            skuCache: "",
+            skuCache: '',
 
             // A sku value selector
             productSkuSelector: '.product-info-stock-sku .sku .value'
@@ -965,7 +965,7 @@ define([
          * @private
          */
 
-        _UpdateSku: function(){
+        _UpdateSku: function () {
 
             var $widget = this,
                 result,
@@ -977,15 +977,15 @@ define([
                 options[attributeId] = $(this).attr('option-selected');
             });
 
-            if($widget.options.skuCache == ""){
+            if ($widget.options.skuCache == '') {
                 $widget.options.skuCache = $($widget.options.productSkuSelector).text();
             }
 
             result = $widget.options.jsonConfig.optionSkus[_.findKey($widget.options.jsonConfig.index, options)];
 
-            if(typeof result != 'undefined'){
+            if (typeof result != 'undefined') {
                 $($widget.options.productSkuSelector).text(result.sku);
-            }else{
+            } else {
                 $($widget.options.productSkuSelector).text($widget.options.skuCache);
             }
 
