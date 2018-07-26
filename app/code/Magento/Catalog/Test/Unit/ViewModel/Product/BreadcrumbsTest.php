@@ -131,7 +131,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
             ->with('catalog/seo/product_use_categories', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
