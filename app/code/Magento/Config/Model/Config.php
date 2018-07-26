@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Backend config model
  * Used to save configuration
@@ -76,6 +79,10 @@ class Config extends \Magento\Framework\DataObject
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
+    /**
+     * @var SettingChecker|null
+     */
+    private $settingChecker;
 
     /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
@@ -85,6 +92,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Config\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param SettingChecker|null $settingChecker
      * @param array $data
      */
     public function __construct(
@@ -95,6 +103,7 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Config\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        SettingChecker $settingChecker = null,
         array $data = []
     ) {
         parent::__construct($data);
@@ -105,6 +114,7 @@ class Config extends \Magento\Framework\DataObject
         $this->_configLoader = $configLoader;
         $this->_configValueFactory = $configValueFactory;
         $this->_storeManager = $storeManager;
+        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
     }
 
     /**
@@ -229,6 +239,16 @@ class Config extends \Magento\Framework\DataObject
             }
 
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
+                $isReadOnly = $this->settingChecker->isReadOnly(
+                    $groupPath . '/' . $fieldId,
+                    $this->getScope(),
+                    $this->getScopeCode()
+                );
+
+                if ($isReadOnly) {
+                    continue;
+                }
+
                 $originalFieldId = $fieldId;
                 if ($group->shouldCloneFields() && isset($mappedFields[$fieldId])) {
                     $originalFieldId = $mappedFields[$fieldId];
