@@ -72,7 +72,7 @@ class ItemProductResolverTest extends \PHPUnit\Framework\TestCase
                 ->with(ItemProductResolver::CONFIG_THUMBNAIL_SOURCE, ScopeInterface::SCOPE_STORE)
                 ->willReturn($configImageSource);
 
-            $finalProduct = ($configImageSource == Thumbnail::OPTION_USE_PARENT_IMAGE)? $parentProduct: $childProduct;
+            $finalProduct = ($configImageSource == Thumbnail::OPTION_USE_PARENT_IMAGE) ? $parentProduct : $childProduct;
         }
 
         $item = $this->createPartialMock(

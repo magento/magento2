@@ -46,6 +46,7 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
     /**
      * Identify the product from which thumbnail should be taken.
      *
+     * @param \Magento\Wishlist\Model\Item $item
      * @return \Magento\Catalog\Model\Product
      */
     public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item): \Magento\Catalog\Model\Product

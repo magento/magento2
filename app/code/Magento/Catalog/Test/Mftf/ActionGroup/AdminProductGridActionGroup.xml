@@ -38,7 +38,7 @@
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFilteredGridLoad"/>
     </actionGroup>
 
     <!--Delete a product by filtering grid and using delete action-->
