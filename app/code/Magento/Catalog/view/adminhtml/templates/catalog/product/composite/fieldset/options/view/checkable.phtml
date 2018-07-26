@@ -33,9 +33,7 @@ $count = 1;
             <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
                 <span>
                     <?= /* @noEscape */ __('None') ?>
-
                 </span>
-
             </label>
     <?php endif; ?>
 
@@ -77,7 +75,8 @@ $count = 1;
                        data-selector="<?= /* @noEscape */ $dataSelector ?>"
                        price="<?= /* @noEscape */ $block->getCurrencyByStore($value) ?>"
                 />
-                <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() . '_' . $count ?>">
+                <label class="label admin__field-label"
+                       for="options_<?= /* @noEscape */ $option->getId() . '_' . $count ?>">
                 <span>
                     <?= $block->escapeHtml($value->getTitle()) ?>
                 </span>
