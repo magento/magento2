@@ -47,7 +47,7 @@ class StoreDimensionProvider implements DimensionProviderInterface
     public function getIterator(): \Traversable
     {
         foreach (array_keys($this->storeManager->getStores()) as $storeId) {
-            yield [self::DIMENSION_NAME => $this->dimensionFactory->create(self::DIMENSION_NAME, $storeId)];
+            yield [self::DIMENSION_NAME => $this->dimensionFactory->create(self::DIMENSION_NAME, (string)$storeId)];
         }
     }
 }
