@@ -72,6 +72,7 @@ define([
             'Magento_Customer/js/customer-data': {
                 get: function () {
                 },
+                reload: jasmine.createSpy(),
                 set: jasmine.createSpy()
             }
         },
@@ -124,6 +125,7 @@ define([
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
             expect(mocks['mage/storage'].post).toHaveBeenCalled();
+            expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith('messages');
             expect(mocks['Magento_Checkout/js/model/cart/cache'].get).not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/cart/cache'].set).toHaveBeenCalledWith('cart-data', data);
         });
@@ -143,6 +145,7 @@ define([
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
             expect(mocks['mage/storage'].post).toHaveBeenCalled();
+            expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith('messages');
             expect(mocks['Magento_Checkout/js/model/cart/cache'].get).not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/error-processor'].process).toHaveBeenCalledWith('Error Message');
         });
