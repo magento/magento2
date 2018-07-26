@@ -1,0 +1,85 @@
+<?php
+/**
+ * @var \Magento\Catalog\Block\Product\View\Options\View\Checkable $this
+ */
+$option = $this->getOption();
+
+if ($option): ?>
+    <?php
+    $configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
+    $optionType = $option->getType();
+    $arraySign = $optionType === 'checkbox' ? '[]' : '';
+    $count = 1;
+    ?>
+
+<div class="options-list nested" id="options-' . <?php echo $option->getId() ?> . '-list">
+
+    <?php if ($optionType === 'radio'): ?>
+    <div class="field choice admin__field admin__field-option">
+    <input type="radio"
+           id="options_'<?php echo $option->getId() ?>'"
+           class="radio admin__control-radio product-custom-option"
+           name="options['<?php echo $option->getId() ?>']"
+           data-selector="options['<?php echo $option->getId() ?>']"
+           onclick="<?php echo $this->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+           value=""
+           checked="checked"
+    />
+    <label class="label admin__field-label" for="options_<?php echo $option->getId() ?>">
+            <span>
+                <?php echo __('None') ?>
+
+            </span>
+
+    </label>
+<?php endif; ?>
+
+    <?php foreach ($option->getValues() as $value): ?>
+
+        <?php
+            $checked = '';
+
+            if ($arraySign) {
+                $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
+            } else {
+                $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
+            }
+
+            $priceStr = $this->formatPrice(
+                [
+                    'is_percent' => $value->getPriceType() == 'percent',
+                    'pricing_value' => $value->getPrice($value->getPriceType() == 'percent')
+                ]
+            );
+
+            $dataSelector = 'options[' . $option->getId() . ']';
+            if ($arraySign) {
+                $dataSelector .= '[' . $value->getOptionTypeId() . ']';
+            }
+        ?>
+
+        <div class="field choice admin__field admin__field-option'<?php echo $option->getIsRequire() ?>'">
+            <input type="<?php echo $optionType ?>"
+                   class="<?php /** @noinspection DisconnectedForeachInstructionInspection */
+                   echo $optionType === 'radio'
+                       ? 'radio admin__control-radio'
+                       : 'checkbox admin__control-checkbox' ?> <?php echo $option->getIsRequire() ?>
+                       product-custom-option
+                       <?php echo $this->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+                   name="options['<?php echo $option->getId() ?>']<?php echo $arraySign ?>"
+                   id="options_<?php echo $option->getId() . '_' . $count ?>."
+                   value="<?php echo $value->getOptionTypeId() ?>"
+                   <?php echo $checked ?>
+                   data-selector="<?php echo $dataSelector ?>"
+                   price="<?php echo $this->getCurrencyByStore($value) ?>"
+            />
+            <label class="label admin__field-label" for="options_<?php echo $option->getId().'_'.$count ?>">
+                <span>
+                    <?php echo $this->escapeHtml($value->getTitle()) ?>
+                </span>
+                <?php echo $priceStr ?>
+            </label>
+        </div>
+    <?php endforeach; ?>
+    </div>
+<?php endif; ?>
