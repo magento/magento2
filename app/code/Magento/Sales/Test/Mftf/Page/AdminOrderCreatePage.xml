@@ -10,5 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminOrderCreatePage" url="sales/order_create/index" area="admin" module="Magento_Sales">
         <section name="AdminOrderFormActionSection"/>
+        <section name="AdminOrderFormAccountSection"/>
+        <section name="AdminOrderFormBillingAddressSection"/>
+        <section name="AdminOrderFormPaymentSection"/>
+        <section name="AdminOrderFormItemsSection"/>
+        <section name="AdminOrderFormTotalSection"/>
     </page>
 </pages>

@@ -19,23 +19,30 @@
             <group value="configurable"/>
             <group value="product"/>
         </annotations>
+
+        <!-- Create Category And Login As Admin -->
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
+
+        <!-- Delete Created Products And Category Then Logout -->
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!-- Delete all created products (including virtual) -->
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <!-- Delete created product attribute -->
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
+                <argument name="productAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logout"/>
+            <!-- Delete created category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="enterCategoryName"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSeoSection"/>
-        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterUrlKey"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickOnSaveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
-
+        <!-- Create configurable product... -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
@@ -49,12 +56,14 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
 
+        <!-- Create Product Attribute -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
         <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
 
+        <!-- Choose Created Attribute -->
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
         <fillField userInput="{{colorProductAttribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
@@ -62,38 +71,49 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
 
+        <!-- Create First Value for Attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
         <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
 
+        <!-- Create Second Value for Attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
         <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute2"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
 
+        <!-- Create Third Value for Attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue3"/>
         <fillField userInput="{{colorProductAttribute3.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute3"/>
 
+        <!-- Select All Values and Go On-->
         <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
 
+        <!-- Apply Unique Prices By Attribute To Each SKU -->
         <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
         <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="{{colorProductAttribute.default_label}}" stepKey="selectAttributes"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="{{colorProductAttribute1.price}}" stepKey="fillAttributePrice1"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" userInput="{{colorProductAttribute2.price}}" stepKey="fillAttributePrice2"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute3}}" userInput="{{colorProductAttribute3.price}}" stepKey="fillAttributePrice3"/>
 
+        <!-- Apply Unique Quantity to Each SKUs -->
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+
+        <!-- Finish Creating Configurations -->
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
 
+        <!-- Save Product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
 
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <!-- Make Sure Product Is Created -->
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
         <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitle"/>
 
+        <!-- Make Sure Configurations Created Correctly -->
         <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="3" stepKey="seeNumberOfRows"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeName1InField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeName2InField"/>
@@ -106,22 +126,27 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{colorProductAttribute3.price}}" stepKey="seeUniquePrice3InField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsQuantityCells}}" userInput="{{colorProductAttribute.attribute_quantity}}" stepKey="seeQuantityInField"/>
 
+        <!-- Go To StoreFront -->
         <amOnPage url="/" stepKey="amOnStorefront"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
+        <!-- Go To Just Created Category -->
         <click userInput="{{_defaultCategory.name}}" stepKey="clickOnCategoryName"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
 
+        <!-- Check Product Presence And Go Into The Product View -->
         <see userInput="{{_defaultProduct.name}}" stepKey="assertProductPresent"/>
         <see userInput="{{colorProductAttribute1.price}}" stepKey="assertProductPricePresent"/>
         <click userInput="{{_defaultProduct.name}}" stepKey="clickOnProductName"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
 
+        <!-- Check Page's Title, Product Name, Price, Sku -->
         <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="assertProductNameTitle"/>
         <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{colorProductAttribute1.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
         <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
 
+        <!-- Check Options -->
         <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{colorProductAttribute.default_label}}" stepKey="seeColorAttributeName1"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetTaxClassForShipping">
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
+        <waitForPageLoad stepKey="waitForAdminSalesTaxClassPageLoad"/>
+        <conditionalClick selector="{{AdminSalesTaxConfigSection.taxClassesTab}}" dependentSelector="{{AdminSalesTaxConfigSection.checkIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
+        <waitForElementVisible selector="{{AdminSalesTaxConfigSection.shippingTaxClass}}" stepKey="seeShippingTaxClass"/>
+        <uncheckOption selector="{{AdminSalesTaxConfigSection.enableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminSalesTaxConfigSection.shippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
+        <click selector="{{AdminSalesTaxConfigSection.taxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    </actionGroup>
+    <actionGroup name="ResetTaxClassForShipping">
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxConfigPagetoReset"/>
+        <waitForPageLoad stepKey="waitForAdminSalesTaxClassPageLoad2"/>
+        <conditionalClick selector="{{AdminSalesTaxConfigSection.taxClassesTab}}" dependentSelector="{{AdminSalesTaxConfigSection.checkIfTaxClassesTabExpand}}" visible="true" stepKey="openTaxClassTab"/>
+        <waitForElementVisible selector="{{AdminSalesTaxConfigSection.shippingTaxClass}}" stepKey="seeShippingTaxClass2"/>
+        <selectOption selector="{{AdminSalesTaxConfigSection.shippingTaxClass}}" userInput="None" stepKey="resetShippingTaxClass"/>
+        <checkOption selector="{{AdminSalesTaxConfigSection.enableTaxClassForShipping}}" stepKey="useSystemValue"/>
+        <click selector="{{AdminSalesTaxConfigSection.taxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
+    </actionGroup>
+</actionGroups>
