@@ -17,22 +17,22 @@ $arraySign = $optionType === 'checkbox' ? '[]' : '';
 $count = 1;
 ?>
 
-<div class="options-list nested" id="options-' . <?= $option->getId() ?> . '-list">
+<div class="options-list nested" id="options-' . <?= /* @noEscape */ $option->getId() ?> . '-list">
 
     <?php if ($optionType === 'radio') : ?>
         <div class="field choice admin__field admin__field-option">
             <input type="radio"
-                   id="options_'<?= $option->getId() ?>'"
+                   id="options_'<?= /* @noEscape */ $option->getId() ?>'"
                    class="radio admin__control-radio product-custom-option"
-                   name="options['<?= $option->getId() ?>']"
-                   data-selector="options['<?= $option->getId() ?>']"
+                   name="options['<?= /* @noEscape */ $option->getId() ?>']"
+                   data-selector="options['<?= /* @noEscape */ $option->getId() ?>']"
                    onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                    value=""
                    checked="checked"
             />
-            <label class="label admin__field-label" for="options_<?= $option->getId() ?>">
+            <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
                 <span>
-                    <?= __('None') ?>
+                    <?= /* @noEscape */ __('None') ?>
 
                 </span>
 
@@ -62,26 +62,26 @@ $count = 1;
             }
             ?>
 
-            <div class="field choice admin__field admin__field-option'<?= $option->getIsRequire() ?>'">
-                <input type="<?= $optionType ?>"
-                       class="<?= /** @noinspection DisconnectedForeachInstructionInspection */
+            <div class="field choice admin__field admin__field-option'<?= /* @noEscape */ $option->getIsRequire() ?>'">
+                <input type="<?= /* @noEscape */ $optionType ?>"
+                       class="<?= /* @noEscape */
                         $optionType === 'radio' ?
                            'radio admin__control-radio' :
-                           'checkbox admin__control-checkbox' ?> <?= $option->getIsRequire() ?>
+                           'checkbox admin__control-checkbox' ?> <?= /* @noEscape */ $option->getIsRequire() ?>
                        product-custom-option
                         <?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
-                       name="options['<?= $option->getId() ?>']<?= $arraySign ?>"
-                       id="options_<?= $option->getId() . '_' . $count ?>."
-                       value="<?= $value->getOptionTypeId() ?>"
-                    <?= $checked ?>
-                       data-selector="<?= $dataSelector ?>"
-                       price="<?= $block->getCurrencyByStore($value) ?>"
+                       name="options['<?= $option->getId() ?>']<?= /* @noEscape */ $arraySign ?>"
+                       id="options_<?= /* @noEscape */ $option->getId() . '_' . $count ?>."
+                       value="<?= /* @noEscape */ $value->getOptionTypeId() ?>"
+                    <?= /* @noEscape */ $checked ?>
+                       data-selector="<?= /* @noEscape */ $dataSelector ?>"
+                       price="<?= /* @noEscape */ $block->getCurrencyByStore($value) ?>"
                 />
-                <label class="label admin__field-label" for="options_<?= $option->getId() . '_' . $count ?>">
+                <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() . '_' . $count ?>">
                 <span>
                     <?= $block->escapeHtml($value->getTitle()) ?>
                 </span>
-                    <?= $priceStr ?>
+                    <?= /* @noEscape */ $priceStr ?>
                 </label>
             </div>
         <?php endforeach; ?>
