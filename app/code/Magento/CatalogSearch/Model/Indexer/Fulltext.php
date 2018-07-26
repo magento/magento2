@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Indexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Magento\Framework\Indexer\Dimension\DimensionProviderInterface;
+use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 
@@ -23,7 +23,7 @@ use Magento\Indexer\Model\ProcessManager;
 class Fulltext implements
     \Magento\Framework\Indexer\ActionInterface,
     \Magento\Framework\Mview\ActionInterface,
-    \Magento\Framework\Indexer\Dimension\DimensionalIndexerInterface
+    \Magento\Framework\Indexer\DimensionalIndexerInterface
 {
     /**
      * Indexer ID in configuration
