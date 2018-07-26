@@ -6,6 +6,7 @@
 namespace Magento\Framework\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Image\Adapter\ConfigInterface;
 
 /**
  * File upload class
@@ -138,12 +139,16 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see ConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 1920;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see ConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 1200;
 

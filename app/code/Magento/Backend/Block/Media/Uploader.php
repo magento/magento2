@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Image\Adapter\ConfigInterface;
 
 /**
  * Adminhtml media library uploader
@@ -31,6 +34,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
+     * @var ConfigInterface
+     */
+    private $imageConfig;
+
+    /**
      * @var Json
      */
     private $jsonEncoder;
@@ -39,17 +47,21 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
+     * @param ConfigInterface $imageConfig
      * @param Json $jsonEncoder
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
+        ConfigInterface $imageConfig = null,
         Json $jsonEncoder = null
     ) {
-        $this->_fileSizeService = $fileSize;
-        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
+
+        $this->_fileSizeService = $fileSize;
+        $this->imageConfig = $imageConfig?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -88,6 +100,26 @@ class Uploader extends \Magento\Backend\Block\Widget
     public function getFileSizeService()
     {
         return $this->_fileSizeService;
+    }
+
+    /**
+     * Get Image Upload Maximum Width Config
+     *
+     * @return int
+     */
+    public function getUploadImageMaxWidth()
+    {
+        return $this->imageConfig->getMaxWidth();
+    }
+
+    /**
+     * Get Image Upload Maximum Height Config
+     *
+     * @return int
+     */
+    public function getUploadImageMaxHeight()
+    {
+        return $this->imageConfig->getMaxHeight();
     }
 
     /**

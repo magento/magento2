@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
 /**
@@ -39,6 +41,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
         array $data = []
     ) {
         $this->_storageHelper = $storageHelper;
+
         parent::__construct($context, $fileSize, $data);
     }
 
