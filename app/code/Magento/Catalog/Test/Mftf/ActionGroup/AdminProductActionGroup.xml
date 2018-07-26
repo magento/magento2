@@ -56,6 +56,7 @@
             <argument name="price" type="string" defaultValue="8"/>
         </arguments>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="initScrollToTopOfThePage"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
         <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
