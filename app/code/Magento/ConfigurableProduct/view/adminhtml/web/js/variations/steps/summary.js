@@ -88,7 +88,7 @@ define([
          * @param {Function} getSectionValue
          */
         calculate: function (variations, getSectionValue) {
-            var productSku = this.variationsComponent().getProductValue('sku'),
+            var productSku = this.variationsComponent().getProductValue('sku').trim(),
                 productPrice = this.variationsComponent().getProductPrice(),
                 productWeight = this.variationsComponent().getProductValue('weight'),
                 productName = this.variationsComponent().getProductValue('name'),
