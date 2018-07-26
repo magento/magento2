@@ -6,7 +6,9 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
-class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
+use Magento\User\Controller\Adminhtml\Auth;
+
+class ResetPasswordPost extends Auth
 {
     /**
      * Reset forgotten password
@@ -27,7 +29,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
         } catch (\Exception $exception) {
             $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->getResponse()->setRedirect(
-                $this->_objectManager->get(\Magento\Backend\Helper\Data::class)->getHomePageUrl()
+                $this->_backendDataHelper->getHomePageUrl()
             );
             return;
         }
@@ -53,7 +55,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
                 $user->save();
                 $this->messageManager->addSuccess(__('You updated your password.'));
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get(\Magento\Backend\Helper\Data::class)->getHomePageUrl()
+                    $this->_backendDataHelper->getHomePageUrl()
                 );
             }
         } catch (\Magento\Framework\Validator\Exception $exception) {
