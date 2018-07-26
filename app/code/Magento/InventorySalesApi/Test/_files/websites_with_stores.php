@@ -17,8 +17,11 @@ use Magento\SalesSequence\Model\Config;
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var OriginalSequenceBuilder $sequence */
+/**
+ * Set original sequence builder to object manager in order to generate sequence table with correct store id.
+ */
 $sequenceBuilder = $objectManager->get(OriginalSequenceBuilder::class);
+$objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
 /** @var EntityPool $entityPool */
 $entityPool = $objectManager->get(EntityPool::class);
 /** @var Config $sequenceConfig */
@@ -65,18 +68,10 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $website->save();
     $store->setGroupId($group->getId());
     $store->save();
-
-    //Generate sequence tables
-    // It use for testing sales operations (order, invoice, shipment etc.)
-    foreach ($entityPool->getEntities() as $entityType) {
-        $sequenceBuilder->setPrefix($store->getId())
-            ->setSuffix($sequenceConfig->get('suffix'))
-            ->setStartValue($sequenceConfig->get('startValue'))
-            ->setStoreId($store->getId())
-            ->setStep($sequenceConfig->get('step'))
-            ->setWarningValue($sequenceConfig->get('warningValue'))
-            ->setMaxValue($sequenceConfig->get('maxValue'))
-            ->setEntityType($entityType)
-            ->create();
-    }
 }
+
+/**
+ * Revert set original sequence builder to test sequence builder.
+ */
+$sequenceBuilder = $objectManager->get(\Magento\TestFramework\Db\Sequence\Builder::class);
+$objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
