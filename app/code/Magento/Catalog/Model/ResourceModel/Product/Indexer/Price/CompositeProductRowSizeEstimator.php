@@ -18,7 +18,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     /**
      * Calculated memory size for one record in catalog_product_index_price table
      */
-    const MEMORY_SIZE_FOR_ONE_ROW = 250;
+    const MEMORY_SIZE_FOR_ONE_ROW = 200;
 
     /**
      * @var WebsiteManagementInterface

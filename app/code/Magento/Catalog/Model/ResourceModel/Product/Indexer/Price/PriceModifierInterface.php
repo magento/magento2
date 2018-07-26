@@ -19,5 +19,5 @@ interface PriceModifierInterface
      * @param array $entityIds
      * @return void
      */
-    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void;
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []);
 }
