@@ -114,7 +114,7 @@ class DataProvider implements DataProviderInterface
                 } catch (\Exception $e) {
                     throw new LocalizedException(
                         __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0]),
-						$e
+                        $e
                     );
                 }
             }
