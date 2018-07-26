@@ -6,6 +6,7 @@
 /**
  * @api
  */
+/* global Base64 */
 define([
     'jquery',
     'underscore',
