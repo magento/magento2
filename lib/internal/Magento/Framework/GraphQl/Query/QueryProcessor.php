@@ -28,14 +28,14 @@ class QueryProcessor
 
     /**
      * @param ExceptionFormatter $exceptionFormatter
-     * @param QueryComplexityLimiter $queryComplexityChecker
+     * @param QueryComplexityLimiter $queryComplexityLimiter
      */
     public function __construct(
         ExceptionFormatter $exceptionFormatter,
-        QueryComplexityLimiter $queryComplexityChecker
+        QueryComplexityLimiter $queryComplexityLimiter
     ) {
         $this->exceptionFormatter = $exceptionFormatter;
-        $this->queryComplexityLimiter = $queryComplexityChecker;
+        $this->queryComplexityLimiter = $queryComplexityLimiter;
     }
 
     /**
