@@ -19,6 +19,7 @@ use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Model\CleanupReservationsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -41,6 +42,11 @@ class NegativeMinQtyPlaceOrderTest extends TestCase
      * @var IsProductSalableForRequestedQtyInterface
      */
     private $isProductSalableForRequestedQty;
+
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    private $getProductSalableQty;
 
     /**
      * @var GetStockItemConfigurationInterface
@@ -121,6 +127,7 @@ class NegativeMinQtyPlaceOrderTest extends TestCase
         $this->isProductSalableForRequestedQty = Bootstrap::getObjectManager()->get(
             IsProductSalableForRequestedQtyInterface::class
         );
+        $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
         $this->getStockItemConfiguration = Bootstrap::getObjectManager()->get(
             GetStockItemConfigurationInterface::class
         );
@@ -163,14 +170,33 @@ class NegativeMinQtyPlaceOrderTest extends TestCase
     {
         $sku = 'SKU-1';
         $stockId = 10;
+        //Initial amount of SKU-1 on StockId = 10 is 8.5
+        //Setting MinQty threshold as negative value we increase the Salable Quantity
+        //Salable Quantity: 8.5 - (-4.5) = 13
         $quoteItemQty = 13;
 
+        // Before backorder is set, Salable Quantity is 8.5
+        $this->assertEquals(8.5, $this->getProductSalableQty->execute($sku, $stockId));
+        $this->assertFalse($this->isProductSalableForRequestedQty->execute($sku, $stockId, 13)->isSalable());
+
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-        $stockItemConfiguration->setUseConfigBackorders(false);
-        $stockItemConfiguration->setBackorders(StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY);
         $stockItemConfiguration->setUseConfigMinQty(false);
         $stockItemConfiguration->setMinQty(-4.5);
         $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+
+        // Before backorder is set, Salable Quantity is 8.5
+        $this->assertEquals(8.5, $this->getProductSalableQty->execute($sku, $stockId));
+        $this->assertFalse($this->isProductSalableForRequestedQty->execute($sku, $stockId, 13)->isSalable());
+
+        $stockItemConfiguration->setUseConfigBackorders(false);
+        $stockItemConfiguration->setBackorders(StockItemConfigurationInterface::BACKORDERS_YES_NONOTIFY);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+
+        // After backorder is set, Salable Quantity is 8.5 - (-4.5) = 13
+        $this->assertEquals(13, $this->getProductSalableQty->execute($sku, $stockId));
+
+        $this->assertTrue($this->isProductSalableForRequestedQty->execute($sku, $stockId, 13)->isSalable());
+        $this->assertFalse($this->isProductSalableForRequestedQty->execute($sku, $stockId, 14)->isSalable());
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
@@ -181,6 +207,16 @@ class NegativeMinQtyPlaceOrderTest extends TestCase
         $orderId = $this->cartManagement->placeOrder($cart->getId());
         $this->assertFalse($this->isProductSalableForRequestedQty->execute($sku, $stockId, 1)->isSalable());
         $this->deleteOrderById((int)$orderId);
+
+        // Now the Salable Quantity of Product SKU-1 is infinite
+        $stockItemConfiguration->setMinQty(0);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+        $this->assertTrue($this->isProductSalableForRequestedQty->execute($sku, $stockId, 1)->isSalable());
+
+        // Positive MinQty works the same as MinQty = 0 , so that Salable Quantity is infinite
+        $stockItemConfiguration->setMinQty(10);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+        $this->assertTrue($this->isProductSalableForRequestedQty->execute($sku, $stockId, 100)->isSalable());
     }
 
     /**
