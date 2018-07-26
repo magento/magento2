@@ -1792,7 +1792,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return (bool)$this->getInvoiceCollection()->count();
+        return boolval($this->getInvoiceCollection()->count());
     }
 
     /**
@@ -1802,7 +1802,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return (bool)$this->getShipmentsCollection()->count();
+        return boolval($this->getShipmentsCollection()->count());
     }
 
     /**
@@ -1812,7 +1812,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return (bool)$this->getCreditmemosCollection()->count();
+        return boolval($this->getCreditmemosCollection()->count());
     }
 
     /**
