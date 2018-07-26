@@ -16,7 +16,7 @@
         <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <!--Create Store View-->
-        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{StoreGroup.name}}" stepKey="selectStore" />
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{storeGroup.name}}" stepKey="selectStore" />
         <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName" />
         <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode" />
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
