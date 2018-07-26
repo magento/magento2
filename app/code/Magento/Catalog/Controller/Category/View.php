@@ -111,7 +111,7 @@ class View extends \Magento\Framework\App\Action\Action
     /**
      * Initialize requested category object
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Category|bool
      */
     protected function _initCategory()
     {
