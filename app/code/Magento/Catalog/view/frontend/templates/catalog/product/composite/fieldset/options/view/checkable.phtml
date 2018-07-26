@@ -17,25 +17,25 @@ $arraySign = $optionType === 'checkbox' ? '[]' : '';
 $count = 1;
 ?>
 
-<div class="options-list nested" id="options-<?= /* @noEscape */ $option->getId() ?>-list">
+<div class="options-list nested" id="options-' <?= /* @noEscape */ $option->getId() ?>'-list">
 
     <?php if ($optionType === 'radio') : ?>
-        <div class="field choice admin__field admin__field-option">
-            <input type="radio"
-                   id="options_<?= /* @noEscape */ $option->getId() ?>"
-                   class="radio admin__control-radio product-custom-option"
-                   name="options[<?= /* @noEscape */ $option->getId() ?>]"
-                   data-selector="options[<?= /* @noEscape */ $option->getId() ?>]"
-                   onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
-                   value=""
-                   checked="checked"
-            />
-            <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
+    <div class="field choice field field-option">
+        <input type="radio"
+               id="options_<?= /* @noEscape */ $option->getId() ?>"
+               class="radio control-radio product-custom-option"
+               name="options[<?= /* @noEscape */ $option->getId() ?>]"
+               data-selector="options[<?= /* @noEscape */ $option->getId() ?>]"
+               onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+               value=""
+               checked="checked"
+        />
+        <label class="label field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
                 <span>
                     <?= /* @noEscape */ __('None') ?>
                 </span>
-            </label>
-    <?php endif; ?>
+        </label>
+        <?php endif; ?>
 
         <?php foreach ($option->getValues() as $value) : ?>
             <?php
@@ -61,12 +61,12 @@ $count = 1;
             }
             ?>
 
-            <div class="field choice admin__field admin__field-option'<?= /* @noEscape */ $option->getIsRequire() ?>'">
-                <input type="<?= /* @noEscape */ $optionType ?>"
-                       class="<?= /* @noEscape */
-                        $optionType === 'radio' ?
-                           'radio admin__control-radio' :
-                           'checkbox admin__control-checkbox' ?> <?= /* @noEscape */ $option->getIsRequire() ?>
+            <div class="field choice field field-option'<?= /* @noEscape */ $option->getIsRequire() ?>'">
+                <input type="<?= /* @noEscape */ $optionType ?>" class="<?= /* @noEscape */
+                       $optionType === 'radio' ?
+                           'radio control-radio' :
+                           'checkbox control-checkbox' ?>
+                        <?= /* @noEscape */ $option->getIsRequire() ?>
                        product-custom-option
                         <?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                        name="options[<?= $option->getId() ?>]<?= /* @noEscape */ $arraySign ?>"
@@ -76,7 +76,7 @@ $count = 1;
                        data-selector="<?= /* @noEscape */ $dataSelector ?>"
                        price="<?= /* @noEscape */ $block->getCurrencyByStore($value) ?>"
                 />
-                <label class="label admin__field-label"
+                <label class="label field-label"
                        for="options_<?= /* @noEscape */ $option->getId() . '_' . $count ?>">
                 <span>
                     <?= $block->escapeHtml($value->getTitle()) ?>
@@ -85,6 +85,6 @@ $count = 1;
                 </label>
             </div>
         <?php endforeach; ?>
-        </div>
-<?php endif; ?>
+    </div>
+    <?php endif; ?>
 
