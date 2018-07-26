@@ -279,7 +279,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return bool
+     * @return array
      */
     public function getCountTotals()
     {
