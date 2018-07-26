@@ -57,7 +57,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage One of the countries has invalid code.
+     * @expectedExceptionMessage Country code is invalid: ZZ
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()
     {
