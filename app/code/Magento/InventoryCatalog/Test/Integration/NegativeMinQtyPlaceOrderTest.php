@@ -33,7 +33,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @dataProvider isProductSalableForRequestedQtyDataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class NegativeMinQtyPlaceOrderTest extends TestCase
 {

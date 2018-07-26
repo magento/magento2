@@ -14,9 +14,6 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @dataProvider isProductSalableForRequestedQtyDataProvider
- */
 class NegativeMinQtyTest extends TestCase
 {
     /**
