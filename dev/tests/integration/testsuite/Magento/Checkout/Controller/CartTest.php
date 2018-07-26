@@ -108,6 +108,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * Test for \Magento\Checkout\Controller\Cart::configureAction() with bundle product
      *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testConfigureActionWithBundleProduct()
     {
