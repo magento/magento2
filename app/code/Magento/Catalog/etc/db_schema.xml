@@ -1199,6 +1199,8 @@
            comment="Catalog Product Website Index Table">
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
+        <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Default store id for website"/>
         <column xsi:type="date" name="website_date" comment="Website Date"/>
         <column xsi:type="float" name="rate" unsigned="false" nullable="true" default="1" comment="Rate"/>
         <constraint xsi:type="primary" name="PRIMARY">
