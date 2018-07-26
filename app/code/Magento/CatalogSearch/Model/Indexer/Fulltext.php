@@ -112,7 +112,7 @@ class Fulltext implements
     public function execute($entityIds)
     {
         foreach ($this->dimensionProvider->getIterator() as $dimension) {
-            $this->executeByDimension($dimension, new \ArrayIterator($entityIds));
+            $this->executeByDimensions($dimension, new \ArrayIterator($entityIds));
         }
     }
 
@@ -120,7 +120,7 @@ class Fulltext implements
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
     {
         if (count($dimensions) > 1 || !isset($dimensions[StoreDimensionProvider::DIMENSION_NAME])) {
             throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');
@@ -161,7 +161,7 @@ class Fulltext implements
         $userFunctions = [];
         foreach ($this->dimensionProvider->getIterator() as $dimension) {
             $userFunctions[] = function () use ($dimension) {
-                $this->executeByDimension($dimension);
+                $this->executeByDimensions($dimension);
             };
         }
         $this->processManager->execute($userFunctions);
