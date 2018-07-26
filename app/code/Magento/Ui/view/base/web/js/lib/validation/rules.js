@@ -754,6 +754,12 @@ define([
             },
             $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')//eslint-disable-line max-len
         ],
+        'validate-not-number-first': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^[^0-9-\.].*$/.test(value.trim());
+            },
+            $.mage.__('First character must be letter.')
+        ],
         'validate-date': [
             function (value, params, additionalParams) {
                 var test = moment(value, additionalParams.dateFormat);

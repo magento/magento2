@@ -61,8 +61,14 @@ class GeneralTest extends AbstractModifierTest
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testModifyMeta()
     {
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(2);
         $this->assertNotEmpty($this->getModel()->modifyMeta([
             'first_panel_code' => [
                 'arguments' => [
