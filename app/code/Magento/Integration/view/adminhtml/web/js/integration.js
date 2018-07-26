@@ -167,7 +167,7 @@ define([
                     //Is the success callback invoked
                     if (IdentityLogin.win.closed ||
                         (IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl)) {
-                        //Stop the the polling
+                        //Stop the polling
                         clearInterval(IdentityLogin.checker);
                         $('body').trigger('processStart');
                         //Check for window closed
