@@ -33,6 +33,7 @@
         <element name="cartItemsAreaActive" type="textarea" selector=".items-in-cart.active"/>
         <element name="paymentSectionTitle" type="text" selector="#checkout-payment-method-load .step-title" />
         <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
+        <element name="checkMoneyOrderPayment" type="radio" selector="#checkmo.radio" timeout="30"/>
         <element name="editAddressButton" type="button" selector=".payment-method._active .action.action-edit-address"/>
         <element name="newAddressSelect" type="select" selector=".payment-method._active select[name*='billing_address_id']"/>
         <element name="goToShipping" type="button" selector="#checkout>ul>li.opc-progress-bar-item._complete>span"/>

@@ -43,6 +43,8 @@
         <waitForPageLoad time="30" stepKey="waitForProductsGridPageLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <!-- Need to wait because fields are loaded a little bit later then it starts to fill them -->
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForNameFieldVisible"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
@@ -56,9 +58,12 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
 
         <!-- switch to the second store view -->
+        <scrollToTopOfPage stepKey="scrollToPageTopToSeeStoreSwitcher"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <scrollToTopOfPage stepKey="scrollToPageTopToSeeStoreSwitcher2"/>
+        <waitForElementVisible selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="waitForStoreSwitcherToBeVisible"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
 
         <!-- Check if Use Default Value checkboxes are checked -->
