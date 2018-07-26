@@ -183,9 +183,12 @@
 
 .admin__field-label {
     color: @field-label__color;
-    cursor: pointer;
     margin: 0;
     text-align: right;
+
+    label {
+        cursor: pointer;
+    }
 
     + br {
         display: none;
@@ -207,7 +210,7 @@
             overflow: hidden;
         }
 
-        span {
+        label {
             display: inline-block;
             line-height: @field-label__line-height;
             vertical-align: middle;
@@ -512,7 +515,7 @@
                 position: absolute;
                 top: 0;
 
-                span {
+                label {
                     &:before {
                         display: block;
                     }
@@ -527,7 +530,7 @@
         }
 
         & > .admin__field-label {
-            span {
+            label {
                 &:before {
                     display: none;
                 }
