@@ -62,6 +62,9 @@
                     <?php if (($block->getVar("gallery/caption"))): ?>
                         "showCaption": <?= /* @escapeNotVerified */ $block->getVar("gallery/caption") ?>,
                     <?php endif; ?>
+                    <?php if ((!$block->getVar("gallery/captions"))): ?>
+                    "captions": false,
+                    <?php endif; ?>
                     "width": "<?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_medium', 'width') ?>",
                     "thumbwidth": "<?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_small', 'width') ?>",
                     <?php if ($block->getImageAttribute('product_page_image_small', 'height') || $block->getImageAttribute('product_page_image_small', 'width')): ?>
