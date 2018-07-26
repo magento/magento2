@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminSubmitsOrderWithAndWithoutEmailTest">
+        <annotations>
+            <title value="Email is required to create an order from Admin Panel"/>
+            <description value="Admin should not be able to submit orders without an email address"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93119"/>
+            <group value="sales"/>
+        </annotations>
+
+        <!-- Create Default Category and Product -->
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <!-- Delete Category and Product created in Before -->
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Create order via Admin-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
+        <!--<actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{OrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.createNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+
+        <!--Check if order can be submitted without the required fields including email address-->
+        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
+        <scrollToTopOfPage after="checkRequiredFieldsNewOrder" stepKey="scrollToTopOfOrderFormPage"/>
+        <actionGroup ref="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!--Fill customer group and customer email-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" after="addSimpleProductToOrder" stepKey="selectCustomerGroup"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" after="selectCustomerGroup" stepKey="fillCustomerEmail"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" after="fillCustomerEmail" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="orderSelectFlatRateShipping" after="fillCustomerAddress" stepKey="selectFlatRateShipping"/>
+
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" after="selectFlatRateShipping" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" after="seeOrderSubTotal" stepKey="seeOrderShipping"/>
+        <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" after="scrollToOrderGrandTotal" stepKey="seeCorrectGrandTotal"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" after="clickSubmitOrder" stepKey="seeViewOrderPage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." after="seeViewOrderPage" stepKey="seeSuccessMessage"/>
+    </test>
+</tests>
