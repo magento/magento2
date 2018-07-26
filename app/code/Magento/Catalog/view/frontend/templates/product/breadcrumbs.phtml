@@ -10,6 +10,6 @@ $viewModel = $block->getData('viewModel');
 <div class="breadcrumbs"></div>
 <script type="text/x-magento-init">
         {
-            ".breadcrumbs": <?= $viewModel->getJsonConfiguration() ?>
+            ".breadcrumbs": <?= $viewModel->getJsonConfigurationHtmlEscaped() ?>
         }
 </script>

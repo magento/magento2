@@ -95,11 +95,11 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     }
 
     /**
-     * Returns breadcrumb json.
+     * Returns breadcrumb json with html escaped names
      *
      * @return string
      */
-    public function getJsonConfiguration() : string
+    public function getJsonConfigurationHtmlEscaped() : string
     {
         return json_encode(
             [
@@ -111,5 +111,16 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
             ],
             JSON_HEX_TAG
         );
+    }
+
+    /**
+     * Returns breadcrumb json.
+     *
+     * @return string
+     * @deprecated in favor of new method with name {suffix}Html{postfix}()
+     */
+    public function getJsonConfiguration()
+    {
+        return $this->getJsonConfigurationHtmlEscaped();
     }
 }
