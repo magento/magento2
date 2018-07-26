@@ -1,12 +1,17 @@
 <?php
 /**
- * @var \Magento\Catalog\Block\Product\View\Options\View\Checkable $this
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-$option = $this->getOption();
+
+/**
+ * @var \Magento\Catalog\Block\Product\View\Options\View\Checkable $block
+ */
+$option = $block->getOption();
 
 if ($option) : ?>
 <?php
-$configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
+$configValue = $block->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
 $optionType = $option->getType();
 $arraySign = $optionType === 'checkbox' ? '[]' : '';
 $count = 1;
@@ -21,7 +26,7 @@ $count = 1;
                    class="radio admin__control-radio product-custom-option"
                    name="options['<?= $option->getId() ?>']"
                    data-selector="options['<?= $option->getId() ?>']"
-                   onclick="<?= $this->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+                   onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                    value=""
                    checked="checked"
             />
@@ -44,10 +49,10 @@ $count = 1;
                 $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
             }
 
-            $priceStr = $this->formatPrice(
+            $priceStr = $block->formatPrice(
                 [
-                    'is_percent' => $value->getPriceType() == 'percent',
-                    'pricing_value' => $value->getPrice($value->getPriceType() == 'percent')
+                    'is_percent' => $value->getPriceType() === 'percent',
+                    'pricing_value' => $value->getPrice($value->getPriceType() === 'percent')
                 ]
             );
 
@@ -64,17 +69,17 @@ $count = 1;
                            'radio admin__control-radio' :
                            'checkbox admin__control-checkbox' ?> <?= $option->getIsRequire() ?>
                        product-custom-option
-                        <?= $this->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+                        <?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                        name="options['<?= $option->getId() ?>']<?= $arraySign ?>"
                        id="options_<?= $option->getId() . '_' . $count ?>."
                        value="<?= $value->getOptionTypeId() ?>"
                     <?= $checked ?>
                        data-selector="<?= $dataSelector ?>"
-                       price="<?= $this->getCurrencyByStore($value) ?>"
+                       price="<?= $block->getCurrencyByStore($value) ?>"
                 />
                 <label class="label admin__field-label" for="options_<?= $option->getId() . '_' . $count ?>">
                 <span>
-                    <?= $this->escapeHtml($value->getTitle()) ?>
+                    <?= $block->escapeHtml($value->getTitle()) ?>
                 </span>
                     <?= $priceStr ?>
                 </label>
