@@ -7,6 +7,8 @@
 
 namespace Magento\Customer\Api;
 
+use Magento\Framework\Exception\InputException;
+
 /**
  * Interface for managing customers accounts.
  * @api
@@ -143,19 +145,24 @@ interface AccountManagementInterface
     /**
      * Reset customer password.
      *
-     * @param string $email
+     * @param string $email If empty value given then the customer
+     * will be matched by the RP token.
      * @param string $resetToken
      * @param string $newPassword
+     *
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InputException
      */
     public function resetPassword($email, $resetToken, $newPassword);
 
     /**
      * Check if password reset token is valid.
      *
-     * @param int $customerId
+     * @param int $customerId If 0 is given then a customer
+     * will be matched by the RP token.
      * @param string $resetPasswordLinkToken
+     *
      * @return bool True if the token is valid
      * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
