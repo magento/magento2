@@ -16,7 +16,7 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/history.phtml';
+    protected $_template = 'Magento_Sales::order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory

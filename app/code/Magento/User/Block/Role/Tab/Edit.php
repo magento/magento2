@@ -18,7 +18,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * @var string
      */
-    protected $_template = 'role/edit.phtml';
+    protected $_template = 'Magento_User::role/edit.phtml';
 
     /**
      * Root ACL Resource

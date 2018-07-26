@@ -15,7 +15,7 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/shipment.phtml';
+    protected $_template = 'Magento_Shipping::order/shipment.phtml';
 
     /**
      * Core registry

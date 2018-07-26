@@ -14,7 +14,7 @@ class Feeds extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'feeds.phtml';
+    protected $_template = 'Magento_Rss::feeds.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\RssManagerInterface
