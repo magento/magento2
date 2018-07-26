@@ -6,7 +6,6 @@
 namespace Magento\Framework\Search\Dynamic;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
