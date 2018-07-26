@@ -42,7 +42,7 @@ define([
     }
 
     /**
-     * Creates observable propery using 'track' method.
+     * Creates observable property using 'track' method.
      *
      * @param {Object} obj - Object to whom property belongs.
      * @param {String} key - Key of the property.
