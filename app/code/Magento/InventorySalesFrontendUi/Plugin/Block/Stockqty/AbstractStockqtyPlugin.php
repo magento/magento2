@@ -74,7 +74,9 @@ class AbstractStockqtyPlugin
         $stockId = (int)$this->stockByWebsiteId->execute($websiteId)->getStockId();
         $stockItemConfig = $this->getStockItemConfiguration->execute($sku, $stockId);
 
-        return $stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
+        return ($stockItemConfig->getBackorders() === StockItemConfigurationInterface::BACKORDERS_NO
+            || $stockItemConfig->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO
+            && $stockItemConfig->getMinQty() < 0)
             && $this->getProductSalableQty->execute($sku, $stockId) <= $stockItemConfig->getStockThresholdQty();
     }
 

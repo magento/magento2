@@ -84,7 +84,8 @@
     </type>
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator">
         <arguments>
-            <argument name="stockSourceLinkValidator" xsi:type="object">Magento\InventoryApi\Model\StockSourceLinkValidatorChain</argument>
+            <argument name="stockSourceLinkValidator"
+                      xsi:type="object">Magento\InventoryApi\Model\StockSourceLinkValidatorChain</argument>
         </arguments>
     </type>
     <preference for="Magento\InventoryApi\Model\IsProductAssignedToStockInterface" type="Magento\Inventory\Model\ResourceModel\IsProductAssignedToStock"/>
