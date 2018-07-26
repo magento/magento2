@@ -114,7 +114,7 @@ To get more details about available JMeter options, read [Non-GUI Mode](http://j
 For example, you can run the B2C scenario via console with 90 threads for the Frontend Pool and 10 threads for the Admin Pool:
 
     cd {JMeter path}/bin/
-    jmeter -n -t {path to peformance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
+    jmeter -n -t {path to performance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
 
 As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in the GUI mode to perform analysis of the results (see the *Output* section below).
 
