@@ -37,10 +37,12 @@ class Forgotpassword extends Auth
     private $backendDataHelper;
 
     /**
+     * Forgotpassword constructor.
      * @param Context $context
      * @param UserFactory $userFactory
      * @param SecurityManager $securityManager
-     * @param CollectionFactory $userCollectionFactory
+     * @param CollectionFactory|null $userCollectionFactory
+     * @param Data|null $backendDataHelper
      */
     public function __construct(
         Context $context,
