@@ -130,14 +130,14 @@ abstract class AbstractAction
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
         $this->tierPriceIndexResource = $tierPriceIndexResource ?? ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
-            );
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
+        );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
-            );
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+        );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
-            );
+            \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
+        );
     }
 
     /**
