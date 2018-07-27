@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\ViewModel\Product;
 
@@ -33,11 +32,6 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     private $scopeConfig;
 
     /**
-     * @var Json
-     */
-    private $json;
-
-    /**
      * @var Escaper
      */
     private $escaper;
@@ -47,6 +41,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param Json|null $json
      * @param Escaper|null $escaper
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Data $catalogData,
@@ -58,7 +53,6 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
-        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
@@ -101,20 +95,32 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     }
 
     /**
-     * Returns breadcrumb json.
+     * Returns breadcrumb json with html escaped names
      *
      * @return string
      */
-    public function getJsonConfiguration()
+    public function getJsonConfigurationHtmlEscaped() : string
     {
-        return $this->json->serialize(
+        return json_encode(
             [
                 'breadcrumbs' => [
                     'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
                     'userCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
-                    'product' => $this->escaper->escapeHtml($this->escaper->escapeJs($this->getProductName()))
+                    'product' => $this->escaper->escapeHtml($this->getProductName())
                 ]
-            ]
+            ],
+            JSON_HEX_TAG
         );
+    }
+
+    /**
+     * Returns breadcrumb json.
+     *
+     * @return string
+     * @deprecated in favor of new method with name {suffix}Html{postfix}()
+     */
+    public function getJsonConfiguration()
+    {
+        return $this->getJsonConfigurationHtmlEscaped();
     }
 }
