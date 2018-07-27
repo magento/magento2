@@ -15,6 +15,7 @@
             <argument name="stateForFPT" type="string"/>
             <argument name="valueForFPT" type="string"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePageToShowAttributeEditor"/>
         <click selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="clickAddFPTButton1"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
         <selectOption selector="{{AdminProductAddFPTValueSection.selectCountryForFPT(FPTAttributeCode)}}" userInput="{{countryForFPT}}" stepKey="selectcountryForFPT"/>
