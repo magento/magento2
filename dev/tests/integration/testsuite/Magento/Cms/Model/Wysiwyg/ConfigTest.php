@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture default/cms/wysiwyg/editor testAdapter
      */
-    public function testEnabledModuleIsAbleToModifyConfig()
+    public function testTestModuleEnabledModuleIsAbleToModifyConfig()
     {
         $objectManager = Bootstrap::getObjectManager();
         $compositeConfigProvider = $objectManager->create(\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider::class);
@@ -68,5 +68,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = $model->getConfig();
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_HEIGHT, $config['height']);
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_CONTENT_CSS, $config['content_css']);
+        $this->assertArrayHasKey('tinymce4', $config);
+        $this->assertArrayHasKey('toolbar', $config['tinymce4']);
+        $this->assertNotContains(
+            'charmap',
+            $config['tinymce4']['toolbar'],
+            'Failed to address that the custom test module removes "charmap" button from the toolbar'
+        );
     }
 }
