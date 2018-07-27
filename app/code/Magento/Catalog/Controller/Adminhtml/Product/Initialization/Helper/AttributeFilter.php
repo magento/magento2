@@ -28,7 +28,7 @@ class AttributeFilter
     public function prepareProductAttributes(Product $product, array $productData, array $useDefaults): array
     {
         $attributeList = $product->getAttributes();
-        
+
         $productData['sku'] = trim($productData['sku']);
         
         foreach ($productData as $attributeCode => $attributeValue) {
