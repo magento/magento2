@@ -212,7 +212,7 @@ class Edit extends Widget
     }
 
     /**
-     * Return return template name for JS
+     * Return template name for JS
      *
      * @return string
      */
