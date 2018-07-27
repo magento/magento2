@@ -43,6 +43,9 @@
         <data key="name">Second Store View</data>
         <data key="code">second_store_view</data>
         <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
         <requiredEntity type="storeGroup">secondStoreGroup</requiredEntity>
     </entity>
 </entities>

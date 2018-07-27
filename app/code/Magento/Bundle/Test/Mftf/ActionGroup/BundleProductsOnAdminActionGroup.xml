@@ -11,6 +11,8 @@
     <actionGroup name="CreateBundleProductForTwoSimpleProducts">
         <arguments>
             <argument name="bundleProduct"/>
+            <argument name="simpleProductFirst"/>
+            <argument name="simpleProductSecond"/>
         </arguments>
         <fillField userInput="{{bundleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
         <fillField userInput="{{bundleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
@@ -19,7 +21,22 @@
         <click selector="{{AdminProductFormBundleSection.AddOption}}" stepKey="clickAddOptionButton"/>
         <fillField userInput="{{bundleProduct.option_title}}" selector="{{AdminProductFormBundleSection.OptionTitle}}" stepKey="fillOptionTitle"/>
         <click selector="{{AdminProductFormBundleSection.AddProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <click selector="{{AdminProductFormBundleSection.selectAll}}" stepKey="tickSelectAllCheckbox"/>
+
+        <!-- Select First Simple -->
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickOnFiltersButton"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.name}}" userInput="{{simpleProductFirst.name}}" stepKey="fillNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters"/>
+        <click selector="{{AdminProductFormBundleSection.firstRowCheckbox}}" stepKey="selectFirstSimple"/>
+
+        <!-- Select Second Simple -->
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickOnFiltersButton2"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearFilters2"/>
+        <fillField selector="{{AdminProductGridFilterSection.name}}" userInput="{{simpleProductSecond.name}}" stepKey="fillNameFilter2"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters2"/>
+        <click selector="{{AdminProductFormBundleSection.firstRowCheckbox}}" stepKey="selectSecondSimple"/>
+
+        <!-- Add Selected Simples To Bundle -->
         <click selector="{{AdminProductFormBundleSection.AddSelectedProducts}}" stepKey="clickAddSelectedProductsButton"/>
         <fillField userInput="{{bundleProduct.default_quantity1}}" selector="{{AdminProductFormBundleSection.DefaultQuantity1}}" stepKey="fillDefaultQuantityForFirstProduct"/>
         <fillField userInput="{{bundleProduct.default_quantity2}}" selector="{{AdminProductFormBundleSection.DefaultQuantity2}}" stepKey="fillDefaultQuantityForSecondProduct"/>

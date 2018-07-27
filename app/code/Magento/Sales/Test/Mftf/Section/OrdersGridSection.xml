@@ -15,6 +15,6 @@
         <element name="submitSearch" type="button" selector=".//*[@id='container']/div/div[2]/div[1]/div[2]/button"/>
         <element name="submitSearch22" type="button" selector=".//*[@class=&quot;admin__data-grid-filters-wrap&quot;]/parent::*/div[@class=&quot;data-grid-search-control-wrap&quot;]/button"/>
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
-        <element name="createNewOrder" type="button" selector="button[title='Create New Order'"/>
+        <element name="createNewOrder" type="button" selector="#add" timeout="30"/>
     </section>
 </sections>
