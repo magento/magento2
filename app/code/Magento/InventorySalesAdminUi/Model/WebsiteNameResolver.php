@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySalesAdminUi\Ui;
+namespace Magento\InventorySalesAdminUi\Model;
 
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
