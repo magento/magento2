@@ -217,7 +217,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->schemaListenerMock = $this->createMock(SchemaListener::class);
             $this->patchApplierFactoryMock = $this->createMock(PatchApplierFactory::class);
             $this->patchApplierMock = $this->createMock(PatchApplier::class);
-            $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn($this->patchApplierMock);
+            $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn(
+                $this->patchApplierMock
+            );
             $this->object = $this->createObject();
         }
 
@@ -535,7 +537,9 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('get')
                 ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
                 ->willReturn(self::$dbConfig);
-            $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
+            $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn(
+                '`magento`'
+            );
             $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
             $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');

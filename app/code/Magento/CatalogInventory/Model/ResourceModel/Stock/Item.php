@@ -241,9 +241,9 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $condition = $connection->quoteInto(
-                '(use_config_notify_stock_qty = 1 AND qty < ?)',
-                $this->stockConfiguration->getNotifyStockQty()
-            ) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
+            '(use_config_notify_stock_qty = 1 AND qty < ?)',
+            $this->stockConfiguration->getNotifyStockQty()
+        ) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
         $currentDbTime = $connection->quoteInto('?', $this->dateTime->gmtDate());
         $conditionalDate = $connection->getCheckSql($condition, $currentDbTime, 'NULL');
         $value = [
