@@ -23,6 +23,9 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StockIndexerTest extends TestCase
 {
     /**
