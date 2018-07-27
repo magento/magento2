@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
-use Magento\Catalog\Block\Product\ImageFactory as HelperFactory;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -20,11 +19,6 @@ class ImageBuilder
      * @var ImageFactory
      */
     protected $imageFactory;
-
-    /**
-     * @var HelperFactory
-     */
-    protected $helperFactory;
 
     /**
      * @var Product
@@ -42,14 +36,11 @@ class ImageBuilder
     protected $attributes = [];
 
     /**
-     * @param HelperFactory $helperFactory
      * @param ImageFactory $imageFactory
      */
     public function __construct(
-        HelperFactory $helperFactory,
         ImageFactory $imageFactory
     ) {
-        $this->helperFactory = $helperFactory;
         $this->imageFactory = $imageFactory;
     }
 
