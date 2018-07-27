@@ -977,7 +977,7 @@ define([
                 options[attributeId] = $(this).attr('option-selected');
             });
 
-            if ($widget.options.skuCache == '') {
+            if ($widget.options.skuCache === '') {
                 $widget.options.skuCache = $($widget.options.productSkuSelector).text();
             }
 
