@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormTotalSection">
+        <element name="subtotalRow" type="text" selector="#order-totals>table tr.row-totals:nth-of-type({{row}}) span.price" parameterized="true"/>
+        <element name="total" type="text" selector="//tr[contains(@class,'row-totals')]/td[contains(text(), '{{total}}')]/following-sibling::td/span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="grandTotal" type="text" selector="#order-totals>table tr.row-totals:nth-of-type(3) span.price"/>
+    </section>
+</sections>
