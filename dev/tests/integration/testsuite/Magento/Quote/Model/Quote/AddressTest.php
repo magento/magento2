@@ -5,7 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -25,9 +24,6 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
     protected $customerRepository;
-
-    /** @var  StoreRepositoryInterface */
-    private $storeRepository;
 
     public static function setUpBeforeClass()
     {
@@ -65,8 +61,6 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_address->setId(1);
         $this->_address->load($this->_address->getId());
         $this->_address->setQuote($this->_quote);
-        $this->storeRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(StoreRepositoryInterface::class);
     }
 
     protected function tearDown()
@@ -326,52 +320,6 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
         return [
             ['test', 'test'],
             [[123, true], [123, true]]
-        ];
-    }
-
-    /**
-     * Tests different shipping rates for different stores.
-     *
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoConfigFixture default_store carriers/flatrate/price 5
-     * @magentoConfigFixture fixture_second_store_store carriers/flatrate/price 10
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
-     * @dataProvider requestShippingRatesDataProvider
-     */
-    public function testRequestShippingRates($storeCode, $expectedRate)
-    {
-        $store = $this->storeRepository->get($storeCode);
-        $this->_quote->setStoreId($store->getId());
-        $this->_address->setItemQty(1);
-        $this->_address->requestShippingRates();
-        /**
-         * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection $shippingRatesCollection
-         */
-        $shippingRatesCollection = $this->_address->getShippingRatesCollection();
-        /**
-         * @var \Magento\Quote\Model\Quote\Address\Rate[] $shippingRates
-         */
-        $shippingRates = $shippingRatesCollection->getItems();
-        self::assertEquals(
-            $expectedRate,
-            $shippingRates[0]->getPrice()
-        );
-    }
-
-    /**
-     * Data provider for testRequestShippingRates.
-     *
-     * @return array
-     */
-    public function requestShippingRatesDataProvider()
-    {
-        return [
-            ['default', 5],
-            ['fixture_second_store', 10],
         ];
     }
 }
