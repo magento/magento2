@@ -21,6 +21,7 @@
         <settings>
             <storageConfig>
                 <param name="dataScope" xsi:type="string">filters.store_id</param>
+                <param name="default_store" xsi:type="string">1</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
