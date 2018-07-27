@@ -219,6 +219,32 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="productWithHTMLEntityOne" type="product">
+        <data key="sku" unique="suffix">SimpleOne&#8482;Product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleOne&#8482;Product</data>
+        <data key="price">50.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="productWithHTMLEntityTwo" type="product">
+        <data key="sku" unique="suffix">SimpleTwo&#38657;&#20135;&#21697;&lt;カネボウPro</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleTwo&#38657;&#20135;&#21697;&lt;カネボウPro</data>
+        <data key="price">50.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="defaultVirtualProduct" type="product">
         <data key="sku" unique="suffix">virtualProduct</data>
         <data key="type_id">virtual</data>
