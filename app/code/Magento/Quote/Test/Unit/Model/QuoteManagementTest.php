@@ -139,11 +139,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     private $quoteIdMaskFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $quoteFactoryMock;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()

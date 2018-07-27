@@ -40,7 +40,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @var AggregatedFieldDataConverter
      */
-    private $aggregatedFieldConverter;
+    private $aggregatedField;
 
     /**
      * @var AddressCollectionFactory
@@ -65,7 +65,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
-     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param AggregatedFieldDataConverter $aggregatedField
      * @param AddressCollectionFactory $addressCollFactory
      * @param OrderFactory $orderFactory
      * @param QuoteFactory $quoteFactory
@@ -74,7 +74,7 @@ class UpgradeData implements UpgradeDataInterface
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
         Config $eavConfig,
-        AggregatedFieldDataConverter $aggregatedFieldConverter,
+        AggregatedFieldDataConverter $aggregatedField,
         AddressCollectionFactory $addressCollFactory,
         OrderFactory $orderFactory,
         QuoteFactory $quoteFactory,
@@ -82,7 +82,7 @@ class UpgradeData implements UpgradeDataInterface
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
-        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
+        $this->aggregatedField = $aggregatedField;
         $this->addressCollectionFactory = $addressCollFactory;
         $this->orderFactory = $orderFactory;
         $this->quoteFactory = $quoteFactory;
