@@ -7,9 +7,6 @@ namespace Magento\Framework\Data\Form\FormKey;
 
 use Magento\Framework\Encryption\Helper\Security;
 
-/**
- * @api
- */
 class Validator
 {
     /**
