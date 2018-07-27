@@ -135,7 +135,6 @@ class Websites extends AbstractModifier
                                     'collapsible' => true,
                                     'componentType' => Form\Fieldset::NAME,
                                     'dataScope' => self::DATA_SCOPE_PRODUCT,
-                                    'disabled' => false,
                                     'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         'search-engine-optimization',
@@ -196,6 +195,7 @@ class Websites extends AbstractModifier
                                 'false' => '0',
                             ],
                             'value' => $isChecked ? (string)$website['id'] : '0',
+                            'disabled' => $this->locator->getProduct()->isLockedAttribute('website_ids'),
                         ],
                     ],
                 ],
