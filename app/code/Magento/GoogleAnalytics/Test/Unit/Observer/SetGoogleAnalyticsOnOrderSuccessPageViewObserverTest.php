@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GoogleAnalytics\Test\Unit\Block;
+namespace Magento\GoogleAnalytics\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
