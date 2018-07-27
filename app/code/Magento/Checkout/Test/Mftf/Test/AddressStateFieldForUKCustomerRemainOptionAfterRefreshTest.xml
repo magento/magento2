@@ -16,7 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93329"/>
             <group value="checkout"/>
-            <!-- Skipped because of MC-3443 -->
+            <!-- Skipped because of MAGETWO-93726 -->
             <group value="skip"/>
         </annotations>
         <before>
