@@ -19,6 +19,7 @@
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductsGridPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearFilters"/>
         <click selector="{{AdminProductGridSection.checkbox(product.name)}}" stepKey="tickCheckbox"/>
         <click selector="{{AdminProductGridActionSection.actionsSelectBox}}" stepKey="openActionsSelectBox"/>
         <click selector="{{AdminProductGridActionSection.deleteOptionInActionsSelectBox}}" stepKey="clickDeleteAction"/>
