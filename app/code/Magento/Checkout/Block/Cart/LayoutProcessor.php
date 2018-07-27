@@ -108,6 +108,10 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'country_id' => $this->countryCollection->loadByStore()->toOptionArray(),
                 'region_id' => $this->regionCollection->addAllowedCountriesFilter()->toOptionArray(),
             ];
+			$layoutdata = $jsLayout['components']['checkoutProvider']['dictionaries']['country_id'];
+			if(count( $layoutdata )==2 &&  $layoutdata[0]['value']==''){
+				unset($jsLayout['components']['checkoutProvider']['dictionaries']['country_id'][0] );
+			}
         }
 
         if (isset($jsLayout['components']['block-summary']['children']['block-shipping']['children']
