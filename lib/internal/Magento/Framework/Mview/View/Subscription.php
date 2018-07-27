@@ -196,14 +196,13 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
-        $tableName = $this->resource->getTableName($this->getTableName());
-
         switch ($event) {
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 break;
 
             case Trigger::EVENT_UPDATE:
+                $tableName = $this->resource->getTableName($this->getTableName());
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 if ($this->connection->isTableExists($tableName) &&
                     $describe = $this->connection->describeTable($tableName)
@@ -237,7 +236,7 @@ class Subscription implements SubscriptionInterface
 
         return sprintf(
             $trigger,
-            $this->connection->quoteIdentifier($tableName),
+            $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
             $this->connection->quoteIdentifier($changelog->getColumnName()),
             $this->connection->quoteIdentifier($this->getColumnName())
         );
