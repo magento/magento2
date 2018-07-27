@@ -46,7 +46,8 @@
         <scrollToTopOfPage stepKey="scrollToTop1"/>
         <click stepKey="clickSwitchStoreMenuForProduct1" selector="{{AdminProductFormActionSection.changeStoreButton}}"/>
         <click stepKey="clickOnStoreNameItemForProduct1" selector="{{AdminProductFormChangeStoreSection.storeSelector(customStore.name)}}"/>
-        <click stepKey="acceptStoreSwitchingForProduct1" selector="{{AdminProductFormChangeStoreSection.acceptButton}}"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForConfirmationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal"/>
         <click stepKey="uncheckVisibilityUseDefaultValueForProduct1" selector="{{AdminProductFormSection.visibilityUseDefault}}"/>
         <selectOption stepKey="makeProductNotVisibleOnSecondaryStoreView" selector="{{AdminProductFormSection.visibility}}" userInput="Not Visible Individually"/>
         <click stepKey="saveEditedProductForProduct1" selector="{{AdminProductFormActionSection.saveButton}}"/>
