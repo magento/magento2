@@ -106,13 +106,13 @@ define([
         });
 
         it('estimateTotals if data wasn\'t cached and request was successfully sent', function () {
+            var deferral = new $.Deferred();
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
                     'data_id': 1
                 })
             );
-            var deferral = new $.Deferred();
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'get');
             spyOn(mocks['mage/storage'], 'post').and.callFake(function () {
                 data.shippingMethodCode = mocks['Magento_Checkout/js/model/quote'].shippingMethod()['method_code'];
@@ -130,6 +130,7 @@ define([
         });
 
         it('estimateTotals if data wasn\'t cached and request returns error', function () {
+            var deferral = new $.Deferred();
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
@@ -137,7 +138,6 @@ define([
                 })
             );
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'get');
-            var deferral = new $.Deferred();
             spyOn(mocks['mage/storage'], 'post').and.callFake(function () {
                 return deferral.reject('Error Message');
             });
