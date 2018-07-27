@@ -25,7 +25,7 @@ define([
                 });
 
                 if ($.mage.cookies.get(this.options.cookieName)) {
-                    window.location.reload();
+                    this.element.hide();
                 } else {
                     window.location.href = this.options.noCookiesUrl;
                 }
