@@ -39,6 +39,9 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedErrors, $actualErrors);
     }
 
+    /**
+     * @return array
+     */
     public function exemplarXmlDataProvider()
     {
         return [

@@ -133,7 +133,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                             'type' => 'primary',
                             'column' => [
                                 'first_column'
-                            ]
+                            ],
+                            'nameWithoutPrefix' => 'PRIMARY',
                         ]
                     ]
                 ],
@@ -141,9 +142,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                     'second_table' => [
                         'FIRST_INDEX' => [
                             'name' => 'FIRST_INDEX',
+                            'nameWithoutPrefix' => 'FIRST_INDEX',
                             'column' => [
                                 'ref_column'
-                            ]
+                            ],
                         ]
                     ]
                 ]
@@ -221,6 +223,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'PRIMARY',
             'primary',
             $table,
+            'PRIMARY',
             $columns
         );
     }
@@ -240,7 +243,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'index',
             $table,
             $columns,
-            'btree'
+            'btree',
+            $indexName
         );
     }
 
@@ -370,6 +374,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'some_foreign_key',
             'foreign',
             $table,
+            'some_foreign_key',
             $foreignColumn,
             $refTable,
             $refColumn,
@@ -429,6 +434,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'type' => 'primary',
                         'columns' => [$firstColumn],
                         'table' => $table,
+                        'nameWithoutPrefix' => 'PRIMARY',
                         'column' => ['first_column'],
                     ]
                 ],
@@ -460,6 +466,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'table' => $refTable,
                         'column' => ['ref_column'],
                         'columns' => [$refColumn],
+                        'nameWithoutPrefix' => 'FIRST_INDEX',
                     ]
                 ],
                 [
