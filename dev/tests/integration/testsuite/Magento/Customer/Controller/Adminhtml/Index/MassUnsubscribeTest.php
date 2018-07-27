@@ -64,6 +64,4 @@ class MassUnsubscribeTest extends AbstractBackendController
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
-
-
 }
