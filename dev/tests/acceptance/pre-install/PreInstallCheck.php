@@ -7,6 +7,7 @@
 require_once 'CliColors.php';
 
 /**
+ * @codingStandardsIgnoreStart
  * @SuppressWarnings(PHPMD)
  */
 class PreInstallCheck {
@@ -317,3 +318,4 @@ class PreInstallCheck {
         }
     }
 }
+// @codingStandardsIgnoreEnd
