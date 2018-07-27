@@ -11,6 +11,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
  * Test for Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
  *
  * @magentoDataFixture Magento/Bundle/_files/product.php
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class BundleTest extends \PHPUnit\Framework\TestCase
