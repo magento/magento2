@@ -248,7 +248,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->getSubTotals();
         }
 
-        if ($this->getCountTotals() && !$this->getTotals()) {
+        if ($this->getCountTotals()) {
             $totalsCollection = $this->_resourceFactory->create(
                 $this->getResourceCollectionName()
             )->setPeriod(
@@ -267,8 +267,9 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
             $this->_addCustomFilter($totalsCollection, $filterData);
 
-            if ($totalsCollection->count()) {
-                $this->setTotals($totalsCollection->getFirstItem());
+            foreach ($totalsCollection as $item) {
+                $this->setTotals($item);
+                break;
             }
         }
 
@@ -303,11 +304,14 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
             $this->_addCustomFilter($totalsCollection, $filterData);
 
-            if (!$totalsCollection->count() || !$filterData->getData('from')) {
+            if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
                 $this->setTotals(new \Magento\Framework\DataObject());
                 $this->setCountTotals(false);
             } else {
-                $this->setTotals($totalsCollection->getFirstItem());
+                foreach ($totalsCollection->getItems() as $item) {
+                    $this->setTotals($item);
+                    break;
+                }
             }
         }
 

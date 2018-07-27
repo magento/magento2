@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Block\Adminhtml\Sales\Coupons;
 
 /**
@@ -49,16 +51,32 @@ class GridTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getCountTotalsDataProvider
      *
-     * @param \Magento\Framework\DataObject $filterData
-     * @param \PHPUnit_Framework_MockObject_MockObject $collection
+     * @param string $reportType
+     * @param int $priceRuleType
+     * @param int $collectionSize
      * @param bool $expectedCountTotals
      */
     public function testGetCountTotals(
-        \Magento\Framework\DataObject $filterData,
-        \PHPUnit_Framework_MockObject_MockObject $collection,
+        string $reportType,
+        int $priceRuleType,
+        int $collectionSize,
         bool $expectedCountTotals
     ) {
+        $filterData = new \Magento\Framework\DataObject();
+        $filterData->setData('report_type', $reportType);
+        $filterData->setData('period_type', 'day');
+        $filterData->setData('from', '2000-01-01');
+        $filterData->setData('to', '2000-01-30');
+        $filterData->setData('store_ids', '1');
+        $filterData->setData('price_rule_type', $priceRuleType);
+        if ($priceRuleType) {
+            $filterData->setData('rules_list', ['0,1']);
+        }
+        $filterData->setData('order_statuses', 'statuses');
         $this->model->setFilterData($filterData);
+
+        $resourceCollectionName = $this->model->getResourceCollectionName();
+        $collectionMock = $this->buildBaseCollectionMock($filterData, $resourceCollectionName, $collectionSize);
 
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMock();
@@ -66,7 +84,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->willReturn([1 => $store]);
         $this->resourceFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($collection);
+            ->willReturn($collectionMock);
 
         $this->assertEquals($expectedCountTotals, $this->model->getCountTotals());
     }
@@ -76,59 +94,27 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     public function getCountTotalsDataProvider(): array
     {
-        $filterData = new \Magento\Framework\DataObject();
-        $filterData->setData('period_type', 'day');
-        $filterData->setData('from', '2000-01-01');
-        $filterData->setData('to', '2000-01-30');
-        $filterData->setData('store_ids', '1');
-        $filterData->setData('price_rule_type', 1);
-        $filterData->setData('rules_list', ['0,1']);
-        $filterData->setData('order_statuses', 'statuses');
-
-        $emptyCollectionMock = $this->buildBaseCollectionMock($filterData);
-        $emptyCollectionMock->expects($this->atLeastOnce())
-            ->method('count')
-            ->willReturn(0);
-
-        $collectionMock = $this->buildBaseCollectionMock($filterData);
-        $collectionMock->expects($this->atLeastOnce())
-            ->method('count')
-            ->willReturn(1);
-        $itemMock = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->atLeastOnce())
-            ->method('getFirstItem')
-            ->willReturn($itemMock);
-
         return [
-            [$filterData, $emptyCollectionMock, false],
-            [$filterData, $collectionMock, true],
+            ['created_at_shipment', 0, 0, false],
+            ['created_at_shipment', 0, 1, true],
+            ['updated_at_order', 0, 1, true],
+            ['updated_at_order', 1, 1, true],
         ];
     }
 
     /**
      * @param \Magento\Framework\DataObject $filterData
+     * @param string $resourceCollectionName
+     * @param int $collectionSize
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function buildBaseCollectionMock(
-        \Magento\Framework\DataObject $filterData
+        \Magento\Framework\DataObject $filterData,
+        string $resourceCollectionName,
+        int $collectionSize
     ): \PHPUnit_Framework_MockObject_MockObject {
-        $collectionMethods = [
-            'setPeriod',
-            'setDateRange',
-            'addStoreFilter',
-            'setAggregatedColumns',
-            'isTotals',
-            'addRuleFilter',
-            'addOrderStatusFilter',
-            'count',
-            'getFirstItem',
-        ];
-        $collectionMock = $this
-            ->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class)
+        $collectionMock = $this->getMockBuilder($resourceCollectionName)
             ->disableOriginalConstructor()
-            ->setMethods($collectionMethods)
             ->getMock();
         $collectionMock->expects($this->once())
             ->method('setPeriod')
@@ -153,10 +139,28 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('addOrderStatusFilter')
             ->with($filterData->getData('order_statuses'))
             ->willReturnSelf();
+
+        if ($filterData->getData('price_rule_type')) {
+            $collectionMock->expects($this->once())
+                ->method('addRuleFilter')
+                ->with(\explode(',', $filterData->getData('rules_list')[0]))
+                ->willReturnSelf();
+        }
+
         $collectionMock->expects($this->once())
-            ->method('addRuleFilter')
-            ->with(\explode(',', $filterData->getData('rules_list')[0]))
+            ->method('load')
             ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn($collectionSize);
+        if ($collectionSize) {
+            $itemMock = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $collectionMock->expects($this->once())
+                ->method('getItems')
+                ->willReturn([$itemMock]);
+        }
 
         return $collectionMock;
     }
