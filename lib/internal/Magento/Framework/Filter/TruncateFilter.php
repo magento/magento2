@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter;
 
 use Magento\Framework\Filter\TruncateFilter\Result;
 use Magento\Framework\Filter\TruncateFilter\ResultFactory;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Truncate filter
@@ -34,7 +35,7 @@ class TruncateFilter implements \Zend_Filter_Interface
     private $breakWords;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     private $stringUtils;
 
@@ -44,14 +45,14 @@ class TruncateFilter implements \Zend_Filter_Interface
     private $resultFactory;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $stringUtils
+     * @param StringUtils $stringUtils
      * @param ResultFactory $resultFactory
      * @param int $length
      * @param string $etc
      * @param bool $breakWords
      */
     public function __construct(
-        \Magento\Framework\Stdlib\StringUtils $stringUtils,
+        StringUtils $stringUtils,
         ResultFactory $resultFactory,
         int $length = 80,
         string $etc = '...',
@@ -67,7 +68,7 @@ class TruncateFilter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
-     * @param string $string
+     * @param mixed $string
      * @return Result
      */
     public function filter($string) : Result
@@ -77,6 +78,7 @@ class TruncateFilter implements \Zend_Filter_Interface
         $length = $this->length;
         if (0 == $length) {
             $result->setValue('');
+
             return $result;
         }
 
@@ -85,6 +87,7 @@ class TruncateFilter implements \Zend_Filter_Interface
             $length -= $this->stringUtils->strlen($this->etc);
             if ($length <= 0) {
                 $result->setValue('');
+
                 return $result;
             }
             $preparedString = $string;
@@ -99,6 +102,7 @@ class TruncateFilter implements \Zend_Filter_Interface
             }
             $result->setRemainder($this->stringUtils->substr($string, $preparedLength, $originalLength));
             $result->setValue($this->stringUtils->substr($preparedString, 0, $length) . $this->etc);
+
             return $result;
         }
 

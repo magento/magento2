@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">17</field>
             </createData>
-            <updateData createDataKey="createProduct" entity="productWithOptions2" stepKey="updateProductWithOptions"/>
+            <updateData createDataKey="createProduct" entity="ProductWithOptions2" stepKey="updateProductWithOptions"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
@@ -33,12 +33,12 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
         <!-- Login Customer Storefront -->
-        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <fillField  userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
-        <fillField userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
-        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
+            <argument name="customer" value="$$createCustomer$$" />
+        </actionGroup>
         <!-- Checking the correctness of displayed prices for user parameters -->
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropDownWithLongValuesTitle.title, ProductOptionValueDropdownLongTitle1.price)}}" stepKey="checkDropDownProductOption"/>
         <!-- Adding items to the checkout -->
         <selectOption userInput="{{ProductOptionValueDropdownLongTitle1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionDropDownWithLongValuesTitle.title)}}" stepKey="seeProductOptionDropDown"/>
@@ -56,13 +56,14 @@
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <!-- Place Order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPayment"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Login to Admin and open Order -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>

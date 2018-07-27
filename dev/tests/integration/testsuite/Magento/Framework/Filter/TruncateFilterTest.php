@@ -58,8 +58,8 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
                 '123 456 789',
                 8,
                 '..',
-                false
-            ]
+                false,
+            ],
         ];
     }
 }

@@ -188,7 +188,7 @@
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
-    <entity name="productWithOptions2" type="product">
+    <entity name="ProductWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
