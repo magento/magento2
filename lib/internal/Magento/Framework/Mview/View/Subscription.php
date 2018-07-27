@@ -196,6 +196,8 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
+        $tableName = $this->resource->getTableName($this->getTableName());
+
         switch ($event) {
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
@@ -203,8 +205,8 @@ class Subscription implements SubscriptionInterface
 
             case Trigger::EVENT_UPDATE:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                if ($this->connection->isTableExists($this->resource->getTableName($this->getTableName())) &&
-                    $describe = $this->connection->describeTable($this->resource->getTableName($this->getTableName()))
+                if ($this->connection->isTableExists($tableName) &&
+                    $describe = $this->connection->describeTable($tableName)
                 ) {
                     $columnNames = array_column($describe, 'COLUMN_NAME');
                     $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
@@ -235,7 +237,7 @@ class Subscription implements SubscriptionInterface
 
         return sprintf(
             $trigger,
-            $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+            $this->connection->quoteIdentifier($tableName),
             $this->connection->quoteIdentifier($changelog->getColumnName()),
             $this->connection->quoteIdentifier($this->getColumnName())
         );
