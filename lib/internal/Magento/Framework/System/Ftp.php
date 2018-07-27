@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\System;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Class to work with remote FTP server
  */
