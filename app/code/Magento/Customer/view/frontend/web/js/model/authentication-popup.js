@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -31,7 +31,7 @@ define(
 
             /** Show login popup window */
             showModal: function () {
-                $(this.modalWindow).modal('openModal');
+                $(this.modalWindow).modal('openModal').trigger('contentUpdated');
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class Configure extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/composite/configure.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/composite/configure.phtml';
 
     /**
      * Core registry

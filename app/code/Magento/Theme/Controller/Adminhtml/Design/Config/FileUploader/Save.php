@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader;
@@ -12,6 +12,13 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
 class Save extends Action
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Theme::theme';
+
     /**
      * @var FileProcessor
      */

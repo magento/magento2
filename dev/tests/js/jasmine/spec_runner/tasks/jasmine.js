@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,6 +37,10 @@ function init(config) {
                 host: host,
                 template: render(files.template),
                 vendor: files.requireJs,
+                junit: {
+                    path: "var/log/js-unit/",
+                    consolidate: true
+                },
 
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)

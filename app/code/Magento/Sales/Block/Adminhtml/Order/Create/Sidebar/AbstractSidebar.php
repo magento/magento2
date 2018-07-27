@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
@@ -69,7 +69,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply item qty availablity
+     * Retrieve display item qty availability
      *
      * @return false
      */

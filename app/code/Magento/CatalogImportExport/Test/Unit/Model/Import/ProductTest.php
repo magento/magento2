@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
@@ -831,6 +831,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function getStoreIdByCodeDataProvider()
     {
         return [
@@ -1278,6 +1281,49 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, $rowNum);
     }
 
+    /**
+     * @dataProvider getImagesFromRowDataProvider
+     */
+    public function testGetImagesFromRow($rowData, $expectedResult)
+    {
+        $this->assertEquals(
+            $this->importProduct->getImagesFromRow($rowData),
+            $expectedResult
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getImagesFromRowDataProvider()
+    {
+        return [
+            [
+                [],
+                [[], []],
+            ],
+            [
+                [
+                    'image' => 'image3.jpg',
+                    '_media_image' => 'image1.jpg,image2.png',
+                    '_media_image_label' => 'label1,label2',
+                ],
+                [
+                    [
+                        'image' => ['image3.jpg'],
+                        '_media_image' => ['image1.jpg', 'image2.png'],
+                    ],
+                    [
+                        '_media_image' => ['label1', 'label2'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider()
     {
         return [
@@ -1312,6 +1358,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateRowCheckSpecifiedSkuDataProvider()
     {
         return [
@@ -1330,6 +1379,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateRowDataProvider()
     {
         return [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Product;
@@ -105,6 +105,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)
             ->order('t.rule_price ' . Select::SQL_ASC)
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 

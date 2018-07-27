@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -27,7 +27,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     const COLUMN_DEFAULT_BILLING = 'default_billing';
 
     const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
-
 
     /**#@-*/
 

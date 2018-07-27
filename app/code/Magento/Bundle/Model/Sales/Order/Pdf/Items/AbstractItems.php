@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
@@ -44,9 +44,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -196,9 +195,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
             return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
         }
+        return $this->getItem()->getOrderItem();
     }
 
     /**

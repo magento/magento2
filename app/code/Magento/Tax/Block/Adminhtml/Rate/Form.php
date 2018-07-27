@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var string
      */
-    protected $_template = 'rate/form.phtml';
+    protected $_template = 'Magento_Tax::rate/form.phtml';
 
     /**
      * Tax data

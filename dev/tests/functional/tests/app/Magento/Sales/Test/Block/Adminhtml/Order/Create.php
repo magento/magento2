@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -191,7 +191,7 @@ class Create extends Block
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals
      */
-    protected function getTotalsBlock()
+    public function getTotalsBlock()
     {
         return $this->blockFactory->create(
             \Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals::class,

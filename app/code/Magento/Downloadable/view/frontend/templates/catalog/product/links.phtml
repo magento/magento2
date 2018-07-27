@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,9 +13,9 @@
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <legend class="legend links-title"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></legend><br>
+    <legend class="legend links-title"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
-        <label class="label"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></label>
+        <label class="label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
                  "linkElement":"input:checkbox[value]",
@@ -37,7 +37,7 @@
                         <span><?php echo $block->escapeHtml($_link->getTitle()); ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             <a class="sample link"
-                               href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
+                               href="<?= /* @escapeNotVerified */ $block->escapeQuote($block->getLinkSampleUrl($_link)) ?>" <?= /* @noEscape */ $block->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
                                 <?php /* @escapeNotVerified */ echo __('sample') ?>
                             </a>
                         <?php endif; ?>

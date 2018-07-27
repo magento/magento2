@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,6 +48,9 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
 
+    /**
+     * @return array
+     */
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
@@ -90,7 +91,7 @@ class StockItemRepository implements StockItemRepositoryInterface
      */
     protected $stockRegistryStorage;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    /** @var  ProductCollectionFactory */
     protected $productCollectionFactory;
 
     /**
@@ -105,7 +106,10 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param TimezoneInterface $localeDate
      * @param Processor $indexProcessor
      * @param DateTime $dateTime
+     * @param ProductCollectionFactory|null $productCollectionFactory
+     * @param StockRegistryStorage|null $stockRegistryStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \RuntimeException
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
@@ -118,7 +122,9 @@ class StockItemRepository implements StockItemRepositoryInterface
         MapperFactory $mapperFactory,
         TimezoneInterface $localeDate,
         Processor $indexProcessor,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ProductCollectionFactory $productCollectionFactory = null,
+        StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockStateProvider = $stockStateProvider;
@@ -131,31 +137,25 @@ class StockItemRepository implements StockItemRepositoryInterface
         $this->localeDate = $localeDate;
         $this->indexProcessor = $indexProcessor;
         $this->dateTime = $dateTime;
-    }
-
-    /**
-     * @deprecated
-     * @return  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    private function getProductCollectionFactory()
-    {
-        if ($this->productCollectionFactory === null) {
-            $this->productCollectionFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
-            );
+        if (null === $productCollectionFactory) {
+            $productCollectionFactory = ObjectManager::getInstance()->get(ProductCollectionFactory::class);
         }
-
-        return $this->productCollectionFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
+        if (null === $stockRegistryStorage) {
+            $stockRegistryStorage = ObjectManager::getInstance()->get(StockRegistryStorage::class);
+        }
+        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
     {
         try {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->getProductCollectionFactory()->create()
+            $product = $this->productCollectionFactory->create()
                 ->setFlag('has_stock_status_filter')
                 ->addIdFilter($stockItem->getProductId())
                 ->addFieldToSelect('type_id')
@@ -190,8 +190,8 @@ class StockItemRepository implements StockItemRepositoryInterface
             $this->resource->save($stockItem);
 
             $this->indexProcessor->reindexRow($stockItem->getProductId());
-            $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
-            $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockItem($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockStatus($stockItem->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Unable to save Stock Item'), $exception);
         }
@@ -200,6 +200,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($stockItemId)
     {
@@ -226,13 +227,14 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(StockItemInterface $stockItem)
     {
         try {
             $this->resource->delete($stockItem);
-            $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
-            $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockItem($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockStatus($stockItem->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock Item with id "%1"', $stockItem->getItemId()),
@@ -244,6 +246,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
     /**
      * @inheritdoc
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function deleteById($id)
     {
@@ -257,17 +260,5 @@ class StockItemRepository implements StockItemRepositoryInterface
             );
         }
         return true;
-    }
-
-    /**
-     * @return StockRegistryStorage
-     */
-    private function getStockRegistryStorage()
-    {
-        if (null === $this->stockRegistryStorage) {
-            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
-        }
-        return $this->stockRegistryStorage;
     }
 }

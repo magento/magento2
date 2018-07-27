@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -8,12 +8,17 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 use Magento\Framework\View\Element\BlockInterface;
 
 /**
- * Catalog category widgets controller for CMS WYSIWYG
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Catalog category widgets controller for CMS WYSIWYG.
  */
 abstract class Widget extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */

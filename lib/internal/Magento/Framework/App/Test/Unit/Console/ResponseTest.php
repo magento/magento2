@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Console;
@@ -34,6 +34,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCode, $result);
     }
 
+    /**
+     * @return array
+     */
     public static function setCodeProvider()
     {
         $largeCode = 256;

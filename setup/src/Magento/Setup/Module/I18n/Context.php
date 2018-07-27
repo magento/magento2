@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 
@@ -93,7 +92,7 @@ class Context
      *
      * @param string $type
      * @param array $value
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      */
     public function buildPathToLocaleDirectoryByContext($type, $value)
@@ -111,6 +110,7 @@ class Context
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));
         }
-        return $path . '/' . self::LOCALE_DIRECTORY . '/';
+
+        return (null === $path) ? null : $path . '/' . self::LOCALE_DIRECTORY . '/';
     }
 }

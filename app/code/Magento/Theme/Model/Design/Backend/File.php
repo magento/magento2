@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Backend;
@@ -90,7 +90,7 @@ class File extends BackendFile
             $this->setValue($value['file']);
             return $this;
         }
-        $filename = $value['file'];
+        $filename = basename($value['file']);
         $result = $this->_mediaDirectory->copyFile(
             $this->getTmpMediaPath($filename),
             $this->_getUploadDir() . '/' . $filename

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -2189,7 +2189,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create the base results for the the multi rules test
+     * Create the base results for the multi rules test
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate\Test\Unit;
@@ -92,6 +92,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $model->isAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [
@@ -144,6 +147,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyStripInlineDataProvider()
     {
         return [
@@ -210,6 +216,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyDataProvider()
     {
         return [
@@ -272,6 +281,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function processResponseBodyGetInlineScriptDataProvider()
     {
         return [

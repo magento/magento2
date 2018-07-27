@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
@@ -291,6 +290,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -304,7 +306,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -312,7 +314,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -426,18 +428,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isSMTPDisabled bool
      * @param $senderName string
      * @param $senderEmail string
      * @param $templateSubject string
+     * @param $expectedValue
      * @dataProvider isValidForSendDataProvider
      */
-    public function testIsValidForSend($isSMTPDisabled, $senderName, $senderEmail, $templateSubject, $expectedValue)
+    public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($isSMTPDisabled));
         $model = $this->getModelMock(['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getSenderName')
@@ -451,39 +449,31 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => true
             ],
-            'no smtp so not valid' => [
-                'isSMTPDisabled' => true,
-                'senderName' => 'sender name',
-                'senderEmail' => 'email@example.com',
-                'templateSubject' => 'template subject',
-                'expectedValue' => false
-            ],
             'no sender name so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => '',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no sender email so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => '',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no subject so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => '',
@@ -552,6 +542,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -652,6 +645,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -748,6 +744,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

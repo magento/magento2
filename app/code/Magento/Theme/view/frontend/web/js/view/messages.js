@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -21,7 +21,7 @@ define([
         initialize: function () {
             this._super();
 
-            this.cookieMessages = $.cookieStorage.get('mage-messages');
+            this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
             this.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
             });

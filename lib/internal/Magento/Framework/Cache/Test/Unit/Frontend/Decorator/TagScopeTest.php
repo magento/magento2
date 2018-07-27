@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
@@ -128,6 +128,9 @@ class TagScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function cleanModeMatchingAnyTagDataProvider()
     {
         return [

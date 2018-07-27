@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -81,7 +81,7 @@ class CreateHandler implements ExtensionInterface
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
     ) {
-        $this->metadata = $metadataPool->getMetadata('Magento\Catalog\Api\Data\ProductInterface');
+        $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
         $this->jsonHelper = $jsonHelper;
@@ -278,6 +278,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate product media gallery data.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -294,7 +296,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 
@@ -309,7 +311,7 @@ class CreateHandler implements ExtensionInterface
      */
     protected function moveImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
         if ($this->fileStorageDb->checkDbUsage()) {
@@ -328,6 +330,19 @@ class CreateHandler implements ExtensionInterface
         }
 
         return str_replace('\\', '/', $destinationFile);
+    }
+
+    /**
+     * Returns safe filename for posted image.
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getSafeFilename($file)
+    {
+        $file = DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+
+        return $this->mediaDirectory->getDriver()->getRealPathSafety($file);
     }
 
     /**

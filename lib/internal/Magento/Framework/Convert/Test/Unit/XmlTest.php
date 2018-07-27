@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Convert\Test\Unit;
@@ -31,6 +31,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getXml()
     {
         return <<<XML

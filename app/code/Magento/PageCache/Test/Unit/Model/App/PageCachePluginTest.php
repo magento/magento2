@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,6 +57,9 @@ class PageCachePluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data, $this->plugin->afterLoad($this->subjectMock, $initResult));
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

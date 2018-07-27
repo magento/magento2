@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -117,8 +117,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
             )
         );
 
-        if (!$admin->getFirstname()
-            || !$admin->getLastname()
+        if (!$admin->getFirstName()
+            || !$admin->getLastName()
             || !$storeInfo->getName()
             || !$storeInfo->getPhone()
             || !$originStreet1
@@ -188,8 +188,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
         );
 
         $request->setShipperContactPersonName($storeAdmin->getName());
-        $request->setShipperContactPersonFirstName($storeAdmin->getFirstname());
-        $request->setShipperContactPersonLastName($storeAdmin->getLastname());
+        $request->setShipperContactPersonFirstName($storeAdmin->getFirstName());
+        $request->setShipperContactPersonLastName($storeAdmin->getLastName());
         $request->setShipperContactCompanyName($store->getName());
         $request->setShipperContactPhoneNumber($store->getPhone());
         $request->setShipperEmail($storeAdmin->getEmail());

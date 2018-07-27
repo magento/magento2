@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,6 +67,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Plugin
+     */
     protected function getPlugin()
     {
         return new \Magento\Wishlist\Controller\Index\Plugin(

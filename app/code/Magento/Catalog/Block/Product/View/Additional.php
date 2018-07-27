@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class Additional extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'product/view/additional.phtml';
+    protected $_template = 'Magento_Catalog::product/view/additional.phtml';
 
     /**
      * @return array

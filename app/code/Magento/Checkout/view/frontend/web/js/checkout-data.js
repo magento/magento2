@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
@@ -15,27 +15,32 @@ define([
 
     var cacheKey = 'checkout-data';
 
-    var getData = function () {
-        return storage.get(cacheKey)();
-    };
-
     var saveData = function (checkoutData) {
         storage.set(cacheKey, checkoutData);
-    };
+    },
+        
+    /**
+     * @return {*}
+     */
+    getData = function () {
+        var data = storage.get(cacheKey)();
 
-    if ($.isEmptyObject(getData())) {
-        var checkoutData = {
-            'selectedShippingAddress': null,
-            'shippingAddressFromData' : null,
-            'newCustomerShippingAddress' : null,
-            'selectedShippingRate' : null,
-            'selectedPaymentMethod' : null,
-            'selectedBillingAddress' : null,
-            'billingAddressFormData' : null,
-            'newCustomerBillingAddress' : null
-        };
-        saveData(checkoutData);
-    }
+        if ($.isEmptyObject(data)) {
+            data = {
+                'selectedShippingAddress': null,
+                'shippingAddressFromData': null,
+                'newCustomerShippingAddress': null,
+                'selectedShippingRate': null,
+                'selectedPaymentMethod': null,
+                'selectedBillingAddress': null,
+                'billingAddressFormData': null,
+                'newCustomerBillingAddress': null
+            };
+            saveData(data);
+        }
+
+        return data;
+    };
 
     return {
         setSelectedShippingAddress: function (data) {
@@ -137,6 +142,29 @@ define([
         setInputFieldEmailValue: function (email) {
             var obj = getData();
             obj.inputFieldEmailValue = email;
+            saveData(obj);
+        },
+
+        /**
+         * Pulling the checked email value from persistence storage.
+         *
+         * @returns {*}
+         */
+        getCheckedEmailValue: function () {
+            var obj = getData();
+
+            return obj.checkedEmailValue ? obj.checkedEmailValue : '';
+        },
+
+        /**
+         * Setting the checked email value pulled from persistence storage.
+         *
+         * @param {String} email
+         */
+        setCheckedEmailValue: function (email) {
+            var obj = getData();
+
+            obj.checkedEmailValue = email;
             saveData(obj);
         }
     }

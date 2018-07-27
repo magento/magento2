@@ -2,7 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\AbstractData
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -91,6 +91,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($bool, $this->_model->isRequestScopeOnly());
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];
@@ -119,6 +122,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($output, $this->_model->applyInputFilter($input));
     }
 
+    /**
+     * @return array
+     */
     public function applyInputFilterProvider()
     {
         return [
@@ -157,6 +163,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($output, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function dateFilterFormatProvider()
     {
         return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
@@ -228,6 +237,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedOutput, $this->_model->validateInputRule($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateInputRuleDataProvider()
     {
         return [
@@ -316,6 +328,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->_model->getRequestValue($request));
     }
 
+    /**
+     * @return array
+     */
     public function getRequestValueDataProvider()
     {
         $expectedValue = 'EXPECTED_VALUE';

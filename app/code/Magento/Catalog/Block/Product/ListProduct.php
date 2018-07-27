@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -318,13 +318,21 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     public function getIdentities()
     {
         $identities = [];
-        foreach ($this->_getProductCollection() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
         }
+
+        //Check if category page shows only static block (No products)
+        if ($category->getData('display_mode') == Category::DM_PAGE) {
+            return $identities;
+        }
+
+        foreach ($this->_getProductCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+
         return $identities;
     }
 
@@ -332,7 +340,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Get post parameters
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @return array
      */
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {

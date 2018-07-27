@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -27,6 +27,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  * @method Category getSkipDeleteChildren()
  * @method Category setSkipDeleteChildren(boolean $value)
+ * @method Category setChangedProductIds(array $categoryIds) Set products ids that inserted or deleted for category
+ * @method array getChangedProductIds() Get products ids that inserted or deleted for category
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -111,6 +113,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
+
+    /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
 
     /**
      * URL rewrite model
@@ -323,6 +330,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -652,14 +669,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve image URL
+     * Get image url by attribute code.
      *
+     * @param string $attributeCode
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getImageUrl()
+    public function getImageUrl($attributeCode = 'image')
     {
         $url = false;
-        $image = $this->getImage();
+        $image = $this->getData($attributeCode);
         if ($image) {
             if (is_string($image)) {
                 $url = $this->_storeManager->getStore()->getBaseUrl(
@@ -671,6 +690,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 );
             }
         }
+
         return $url;
     }
 
@@ -699,7 +719,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             return $parentId;
         }
         $parentIds = $this->getParentIds();
-        return intval(array_pop($parentIds));
+        return (int)array_pop($parentIds);
     }
 
     /**
@@ -933,8 +953,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        $count = $this->_getResource()->getProductCount($this);
-        $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        if (!$this->hasData(self::KEY_PRODUCT_COUNT)) {
+            $count = $this->_getResource()->getProductCount($this);
+            $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        }
+
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 
@@ -1089,7 +1112,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexRow($this->getId());
+                $idsList = [$this->getId()];
+                if ($this->dataHasChangedFor('url_key')) {
+                    $idsList = array_merge($idsList, explode(',', $this->getAllChildren()));
+                }
+                $flatIndexer->reindexList($idsList);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
@@ -1118,15 +1145,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [
-            self::CACHE_TAG . '_' . $this->getId(),
-        ];
-        if (!$this->getId() || $this->hasDataChanges()
-            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
-        ) {
-            $identities[] = self::CACHE_TAG;
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        $identities = [];
+        if ($this->getId()) {
+            if ($this->getAffectedCategoryIds()) {
+                foreach (array_unique($this->getAffectedCategoryIds()) as $affectedCategoryId) {
+                    $identities[] = self::CACHE_TAG . '_' . $affectedCategoryId;
+                }
+            } else {
+                $identities[] = self::CACHE_TAG . '_' . $this->getId();
+            }
+
+            if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+            }
+
+            if ($this->isObjectNew()) {
+                $identities[] = self::CACHE_TAG;
+            }
         }
+
         return $identities;
     }
 

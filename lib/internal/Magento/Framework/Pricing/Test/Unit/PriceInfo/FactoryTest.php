@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
@@ -92,6 +92,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($this->types, $this->objectManagerMock);
     }
 
+    /**
+     * @return array
+     */
     public function createPriceInfoDataProvider()
     {
         return [

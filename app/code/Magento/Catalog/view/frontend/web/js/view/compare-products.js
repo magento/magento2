@@ -1,10 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
+    'Magento_Customer/js/customer-data',
+    'mage/translate'
 ], function (Component, customerData) {
     'use strict';
 
@@ -12,23 +13,22 @@ define([
 
     function initSidebar() {
         if (sidebarInitialized) {
-            return ;
+            return;
         }
         sidebarInitialized = true;
         require([
             'jquery',
             'mage/mage'
         ], function ($) {
+            /*eslint-disable max-len*/
             $('[data-role=compare-products-sidebar]').mage('compareItems', {
-                "removeConfirmMessage": $.mage.__(
-                    "Are you sure you want to remove this item from your Compare Products list?"
-                ),
-                "removeSelector": "#compare-items a.action.delete",
-                "clearAllConfirmMessage": $.mage.__(
-                    "Are you sure you want to remove all items from your Compare Products list?"
-                ),
-                "clearAllSelector": "#compare-clear-all"
+                'removeConfirmMessage': $.mage.__('Are you sure you want to remove this item from your Compare Products list?'),
+                'removeSelector': '#compare-items a.action.delete',
+                'clearAllConfirmMessage': $.mage.__('Are you sure you want to remove all items from your Compare Products list?'),
+                'clearAllSelector': '#compare-clear-all'
             });
+
+            /*eslint-enable max-len*/
         });
     }
 

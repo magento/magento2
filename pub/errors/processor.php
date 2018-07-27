@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
@@ -256,7 +256,7 @@ class Processor
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 433])
+        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
             && !preg_match('/.*?\:[0-9]+$/', $url)
         ) {
             $url .= ':' . $_SERVER['SERVER_PORT'];

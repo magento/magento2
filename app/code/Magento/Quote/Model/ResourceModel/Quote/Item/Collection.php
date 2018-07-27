@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
@@ -95,7 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     public function getStoreId()
     {
-        return (int)$this->_quote->getStoreId();
+        return (int)$this->_productCollectionFactory->create()->getStoreId();
     }
 
     /**
@@ -150,18 +150,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     {
         parent::_afterLoad();
 
-        /**
-         * Assign parent items
-         */
+        $productIds = [];
         foreach ($this as $item) {
+            // Assign parent items
             if ($item->getParentItemId()) {
                 $item->setParentItem($this->getItemById($item->getParentItemId()));
             }
             if ($this->_quote) {
                 $item->setQuote($this->_quote);
             }
+            // Collect quote products ids
+            $productIds[] = (int)$item->getProductId();
         }
-
+        $this->_productIds = array_merge($this->_productIds, $productIds);
+        $this->removeItemsWithAbsentProducts();
         /**
          * Assign options and products
          */
@@ -199,12 +201,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected function _assignProducts()
     {
         \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, ['group' => 'QUOTE', 'method' => __METHOD__]);
-        $productIds = [];
-        foreach ($this as $item) {
-            $productIds[] = (int)$item->getProductId();
-        }
-        $this->_productIds = array_merge($this->_productIds, $productIds);
-
         $productCollection = $this->_productCollectionFactory->create()->setStoreId(
             $this->getStoreId()
         )->addIdFilter(
@@ -267,5 +263,25 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
         return $this;
+    }
+
+    /**
+     * Find and remove quote items with non existing products
+     *
+     * @return void
+     */
+    private function removeItemsWithAbsentProducts()
+    {
+        $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
+        $existingProductsIds = $productCollection->getAllIds();
+        $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
+        // Remove not existing products from items collection
+        if (!empty($absentProductsIds)) {
+            foreach ($absentProductsIds as $productIdToExclude) {
+                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
+                $quoteItem = $this->getItemByColumnValue('product_id', $productIdToExclude);
+                $this->removeItemByKey($quoteItem->getId());
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,6 +28,9 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
         new SetupInfo($server);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';
@@ -190,6 +193,13 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
                     'DOCUMENT_ROOT' => dirname(__DIR__) . DIRECTORY_SEPARATOR,
                     'SCRIPT_FILENAME' => __FILE__,
                     SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files'
+                ],
+                true
+            ],
+            'root within doc root + pub, existent sub-directory' => [
+                [
+                    'DOCUMENT_ROOT' => __DIR__ . '/_files/pub/',
+                    'SCRIPT_FILENAME' => __DIR__ . '/_files/pub/index.php',
                 ],
                 true
             ],

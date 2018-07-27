@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Category.
@@ -23,9 +26,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
+        $this->_model = Bootstrap::getObjectManager()->create(Category::class);
     }
 
     /**
@@ -125,7 +126,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $this->_model->load(3);
-        $this->assertEquals('4,13', $this->_model->getChildren());
+        $this->assertEquals([], array_diff([4, 13], explode(',', $this->_model->getChildren())));
     }
 
     public function testGetPathInStore()
@@ -172,28 +173,28 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->load(5);
         $parents = $this->_model->getParentCategories();
-        $this->assertEquals(3, count($parents));
+        $this->assertCount(3, $parents);
     }
 
     public function testGetParentCategoriesEmpty()
     {
         $this->_model->load(1);
         $parents = $this->_model->getParentCategories();
-        $this->assertEquals(0, count($parents));
+        $this->assertCount(0, $parents);
     }
 
     public function testGetChildrenCategories()
     {
         $this->_model->load(3);
         $children = $this->_model->getChildrenCategories();
-        $this->assertEquals(2, count($children));
+        $this->assertCount(2, $children);
     }
 
     public function testGetChildrenCategoriesEmpty()
     {
         $this->_model->load(5);
         $children = $this->_model->getChildrenCategories();
-        $this->assertEquals(0, count($children));
+        $this->assertCount(0, $children);
     }
 
     public function testGetParentDesignCategory()

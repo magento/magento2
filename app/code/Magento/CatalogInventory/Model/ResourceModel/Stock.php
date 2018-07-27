@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -126,7 +126,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
-            ->where('website_id=?', $websiteId)
+            ->where('website_id = ?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
 
@@ -139,9 +139,15 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
                     'type_id' => 'type_id'
                 ]
             );
-        $this->getConnection()->query($select);
+        $items = [];
 
-        return $this->getConnection()->fetchAll($selectProducts);
+        foreach ($this->getConnection()->query($select)->fetchAll() as $si) {
+            $items[$si['product_id']] = $si;
+        }
+        foreach ($this->getConnection()->fetchAll($selectProducts) as $p) {
+            $items[$p['product_id']]['type_id'] = $p['type_id'];
+        }
+        return $items;
     }
 
     /**

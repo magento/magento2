@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
@@ -127,6 +127,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
@@ -156,6 +159,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [

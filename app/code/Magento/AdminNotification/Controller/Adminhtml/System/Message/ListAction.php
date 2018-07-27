@@ -1,13 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\System\Message;
 
 class ListAction extends \Magento\Backend\App\AbstractAction
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_AdminNotification::show_list';
+
     /**
      * @var \Magento\Framework\Json\Helper\Data
      */
@@ -54,8 +61,10 @@ class ListAction extends \Magento\Backend\App\AbstractAction
         if (empty($result)) {
             $result[] = [
                 'severity' => (string)\Magento\Framework\Notification\MessageInterface::SEVERITY_NOTICE,
-                'text' => 'You have viewed and resolved all recent system notices. '
-                    . 'Please refresh the web page to clear the notice alert.',
+                'text' => __(
+                    'You have viewed and resolved all recent system notices. '
+                    . 'Please refresh the web page to clear the notice alert.'
+                )
             ];
         }
         $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));

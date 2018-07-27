@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Category\Rss;
@@ -72,6 +72,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isAllowed, $this->link->isRssAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isRssAllowedDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
+    /**
+     * @return array
+     */
     public function isTopCategoryDataProvider()
     {
         return [

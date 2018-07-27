@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Sender;
@@ -258,8 +258,9 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                 'payment_html' => 'Payment Info Block',
                 'store' => $this->storeMock,
                 'formattedShippingAddress' => 'Formatted address',
-                'formattedBillingAddress' => 'Formatted address'
+                'formattedBillingAddress' => 'Formatted address',
             ];
+            $transport = new \Magento\Framework\DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
                 ->method('dispatch')
@@ -267,13 +268,14 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                     'email_invoice_set_template_vars_before',
                     [
                         'sender' => $this->subject,
-                        'transport' => $transport
+                        'transport' => $transport->getData(),
+                        'transportObject' => $transport,
                     ]
                 );
 
             $this->templateContainerMock->expects($this->once())
                 ->method('setTemplateVars')
-                ->with($transport);
+                ->with($transport->getData());
 
             $this->identityContainerMock->expects($this->once())
                 ->method('isEnabled')
@@ -353,7 +355,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             'Successful sync sending without comment' => [0, false, false, true],
             'Failed sync sending with comment' => [0, false, true, false],
             'Successful forced sync sending with comment' => [1, true, true, true],
-            'Async sending' => [1, false, false, false]
+            'Async sending' => [1, false, false, false],
         ];
     }
 }

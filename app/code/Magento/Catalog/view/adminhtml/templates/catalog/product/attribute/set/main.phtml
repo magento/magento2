@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -106,7 +106,6 @@
                             this.ge.addListener('beforeshow', editSet.editGroup);
                             this.ge.addListener('beforecomplete', editSet.beforeRenameGroup);
                             //this.ge.addListener('startedit', editSet.editGroup);
-
                             //-------------------------------------------------------------
 
                             var tree2 = new Ext.tree.TreePanel('tree-div2', {
@@ -295,16 +294,23 @@
                         },
 
                         validateGroupName : function(name, exceptNodeId) {
+                            var textNode;
+                                result = true;
+
                             name = name.strip();
-                            var result = true;
+                            name = name.escapeHTML();
                             if (name === '') {
                                 result = false;
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
                                     errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = errorText.replace("/name/", name);
+                                    textNode = jQuery('<span></span>')[0];
+                                    textNode.textContent = errorText;
                                     alert({
-                                        content: errorText.replace("/name/",name)
+                                        content: textNode
+
                                     });
                                     result =  false;
                                 }

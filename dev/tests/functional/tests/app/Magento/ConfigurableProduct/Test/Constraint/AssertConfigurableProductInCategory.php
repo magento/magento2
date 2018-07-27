@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,6 +39,13 @@ class AssertConfigurableProductInCategory extends AssertProductInCategory
                 number_format($product->getSpecialPrice(), 2, '.', ''),
                 $priceBlock->getSpecialPrice(),
                 'Product special price on category page is not correct.'
+            );
+        }
+
+        if (!$product->hasData('tier_price')) {
+            \PHPUnit_Framework_Assert::assertNotTrue(
+                $priceBlock->isMinimalPriceVisible(),
+                'Minimal price block mustn\'t be visible on category page.'
             );
         }
     }

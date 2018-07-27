@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
@@ -21,7 +21,7 @@ class Export extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Backend\Helper\Data $helper
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param array $data
      */
     public function __construct(

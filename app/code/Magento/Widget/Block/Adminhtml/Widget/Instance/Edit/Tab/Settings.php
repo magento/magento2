@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -170,7 +170,12 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         return $this->getUrl(
             'adminhtml/*/*',
-            ['_current' => true, 'code' => '<%- data.code %>', 'theme_id' => '<%- data.theme_id %>']
+            [
+                '_current' => true,
+                'code' => '<%- data.code %>',
+                'theme_id' => '<%- data.theme_id %>',
+                '_escape_params' => false
+            ]
         );
     }
 

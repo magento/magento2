@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -82,15 +82,23 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param AttributeGroupInterfaceFactory|null $attributeGroupFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory $attributeGroupFactory = null
     ) {
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
+        if (null === $attributeGroupFactory) {
+            $attributeGroupFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Api\Data\AttributeGroupInterfaceFactory::class);
+        }
+        $this->attributeGroupFactory = $attributeGroupFactory;
     }
 
     /**
@@ -132,7 +140,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 $attributeGroup = reset($attributeGroupItems);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 /** @var AttributeGroupInterface $attributeGroup */
-                $attributeGroup = $this->getAttributeGroupFactory()->create();
+                $attributeGroup = $this->attributeGroupFactory->create();
             }
 
             $extensionAttributes = $attributeGroup->getExtensionAttributes()
@@ -226,18 +234,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 ->get('Magento\Eav\Api\AttributeGroupRepositoryInterface');
         }
         return $this->attributeGroupRepository;
-    }
-
-    /**
-     * @return AttributeGroupInterfaceFactory
-     */
-    private function getAttributeGroupFactory()
-    {
-        if (null === $this->attributeGroupFactory) {
-            $this->attributeGroupFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Eav\Api\Data\AttributeGroupInterfaceFactory');
-        }
-        return $this->attributeGroupFactory;
     }
 
     /**

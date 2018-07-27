@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 //Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+/** @var Magento\Customer\Model\Customer $customer */
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Customer\Model\Customer');
 $customer->setWebsiteId(
     0
 )->setEntityId(
@@ -69,5 +71,4 @@ $addressSecond->addData(
 $addressSecond->isObjectNew(true);
 $customer->addAddress($addressSecond);
 $customer->setDefaultShipping($addressSecond->getId());
-$customer->isObjectNew(true);
 $customer->save();

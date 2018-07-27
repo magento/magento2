@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
@@ -17,7 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var string
      */
-    protected $_template = 'rating/form.phtml';
+    protected $_template = 'Magento_Review::rating/form.phtml';
 
     /**
      * Session

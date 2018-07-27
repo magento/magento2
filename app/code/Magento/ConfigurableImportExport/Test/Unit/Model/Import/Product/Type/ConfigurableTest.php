@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -448,6 +448,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function _getSuperAttributes()
     {
         return [

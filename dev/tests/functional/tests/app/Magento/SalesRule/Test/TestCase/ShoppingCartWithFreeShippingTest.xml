@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\ShoppingCartWithFreeShippingTest" summary="Shopping Cart With Freeshipping" ticketId="MAGETWO-69066">
+        <variation name="ShoppingCartWithFreeShippingTestVariation1">
+            <data name="salesRule/dataset" xsi:type="string">rule_with_freeshipping_by_weight</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="cart/data/subtotal" xsi:type="string">560.00</data>
+            <data name="cart/data/shipping_amount" xsi:type="string">0.00</data>
+            <data name="cart/data/grand_total" xsi:type="string">560.00</data>
+        </variation>
+        <variation name="ShoppingCartWithFreeShippingTestVariation2">
+            <data name="salesRule/dataset" xsi:type="string">rule_with_freeshipping_by_weight</data>
+            <data name="product/dataset" xsi:type="string">simple_with_weight_10_for_salesrule</data>
+            <data name="cart/data/subtotal" xsi:type="string">560.00</data>
+            <data name="cart/data/shipping_amount" xsi:type="string">5.00</data>
+            <data name="cart/data/grand_total" xsi:type="string">565.00</data>
+        </variation>
+    </testCase>
+</config>

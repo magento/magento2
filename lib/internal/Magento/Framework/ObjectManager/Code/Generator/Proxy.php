@@ -2,7 +2,7 @@
 /**
  * Proxy generator
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
@@ -155,7 +155,8 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameterNames = [];
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
-            $parameterNames[] = '$' . $parameter->getName();
+            $name = $parameter->isVariadic() ? '... $' . $parameter->getName() : '$' . $parameter->getName();
+            $parameterNames[] = $name;
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 

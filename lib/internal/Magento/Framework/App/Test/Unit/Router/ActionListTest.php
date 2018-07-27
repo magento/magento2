@@ -2,7 +2,7 @@
 /**
  * RouterList model test class
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Router;
@@ -107,6 +107,9 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->actionList->get($module, $area, $namespace, $action));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $mockClassName = 'Mock_Action_Class';

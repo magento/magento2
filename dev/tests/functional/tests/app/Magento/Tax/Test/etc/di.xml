@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -79,6 +79,16 @@
     <type name="Magento\Tax\Test\Constraint\AssertTaxRateInTaxRule">
         <arguments>
             <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Test\Constraint\AssertTaxConfigurationNotificationMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Test\Constraint\AssertTaxConfigurationSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
 </config>

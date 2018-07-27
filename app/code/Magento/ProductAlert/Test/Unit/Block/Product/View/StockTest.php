@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
@@ -132,6 +132,9 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_block->getSignupUrl());
     }
 
+    /**
+     * @return array
+     */
     public function setTemplateStockUrlNotAllowedDataProvider()
     {
         return [

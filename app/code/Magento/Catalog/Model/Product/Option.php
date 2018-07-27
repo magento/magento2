@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -391,6 +391,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
                 }
             }
         }
+
+        if ($this->getGroupByType($this->getData('type')) === self::OPTION_GROUP_FILE) {
+            $this->cleanFileExtensions();
+        }
+
         return $this;
     }
 
@@ -912,5 +917,22 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
         return $this->metadataPool;
     }
+
+    /**
+     * Clears all non-accepted characters from file_extension field.
+     *
+     * @return void
+     */
+    private function cleanFileExtensions()
+    {
+        $rawExtensions = $this->getFileExtension();
+        $matches = [];
+        preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
+        if (!empty($matches)) {
+            $extensions = implode(', ', array_unique($matches['extensions']));
+        }
+        $this->setFileExtension($extensions);
+    }
+
     //@codeCoverageIgnoreEnd
 }

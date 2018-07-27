@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -816,7 +816,7 @@ class InstallData implements InstallDataInterface
 
                 $connection->commit();
             } catch (\Exception $e) {
-                $connection->rollback();
+                $connection->rollBack();
                 throw $e;
             }
         }

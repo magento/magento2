@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\View\Type;
@@ -123,6 +123,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->groupedView->setPreconfiguredValue();
     }
 
+    /**
+     * @return array
+     */
     public function setPreconfiguredValueDataProvider()
     {
         return ['item_id_exist_in_config' => ['id_one'], 'item_id_not_exist_in_config' => ['id_two']];

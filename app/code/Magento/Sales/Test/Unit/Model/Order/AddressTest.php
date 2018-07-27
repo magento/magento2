@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,6 +101,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('region', $this->address->getRegionCode());
     }
 
+    /**
+     * @return array
+     */
     public function regionProvider()
     {
         return [ [1, null], [null, 1]];

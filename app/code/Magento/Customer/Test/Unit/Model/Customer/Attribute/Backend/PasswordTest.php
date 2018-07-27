@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,6 +39,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->testable->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function passwordNegativeDataProvider()
     {
         return [

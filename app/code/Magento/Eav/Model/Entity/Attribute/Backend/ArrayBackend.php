@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
@@ -38,11 +38,16 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
      */
     public function validate($object)
     {
-        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $attribute = $this->getAttribute();
+        $attributeCode = $attribute->getAttributeCode();
         $data = $object->getData($attributeCode);
+        $assigned = $object->hasData($attributeCode);
         if (is_array($data)) {
             $object->setData($attributeCode, implode(',', array_filter($data)));
+        } elseif (empty($data) && $assigned) {
+            $object->setData($attributeCode, null);
         }
+
         return parent::validate($object);
     }
 }

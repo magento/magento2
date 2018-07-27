@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Reader;
@@ -25,9 +25,11 @@ class ArgumentsReader
         /**
          * Skip native PHP types, classes without constructor
          */
-        if (!$class->getFileName() || false == $class->hasMethod(
-            '__construct'
-        ) || !$inherited && $class->getConstructor()->class != $class->getName()
+        if ($class->isInterface() ||
+            !$class->getFileName() ||
+            false == $class->hasMethod('__construct') ||
+            !$inherited &&
+            $class->getConstructor()->class != $class->getName()
         ) {
             return $output;
         }

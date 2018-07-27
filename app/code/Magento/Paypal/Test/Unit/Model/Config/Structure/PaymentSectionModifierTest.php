@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -151,6 +151,10 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param $structure
+     * @return array
+     */
     private function fetchAllAvailableGroups($structure)
     {
         $availableGroups = [];

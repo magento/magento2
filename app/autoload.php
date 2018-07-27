@@ -2,7 +2,7 @@
 /**
  * Register basic autoloader that uses include path
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
@@ -35,6 +35,3 @@ if (file_exists($vendorAutoload)) {
 }
 
 AutoloaderRegistry::registerAutoloader(new ClassLoaderWrapper($composerAutoloader));
-
-// Sets default autoload mappings, may be overridden in Bootstrap::create
-\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);

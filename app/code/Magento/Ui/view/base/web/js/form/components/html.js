@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -16,7 +16,10 @@ define([
             loading:        false,
             visible:        true,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**

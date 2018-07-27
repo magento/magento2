@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model;
@@ -161,11 +161,11 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     protected $storedData = [];
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -336,8 +336,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed        $value
+     *
      * @return $this
      */
     public function setData($key, $value = null)
@@ -414,7 +415,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @FIXME changing original data can't be available as public interface
      *
      * @param string $key
-     * @param mixed $data
+     * @param mixed  $data
      * @return $this
      */
     public function setOrigData($key = null, $data = null)
@@ -445,7 +446,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * If collection name is omitted, resource name will be used with _collection appended
      *
-     * @param string $resourceName
+     * @param string      $resourceName
      * @param string|null $collectionName
      * @return void
      */
@@ -520,10 +521,12 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Load object data
      *
-     * @param integer $modelId
+     * @param integer     $modelId
      * @param null|string $field
      * @return $this
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own loading.
+     * Service contracts should persist entities. Use resource model "load" or collections to implement
+     * service contract model loading operations.
      */
     public function load($modelId, $field = null)
     {
@@ -544,7 +547,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     protected function _getEventData()
     {
         return [
-            'data_object' => $this,
+            'data_object'       => $this,
             $this->_eventObject => $this,
         ];
     }
@@ -552,7 +555,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Processing object before load data
      *
-     * @param int $modelId
+     * @param int         $modelId
      * @param null|string $field
      * @return $this
      */
@@ -624,7 +627,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own persistence.
+     * Service contracts should persist entities. Use resource model "save" to implement
+     * service contract persistence operations.
      */
     public function save()
     {
@@ -809,7 +814,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own deletion.
+     * Service contracts should delete entities. Use resource model "delete" method to implement
+     * service contract persistence operations.
      */
     public function delete()
     {

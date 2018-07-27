@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -830,6 +830,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
+        )->setScopeId(
+            $storeId
         )->setFrom(
             $this->_scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
@@ -1076,7 +1078,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexRow($this->getId());
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexRow($this->getId());
+        }
     }
 
     /**

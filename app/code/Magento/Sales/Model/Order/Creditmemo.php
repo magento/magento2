@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -588,13 +588,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         $collection = $this->_commentCollectionFactory->create()->setCreditmemoFilter($this->getId())
             ->setCreatedAtOrder();
-//
-//            $this->setComments($comments);
-//            /**
-//             * When credit memo created with adding comment,
-//             * comments collection must be loaded before we added this comment.
-//             */
-//            $this->getComments()->load();
 
         if ($this->getId()) {
             foreach ($collection as $comment) {

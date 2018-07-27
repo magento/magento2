@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class Dashboard extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'dashboard/index.phtml';
+    protected $_template = 'Magento_Backend::dashboard/index.phtml';
 
     /**
      * @return void

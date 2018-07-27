@@ -1,4 +1,4 @@
-Options All -Indexes
+Options -Indexes
 <Files ~ "\.xml$">
     Order allow,deny
     Deny from all

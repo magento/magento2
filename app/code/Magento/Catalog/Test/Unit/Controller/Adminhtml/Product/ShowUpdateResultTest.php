@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
@@ -58,7 +58,7 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->willreturn($productActionMock);
+            ->willReturn($productActionMock);
 
         $eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\Manager', ['dispatch'], '', false);
 

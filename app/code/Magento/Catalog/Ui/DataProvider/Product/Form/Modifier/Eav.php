@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -244,7 +244,7 @@ class Eav extends AbstractModifier
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', $group->getAttributeGroupName());
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', __($group->getAttributeGroupName()));
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = true;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
@@ -525,6 +525,16 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Check is product already new or we trying to create one.
+     *
+     * @return bool
+     */
+    private function isProductExists()
+    {
+        return (bool) $this->locator->getProduct()->getId();
+    }
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -533,6 +543,7 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
@@ -545,8 +556,8 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $attribute->getDefaultValue(),
-            'label' => $attribute->getDefaultFrontendLabel(),
+            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
+            'label' => __($attribute->getDefaultFrontendLabel()),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
@@ -650,7 +661,7 @@ class Eav extends AbstractModifier
                 'formElement' => 'container',
                 'componentType' => 'container',
                 'breakLine' => false,
-                'label' => $attribute->getDefaultFrontendLabel(),
+                'label' => __($attribute->getDefaultFrontendLabel()),
                 'required' => $attribute->getIsRequired(),
             ]
         );
@@ -745,7 +756,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;

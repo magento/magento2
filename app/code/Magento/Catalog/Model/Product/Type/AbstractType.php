@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -238,7 +238,7 @@ abstract class AbstractType
     }
 
     /**
-     * Retrieve parent ids array by requered child
+     * Retrieve parent ids array by required child
      *
      * @param int|array $childId
      * @return array
@@ -1091,5 +1091,17 @@ abstract class AbstractType
     public function getAssociatedProducts($product)
     {
         return [];
+    }
+
+    /**
+     * Check if product can be potentially buyed from the category page or some
+     * other list
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        return !$this->hasRequiredOptions($product);
     }
 }

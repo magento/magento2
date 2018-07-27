@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class Wishlist extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'report/wishlist.phtml';
+    protected $_template = 'Magento_Reports::report/wishlist.phtml';
 
     /**
      * Reports wishlist collection factory

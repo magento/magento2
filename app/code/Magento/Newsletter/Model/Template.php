@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -232,15 +232,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
-     * Check if template can be added to newsletter queue
+     * Check if template can be added to newsletter queue.
      *
      * @return boolean
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
+        return $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

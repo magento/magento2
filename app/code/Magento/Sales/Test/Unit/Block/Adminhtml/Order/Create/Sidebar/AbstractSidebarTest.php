@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Sidebar;
@@ -39,6 +39,9 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
     }
 
+    /**
+     * @return array
+     */
     public function getItemQtyDataProvider()
     {
         return ['whenQtyIsset' => [2, 10, 10], 'whenQtyNotIsset' => [1, false, 1]];

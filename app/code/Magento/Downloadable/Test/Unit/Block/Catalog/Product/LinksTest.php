@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -154,6 +154,11 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_encode($config), $encodedJsonConfig);
     }
 
+    /**
+     * @param $linkPrice
+     * @param $linkId
+     * @return mixed
+     */
     protected function getLinkMock($linkPrice, $linkId)
     {
         $linkMock = $this->getMock('Magento\Downloadable\Model\Link', ['getPrice', 'getId', '__wakeup'], [], '', false);

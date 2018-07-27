@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
@@ -221,7 +221,7 @@ class Rule extends AbstractResource
                 $connection->delete($table, ['rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]);
             }
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw $e;
         }
         $connection->commit();

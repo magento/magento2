@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -252,7 +252,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $file = $this->_getCurrentFile();
 
         if (is_dir($file)) {
-            $dirFiles = scandir($file);
+            $dirFiles = scandir($file, SCANDIR_SORT_NONE);
 
             if (false === $dirFiles) {
                 throw new \Magento\Framework\Exception\LocalizedException(

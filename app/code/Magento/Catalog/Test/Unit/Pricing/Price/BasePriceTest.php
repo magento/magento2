@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,6 +107,9 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->basePrice->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function getValueDataProvider()
     {
         return [[77, 77], [0, 0], [false, 99]];

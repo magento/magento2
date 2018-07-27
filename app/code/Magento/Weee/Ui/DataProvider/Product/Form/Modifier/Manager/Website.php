@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager;
@@ -67,11 +67,10 @@ class Website
             return $this->websites = $websites;
         }
 
-
         if ($storeId = $this->locator->getStore()->getId()) {
             /** @var WebsiteInterface $website */
             $website = $this->storeManager->getStore($storeId)->getWebsite();
-            $websites[$website->getId()] = [
+            $websites[] = [
                 'value' => $website->getId(),
                 'label' => $this->formatLabel(
                     $website->getName(),
@@ -84,7 +83,7 @@ class Website
                 if (!in_array($website->getId(), $product->getWebsiteIds())) {
                     continue;
                 }
-                $websites[$website->getId()] = [
+                $websites[] = [
                     'value' => $website->getId(),
                     'label' => $this->formatLabel(
                         $website->getName(),

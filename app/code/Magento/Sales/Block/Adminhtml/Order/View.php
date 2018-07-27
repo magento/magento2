@@ -2,7 +2,7 @@
 /**
  * @category    Magento
  * @package     Magento_Sales
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
@@ -180,7 +180,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'class' => __('unhold'),
                     'id' => 'order-view-unhold-button',
                     'data_attribute' => [
-                        'url' => $this->getUnHoldUrl()
+                        'url' => $this->getUnholdUrl()
                     ]
                 ]
             );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Decorator;
@@ -33,6 +33,9 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         $this->assertSelectEquals('div > div[title="TestBlock"]', 'TestBlock', (int)$showBlockHints, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return ['block hints disabled' => [false], 'block hints enabled' => [true]];

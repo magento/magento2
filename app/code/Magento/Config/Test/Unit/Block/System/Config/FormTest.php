@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -269,6 +269,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_formMock, $object->getForm());
     }
 
+    /**
+     * @return array
+     */
     public function initFormDataProvider()
     {
         return [
@@ -414,6 +417,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $object->initForm();
     }
 
+    /**
+     * @return array
+     */
     public function initGroupDataProvider()
     {
         return [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
@@ -111,6 +111,9 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
         $this->model->getValue();
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
@@ -76,6 +76,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->init(null);
     }
 
+    /**
+     * @return array
+     */
     public function isValidDataProvider()
     {
         return [

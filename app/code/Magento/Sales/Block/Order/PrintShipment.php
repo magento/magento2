@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -61,6 +61,16 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Disable pager for print
+     *
+     * @return bool
+     */
+    public function isPagerDisplayed()
+    {
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getPaymentInfoHtml()
@@ -69,11 +79,24 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return array|null
+     * @return \Magento\Sales\Model\Order|null
      */
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_order');
+    }
+
+    /**
+     * Get order items
+     *
+     * @return \Magento\Framework\DataObject[]
+     */
+    public function getItems()
+    {
+        if (!$this->getOrder()) {
+            return [];
+        }
+        return $this->getOrder()->getItemsCollection()->getItems();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
@@ -79,6 +79,9 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function isDisplayedDataProvider()
     {
         return [

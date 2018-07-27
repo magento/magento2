@@ -2,7 +2,7 @@
 /**
  * SID resolver interface
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -18,7 +18,7 @@ interface SidResolverInterface
      * Get SID
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @return string
+     * @return string|null
      */
     public function getSid(\Magento\Framework\Session\SessionManagerInterface $session);
 

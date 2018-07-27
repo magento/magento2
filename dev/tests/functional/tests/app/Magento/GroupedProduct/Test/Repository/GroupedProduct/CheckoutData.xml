@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -37,6 +37,33 @@
                     <item name="product_key_0" xsi:type="string">1680</item>
                     <item name="product_key_1" xsi:type="string">40</item>
                     <item name="product_key_2" xsi:type="string">200</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="grouped_two_simple_products">
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="name" xsi:type="string">product_key_0</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="name" xsi:type="string">product_key_1</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">560</item>
+                    <item name="product_key_1" xsi:type="string">40</item>
+                </item>
+                <item name="qty" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">1</item>
+                    <item name="product_key_1" xsi:type="string">1</item>
+                </item>
+                <item name="subtotal" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">560</item>
+                    <item name="product_key_1" xsi:type="string">40</item>
                 </item>
             </field>
         </dataset>

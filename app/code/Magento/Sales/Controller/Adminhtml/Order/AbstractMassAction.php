@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -17,6 +17,13 @@ use Magento\Ui\Component\MassAction\Filter;
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
     /**
      * @var string
      */
@@ -71,6 +78,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     {
         return $this->filter->getComponentRefererUrl()?: 'sales/*/';
     }
+
     /**
      * Set status to collection items
      *

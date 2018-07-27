@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -117,6 +117,7 @@ class Config
         'description' => null,
         'keywords' => null,
         'robots' => null,
+        'title' => null,
     ];
 
     /**
@@ -226,7 +227,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = htmlentities($content);
+        $this->metadata[$name] = htmlspecialchars($content);
     }
 
     /**

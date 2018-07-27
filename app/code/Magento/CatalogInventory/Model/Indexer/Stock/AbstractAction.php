@@ -2,7 +2,7 @@
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -248,7 +248,7 @@ abstract class AbstractAction
             }
         }
         
-        $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
+        $this->cacheContext->registerEntities(Product::CACHE_TAG, $processIds);
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         
         return $this;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
@@ -35,6 +35,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $link->getLinkAttributes());
     }
 
+    /**
+     * @return array
+     */
     public function getLinkAttributesDataProvider()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

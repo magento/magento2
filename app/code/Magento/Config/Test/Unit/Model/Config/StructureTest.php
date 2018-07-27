@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -205,6 +205,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($elementMock, $this->_model->getElement($path));
     }
 
+    /**
+     * @return array
+     */
     public function emptyElementDataProvider()
     {
         return [
@@ -347,6 +350,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
     }
 
+    /**
+     * @return array
+     */
     public function getFieldPathsByAttributeDataProvider()
     {
         return [

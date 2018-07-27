@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Helper;
@@ -202,7 +202,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         if ($isSwatch) {
             $image->keepFrame(true);
             $image->keepTransparency(true);
-            $image->backgroundColor('#FFF');
+            $image->backgroundColor([255, 255, 255]);
         }
         return $this;
     }

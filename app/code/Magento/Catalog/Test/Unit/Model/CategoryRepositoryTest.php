@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -292,6 +292,9 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($categoryMock);
     }
 
+    /**
+     * @return array
+     */
     public function saveWithValidateCategoryExceptionDataProvider()
     {
         return [

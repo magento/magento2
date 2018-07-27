@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -103,7 +103,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + pow(2, 16)) * 1.65
         );
     }
 
@@ -346,6 +346,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $newImage = imagecreate($dims['frame']['width'], $dims['frame']['height']);
         }
 
+        if ($isAlpha) {
+            $this->_saveAlpha($newImage);
+        }
+
         // fill new image with required color
         $this->_fillBackgroundColor($newImage);
 
@@ -419,7 +423,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
             imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -444,7 +448,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
             imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -662,7 +666,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     private function _saveAlpha($imageHandler)
     {
         $background = imagecolorallocate($imageHandler, 0, 0, 0);
-        ImageColorTransparent($imageHandler, $background);
+        imagecolortransparent($imageHandler, $background);
         imagealphablending($imageHandler, false);
         imagesavealpha($imageHandler, true);
     }
@@ -733,8 +737,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _createImageFromTtfText($text, $font)
     {
         $boundingBox = imagettfbbox($this->_fontSize, 0, $font, $text);
-        $width = abs($boundingBox[4]) + abs($boundingBox[0]);
-        $height = abs($boundingBox[5]) + abs($boundingBox[1]);
+        $width = abs($boundingBox[4] - $boundingBox[0]);
+        $height = abs($boundingBox[5] - $boundingBox[1]);
 
         $this->_createEmptyImage($width, $height);
 
@@ -744,7 +748,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_fontSize,
             0,
             0,
-            $height - abs($boundingBox[1]),
+            $height - $boundingBox[1],
             $black,
             $font,
             $text

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block;
@@ -68,6 +68,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $block->toHtml());
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [[false, true], [true, false], [false, false]];

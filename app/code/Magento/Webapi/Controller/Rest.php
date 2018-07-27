@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
@@ -280,7 +280,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $this->_request->getScheme(),
-            $this->_request->getHttpHost(),
+            $this->_request->getHttpHost(false),
             $this->_request->getRequestUri()
         );
         $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');

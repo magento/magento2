@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Store\Model\Store\Service\StoreConfigManager
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,6 +52,10 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param array $storeConfig
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getStoreMock(array $storeConfig)
     {
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -85,6 +89,9 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         return $storeMock;
     }
 
+    /**
+     * @return \Magento\Store\Model\Data\StoreConfig
+     */
     protected function createStoreConfigDataObject()
     {
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactoryMock */

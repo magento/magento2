@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -54,9 +54,12 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
             $product->delete();
             $productDeleted++;
         }
-        $this->messageManager->addSuccess(
-            __('A total of %1 record(s) have been deleted.', $productDeleted)
-        );
+
+        if ($productDeleted) {
+            $this->messageManager->addSuccess(
+                __('A total of %1 record(s) have been deleted.', $productDeleted)
+            );
+        }
 
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
     }

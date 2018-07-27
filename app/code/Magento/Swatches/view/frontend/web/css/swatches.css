@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -275,4 +275,10 @@
 
 .swatch-option-loading {
     content: url("../images/loader-2.gif");
+}
+
+.swatch-input {
+    left: -1000px;
+    position: absolute;
+    visibility: hidden;
 }

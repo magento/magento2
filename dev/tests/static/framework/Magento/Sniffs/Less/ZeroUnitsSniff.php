@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
@@ -25,7 +25,7 @@ class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
     const CSS_PROPERTY_UNIT_REM = 'rem';
 
     /**
-     * List of available CSS Propery units
+     * List of available CSS Property units
      *
      * @var array
      */

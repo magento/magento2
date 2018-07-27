@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
@@ -769,7 +769,7 @@ abstract class AbstractEntity
                     if (!$this->isAttributeParticular($columnName)) {
                         if (trim($columnName) == '') {
                             $emptyHeaderColumns[] = $columnNumber;
-                        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                        } elseif (!preg_match('/^[a-z][\w]*$/u', $columnName)) {
                             $invalidColumns[] = $columnName;
                         } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;

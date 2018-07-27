@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -42,7 +42,7 @@ define([
     }
 
     /**
-     * Creates observable propery using 'track' method.
+     * Creates observable property using 'track' method.
      *
      * @param {Object} obj - Object to whom property belongs.
      * @param {String} key - Key of the property.

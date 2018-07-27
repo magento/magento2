@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,6 +45,7 @@ class Calculator extends Validator
 
                 case Rule::FREE_SHIPPING_ADDRESS:
                     $address->setFreeShipping(true);
+                    $item->setFreeShipping(true);
                     break;
             }
             if ($rule->getStopRulesProcessing()) {

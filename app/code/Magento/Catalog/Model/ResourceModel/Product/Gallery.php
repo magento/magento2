@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -448,5 +448,23 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Counts uses of this image.
+     *
+     * @param string $image
+     * @return int
+     */
+    public function countImageUses($image)
+    {
+        $select = $this->getConnection()->select()
+            ->from(
+                [$this->getMainTableAlias() => $this->getMainTable()],
+                'count(*)'
+            )
+            ->where('value = ?', $image);
+
+        return $this->getConnection()->fetchOne($select);
     }
 }

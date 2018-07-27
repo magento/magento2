@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model;
@@ -576,6 +576,10 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
+    /**
+     * @param $resource
+     * @param $inputData
+     */
     protected function setLinkAssertions($resource, $inputData)
     {
         $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));

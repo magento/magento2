@@ -2,7 +2,7 @@
 /**
  * A helper for handling Magento-specific class names in various use cases
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Utility;
@@ -273,10 +273,11 @@ class Classes
     {
         if (
             preg_match(
-                '/.*\\\\[a-zA-Z0-9]{1,}(Factory|Proxy|SearchResults|DataBuilder|Extension|ExtensionInterface)$/',
+                '/.*\\\\[a-zA-Z0-9]{1,}(Factory|SearchResults|DataBuilder|Extension|ExtensionInterface)$/',
                 $className
             )
             || preg_match('/Magento\\\\[\w]+\\\\(Test\\\\(Page|Fixture))\\\\/', $className)
+            || preg_match('/.*\\\\[a-zA-Z0-9]{1,}\\\\Proxy$/', $className)
         ) {
             return true;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,6 +95,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installUserConfig($input->getOptions());
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

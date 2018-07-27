@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -256,7 +256,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
         $info = $this->model->getSelectedAttributesInfo($product);
-        $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1']], $info);
+        $this->assertEquals('Test Configurable', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
+        $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1',
+            'option_id' => $attribute['attribute_id'], 'option_value' => $attribute['values'][0]['value_index']]],
+            $info);
     }
 
     public function testGetSelectedAttributesInfoForStore()
@@ -273,7 +277,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->model->getSelectedAttributesInfo($this->product);
-        $this->assertEquals([['label' => 'store label', 'value' => 'Option 1']], $info);
+        $this->assertEquals('store label', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
+        $this->assertEquals([['label' => 'store label', 'value' => 'Option 1',
+            'option_id' => $attribute['attribute_id'], 'option_value' => $optionValueId]],
+            $info);
     }
 
     /**
@@ -314,10 +322,17 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product = $this->_prepareForCart();
 
         $result = $this->model->getOrderOptions($product);
+
+        $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
+        $attribute = reset($attributes);
+
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
+        $this->assertEquals('Test Configurable', $result['attributes_info'][0]['label']);
+        $this->assertEquals('Option 1', $result['attributes_info'][0]['value']);
         $this->assertEquals(
-            [['label' => 'Test Configurable', 'value' => 'Option 1']],
+            [['label' => 'Test Configurable', 'value' => 'Option 1',
+                'option_id' => $attribute['attribute_id'], 'option_value' => $attribute['values'][0]['value_index']]],
             $result['attributes_info']
         );
         $this->assertArrayHasKey('product_calculations', $result);

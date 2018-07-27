@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -12,10 +12,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -459,7 +459,7 @@ class Store extends AbstractExtensibleModel implements
         $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $validator->addRule($storeLabelRule, 'name');
 
-        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/');
+        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/i');
         $storeCodeRule->setMessage(
             __(
                 'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'
@@ -531,8 +531,8 @@ class Store extends AbstractExtensibleModel implements
     public function getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data) {
-            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        if ($data === null) {
+            $data = $this->_config->getValue($path);
         }
         return $data === false ? null : $data;
     }
@@ -1160,18 +1160,29 @@ class Store extends AbstractExtensibleModel implements
         if (!$this->isUseStoreInUrl()) {
             $storeParsedQuery['___store'] = $this->getCode();
         }
+
         if ($fromStore !== false) {
             $storeParsedQuery['___from_store'] = $fromStore ===
                 true ? $this->_storeManager->getStore()->getCode() : $fromStore;
         }
+
+        $requestStringParts = explode('?', $requestString, 2);
+        $requestStringPath = $requestStringParts[0];
+        if (isset($requestStringParts[1])) {
+            parse_str($requestStringParts[1], $requestString);
+        } else {
+            $requestString = [];
+        }
+
+        $currentUrlQueryParams = array_merge($requestString, $storeParsedQuery);
 
         $currentUrl = $storeParsedUrl['scheme']
             . '://'
             . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
             . $storeParsedUrl['path']
-            . $requestString
-            . ($storeParsedQuery ? '?' . http_build_query($storeParsedQuery, '', '&amp;') : '');
+            . $requestStringPath
+            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams, '', '&amp;') : '');
 
         return $currentUrl;
     }

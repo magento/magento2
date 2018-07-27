@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,6 +44,9 @@ class Header extends Block
     public function logOut()
     {
         if ($this->isLoggedIn()) {
+            $this->browser->waitUntil(function () {
+                return $this->browser->find('[data-role="spinner"]')->isVisible() ? null : true;
+            });
             $this->_rootElement->find($this->adminAccountLink)->click();
             $this->_rootElement->find($this->signOutLink)->click();
             $this->waitForElementNotVisible($this->signOutLink);

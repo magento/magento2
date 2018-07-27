@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -124,9 +124,8 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
                 $this->priceInfo
                     ->getPrice(BundleDiscountPrice::PRICE_CODE)
                     ->calculateDiscount($configuredOptionsAmount);
-        } else {
-            return parent::getValue();
         }
+        return parent::getValue();
     }
 
     /**

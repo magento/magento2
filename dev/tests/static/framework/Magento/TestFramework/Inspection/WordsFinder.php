@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class WordsFinder
      *
      * @var string
      */
-    protected $copyrightString = 'Copyright © 2013-2017 Magento, Inc. All rights reserved.';
+    protected $copyrightString = 'Copyright © Magento, Inc. All rights reserved.';
 
     /**
      * Copying string which must be present in every non-binary file right after copyright string

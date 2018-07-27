@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,19 +24,36 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeMock;
 
+    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $objectManagerMock;
+
     protected function setUp()
     {
         $this->collectionFactoryMock =
-            $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory')
+            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionFactoryMock =
-            $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory')
+            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\System\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\System\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        ObjectManager::setInstance($this->objectManagerMock);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Framework\Escaper::class)
+            ->willReturn($escaper);
 
         $this->model = new Website(
             $this->collectionFactoryMock,
@@ -90,5 +109,13 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->mockOptions();
 
         $this->assertEquals(false, $this->model->getOptionText('value'));
+    }
+
+    protected function tearDown()
+    {
+        $property = (new \ReflectionClass(ObjectManager::class))->getProperty('_instance');
+        $property->setAccessible(true);
+        $property->setValue(null, null);
+        parent::tearDown();
     }
 }

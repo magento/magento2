@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
+        $title = [];
         if ($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs')) {
             $breadcrumbsBlock->addCrumb(
                 'home',
@@ -64,7 +65,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
                 ]
             );
 
-            $title = [];
             $path = $this->_catalogData->getBreadcrumbPath();
 
             foreach ($path as $name => $breadcrumb) {
@@ -73,7 +73,18 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
             }
 
             $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($title)));
+
+            return parent::_prepareLayout();
         }
+
+        $path = $this->_catalogData->getBreadcrumbPath();
+
+        foreach ($path as $name => $breadcrumb) {
+            $title[] = $breadcrumb['label'];
+        }
+
+        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($title)));
+
         return parent::_prepareLayout();
     }
 }

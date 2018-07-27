@@ -2,7 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Text
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -52,6 +52,9 @@ class TextTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -84,6 +87,9 @@ class TextTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueRequiredDataProvider()
     {
         return [
@@ -150,6 +156,9 @@ class TextTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateValueLengthDataProvider()
     {
         return [

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="TaxConfiguration" area="Adminhtml" mca="admin/system_config/edit/section/tax" module="Magento_Tax">
+        <block name="notificationBlockPopup" class="Magento\Tax\Test\Block\Adminhtml\System\Config\NotificationPopup" locator=".ui-popup-message._show .modal-inner-wrap" strategy="css selector" />
+        <block name="notificationBlock" class="Magento\Tax\Test\Block\Adminhtml\System\Config\Notification" locator="#system_messages" strategy="css selector" />
+        <block name="pageActions" class="Magento\Backend\Test\Block\System\Config\PageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector" />
+        <block name="taxConfigForm" class="Magento\Tax\Test\Block\Adminhtml\System\Config\Tax" locator="#config-edit-form" strategy="css selector" />
+    </page>
+</config>

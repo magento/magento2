@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
@@ -69,6 +69,9 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
         $this->quote->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function restoreCustomerGroupIdDataProvider()
     {
         return [

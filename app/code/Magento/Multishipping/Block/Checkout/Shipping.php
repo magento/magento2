@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -9,7 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Mustishipping checkout shipping
+ * Multishipping checkout shipping
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */

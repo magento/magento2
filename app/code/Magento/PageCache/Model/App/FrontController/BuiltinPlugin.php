@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\App\FrontController;
@@ -64,10 +64,10 @@ class BuiltinPlugin
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
+        $this->version->process();
         if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN) {
             return $proceed($request);
         }
-        $this->version->process();
         $result = $this->kernel->load();
         if ($result === false) {
             $result = $proceed($request);

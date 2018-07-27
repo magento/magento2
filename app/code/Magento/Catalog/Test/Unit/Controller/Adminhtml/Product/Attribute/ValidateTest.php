@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
@@ -195,11 +195,22 @@ class ValidateTest extends AttributeTest
         $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
     }
 
+    /**
+     * @return array
+     */
     public function provideUniqueData()
     {
         return [
-            // valid options
-            [
+            'no values' => [
+                [
+                    'delete' => [
+                        "option_0" => "",
+                        "option_1" => "",
+                        "option_2" => "",
+                    ]
+                ], false
+            ],
+            'valid options' => [
                 [
                     'value' => [
                         "option_0" => [1, 0],
@@ -213,8 +224,7 @@ class ValidateTest extends AttributeTest
                     ]
                 ], false
             ],
-            //with duplicate
-            [
+            'duplicate options' => [
                 [
                     'value' => [
                         "option_0" => [1, 0],
@@ -228,8 +238,7 @@ class ValidateTest extends AttributeTest
                     ]
                 ], true
             ],
-            //with duplicate but deleted
-            [
+            'duplicate and deleted' => [
                 [
                     'value' => [
                         "option_0" => [1, 0],

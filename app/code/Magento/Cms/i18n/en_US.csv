@@ -84,10 +84,8 @@ Exception,Exception
 "All Store Views","All Store Views"
 Edit,Edit
 Delete,Delete
-"Delete ${ $.$data.title }","Delete ${ $.$data.title }"
-"Are you sure you wan\'t to delete a ${ $.$data.title } record?","Are you sure you wan\'t to delete a ${ $.$data.title } record?"
-"Delete ""${ $.$data.title }""","Delete ""${ $.$data.title }"""
-"Are you sure you wan\'t to delete a ""${ $.$data.title }"" record?","Are you sure you wan\'t to delete a ""${ $.$data.title }"" record?"
+"Delete %1","Delete %1"
+"Are you sure you wan\'t to delete a %1 record?","Are you sure you wan\'t to delete a %1 record?"
 View,View
 px.,px.
 "No files found","No files found"

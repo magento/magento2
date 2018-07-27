@@ -1,7 +1,7 @@
 <?php
 /** 
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -119,7 +119,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $dataObjectHelperMock->expects($this->once())->method('populateWithArray')
-            ->with($attributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
+            ->with($attributeOptionMock, ['some value'], \Magento\Eav\Api\Data\AttributeOptionInterface::class)
             ->willReturnSelf();
         $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 

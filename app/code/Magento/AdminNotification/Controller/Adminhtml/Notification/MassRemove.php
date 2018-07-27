@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
@@ -39,6 +39,6 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
                 $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        $this->_redirect('adminhtml/*/');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
@@ -139,7 +139,48 @@ class DataProvider extends AbstractDataProvider
             }
         }
 
+        if (isset($meta['other_settings']['children']['search_engine_robots']['children'])) {
+            $meta['other_settings']['children']['search_engine_robots']['children'] = array_merge(
+                $meta['other_settings']['children']['search_engine_robots']['children'],
+                $this->getSearchEngineRobotsMetadata(
+                    $scope,
+                    $meta['other_settings']['children']['search_engine_robots']['children']
+                )
+            );
+        }
+
         return $meta;
+    }
+
+    /**
+     * Retrieve modified Search Engine Robots metadata
+     *
+     * Disable Search Engine Robots fields in case when current scope is 'stores'.
+     *
+     * @param string $scope
+     * @param array $fields
+     * @return array
+     */
+    private function getSearchEngineRobotsMetadata($scope, array $fields = [])
+    {
+        if ($scope == \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
+            $resetToDefaultsData = [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'disabled' => true,
+                            'is_disable_inheritance' => true,
+                        ],
+                    ],
+                ],
+            ];
+            $fields = array_merge($fields, ['reset_to_defaults' => $resetToDefaultsData]);
+            foreach ($fields as &$field) {
+                $field['arguments']['data']['config']['disabled'] = true;
+                $field['arguments']['data']['config']['is_disable_inheritance'] = true;
+            }
+        }
+        return $fields;
     }
 
     /**

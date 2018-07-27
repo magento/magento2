@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -109,14 +109,14 @@ define([
          * @returns {Group} Chainable.
          */
         _setClasses: function () {
-            var addtional = this.additionalClasses,
+            var additional = this.additionalClasses,
                 classes;
 
-            if (_.isString(addtional)) {
-                addtional = this.additionalClasses.split(' ');
+            if (_.isString(additional)) {
+                additional = this.additionalClasses.split(' ');
                 classes = this.additionalClasses = {};
 
-                addtional.forEach(function (name) {
+                additional.forEach(function (name) {
                     classes[name] = true;
                 }, this);
             }

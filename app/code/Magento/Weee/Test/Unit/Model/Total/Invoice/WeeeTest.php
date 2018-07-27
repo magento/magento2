@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Invoice;
@@ -86,6 +86,9 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
+    /**
+     * @param $orderData
+     */
     private function setupOrder($orderData)
     {
         //Set up order mock

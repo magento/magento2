@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit;
@@ -233,7 +233,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo([]))
             ->will($this->returnSelf());
         $this->assertSame($this->model, $this->model->generateXml());
-        $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXml());
+        $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXML());
     }
 
     public function testGetChildBlock()

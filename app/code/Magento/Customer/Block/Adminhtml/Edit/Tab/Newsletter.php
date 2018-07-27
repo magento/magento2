@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -17,7 +17,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
     /**
      * @var string
      */
-    protected $_template = 'tab/newsletter.phtml';
+    protected $_template = 'Magento_Customer::tab/newsletter.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
@@ -160,7 +160,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
             ]
         );
 
-        if ($this->customerAccountManagement->isReadOnly($customerId)) {
+        if ($this->customerAccountManagement->isReadonly($customerId)) {
             $form->getElement('subscription')->setReadonly(true, true);
         }
         $isSubscribed = $subscriber->isSubscribed();

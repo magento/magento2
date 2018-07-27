@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <th><?php /* @escapeNotVerified */ echo $column['label']; ?></th>
                 <?php endforeach;?>
-                <th class="col-actions" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>">Action</th>
+                <th class="col-actions" colspan="<?= /* @escapeNotVerified */ $_colspan ?>"><?php /* @escapeNotVerified */ echo __('Action') ?></th>
             </tr>
             </thead>
             <tfoot>

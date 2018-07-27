@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Tax\Test\TestCase\TaxConfigurationTest" summary="Apply Tax Configuration Test" ticketId="MAGETWO-64653">
+        <variation name="ApplyDiscountOnPricesIncludingTax" summary="Check Notification After Save Tax Configuration" ticketId="MAGETWO-64652">
+            <data name="config/tax_calculation/tax_calculation_price_includes_tax">Excluding Tax</data>
+            <data name="config/tax_calculation/tax_calculation_apply_after_discount">After Discount</data>
+            <data name="config/tax_calculation/tax_calculation_discount_tax">Including Tax</data>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxConfigurationSuccessSaveMessage"/>
+            <constraint name="Magento\Tax\Test\Constraint\AssertTaxConfigurationNotificationMessage"/>
+        </variation>
+    </testCase>
+</config>

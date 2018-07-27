@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
@@ -178,6 +178,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function postDataProvider()
     {
         return [

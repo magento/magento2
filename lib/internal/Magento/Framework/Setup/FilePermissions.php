@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
@@ -9,7 +9,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Checks permissions to files and folders.
+ */
 class FilePermissions
 {
     /**
@@ -21,6 +26,11 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
+
+    /**
+     * @var State
+     */
+    private $state;
 
     /**
      * List of required writable directories for installation
@@ -60,13 +70,16 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param State $state
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        State $state = null
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
+        $this->state = $state ?: ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -137,16 +150,20 @@ class FilePermissions
      */
     private function checkRecursiveDirectories($directory)
     {
+        /** @var $directoryIterator \RecursiveIteratorIterator   */
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
-        $noWritableFilesFolders = [
-            $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) . '/',
-        ];
 
-        $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $diPath = $this->directoryList->getPath(DirectoryList::DI);
+
+        if ($this->state->getMode() === State::MODE_PRODUCTION) {
+            $directoryIterator = new ExcludeFilter($directoryIterator, [$generationPath, $diPath]);
+        } else {
+            $directoryIterator = new Filter($directoryIterator, [$generationPath . '/', $diPath . '/']);
+        }
 
         $directoryIterator = new ExcludeFilter(
             $directoryIterator,
@@ -154,6 +171,8 @@ class FilePermissions
                 $this->directoryList->getPath(DirectoryList::SESSION) . '/',
             ]
         );
+
+        $directoryIterator->setMaxDepth(1);
 
         $foundNonWritable = false;
 

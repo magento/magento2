@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email;
@@ -12,23 +12,31 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SenderBuilder
      */
-    protected $senderBuilder;
+    private $senderBuilder;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $templateContainerMock;
+    private $templateContainerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $identityContainerMock;
+    private $identityContainerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $transportBuilder;
+    private $transportBuilder;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $templateId = 'test_template_id';
@@ -38,7 +46,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $emailCopyTo = ['example@mail.com'];
 
         $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
+            \Magento\Sales\Model\Order\Email\Container\Template::class,
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId'],
             [],
             '',
@@ -46,7 +54,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getStoreId', '__wakeup'],
             [],
             '',
@@ -54,11 +62,11 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity',
+            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
             [
                 'getEmailIdentity', 'getCustomerEmail',
                 'getCustomerName', 'getTemplateOptions', 'getEmailCopyTo',
-                'getCopyMethod'
+                'getCopyMethod', 'getStore',
             ],
             [],
             '',
@@ -66,7 +74,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->transportBuilder = $this->getMock(
-            '\Magento\Framework\Mail\Template\TransportBuilder',
+            \Magento\Framework\Mail\Template\TransportBuilder::class,
             [
                 'addTo', 'addBcc', 'getTransport',
                 'setTemplateIdentifier', 'setTemplateOptions', 'setTemplateVars',
@@ -99,6 +107,9 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailIdentity')
             ->will($this->returnValue($emailIdentity));
+        $this->identityContainerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($this->equalTo($emailIdentity));
@@ -119,7 +130,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $customerName = 'test_name';
         $customerEmail = 'test_email';
         $transportMock = $this->getMock(
-            '\Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock',
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
             [],
             [],
             '',
@@ -152,7 +163,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSendCopyTo()
     {
         $transportMock = $this->getMock(
-            '\Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock',
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
             [],
             [],
             '',

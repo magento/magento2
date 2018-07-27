@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -62,17 +62,16 @@
 //  Common
 //  _____________________________________________
 
+.page-wrapper {
+    .ie9 & {
+        .lib-css(background-color, @page__background-color);
+        min-height: 0;
+    }
+}
+
 & when (@media-common = true) {
     body {
         .lib-css(background-color, @page__background-color);
-    }
-
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
-    .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
-        }
     }
 
     //
@@ -327,6 +326,9 @@
     .page-footer {
         .widget.block {
             .lib-css(margin, @indent__base 0);
+        }
+        .links .widget.block {
+            margin: 0;
         }
     }
 

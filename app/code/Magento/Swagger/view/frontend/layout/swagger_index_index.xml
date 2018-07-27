@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -41,7 +41,7 @@
         <referenceContainer name="page.wrapper" remove="true"/>
         <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
-            <block name="swaggerUiContent" class="Magento\Framework\View\Element\Template" template="Magento_Swagger::swagger-ui/index.phtml"/>
+            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml"/>
         </referenceContainer>
     </body>
 </page>

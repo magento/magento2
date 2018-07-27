@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -121,5 +121,19 @@ class Page extends Block
     {
         $this->waitForElementNotVisible($this->initialScript);
         sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
+    }
+
+    /**
+     * Get widget title value.
+     * 
+     * @param string $widgetType
+     * @param string $widgetText
+     * @return string
+     */
+    public function getWidgetTitle($widgetType, $widgetText)
+    {
+        return $this->_rootElement
+            ->find(sprintf($this->widgetSelectors[$widgetType], $widgetText), Locator::SELECTOR_XPATH)
+            ->getAttribute('title');
     }
 }

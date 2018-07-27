@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,6 +63,9 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         $this->getMockForAbstractClass('Magento\Framework\Cache\Backend\Decorator\AbstractDecorator', [$options]);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
@@ -86,6 +89,9 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         call_user_func([$decorator, $methodName], null, null);
     }
 
+    /**
+     * @return array
+     */
     public function allMethodsDataProvider()
     {
         $return = [];

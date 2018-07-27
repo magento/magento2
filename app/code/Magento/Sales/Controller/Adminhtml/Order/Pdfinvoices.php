@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -22,6 +22,13 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
  */
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
     /**
      * @var FileFactory
      */

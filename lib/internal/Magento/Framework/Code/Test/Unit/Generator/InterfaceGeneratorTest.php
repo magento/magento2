@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
@@ -113,6 +113,9 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
+    /**
+     * @return array
+     */
     public function generateDataProvider()
     {
         return [

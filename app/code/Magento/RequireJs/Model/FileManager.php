@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\RequireJs\Model;
@@ -164,6 +164,9 @@ class FileManager
             }
 
             foreach ($libDir->read($bundleDir) as $bundleFile) {
+                if (pathinfo($bundleFile, PATHINFO_EXTENSION) !== 'js') {
+                    continue;
+                }
                 $relPath = $libDir->getRelativePath($bundleFile);
                 $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -141,6 +141,9 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($secureRequest, $adminConfig->getCookieSecure());
     }
 
+    /**
+     * @return array
+     */
     public function requestSecureDataProvider()
     {
         return [[true], [false]];

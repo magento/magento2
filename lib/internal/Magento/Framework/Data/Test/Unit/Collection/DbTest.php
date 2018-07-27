@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -327,6 +327,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->printLogQuery($printQuery, false, $query);
     }
 
+    /**
+     * @return array
+     */
     public function printLogQueryPrintingDataProvider()
     {
         return [
@@ -350,6 +353,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->printLogQuery(false, $logQuery, 'some_query');
     }
 
+    /**
+     * @return array
+     */
     public function printLogQueryLoggingDataProvider()
     {
         return [
@@ -541,6 +547,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->distinct($flag);
     }
 
+    /**
+     * @return array
+     */
     public function distinctDataProvider()
     {
         return [

@@ -1,7 +1,8 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
+[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.1-develop)](https://travis-ci.org/magento/magento2)
+[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <h2>Welcome</h2>
-Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
+Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 The installation instructions that used to be here are now published on our GitHub site. Use the information on this page to get started or go directly to the <a href="http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html" target="_blank">guide</a>.
 
@@ -73,9 +74,22 @@ To suggest documentation improvements, click [here][4].
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
 
+<h3>Community Maintainers</h3>
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+
+<a href="https://magento.com/magento-contributors#maintainers">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
+</a>
+
+<h3>Top Contributors</h3>
+Magento is thankful for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, as their contributions are the foundation of the Magento Open Source platform.
+<a href="https://magento.com/magento-contributors">
+    <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
+</a>
+
 <h2>Reporting security issues</h2>
 
-To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
+To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account <a href="https://bugcrowd.com/magento">there</a> to submit and follow-up your issue. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
 
 Stay up-to-date on the latest vulnerabilities and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
 

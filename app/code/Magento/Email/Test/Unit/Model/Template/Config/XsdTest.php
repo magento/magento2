@@ -2,7 +2,7 @@
 /**
  * Test for validation rules implemented by XSD schemas for email templates configuration
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $this->_testXmlAgainstXsd($fixtureXml, $schemaFile, $expectedErrors);
     }
 
+    /**
+     * @return array
+     */
     public function mergedXmlDataProvider()
     {
         return [

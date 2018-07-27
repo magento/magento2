@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
@@ -190,6 +190,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(!$value, $this->model->validate($this->dataObject));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -61,6 +61,9 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->customerRegistryMock = $this->getMock(
@@ -149,7 +152,7 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
                 'transportBuilder' => $this->transportBuilderMock,
                 'customerViewHelper' => $this->customerViewHelperMock,
                 'dataProcessor' => $this->dataProcessorMock,
-                'scopeConfig' => $this->scopeConfigMock
+                'scopeConfig' => $this->scopeConfigMock,
             ]
         );
     }
@@ -284,13 +287,13 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
                 [
                     \Magento\Customer\Model\EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $customerStoreId
+                    $customerStoreId,
                 ],
                 [$xmlPathTemplate, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $customerStoreId],
                 [
                     \Magento\Customer\Model\EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $customerStoreId
+                    $customerStoreId,
                 ]
             )
             ->willReturnOnConsecutiveCalls($templateIdentifier, $sender, $templateIdentifier, $sender);
@@ -302,6 +305,10 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilderMock->expects(clone $expects)
             ->method('setTemplateOptions')
             ->with(['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $customerStoreId])
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects(clone $expects)
+            ->method('setScopeId')
+            ->with($customerStoreId)
             ->willReturnSelf();
         $this->transportBuilderMock->expects(clone $expects)
             ->method('setTemplateVars')
@@ -345,20 +352,20 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
                 'test_number' => 1,
                 'old_email' => 'test@example.com',
                 'new_email' => 'test@example.com',
-                'is_password_changed' => true
+                'is_password_changed' => true,
             ],
             [
                 'test_number' => 2,
                 'old_email' => 'test1@example.com',
                 'new_email' => 'test2@example.com',
-                'is_password_changed' => false
+                'is_password_changed' => false,
             ],
             [
                 'test_number' => 3,
                 'old_email' => 'test1@example.com',
                 'new_email' => 'test2@example.com',
-                'is_password_changed' => true
-            ]
+                'is_password_changed' => true,
+            ],
         ];
     }
 
@@ -457,6 +464,10 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecureMock, 'store' => $this->storeMock])
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setScopeId')
+            ->with($customerStoreId)
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')
@@ -573,6 +584,10 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(['customer' => $this->customerSecureMock, 'store' => $this->storeMock])
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
+            ->method('setScopeId')
+            ->with($customerStoreId)
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')
             ->with($sender)
             ->willReturnSelf();
@@ -681,6 +696,10 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecureMock, 'back_url' => '', 'store' => $this->storeMock])
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setScopeId')
+            ->with($customerStoreId)
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')

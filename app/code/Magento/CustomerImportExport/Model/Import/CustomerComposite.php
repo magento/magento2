@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -285,6 +285,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function getEntityTypeCode()
     {
         return 'customer_composite';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL],
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE]
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData(new \ArrayObject($rows));
+
+        return parent::validateData();
     }
 
     /**

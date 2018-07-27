@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Action;
@@ -212,7 +212,7 @@ class Base implements ActionInterface
     {
         return !count($ids)
             ? $this->createResultCollection()
-            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldName(), $ids);
     }
 
     /**

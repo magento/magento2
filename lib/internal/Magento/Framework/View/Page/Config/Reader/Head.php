@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config\Reader;
@@ -138,6 +138,6 @@ class Head implements Layout\ReaderInterface
             $metadataName = $node->getAttribute('name');
         }
 
-        $pageConfigStructure->setMetaData($metadataName, $node->getAttribute('content'));
+        $pageConfigStructure->setMetadata($metadataName, $node->getAttribute('content'));
     }
 }

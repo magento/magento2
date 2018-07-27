@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -60,6 +60,9 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertStringMatchesFormat($expectedMessage, $tester->getDisplay());
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
