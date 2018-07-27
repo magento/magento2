@@ -129,6 +129,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindexRow(1, $forceReindex);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderReindexRow()
     {
         return [
@@ -198,6 +201,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindexList([1], $forceReindex);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderReindexList()
     {
         return [

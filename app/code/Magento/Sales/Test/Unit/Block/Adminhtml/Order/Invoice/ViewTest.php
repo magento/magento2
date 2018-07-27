@@ -54,6 +54,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $testMethod->invoke($block));
     }
 
+    /**
+     * @return array
+     */
     public function isPaymentReviewDataProvider()
     {
         return [

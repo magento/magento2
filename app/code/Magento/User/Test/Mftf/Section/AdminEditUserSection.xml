@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminEditUserSection">
+        <element name="usernameTextField" type="input" selector="#user_username"/>
+        <element name="firstNameTextField" type="input" selector="#user_firstname"/>
+        <element name="lastNameTextField" type="input" selector="#user_lastname"/>
+        <element name="emailTextField" type="input" selector="#user_email"/>
+        <element name="passwordTextField" type="input" selector="#user_password"/>
+        <element name="pwConfirmationTextField" type="input" selector="#user_confirmation"/>
+        <element name="currentPasswordField" type="input" selector="#user_current_password"/>
+        <element name="userRoleTab" type="button" selector="#page_tabs_roles_section"/>
+        <element name="roleNameFilterTextField" type="input" selector="#permissionsUserRolesGrid_filter_role_name"/>
+        <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]"/>
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
+        <element name="roleNameInFirstRow" type="text" selector=".col-role_name"/>
+        <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+        <element name="saveButton" type="button" selector="#save"/>
+    </section>
+</sections>
