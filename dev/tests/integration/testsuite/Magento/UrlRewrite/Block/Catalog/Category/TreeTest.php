@@ -54,7 +54,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTreeArrayApostropheReplaced()
     {
-//        $this->markTestSkipped('To be fixed in MAGETWO-91166');
         $tree = $this->_treeBlock->getTreeArray();
 
         $this->assertNotContains('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
@@ -72,7 +71,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTreeArrayDoubleQuotesReplaced()
     {
-//        $this->markTestSkipped('To be fixed in MAGETWO-91166');
         $tree = $this->_treeBlock->getTreeArray();
 
         $this->assertNotContains('\"', $tree['children'][0]['children'][0]['children'][0]['name']);
