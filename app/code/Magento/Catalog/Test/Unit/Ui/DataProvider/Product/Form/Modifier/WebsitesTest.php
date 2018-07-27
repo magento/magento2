@@ -76,7 +76,10 @@ class WebsitesTest extends AbstractModifierTest
 
     protected function setUp()
     {
-        $this->objectManager = new ObjectManager($this);
+        parent::setUp();
+        $this->productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(self::PRODUCT_ID);
         $this->assignedWebsites = [self::SECOND_WEBSITE_ID];
         $this->websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->setMethods(['getId', 'getName'])
@@ -101,15 +104,9 @@ class WebsitesTest extends AbstractModifierTest
         $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
-        $this->locatorMock = $this->getMockBuilder(\Magento\Catalog\Model\Locator\LocatorInterface::class)
-            ->setMethods(['getProduct', 'getWebsiteIds'])
-            ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
         $this->locatorMock->expects($this->any())
             ->method('getWebsiteIds')
             ->willReturn($this->assignedWebsites);
@@ -148,9 +145,6 @@ class WebsitesTest extends AbstractModifierTest
         $this->storeRepositoryMock->expects($this->any())
             ->method('getList')
             ->willReturn([$this->storeViewMock]);
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::PRODUCT_ID);
         $this->secondWebsiteMock->expects($this->any())
             ->method('getId')
             ->willReturn($this->assignedWebsites[0]);
