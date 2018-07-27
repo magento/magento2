@@ -71,4 +71,11 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="{{id}}" stepKey="seeCategoryPageTitle"/>
     </actionGroup>
+
+    <!--Open tab "Products in Category" if she closed-->
+    <actionGroup name="OpenProductsInCategorySection">
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSection"/>
+        <conditionalClick selector="{{AdminCategoryProductsSection.sectionHeader}}" dependentSelector="{{AdminCategoryProductsSection.tabProductClosed}}" visible="true" stepKey="openProductsInCategory"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
+    </actionGroup>
 </actionGroups>
