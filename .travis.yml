@@ -53,13 +53,26 @@ cache:
 before_install:
   - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.0/elasticsearch-2.3.0.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.0.deb && sudo service elasticsearch restart
   - ./dev/travis/before_install.sh
+  - mkdir -p $HOME/bin
+  - curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C $HOME/bin
+  - testspace config url $TS_ORG.testspace.com
 install: composer install --no-interaction
+
 before_script: ./dev/travis/before_script.sh
 script:
   # Set arguments for variants of phpunit based tests; '|| true' prevents failing script when leading test fails
   - test $TEST_SUITE = "functional" && TEST_FILTER='dev/tests/functional/testsuites/Magento/Mtf/TestSuite/InjectableTests.php' || true
 
   # The scripts for grunt/phpunit type tests
-  - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
-  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER --log-junit $TRAVIS_BUILD_DIR/testresults.xml; fi
+  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER --log-junit $TRAVIS_BUILD_DIR/testresults.xml; fi
   - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi
+
+after_script:
+  - if [ $TEST_SUITE != "js" ]; then
+      testspace [PHP-${TRAVIS_PHP_VERSION}]testresults.xml{.};
+    elif [ $GRUNT_COMMAND == "spec" ]; then
+      for theme in blank luma backend; do
+          testspace [JS-$theme/dev/tests/js/jasmine]var/log/js-unit/$theme/TEST-*.xml{dev/tests/js/jasmine};
+      done
+    fi
