@@ -18,13 +18,13 @@ class Order extends AbstractDashboard
     /**
      * @var \Magento\Reports\Model\ResourceModel\Order\Collection
      */
-    private $_orderCollection;
+    protected $_orderCollection;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      * @since 100.0.6
      */
-    private $_storeManager;
+    protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
