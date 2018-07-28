@@ -62,7 +62,7 @@ define([
 
     Element = _.extend({
         defaults: {
-            _requesetd: {},
+            _requested: {},
             containers: [],
             exports: {},
             imports: {},
@@ -245,7 +245,7 @@ define([
          * @returns {Function} Async module wrapper.
          */
         requestModule: function (name) {
-            var requested = this._requesetd;
+            var requested = this._requested;
 
             if (!requested[name]) {
                 requested[name] = registry.async(name);
