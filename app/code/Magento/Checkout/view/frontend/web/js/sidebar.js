@@ -77,8 +77,10 @@ define([
                         confirm: function () {
                             self._removeItem($(event.currentTarget));
                         },
-                        always: function (event) {
-                            event.stopImmediatePropagation();
+
+                        /** @inheritdoc */
+                        always: function (e) {
+                            e.stopImmediatePropagation();
                         }
                     }
                 });
