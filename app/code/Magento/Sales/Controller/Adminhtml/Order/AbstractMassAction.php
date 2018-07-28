@@ -70,7 +70,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
 
     /**
      * Return component referrer url
-     * TODO: Technical dept referrer url should be implement as a part of Action configuration in in appropriate way
+     * TODO: Technical dept referrer url should be implement as a part of Action configuration in appropriate way
      *
      * @return null|string
      */

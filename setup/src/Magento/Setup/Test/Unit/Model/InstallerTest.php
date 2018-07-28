@@ -267,6 +267,9 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testInstall()
     {
         $request = [
@@ -316,6 +319,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $appState->expects($this->once())
             ->method('setAreaCode')
             ->with(\Magento\Framework\App\Area::AREA_GLOBAL);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
         $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
         $this->objectManager->expects($this->any())
@@ -346,7 +350,8 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
                 [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
-                [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock]
+                [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock],
+                [\Magento\Framework\Registry::class, $registry]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->createMock(\Magento\Setup\Model\AdminAccount::class)
