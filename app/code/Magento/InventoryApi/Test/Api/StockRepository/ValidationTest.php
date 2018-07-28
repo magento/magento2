@@ -103,7 +103,7 @@ class ValidationTest extends WebapiAbstract
     public function testFailedValidationWhenCreateOnNotExistingWebsite()
     {
         $notExistingWebsiteCode = 'NotExistingWebsite';
-        $data = $validData = [
+        $data = [
             StockInterface::NAME => 'stock-name',
             StockInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => [[
