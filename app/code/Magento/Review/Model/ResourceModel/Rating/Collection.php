@@ -138,7 +138,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id',
                 []
             );
-            //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
         $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);
