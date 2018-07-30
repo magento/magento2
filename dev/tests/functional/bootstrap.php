@@ -14,6 +14,11 @@ restore_error_handler();
 include __DIR__ . '/vendor/autoload.php';
 setCustomErrorHandler();
 
+/* Custom umask value may be provided in optional mage_umask file in root */
+$umaskFile = BP . '/magento_umask';
+$mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
+umask($mask);
+
 date_default_timezone_set('UTC');
 
 /*  For data consistency between displaying (printing) and serialization a float number */
