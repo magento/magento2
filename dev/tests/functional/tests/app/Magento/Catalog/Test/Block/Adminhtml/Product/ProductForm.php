@@ -28,7 +28,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
+    protected $attribute = './/*[contains(@class,"label")]/label[text()="%s"]';
 
     /**
      * Product new from date field on the product form
