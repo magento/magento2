@@ -32,11 +32,11 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         $itemId = $request->getParam('item_id');
         if (!($model = $this->_objectManager->create(\Magento\Store\Model\Store::class)->load($itemId))) {
-            $this->messageManager->addError(__('Something went wrong. Please try again.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
-            $this->messageManager->addError(__('This store view cannot be deleted.'));
+            $this->messageManager->addErrorMessage(__('This store view cannot be deleted.'));
             return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $model->getId()]);
         }
 
@@ -47,12 +47,13 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
         try {
             $model->delete();
 
-            $this->messageManager->addSuccess(__('You deleted the store view.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the store view.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete the store view. Please try again later.'));
+            $this->messageManager
+                ->addExceptionMessage($e, __('Unable to delete the store view. Please try again later.'));
         }
         return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
     }

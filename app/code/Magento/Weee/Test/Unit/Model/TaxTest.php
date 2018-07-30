@@ -157,13 +157,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * test GetProductWeeeAttributes
      * @dataProvider getProductWeeeAttributesDataProvider
      * @param array $weeeTaxCalculationsByEntity
-     * @param array $expectedFptLabel
+     * @param mixed $websitePassed
+     * @param string $expectedFptLabel
+     * @return void
      */
-    public function testGetProductWeeeAttributes($weeeTaxCalculationsByEntity, $expectedFptLabel)
-    {
+    public function testGetProductWeeeAttributes(
+        array $weeeTaxCalculationsByEntity,
+        $websitePassed,
+        string $expectedFptLabel
+    ) {
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $store = $this->createMock(\Magento\Store\Model\Store::class);
@@ -187,28 +191,38 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCodesByFrontendType')
             ->willReturn(['0'=>'fpt']);
 
+        $this->storeManager->expects($this->any())
+            ->method('getWebsite')
+            ->willReturn($website);
+        $website->expects($this->any())
+            ->method('getId')
+            ->willReturn($websitePassed);
+        $website->expects($this->any())
+            ->method('getDefaultGroup')
+            ->willReturn($group);
+        $group->expects($this->any())
+            ->method('getDefaultStore')
+            ->willReturn($store);
         $store->expects($this->any())
             ->method('getId')
             ->willReturn(1);
 
+        if ($websitePassed) {
+            $product->expects($this->never())
+                ->method('getStore')
+                ->willReturn($store);
+        } else {
+            $product->expects($this->once())
+                ->method('getStore')
+                ->willReturn($store);
+            $store->expects($this->once())
+                ->method('getWebsiteId')
+                ->willReturn(1);
+        }
+
         $product->expects($this->any())
             ->method('getId')
             ->willReturn(1);
-
-        $website->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
-        $website->expects($this->any())
-            ->method('getDefaultGroup')
-            ->willReturn($group);
-
-        $group->expects($this->any())
-            ->method('getDefaultStore')
-            ->willReturn($store);
-
-        $this->storeManager->expects($this->any())
-            ->method('getWebsite')
-            ->willReturn($website);
 
         $this->weeeConfig->expects($this->any())
             ->method('isEnabled')
@@ -237,7 +251,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 0 => $weeeTaxCalculationsByEntity
             ]);
 
-        $result = $this->model->getProductWeeeAttributes($product, null, null, null, true);
+        $result = $this->model->getProductWeeeAttributes($product, null, null, $websitePassed, true);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey(0, $result);
         $obj = $result[0];
@@ -312,7 +326,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'frontend_label' => 'fpt_label_frontend',
                     'attribute_code' => 'fpt_code',
                 ],
-                'expectedFptLabel' => 'fpt_label'
+                'websitePassed' => 1,
+                'expectedFptLabel' => 'fpt_label',
             ],
             'store_label_not_defined' => [
                 'weeeTaxCalculationsByEntity' => [
@@ -321,8 +336,19 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     'frontend_label' => 'fpt_label_frontend',
                     'attribute_code' => 'fpt_code',
                 ],
-                'expectedFptLabel' => 'fpt_label_frontend'
-            ]
+                'websitePassed' => 1,
+                'expectedFptLabel' => 'fpt_label_frontend',
+            ],
+            'website_not_passed' => [
+                'weeeTaxCalculationsByEntity' => [
+                    'weee_value' => 1,
+                    'label_value' => '',
+                    'frontend_label' => 'fpt_label_frontend',
+                    'attribute_code' => 'fpt_code',
+                ],
+                'websitePassed' => null,
+                'expectedFptLabel' => 'fpt_label_frontend',
+            ],
         ];
     }
 

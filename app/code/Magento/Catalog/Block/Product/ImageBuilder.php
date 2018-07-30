@@ -122,7 +122,7 @@ class ImageBuilder
     public function create()
     {
         /** @var \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface $simpleOption */
-        $simpleOption = $this->product->getCustomOption('simple_product');
+        $simpleOption = $this->product->getOptionById('simple_product');
 
         if ($simpleOption !== null) {
             $optionProduct = $simpleOption->getProduct();
