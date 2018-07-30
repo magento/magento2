@@ -55,7 +55,7 @@ class QueryProcessor
         array $variableValues = null,
         string $operationName = null
     ) : array {
-        $disableIntrospection = $this->exceptionFormatter->shouldShowDetail();
+        $disableIntrospection = !$this->exceptionFormatter->shouldShowDetail();
         $this->queryComplexityLimiter->execute($disableIntrospection);
 
         $rootValue = null;
