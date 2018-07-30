@@ -45,6 +45,7 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
@@ -60,5 +61,19 @@
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
         <waitForElementNotVisible selector="{{AdminProductImagesSection.uploadProgressBar}}" stepKey="waitForUpload"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
+    </actionGroup>
+
+    <!--Add special price to product in Admin product page-->
+    <actionGroup name="AddSpecialPriceToProductActionGroup">
+        <arguments>
+            <argument name="price" type="string" defaultValue="8"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="initScrollToTopOfThePage"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
+        <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
     </actionGroup>
 </actionGroups>
