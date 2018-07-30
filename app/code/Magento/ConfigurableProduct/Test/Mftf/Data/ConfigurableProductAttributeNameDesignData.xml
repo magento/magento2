@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="NewProductsData" type="user">
+        <data key="productName">Shoes</data>
+        <data key="price">60</data>
+        <data key="weight">100</data>
+        <data key="defaultLabel">design</data>
+        <data key="adminField1">red</data>
+        <data key="defaultStoreViewField1">red123</data>
+        <data key="adminField2">blue</data>
+        <data key="defaultStoreViewField2">blue123</data>
+        <data key="adminField3">yellow</data>
+        <data key="defaultStoreViewField3">yellow123</data>
+        <data key="adminField4">green</data>
+        <data key="defaultStoreViewField4">green123</data>
+        <data key="adminField5">black</data>
+        <data key="defaultStoreViewField5">black123</data>
+        <data key="attributeCodeField">bug91524</data>
+    </entity>
+
+    <entity name="assertionData" type="assertion">
+        <data key="catalogProduct">product</data>
+        <data key="configurableProduct">configurable</data>
+        <data key="errorMessage">element.disabled is not a function</data>
+    </entity>
+
+</entities>
