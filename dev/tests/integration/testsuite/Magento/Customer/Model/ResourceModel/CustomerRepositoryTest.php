@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Checks Customer insert, update, search with repository
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 {
