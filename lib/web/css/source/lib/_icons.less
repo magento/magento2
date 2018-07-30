@@ -285,6 +285,10 @@
     .lib-icon-text-hide();
 }
 
+._lib-icon-image-url(@_path) when not (@_path = false) {
+    .lib-css(background-image, url(@_path));
+}
+
 ._lib-icon-image(
     @_icon-image,
     @_icon-image-width,
@@ -294,9 +298,7 @@
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
-    .lib-url-check(@_icon-image);
-
-    .lib-css(background-image, @lib-url-check-output); // @lib-url-check-output is a returned variable of .lib-url-check() mixin
+    ._lib-icon-image-url(@_icon-image);
     .lib-css(background-position-x, @_icon-image-position-x);
     .lib-css(background-position-y, @_icon-image-position-y);
     .lib-css(line-height, @_icon-image-height);
