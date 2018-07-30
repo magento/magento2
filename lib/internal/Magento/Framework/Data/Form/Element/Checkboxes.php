@@ -178,14 +178,6 @@ class Checkboxes extends AbstractElement
         return;
     }
 
-    //    public function getName($value)
-    //    {
-    //        if ($name = $this->getData('name')) {
-    //            return str_replace('$value', $value, $name);
-    //        }
-    //        return ;
-    //    }
-
     /**
      * @param array $option
      * @return string

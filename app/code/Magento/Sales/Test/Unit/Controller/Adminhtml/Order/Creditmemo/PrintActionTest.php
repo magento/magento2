@@ -155,7 +155,8 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
         $creditmemoId = 2;
         $date = '2015-01-19_13-03-45';
         $fileName = 'creditmemo2015-01-19_13-03-45.pdf';
-        $fileContents = 'pdf0123456789';
+        $pdfContent = 'pdf0123456789';
+        $fileData = ['type' => 'string', 'value' => $pdfContent, 'rm' => true];
         $this->prepareTestExecute($creditmemoId);
 
         $this->objectManagerMock->expects($this->any())
@@ -184,12 +185,12 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($date);
         $this->pdfMock->expects($this->once())
             ->method('render')
-            ->willReturn($fileContents);
+            ->willReturn($pdfContent);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
             ->with(
                 $fileName,
-                $fileContents,
+                $fileData,
                 \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR,
                 'application/pdf'
             )
