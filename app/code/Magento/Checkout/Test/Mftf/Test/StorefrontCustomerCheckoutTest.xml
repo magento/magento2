@@ -60,6 +60,7 @@
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersIfPresent"/>
         <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
 
