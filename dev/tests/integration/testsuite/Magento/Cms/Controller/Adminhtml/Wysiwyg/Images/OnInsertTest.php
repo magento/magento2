@@ -23,7 +23,7 @@ class OnInsertTest extends AbstractBackendController
      * @magentoConfigFixture admin_store cms/wysiwyg/use_static_urls_in_catalog 1
      * @return void
      */
-    public function testExecuteWhithStaticUrls()
+    public function testExecutewithStaticUrls()
     {
         $this->prepareRequest();
         $this->dispatch('backend/cms/wysiwyg_images/onInsert');
@@ -36,7 +36,7 @@ class OnInsertTest extends AbstractBackendController
      * @magentoConfigFixture admin_store cms/wysiwyg/use_static_urls_in_catalog 0
      * @return void
      */
-    public function testExecuteWhithoutStaticUrls()
+    public function testExecutewithoutStaticUrls()
     {
         $this->prepareRequest();
         $this->dispatch('backend/cms/wysiwyg_images/onInsert');
