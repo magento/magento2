@@ -34,8 +34,8 @@ class QueryComplexityLimiter
      * @param int $queryComplexity
      */
     public function __construct(
-        int $queryDepth = 50,
-        int $queryComplexity = 150
+        int $queryDepth = 10,
+        int $queryComplexity = 50
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;

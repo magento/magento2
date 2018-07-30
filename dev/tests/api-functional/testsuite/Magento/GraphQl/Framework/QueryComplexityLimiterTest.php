@@ -86,109 +86,6 @@ category(id: 2) {
                       id
                       types
                     }
-                    categories {
-                      id
-                      position
-                      level
-                      url_key
-                      url_path
-                      product_count
-                      breadcrumbs {
-                        category_id
-                        category_name
-                        category_url_key
-                      }
-                      products {
-                        items {
-                          name
-                          special_from_date
-                          special_to_date
-                          new_to_date
-                          new_from_date
-                          tier_price
-                          manufacturer
-                          thumbnail
-                          sku
-                          image
-                          canonical_url
-                          updated_at
-                          created_at
-                          categories {
-                            id
-                            position
-                            level
-                            url_key
-                            url_path
-                            product_count
-                            breadcrumbs {
-                              category_id
-                              category_name
-                              category_url_key
-                            }
-                            products {
-                              items {
-                                name
-                                special_from_date
-                                special_to_date
-                                new_to_date
-                                new_from_date
-                                tier_price
-                                manufacturer
-                                sku
-                                image
-                                canonical_url
-                                updated_at
-                                created_at
-                                categories {
-                                  id
-                                  position
-                                  level
-                                  url_key
-                                  url_path
-                                  product_count
-                                  breadcrumbs {
-                                    category_id
-                                    category_name
-                                    category_url_key
-                                  }
-                                  products {
-                                    items {
-                                      name
-                                      special_from_date
-                                      special_to_date
-                                      new_to_date
-                                      new_from_date
-                                      tier_price
-                                      manufacturer
-                                      sku
-                                      image
-                                      thumbnail
-                                      canonical_url
-                                      updated_at
-                                      created_at
-                                      categories {
-                                        id
-                                        position
-                                        level
-                                        url_key
-                                        url_path
-                                        product_count
-                                        default_sort_by
-                                        breadcrumbs {
-                                          category_id
-                                          category_name
-                                          category_url_key
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -201,7 +98,7 @@ category(id: 2) {
 }
 QUERY;
 
-        self::expectExceptionMessageRegExp('/Max query complexity should be 150 but got 151/');
+        self::expectExceptionMessageRegExp('/Max query complexity should be 50 but got 62/');
         $this->graphQlQuery($query);
     }
 
@@ -238,71 +135,7 @@ QUERY;
                                       categories {
                                         products {
                                           items {
-                                            categories {
-                                              products {
-                                                items {
-                                                  categories {
-                                                    products {
-                                                      items {
-                                                        categories {
-                                                          products {
-                                                            items {
-                                                              name,
-                                                              categories {
-                                                                products {
-                                                                  items {
-                                                                    categories {
-                                                                      products {
-                                                                        items {
-                                                                          categories{
-                                                                            products {
-                                                                              items {
-                                                                                categories {
-                                                                                  products {
-                                                                                    items {
-                                                                                      categories {
-                                                                                        products {
-                                                                                          items {
-                                                                                            categories {
-                                                                                              products {
-                                                                                                items {
-                                                                                                  name,
-                                                                                                  categories {
-                                                                                                    products {
-                                                                                                      items {
-                                                                                                        categories {
-                                                                                                          name
-                                                                                                        }
-                                                                                                      }
-                                                                                                    }
-                                                                                                  }
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
+                                            name
                                           }
                                         }
                                       }
@@ -326,7 +159,7 @@ QUERY;
   }
 }
 QUERY;
-        self::expectExceptionMessageRegExp('/Max query depth should be 50 but got 51/');
+        self::expectExceptionMessageRegExp('/Max query depth should be 10 but got 20/');
         $this->graphQlQuery($query);
     }
 }
