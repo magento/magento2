@@ -12,6 +12,7 @@
             <title value="Remove products from the wishlist using the sidebar."/>
             <description value="Products removed from wishlist and a customer remains on the same page."/>
             <group value="wishlist"/>
+            <testCaseId value="MAGETWO-93952"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
@@ -32,8 +33,8 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
         <!-- Sign in as customer -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
-            <argument name="Customer" value="$$customer$$"/>
+        <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginToStorefrontAccount">
+            <argument name="customer" value="$$customer$$"/>
         </actionGroup>
         <!-- Add product from first category to the wishlist -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
@@ -45,6 +46,7 @@
         </actionGroup>
         <!--Remove product from the Wishlist using the sidebar from the second category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$simpleProduct1$$"/>
