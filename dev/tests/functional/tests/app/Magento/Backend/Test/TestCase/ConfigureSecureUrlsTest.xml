@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\ConfigureSecureUrlsTest" summary="Configure secure URLs" ticketId="MAGETWO-35408">
         <variation name="ConfigureSecureUrlsHttpForStorefrontHttpsForAdmin" summary="http for Storefront, https for Admin" ticketId="MAGETWO-35408">
+            <data name="issue" xsi:type="string">MQE-1160</data>
             <data name="configData" xsi:type="string">disable_https_frontend_admin</data>
             <data name="navMenuPath" xsi:type="string">Marketing>Catalog Price Rule</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertHttpUsedOnFrontend" />
