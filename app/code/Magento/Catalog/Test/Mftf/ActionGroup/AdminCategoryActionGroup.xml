@@ -58,4 +58,14 @@
         <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
         <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
     </actionGroup>
+
+    <!-- Go to admin category page by id -->
+    <actionGroup name="goToAdminCategoryPageById">
+        <arguments>
+            <argument name="id" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryEditPage.url(id)}}" stepKey="amOnAdminCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="{{id}}" stepKey="seeCategoryPageTitle"/>
+    </actionGroup>
 </actionGroups>
