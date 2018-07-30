@@ -736,16 +736,21 @@
     text-align: center;
     top: 0;
     z-index: @z-index-10;
+    overflow: hidden;
+
+    .magnifier-large {
+        width: auto;
+        height: auto;
+        max-height: none;
+        max-width: none;
+        border: none;
+        position: absolute;
+        z-index: @z-index-1;
+    }
 }
 
 .magnifier-loader-text {
     margin-top: 10px;
-}
-
-.magnifier-large {
-    position: absolute;
-    width: 32%;
-    z-index: @z-index-1;
 }
 
 .magnifier-preview {
@@ -754,6 +759,7 @@
     overflow: hidden;
     padding: 0;
     position: absolute;
+    z-index: 2;
     top: 215px;
     &:not(.hidden) {
         background-color: @color-white;
