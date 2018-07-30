@@ -260,7 +260,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(
                 $attributeMetadata,
                 $attributeMetadata1,
-                'Attribute metadata from the the same service became different after getAttributeCode was called'
+                'Attribute metadata from the same service became different after getAttributeCode was called'
             );
             // Verify the consistency of attribute metadata from two services
             // after getAttributeCode was called

@@ -11,6 +11,8 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Serialize\Serializer\Sensitive;
+use Magento\Framework\Serialize\Serializer\SensitiveFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Config\App\Config\Type\System\Reader;
@@ -74,9 +76,20 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(Sensitive::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->reader = $this->getMockBuilder(Reader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sensitiveFactory = $this->getMockBuilder(SensitiveFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sensitiveFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->serializer);
+        /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializerMock */
+        $serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,11 +98,12 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             $this->postProcessor,
             $this->fallback,
             $this->cache,
-            $this->serializer,
+            $serializerMock,
             $this->preProcessor,
             1,
             'system',
-            $this->reader
+            $this->reader,
+            $sensitiveFactory
         );
     }
 
@@ -132,50 +146,5 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->willReturn($data);
         $this->assertEquals($data, $this->configType->get(''));
-    }
-
-    public function testGetNotCached()
-    {
-        $path = 'stores/default/dev/unsecure/url';
-        $url = 'http://magento.test/';
-
-        $dataToCache = [
-            'unsecure' => [
-                'url' => $url
-            ]
-        ];
-        $data = [
-            'default' => [],
-            'websites' => [],
-            'stores' => [
-                'default' => [
-                    'dev' => [
-                        'unsecure' => [
-                            'url' => $url
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $this->cache->expects($this->any())
-            ->method('load')
-            ->willReturnOnConsecutiveCalls(false, false);
-
-        $this->serializer->expects($this->atLeastOnce())
-            ->method('serialize')
-            ->willReturn(serialize($dataToCache));
-        $this->cache->expects($this->atLeastOnce())
-            ->method('save')
-            ->willReturnSelf();
-        $this->reader->expects($this->once())
-            ->method('read')
-            ->willReturn($data);
-        $this->postProcessor->expects($this->once())
-            ->method('process')
-            ->with($data)
-            ->willReturn($data);
-
-        $this->assertEquals($url, $this->configType->get($path));
-        $this->assertEquals($url, $this->configType->get($path));
     }
 }

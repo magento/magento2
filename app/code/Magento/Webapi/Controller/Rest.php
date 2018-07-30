@@ -22,6 +22,7 @@ use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
  * Front controller for WebAPI REST area.
@@ -120,6 +121,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $swaggerGenerator;
 
     /**
+     * @var RequestProcessorPool
+     */
+    protected $requestProcessorPool;
+
+    /**
      * @var StoreManagerInterface
      * @deprecated 100.1.0
      */
@@ -189,6 +195,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
+        $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
     }
 
     /**
@@ -233,15 +240,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            if ($this->isSchemaRequest()) {
-                $this->processSchemaRequest();
-            } else {
-                $this->processApiRequest();
-            }
+            $processor = $this->requestProcessorPool->getProcessor($this->_request);
+            $processor->process($this->_request);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
         }
+
         return $this->_response;
     }
 

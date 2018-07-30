@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Tax\Model\Calculation;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php'
  * Class TaxTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Utility object for setting up tax rates, tax classes and tax rules
@@ -23,6 +24,21 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * @var SetupUtil
      */
     protected $setupUtil = null;
+
+    /**
+     * @var TotalsCollector
+     */
+    private $totalsCollector;
+
+    public function setUp()
+    {
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        $this->totalsCollector = $objectManager->create(TotalsCollector::class);
+        $this->setupUtil = new SetupUtil($objectManager);
+
+        parent::setUp();
+    }
 
     /**
      * Test taxes collection for quote.
@@ -227,25 +243,26 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * @param array $configData
      * @param array $quoteData
      * @param array $expectedResults
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @dataProvider taxDataProvider
      * @return void
      */
     public function testTaxCalculation($configData, $quoteData, $expectedResults)
     {
-        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var  \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector */
-        $totalsCollector = $objectManager->create(\Magento\Quote\Model\Quote\TotalsCollector::class);
-
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil = new SetupUtil($objectManager);
         $this->setupUtil->setupTax($configData);
 
         $quote = $this->setupUtil->setupQuote($quoteData);
         $quoteAddress = $quote->getShippingAddress();
-        $totalsCollector->collectAddressTotals($quote, $quoteAddress);
+        $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
         $this->verifyResult($quoteAddress, $expectedResults);
     }
 

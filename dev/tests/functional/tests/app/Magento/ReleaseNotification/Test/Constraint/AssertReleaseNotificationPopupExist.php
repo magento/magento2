@@ -17,14 +17,23 @@ class AssertReleaseNotificationPopupExist extends AbstractConstraint
      * Assert that release notificationt popup is visible on dashboard
      *
      * @param Dashboard $dashboard
+     * @param string $releaseContentVersion
      * @return void
      */
-    public function processAssert(Dashboard $dashboard)
+    public function processAssert(Dashboard $dashboard, string $releaseContentVersion)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
-            $dashboard->getReleaseNotificationBlock()->isVisible(),
-            "Release Notification Popup is absent on dashboard."
+        $value = version_compare(
+            $dashboard->getApplicationVersion()->getVersion(),
+            $releaseContentVersion,
+            '<='
         );
+
+        if (!$value) {
+            \PHPUnit_Framework_Assert::assertTrue(
+                $dashboard->getReleaseNotificationBlock()->isVisible(),
+                "Release Notification Popup is absent on dashboard."
+            );
+        }
     }
 
     /**

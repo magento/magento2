@@ -407,7 +407,7 @@ class Generator extends AbstractSchemaGenerator
             if ($simpleType = $this->getSimpleType($trimedTypeName)) {
                 $result['items'] = ['type' => $simpleType];
             } else {
-                if (strpos($typeName, '[]')) {
+                if (strpos($typeName, '[]') !== false) {
                     $result['items'] = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
                 } else {
                     $result = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
@@ -863,9 +863,17 @@ class Generator extends AbstractSchemaGenerator
             if (isset($parameters['result']['type'])) {
                 $schema = $this->getObjectSchema($parameters['result']['type'], $description);
             }
-            $responses['200']['description'] = '200 Success.';
+
+            // Some methods may have a non-standard HTTP success code.
+            $specificResponseData = $parameters['result']['response_codes']['success'] ?? [];
+            // Default HTTP success code to 200 if nothing has been supplied.
+            $responseCode = $specificResponseData['code'] ?? '200';
+            // Default HTTP response status to 200 Success if nothing has been supplied.
+            $responseDescription = $specificResponseData['description'] ?? '200 Success.';
+
+            $responses[$responseCode]['description'] = $responseDescription;
             if (!empty($schema)) {
-                $responses['200']['schema'] = $schema;
+                $responses[$responseCode]['schema'] = $schema;
             }
         }
         return $responses;

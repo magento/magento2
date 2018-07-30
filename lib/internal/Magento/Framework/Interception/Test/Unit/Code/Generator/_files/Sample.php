@@ -14,6 +14,9 @@ class Sample
         return $this->attribute;
     }
 
+    /**
+     * @param $value
+     */
     public function setValue($value)
     {
         $this->attribute = $value;

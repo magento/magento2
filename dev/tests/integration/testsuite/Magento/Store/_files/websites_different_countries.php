@@ -44,9 +44,6 @@ if (!$store->getId()) {
     $store->save();
 }
 
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
-
 //Setting up allowed countries
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 //Allowed countries for default website.
@@ -59,7 +56,7 @@ $configResource->saveConfig(
 //Allowed countries for second website
 $configResource->saveConfig(
     'general/country/allow',
-    'ES',
+    'ES,US,UK,DE',
     \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
     $websiteId
 );

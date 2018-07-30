@@ -141,11 +141,13 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
                     ->getMetadata(ProductInterface::class)
                     ->getLinkField();
 
+                $backendLinkField = $attribute->getBackend()->getEntityIdField();
+
                 $select = $this->getConnection()->select()
                     ->from(['b' => $backendTable])
                     ->join(
                         ['e' => $attribute->getEntity()->getEntityTable()],
-                        "b.$linkField = e.$linkField"
+                        "b.$backendLinkField = e.$linkField"
                     )->where('b.attribute_id = ?', $attribute->getId())
                     ->where('e.attribute_set_id = ?', $result['attribute_set_id']);
 

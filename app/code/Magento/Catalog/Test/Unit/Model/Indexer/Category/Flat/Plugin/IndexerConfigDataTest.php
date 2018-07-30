@@ -48,6 +48,9 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($outputData, $this->model->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetDataProvider()
     {
         $flatIndexerData = [

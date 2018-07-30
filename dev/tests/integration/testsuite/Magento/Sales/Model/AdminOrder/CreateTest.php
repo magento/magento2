@@ -519,20 +519,14 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * Email before and after failed first place order action.
      *
      * @case #1 Is the same.
-     * @case #2 Is empty.
-     * @case #3 Filled after failed first place order action.
-     * @case #4 Empty after failed first place order action.
-     * @case #5 Changed after failed first place order action.
+     * @case #2 Changed after failed first place order action.
      * @return array
      */
     public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
-            2 => ['', ''],
-            3 => ['', 'customer@email.com'],
-            4 => ['customer@email.com', ''],
-            5 => ['customer@email.com', 'changed_customer@email.com'],
+            2 => ['customer@email.com', 'changed_customer@email.com'],
         ];
     }
 

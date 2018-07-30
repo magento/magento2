@@ -177,6 +177,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex($ids);
     }
 
+    /**
+     * @return array
+     */
     public function reindexEntitiesDataProvider()
     {
         return [

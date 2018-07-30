@@ -131,18 +131,21 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $urlMock = $this->createMock(\Magento\Framework\Url::class);
         $urlMock->expects($this->exactly(2))
             ->method('getUrl')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $urlMock->expects($this->once())
             ->method('getRebuiltUrl')
-            ->will($this->returnValue(''));
-        $this->urlFactoryMock->expects($this->exactly(3))
+            ->willReturn('');
+        $this->urlFactoryMock->expects($this->exactly(4))
             ->method('create')
-            ->will($this->returnValue($urlMock));
+            ->willReturn($urlMock);
+        $urlMock->expects($this->once())
+            ->method('getUseSession')
+            ->willReturn(false);
 
         $this->responseMock->expects($this->once())
             ->method('setRedirect')
             ->with('')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $this->assertFalse($this->_model->authenticate());
     }

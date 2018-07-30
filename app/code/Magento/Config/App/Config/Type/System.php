@@ -8,6 +8,8 @@ namespace Magento\Config\App\Config\Type;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\Serialize\Serializer\Sensitive as SensitiveSerializer;
+use Magento\Framework\Serialize\Serializer\SensitiveFactory as SensitiveSerializerFactory;
 
 /**
  * System configuration type
@@ -56,7 +58,7 @@ class System implements ConfigTypeInterface
     private $fallback;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SensitiveSerializer
      */
     private $serializer;
 
@@ -91,6 +93,9 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
+     * @param SensitiveSerializerFactory|null $sensitiveFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -101,7 +106,8 @@ class System implements ConfigTypeInterface
         \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null
+        Reader $reader = null,
+        SensitiveSerializerFactory $sensitiveFactory = null
     ) {
         $this->source = $source;
         $this->postProcessor = $postProcessor;
@@ -109,9 +115,16 @@ class System implements ConfigTypeInterface
         $this->cache = $cache;
         $this->cachingNestedLevel = $cachingNestedLevel;
         $this->fallback = $fallback;
-        $this->serializer = $serializer;
         $this->configType = $configType;
-        $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
+        $this->reader = $reader ?: ObjectManager::getInstance()
+            ->get(Reader::class);
+        $sensitiveFactory = $sensitiveFactory ?? ObjectManager::getInstance()
+                ->get(SensitiveSerializerFactory::class);
+        //Using sensitive serializer because any kind of information may
+        //be stored in configs.
+        $this->serializer = $sensitiveFactory->create(
+            ['serializer' => $serializer]
+        );
     }
 
     /**

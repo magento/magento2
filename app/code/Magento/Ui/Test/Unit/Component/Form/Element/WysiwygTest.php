@@ -62,6 +62,9 @@ class WysiwygTest extends AbstractElementTest
             ->method('getElementHtml');
     }
 
+    /**
+     * @return \Magento\Ui\Component\Form\Element\AbstractElement|object
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(Wysiwyg::class, [
@@ -82,6 +85,9 @@ class WysiwygTest extends AbstractElementTest
         return Wysiwyg::class;
     }
 
+    /**
+     * @return mixed|void
+     */
     public function testGetComponentName()
     {
         $this->assertSame(Wysiwyg::NAME, $this->getModel()->getComponentName());
