@@ -5,7 +5,6 @@
  */
 
 namespace Magento\UrlRewrite\Block\Catalog\Category;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Catalog\Category\Tree
@@ -55,7 +54,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTreeArrayApostropheReplaced()
     {
-        $tree = $this->treeBlock->getTreeArray(333);
+        $tree = $this->treeBlock->getTreeArray(523);
 
         $this->assertNotContains('\'', $tree[0]['name']);
         $this->assertEquals(
@@ -72,7 +71,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTreeArrayDoubleQuotesReplaced()
     {
-        $tree = $this->treeBlock->getTreeArray(333);
+        $tree = $this->treeBlock->getTreeArray(523);
 
         $this->assertNotContains('\"', $tree[0]['name']);
         $this->assertEquals(
