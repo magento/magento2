@@ -84,17 +84,19 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
+     * @return void
      */
-    public function testGetMinPrice()
+    public function testGetMinPrice(): void
     {
-        $product = $this->productRepository->get('simple');
+        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addIdFilter($product->getId());
         $collection->addPriceData();
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $collection->getFirstItem();
-        $this->assertEquals(323, $product->getData('min_price'));
+        $this->assertEquals(333, $product->getData('min_price'));
     }
 
     /**
