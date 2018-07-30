@@ -8,29 +8,29 @@ namespace Magento\ConfigurableProduct\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * Class InstallInitialConfigurableAttributes
+ * Class UpdateManufacturerAttribute
  * @package Magento\ConfigurableProduct\Setup\Patch
  */
-class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchVersionInterface
+class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
+
     /**
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * InstallInitialConfigurableAttributes constructor.
+     * UpdateTierPriceAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
@@ -49,34 +49,19 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $attributes = [
-            'country_of_manufacture',
-            'manufacturer',
-            'minimal_price',
-            'msrp',
-            'msrp_display_actual_price_type',
-            'price',
-            'special_price',
-            'special_from_date',
-            'special_to_date',
-            'tier_price',
-            'weight',
-            'color'
-        ];
-        foreach ($attributes as $attributeCode) {
-            $relatedProductTypes = explode(
-                ',',
-                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to')
+        $relatedProductTypes = explode(
+            ',',
+            $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'manufacturer', 'apply_to')
+        );
+        $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
+        if ($key !== false) {
+            unset($relatedProductTypes[$key]);
+            $eavSetup->updateAttribute(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'manufacturer',
+                'apply_to',
+                implode(',', $relatedProductTypes)
             );
-            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-                $relatedProductTypes[] = Configurable::TYPE_CODE;
-                $eavSetup->updateAttribute(
-                    \Magento\Catalog\Model\Product::ENTITY,
-                    $attributeCode,
-                    'apply_to',
-                    implode(',', $relatedProductTypes)
-                );
-            }
         }
     }
 
@@ -85,15 +70,17 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            InstallInitialConfigurableAttributes::class,
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}\
      */
     public static function getVersion()
     {
-        return '2.0.0';
+        return '2.2.1';
     }
 
     /**
