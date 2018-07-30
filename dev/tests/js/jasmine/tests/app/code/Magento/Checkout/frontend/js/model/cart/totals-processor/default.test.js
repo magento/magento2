@@ -114,7 +114,7 @@ define([
 
         it('estimateTotals if data wasn\'t cached and request was successfully sent', function () {
             var deferral = new $.Deferred();
-            
+
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
@@ -139,7 +139,7 @@ define([
 
         it('estimateTotals if data wasn\'t cached and request returns error', function () {
             var deferral = new $.Deferred();
-            
+
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
