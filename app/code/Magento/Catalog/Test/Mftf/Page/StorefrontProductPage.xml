@@ -12,5 +12,6 @@
         <section name="StorefrontProductPageSection"/>
         <section name="StorefrontProductAdditionalInformationSection"/>
         <section name="StorefrontProductMediaSection"/>
+        <section name="StorefrontProductInfoMainSection"/>
     </page>
 </pages>

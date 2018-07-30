@@ -44,15 +44,15 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
-                'getDiscountRefunded', 'getQtyRefunded'
+                'getDiscountRefunded', 'getQtyRefunded',
             ]);
         $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
-                'setDiscountAmount', 'setBaseDiscountAmount'
+                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount',
             ]);
         $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
-                'setBaseDiscountAmount', 'isLast'
+                'setBaseDiscountAmount', 'isLast',
             ]);
         $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount();
     }
@@ -122,6 +122,82 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                 [
                     [1, 'regular', true, 1],
                     [1, 'base', true, 1]
+                ]
+            );
+        $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
+    }
+
+    public function testCollectNoBaseShippingAmount()
+    {
+        $this->creditmemoMock->expects($this->exactly(2))
+            ->method('setDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->exactly(2))
+            ->method('setBaseDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+        $this->creditmemoMock->expects($this->once())
+            ->method('getBaseShippingAmount')
+            ->willReturn(0);
+        $this->creditmemoMock->expects($this->once())
+            ->method('getBaseShippingInclTax')
+            ->willReturn(1);
+        $this->creditmemoMock->expects($this->once())
+            ->method('getBaseShippingTaxAmount')
+            ->willReturn(0);
+        $this->orderMock->expects($this->once())
+            ->method('getBaseShippingDiscountAmount')
+            ->willReturn(1);
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getBaseShippingAmount')
+            ->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAmount')
+            ->willReturn(1);
+        $this->creditmemoMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$this->creditmemoItemMock]);
+        $this->creditmemoItemMock->expects($this->atLeastOnce())
+            ->method('getOrderItem')
+            ->willReturn($this->orderItemMock);
+        $this->orderItemMock->expects($this->once())
+            ->method('isDummy')
+            ->willReturn(false);
+        $this->orderItemMock->expects($this->once())
+            ->method('getDiscountInvoiced')
+            ->willReturn(1);
+        $this->orderItemMock->expects($this->once())
+            ->method('getBaseDiscountInvoiced')
+            ->willReturn(1);
+        $this->orderItemMock->expects($this->once())
+            ->method('getQtyInvoiced')
+            ->willReturn(1);
+        $this->orderItemMock->expects($this->once())
+            ->method('getDiscountRefunded')
+            ->willReturn(1);
+        $this->orderItemMock->expects($this->once())
+            ->method('getQtyRefunded')
+            ->willReturn(0);
+        $this->creditmemoItemMock->expects($this->once())
+            ->method('isLast')
+            ->willReturn(false);
+        $this->creditmemoItemMock->expects($this->atLeastOnce())
+            ->method('getQty')
+            ->willReturn(1);
+        $this->creditmemoItemMock->expects($this->exactly(1))
+            ->method('setDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoItemMock->expects($this->exactly(1))
+            ->method('setBaseDiscountAmount')
+            ->willReturnSelf();
+        $this->creditmemoMock->expects($this->exactly(2))
+            ->method('roundPrice')
+            ->willReturnMap(
+                [
+                    [1, 'regular', true, 1],
+                    [1, 'base', true, 1],
                 ]
             );
         $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
