@@ -141,6 +141,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 );
 
                 if ($redirectBack === 'duplicate') {
+                    $product->unsetData('quantity_and_stock_status');
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
