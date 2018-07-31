@@ -132,6 +132,10 @@ class FrontController implements FrontControllerInterface
                 }
             }
         }
+        //handling redirect to 404
+        if ($result instanceof NotFoundException) {
+            throw $result;
+        }
 
         return $result;
     }

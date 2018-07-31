@@ -10,7 +10,7 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Make sure that a request's method can be processed by an action.
@@ -23,20 +23,12 @@ class HttpMethodValidator implements ValidatorInterface
     private $map;
 
     /**
-     * @var RedirectFactory
-     */
-    private $redirectFactory;
-
-    /**
      * @param HttpMethodMap $map
-     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
-        HttpMethodMap $map,
-        RedirectFactory $redirectFactory
+        HttpMethodMap $map
     ) {
         $this->map = $map;
-        $this->redirectFactory = $redirectFactory;
     }
 
     /**
@@ -44,11 +36,9 @@ class HttpMethodValidator implements ValidatorInterface
      */
     private function createException(): InvalidRequestException
     {
-        $response = $this->redirectFactory->create();
-        $response->setHttpResponseCode(302);
-        $response->setPath('noroute');
-
-        return new InvalidRequestException($response);
+        return new InvalidRequestException(
+            new NotFoundException(__('Page not found.'))
+        );
     }
 
     /**

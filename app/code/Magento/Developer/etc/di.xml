@@ -240,4 +240,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="HttpMethodLogger" type="Magento\Developer\Model\HttpMethodUpdater\Logger" sortOrder="1" />
+    </type>
 </config>
