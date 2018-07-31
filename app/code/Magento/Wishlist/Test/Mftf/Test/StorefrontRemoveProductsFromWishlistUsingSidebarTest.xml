@@ -38,6 +38,7 @@
         </actionGroup>
         <!-- Add product from first category to the wishlist -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -46,7 +47,7 @@
         </actionGroup>
         <!--Remove product from the Wishlist using the sidebar from the second category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$simpleProduct1$$"/>

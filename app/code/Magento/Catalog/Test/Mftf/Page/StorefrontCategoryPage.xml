@@ -11,5 +11,7 @@
     <page name="StorefrontCategoryPage" url="/{{var1}}.html" area="storefront" module="Category" parameterized="true">
         <section name="StorefrontCategoryMainSection"/>
         <section name="WYSIWYGToolbarSection"/>
+        <section name="StorefrontCustomerWishlistSidebarSection"/>
+        <section name="StorefrontCategoryProductSection"/>
     </page>
 </pages>

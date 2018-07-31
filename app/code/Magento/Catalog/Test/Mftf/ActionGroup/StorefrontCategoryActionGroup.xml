@@ -33,6 +33,6 @@
 
     <actionGroup name="StorefrontSwitchCategoryViewToListMode">
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
-        <waitForElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" time="30" stepKey="waitForCategoryReload"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryTitle"/>
     </actionGroup>
 </actionGroups>
