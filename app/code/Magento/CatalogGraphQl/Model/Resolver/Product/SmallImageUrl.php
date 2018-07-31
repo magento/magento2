@@ -17,7 +17,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Returns product's small image. If the small image is not set, returns a placeholder
@@ -45,21 +45,29 @@ class SmallImageUrl implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param CatalogImageHelper $catalogImageHelper
      * @param AreaList $areaList
      * @param GalleryResourceFactory $galleryResourceFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ValueFactory $valueFactory,
         CatalogImageHelper $catalogImageHelper,
         AreaList $areaList,
-        GalleryResourceFactory $galleryResourceFactory
+        GalleryResourceFactory $galleryResourceFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->valueFactory = $valueFactory;
         $this->catalogImageHelper = $catalogImageHelper;
         $this->areaList = $areaList;
         $this->galleryResourceFactory = $galleryResourceFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -84,7 +92,8 @@ class SmallImageUrl implements ResolverInterface
         /* If small_image is not loaded for product, need to load it separately */
         if (!$product->getSmallImage()) {
             $galleryResource = $this->galleryResourceFactory->create();
-            $productImages = $galleryResource->getProductImages($product, [Store::DEFAULT_STORE_ID]);
+            $currentStoreId =$this->storeManager->getStore()->getId();
+            $productImages = $galleryResource->getProductImages($product, [$currentStoreId]);
             $productSmallImage = $this->getSmallImageFromGallery($productImages);
             $product->setSmallImage($productSmallImage);
         }
