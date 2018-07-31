@@ -92,6 +92,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Some of the products are out of stock.
+     * @magentoDbIsolation enabled
      */
     public function testSubmitWithItemOutOfStock()
     {
