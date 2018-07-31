@@ -100,6 +100,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      * @param int $id Credit Memo Id
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel($id)
     {

@@ -177,6 +177,7 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCurrency($attribute)
     {
