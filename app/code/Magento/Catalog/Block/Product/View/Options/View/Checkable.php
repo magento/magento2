@@ -18,31 +18,21 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
  */
 class Checkable extends AbstractOptions
 {
-    protected $_template = 'Magento_Catalog::catalog/product/composite/fieldset/options/view/checkable.phtml';
-
-    /**
-     * Checkable constructor.
-     * @param Context $context
-     * @param Data $pricingHelper
-     * @param CatalogHelper $catalogData
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        Data $pricingHelper,
-        CatalogHelper $catalogData,
-        array $data = []
-    ) {
-        parent::__construct($context, $pricingHelper, $catalogData, $data);
-    }
+    protected $_template = 'Magento_Catalog::product/composite/fieldset/options/view/checkable.phtml';
 
     /**
      * @param $value
      * @return string
      */
-    public function formatPrice(array $value) : string
+    public function formatPrice(ProductCustomOptionValuesInterface $value) : string
     {
-        return parent::_formatPrice($value);
+
+        return parent::_formatPrice(
+            [
+                'is_percent' => $value->getPriceType() === 'percent',
+                'pricing_value' => $value->getPrice($value->getPriceType() === 'percent')
+            ]
+        );
     }
 
     /**
@@ -56,5 +46,10 @@ class Checkable extends AbstractOptions
             $this->getProduct()->getStore(),
             false
         );
+    }
+
+    public function getPreconfiguredValue($option) : string
+    {
+        $configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
     }
 }

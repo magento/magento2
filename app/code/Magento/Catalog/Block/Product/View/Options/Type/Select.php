@@ -7,9 +7,12 @@
 namespace Magento\Catalog\Block\Product\View\Options\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use Magento\Catalog\Block\Product\View\Options\View\Checkable;
-use Magento\Catalog\Block\Product\View\Options\View\Multiple;
+use Magento\Catalog\Block\Product\View\Options\View\CheckableFactory;
+use Magento\Catalog\Block\Product\View\Options\View\MultipleFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Product options text type block
@@ -20,37 +23,57 @@ use Magento\Framework\App\ObjectManager;
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
+     * @var CheckableFactory
+     */
+    protected $checkableFactory;
+
+    /**
+     * @var MultipleFactory
+     */
+    protected $multipleFactory;
+
+    /**
+     * Select constructor.
+     * @param Context $context
+     * @param Data $pricingHelper
+     * @param CatalogHelper $catalogData
+     * @param array $data
+     * @param CheckableFactory|null $checkableFactory
+     * @param MultipleFactory|null $multipleFactory
+     */
+    public function __construct(
+        Context $context,
+        Data $pricingHelper,
+        CatalogHelper $catalogData,
+        array $data = [],
+        CheckableFactory $checkableFactory = null,
+        MultipleFactory $multipleFactory = null
+    ) {
+        parent::__construct($context, $pricingHelper, $catalogData, $data);
+        $this->checkableFactory = $checkableFactory ?: ObjectManager::getInstance()->get(CheckableFactory::class);
+        $this->multipleFactory = $multipleFactory ?: ObjectManager::getInstance()->get(MultipleFactory::class);
+    }
+
+    /**
      * Return html for control element
      *
      * @return string
      */
-    public function getValuesHtml()
+    public function getValuesHtml(): string
     {
         $option = $this->getOption();
         $optionType = $option->getType();
-        $objectManager = ObjectManager::getInstance();
-        // Remove inline prototype onclick and onchange events
 
         if ($optionType === ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN ||
             $optionType === ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
         ) {
-            $optionBlock = $objectManager->create(
-                Multiple::class,
-                [
-                    'option' => $option
-                ]
-            );
+            $optionBlock = $this->multipleFactory->create();
         }
 
         if ($optionType === ProductCustomOptionInterface::OPTION_TYPE_RADIO ||
             $optionType === ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX
         ) {
-            $optionBlock = $objectManager->create(
-                Checkable::class,
-                [
-                    'option' => $option
-                ]
-            );
+            $optionBlock = $this->checkableFactory->create();
         }
 
         return $optionBlock

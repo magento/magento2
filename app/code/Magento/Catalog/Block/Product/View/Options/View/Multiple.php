@@ -21,7 +21,7 @@ class Multiple extends AbstractOptions
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _toHtml() : string
+    protected function _toHtml()
     {
         $option = $this->getOption();
         $optionType = $option->getType();
@@ -38,7 +38,7 @@ class Multiple extends AbstractOptions
             ]
         );
 
-        $select = $this->setSelectOption($select, $option);
+        $select = $this->insertSelectOption($select, $option);
         $select = $this->processSelectOption($select, $option);
 
         if ($optionType === ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE) {
@@ -64,7 +64,7 @@ class Multiple extends AbstractOptions
      * @param Option $option
      * @return Select
      */
-    private function setSelectOption(Select $select, Option $option) : Select
+    private function insertSelectOption(Select $select, Option $option) : Select
     {
         $require = $option->getIsRequire() ? ' required' : '';
 

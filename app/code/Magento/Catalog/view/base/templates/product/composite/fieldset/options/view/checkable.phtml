@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 /**
  * @var \Magento\Catalog\Block\Product\View\Options\View\Checkable $block
  */
@@ -11,31 +12,31 @@ $option = $block->getOption();
 
 if ($option) : ?>
 <?php
-$configValue = $block->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
+$configValue = $block->getPreconfiguredValue($option);
 $optionType = $option->getType();
-$arraySign = $optionType === 'checkbox' ? '[]' : '';
+$arraySign = $optionType === ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX ? '[]' : '';
 $count = 1;
 ?>
 
 <div class="options-list nested" id="options-<?= /* @noEscape */ $option->getId() ?>-list">
 
-    <?php if ($optionType === 'radio') : ?>
-        <div class="field choice admin__field admin__field-option">
-            <input type="radio"
-                   id="options_<?= /* @noEscape */ $option->getId() ?>"
-                   class="radio admin__control-radio product-custom-option"
-                   name="options[<?= /* @noEscape */ $option->getId() ?>]"
-                   data-selector="options[<?= /* @noEscape */ $option->getId() ?>]"
-                   onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
-                   value=""
-                   checked="checked"
-            />
-            <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
+    <?php if ($optionType === ProductCustomOptionInterface::OPTION_TYPE_RADIO) : ?>
+    <div class="field choice admin__field admin__field-option">
+        <input type="radio"
+               id="options_<?= /* @noEscape */ $option->getId() ?>"
+               class="radio admin__control-radio product-custom-option"
+               name="options[<?= /* @noEscape */ $option->getId() ?>]"
+               data-selector="options[<?= /* @noEscape */ $option->getId() ?>]"
+               onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+               value=""
+               checked="checked"
+        />
+        <label class="label admin__field-label" for="options_<?= /* @noEscape */ $option->getId() ?>">
                 <span>
                     <?= /* @noEscape */ __('None') ?>
                 </span>
-            </label>
-    <?php endif; ?>
+        </label>
+        <?php endif; ?>
 
         <?php foreach ($option->getValues() as $value) : ?>
             <?php
@@ -48,13 +49,6 @@ $count = 1;
                 $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
             }
 
-            $priceStr = $block->formatPrice(
-                [
-                    'is_percent' => $value->getPriceType() === 'percent',
-                    'pricing_value' => $value->getPrice($value->getPriceType() === 'percent')
-                ]
-            );
-
             $dataSelector = 'options[' . $option->getId() . ']';
             if ($arraySign) {
                 $dataSelector .= '[' . $value->getOptionTypeId() . ']';
@@ -64,7 +58,8 @@ $count = 1;
             <div class="field choice admin__field admin__field-option'<?= /* @noEscape */ $option->getIsRequire() ?>'">
                 <input type="<?= /* @noEscape */ $optionType ?>"
                        class="<?= /* @noEscape */
-                        $optionType === 'radio' ?
+                       /** @noinspection DisconnectedForeachInstructionInspection */
+                       $optionType === ProductCustomOptionInterface::OPTION_TYPE_RADIO ?
                            'radio admin__control-radio' :
                            'checkbox admin__control-checkbox' ?> <?= /* @noEscape */ $option->getIsRequire() ?>
                        product-custom-option
@@ -81,10 +76,10 @@ $count = 1;
                 <span>
                     <?= $block->escapeHtml($value->getTitle()) ?>
                 </span>
-                    <?= /* @noEscape */ $priceStr ?>
+                    <?= /* @noEscape */ $block->formatPrice($value) ?>
                 </label>
             </div>
         <?php endforeach; ?>
-        </div>
-<?php endif; ?>
+    </div>
+    <?php endif; ?>
 
