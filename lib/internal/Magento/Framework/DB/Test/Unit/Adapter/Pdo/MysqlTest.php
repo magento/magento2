@@ -290,7 +290,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionCommitSuccess()
     {
@@ -312,7 +312,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionRollBackSuccess()
     {
@@ -334,7 +334,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test successfull nested transaction
+     * Test successful nested transaction
      */
     public function testNestedTransactionLastRollBack()
     {
