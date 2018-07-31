@@ -8,6 +8,10 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * Opens a file for reading
+ * @api
+ */
 class ReadFactory
 {
     /**
@@ -28,7 +32,7 @@ class ReadFactory
     }
 
     /**
-     * Create a readable file
+     * Create a {@see ReaderInterface}
      *
      * @param string $path
      * @param DriverInterface|string $driver Driver or driver code
