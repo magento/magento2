@@ -391,7 +391,7 @@ abstract class AbstractEntity
         $nextRowBackup = [];
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
-        $entitiesUniq = [];
+        $skuSet = [];
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
@@ -408,7 +408,7 @@ abstract class AbstractEntity
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
-                    $entitiesUniq[$rowData['sku']] = 1;
+                    $skuSet[$rowData['sku']] = true;
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                     $this->_processedRowsCount++;
@@ -436,7 +436,7 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
-        $this->_processedEntitiesCount = count($entitiesUniq);
+        $this->_processedEntitiesCount = count($skuSet);
 
         return $this;
     }
