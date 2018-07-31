@@ -40,15 +40,15 @@ class Delete extends Agreement
     public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
-        $repository = $this->agreementRepository->get($id);
-        if (!$repository->getAgreementId()) {
+        $agreement = $this->agreementRepository->get($id);
+        if (!$agreement->getAgreementId()) {
             $this->messageManager->addError(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
             return;
         }
 
         try {
-            $repository->delete();
+            $this->agreementRepository->delete($agreement);
             $this->messageManager->addSuccess(__('You deleted the condition.'));
             $this->_redirect('checkout/*/');
             return;
