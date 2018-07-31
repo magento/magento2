@@ -14,21 +14,21 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 class Elasticsearch implements ClientInterface
 {
     /**
-     * Elasticsearch Client instance
+     * Elasticsearch Client instances
      *
      * @var \Elasticsearch\Client[]
      */
-    protected $client;
+    private $client;
 
     /**
      * @var array
      */
-    protected $clientOptions;
+    private $clientOptions;
 
     /**
      * @var bool
      */
-    protected $pingResult;
+    private $pingResult;
 
     /**
      * @var string
