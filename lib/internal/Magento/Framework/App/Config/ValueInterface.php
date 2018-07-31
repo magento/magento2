@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface \Magento\Framework\App\Config\ValueInterface
- *
+ * @api
  */
 interface ValueInterface
 {

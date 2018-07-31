@@ -17,6 +17,8 @@ namespace Magento\Framework\App\Config;
  * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\App\Config\ValueInterface
