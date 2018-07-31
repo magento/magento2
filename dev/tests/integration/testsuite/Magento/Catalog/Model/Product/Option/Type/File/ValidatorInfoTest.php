@@ -112,7 +112,7 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
     public function testValidate()
     {
         //use actual zend class to test changed functionality
-        $validate = $this->objectManager->create(\Zend_Validate::class );
+        $validate = $this->objectManager->create(\Zend_Validate::class);
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($validate));
