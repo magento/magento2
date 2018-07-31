@@ -17,6 +17,7 @@ class SendTest extends AbstractController
 {
     /** @var AccountManagementInterface */
     private $accountManagement;
+
     /** @var FormKey */
     private $formKey;
 
