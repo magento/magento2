@@ -293,6 +293,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
         $query = $connection->query($select);
+        
+        $this->deleteOldRecords($entityIds);
 
         $i = 0;
         $data = [];
