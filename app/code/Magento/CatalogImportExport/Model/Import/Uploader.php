@@ -6,6 +6,8 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\App\ObjectManager;
 
@@ -110,6 +112,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
      * @param null $filePath
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -156,7 +160,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $fileName
      * @param bool $renameFileOff
+     *
      * @return array
+     *
+     * @throws FileSystemException
+     * @throws LocalizedException
      */
     public function move($fileName, $renameFileOff = false)
     {
@@ -192,8 +200,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Prepare information about the file for moving
      *
      * @param string $filePath
+     *
      * @return void
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     protected function _setUploadFile($filePath)
     {
@@ -211,6 +222,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Reads file info
      *
      * @param string $filePath
+     *
      * @return array
      */
     protected function _readFileInfo($filePath)
@@ -230,6 +242,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Validate uploaded file by type and etc.
      *
      * @return void
+     *
      * @throws \Exception
      */
     protected function _validateFile()
@@ -261,6 +274,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Returns file MIME type by extension
      *
      * @param string $ext
+     *
      * @return string
      */
     protected function _getMimeTypeByExt($ext)
@@ -285,7 +299,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Set TMP file path prefix
      *
      * @param string $path
+     *
      * @return bool
+     *
+     * @throws FileSystemException
      */
     public function setTmpDir($path)
     {
@@ -313,6 +330,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Set destination file path prefix
      *
      * @param string $path
+     *
      * @return bool
      */
     public function setDestDir($path)
@@ -329,7 +347,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
+     *
      * @return bool
+     *
+     * @throws FileSystemException
      */
     protected function _moveFile($tmpPath, $destPath)
     {

@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -364,6 +365,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
+     *
+     * @throws LocalizedException
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -773,15 +777,18 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 case 'g':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+	                break;
                 case 'm':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+	                break;
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
                 default:
                     // minimum memory required by Magento
                     $memoryLimit = 250000000;
+                    break;
             }
 
             // Tested one product to have up to such size
@@ -822,6 +829,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Export process
      *
      * @return string
+     *
+     * @throws LocalizedException
      */
     public function export()
     {
@@ -1514,6 +1523,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     *
+     * @throws \Exception
+     *
      * @since 100.1.0
      */
     protected function getProductEntityLinkField()

@@ -937,6 +937,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Delete products for replacement.
      *
      * @return $this
+     *
+     * @throws \Exception
      */
     public function deleteProductsForReplacement()
     {
@@ -953,6 +955,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Delete products.
      *
      * @return $this
+     *
      * @throws \Exception
      */
     protected function _deleteProducts()
@@ -1023,6 +1026,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Replace imported products.
      *
      * @return $this
+     *
+     * @throws \Exception
      */
     protected function _replaceProducts()
     {
@@ -1042,6 +1047,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Save products data.
      *
      * @return $this
+     *
+     * @throws LocalizedException
      */
     protected function _saveProductsData()
     {
@@ -1089,7 +1096,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Initialize product type models.
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _initTypeModels()
     {
@@ -1171,6 +1178,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @throws LocalizedException
      */
     protected function _saveLinks()
     {
@@ -1521,10 +1530,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Gather and save information about product entities.
      *
      * @return $this
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     *
      * @throws LocalizedException
      */
     protected function _saveProducts()
@@ -1960,6 +1971,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns an object for upload a media files
      *
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUploader()
@@ -2000,6 +2012,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @return Uploader
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUploader()
@@ -2013,6 +2026,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $fileName
      * @param bool $renameFileOff
+     *
      * @return string
      */
     protected function uploadMediaFiles($fileName, $renameFileOff = false)
@@ -2030,6 +2044,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Try to find file by it's path.
      *
      * @param string $fileName
+     *
      * @return string
      */
     private function getSystemFile($fileName)
@@ -2045,6 +2060,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Save product media gallery.
      *
      * @param array $mediaGalleryData
+     *
      * @return $this
      */
     protected function _saveMediaGallery(array $mediaGalleryData)
@@ -2061,6 +2077,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Save product websites.
      *
      * @param array $websiteData
+     *
      * @return $this
      */
     protected function _saveProductWebsites(array $websiteData)
@@ -2099,6 +2116,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Stock item saving.
      *
      * @return $this
+     *
+     * @throws LocalizedException
      */
     protected function _saveStockItem()
     {
@@ -2140,6 +2159,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Initiate product reindex by product ids
      *
      * @param array $productIdsToReindex
+     *
      * @return void
      */
     private function reindexProducts($productIdsToReindex = [])
@@ -2154,6 +2174,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Retrieve attribute by code
      *
      * @param string $attrCode
+     *
      * @return mixed
      */
     public function retrieveAttributeByCode($attrCode)
@@ -2205,7 +2226,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns array of new products data with SKU as key. All SKU keys are in lowercase for avoiding creation of
      * new products with the same SKU in different letter cases.
      *
-     * @var string $sku
+     * @param string $sku
+     *
      * @return array
      */
     public function getNewSku($sku = null)
@@ -2250,6 +2272,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Obtain scope of the row from row data.
      *
      * @param array $rowData
+     *
      * @return int
      */
     public function getRowScope(array $rowData)
@@ -2265,10 +2288,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $rowData
      * @param int $rowNum
-     * @return boolean
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @return boolean
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -2402,6 +2427,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param array $rowData
+     *
      * @return bool
      */
     private function isNeedToValidateUrlKey($rowData)
@@ -2416,6 +2442,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Prepare new SKU data
      *
      * @param string $sku
+     *
      * @return array
      */
     private function prepareNewSkuData($sku)
@@ -2456,6 +2483,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * ]
      *
      * @param string $additionalAttributes Attributes data that will be parsed
+     *
      * @return array
      */
     private function parseAdditionalAttributes($additionalAttributes)
@@ -2476,6 +2504,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
+     *
      * @return array
      */
     private function parseAttributesWithoutWrappedValues($attributesData)
@@ -2539,7 +2568,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param string $values
      * @param string $delimiter
+     *
      * @return array
+     *
      * @since 100.1.2
      */
     public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
@@ -2660,6 +2691,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Check that url_keys are not assigned to other products in DB
      *
      * @return void
+     *
      * @since 100.0.3
      */
     protected function checkUrlKeyDuplicates()
@@ -2693,7 +2725,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Retrieve product rewrite suffix for store
      *
      * @param int $storeId
+     *
      * @return string
+     *
      * @since 100.0.3
      */
     protected function getProductUrlSuffix($storeId = null)
@@ -2710,7 +2744,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param array $rowData
+     *
      * @return string
+     *
      * @since 100.0.3
      */
     protected function getUrlKey($rowData)
@@ -2728,6 +2764,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @return Proxy\Product\ResourceModel
+     *
      * @since 100.0.3
      */
     protected function getResource()
@@ -2742,6 +2779,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     *
+     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {
@@ -2757,6 +2796,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get product entity identifier field
      *
      * @return string
+     *
+     * @throws \Exception
      */
     private function getProductIdentifierField()
     {
@@ -2772,6 +2813,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Update media gallery labels
      *
      * @param array $labels
+     *
      * @return void
      */
     private function updateMediaGalleryLabels(array $labels)
@@ -2786,6 +2828,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Parse values from multiple attributes fields
      *
      * @param string $labelRow
+     *
      * @return array
      */
     private function parseMultipleValues($labelRow)
@@ -2800,6 +2843,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Check if product exists for specified SKU
      *
      * @param string $sku
+     *
      * @return bool
      */
     private function isSkuExist($sku)
@@ -2812,6 +2856,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get existing product data for specified SKU
      *
      * @param string $sku
+     *
      * @return array
      */
     private function getExistingSku($sku)
@@ -2823,6 +2868,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Format row data to DB compatible values
      *
      * @param array $rowData
+     *
      * @return array
      */
     private function formatStockDataForRow(array $rowData)
