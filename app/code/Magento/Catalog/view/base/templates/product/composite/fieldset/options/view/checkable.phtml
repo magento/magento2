@@ -37,7 +37,7 @@ $count = 1;
                     <?= /* @noEscape */ __('None') ?>
                 </span>
         </label>
-        <?php endif; ?>
+    <?php endif; ?>
 
         <?php foreach ($option->getValues() as $value) : ?>
             <?php
@@ -60,7 +60,7 @@ $count = 1;
                 <input type="<?= /* @noEscape */ $optionType ?>"
                        class="<?= /* @noEscape */
                        /** @noinspection DisconnectedForeachInstructionInspection */
-                       $optionType === ProductCustomOptionInterface::OPTION_TYPE_RADIO ?
+                        $optionType === ProductCustomOptionInterface::OPTION_TYPE_RADIO ?
                            'radio admin__control-radio' :
                            'checkbox admin__control-checkbox' ?> <?= /* @noEscape */ $option->getIsRequire() ?>
                        product-custom-option
@@ -81,6 +81,6 @@ $count = 1;
                 </label>
             </div>
         <?php endforeach; ?>
-    </div>
+</div>
     <?php endif; ?>
 
