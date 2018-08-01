@@ -2342,6 +2342,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             foreach ($this->getAllItems() as $quoteItem) {
                 if ($quoteItem->compare($item)) {
                     $quoteItem->setQty($quoteItem->getQty() + $item->getQty());
+                    $this->itemProcessor->merge($item, $quoteItem);
                     $found = true;
                     break;
                 }
