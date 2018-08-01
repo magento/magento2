@@ -68,4 +68,13 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="{{id}}" stepKey="seeCategoryPageTitle"/>
     </actionGroup>
+
+    <actionGroup name="SeeProductInProductCategoryGridForCurrentCategory">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <see selector="{{AdminCategoryProductsGridSection.nameColumn}}" userInput="{{product.name}}" stepKey="seeProductNameInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.priceColumn}}" userInput="{{product.price}}" stepKey="seeProductPriceInGrid"/>
+    </actionGroup>
 </actionGroups>
