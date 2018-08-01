@@ -94,10 +94,19 @@ SQL
             {
                 return new Logged(
                     $row[self::CLASS_NAME],
-                    $row[self::METHOD_NAME]
+                    explode(',', $row[self::METHOD_NAME])
                 );
             },
-            $connection->fetchAll($connection->select()->from($table))
+            $connection->fetchAll(
+                $connection->select()->from(
+                    $table,
+                    [
+                        self::CLASS_NAME => self::CLASS_NAME,
+                        'methods' => 'group_concat('
+                            .self::METHOD_NAME .' separator \',\')'
+                    ]
+                )->group(self::CLASS_NAME)
+            )
         );
     }
 }
