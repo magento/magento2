@@ -52,7 +52,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
     public function execute()
     {
         if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found'));
         }
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productDeleted = 0;
