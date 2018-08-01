@@ -11,6 +11,7 @@ namespace Magento\Framework\App\Request;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Phrase;
 
 /**
  * Make sure that a request's method can be processed by an action.
@@ -37,7 +38,7 @@ class HttpMethodValidator implements ValidatorInterface
     private function createException(): InvalidRequestException
     {
         return new InvalidRequestException(
-            new NotFoundException(__('Page not found.'))
+            new NotFoundException(new Phrase('Page not found.'))
         );
     }
 

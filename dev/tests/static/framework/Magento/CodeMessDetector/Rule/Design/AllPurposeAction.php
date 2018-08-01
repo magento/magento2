@@ -13,6 +13,7 @@ use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
 use PHPMD\Node\ClassNode;
 use PHPMD\Rule\ClassAware;
+use Magento\Framework\App\ActionInterface;
 
 /**
  * Actions must process a defined list of HTTP methods.
@@ -32,7 +33,7 @@ class AllPurposeAction extends AbstractRule implements ClassAware
             $impl[] = $astInterface->getNamespacedName();
         }
 
-        if (in_array('Magento\\Framework\\App\\ActionInterface', $impl, true)) {
+        if (in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;
             foreach ($impl as $i) {
                 if (preg_match('/\\\Http[a-z]+MethodActionInterface$/i', $i)) {

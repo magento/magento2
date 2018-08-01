@@ -53,7 +53,7 @@ class LogRepository
         $class = self::CLASS_NAME;
         $method = self::METHOD_NAME;
         $connection->query(
-<<<SQL
+            <<<SQL
 create table if not exists $table (
   $class varchar(1024) not null,
   $method varchar(32) not null,
@@ -90,8 +90,7 @@ SQL
         $table = $this->getTableName();
 
         return array_map(
-            function (array $row): Logged
-            {
+            function (array $row): Logged {
                 return new Logged(
                     $row[self::CLASS_NAME],
                     explode(',', $row[self::METHOD_NAME])
