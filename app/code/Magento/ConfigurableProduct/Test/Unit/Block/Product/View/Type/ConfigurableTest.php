@@ -311,6 +311,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributesData);
 
         $this->localeFormat->expects($this->atLeastOnce())->method('getPriceFormat')->willReturn([]);
+        $this->localeFormat->expects($this->atLeastOnce())->method('getOptionSkus')->willReturn([]);        
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
             ->willReturnMap([
@@ -381,6 +382,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ],
+            'optionSkus' => [],
             'priceFormat' => [],
             'prices' => [
                 'oldPrice' => [
