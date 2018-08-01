@@ -16,7 +16,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-77831"/>
             <group value="product"/>
-            <group value="skip"/><!-- MAGETWO-91215 -->
         </annotations>
 
         <before>
@@ -175,7 +174,7 @@
 
         <!-- Place Order -->
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder1"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -246,7 +245,7 @@
 
         <!-- Place Order -->
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton1"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder2"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
 
         <!-- Open Product Grid, Filter product and open -->
