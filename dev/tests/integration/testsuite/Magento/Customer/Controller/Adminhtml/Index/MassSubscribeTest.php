@@ -41,10 +41,21 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         // Pre-condition
         /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
         $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
+
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
         $this->assertNull($subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus());
         $this->assertNull($subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus());
         // Setup
-        $this->getRequest()->setPostValue('selected', [1, 2])->setPostValue('namespace', 'customer_listing');
+        $this->getRequest()->setParams(
+            [
+                'selected' => [1, 2],
+                'namespace' => 'customer_listing',
+                'form_key' => $formKey->getFormKey()
+            ]
+        )
+        ->setMethod('POST');
 
         // Test
         $this->dispatch('backend/customer/index/massSubscribe');
@@ -70,7 +81,17 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     public function testMassSubscriberActionNoSelection()
     {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+        $this->getRequest()->setParams(
+            [
+                'namespace' => 'customer_listing',
+                'form_key' => $formKey->getFormKey()
+            ]
+        )
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));

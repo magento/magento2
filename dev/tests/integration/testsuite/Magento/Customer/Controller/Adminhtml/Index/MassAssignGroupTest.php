@@ -52,12 +52,23 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testMassAssignGroupAction()
     {
         $customer = $this->customerRepository->getById(1);
+
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
         $this->assertEquals(1, $customer->getGroupId());
 
         $this->getRequest()
-            ->setParam('group', 0)
-            ->setPostValue('namespace', 'customer_listing')
-            ->setPostValue('selected', [1]);
+            ->setParams(
+                [
+                    'group' => 0,
+                    'namespace' => 'customer_listing',
+                    'selected' => [1],
+                    'form_key' => $formKey->getFormKey()
+                ]
+            )
+            ->setMethod('POST');
+        
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were updated.']),
@@ -75,7 +86,19 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
-        $this->getRequest()->setParam('group', 0)->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
+        $this->getRequest()
+            ->setParams(
+                [
+                    'group' => 0,
+                    'namespace' => 'customer_listing',
+                    'form_key' => $formKey->getFormKey()
+                ]
+            )
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['Please select item(s).']),
