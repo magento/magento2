@@ -501,6 +501,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 self::ENTITY,
                 $this
             ));
+            //TODO: HOT FIX for failed tests. If tests are green, need to encapsulate CatalogInventory/etc/di.xml
+            // "blackList" into object and use this object in Plugin and self::getCustomAttributesCodes for filter
+            $key = array_search('quantity_and_stock_status', $this->customAttributesCodes, true);
+            unset($this->customAttributesCodes[$key]);
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
         }
 

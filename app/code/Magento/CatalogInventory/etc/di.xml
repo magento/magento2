@@ -35,9 +35,6 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
-    <type name="Magento\Eav\Model\Config">
-        <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
-    </type>
     <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
