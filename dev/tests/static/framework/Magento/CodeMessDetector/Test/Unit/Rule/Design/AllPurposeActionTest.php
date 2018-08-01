@@ -75,7 +75,12 @@ class AllPurposeActionTest extends TestCase
                 },
                 false
             ],
-            [new class {}, false]
+            [
+                new class {
+
+                },
+                false
+            ]
         ];
     }
 

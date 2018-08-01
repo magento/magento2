@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="dev_http_method_log" resource="default" engine="innodb"
+           comment="Logging HTTP methods used with actions">
+        <column xsi:type="varchar" name="class_name" nullable="false" length="512" comment="Controller class name"/>
+        <column xsi:type="varchar" name="method_name" nullable="false" length="32" comment="HTTP method used"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="class_name"/>
+            <column name="method_name"/>
+        </constraint>
+    </table>
+</schema>
