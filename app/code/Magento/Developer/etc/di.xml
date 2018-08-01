@@ -243,6 +243,9 @@
     </type>
 
     <type name="Magento\Framework\App\ActionInterface">
-        <plugin name="HttpMethodLogger" type="Magento\Developer\Model\HttpMethodUpdater\Logger" sortOrder="1" />
+        <plugin name="HttpMethodLogger"
+                type="Magento\Developer\Model\HttpMethodUpdater\Logger"
+                sortOrder="1"
+                disabled="true" />
     </type>
 </config>

@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Move extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\ActionInterface;
+
+class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements ActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -48,6 +50,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
+        $x1=33;
         /**
          * New parent category identifier
          */
