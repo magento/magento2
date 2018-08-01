@@ -48,7 +48,11 @@ class Checkable extends AbstractOptions
         );
     }
 
-    public function getPreconfiguredValue($option) : string
+    /**
+     * @param $option
+     * @return string|array|null
+     */
+    public function getPreconfiguredValue($option)
     {
         return $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
     }
