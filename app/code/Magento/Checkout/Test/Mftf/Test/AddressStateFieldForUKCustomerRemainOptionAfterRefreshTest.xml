@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93329"/>
             <group value="checkout"/>
+            <!-- Skipped because of MAGETWO-93726 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

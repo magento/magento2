@@ -138,7 +138,7 @@
         <!--Confirm bundle products have been disabled-->
         <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductDisabled" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProductDisabled" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Enabling bundle products-->
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
@@ -155,6 +155,6 @@
         <!--Confirm bundle products have been enabled-->
         <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageEnabled"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>
