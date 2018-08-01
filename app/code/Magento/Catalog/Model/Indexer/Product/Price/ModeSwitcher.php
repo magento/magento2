@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\Search\Request\Dimension;
@@ -14,10 +14,8 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 /**
  * Class to prepare new tables for new indexer mode
  */
-class ModeSwitcher
+class ModeSwitcher implements \Magento\Indexer\Model\Indexer\ModeSwitcherInterface
 {
-    const XML_PATH_PRICE_DIMENSIONS_MODE = 'indexer/catalog_product_price/dimensions_mode';
-
     /**
      * TableMaintainer
      *
@@ -38,15 +36,55 @@ class ModeSwitcher
     private $dimensionsArray;
 
     /**
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration
+     */
+    private $dimensionModeConfiguration;
+
+    /**
+     * @var ModeSwitcherConfiguration
+     */
+    private $modeSwitcherConfiguration;
+
+    /**
+     * @param TableMaintainer            $tableMaintainer
+     * @param DimensionCollectionFactory $dimensionCollectionFactory
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
+     * @param ModeSwitcherConfiguration  $modeSwitcherConfiguration
      */
     public function __construct(
-        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory
+        TableMaintainer $tableMaintainer,
+        DimensionCollectionFactory $dimensionCollectionFactory,
+        DimensionModeConfiguration $dimensionModeConfiguration,
+        ModeSwitcherConfiguration $modeSwitcherConfiguration
     ) {
         $this->tableMaintainer = $tableMaintainer;
         $this->dimensionCollectionFactory = $dimensionCollectionFactory;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
+        $this->modeSwitcherConfiguration = $modeSwitcherConfiguration;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDimensionSwitchModes(): array
+    {
+        return $this->dimensionModeConfiguration->getDimensionModes();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function switchMode(string $currentMode, string $previousMode)
+    {
+        //Create new tables and move data
+        $this->createTables($currentMode);
+        $this->moveData($currentMode, $previousMode);
+
+        //Change config options
+        $this->modeSwitcherConfiguration->saveMode($currentMode);
+
+        //Delete old tables
+        $this->dropTables($previousMode);
     }
 
     /**
@@ -120,7 +158,7 @@ class ModeSwitcher
      *
      * @param string $mode
      *
-     * @return array
+     * @return \Magento\Framework\Indexer\MultiDimensionProvider
      */
     private function getDimensionsArray(string $mode): \Magento\Framework\Indexer\MultiDimensionProvider
     {
