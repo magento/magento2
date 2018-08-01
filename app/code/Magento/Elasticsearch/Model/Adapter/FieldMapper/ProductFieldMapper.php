@@ -115,4 +115,22 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
 
         return $allAttributes;
     }
+
+    /**
+     * @param string $frontendInput
+     * @param string $fieldType
+     * @param string $attributeCode
+     * @return string
+     */
+    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
+    {
+        switch ($frontendInput) {
+            case 'select':
+                return in_array($fieldType, ['string','integer'], true) ? $attributeCode . '_value' : $attributeCode;
+            case 'boolean':
+                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
+            default:
+                return $attributeCode;
+        }
+    }
 }
