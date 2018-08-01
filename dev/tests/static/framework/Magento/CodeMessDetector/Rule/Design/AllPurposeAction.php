@@ -27,11 +27,7 @@ class AllPurposeAction extends AbstractRule implements ClassAware
      */
     public function apply(AbstractNode $node)
     {
-        $artifactList = $node->getInterfaces();
-        $impl = [];
-        foreach ($artifactList as $astInterface) {
-            $impl[] = $astInterface->getNamespacedName();
-        }
+        $impl = class_implements($node->getFullQualifiedName(), true);
 
         if (in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;
