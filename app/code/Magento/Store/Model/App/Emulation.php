@@ -119,7 +119,7 @@ class Emulation extends \Magento\Framework\DataObject
         $force = false
     ) {
         // Only allow a single level of emulation
-        if ($this->initialEnvironmentInfo !== null) {
+        if ($this->isEnvironmentEmulated()) {
             $this->logger->error(__('Environment emulation nesting is not allowed.'));
             return;
         }
@@ -168,7 +168,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     public function stopEnvironmentEmulation()
     {
-        if ($this->initialEnvironmentInfo === null) {
+        if (!$this->isEnvironmentEmulated()) {
             return $this;
         }
 
@@ -181,6 +181,16 @@ class Emulation extends \Magento\Framework\DataObject
 
         $this->initialEnvironmentInfo = null;
         return $this;
+    }
+
+    /**
+     * Checks whether the environment is being emulated
+     *
+     * @return bool
+     */
+    public function isEnvironmentEmulated()
+    {
+        return $this->initialEnvironmentInfo !== null;
     }
 
     /**

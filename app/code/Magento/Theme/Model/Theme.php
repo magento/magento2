@@ -80,6 +80,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_customFactory;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    protected $appEmulation;
+
+    /**
      * @var ThemeFactory
      */
     private $themeModelFactory;
@@ -99,6 +104,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory
      * @param \Magento\Framework\View\Design\Theme\Validator $validator
      * @param \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Theme\Model\ResourceModel\Theme $resource
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
@@ -113,6 +119,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
         \Magento\Framework\View\Design\Theme\Validator $validator,
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
         array $data = [],
@@ -124,7 +131,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
-        $this->themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
+        $this->appEmulation = $appEmulation;
+        $this->themeModelFactory = $themeModelFactory ?? ObjectManager::getInstance()->get(ThemeFactory::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 
@@ -216,7 +224,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function hasChildThemes()
     {
-        return (bool)$this->getCollection()->addTypeFilter(
+        return (bool) $this->getCollection()->addTypeFilter(
             self::TYPE_VIRTUAL
         )->addFieldToFilter(
             'parent_id',
@@ -265,8 +273,9 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getArea()
     {
-        // In order to support environment emulation of area, if area is set, return it
-        if ($this->getData('area') && !$this->_appState->isAreaCodeEmulated()) {
+        if ($this->getData('area')
+            && (!$this->_appState->isAreaCodeEmulated() || $this->appEmulation->isEnvironmentEmulated())
+        ) {
             return $this->getData('area');
         }
         return $this->_appState->getAreaCode();
@@ -298,7 +307,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getCode()
     {
-        return (string)$this->getData('code');
+        return (string) $this->getData('code');
     }
 
     /**

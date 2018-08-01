@@ -39,6 +39,11 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     protected $config;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appEmulation;
+
+    /**
      * @var string|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $defaultTheme = 'anyName4Theme';
@@ -61,6 +66,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->state = $this->createMock(\Magento\Framework\App\State::class);
+        $this->appEmulation = $this->createMock(\Magento\Store\Model\App\Emulation::class);
         $themes = [Design::DEFAULT_AREA => $this->defaultTheme];
         $this->model = new Design(
             $this->storeManager,
@@ -69,6 +75,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             $this->themeFactory,
             $this->objectManager,
             $this->state,
+            $this->appEmulation,
             $themes
         );
     }

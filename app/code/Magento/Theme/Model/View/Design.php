@@ -74,12 +74,18 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    protected $appEmulation;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param array $themes
      */
     public function __construct(
@@ -89,6 +95,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         array $themes
     ) {
         $this->_storeManager = $storeManager;
@@ -96,6 +103,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_themeFactory = $themeFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
+        $this->appEmulation = $appEmulation;
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
     }
@@ -121,7 +129,9 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function getArea()
     {
         // In order to support environment emulation of area, if area is set, return it
-        if ($this->_area && !$this->_appState->isAreaCodeEmulated()) {
+        if ($this->_area
+            && (!$this->_appState->isAreaCodeEmulated() || $this->appEmulation->isEnvironmentEmulated())
+        ) {
             return $this->_area;
         }
         return $this->_appState->getAreaCode();
