@@ -131,7 +131,7 @@ class UpdateHandler implements ExtensionInterface
      * Check whether price has percentage value.
      *
      * @param array $priceRow
-     * @return integer|null
+     * @return int|null
      */
     private function getPercentage(array $priceRow): ?int
     {
@@ -145,7 +145,7 @@ class UpdateHandler implements ExtensionInterface
      *
      * @param array $valuesToUpdate
      * @param array $oldValues
-     * @return boolean
+     * @return bool
      */
     private function updateValues(array $valuesToUpdate, array $oldValues): bool
     {

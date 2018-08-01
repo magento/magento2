@@ -135,7 +135,7 @@ class SaveHandler implements ExtensionInterface
      * Check whether price has percentage value.
      *
      * @param array $priceRow
-     * @return integer|null
+     * @return int|null
      */
     private function getPercentage(array $priceRow): ?int
     {
