@@ -127,9 +127,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getPersistorClassName()
     {
         $target = $this->getSourceClassName();
-//        if (substr($target, -9) == 'Interface') {
-//            $target = substr($target, 1, strlen($target) -9);
-//        }
         return $target . 'Persistor';
     }
 
