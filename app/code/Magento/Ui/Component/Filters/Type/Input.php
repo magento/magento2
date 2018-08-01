@@ -67,14 +67,12 @@ class Input extends AbstractFilter
         if (isset($this->filterData[$this->getName()])) {
             $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
 
-            if (!empty($value)) {
-                $filter = $this->filterBuilder->setConditionType('like')
-                    ->setField($this->getName())
-                    ->setValue(sprintf('%%%s%%', $value))
-                    ->create();
+            $filter = $this->filterBuilder->setConditionType('like')
+                ->setField($this->getName())
+                ->setValue(sprintf('%%%s%%', $value))
+                ->create();
 
-                $this->getContext()->getDataProvider()->addFilter($filter);
-            }
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
     }
 }
