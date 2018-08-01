@@ -17,6 +17,11 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
 {
     /**
+     * @inheritdoc
+     */
+    protected $skippedFields = ['sku'];
+
+    /**
      * Assert product details.
      *
      * @param WishlistIndex $wishlistIndex
@@ -33,8 +38,7 @@ abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
         $actualOptions = $productBlock->getItemProduct($product)->getOptions();
         $cartFixture = $fixtureFactory->createByCode('cart', ['data' => ['items' => ['products' => [$product]]]]);
         $expectedOptions = $cartFixture->getItems()[0]->getData()['options'];
-        // Sku is not present in Wishlist Product Details
-        unset($expectedOptions[0]['sku']);
+
         $errors = $this->verifyData(
             $this->sortDataByPath($expectedOptions, '::title'),
             $this->sortDataByPath($actualOptions, '::title')
