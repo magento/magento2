@@ -565,7 +565,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['"Email" is not a valid email address.']),
+            $this->equalTo(['&quot;Email&quot; is not a valid email address.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -622,7 +622,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Password confirmation doesn\'t match entered password.']),
+            $this->equalTo(['Password confirmation doesn&#039;t match entered password.']),
             MessageInterface::TYPE_ERROR
         );
     }
