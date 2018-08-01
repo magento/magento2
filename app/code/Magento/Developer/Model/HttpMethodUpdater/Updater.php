@@ -45,9 +45,9 @@ class Updater
             throw new \RuntimeException("Failed to read $file");
         }
 
-        $withoutImplementsRegex = '/class\s+' .$className .'\s+extends\s+[a-z0-9_]+\s+?\n?\{/i';
+        $withoutImplementsRegex = '/class\s+' .$className .'\s+extends\s+[a-z0-9_\\\]+\s+?\n?\{/i';
         $withImplementsRegex = '/class\s+' .$className
-            .'\s+extends\s+[a-z0-9_]+\s+implements\s+[0-9a-z_\\\,\s]+\s*?\n?\{/i';
+            .'\s+extends\s+[a-z0-9_\\\]+\s+implements\s+[0-9a-z_\\\,\s]+\s*?\n?\{/i';
         if (preg_match($withoutImplementsRegex, $fileContent, $found)) {
             $beginning = preg_replace('/\s+?\n?\{$/', '', $found[0]);
             $rewrite = str_replace(

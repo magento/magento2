@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace FakeNamespace;
 
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Exception\NotFoundException;
 
-class FakeAction2 extends Action implements ActionInterface
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class FakeAction2 extends \Magento\Framework\App\Action\Action implements ActionInterface
 {
     /**
      * @inheritDoc

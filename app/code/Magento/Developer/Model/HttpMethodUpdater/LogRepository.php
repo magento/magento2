@@ -82,30 +82,36 @@ SQL
     }
 
     /**
+     * @param bool $includeMultiple If false classes with multiple
+     * methods logged will be omitted.
+     *
      * @return Logged[]
      */
-    public function findLogged(): array
+    public function findLogged($includeMultiple = true): array
     {
         $connection = $this->getConnection();
         $table = $this->getTableName();
+        $select = $connection->select()
+            ->from(
+                $table,
+                [
+                    self::CLASS_NAME => self::CLASS_NAME,
+                    'methods'        => 'group_concat('
+                        .self::METHOD_NAME.' separator \',\')',
+                ]
+            )->group(self::CLASS_NAME);
+        if (!$includeMultiple) {
+            $select->having('count(' .self::METHOD_NAME .') = 1');
+        }
 
         return array_map(
             function (array $row): Logged {
                 return new Logged(
                     $row[self::CLASS_NAME],
-                    explode(',', $row[self::METHOD_NAME])
+                    explode(',', $row['methods'])
                 );
             },
-            $connection->fetchAll(
-                $connection->select()->from(
-                    $table,
-                    [
-                        self::CLASS_NAME => self::CLASS_NAME,
-                        'methods' => 'group_concat('
-                            .self::METHOD_NAME .' separator \',\')'
-                    ]
-                )->group(self::CLASS_NAME)
-            )
+            $connection->fetchAll($select)
         );
     }
 }

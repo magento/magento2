@@ -11,6 +11,9 @@ namespace FakeNamespace;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class FakeAction extends Action
 {
     /**
