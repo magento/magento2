@@ -98,9 +98,6 @@
         <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
         <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
         <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
-        <!--Widget on Storefront-->
-        <element name="CategoryWidget" type="text" selector="//a[@href='http://magento2.vagrant42/{{var1}}.html?___store=default']" parameterized="true"/>
-        <element name="CMSPageWidget" type="text" selector="//a[@href='http://magento2.vagrant42/home']"/>
         <!--Compare on Storefront-->
         <element name="ProductName" type="text" selector=".product.name.product-item-name" />
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>
