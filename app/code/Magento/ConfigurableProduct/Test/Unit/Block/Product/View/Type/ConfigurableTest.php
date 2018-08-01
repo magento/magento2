@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
 use Magento\Customer\Model\Session;
@@ -174,7 +175,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider() : array
+    public function cacheKeyProvider(): array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -313,11 +314,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->atLeastOnce())->method('getPriceFormat')->willReturn([]);
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
-            ->willReturnMap([
-                [$amount, $amount],
-                [$priceQty, $priceQty],
-                [$percentage, $percentage],
-            ]);
+            ->willReturnArgument(0);
 
         $this->variationPricesMock->expects($this->once())
             ->method('getFormattedPrices')
