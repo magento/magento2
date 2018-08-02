@@ -19,6 +19,7 @@
     },
     "type": "magento2-test",
     "license": [
-        "proprietary"
+        "OSL-3.0",
+        "AFL-3.0"
     ]
 }
