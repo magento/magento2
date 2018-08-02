@@ -1,0 +1,1 @@
+/Users/kkozan/Documents/GitHub/magento2ee/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Backend/_files/controller_acl_test_whitelist_ee.txt
