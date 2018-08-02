@@ -41,14 +41,17 @@ class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         $filter3 = $filterBuilder->setField(ShipmentTrackInterface::TRACK_NUMBER)
             ->setValue('track number 4')
             ->create();
-        $filter4 = $filterBuilder->setField(ShipmentTrackInterface::CARRIER_CODE)
-            ->setValue('carrier code 5')
+        $filter4 = $filterBuilder->setField(ShipmentTrackInterface::TRACK_URL)
+            ->setValue('track url 5')
             ->create();
-        $filter5 = $filterBuilder->setField(ShipmentTrackInterface::QTY)
+        $filter5 = $filterBuilder->setField(ShipmentTrackInterface::CARRIER_CODE)
+            ->setValue('carrier code 6')
+            ->create();
+        $filter6 = $filterBuilder->setField(ShipmentTrackInterface::QTY)
             ->setConditionType('lt')
             ->setValue(5)
             ->create();
-        $filter6 = $filterBuilder->setField(ShipmentTrackInterface::WEIGHT)
+        $filter7 = $filterBuilder->setField(ShipmentTrackInterface::WEIGHT)
             ->setValue(1)
             ->create();
 
@@ -63,9 +66,9 @@ class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
-        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
-        $searchCriteriaBuilder->addFilters([$filter5]);
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4, $filter5]);
         $searchCriteriaBuilder->addFilters([$filter6]);
+        $searchCriteriaBuilder->addFilters([$filter7]);
         $searchCriteriaBuilder->setSortOrders([$sortOrder]);
 
         $searchCriteriaBuilder->setPageSize(2);
