@@ -38,7 +38,15 @@ class ResponseResolver
     public function getResult(\Zend_Http_Response $response)
     {
         $result = false;
-        $responseBody = $this->converter->fromBody($response->getBody());
+        preg_match('#(?:Content-Type:\s*)(\w\S+)#i', $this->converter->getContentTypeHeader(), $contentType);
+        $converterContentType = $contentType[1];
+
+        if ($response->getBody() && is_int(strripos($response->getHeader('Content-Type'), $converterContentType))) {
+            $responseBody = $this->converter->fromBody($response->getBody());
+        } else {
+            $responseBody = [];
+        }
+
         if (array_key_exists($response->getStatus(), $this->responseHandlers)) {
             $result = $this->responseHandlers[$response->getStatus()]->handleResponse($responseBody);
         }
