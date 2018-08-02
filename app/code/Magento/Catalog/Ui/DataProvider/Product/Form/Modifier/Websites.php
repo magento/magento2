@@ -175,9 +175,11 @@ class Websites extends AbstractModifier
         $label = __('Websites');
 
         $defaultWebsiteId = $this->websiteRepository->getDefault()->getId();
+        $isOnlyOneWebsiteAvailable = count($websitesList) === 1;
         foreach ($websitesList as $website) {
             $isChecked = in_array($website['id'], $websiteIds)
-                || ($defaultWebsiteId == $website['id'] && $isNewProduct);
+                || ($defaultWebsiteId == $website['id'] && $isNewProduct)
+                || $isOnlyOneWebsiteAvailable;
             $children[$website['id']] = [
                 'arguments' => [
                     'data' => [
@@ -397,8 +399,9 @@ class Websites extends AbstractModifier
         $this->websitesList = [];
         $groupList = $this->groupRepository->getList();
         $storesList = $this->storeRepository->getList();
+        $websiteList = $this->storeManager->getWebsites(true);
 
-        foreach ($this->websiteRepository->getList() as $website) {
+        foreach ($websiteList as $website) {
             $websiteId = $website->getId();
             if (!$websiteId) {
                 continue;
