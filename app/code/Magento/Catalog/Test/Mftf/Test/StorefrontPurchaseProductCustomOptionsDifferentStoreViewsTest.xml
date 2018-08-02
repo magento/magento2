@@ -97,7 +97,7 @@
 
         <!-- Switcher to Store FR-->
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
 
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView"/>
@@ -262,8 +262,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
         <!-- Switcher to Store FR-->
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
-
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher1"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView1"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage1"/>
