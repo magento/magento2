@@ -1128,7 +1128,7 @@
             <argument name="productType" xsi:type="string">virtual</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Indexer\Console\Command\IndexerDimensionsModeCommand">
+    <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
         <arguments>
             <argument name="dimensionSwitchers" xsi:type="array">
                 <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>

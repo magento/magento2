@@ -19,7 +19,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     /** @var  ObjectManagerInterface */
     private $objectManager;
 
-    /** @var  \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand */
+    /** @var  \Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand */
     private $command;
 
     /** @var  CommandTester */
@@ -35,7 +35,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         $this->objectManager->get(\Magento\TestFramework\App\Config::class)->clean();
 
         $this->command = $this->objectManager->create(
-            \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::class
+            \Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand::class
         );
 
         $this->commandTester = new CommandTester($this->command);

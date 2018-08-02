@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\Command\IndexerDimensionsModeCommand;
+use Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -15,12 +15,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Test for class \Magento\Indexer\Model\ModeSwitcherInterface.
  */
-class IndexerDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
+class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
      *
-     * @var IndexerDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerSetDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
      */
     private $command;
 
@@ -60,7 +60,7 @@ class IndexerDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];
         $this->command = $objectManagerHelper->getObject(
-            IndexerDimensionsModeCommand::class,
+            IndexerSetDimensionsModeCommand::class,
             [
                 'objectManagerFactory' => $this->objectManagerFactory,
                 'configReader'         => $this->configReaderMock,

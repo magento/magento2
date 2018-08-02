@@ -17,7 +17,7 @@ use Magento\Indexer\Model\ModeSwitcherInterface;
 /**
  * Command to set indexer dimensions mode
  */
-class IndexerDimensionsModeCommand extends AbstractIndexerCommand
+class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
 {
     const INPUT_KEY_MODE = 'mode';
     const INPUT_KEY_INDEXER = 'indexer';
