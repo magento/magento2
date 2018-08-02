@@ -97,6 +97,8 @@
 
         <!-- Switcher to Store FR-->
 
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage"/>
