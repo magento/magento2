@@ -37,7 +37,6 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $properties = parent::_getClassProperties();
 
-        // protected $_instanceName = null;
         $properties[] = [
             'name' => '_instanceName',
             'visibility' => 'protected',
@@ -56,7 +55,6 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             ],
         ];
 
-        // protected $_shared = null;
         $properties[] = [
             'name' => '_isShared',
             'visibility' => 'protected',
