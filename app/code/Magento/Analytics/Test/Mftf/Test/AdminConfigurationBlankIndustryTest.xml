@@ -22,6 +22,7 @@
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminConfig"/>
         <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
         <see stepKey="seeAdvancedReportingIndustryLabel" selector="{{AdminConfigSection.advancedReportingIndustryLabel}}" userInput="Industry"/>
         <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="--Please Select--"/>

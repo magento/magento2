@@ -6,7 +6,6 @@
 
 namespace Magento\Mtf\Util\Generate;
 
-
 /**
  * Factory classes generator.
  *
