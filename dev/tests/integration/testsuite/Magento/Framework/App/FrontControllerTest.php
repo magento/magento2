@@ -16,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea frontend
  */
 class FrontControllerTest extends TestCase
@@ -37,6 +38,8 @@ class FrontControllerTest extends TestCase
 
     /**
      * @return ValidatorInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function createRequestValidator(): ValidatorInterface
     {
