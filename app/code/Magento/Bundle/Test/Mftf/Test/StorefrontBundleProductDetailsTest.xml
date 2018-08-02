@@ -7,15 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminProductBundleCreationTest">
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleProductDetailsTest">
         <annotations>
             <features value="Bundle"/>
-            <stories value="Create/Edit bundle product in Admin"/>
-            <title value="Admin should be able to save and publish a bundle product"/>
-            <description value="Admin should be able to save and publish a bundle product"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to see basic bundle product details"/>
+            <description value="Customer should be able to see basic bundle product details"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-225"/>
+            <testCaseId value="MC-230"/>
             <group value="Bundle"/>
         </annotations>
         <before>
@@ -26,6 +26,7 @@
 
             <!-- Admin Login-->
             <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
@@ -37,9 +38,15 @@
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
-        <!-- Add two bundle items -->
+        <!--Add description-->
+        <click selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="openDescriptionDropDown"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToError"/>
+        <fillField selector="{{AdminProductFormBundleSection.longDescription}}" userInput="This is the long description" stepKey="fillLongDescription"/>
+        <fillField selector="{{AdminProductFormBundleSection.shortDescription}}" userInput="This is the short description" stepKey="fillShortDescription"/>
+
+        <!-- Add options -->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
@@ -58,20 +65,22 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
-        <!--Create a bundle product with ancillary data-->
-        <actionGroup ref="CreateBasicBundleProduct" stepKey="createBundledProduct">
+        <!--Create a basic bundle product-->
+        <actionGroup ref="CreateBasicBundleProduct" stepKey="createBundledProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
 
-        <!--save the product/published by default-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+        <!--save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
+        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
 
-        <!-- go to page-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
-
-        <!--Test Assertion - on correct page/page has been published-->
-        <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <!--Checking details-->
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <see selector="{{BundleStorefrontSection.shortDescriptionText}}" userInput="This is the short description" stepKey="seeShortDescription"/>
+        <see selector="{{BundleStorefrontSection.longDescriptionText}}" userInput="This is the long description" stepKey="seeLongDescription"/>
+        <click selector="{{BundleStorefrontSection.bundleOptionSelector}}" stepKey="clickOnCustomizationOption"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct1.name$$" stepKey="seeOption1"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct2.name$$" stepKey="seeOption2"/>
     </test>
 </tests>
