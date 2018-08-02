@@ -6,7 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\Index
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Index extends \Magento\Backend\Controller\Adminhtml\Index implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Admin area entry point

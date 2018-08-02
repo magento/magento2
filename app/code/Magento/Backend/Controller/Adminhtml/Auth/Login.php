@@ -6,11 +6,14 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Login extends \Magento\Backend\Controller\Adminhtml\Auth
+class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
