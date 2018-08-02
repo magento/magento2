@@ -47,6 +47,11 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     private $indexerMock;
 
     /**
+     * @var \Magento\Indexer\Model\DimensionModes|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dimensionModes;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -59,6 +64,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
         $this->dimensionProviders = [
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];
+        $this->dimensionModes = $this->createMock(\Magento\Indexer\Model\DimensionModes::class);
         $this->command = $objectManagerHelper->getObject(
             IndexerSetDimensionsModeCommand::class,
             [
@@ -97,10 +103,11 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         $this->configureAdminArea();
         $commandTester = new CommandTester($this->command);
-        $this->dimensionModeSwitcherMock->method('getDimensionSwitchModes')->willReturn([
+        $this->dimensionModes->method('getDimensions')->willReturn([
             $previousMode    => 'dimension1',
             $command['mode'] => 'dimension2',
         ]);
+        $this->dimensionModeSwitcherMock->method('getDimensionModes')->willReturn($this->dimensionModes);
         $this->indexerMock->method('load')->willReturnSelf();
         $this->indexerMock->method('getTitle')->willReturn($indexerTitle);
         $commandTester->execute($command);
@@ -175,10 +182,11 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     public function testExecuteWithModeException()
     {
         $commandTester = new CommandTester($this->command);
-        $this->dimensionModeSwitcherMock->method('getDimensionSwitchModes')->willReturn([
+        $this->dimensionModes->method('getDimensions')->willReturn([
             'store'   => 'dimension1',
             'website' => 'dimension2',
         ]);
+        $this->dimensionModeSwitcherMock->method('getDimensionModes')->willReturn($this->dimensionModes);
         $this->indexerMock->method('getTitle')->willReturn('indexer_title');
         $commandTester->execute([
             'indexer' => 'indexer_title',
@@ -200,7 +208,8 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
         $this->configureAdminArea();
         $commandTester = new CommandTester($this->command);
         $this->indexerMock->method('getTitle')->willReturn($indexerTitle);
-        $this->dimensionModeSwitcherMock->method('getDimensionSwitchModes')->willReturn($modesConfig);
+        $this->dimensionModes->method('getDimensions')->willReturn($modesConfig);
+        $this->dimensionModeSwitcherMock->method('getDimensionModes')->willReturn($this->dimensionModes);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
         $consoleOutput = sprintf('%-50s', 'Indexer') . 'Available modes' . PHP_EOL
