@@ -6,9 +6,10 @@
 
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,6 +75,75 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('current-store-id'));
 
         $this->assertNull($this->router->match($this->request));
+    }
+
+    public function testRewriteAfterStoreSwitcher()
+    {
+        $initialRequestPath = 'request-path';
+        $newRequestPath = 'new-request-path';
+        $oldStoreAlias = 'old-store';
+        $oldStoreId = 'old-store-id';
+        $currentStoreId = 'current-store-id';
+        $rewriteEntityType = 'entity-type';
+        $rewriteEntityId = 42;
+        $this->request
+            ->expects($this->any())
+            ->method('getParam')
+            ->with('___from_store')
+            ->willReturn($oldStoreAlias);
+        $this->request
+            ->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn($initialRequestPath);
+        $oldStore = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $oldStore->expects($this->any())
+            ->method('getId')
+            ->willReturn($oldStoreId);
+        $this->store
+            ->expects($this->any())
+            ->method('getId')
+            ->willReturn($currentStoreId);
+        $this->storeManager
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturnMap([[$oldStoreAlias, $oldStore], [null, $this->store]]);
+        $oldUrlRewrite = $this->getMockBuilder(UrlRewrite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $oldUrlRewrite->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn($rewriteEntityType);
+        $oldUrlRewrite->expects($this->any())
+            ->method('getEntityId')
+            ->willReturn($rewriteEntityId);
+        $oldUrlRewrite->expects($this->any())
+            ->method('getRedirectType')
+            ->willReturn(0);
+        $urlRewrite = $this->getMockBuilder(UrlRewrite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $urlRewrite->expects($this->any())
+            ->method('getRequestPath')
+            ->willReturn($newRequestPath);
+        $this->urlFinder
+            ->expects($this->any())
+            ->method('findOneByData')
+            ->willReturnMap([
+                [
+                    [
+                        UrlRewrite::REQUEST_PATH => $initialRequestPath,
+                        UrlRewrite::STORE_ID     => $currentStoreId,
+                    ],
+                    $urlRewrite,
+                ]
+            ]);
+        $this->actionFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with(Forward::class);
+        $this->router->match($this->request);
     }
 
     public function testNoRewriteAfterStoreSwitcherWhenNoOldRewrite()

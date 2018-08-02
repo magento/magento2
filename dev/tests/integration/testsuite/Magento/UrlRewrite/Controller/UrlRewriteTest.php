@@ -69,12 +69,6 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
             ],
-            'Use Case #7: Rewrite during stores switching' => [
-                'request' => '/page-c-on-2nd-store'
-                    . '?___store=default&___from_store=fixture_second_store',
-                'redirect' => '/page-c-on-1st-store',
-                'expectedCode' => 302
-            ],
         ];
     }
 }
