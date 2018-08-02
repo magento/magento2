@@ -262,6 +262,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
         <!-- Switcher to Store FR-->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher1"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView1"/>
