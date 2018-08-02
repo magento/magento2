@@ -80,3 +80,4 @@ DoubleColon
 BarFactory
 PartialNamespace\BarFactory
 Product\OptionFactory
+FormElementDependenceController

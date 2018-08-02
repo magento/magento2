@@ -101,13 +101,11 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
+
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $this->getFilterIds()]
+        );
 
         return $collection;
     }

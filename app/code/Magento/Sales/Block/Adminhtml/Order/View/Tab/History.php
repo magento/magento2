@@ -17,7 +17,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @var string
      */
-    protected $_template = 'order/view/tab/history.phtml';
+    protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
      * Core registry

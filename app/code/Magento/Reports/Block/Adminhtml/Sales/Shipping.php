@@ -17,7 +17,7 @@ class Shipping extends \Magento\Backend\Block\Widget\Grid\Container
      *
      * @var string
      */
-    protected $_template = 'report/grid/container.phtml';
+    protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
      * {@inheritdoc}

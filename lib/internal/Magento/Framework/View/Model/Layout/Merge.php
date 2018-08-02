@@ -428,6 +428,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if ($result && $pageLayoutResult) {
             $this->addUpdate($result);
             $this->pageLayout = $pageLayoutResult;
+            foreach ($this->getHandles() as $handle) {
+                $this->allHandles[$handle] = $this->handleProcessed;
+            }
             return $this;
         }
 
@@ -632,7 +635,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $result = $this->_loadXmlString($result);
         } else {
             $result = $this->_loadFileLayoutUpdatesXml();
-            $this->_saveCache($result->asXml(), $cacheId);
+            $this->_saveCache($result->asXML(), $cacheId);
         }
         $this->layoutUpdatesCache = $result;
         return $result;

@@ -16,7 +16,7 @@ class Header extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'html/header.phtml';
+    protected $_template = 'Magento_Theme::html/header.phtml';
 
     /**
      * Retrieve welcome text

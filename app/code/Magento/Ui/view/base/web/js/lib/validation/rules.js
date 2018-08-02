@@ -316,7 +316,7 @@ define([
         ],
         "pattern": [
             function(value, param) {
-                return param.test(value);
+                return new RegExp(param).test(value);
             },
             $.mage.__('Invalid format.')
         ],

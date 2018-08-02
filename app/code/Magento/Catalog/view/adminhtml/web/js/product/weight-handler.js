@@ -64,10 +64,10 @@ define([
         },
 
         /**
-         * Has weight swither
+         * Has weight switcher
          * @returns {*}
          */
-        hasWeightSwither: function () {
+        hasWeightSwitcher: function () {
             return this.$weightSwitcher().is(':visible');
         },
 
@@ -104,7 +104,7 @@ define([
         'Magento_Catalog/js/product/weight-handler': function () {
             this.bindAll();
 
-            if (this.hasWeightSwither()) {
+            if (this.hasWeightSwitcher()) {
                 this.switchWeight();
             }
         },
