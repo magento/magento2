@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Test for class \Magento\Indexer\Model\Indexer\ModeSwitcherInterface.
+ * Test for class \Magento\Indexer\Model\ModeSwitcherInterface.
  */
 class IndexerDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -32,12 +32,12 @@ class IndexerDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
     private $configReaderMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface[]
+     * @var \Magento\Indexer\Model\ModeSwitcherInterface[]
      */
     private $dimensionProviders;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ModeSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dimensionModeSwitcherMock;
 
@@ -55,7 +55,7 @@ class IndexerDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
         $this->dimensionModeSwitcherMock =
-            $this->createMock(\Magento\Indexer\Model\Indexer\ModeSwitcherInterface::class);
+            $this->createMock(\Magento\Indexer\Model\ModeSwitcherInterface::class);
         $this->dimensionProviders = [
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];

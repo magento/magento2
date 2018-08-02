@@ -28,7 +28,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     private $configReaderMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface[]
+     * @var \Magento\Indexer\Model\ModeSwitcherInterface[]
      */
     private $indexers;
 

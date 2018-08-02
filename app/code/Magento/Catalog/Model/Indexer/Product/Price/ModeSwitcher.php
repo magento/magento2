@@ -10,11 +10,13 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Indexer\Model\DimensionModes;
+use Magento\Indexer\Model\DimensionMode;
 
 /**
  * Class to prepare new tables for new indexer mode
  */
-class ModeSwitcher implements \Magento\Indexer\Model\Indexer\ModeSwitcherInterface
+class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
 {
     /**
      * TableMaintainer
@@ -66,9 +68,14 @@ class ModeSwitcher implements \Magento\Indexer\Model\Indexer\ModeSwitcherInterfa
     /**
      * @inheritdoc
      */
-    public function getDimensionSwitchModes(): array
+    public function getDimensionModes(): DimensionModes
     {
-        return $this->dimensionModeConfiguration->getDimensionModes();
+        $dimensionsList = [];
+        foreach ($this->dimensionModeConfiguration->getDimensionModes() as $dimension => $modes) {
+            $dimensionsList[$dimension] = new DimensionMode($dimension, $modes);
+        }
+
+        return new DimensionModes($dimensionsList);
     }
 
     /**

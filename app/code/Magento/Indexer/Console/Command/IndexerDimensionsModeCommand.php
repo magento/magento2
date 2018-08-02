@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Indexer\Model\ModeSwitcherInterface;
 
 /**
  * Command to set indexer dimensions mode
@@ -34,15 +35,16 @@ class IndexerDimensionsModeCommand extends AbstractIndexerCommand
      * @var ScopeConfigInterface
      */
     private $configReader;
+
     /**
-     * @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface[]
+     * @var ModeSwitcherInterface[]
      */
     private $dimensionProviders;
 
     /**
-     * @param ObjectManagerFactory                                   $objectManagerFactory
-     * @param ScopeConfigInterface                                   $configReader
-     * @param \Magento\Indexer\Model\Indexer\ModeSwitcherInterface[] $dimensionSwitchers
+     * @param ObjectManagerFactory    $objectManagerFactory
+     * @param ScopeConfigInterface    $configReader
+     * @param ModeSwitcherInterface[] $dimensionSwitchers
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -87,7 +89,7 @@ class IndexerDimensionsModeCommand extends AbstractIndexerCommand
                 $configPath = sprintf(self::XML_PATH_DIMENSIONS_MODE_MASK, $selectedIndexer);
                 $previousMode = $this->configReader->getValue($configPath) ?: self::DIMENSION_MODE_NONE;
                 if ($previousMode !== $currentMode) {
-                    /** @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface $modeSwitcher */
+                    /** @var ModeSwitcherInterface $modeSwitcher */
                     $modeSwitcher = $this->dimensionProviders[$selectedIndexer];
                     // Switch dimensions mode
                     $modeSwitcher->switchMode($currentMode, $previousMode);
@@ -119,7 +121,7 @@ class IndexerDimensionsModeCommand extends AbstractIndexerCommand
     {
         $output->writeln(sprintf('%-50s', 'Indexer') . 'Available modes');
         foreach ($this->dimensionProviders as $indexer => $provider) {
-            $availableModes = implode(',', array_keys($provider->getDimensionSwitchModes()));
+            $availableModes = implode(',', array_keys($provider->getDimensionModes()->getDimensions()));
             $output->writeln(sprintf('%-50s', $indexer) . $availableModes);
         }
     }
@@ -140,7 +142,7 @@ class IndexerDimensionsModeCommand extends AbstractIndexerCommand
         );
         $modeOptionDescription = 'Indexer dimension modes' . PHP_EOL;
         foreach ($this->dimensionProviders as $indexer => $provider) {
-            $availableModes = implode(',', array_keys($provider->getDimensionSwitchModes()));
+            $availableModes = implode(',', array_keys($provider->getDimensionModes()->getDimensions()));
             $modeOptionDescription .= sprintf('%-30s ', $indexer) . $availableModes . PHP_EOL;
         }
         $arguments[] = new InputArgument(
@@ -167,9 +169,9 @@ class IndexerDimensionsModeCommand extends AbstractIndexerCommand
             $errors = $this->validateArgument(self::INPUT_KEY_INDEXER, $inputIndexer, $acceptedValues);
             if (!$errors) {
                 $inputIndexerDimensionMode = (string)$input->getArgument(self::INPUT_KEY_MODE);
-                /** @var \Magento\Indexer\Model\Indexer\ModeSwitcherInterface $modeSwitcher */
+                /** @var ModeSwitcherInterface $modeSwitcher */
                 $modeSwitcher = $this->dimensionProviders[$inputIndexer];
-                $acceptedValues = array_keys($modeSwitcher->getDimensionSwitchModes());
+                $acceptedValues = array_keys($modeSwitcher->getDimensionModes()->getDimensions());
                 $errors = $this->validateArgument(self::INPUT_KEY_MODE, $inputIndexerDimensionMode, $acceptedValues);
             }
         }

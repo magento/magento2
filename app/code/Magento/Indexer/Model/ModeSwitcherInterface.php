@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Indexer\Model\Indexer;
+namespace Magento\Indexer\Model;
 
 /**
  * Interface to switch indexer mode
@@ -13,17 +13,11 @@ namespace Magento\Indexer\Model\Indexer;
 interface ModeSwitcherInterface
 {
     /**
-     * Returns array of possible dimensions modes
-     * Example:
-     * [
-     *    'mode1' => ['dimension1'],
-     *    'mode2' => ['dimension2']
-     *    'mode3' => ['dimension1', 'dimension2']
-     * ]
+     * Returns data object that contains dimension modes
      *
-     * @return array
+     * @return DimensionModes
      */
-    public function getDimensionSwitchModes(): array;
+    public function getDimensionModes(): DimensionModes;
 
     /**
      * Switch dimension mode
