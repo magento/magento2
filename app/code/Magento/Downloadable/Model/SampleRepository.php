@@ -227,7 +227,10 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             'title' => $sample->getTitle(),
         ];
 
-        if ($sample->getSampleType() === 'file' && $sample->getSampleFile() === null) {
+        if ($sample->getSampleType() === 'file'
+            && $sample->getSampleFile() === null
+            && $sample->getSampleFileContent() !== null
+        ) {
             $sampleData['file'] = $this->jsonEncoder->encode(
                 [
                     $this->fileContentUploader->upload($sample->getSampleFileContent(), 'sample'),
@@ -309,7 +312,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         }
 
         if ($sample->getSampleType() === 'file' && $sample->getSampleFileContent() === null) {
-            $sample->setSampleFile($existingSample->getSampleFile());
+            $existingSample->setSampleFile($sample->getSampleFile());
         }
         $this->saveSample($product, $sample, $isGlobalScopeContent);
         return $existingSample->getId();
