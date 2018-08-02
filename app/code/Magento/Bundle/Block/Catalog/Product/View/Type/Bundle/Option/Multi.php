@@ -15,5 +15,5 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/view/type/bundle/option/multi.phtml';
+    protected $_template = 'Magento_Bundle::catalog/product/view/type/bundle/option/multi.phtml';
 }

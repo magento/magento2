@@ -54,6 +54,7 @@ Region/State,Region/State
 City,City
 "Street Address 1","Street Address 1"
 "Street Address 2","Street Address 2"
+"VAT Number","VAT Number"
 "Store Contact Information","Store Contact Information"
 %1,%1
 "Template Variables","Template Variables"

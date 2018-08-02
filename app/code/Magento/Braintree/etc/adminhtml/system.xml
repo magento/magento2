@@ -44,7 +44,7 @@
                         <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
-                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
+                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.<br><br>Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a> latest technology. Hosted Fields are small, transparent iframes that replace the sensitive credit card inputs in your checkout flow - helping you meet the latest data security requirements while ensuring your customization doesn't suffer. <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
@@ -78,7 +78,7 @@
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
                     </group>
-                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
                         <label>Advanced Braintree Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="braintree_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -126,7 +126,7 @@
                             <config_path>payment/braintree/sort_order</config_path>
                         </field>
                     </group>
-                    <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
+                    <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="30">
                         <label>Country Specific Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="allowspecific" translate="label" type="allowspecific" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -147,7 +147,7 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
-                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
+                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -216,7 +216,7 @@
                             <config_path>payment/braintree_paypal/skip_order_review</config_path>
                         </field>
                     </group>
-                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
+                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="41">
                         <label>3D Secure Verification Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="verify_3dsecure" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -240,7 +240,7 @@
                             <config_path>payment/braintree/verify_specific_countries</config_path>
                         </field>
                     </group>
-                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="50">
+                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                         <label>Dynamic Descriptors</label>
                         <comment><![CDATA[Dynamic descriptors are sent on a per-transaction basis and define what will appear on your customers credit card statements for a specific purchase.
                             The clearer the description of your product, the less likely customers will issue chargebacks due to confusion or non-recognition.

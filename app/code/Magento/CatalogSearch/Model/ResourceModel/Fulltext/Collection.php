@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
@@ -350,15 +350,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
             );
         }
+        return parent::_renderFiltersBefore();
+    }
 
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeLoad()
+    {
         /*
          * This order is required to force search results be the same
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
         $this->setOrder('entity_id');
-
-        return parent::_renderFiltersBefore();
+        return parent::_beforeLoad();
     }
 
     /**

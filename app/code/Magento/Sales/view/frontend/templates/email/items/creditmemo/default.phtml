@@ -31,6 +31,6 @@
     </td>
     <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
     <td class="item-price">
-        <?= /* @escapeNotVerified */  $block->getItemPrice($_item); ?>
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item->getOrderItem()) ?>
     </td>
 </tr>
