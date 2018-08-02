@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -170,12 +171,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getStoreIds()
     {
-        $filterData = $this->getFilterData();
-        if ($filterData) {
-            $storeIds = explode(',', $filterData->getData('store_ids'));
-        } else {
-            $storeIds = [];
-        }
+        $storeIds = $this->getFilteredStores();
         // By default storeIds array contains only allowed stores
         $allowedStoreIds = array_keys($this->_storeManager->getStores());
         // And then array_intersect with post data for prevent unauthorized stores reports
@@ -408,5 +404,35 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _addCustomFilter($collection, $filterData)
     {
         return $this;
+    }
+
+    /**
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getFilteredStores(): array
+    {
+        $storeIds = [];
+
+        $filterData = $this->getFilterData();
+        if ($filterData) {
+            if ($filterData->getWebsite()) {
+                $storeIds = array_keys(
+                    $this->_storeManager->getWebsite($filterData->getWebsite())->getStores()
+                );
+            }
+
+            if ($filterData->getGroup()) {
+                $storeIds = array_keys(
+                    $this->_storeManager->getGroup($filterData->getGroup())->getStores()
+                );
+            }
+
+            if ($filterData->getData('store_ids')) {
+                $storeIds = explode(',', $filterData->getData('store_ids'));
+            }
+        }
+        return is_array($storeIds) ? $storeIds : [];
     }
 }
