@@ -48,21 +48,7 @@ class LogRepository
      */
     private function getTableName(): string
     {
-        $connection = $this->getConnection();
-        $table = $connection->getTableName(self::TABLE_NAME);
-        $class = self::CLASS_NAME;
-        $method = self::METHOD_NAME;
-        $connection->query(
-            <<<SQL
-create table if not exists $table (
-  $class varchar(1024) not null,
-  $method varchar(32) not null,
-  primary key ($class, $method)
-)
-SQL
-        );
-
-        return $table;
+        return $this->connection->getTableName(self::TABLE_NAME);
     }
 
     /**
@@ -87,7 +73,7 @@ SQL
      *
      * @return Logged[]
      */
-    public function findLogged($includeMultiple = true): array
+    public function findLogged(bool $includeMultiple = true): array
     {
         $connection = $this->getConnection();
         $table = $this->getTableName();
@@ -96,7 +82,7 @@ SQL
                 $table,
                 [
                     self::CLASS_NAME => self::CLASS_NAME,
-                    'methods'        => 'group_concat('
+                    'methods' => 'group_concat('
                         .self::METHOD_NAME.' separator \',\')',
                 ]
             )->group(self::CLASS_NAME);

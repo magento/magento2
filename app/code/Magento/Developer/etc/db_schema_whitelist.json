@@ -1,0 +1,11 @@
+{
+  "dev_http_method_log": {
+    "column": {
+      "class_name": true,
+      "method_name": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
