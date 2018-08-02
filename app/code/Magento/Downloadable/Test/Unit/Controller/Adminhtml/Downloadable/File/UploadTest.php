@@ -57,11 +57,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     protected $fileHelper;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
-     */
-    protected $session;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\ResultFactory
      */
     protected $resultFactory;
@@ -77,9 +72,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactory = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();
-        $this->session = $this->getMockBuilder('\Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactory = $this->getMockBuilder('\Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
@@ -111,9 +103,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
-        $this->context->expects($this->any())
-            ->method('getSession')
-            ->will($this->returnValue($this->session));
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->will($this->returnValue($this->resultFactory));
@@ -157,11 +146,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactory->expects($this->once())->method('create')->willReturn($uploader);
         $this->fileHelper->expects($this->once())->method('uploadFromTmp')->willReturn($data);
         $this->storageDatabase->expects($this->once())->method('saveFile');
-        $this->session->expects($this->once())->method('getName')->willReturn('Name');
-        $this->session->expects($this->once())->method('getSessionId')->willReturn('SessionId');
-        $this->session->expects($this->once())->method('getCookieLifetime')->willReturn('CookieLifetime');
-        $this->session->expects($this->once())->method('getCookiePath')->willReturn('CookiePath');
-        $this->session->expects($this->once())->method('getCookieDomain')->willReturn('CookieDomain');
         $this->resultFactory->expects($this->once())->method('create')->willReturn($resultJson);
         $resultJson->expects($this->once())->method('setData')->willReturnSelf();
 
