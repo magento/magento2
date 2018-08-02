@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\File;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * File upload class
  *
