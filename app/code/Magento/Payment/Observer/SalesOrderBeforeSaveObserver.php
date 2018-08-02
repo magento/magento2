@@ -21,7 +21,7 @@ class SalesOrderBeforeSaveObserver implements ObserverInterface
         /** @var \Magento\Sales\Model\Order $order */
         $order = $observer->getEvent()->getOrder();
 
-        if ($order->getPayment()->getMethodInstance()->getCode() != 'free') {
+        if ($order->getPayment() && $order->getPayment()->getMethodInstance()->getCode() != 'free') {
             return $this;
         }
 
