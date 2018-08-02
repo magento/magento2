@@ -11,7 +11,9 @@ namespace Magento\Framework\App\Request;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Interception\InterceptorInterface;
 use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Make sure that a request's method can be processed by an action.
@@ -24,19 +26,44 @@ class HttpMethodValidator implements ValidatorInterface
     private $map;
 
     /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * @param HttpMethodMap $map
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        HttpMethodMap $map
+        HttpMethodMap $map,
+        LoggerInterface $logger
     ) {
         $this->map = $map;
+        $this->log = $logger;
     }
 
     /**
+     * @param Http $request
+     * @param ActionInterface $action
+     *
      * @return InvalidRequestException
      */
-    private function createException(): InvalidRequestException
-    {
+    private function createException(
+        Http $request,
+        ActionInterface $action
+    ): InvalidRequestException {
+        $uri = $request->getRequestUri();
+        $method = $request->getMethod();
+        if ($action instanceof InterceptorInterface) {
+            $actionClass = get_parent_class($action);
+        } else {
+            $actionClass = get_class($action);
+        }
+
+        $this->log->debug(
+            "URI '$uri'' cannot be accessed with $method method ($actionClass)"
+        );
+
         return new InvalidRequestException(
             new NotFoundException(new Phrase('Page not found.'))
         );
@@ -60,7 +87,7 @@ class HttpMethodValidator implements ValidatorInterface
                     && !$action instanceof $map[$method]
                 )
             ) {
-                throw $this->createException();
+                throw $this->createException($request, $action);
             }
         }
     }
