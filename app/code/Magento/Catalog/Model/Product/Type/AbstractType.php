@@ -291,13 +291,7 @@ abstract class AbstractType
         $sortOne = $attributeOne->getGroupSortPath() * 1000 + $attributeOne->getSortPath() * 0.0001;
         $sortTwo = $attributeTwo->getGroupSortPath() * 1000 + $attributeTwo->getSortPath() * 0.0001;
 
-        if ($sortOne > $sortTwo) {
-            return 1;
-        } elseif ($sortOne < $sortTwo) {
-            return -1;
-        }
-
-        return 0;
+        return $sortOne <=> $sortTwo;
     }
 
     /**
