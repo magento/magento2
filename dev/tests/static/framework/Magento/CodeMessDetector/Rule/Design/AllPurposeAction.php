@@ -21,34 +21,13 @@ use Magento\Framework\App\ActionInterface;
 class AllPurposeAction extends AbstractRule implements ClassAware
 {
     /**
-     * @param ClassNode|ASTClass $node
-     *
-     * @return string[]
-     */
-    private function extractInterfaces($node): array
-    {
-        $interfaces = [];
-        foreach ($node->getInterfaces() as $interface) {
-            $interfaces[] = $interface->getNamespacedName();
-        }
-        if ($parent = $node->getParentClass()) {
-            $interfaces = array_merge(
-                $interfaces,
-                $this->extractInterfaces($parent)
-            );
-        }
-
-        return array_unique($interfaces);
-    }
-
-    /**
      * @inheritdoc
      *
      * @param ClassNode|ASTClass $node
      */
     public function apply(AbstractNode $node)
     {
-        $impl = $this->extractInterfaces($node);
+        $impl = class_implements($node->getFullQualifiedName(), true);
 
         if (in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;

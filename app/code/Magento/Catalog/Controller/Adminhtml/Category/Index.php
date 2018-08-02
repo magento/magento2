@@ -34,7 +34,6 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
-        $x=2;
         return $resultForward->forward('edit');
     }
 }
