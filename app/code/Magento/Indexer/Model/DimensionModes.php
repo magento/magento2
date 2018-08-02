@@ -23,9 +23,8 @@ class DimensionModes
     public function __construct(array $dimensions)
     {
         $this->validateDimensions($dimensions);
-        $this->dimensions = (function (...$dimensions){
+        $this->dimensions = (function (DimensionMode ...$dimensions) {
             $result = [];
-            /** @var DimensionMode $dimension */
             foreach ($dimensions as $dimension) {
                 $result[$dimension->getName()] = $dimension;
             };
@@ -41,24 +40,5 @@ class DimensionModes
     public function getDimensions(): array
     {
         return $this->dimensions;
-    }
-
-    /**
-     * Validate dimensions.
-     *
-     * @param DimensionMode[] $dimensions
-     * @throws \InvalidArgumentException
-     */
-    private function validateDimensions(array $dimensions)
-    {
-        foreach ($dimensions as $name => $dimension) {
-            if (!$dimension instanceof \Magento\Indexer\Model\DimensionMode) {
-                throw new \InvalidArgumentException(
-                    (string)new \Magento\Framework\Phrase(
-                        sprintf('Dimension must be an instance of %s', \Magento\Indexer\Model\DimensionMode::class)
-                    )
-                );
-            }
-        }
     }
 }
