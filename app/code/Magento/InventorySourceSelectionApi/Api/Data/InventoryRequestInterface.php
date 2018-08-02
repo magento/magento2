@@ -34,7 +34,7 @@ interface InventoryRequestInterface
      * @param int $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(int $stockId): void;
 
     /**
      * Set Items
@@ -42,5 +42,5 @@ interface InventoryRequestInterface
      * @param \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface[] $items
      * @return void
      */
-    public function setItems($items);
+    public function setItems(array $items): void;
 }
