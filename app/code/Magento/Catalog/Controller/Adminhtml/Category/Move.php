@@ -39,6 +39,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements Act
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
+        $x1=1;
         $this->layoutFactory = $layoutFactory;
         $this->logger = $logger;
     }

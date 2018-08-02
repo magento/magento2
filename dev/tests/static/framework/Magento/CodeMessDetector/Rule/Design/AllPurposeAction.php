@@ -25,7 +25,7 @@ class AllPurposeAction extends AbstractRule implements ClassAware
      *
      * @return string[]
      */
-    private function extractInterfaces(ClassNode $node): array
+    private function extractInterfaces($node): array
     {
         $interfaces = [];
         foreach ($node->getInterfaces() as $interface) {
