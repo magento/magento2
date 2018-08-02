@@ -16,7 +16,7 @@ define([
 
     var defaults = {
         dateFormat: 'mm\/dd\/yyyy',
-        showsTime: false,
+        showsTime: true,
         timeFormat: null,
         buttonImage: null,
         buttonImageOnly: null,
