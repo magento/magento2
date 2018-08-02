@@ -391,10 +391,10 @@ define([
                     input = $widget._RenderFormInput(item),
                     listLabel = '',
                     label = '',
-                    firstSpan ='',
+                    firstSpan = '',
                     div = '',
                     subDiv = '',
-                    secondSpan='';
+                    secondSpan = '';
 
                 // Show only swatch controls
                 if ($widget.options.onlySwatches && !$widget.options.jsonSwatchConfig.hasOwnProperty(item.id)) {
@@ -409,7 +409,7 @@ define([
                     firstSpan.textContent = item.label;
                     secondSpan.setAttribute('class', classes.attributeSelectedOptionLabelClass);
 
-                    label+= firstSpan.outerHTML + secondSpan.outerHTML;
+                    label += firstSpan.outerHTML + secondSpan.outerHTML;
                 }
 
                 if ($widget.inProductList) {
@@ -428,15 +428,15 @@ define([
                 div.setAttribute('attribute-code', item.code);
                 div.setAttribute('attribute-id', item.id);
                 div.innerHTML = input;
-                subDiv.setAttribute('aria-activedescendant','');
+                subDiv.setAttribute('aria-activedescendant', '');
                 subDiv.setAttribute('tabindex', 0);
                 subDiv.setAttribute('aria-invalid', false);
                 subDiv.setAttribute('aria-required', true);
-                subDiv.setAttribute('role','listbox');
+                subDiv.setAttribute('role', 'listbox');
                 subDiv.setAttributeNode(listLabel);
                 subDiv.setAttribute('class', classes.attributeOptionsWrapper + ' clearfix');
-                subDiv.innerHTML = options+select;
-                div.appendChild(subDiv)
+                subDiv.innerHTML = options + select;
+                div.appendChild(subDiv);
 
                 // Create new control
                 container.append(div.outerHTML);
@@ -499,11 +499,12 @@ define([
 
             $.each(config.options, function () {
                 var id,
+                    div,
                     type,
                     value,
                     thumb,
                     label,
-                    attr;
+                    link;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
@@ -524,9 +525,7 @@ define([
                 value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 label = this.label ? this.label : '';
-
-
-                var div = document.createElement('div');
+                div = document.createElement('div');
 
                 div.setAttribute('id', controlId + '-item-' + id);
                 div.setAttribute('aria-checked', false);
@@ -538,7 +537,7 @@ define([
                 div.setAttribute('aria-label', label);
                 div.setAttribute('option-tooltip-thumb', thumb);
                 div.setAttribute('option-tooltip-value', value);
-                div.setAttribute('role', "option");
+                div.setAttribute('role', 'option');
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     div.setAttribute('option-empty', true);
@@ -551,7 +550,7 @@ define([
                 } else if (type === 1) {
                     // Color
                     div.setAttribute('class', optionClass + ' color');
-                    div.setAttribute('style', 'background: ' + value +' no-repeat center; background-size: initial;');
+                    div.setAttribute('style', 'background: ' + value + ' no-repeat center; background-size: initial;');
 
                 } else if (type === 2) {
                     // Image
