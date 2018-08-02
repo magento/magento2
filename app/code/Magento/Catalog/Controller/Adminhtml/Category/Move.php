@@ -38,6 +38,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $x1=1;
         $this->logger = $logger;
     }
 

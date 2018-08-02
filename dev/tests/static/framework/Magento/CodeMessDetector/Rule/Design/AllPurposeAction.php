@@ -27,7 +27,12 @@ class AllPurposeAction extends AbstractRule implements ClassAware
      */
     public function apply(AbstractNode $node)
     {
-        $impl = class_implements($node->getFullQualifiedName(), true);
+        try {
+            $impl = class_implements($node->getFullQualifiedName(), true);
+        } catch (\Throwable $exception) {
+            //Couldn't load a class.
+            return;
+        }
 
         if (in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;
