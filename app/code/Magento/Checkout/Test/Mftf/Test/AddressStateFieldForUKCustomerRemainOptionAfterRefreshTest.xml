@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93329"/>
             <group value="checkout"/>
+            <!-- Skipped because of MAGETWO-93726 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -45,6 +47,7 @@
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
         <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{UK_Address.street[0]}}" stepKey="enterStreet"/>
         <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{UK_Address.city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="{{UK_Address.province}}" stepKey="enterProvince"/>
         <waitForPageLoad stepKey="waitFormToReload2"/>
         <see userInput="State/Province" stepKey="StateFieldStillExists"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{UK_Address.telephone}}" stepKey="enterTelephone"/>

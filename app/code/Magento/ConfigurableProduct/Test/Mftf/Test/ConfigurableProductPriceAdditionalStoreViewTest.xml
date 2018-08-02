@@ -15,7 +15,9 @@
             <description value="Configurable product price should not disappear for additional stores on frontEnd if disabled for default store"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-92247"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="MAGETWO-92247"/>
+            </skip>
         </annotations>
         <before>
             
