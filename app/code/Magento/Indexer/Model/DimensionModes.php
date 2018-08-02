@@ -22,7 +22,6 @@ class DimensionModes
      */
     public function __construct(array $dimensions)
     {
-        $this->validateDimensions($dimensions);
         $this->dimensions = (function (DimensionMode ...$dimensions) {
             $result = [];
             foreach ($dimensions as $dimension) {
