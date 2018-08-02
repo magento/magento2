@@ -107,7 +107,8 @@ class Option
             $optionQty,
             $qtyForCheck,
             $optionValue,
-            $option->getProduct()->getStore()->getWebsiteId()
+            $option->getProduct()->getStore()->getWebsiteId(),
+            $quoteItem->getProductType()
         );
 
         if ($result->getItemIsQtyDecimal() !== null) {
