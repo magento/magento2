@@ -23,6 +23,7 @@ class Index extends \Magento\Checkout\Controller\Onepage
         }
 
         $quote = $this->getOnepage()->getQuote();
+        $this->_eventManager->dispatch('validate_quote', ['quote' => $quote]);
         if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
