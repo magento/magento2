@@ -567,7 +567,7 @@ define([
                     div.setAttribute('class', optionClass + ' image');
                     div.textContent = label;
                 }
-                html += div.outerHTML
+                html += div.outerHTML;
             });
 
             return html;
