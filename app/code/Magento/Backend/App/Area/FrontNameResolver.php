@@ -120,7 +120,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         $host = parse_url(trim($url), PHP_URL_HOST);
         $port = parse_url(trim($url), PHP_URL_PORT);
         if (!$port) {
-            $port = isset($this->standardPorts[$scheme]) ? $this->standardPorts[$scheme] : null;
+            $port = $this->standardPorts[$scheme] ?? null;
         }
         return isset($port) ? $host . ':' . $port : $host;
     }

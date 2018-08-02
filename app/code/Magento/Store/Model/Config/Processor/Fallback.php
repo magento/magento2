@@ -172,7 +172,7 @@ class Fallback implements PostProcessorInterface
         foreach ((array)$this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['code'];
-                return isset($websites[$code]) ? $websites[$code] : [];
+                return $websites[$code] ?? [];
             }
         }
         return [];

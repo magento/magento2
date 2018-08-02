@@ -35,7 +35,7 @@ class StockRegistryStorage
      */
     public function getStock($scopeId)
     {
-        return isset($this->stocks[$scopeId]) ? $this->stocks[$scopeId] : null;
+        return $this->stocks[$scopeId] ?? null;
     }
 
     /**

@@ -106,7 +106,7 @@ class EavAttributeCondition implements CustomConditionInterface
             'neq' => 'nin'
         ];
 
-        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
+        return $conditionsMap[$conditionType] ?? $conditionType;
     }
 
     /**

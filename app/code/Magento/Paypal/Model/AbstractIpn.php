@@ -68,7 +68,7 @@ class AbstractIpn
         if (null === $key) {
             return $this->_ipnRequest;
         }
-        return isset($this->_ipnRequest[$key]) ? $this->_ipnRequest[$key] : null;
+        return $this->_ipnRequest[$key] ?? null;
     }
 
     /**

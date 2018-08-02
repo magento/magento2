@@ -181,7 +181,7 @@ class Info extends AbstractModel implements InfoInterface
         if (null === $key) {
             return $this->additionalInformation;
         }
-        return isset($this->additionalInformation[$key]) ? $this->additionalInformation[$key] : null;
+        return $this->additionalInformation[$key] ?? null;
     }
 
     /**

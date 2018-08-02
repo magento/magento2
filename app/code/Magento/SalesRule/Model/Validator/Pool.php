@@ -32,6 +32,6 @@ class Pool
      */
     public function getValidators($type)
     {
-        return isset($this->validators[$type]) ? $this->validators[$type] : [];
+        return $this->validators[$type] ?? [];
     }
 }

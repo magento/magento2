@@ -147,6 +147,6 @@ class AttributeRepository
      */
     public function getMetadataByCode($code)
     {
-        return isset($this->getList()[$code]) ? $this->getList()[$code] : null;
+        return $this->getList()[$code] ?? null;
     }
 }

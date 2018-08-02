@@ -759,7 +759,7 @@ class EavSetup
         if (isset($array[$key]) && is_bool($array[$key])) {
             $array[$key] = (int)$array[$key];
         }
-        return isset($array[$key]) ? $array[$key] : $default;
+        return $array[$key] ?? $default;
     }
 
     /**
@@ -1135,7 +1135,7 @@ class EavSetup
 
         $row = $setupCache->get($mainTable, $entityTypeId, $id);
         if ($field !== null) {
-            return isset($row[$field]) ? $row[$field] : false;
+            return $row[$field] ?? false;
         }
 
         return $row;
