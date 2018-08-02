@@ -20,17 +20,18 @@ class DimensionMode
     /**
      * @var array
      */
-    private $modes;
+    private $dimensions;
 
     /**
-     * @param string   $name
-     * @param string[] $modes
+     * @param string $name
+     * @param array  $dimensions
      */
-    public function __construct(string $name, array $modes)
+    public function __construct(string $name, array $dimensions)
     {
-        $this->validateModes($modes);
+        $this->dimensions = (function (string ...$dimensions) {
+            return $dimensions;
+        })(...$dimensions);
         $this->name = $name;
-        $this->modes = $modes;
     }
 
     /**
@@ -48,28 +49,8 @@ class DimensionMode
      *
      * @return string[]
      */
-    public function getModes(): array
+    public function getDimensions(): array
     {
-        return $this->modes;
-    }
-
-    /**
-     * Validates dimension modes
-     *
-     * @param array $modes
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function validateModes(array $modes)
-    {
-        array_walk($modes, function ($mode) {
-            if (!\is_string($mode)) {
-                throw new \InvalidArgumentException(
-                    (string)new \Magento\Framework\Phrase(
-                        sprintf('Dimension mode must be a string')
-                    )
-                );
-            }
-        });
+        return $this->dimensions;
     }
 }

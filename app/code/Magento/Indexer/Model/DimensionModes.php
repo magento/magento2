@@ -23,7 +23,14 @@ class DimensionModes
     public function __construct(array $dimensions)
     {
         $this->validateDimensions($dimensions);
-        $this->dimensions = $dimensions;
+        $this->dimensions = (function (...$dimensions){
+            $result = [];
+            /** @var DimensionMode $dimension */
+            foreach ($dimensions as $dimension) {
+                $result[$dimension->getName()] = $dimension;
+            };
+            return $result;
+        })(...$dimensions);
     }
 
     /**
@@ -45,13 +52,6 @@ class DimensionModes
     private function validateDimensions(array $dimensions)
     {
         foreach ($dimensions as $name => $dimension) {
-            if (!\is_string($name)) {
-                throw new \InvalidArgumentException(
-                    (string)new \Magento\Framework\Phrase(
-                        sprintf('Dimension name must be a string')
-                    )
-                );
-            }
             if (!$dimension instanceof \Magento\Indexer\Model\DimensionMode) {
                 throw new \InvalidArgumentException(
                     (string)new \Magento\Framework\Phrase(

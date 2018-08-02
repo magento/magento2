@@ -72,7 +72,7 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
     {
         $dimensionsList = [];
         foreach ($this->dimensionModeConfiguration->getDimensionModes() as $dimension => $modes) {
-            $dimensionsList[$dimension] = new DimensionMode($dimension, $modes);
+            $dimensionsList[] = new DimensionMode($dimension, $modes);
         }
 
         return new DimensionModes($dimensionsList);
