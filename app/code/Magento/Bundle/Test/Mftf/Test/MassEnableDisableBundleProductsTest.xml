@@ -17,8 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-217"/>
             <group value="Bundle"/>
-            <!--Skipped due to MAGETWO-92898-->
-            <group value="skip"/>
+            <skip>
+                <issueId value="MAGETWO-92898"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
