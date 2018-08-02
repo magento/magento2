@@ -415,9 +415,11 @@ define([
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = document.createAttribute('aria-label').value = item.label;
+                    listLabel = document.createAttribute('aria-label');
+                    listLabel.value = item.label;
                 } else {
-                    listLabel = document.createAttribute('aria-labelledby').value = controlLabelId;
+                    listLabel = document.createAttribute('aria-labelledby');
+                    listLabel.value = controlLabelId;
                 }
 
                 div = document.createElement('div');
