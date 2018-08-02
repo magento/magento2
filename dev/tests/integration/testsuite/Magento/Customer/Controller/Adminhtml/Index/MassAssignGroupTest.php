@@ -111,13 +111,22 @@ class MassAssignGroupTest extends AbstractBackendController
             }
         }
 
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
         $params = [
             'group' => 0,
             'namespace' => 'customer_listing',
             'selected' => $ids,
+            'form_key' => $formKey->getFormKey()
         ];
 
-        $this->getRequest()->setParams($params);
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             self::equalTo(['A total of 5 record(s) were updated.']),
