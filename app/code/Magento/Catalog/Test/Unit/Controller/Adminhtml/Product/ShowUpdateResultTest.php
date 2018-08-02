@@ -58,7 +58,7 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->willreturn($productActionMock);
+            ->willReturn($productActionMock);
 
         $eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\Manager', ['dispatch'], '', false);
 

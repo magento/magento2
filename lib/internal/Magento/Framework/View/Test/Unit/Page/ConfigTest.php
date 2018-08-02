@@ -13,7 +13,7 @@ use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
 /**
- * @covers Magento\Framework\View\Page\Config
+ * @covers \Magento\Framework\View\Page\Config
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -137,6 +137,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'description' => null,
             'keywords' => null,
             'robots' => null,
+            'title' => null,
             'name' => 'test_value',
             'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
         ];
