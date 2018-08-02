@@ -409,6 +409,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
+        $this->getErrorAggregator()->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
+
         $result = $this->processImport();
 
         if ($result) {

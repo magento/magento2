@@ -517,7 +517,7 @@ abstract class AbstractEntity
         $errorRowNum,
         $colName = null,
         $errorMessage = null,
-        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
+        $errorLevel = ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
         $errorDescription = null
     ) {
         $errorCode = (string)$errorCode;
