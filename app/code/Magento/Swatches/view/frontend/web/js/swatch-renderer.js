@@ -565,7 +565,7 @@ define([
                 } else {
                     // Default
                     div.setAttribute('class', optionClass + ' image');
-                    div.textContent = label
+                    div.textContent = label;
                 }
                 html += div.outerHTML
             });
@@ -582,7 +582,8 @@ define([
          * @private
          */
         _RenderSwatchSelect: function (config, chooseText) {
-            var select;
+            var select,
+            option;
 
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
