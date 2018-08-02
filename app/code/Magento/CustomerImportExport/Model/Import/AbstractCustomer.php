@@ -260,9 +260,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getSelectAttrIdByValue(array $attributeParameters, $value)
     {
-        return isset($attributeParameters['options'][strtolower($value)])
-            ? $attributeParameters['options'][strtolower($value)]
-            : 0;
+        return $attributeParameters['options'][strtolower($value)] ?? 0;
     }
 
     /**
@@ -273,8 +271,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getMultipleValueSeparator()
     {
-        return isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] ?? Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 }

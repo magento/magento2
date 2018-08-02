@@ -41,7 +41,7 @@ class Section extends AbstractComposite
      */
     public function getHeaderCss()
     {
-        return isset($this->_data['header_css']) ? $this->_data['header_css'] : '';
+        return $this->_data['header_css'] ?? '';
     }
 
     /**

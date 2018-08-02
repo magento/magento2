@@ -329,9 +329,7 @@ class Queue
      */
     private function getPid(Package $package)
     {
-        return isset($this->processIds[$package->getPath()])
-            ? $this->processIds[$package->getPath()]
-            : null;
+        return $this->processIds[$package->getPath()] ?? null;
     }
 
     /**

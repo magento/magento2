@@ -59,9 +59,7 @@ class ValidationRules
     protected function getValidationClass(ValidationRuleInterface $rule)
     {
         $key = $rule->getName() == 'input_validation' ? $rule->getValue() : $rule->getName();
-        return isset($this->inputValidationMap[$key])
-            ? $this->inputValidationMap[$key]
-            : $key;
+        return $this->inputValidationMap[$key] ?? $key;
     }
 
     /**

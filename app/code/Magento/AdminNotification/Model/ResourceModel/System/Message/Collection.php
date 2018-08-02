@@ -113,6 +113,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function getCountBySeverity($severity)
     {
-        return isset($this->_countBySeverity[$severity]) ? $this->_countBySeverity[$severity] : 0;
+        return $this->_countBySeverity[$severity] ?? 0;
     }
 }

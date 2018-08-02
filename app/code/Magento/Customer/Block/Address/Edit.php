@@ -236,7 +236,7 @@ class Edit extends \Magento\Directory\Block\Data
     public function getStreetLine($lineNumber)
     {
         $street = $this->_address->getStreet();
-        return isset($street[$lineNumber - 1]) ? $street[$lineNumber - 1] : '';
+        return $street[$lineNumber - 1] ?? '';
     }
 
     /**

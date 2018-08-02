@@ -80,9 +80,7 @@ class TransactionService
      */
     public function getTransactionDetails(Authorizenet $context, $transactionId)
     {
-        return isset($this->transactionDetails[$transactionId])
-            ? $this->transactionDetails[$transactionId]
-            : $this->loadTransactionDetails($context, $transactionId);
+        return $this->transactionDetails[$transactionId] ?? $this->loadTransactionDetails($context, $transactionId);
     }
 
     /**

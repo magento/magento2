@@ -61,6 +61,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
         }
 
         $cvv = $additionalInfo[PaymentDetailsHandler::CVV_RESPONSE_CODE];
-        return isset(self::$cvvMap[$cvv]) ? self::$cvvMap[$cvv] : self::$notProvidedCode;
+        return self::$cvvMap[$cvv] ?? self::$notProvidedCode;
     }
 }

@@ -31,7 +31,7 @@ class ObjectRegistry
      */
     public function get($entityId)
     {
-        return isset($this->entitiesMap[$entityId]) ? $this->entitiesMap[$entityId] : null;
+        return $this->entitiesMap[$entityId] ?? null;
     }
 
     /**

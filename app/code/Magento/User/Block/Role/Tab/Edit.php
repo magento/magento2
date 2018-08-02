@@ -221,6 +221,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
             }
         );
         $configResource = reset($configResource);
-        return isset($configResource['children']) ? $configResource['children'] : [];
+        return $configResource['children'] ?? [];
     }
 }

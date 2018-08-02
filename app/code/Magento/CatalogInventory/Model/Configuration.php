@@ -188,7 +188,7 @@ class Configuration implements StockConfigurationInterface
     public function isQty($productTypeId)
     {
         $result = $this->getIsQtyTypeIds();
-        return isset($result[$productTypeId]) ? $result[$productTypeId] : false;
+        return $result[$productTypeId] ?? false;
     }
 
     /**

@@ -147,7 +147,7 @@ class Sales extends \Magento\Backend\Block\Template
      */
     public function getWebsiteCount($websiteId)
     {
-        return isset($this->_websiteCounts[$websiteId]) ? $this->_websiteCounts[$websiteId] : 0;
+        return $this->_websiteCounts[$websiteId] ?? 0;
     }
 
     /**

@@ -113,7 +113,7 @@ class Result
      */
     public function getRateById($id)
     {
-        return isset($this->_rates[$id]) ? $this->_rates[$id] : null;
+        return $this->_rates[$id] ?? null;
     }
 
     /**

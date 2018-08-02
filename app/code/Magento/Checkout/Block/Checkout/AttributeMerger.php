@@ -370,7 +370,7 @@ class AttributeMerger
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
-        return isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return $attributeConfig['options'] ?? [];
     }
 
     /**

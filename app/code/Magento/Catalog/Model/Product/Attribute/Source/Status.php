@@ -83,7 +83,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     {
         $options = self::getOptionArray();
 
-        return isset($options[$optionId]) ? $options[$optionId] : null;
+        return $options[$optionId] ?? null;
     }
 
     /**
