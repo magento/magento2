@@ -5,6 +5,9 @@
  */
 namespace Magento\Ups\Model;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -14,7 +17,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->carrier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->carrier = Bootstrap::getObjectManager()->create(
             \Magento\Ups\Model\Carrier::class
         );
     }

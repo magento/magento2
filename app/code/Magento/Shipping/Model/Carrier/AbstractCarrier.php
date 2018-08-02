@@ -451,6 +451,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
+        } else {
+            $price = 0;
         }
 
         /**
