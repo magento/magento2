@@ -309,6 +309,10 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
+        if ($item->getIsCategory()) {
+            $classes[] = 'category-item';
+        }
+
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }

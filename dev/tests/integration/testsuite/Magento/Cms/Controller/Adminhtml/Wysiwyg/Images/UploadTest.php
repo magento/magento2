@@ -34,21 +34,31 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     private $fileName = 'magento_small_image.jpg';
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryName = 'directory1';
-        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
-        $imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fullDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
-        $this->model = $objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);
+        $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
-        $tmpFile = __DIR__ . DIRECTORY_SEPARATOR . $this->fileName;
+        $tmpFile = $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath() . $this->fileName;
         copy($fixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFile);
         $_FILES = [
             'image' => [
@@ -66,6 +76,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      * located under WYSIWYG media.
      *
      * @return void
+     * @magentoAppIsolation enabled
      */
     public function testExecute()
     {
@@ -80,6 +91,25 @@ class UploadTest extends \PHPUnit\Framework\TestCase
                 )
             )
         );
+    }
+
+    /**
+     * Execute method with correct directory path and file name to check that file can be uploaded to the directory
+     * located under linked folder.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Cms/_files/linked_media.php
+     */
+    public function testExecuteWithLinkedMedia()
+    {
+        $directoryName = 'linked_media';
+        $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
+                ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
+        $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
+        $this->model->execute();
+        $this->assertTrue(is_file($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
     }
 
     /**

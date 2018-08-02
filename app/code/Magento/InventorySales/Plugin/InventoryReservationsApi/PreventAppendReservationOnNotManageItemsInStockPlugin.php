@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Plugin\InventoryReservationsApi;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryReservationsApi\Model\AppendReservationsInterface;
 use Magento\InventoryReservationsApi\Model\ReservationInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Prevent append reservation if use_config_manage_stock is set to 0
@@ -61,7 +61,7 @@ class PreventAppendReservationOnNotManageItemsInStockPlugin
                 $reservation->getStockId()
             );
 
-            if ($stockItemConfiguration === null || $stockItemConfiguration->isManageStock()) {
+            if ($stockItemConfiguration->isManageStock()) {
                 $reservationToAppend[] = $reservation;
             }
         }

@@ -9,7 +9,7 @@
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateSource" dataType="source" type="create"
-               auth="adminOauth" url="/V1/inventory/source" method="POST">
+               auth="adminOauth" url="/V1/inventory/sources" method="POST">
         <contentType>application/json</contentType>
         <object dataType="source" key="source">
             <field key="source_code">string</field>
@@ -32,7 +32,7 @@
         </object>
     </operation>
     <operation name="DeleteSource" dataType="source" type="delete"
-               auth="adminOauth" url="/V1/inventory/source/{source_code}" method="DELETE">
+               auth="adminOauth" url="/V1/inventory/sources/{source_code}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
 </operations>

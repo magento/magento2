@@ -9,6 +9,7 @@ namespace Magento\Inventory\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\Framework\Model\ResourceModel\PredefinedId;
 
 /**
  * Implementation of basic operations for Stock entity for specific db layer

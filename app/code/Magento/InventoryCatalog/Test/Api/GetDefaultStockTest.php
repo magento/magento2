@@ -34,7 +34,7 @@ class GetDefaultStockTest extends WebapiAbstract
         $defaultStockId = $this->defaultStockProvider->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/' . $defaultStockId,
+                'resourcePath' => '/V1/inventory/stocks/' . $defaultStockId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [

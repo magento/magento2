@@ -6,7 +6,7 @@
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
@@ -20,7 +20,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
     private $entityManager;
 
     /**
-     * @var DetailedOperationStatusInterfaceFactory
+     * @var OperationInterfaceFactory
      */
     private $operationFactory;
 
@@ -33,12 +33,12 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
      * OperationManagement constructor.
      *
      * @param EntityManager $entityManager
-     * @param DetailedOperationStatusInterfaceFactory $operationFactory
+     * @param OperationInterfaceFactory $operationFactory
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         EntityManager $entityManager,
-        DetailedOperationStatusInterfaceFactory $operationFactory,
+        OperationInterfaceFactory $operationFactory,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
@@ -64,7 +64,6 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
             $operationEntity->setStatus($status);
             $operationEntity->setResultMessage($message);
             $operationEntity->setSerializedData($data);
-            $operationEntity->setResultSerializedData($resultData);
             $operationEntity->setResultSerializedData($resultData);
             $this->entityManager->save($operationEntity);
         } catch (\Exception $exception) {

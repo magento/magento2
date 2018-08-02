@@ -17,7 +17,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const RESOURCE_PATH = '/V1/inventory/sources';
     const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 
@@ -28,6 +28,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      */
     public function testCarrierLinksManagement(array $carrierLinks)
     {
+        $this->markTestSkipped('Binding carriers to individual sources is not implemented in MSI MVP');
         $sourceCode = 'source-code-1';
         $expectedData = [
             SourceInterface::NAME => 'source-name-1',
@@ -146,9 +147,93 @@ class CarrierLinkManagementTest extends WebapiAbstract
     /**
      * @param array $carrierData
      * @param array $expectedErrorData
-     * @dataProvider failedValidationDataProvider
      */
-    public function testCarrierLinksValidation(array $carrierData, array $expectedErrorData)
+    public function testCarrierLinksValidationUseGlobalConfiguration()
+    {
+        $carrierData = [
+            SourceInterface::SOURCE_CODE => 'source-code-1',
+            SourceInterface::NAME => 'source-name-1',
+            SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 1,
+            SourceInterface::CARRIER_LINKS => [
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'ups',
+                    SourceCarrierLinkInterface::POSITION => 100,
+                ],
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'usps',
+                    SourceCarrierLinkInterface::POSITION => 200,
+                ],
+            ],
+        ];
+        $expectedErrorData = [
+            'message' => 'Validation Failed',
+            'errors' => [
+                [
+                    'message' =>
+                        'You can\'t configure "%field" because you have chosen Global Shipping configuration.',
+                    'parameters' => [
+                        'field' => SourceInterface::CARRIER_LINKS,
+                    ],
+                ],
+            ],
+        ];
+
+        $this->validate($carrierData, $expectedErrorData);
+    }
+
+    /**
+     * @param array $carrierData
+     * @param array $expectedErrorData
+     */
+    public function testCarrierLinksValidationWithNonExistedCarrierCode()
+    {
+        $this->markTestSkipped('Binding carriers to individual sources is not implemented in MSI MVP');
+        $carrierData = [
+            SourceInterface::SOURCE_CODE => 'source-code-1',
+            SourceInterface::NAME => 'source-name-1',
+            SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
+            SourceInterface::CARRIER_LINKS => [
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_1',
+                    SourceCarrierLinkInterface::POSITION => 100,
+                ],
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_2',
+                    SourceCarrierLinkInterface::POSITION => 200,
+                ],
+            ],
+        ];
+        $expectedErrorData = [
+            'message' => 'Validation Failed',
+            'errors' => [
+                [
+                    'message' => 'Carrier with code: "%carrier" don\'t exists.',
+                    'parameters' => [
+                        'carrier' => 'no_exists_1',
+                    ],
+                ],
+                [
+                    'message' => 'Carrier with code: "%carrier" don\'t exists.',
+                    'parameters' => [
+                        'carrier' => 'no_exists_2',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->validate($carrierData, $expectedErrorData);
+    }
+
+    /**
+     * @param array $carrierData
+     * @param array $expectedErrorData
+     * @return void
+     */
+    private function validate(array $carrierData, array $expectedErrorData): void
     {
         $serviceInfo = [
             'rest' => [
@@ -189,81 +274,5 @@ class CarrierLinkManagementTest extends WebapiAbstract
                 throw $e;
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function failedValidationDataProvider(): array
-    {
-        return [
-            'use_global_configuration_chosen' => [
-                [
-                    SourceInterface::SOURCE_CODE => 'source-code-1',
-                    SourceInterface::NAME => 'source-name-1',
-                    SourceInterface::POSTCODE => 'source-postcode',
-                    SourceInterface::COUNTRY_ID => 'US',
-                    SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 1,
-                    SourceInterface::CARRIER_LINKS => [
-                        [
-                            SourceCarrierLinkInterface::CARRIER_CODE => 'ups',
-                            SourceCarrierLinkInterface::POSITION => 100,
-                        ],
-                        [
-                            SourceCarrierLinkInterface::CARRIER_CODE => 'usps',
-                            SourceCarrierLinkInterface::POSITION => 200,
-                        ],
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' =>
-                                'You can\'t configure "%field" because you have chosen Global Shipping configuration.',
-                            'parameters' => [
-                                'field' => SourceInterface::CARRIER_LINKS,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'carrier_codes_not_exits' => [
-                [
-                    SourceInterface::SOURCE_CODE => 'source-code-1',
-                    SourceInterface::NAME => 'source-name-1',
-                    SourceInterface::POSTCODE => 'source-postcode',
-                    SourceInterface::COUNTRY_ID => 'US',
-                    SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
-                    SourceInterface::CARRIER_LINKS => [
-                        [
-                            SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_1',
-                            SourceCarrierLinkInterface::POSITION => 100,
-                        ],
-                        [
-                            SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_2',
-                            SourceCarrierLinkInterface::POSITION => 200,
-                        ],
-                    ],
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => 'Carrier with code: "%carrier" don\'t exists.',
-                            'parameters' => [
-                                'carrier' => 'no_exists_1'
-                            ],
-                        ],
-                        [
-                            'message' => 'Carrier with code: "%carrier" don\'t exists.',
-                            'parameters' => [
-                                'carrier' => 'no_exists_2'
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
     }
 }

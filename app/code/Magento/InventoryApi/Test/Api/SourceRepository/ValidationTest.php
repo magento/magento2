@@ -17,7 +17,7 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source';
+    const RESOURCE_PATH = '/V1/inventory/sources';
     const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     /**#@-*/
 
@@ -134,7 +134,7 @@ class ValidationTest extends WebapiAbstract
      * @param string $field
      * @param string|null $value
      * @param array $expectedErrorData
-     * @dataProvider failedValidationDataProvider
+     * @dataProvider failedValidationUpdateDataProvider
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      */
     public function testFailedValidationOnUpdate(string $field, $value, array $expectedErrorData)
@@ -225,6 +225,153 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
+            'null_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * SuppressWarnings was added due to a tests on different fail types and big size of data provider.
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function failedValidationUpdateDataProvider(): array
+    {
+        return [
             'null_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 null,

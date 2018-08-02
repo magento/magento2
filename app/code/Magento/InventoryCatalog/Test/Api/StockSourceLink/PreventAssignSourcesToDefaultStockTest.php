@@ -19,7 +19,7 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH_ASSIGN_SOURCES_TO_STOCK = '/V1/inventory/stock-source-link';
+    const RESOURCE_PATH_ASSIGN_SOURCES_TO_STOCK = '/V1/inventory/stock-source-links';
     const SERVICE_NAME_ASSIGN_SOURCES_TO_STOCK = 'inventoryApiStockSourceLinksSaveV1';
     /**#@-*/
 
@@ -98,10 +98,6 @@ class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
-                        [
-                            'message' => 'Can not save link related to Default Source or Default Stock',
-                            'parameters' => [],
-                        ],
                         [
                             'message' => 'Can not save link related to Default Source or Default Stock',
                             'parameters' => [],

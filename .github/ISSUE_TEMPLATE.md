@@ -28,8 +28,8 @@
 
 ### Expected result
 <!--- Tell us what should happen -->
-1. [Screenshot, logs]
+1. [Screenshots, logs or description]
 
 ### Actual result
 <!--- Tell us what happens instead -->
-1. [Screenshot, logs]
+1. [Screenshots, logs or description]

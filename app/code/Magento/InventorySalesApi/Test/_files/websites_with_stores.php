@@ -5,21 +5,28 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
-use Magento\TestFramework\Db\Sequence;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventorySalesApi\Test\OriginalSequenceBuilder;
+use Magento\SalesSequence\Model\EntityPool;
+use Magento\SalesSequence\Model\Config;
 
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var ManagerInterface $eventManager */
-$eventManager = $objectManager->create(ManagerInterface::class);
-/** @var Sequence $sequence */
-$sequence = $objectManager->create(Sequence::class);
+/**
+ * Set original sequence builder to object manager in order to generate sequence table with correct store id.
+ */
+$sequenceBuilder = $objectManager->get(OriginalSequenceBuilder::class);
+$objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
+/** @var EntityPool $entityPool */
+$entityPool = $objectManager->get(EntityPool::class);
+/** @var Config $sequenceConfig */
+$sequenceConfig = $objectManager->get(Config::class);
+
 /** @var StoreInterface $store */
 $store = $objectManager->create(Store::class);
 $store->load('default');
@@ -61,5 +68,10 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $website->save();
     $store->setGroupId($group->getId());
     $store->save();
-    $eventManager->dispatch('store_add', ['store' => $store]);
 }
+
+/**
+ * Revert set original sequence builder to test sequence builder.
+ */
+$sequenceBuilder = $objectManager->get(\Magento\TestFramework\Db\Sequence\Builder::class);
+$objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);

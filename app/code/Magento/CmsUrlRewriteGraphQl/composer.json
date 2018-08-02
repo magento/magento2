@@ -4,13 +4,14 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "magento/framework": "*"
-
+        "magento/framework": "*",
+        "magento/module-url-rewrite-graph-ql": "*",
+        "magento/module-store": "*",
+        "magento/module-cms": "*"
     },
     "suggest": {
         "magento/module-cms-url-rewrite": "*",
-        "magento/module-catalog-graph-ql": "*",
-        "magento/module-url-rewrite-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

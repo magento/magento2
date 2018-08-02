@@ -33,6 +33,7 @@
                         <item name="config" xsi:type="array">
                             <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
+                            <item name="default" xsi:type="number">1</item>
                         </item>
                     </argument>
                     <settings>

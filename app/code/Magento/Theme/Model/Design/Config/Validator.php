@@ -114,6 +114,7 @@ class Validator
         if (is_numeric($templateId)) {
             $template->load($templateId);
         } else {
+            $template->setForcedArea($templateId);
             $template->loadDefault($templateId);
         }
         $text = $template->getTemplateText();

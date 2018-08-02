@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Client;
 
-use Magento\Framework\HTTP\ZendClient;
-
 /**
  * Class RequestBuilder
  * Creates HTTP client, sends request to Signifyd and handles response
@@ -50,13 +48,14 @@ class RequestBuilder
      *
      * @param string $url
      * @param string $method
-     * @param array  $params
+     * @param array $params
+     * @param int|null $storeId
      * @return array
      */
-    public function doRequest($url, $method, array $params = [])
+    public function doRequest($url, $method, array $params = [], $storeId = null): array
     {
-        $client = $this->clientCreator->create($url, $method, $params);
-        $response = $this->requestSender->send($client);
+        $client = $this->clientCreator->create($url, $method, $params, $storeId);
+        $response = $this->requestSender->send($client, $storeId);
         $result = $this->responseHandler->handle($response);
 
         return $result;

@@ -10,6 +10,7 @@
         "magento/module-eav": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/framework": "*",
         "elasticsearch/elasticsearch": "~2.0|~5.1"
     },

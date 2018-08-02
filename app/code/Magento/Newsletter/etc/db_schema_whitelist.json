@@ -11,7 +11,8 @@
     },
     "index": {
       "NEWSLETTER_SUBSCRIBER_CUSTOMER_ID": true,
-      "NEWSLETTER_SUBSCRIBER_STORE_ID": true
+      "NEWSLETTER_SUBSCRIBER_STORE_ID": true,
+      "NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL": true
     },
     "constraint": {
       "PRIMARY": true,

@@ -34,13 +34,18 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     private $fullDirectoryPath;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot();
@@ -52,6 +57,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      * can be removed.
      *
      * @return void
+     * @magentoAppIsolation enabled
      */
     public function testExecute()
     {
@@ -69,6 +75,29 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
                 )
             )
         );
+    }
+
+    /**
+     * Execute method with correct directory path to check that directories under linked media directory
+     * can be removed.
+     *
+     * @magentoDataFixture Magento/Cms/_files/linked_media.php
+     */
+    public function testExecuteWithLinkedMedia()
+    {
+        $linkedDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
+                ->getAbsolutePath() . 'linked_media';
+        $directoryName = 'NewDirectory';
+
+        $linkedDirectory->create(
+            $linkedDirectory->getRelativePath($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName)
+        );
+        $this->model->getRequest()->setParams(
+            ['node' => $this->imagesHelper->idEncode('wysiwyg' . DIRECTORY_SEPARATOR . $directoryName)]
+        );
+        $this->model->execute();
+        $this->assertFalse(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $directoryName));
     }
 
     /**

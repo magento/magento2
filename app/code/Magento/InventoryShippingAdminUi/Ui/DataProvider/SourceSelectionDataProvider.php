@@ -170,11 +170,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($itemSku, $stockId);
 
-        if (!empty($stockItemConfiguration)) {
-            return $stockItemConfiguration->isManageStock();
-        }
-
-        return true;
+        return $stockItemConfiguration->isManageStock();
     }
 
     /**

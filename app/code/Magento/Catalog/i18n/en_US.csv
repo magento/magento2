@@ -516,6 +516,9 @@ Groups,Groups
 "Maximum image width","Maximum image width"
 "Maximum image height","Maximum image height"
 "Maximum number of characters:","Maximum number of characters:"
+"Maximum %1 characters", "Maximum %1 characters"
+"too many", "too many"
+"remaining", "remaining"
 "start typing to search template","start typing to search template"
 "Product online","Product online"
 "Product offline","Product offline"
@@ -705,7 +708,13 @@ Template,Template
 "New Products Names Only Template","New Products Names Only Template"
 "New Products Images Only Template","New Products Images Only Template"
 "Cache Lifetime (Seconds)","Cache Lifetime (Seconds)"
-"86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.","86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache."
+"Time in seconds between the widget updates.
+<br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+<br/>Widget will not show products that begin to match the specified conditions until cache is refreshed."
+,
+"Time in seconds between the widget updates.
+<br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+<br/>Widget will not show products that begin to match the specified conditions until cache is refreshed."
 "Catalog Product Link","Catalog Product Link"
 "Link to a Specified Product","Link to a Specified Product"
 "Select Product...","Select Product..."

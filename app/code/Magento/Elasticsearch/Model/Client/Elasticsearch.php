@@ -293,7 +293,8 @@ class Elasticsearch implements ClientInterface
      */
     public function query($query)
     {
-        return $this->client->search($query);
+        $params = array_merge($query, ['client' => ['timeout' => $this->clientOptions['timeout']]]);
+        return $this->client->search($params);
     }
 
     /**

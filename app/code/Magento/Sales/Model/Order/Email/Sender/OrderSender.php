@@ -138,7 +138,7 @@ class OrderSender extends Sender
          */
         $this->eventManager->dispatch(
             'email_order_set_template_vars_before',
-            ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
+            ['sender' => $this, 'transport' => $transportObject, 'transportObject' => $transportObject]
         );
 
         $this->templateContainer->setTemplateVars($transportObject->getData());

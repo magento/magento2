@@ -10,6 +10,7 @@ namespace Magento\InventorySalesAdminUi\Model;
 use Magento\InventorySalesAdminUi\Model\ResourceModel\GetAssignedStockIdsBySku;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
  * Get salable quantity data by sku
@@ -32,18 +33,26 @@ class GetSalableQuantityDataBySku
     private $getAssignedStockIdsBySku;
 
     /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
      * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param StockRepositoryInterface $stockRepository
      * @param GetAssignedStockIdsBySku $getAssignedStockIdsBySku
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
         GetProductSalableQtyInterface $getProductSalableQty,
         StockRepositoryInterface $stockRepository,
-        GetAssignedStockIdsBySku $getAssignedStockIdsBySku
+        GetAssignedStockIdsBySku $getAssignedStockIdsBySku,
+        GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
         $this->getProductSalableQty = $getProductSalableQty;
         $this->stockRepository = $stockRepository;
         $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
     }
 
     /**
@@ -58,9 +67,12 @@ class GetSalableQuantityDataBySku
             foreach ($stockIds as $stockId) {
                 $stockId = (int)$stockId;
                 $stock = $this->stockRepository->get($stockId);
+                $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+                $isManageStock = $stockItemConfiguration->isManageStock();
                 $stockInfo[] = [
                     'stock_name' => $stock->getName(),
-                    'qty' => $this->getProductSalableQty->execute($sku, $stockId),
+                    'qty' => $isManageStock ? $this->getProductSalableQty->execute($sku, $stockId) : null,
+                    'manage_stock' => $isManageStock,
                 ];
             }
         }

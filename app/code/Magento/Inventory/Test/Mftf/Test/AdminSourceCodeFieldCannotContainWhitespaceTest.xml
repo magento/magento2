@@ -56,10 +56,6 @@
         <fillField userInput="{{FullSource1.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField1"/>
         <fillField userInput="{{FullSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
 
-        <conditionalClick selector="{{AdminEditSourceCarriersSection.closed}}" dependentSelector="{{AdminEditSourceCarriersSection.opened}}" visible="false" stepKey="clickOnCarriers1"/>
-        <waitForPageLoad time="5" stepKey="waitForPageLoad3"/>
-        <checkOption selector="{{AdminEditSourceCarriersSection.useGlobalShippingConfiguration}}" stepKey="checkUseGlobalShippingConfiguration1"/>
-
         <seeElement selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" stepKey="seeErrorMessage1"/>
         <see selector="{{AdminEditSourceGeneralSection.codeErrorMessage}}" userInput="No white space please" stepKey="seeInErrorMessage1"/>
 

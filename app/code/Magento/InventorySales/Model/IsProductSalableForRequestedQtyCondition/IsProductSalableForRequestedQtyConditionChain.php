@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException;
 
 /**
  * @inheritdoc
@@ -130,7 +131,7 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
      * @param array $conditions
      * @return array
      */
-    private function sortConditions(array $conditions)
+    private function sortConditions(array $conditions): array
     {
         usort($conditions, function (array $conditionLeft, array $conditionRight) {
             if ($conditionLeft['sort_order'] == $conditionRight['sort_order']) {
@@ -152,7 +153,42 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             $this->setConditions();
         }
 
-        // iterate over the required conditions: return error as soon as a condition fails
+        try {
+            $requiredConditionsErrors = $this->processRequiredConditions($sku, $stockId, $requestedQty);
+            if (count($requiredConditionsErrors)) {
+                return $this->productSalableResultFactory->create(['errors' => $requiredConditionsErrors]);
+            }
+
+            $sufficientConditionsErrors = $this->processSufficientConditions($sku, $stockId, $requestedQty);
+            if (count($sufficientConditionsErrors)) {
+                return $this->productSalableResultFactory->create(['errors' => $sufficientConditionsErrors]);
+            }
+        } catch (SkuIsNotAssignedToStockException $e) {
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'requested-sku-is-not-assigned-to-given-stock',
+                    'message' => __('The requested sku is not assigned to given stock.')
+                ])
+            ];
+            return $this->productSalableResultFactory->create(['errors' => $errors]);
+        }
+
+        return $this->productSalableResultFactory->create(['errors' => []]);
+    }
+
+    /**
+     * Required conditions
+     *
+     * Iterate over required conditions: return error if at least one of them doesn't passed
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param float $requestedQty
+     * @return array
+     * @throws LocalizedException
+     */
+    private function processRequiredConditions(string $sku, int $stockId, float $requestedQty): array
+    {
         $requiredConditionsErrors = [[]];
         foreach ($this->requiredConditions as $condition) {
             /** @var ProductSalableResultInterface $productSalableResult */
@@ -162,25 +198,36 @@ class IsProductSalableForRequestedQtyConditionChain implements IsProductSalableF
             }
             $requiredConditionsErrors[] = $productSalableResult->getErrors();
         }
-
         $requiredConditionsErrors = array_merge(...$requiredConditionsErrors);
-        if (count($requiredConditionsErrors)) {
-            return $this->productSalableResultFactory->create(['errors' => $requiredConditionsErrors]);
-        }
 
-        // iterate over not required conditions: return error if all conditions fail
-        $unrequiredConditionsErrors = [[]];
+        return $requiredConditionsErrors;
+    }
+
+    /**
+     * Sufficient conditions ordered by priority.
+     *
+     * Iterate over sufficient conditions: return true if one of them is Salable
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param float $requestedQty
+     * @return array
+     * @throws LocalizedException
+     */
+    private function processSufficientConditions(string $sku, int $stockId, float $requestedQty): array
+    {
+        $sufficientConditionsErrors = [[]];
         foreach ($this->unrequiredConditions as $condition) {
             /** @var ProductSalableResultInterface $productSalableResult */
             $productSalableResult = $condition->execute($sku, $stockId, $requestedQty);
             if ($productSalableResult->isSalable()) {
-                return $this->productSalableResultFactory->create(['errors' => []]);
+                return [];
             }
-            $unrequiredConditionsErrors[] = $productSalableResult->getErrors();
+            $sufficientConditionsErrors[] = $productSalableResult->getErrors();
         }
+        $sufficientConditionsErrors = array_merge(...$sufficientConditionsErrors);
 
-        $unrequiredConditionsErrors = array_merge(...$unrequiredConditionsErrors);
-        return $this->productSalableResultFactory->create(['errors' => $unrequiredConditionsErrors]);
+        return $sufficientConditionsErrors;
     }
 
     /**

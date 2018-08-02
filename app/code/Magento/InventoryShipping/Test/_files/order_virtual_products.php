@@ -8,9 +8,6 @@ declare(strict_types=1);
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Quote\Api\Data\CartItemInterfaceFactory;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
@@ -20,12 +17,8 @@ $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilde
 $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-/** @var CartItemInterfaceFactory $cartItemFactory */
-$cartItemFactory = Bootstrap::getObjectManager()->get(CartItemInterfaceFactory::class);
 /** @var CartManagementInterface $cartManagement */
 $cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::class);
-/** @var OrderRepositoryInterface $orderRepository */
-$orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
 
 $itemsToBuy = [
     'VIRT-1' => 5,
@@ -39,21 +32,13 @@ $cart = current($cartRepository->getList($searchCriteria)->getItems());
 
 foreach ($itemsToBuy as $sku => $qty) {
     $product = $productRepository->get($sku);
-    $cartItem = $cartItemFactory->create(
-        [
-            'data' => [
-                CartItemInterface::KEY_SKU => $product->getSku(),
-                CartItemInterface::KEY_QTY => $qty,
-                CartItemInterface::KEY_QUOTE_ID => (int)$cart->getId(),
-                'product_id' => (int)$product->getId(),
-                'product' => $product,
-            ]
-        ]
-    );
-    $cart->addItem($cartItem);
+    $requestData = [
+        'product'           => $product->getProductId(),
+        'qty'               => $qty
+    ];
+    $request = new \Magento\Framework\DataObject($requestData);
+    $cart->addProduct($product, $request);
 }
 
 $cartRepository->save($cart);
-$orderId = $cartManagement->placeOrder($cart->getId());
-
-$order = $orderRepository->get($orderId);
+$cartManagement->placeOrder($cart->getId());

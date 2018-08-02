@@ -11,7 +11,8 @@ use Magento\Framework\App\State;
  * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
  * @api
- * @since 100.2.0
+ * @deprecated class location was changed
+ * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
  */
 class ConcealInProductionConfigList implements ElementVisibilityInterface
 {
@@ -43,63 +44,31 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
     private $state;
 
     /**
-     *
-     * The list of form element paths which ignore visibility status.
-     *
-     * E.g.
-     *
-     * ```php
-     * [
-     *      'general/country/default' => '',
-     * ];
-     * ```
-     *
-     * It means that:
-     *  - field 'default' in group Country Options (in section General) will be showed, even if all group(section)
-     *    will be hidden.
-     *
-     * @var array
-     */
-    private $exemptions = [];
-
-    /**
      * @param State $state The object that has information about the state of the system
      * @param array $configs The list of form element paths with concrete visibility status.
-     * @param array $exemptions The list of form element paths which ignore visibility status.
      */
-    public function __construct(State $state, array $configs = [], array $exemptions = [])
+    public function __construct(State $state, array $configs = [])
     {
         $this->state = $state;
         $this->configs = $configs;
-        $this->exemptions = $exemptions;
     }
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @deprecated
      */
     public function isHidden($path)
     {
-        $result = false;
         $path = $this->normalizePath($path);
-        if ($this->state->getMode() === State::MODE_PRODUCTION
-            && preg_match('/(?<group>(?<section>.*?)\/.*?)\/.*?/', $path, $match)) {
-            $group = $match['group'];
-            $section = $match['section'];
-            $exemptions = array_keys($this->exemptions);
-            foreach ($this->configs as $configPath => $value) {
-                if ($value === static::HIDDEN && strpos($path, $configPath) !==false) {
-                    $result = empty(array_intersect([$section, $group, $path], $exemptions));
-                }
-            }
-        }
 
-        return $result;
+        return $this->state->getMode() === State::MODE_PRODUCTION
+            && !empty($this->configs[$path])
+            && $this->configs[$path] === static::HIDDEN;
     }
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @deprecated
      */
     public function isDisabled($path)
     {

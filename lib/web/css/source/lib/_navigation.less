@@ -305,6 +305,10 @@
             .lib-css(border-top, none);
         }
 
+        li.level1 {
+            position: relative;
+        }
+
         .level0 {
             .lib-css(margin, @_nav-level0-item-margin);
             display: inline-block;
@@ -349,6 +353,25 @@
 
             &.parent:hover > .submenu {
                 overflow: visible !important;
+            }
+
+            &.parent {
+                > .level-top {
+                    padding-right: 20px;
+
+                    > .ui-menu-icon {
+                        position: absolute;
+                        right: 0;
+
+                        .lib-icon-font(
+                            @icon-down,
+                            @_icon-font-size: 12px,
+                            @_icon-font-line-height: 20px,
+                            @_icon-font-text-hide: true,
+                            @_icon-font-position: after
+                        );
+                    }
+                }
             }
 
             .submenu {
@@ -409,6 +432,26 @@
                 .submenu-reverse{
                     left: auto !important;
                     right: 100%;
+                }
+
+                li {
+                    margin: 0;
+                    &.parent {
+                        > a {
+                            > .ui-menu-icon {
+                                position: absolute;
+                                right: 3px;
+
+                                .lib-icon-font(
+                                    @icon-next,
+                                    @_icon-font-size: 12px,
+                                    @_icon-font-line-height: 20px,
+                                    @_icon-font-text-hide: true,
+                                    @_icon-font-position: after
+                                );
+                            }
+                        }
+                    }
                 }
             }
 

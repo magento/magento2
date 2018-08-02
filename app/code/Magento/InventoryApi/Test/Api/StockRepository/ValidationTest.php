@@ -10,6 +10,7 @@ namespace Magento\InventoryApi\Test\Api\StockRepository;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ValidationTest extends WebapiAbstract
@@ -17,7 +18,7 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/stock';
+    const RESOURCE_PATH = '/V1/inventory/stocks';
     const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 
@@ -85,6 +86,44 @@ class ValidationTest extends WebapiAbstract
     {
         $data = $this->validData;
         $data[$field] = $value;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+    }
+
+    public function testFailedValidationWhenCreateOnNotExistingWebsite()
+    {
+        $notExistingWebsiteCode = 'NotExistingWebsite';
+        $data = [
+            StockInterface::NAME => 'stock-name',
+            StockInterface::EXTENSION_ATTRIBUTES_KEY => [
+                'sales_channels' => [[
+                    'type' => SalesChannelInterface::TYPE_WEBSITE,
+                    'code' => $notExistingWebsiteCode
+                ]]
+            ]
+        ];
+
+        $expectedErrorData = [
+            'message' => 'Validation Failed',
+            'errors' => [
+                [
+                    'message' => 'The website with code "%code" does not exist.',
+                    'parameters' => [
+                        'code' => $notExistingWebsiteCode,
+                    ],
+                ],
+            ],
+        ];
 
         $serviceInfo = [
             'rest' => [

@@ -63,12 +63,11 @@ class CanManageSourceItemsBySku
             $stockId = $this->defaultStockProvider->getId();
             $itemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
 
-            if (null !== $itemConfiguration) {
-                return $itemConfiguration->isUseConfigManageStock()
-                    ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
-                    : $itemConfiguration->isManageStock();
-            }
+            return $itemConfiguration->isUseConfigManageStock()
+                ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
+                : $itemConfiguration->isManageStock();
         }
+
         return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
     }
 }

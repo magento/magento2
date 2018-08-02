@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Test\Integration;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
@@ -70,11 +69,6 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
      */
     private $invoiceRepository;
 
-    /**
-     * @var Registry
-     */
-    private $registry;
-
     protected function setUp()
     {
         $this->invoiceOrder = Bootstrap::getObjectManager()->get(InvoiceOrderInterface::class);
@@ -87,15 +81,14 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $this->getReservationsQuantity = Bootstrap::getObjectManager()->get(GetReservationsQuantityInterface::class);
         $this->invoiceRepository = Bootstrap::getObjectManager()->get(InvoiceRepositoryInterface::class);
-        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testSourceDeductionWhileInvoicingWholeOrderedQty()
     {
@@ -114,7 +107,7 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
             $invoiceItems[] = $invoiceItemCreation;
         }
 
-        $invoiceId = $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
+        $this->invoiceOrder->execute($order->getEntityId(), true, $invoiceItems);
 
         $defaultStockId = $this->defaultStockProvider->getId();
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
@@ -124,16 +117,14 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
 
         self::assertEquals(0, $this->getReservationsQuantity('VIRT-1', $defaultStockId));
         self::assertEquals(0, $this->getReservationsQuantity('VIRT-2', $defaultStockId));
-
-        $this->deleteInvoice($invoiceId);
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/products_virtual.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/source_items_for_virtual_on_default_source.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/create_quote_on_default_website.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryShipping/Test/_files/order_virtual_products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
     public function testSourceDeductionWhileInvoicingPartialOrderedQty()
     {
@@ -159,7 +150,7 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
             }
         }
 
-        $invoiceId = $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
+        $this->invoiceOrder->execute($order->getEntityId(), false, $invoiceItems);
 
         $defaultStockId = $this->defaultStockProvider->getId();
         $defaultSourceCode = $this->defaultSourceProvider->getCode();
@@ -169,22 +160,6 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
 
         self::assertEquals(-2, $this->getReservationsQuantity('VIRT-1', $defaultStockId));
         self::assertEquals(-4, $this->getReservationsQuantity('VIRT-2', $defaultStockId));
-
-        $this->deleteInvoice($invoiceId);
-    }
-
-    /**
-     * @param int $invoiceId
-     */
-    private function deleteInvoice($invoiceId)
-    {
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-
-        $this->invoiceRepository->delete($this->invoiceRepository->get($invoiceId));
-
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
     }
 
     /**

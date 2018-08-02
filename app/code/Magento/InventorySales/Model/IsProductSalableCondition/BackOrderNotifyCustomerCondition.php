@@ -64,14 +64,11 @@ class BackOrderNotifyCustomerCondition implements IsProductSalableForRequestedQt
     public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-        if (null === $stockItemConfiguration) {
-            $this->productSalableResultFactory->create(['errors' => []]);
-        }
 
         if ($stockItemConfiguration->getBackorders() === StockItemConfigurationInterface::BACKORDERS_YES_NOTIFY) {
             $stockItemData = $this->getStockItemData->execute($sku, $stockId);
             if (null === $stockItemData) {
-                $this->productSalableResultFactory->create(['errors' => []]);
+                return $this->productSalableResultFactory->create(['errors' => []]);
             }
 
             $backOrderQty = $requestedQty - $stockItemData[GetStockItemDataInterface::QUANTITY];

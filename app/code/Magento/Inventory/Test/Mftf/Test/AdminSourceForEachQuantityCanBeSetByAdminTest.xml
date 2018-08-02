@@ -86,7 +86,9 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="2" stepKey="fillSourceNotifyQuantity1"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('1')}}" stepKey="uncheckUseDefaultForNotifyQuantity1"/>
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('1')}}" userInput="5" stepKey="fillSourceNotifyQuantity2"/>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('2')}}" stepKey="uncheckUseDefaultForNotifyQuantity2"/>
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('2')}}" userInput="10" stepKey="fillSourceNotifyQuantity3"/>
 
         <click selector="{{AdminGridMainControls.save}}" stepKey="clickOnSave"/>

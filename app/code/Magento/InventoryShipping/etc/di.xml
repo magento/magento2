@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeduct"/>
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequestInterface" type="Magento\InventoryShipping\Model\SourceDeduction\Request\SourceDeductionRequest"/>
-    <preference for="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionServiceInterface" type="Magento\InventoryShipping\Model\SourceDeduction\SourceDeductionService"/>
     <type name="Magento\Sales\Model\Order\ShipmentFactory">
         <plugin name="assign_source_code_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\AssignSourceCodeToShipmentPlugin"/>
     </type>
