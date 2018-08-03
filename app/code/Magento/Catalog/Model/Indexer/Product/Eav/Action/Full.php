@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
 /**
  * Class Full reindex action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
 {
