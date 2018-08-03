@@ -166,7 +166,7 @@ class Structure
      */
     public function getElement($elementId)
     {
-        return isset($this->_elements[$elementId]) ? $this->_elements[$elementId] : false;
+        return $this->_elements[$elementId] ?? false;
     }
 
     /**
@@ -456,9 +456,7 @@ class Structure
      */
     public function getChildren($parentId)
     {
-        return isset(
-            $this->_elements[$parentId][self::CHILDREN]
-        ) ? $this->_elements[$parentId][self::CHILDREN] : [];
+        return $this->_elements[$parentId][self::CHILDREN] ?? [];
     }
 
     /**
@@ -469,7 +467,7 @@ class Structure
      */
     public function getParentId($childId)
     {
-        return isset($this->_elements[$childId][self::PARENT]) ? $this->_elements[$childId][self::PARENT] : false;
+        return $this->_elements[$childId][self::PARENT] ?? false;
     }
 
     /**

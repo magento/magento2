@@ -208,7 +208,7 @@ class Context implements ContextInterface
     public function getFilterParam($key, $defaultValue = null)
     {
         $filter = $this->getFiltersParams();
-        return isset($filter[$key]) ? $filter[$key] : $defaultValue;
+        return $filter[$key] ?? $defaultValue;
     }
 
     /**

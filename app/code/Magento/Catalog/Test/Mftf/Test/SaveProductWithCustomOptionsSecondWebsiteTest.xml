@@ -53,7 +53,7 @@
         <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
 
         <!--Click Customizable Options-->
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <waitForPageLoad stepKey="waitAfterAddOption"/>
         <fillField selector="input[name='product[options][0][title]']" userInput="Radio Option" stepKey="fillOptionTitle"/>
@@ -85,7 +85,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
-        <click selector="{{AdminProductCustomizableOptionsSection.customezableOptions}}" stepKey="openCustomOptionsSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
         <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
     </test>
 </tests>
