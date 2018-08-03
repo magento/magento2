@@ -43,7 +43,8 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'ns3' => 'just text',
-            'ns4' => 'just text'
+            'ns4' => 'just text',
+            'ns5' => null
         ];
         $comments1 = ['ns2' => 'comment for namespace 2'];
         $comments2 = [
@@ -51,7 +52,8 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
             'ns2' => "comment for namespace 2.\nNext comment for' namespace 2",
             'ns3' => 'comment for" namespace 3',
             'ns4' => 'comment for namespace 4',
-            'ns5' => 'comment for unexisted namespace 5',
+            'ns5' => 'comment for namespace 5',
+            'ns6' => 'comment for unexisted namespace 6',
         ];
         $expectedResult1 = <<<TEXT
 <?php
@@ -77,6 +79,7 @@ return [
     ],
     'ns3' => 'just text',
     'ns4' => 'just text',
+    'ns5' => null,
 ];
 
 TEXT;
@@ -117,6 +120,11 @@ return [
      * comment for namespace 4
      */
     'ns4' => 'just text',
+    /**
+     * For the section: ns5
+     * comment for namespace 5
+     */
+    'ns5' => null,
 ];
 
 TEXT;
@@ -140,7 +148,8 @@ return [
         ]
     ],
     'ns3' => 'just text',
-    'ns4' => 'just text'
+    'ns4' => 'just text',
+    'ns5' => null
 ];
 
 TEXT;
