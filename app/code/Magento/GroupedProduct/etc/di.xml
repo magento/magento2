@@ -98,4 +98,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -47,7 +47,7 @@ class Aggregation implements AggregationInterface, \IteratorAggregate
      */
     public function getBucket($bucketName)
     {
-        return isset($this->buckets[$bucketName]) ? $this->buckets[$bucketName] : null;
+        return $this->buckets[$bucketName] ?? null;
     }
 
     /**

@@ -11,7 +11,6 @@
 namespace Magento\Framework\Module\Test\Unit\Dir;
 
 use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 
 class ReaderTest extends \PHPUnit\Framework\TestCase

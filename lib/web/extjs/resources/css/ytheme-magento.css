@@ -59,7 +59,7 @@
 .x-tree-node .x-tree-selected a span { background:#f5d6c7; color:#000; }
 
 .x-tree-lines .x-tree-elbow{
-    background:transparent url(../images/magento/tree/elbow.gif) no-repeat ;
+    background:transparent url(../images/magento/tree/elbow.gif) no-repeat;
 }
 .x-tree-lines .x-tree-elbow-plus{
     background:transparent url(../images/magento/tree/elbow-plus.gif) no-repeat;
