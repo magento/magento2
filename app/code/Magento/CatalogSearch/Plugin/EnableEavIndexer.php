@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Plugin;
 
 /**
- * Enable Product EAV indexer by default for MySQL search engine
+ * Enable Product EAV indexer in configuration for MySQL search engine
  */
 class EnableEavIndexer
 {
