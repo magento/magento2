@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormConfigurationsSection">
+        <element name="sectionHeader" type="text" selector=".admin__collapsible-block-wrapper[data-index='configurable']"/>
+        <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="30"/>
+        <element name="currentVariationsRows" type="button" selector=".data-row"/>
+        <element name="currentVariationsNameCells" type="textarea" selector=".admin__control-fields[data-index='name_container']"/>
+        <element name="currentVariationsSkuCells" type="textarea" selector=".admin__control-fields[data-index='sku_container']"/>
+        <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
+        <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
+        <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
+        <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
+        <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
+        <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
+        <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
+    </section>
+</sections>
