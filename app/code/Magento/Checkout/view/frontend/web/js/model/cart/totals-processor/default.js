@@ -61,6 +61,8 @@ define([
         }).always(function () {
             // Stop loader for totals block
             totalsService.isLoading(false);
+            // Check for new session messages
+            customerData.reload('messages');
         });
     };
 
