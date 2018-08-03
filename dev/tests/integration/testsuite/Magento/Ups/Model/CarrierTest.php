@@ -58,7 +58,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
      * @magentoConfigFixture current_store carriers/ups/free_method GND
      */
-    public function testCollectRates()
+    public function testCollectFreeRates()
     {
         $rateRequest = Bootstrap::getObjectManager()->get(RateRequestFactory::class)->create();
         $rateRequest->setDestCountryId('US');
@@ -68,6 +68,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rateRequest->setPackageWeight(1);
         $rateRequest->setFreeMethodWeight(0);
         $rateRequest->setLimitCarrier($this->carrier::CODE);
+        $rateRequest->setFreeShipping(true);
 
         $rateResult = $this->carrier->collectRates($rateRequest);
         $result = $rateResult->asArray();

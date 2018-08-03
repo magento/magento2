@@ -10,26 +10,28 @@
  */
 ?>
 
-<?php $_divId = 'tree-div_' . time() ?>
-<div id="<?= /* @escapeNotVerified */ $_divId ?>" class="tree"></div>
+<?php $divId = $block->escapeHtml('tree-div_' . time()) ?>
+<div id="<?= /* @noEscape */ $divId ?>" class="tree"></div>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 
-<script>
-    require(["Magento_Catalog/js/category-checkbox-tree"], function (element) {
-        element({
-            "dataUrl":       "<?= /* @escapeNotVerified */ $block->getLoadTreeUrl() ?>" ,
-            "divId":         "<?= /* @escapeNotVerified */$_divId ?>",
-            "rootVisible":   <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-            "useAjax":       <?= /* @escapeNotVerified */ $block->getUseAjax() ?>,
-            "currentNodeId": <?= (int)$block->getCategoryId() ?>,
-            "jsFormObject":  <?= /* @escapeNotVerified */ $block->getJsFormObject() ?>,
-            "name":          "<?= /* @escapeNotVerified */ htmlentities($block->getRoot()->getName()) ?>",
-            "checked":       "<?= /* @escapeNotVerified */ $block->getRoot()->getChecked() ?>",
-            "allowDrop":     <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-            "rootId":        <?= (int)$block->getRoot()->getId() ?>,
-            "expanded":      <?= (int)$block->getIsWasExpanded() ?>,
-            "categoryId":    <?= (int)$block->getCategoryId() ?>,
-            "treeJson":      <?= /* @escapeNotVerified */ $block->getTreeJson() ?>
-        });
-    })
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "categoryCheckboxTree": {
+                "dataUrl":       "<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>",
+                "divId":         "<?= /* @noEscape */ $divId ?>",
+                "rootVisible":   <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "useAjax":       <?= $block->escapeHtml($block->getUseAjax()) ?>,
+                "currentNodeId": <?= (int)$block->getCategoryId() ?>,
+                "jsFormObject":  "<?= /* @noEscape */ $block->getJsFormObject() ?>",
+                "name":          "<?= $block->escapeHtml($block->getRoot()->getName()) ?>",
+                "checked":       "<?= $block->escapeHtml($block->getRoot()->getChecked()) ?>",
+                "allowdDrop":    <?= /* @noEscape */ $block->getRoot()->getIsVisible() ? 'true' : 'false' ?>,
+                "rootId":        <?= (int)$block->getRoot()->getId() ?>,
+                "expanded":      <?= (int)$block->getIsWasExpanded() ?>,
+                "categoryId":    <?= (int)$block->getCategoryId() ?>,
+                "treeJson":      <?= /* @noEscape */ $block->getTreeJson() ?>
+            }
+        }
+    }
 </script>

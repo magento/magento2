@@ -620,7 +620,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function isSaveAllowed()
     {
-        return (bool) $this->_dataSaveAllowed;
+        return (bool)$this->_dataSaveAllowed;
     }
 
     /**

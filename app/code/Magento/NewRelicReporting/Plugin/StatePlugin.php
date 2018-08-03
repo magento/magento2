@@ -65,6 +65,12 @@ class StatePlugin
         }
     }
 
+    /**
+     * @param State $state
+     *
+     * @return string
+     * @throws LocalizedException
+     */
     private function appName(State $state)
     {
         $code = $state->getAreaCode();
@@ -73,6 +79,9 @@ class StatePlugin
         return $current . ';' . $current . '_' . $code;
     }
 
+    /**
+     * @return bool
+     */
     private function shouldSetAppName()
     {
         if (!$this->config->isNewRelicEnabled()) {

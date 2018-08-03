@@ -23,6 +23,9 @@
                     <attribute>
                         <options>8</options>
                     </attribute>
+                    <attribute>
+                        <options>5</options>
+                    </attribute>
                 </attributes>
                 <sku>Configurable Product %s</sku>
                 <products>8000</products>

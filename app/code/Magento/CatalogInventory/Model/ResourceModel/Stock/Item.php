@@ -263,6 +263,48 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $value, $where);
     }
 
+    public function getManageStockExpr(string $tableAlias = ''): \Zend_Db_Expr
+    {
+        if ($tableAlias) {
+            $tableAlias .= '.';
+        }
+        $manageStock = $this->getConnection()->getCheckSql(
+            $tableAlias . 'use_config_manage_stock = 1',
+            $this->stockConfiguration->getManageStock(),
+            $tableAlias . 'manage_stock'
+        );
+
+        return $manageStock;
+    }
+
+    public function getBackordersExpr(string $tableAlias = ''): \Zend_Db_Expr
+    {
+        if ($tableAlias) {
+            $tableAlias .= '.';
+        }
+        $itemBackorders = $this->getConnection()->getCheckSql(
+            $tableAlias . 'use_config_backorders = 1',
+            $this->stockConfiguration->getBackorders(),
+            $tableAlias . 'backorders'
+        );
+
+        return $itemBackorders;
+    }
+
+    public function getMinSaleQtyExpr(string $tableAlias = ''): \Zend_Db_Expr
+    {
+        if ($tableAlias) {
+            $tableAlias .= '.';
+        }
+        $itemMinSaleQty = $this->getConnection()->getCheckSql(
+            $tableAlias . 'use_config_min_sale_qty = 1',
+            $this->stockConfiguration->getMinSaleQty(),
+            $tableAlias . 'min_sale_qty'
+        );
+
+        return $itemMinSaleQty;
+    }
+
     /**
      * Build select for products with types from config
      *

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -16,17 +17,24 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\ImageContentValidator;
 use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -42,122 +50,122 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $product;
 
     /**
-     * @var MockObject
+     * @var Product|MockObject
      */
-    private $initializedProductMock;
+    private $initializedProduct;
 
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var ProductRepository
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var MockObject
+     * @var Helper|MockObject
      */
-    protected $initializationHelperMock;
+    private $initializationHelper;
 
     /**
-     * @var MockObject
+     * @var Product|MockObject
      */
-    protected $resourceModelMock;
+    private $resourceModel;
 
     /**
      * @var ProductFactory|MockObject
      */
-    protected $productFactory;
+    private $productFactory;
 
     /**
-     * @var MockObject
+     * @var CollectionFactory|MockObject
      */
-    protected $collectionFactoryMock;
+    private $collectionFactory;
 
     /**
-     * @var MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
-    protected $searchCriteriaBuilderMock;
+    private $searchCriteriaBuilder;
 
     /**
-     * @var MockObject
+     * @var FilterBuilder|MockObject
      */
-    protected $filterBuilderMock;
+    private $filterBuilder;
 
     /**
-     * @var MockObject
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
-    protected $metadataServiceMock;
+    private $metadataService;
 
     /**
-     * @var MockObject
+     * @var ProductSearchResultsInterfaceFactory|MockObject
      */
     private $searchResultsFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config|MockObject
+     * @var ExtensibleDataObjectConverter|MockObject
      */
-    protected $eavConfigMock;
-
-    /**
-     * @var MockObject
-     */
-    protected $extensibleDataObjectConverterMock;
+    private $extensibleDataObjectConverter;
 
     /**
      * @var array data to create product
      */
-    protected $productData = [
+    private $productData = [
         'sku' => 'exisiting',
         'name' => 'existing product',
     ];
 
     /**
-     * @var MockObject|\Magento\Framework\Filesystem
+     * @var Filesystem|MockObject
      */
-    protected $fileSystemMock;
+    private $fileSystem;
 
     /**
-     * @var MockObject|\Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap
+     * @var MimeTypeExtensionMap|MockObject
      */
-    protected $mimeTypeExtensionMapMock;
+    private $mimeTypeExtensionMap;
 
     /**
-     * @var MockObject
+     * @var ImageContentInterfaceFactory|MockObject
      */
-    protected $contentFactoryMock;
+    private $contentFactory;
 
     /**
-     * @var MockObject|\Magento\Framework\Api\ImageContentValidator
+     * @var ImageContentValidator|MockObject
      */
-    protected $contentValidatorMock;
+    private $contentValidator;
 
     /**
-     * @var MockObject
+     * @var LinkTypeProvider|MockObject
      */
-    protected $linkTypeProviderMock;
+    private $linkTypeProvider;
 
     /**
-     * @var MockObject|\Magento\Framework\Api\ImageProcessorInterface
+     * @var ImageProcessorInterface|MockObject
      */
-    protected $imageProcessorMock;
+    private $imageProcessor;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    protected $storeManagerMock;
+    private $storeManager;
 
     /**
      * @var MediaGalleryProcessor|MockObject
      */
-    protected $mediaGalleryProcessor;
+    private $mediaGalleryProcessor;
 
     /**
      * @var CollectionProcessorInterface|MockObject
      */
-    private $collectionProcessorMock;
+    private $collectionProcessor;
+
+    /**
+     * @var ProductExtensionInterface|MockObject
+     */
+    private $productExtension;
 
     /**
      * Product repository cache limit.
@@ -183,11 +191,12 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'load',
                 'setData',
                 'getStoreId',
-                'getMediaGalleryEntries'
+                'getMediaGalleryEntries',
+                'getExtensionAttributes'
             ]
         );
 
-        $this->initializedProductMock = $this->createPartialMock(
+        $this->initializedProduct = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
                 'getWebsiteIds',
@@ -195,6 +204,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'load',
                 'getOptions',
                 'getSku',
+                'getId',
                 'hasGalleryAttribute',
                 'getMediaConfig',
                 'getMediaAttributes',
@@ -203,73 +213,87 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'validate',
                 'save',
                 'getMediaGalleryEntries',
+                'getExtensionAttributes'
             ]
         );
-        $this->initializedProductMock->expects($this->any())
+        $this->initializedProduct->expects($this->any())
             ->method('hasGalleryAttribute')
             ->willReturn(true);
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->initializationHelperMock = $this->createMock(Helper::class);
-        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
-        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->metadataServiceMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->filterBuilder = $this->createMock(FilterBuilder::class);
+        $this->initializationHelper = $this->createMock(Helper::class);
+        $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
+        $this->metadataService = $this->createMock(ProductAttributeRepositoryInterface::class);
         $this->searchResultsFactory = $this->createPartialMock(ProductSearchResultsInterfaceFactory::class, ['create']);
-        $this->resourceModelMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->resourceModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->objectManager = new ObjectManager($this);
-        $this->extensibleDataObjectConverterMock = $this
-            ->getMockBuilder(\Magento\Framework\Api\ExtensibleDataObjectConverter::class)
+        $this->extensibleDataObjectConverter = $this
+            ->getMockBuilder(ExtensibleDataObjectConverter::class)
             ->setMethods(['toNestedArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileSystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->fileSystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()->getMock();
-        $this->mimeTypeExtensionMapMock = $this->getMockBuilder(MimeTypeExtensionMap::class)
+        $this->mimeTypeExtensionMap = $this->getMockBuilder(MimeTypeExtensionMap::class)
             ->getMock();
-        $this->contentFactoryMock = $this->createPartialMock(ImageContentInterfaceFactory::class, ['create']);
-        $this->contentValidatorMock = $this->getMockBuilder(ImageContentValidatorInterface::class)
+        $this->contentFactory = $this->createPartialMock(ImageContentInterfaceFactory::class, ['create']);
+        $this->contentValidator = $this->getMockBuilder(ImageContentValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->linkTypeProviderMock = $this->createPartialMock(LinkTypeProvider::class, ['getLinkTypes']);
-        $this->imageProcessorMock = $this->createMock(\Magento\Framework\Api\ImageProcessorInterface::class);
+        $this->linkTypeProvider = $this->createPartialMock(LinkTypeProvider::class, ['getLinkTypes']);
+        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->productExtension = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['__toArray'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productExtension
+            ->method('__toArray')
+            ->willReturn([]);
+        $this->product
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtension);
+        $this->initializedProduct
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtension);
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
         $storeMock->expects($this->any())->method('getCode')->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $this->mediaGalleryProcessor = $this->createMock(MediaGalleryProcessor::class);
 
-        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Catalog\Model\ProductRepository::class,
+            ProductRepository::class,
             [
                 'productFactory' => $this->productFactory,
-                'initializationHelper' => $this->initializationHelperMock,
-                'resourceModel' => $this->resourceModelMock,
-                'filterBuilder' => $this->filterBuilderMock,
-                'collectionFactory' => $this->collectionFactoryMock,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-                'metadataServiceInterface' => $this->metadataServiceMock,
+                'initializationHelper' => $this->initializationHelper,
+                'resourceModel' => $this->resourceModel,
+                'filterBuilder' => $this->filterBuilder,
+                'collectionFactory' => $this->collectionFactory,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                'metadataServiceInterface' => $this->metadataService,
                 'searchResultsFactory' => $this->searchResultsFactory,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'contentValidator' => $this->contentValidatorMock,
-                'fileSystem' => $this->fileSystemMock,
-                'contentFactory' => $this->contentFactoryMock,
-                'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
-                'linkTypeProvider' => $this->linkTypeProviderMock,
-                'imageProcessor' => $this->imageProcessorMock,
-                'storeManager' => $this->storeManagerMock,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
+                'contentValidator' => $this->contentValidator,
+                'fileSystem' => $this->fileSystem,
+                'contentFactory' => $this->contentFactory,
+                'mimeTypeExtensionMap' => $this->mimeTypeExtensionMap,
+                'linkTypeProvider' => $this->linkTypeProvider,
+                'imageProcessor' => $this->imageProcessor,
+                'storeManager' => $this->storeManager,
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
-                'collectionProcessor' => $this->collectionProcessorMock,
+                'collectionProcessor' => $this->collectionProcessor,
                 'serializer' => new Json(),
                 'cacheLimit' => $this->cacheLimit
             ]
@@ -282,9 +306,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAbsentProduct()
     {
-        $this->productFactory->expects($this->once())->method('create')
+        $this->productFactory->expects($this->never())->method('create')
             ->will($this->returnValue($this->product));
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with('test_sku')
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with('test_sku')
             ->will($this->returnValue(null));
         $this->productFactory->expects($this->never())->method('setData');
         $this->model->get('test_sku');
@@ -293,25 +317,27 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateCreatesProduct()
     {
         $sku = 'test_sku';
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('test_id'));
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
-            ->will($this->returnValue('test_id'));
         $this->product->expects($this->once())->method('load')->with('test_id');
-        $this->product->expects($this->once())->method('getSku')->willReturn($sku);
+        $this->product->expects($this->any())->method('getId')->willReturn('test_id');
+        $this->product->expects($this->any())->method('getSku')->willReturn($sku);
         $this->assertEquals($this->product, $this->model->get($sku));
     }
 
     public function testGetProductInEditMode()
     {
         $sku = 'test_sku';
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('test_id'));
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
-            ->will($this->returnValue('test_id'));
         $this->product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->product->expects($this->once())->method('load')->with('test_id');
-        $this->product->expects($this->once())->method('getSku')->willReturn($sku);
+        $this->product->expects($this->any())->method('getId')->willReturn('test_id');
+        $this->product->expects($this->any())->method('getSku')->willReturn($sku);
         $this->assertEquals($this->product, $this->model->get($sku, true));
     }
 
@@ -319,12 +345,13 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $trimmedSku = 'test_sku';
         $sku = 'test_sku ';
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('test_id'));
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
-            ->will($this->returnValue('test_id'));
         $this->product->expects($this->once())->method('load')->with('test_id');
-        $this->product->expects($this->once())->method('getSku')->willReturn($trimmedSku);
+        $this->product->expects($this->any())->method('getId')->willReturn('test_id');
+        $this->product->expects($this->any())->method('getSku')->willReturn($trimmedSku);
         $this->assertEquals($this->product, $this->model->get($sku));
     }
 
@@ -333,12 +360,12 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $productId = 123;
         $sku = 'test-sku';
         $storeId = 7;
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with($sku)->willReturn($productId);
         $this->productFactory->expects($this->once())->method('create')->willReturn($this->product);
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)->willReturn($productId);
         $this->product->expects($this->once())->method('setData')->with('store_id', $storeId);
         $this->product->expects($this->once())->method('load')->with($productId);
-        $this->product->expects($this->once())->method('getId')->willReturn($productId);
-        $this->product->expects($this->once())->method('getSku')->willReturn($sku);
+        $this->product->expects($this->any())->method('getId')->willReturn($productId);
+        $this->product->expects($this->any())->method('getSku')->willReturn($sku);
         $this->assertSame($this->product, $this->model->get($sku, false, $storeId));
     }
 
@@ -498,13 +525,13 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $editMode = false;
         $storeId = 0;
 
+        $this->resourceModel->expects($this->exactly(2))->method('getIdBySku')
+            ->with($sku)->willReturn($id);
         $this->productFactory->expects($this->exactly(2))->method('create')
             ->will($this->returnValue($this->product));
         $this->product->expects($this->exactly(2))->method('load');
-        $this->product->expects($this->exactly(2))->method('getId')->willReturn($sku);
-        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')
-            ->with($sku)->willReturn($id);
-        $this->product->expects($this->exactly(2))->method('getSku')->willReturn($sku);
+        $this->product->expects($this->any())->method('getId')->willReturn($id);
+        $this->product->expects($this->any())->method('getSku')->willReturn($sku);
 
         $this->assertEquals($this->product, $this->model->get($sku, $editMode, $storeId));
         //second invocation should just return from cache
@@ -550,45 +577,47 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveExisting()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
+        $id = 100;
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn($id);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')->with($this->product)->willReturn(true);
-        $this->extensibleDataObjectConverterMock
+        $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+            ->willReturn($this->productData);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
+        $this->product->expects($this->at(0))->method('getId')->willReturn(null);
+        $this->product->expects($this->any())->method('getId')->willReturn($id);
 
         $this->assertEquals($this->product, $this->model->save($this->product));
     }
 
     public function testSaveNew()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue(null));
-        $this->resourceModelMock->expects($this->at(3))->method('getIdBySku')->will($this->returnValue(100));
+        $id = 100;
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->at(0))->method('getIdBySku')->willReturn(null);
+        $this->resourceModel->expects($this->at(3))->method('getIdBySku')->willReturn($id);
+        $this->product->expects($this->at(0))->method('getId')->willReturn(null);
+        $this->product->expects($this->any())->method('getId')->willReturn($id);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')->with($this->product)->willReturn(true);
-        $this->extensibleDataObjectConverterMock
+        $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->method('getWebsiteIds')
-            ->willReturn([]);
-        $this->product->method('getSku')
-            ->willReturn('simple');
+            ->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('simple');
 
         $this->assertEquals($this->product, $this->model->save($this->product));
     }
@@ -599,26 +628,23 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveUnableToSaveException()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->exactly(1))
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->exactly(1))
             ->method('getIdBySku')
             ->willReturn(null);
-        $this->productFactory->expects($this->exactly(2))
+        $this->productFactory->expects($this->exactly(1))
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')->with($this->product)
+        $this->resourceModel->expects($this->once())->method('save')->with($this->product)
             ->willThrowException(new \Exception());
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->method('getWebsiteIds')
-            ->willReturn([]);
-        $this->product->method('getSku')
-            ->willReturn('simple');
+            ->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('simple');
 
         $this->model->save($this->product);
     }
@@ -629,27 +655,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveException()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->exactly(1))
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->exactly(1))
             ->method('getIdBySku')
             ->willReturn(null);
-        $this->productFactory->expects($this->exactly(2))
+        $this->productFactory->expects($this->exactly(1))
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')->with($this->product)
+        $this->resourceModel->expects($this->once())->method('save')->with($this->product)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(null);
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->method('getWebsiteIds')
-            ->willReturn([]);
-        $this->product->method('getSku')
-            ->willReturn('simple');
+            ->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('simple');
 
         $this->model->save($this->product);
     }
@@ -660,23 +683,26 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveInvalidProductException()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productFactory->expects($this->exactly(2))
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel
+            ->expects($this->exactly(1))
+            ->method('getIdBySku')
+            ->willReturn(null);
+        $this->productFactory->expects($this->exactly(1))
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel
+            ->expects($this->once())
+            ->method('validate')
+            ->with($this->product)
             ->willReturn(['error1', 'error2']);
         $this->product->expects($this->once())->method('getId')->willReturn(null);
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->method('getWebsiteIds')
-            ->willReturn([]);
-        $this->product->method('getSku')
-            ->willReturn('simple');
+            ->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('simple');
 
         $this->model->save($this->product);
     }
@@ -687,26 +713,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveThrowsTemporaryStateExceptionIfDatabaseConnectionErrorOccurred()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())
             ->method('initialize');
-        $this->resourceModelMock->expects($this->once())
+        $this->resourceModel->expects($this->once())
             ->method('validate')
             ->with($this->product)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())
+        $this->resourceModel->expects($this->once())
             ->method('save')
             ->with($this->product)
             ->willThrowException(new ConnectionException('Connection lost'));
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->product->method('getWebsiteIds')
-            ->willReturn([]);
+            ->willReturn($this->productData);
         $this->product->method('getSku')
             ->willReturn('simple');
 
@@ -717,7 +741,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(42);
-        $this->resourceModelMock->expects($this->once())->method('delete')->with($this->product)
+        $this->resourceModel->expects($this->once())->method('delete')->with($this->product)
             ->willReturn(true);
         $this->assertTrue($this->model->delete($this->product));
     }
@@ -730,7 +754,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(42);
-        $this->resourceModelMock->expects($this->once())->method('delete')->with($this->product)
+        $this->resourceModel->expects($this->once())->method('delete')->with($this->product)
             ->willThrowException(new \Exception());
         $this->model->delete($this->product);
     }
@@ -740,10 +764,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $sku = 'product-42';
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
-        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
+        $this->resourceModel->expects($this->once())->method('getIdBySku')->with($sku)
             ->will($this->returnValue('42'));
         $this->product->expects($this->once())->method('load')->with('42');
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
+        $this->product->expects($this->atLeastOnce())->method('getId')->willReturn(42);
         $this->assertTrue($this->model->deleteById($sku));
     }
 
@@ -752,7 +777,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
 
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $this->product->method('getSku')
             ->willReturn('simple');
@@ -762,7 +787,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ['status', 'catalog_product/status', 'entity_id', null, 'inner'],
             ['visibility', 'catalog_product/visibility', 'entity_id', null, 'inner']
         );
-        $this->collectionProcessorMock->expects($this->once())
+        $this->collectionProcessor->expects($this->once())
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $collectionMock->expects($this->once())->method('load');
@@ -838,33 +863,42 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param array $existingOptions
      * @param array $expectedData
      * @dataProvider saveExistingWithOptionsDataProvider
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveExistingWithOptions(array $newOptions, array $existingOptions, array $expectedData)
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
+        $id = 100;
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->any())->method('getIdBySku')->will($this->returnValue($id));
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->willReturn($this->initializedProduct);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel
+            ->expects($this->once())->method('validate')
+            ->with($this->initializedProduct)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')
-            ->with($this->initializedProductMock)->willReturn(true);
+        $this->resourceModel
+            ->expects($this->once())->method('save')
+            ->with($this->initializedProduct)
+            ->willReturn(true);
         //option data
         $this->productData['options'] = $newOptions;
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
+            ->willReturn($this->productData);
 
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-        $this->initializedProductMock->expects($this->atLeastOnce())
-            ->method('getSku')->willReturn($this->productData['sku']);
+        $this->initializedProduct
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn($this->productData['sku']);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
+        $this->initializedProduct->expects($this->at(0))->method('getId')->willReturn(null);
+        $this->initializedProduct->expects($this->any())->method('getId')->willReturn($id);
 
-        $this->assertEquals($this->initializedProductMock, $this->model->save($this->product));
+        $this->assertEquals($this->initializedProduct, $this->model->save($this->product));
     }
 
     /**
@@ -1009,32 +1043,40 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param array $existingLinks
      * @param array $expectedData
      * @dataProvider saveWithLinksDataProvider
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      */
     public function testSaveWithLinks(array $newLinks, array $existingLinks, array $expectedData)
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
-        $this->productFactory->expects($this->any())
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
+        $this->productFactory
+            ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->will($this->returnValue($this->initializedProduct));
+        $this->initializedProduct->method('getId')->willReturn(100);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel
+            ->expects($this->once())->method('validate')
+            ->with($this->initializedProduct)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')
-            ->with($this->initializedProductMock)->willReturn(true);
+        $this->resourceModel
+            ->expects($this->once())->method('save')
+            ->with($this->initializedProduct)
+            ->willReturn(true);
 
-        $this->initializedProductMock->setData("product_links", $existingLinks);
+        $this->initializedProduct->setData("product_links", $existingLinks);
 
         if (!empty($newLinks)) {
             $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
-            $this->linkTypeProviderMock->expects($this->once())
+            $this->linkTypeProvider
+                ->expects($this->once())
                 ->method('getLinkTypes')
                 ->willReturn($linkTypes);
 
-            $this->initializedProductMock->setData("ignore_links_flag", false);
-            $this->resourceModelMock
+            $this->initializedProduct->setData("ignore_links_flag", false);
+            $this->resourceModel
                 ->expects($this->any())->method('getProductsIdsBySkus')
                 ->willReturn([$newLinks['linked_product_sku'] => $newLinks['linked_product_sku']]);
 
@@ -1051,32 +1093,34 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
             $this->productData['product_links'] = [$inputLink];
 
-            $this->initializedProductMock->expects($this->any())
+            $this->initializedProduct
+                ->expects($this->any())
                 ->method('getProductLinks')
                 ->willReturn([$inputLink]);
         } else {
-            $this->resourceModelMock
+            $this->resourceModel
                 ->expects($this->any())->method('getProductsIdsBySkus')
                 ->willReturn([]);
 
             $this->productData['product_links'] = [];
 
-            $this->initializedProductMock->setData('ignore_links_flag', true);
-            $this->initializedProductMock->expects($this->never())
+            $this->initializedProduct->setData('ignore_links_flag', true);
+            $this->initializedProduct
+                ->expects($this->never())
                 ->method('getProductLinks')
                 ->willReturn([]);
         }
 
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->at(0))
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
+            ->willReturn($this->productData);
 
         if (!empty($newLinks)) {
-            $this->extensibleDataObjectConverterMock
+            $this->extensibleDataObjectConverter
                 ->expects($this->at(1))
                 ->method('toNestedArray')
-                ->will($this->returnValue($newLinks));
+                ->willReturn($newLinks);
         }
 
         $outputLinks = [];
@@ -1095,23 +1139,29 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 $outputLinks[] = $outputLink;
             }
         }
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         if (!empty($outputLinks)) {
-            $this->initializedProductMock->expects($this->once())
+            $this->initializedProduct
+                ->expects($this->once())
                 ->method('setProductLinks')
                 ->with($outputLinks);
         } else {
-            $this->initializedProductMock->expects($this->never())
+            $this->initializedProduct
+                ->expects($this->never())
                 ->method('setProductLinks');
         }
-        $this->initializedProductMock->expects($this->atLeastOnce())
-            ->method('getSku')->willReturn($this->productData['sku']);
+        $this->initializedProduct
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn($this->productData['sku']);
 
-        $results = $this->model->save($this->initializedProductMock);
-        $this->assertEquals($this->initializedProductMock, $results);
+        $results = $this->model->save($this->initializedProduct);
+        $this->assertEquals($this->initializedProduct, $results);
     }
 
+    /**
+     * @return mixed
+     */
     public function saveWithLinksDataProvider()
     {
         // Scenario 1
@@ -1183,20 +1233,21 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setupProductMocksForSave()
     {
-        $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
-        $this->productFactory->expects($this->any())
+        $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
+        $this->productFactory
+            ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->willReturn($this->initializedProduct);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->initializedProduct)
             ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')
-            ->with($this->initializedProductMock)->willReturn(true);
+        $this->resourceModel->expects($this->once())->method('save')
+            ->with($this->initializedProduct)->willReturn(true);
     }
 
     public function testSaveExistingWithNewMediaGalleryEntries()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $newEntriesData = [
             'images' => [
                     [
@@ -1248,22 +1299,30 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'media_type' => 'media_type',
             ]
         ];
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
+            ->willReturn($this->productData);
 
-        $this->initializedProductMock->setData('media_gallery', $newEntriesData);
-        $this->mediaGalleryProcessor->expects($this->once())->method('processMediaGallery')
-            ->with($this->initializedProductMock, $expectedEntriesData);
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-        $this->initializedProductMock->expects($this->atLeastOnce())
-            ->method('getSku')->willReturn($this->productData['sku']);
+        $this->initializedProduct->setData('media_gallery', $newEntriesData);
+        $this->mediaGalleryProcessor
+            ->expects($this->once())
+            ->method('processMediaGallery')
+            ->with($this->initializedProduct, $expectedEntriesData);
+        $this->initializedProduct
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn($this->productData['sku']);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
+        $this->initializedProduct->expects($this->at(0))->method('getId')->willReturn(null);
+        $this->initializedProduct->expects($this->any())->method('getId')->willReturn(100);
 
         $this->model->save($this->product);
     }
 
+    /**
+     * @return array
+     */
     public function websitesProvider()
     {
         return [
@@ -1274,40 +1333,43 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveWithDifferentWebsites()
     {
         $storeMock = $this->createMock(StoreInterface::class);
-        $this->resourceModelMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue(null));
-        $this->resourceModelMock->expects($this->at(3))->method('getIdBySku')->will($this->returnValue(100));
-        $this->productFactory->expects($this->any())
+        $this->resourceModel->expects($this->at(0))->method('getIdBySku')->willReturn(null);
+        $this->resourceModel->expects($this->at(3))->method('getIdBySku')->willReturn(100);
+        $this->productFactory
+            ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
-        $this->initializationHelperMock->expects($this->never())->method('initialize');
-        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->product)
-            ->willReturn(true);
-        $this->resourceModelMock->expects($this->once())->method('save')->with($this->product)->willReturn(true);
-        $this->extensibleDataObjectConverterMock
+            ->willReturn($this->product);
+        $this->initializationHelper->expects($this->never())->method('initialize');
+        $this->resourceModel->expects($this->once())->method('validate')->with($this->product)->willReturn(true);
+        $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($this->productData));
-        $this->storeManagerMock->expects($this->any())
+            ->willReturn($this->productData);
+        $this->storeManager
+            ->expects($this->any())
             ->method('getStore')
             ->willReturn($storeMock);
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManager
+            ->expects($this->once())
             ->method('getWebsites')
             ->willReturn([
                 1 => ['first'],
                 2 => ['second'],
                 3 => ['third']
             ]);
-        $this->product->method('getWebsiteIds')->willReturn([1,2,3]);
         $this->product->method('setWebsiteIds')->willReturn([2,3]);
         $this->product->method('getSku')
             ->willReturn('simple');
+        $this->product->expects($this->at(0))->method('getId')->willReturn(null);
+        $this->product->expects($this->any())->method('getId')->willReturn(100);
 
         $this->assertEquals($this->product, $this->model->save($this->product));
     }
 
     public function testSaveExistingWithMediaGalleryEntries()
     {
-        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
+        $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         //update one entry, delete one entry
         $newEntries = [
             [
@@ -1338,21 +1400,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->setupProductMocksForSave();
         //media gallery data
         $this->productData['media_gallery_entries'] = $newEntries;
-        $this->extensibleDataObjectConverterMock
+        $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
-        $this->initializedProductMock->setData('media_gallery', $existingMediaGallery);
+        $this->initializedProduct->setData('media_gallery', $existingMediaGallery);
 
-        $this->mediaGalleryProcessor->expects($this->once())
+        $this->mediaGalleryProcessor
+            ->expects($this->once())
             ->method('processMediaGallery')
-            ->with($this->initializedProductMock, $newEntries);
-        $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-        $this->initializedProductMock->expects($this->atLeastOnce())
-            ->method('getSku')->willReturn($this->productData['sku']);
+            ->with($this->initializedProduct, $newEntries);
+        $this->initializedProduct
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn($this->productData['sku']);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($this->productData['sku']);
         $this->product->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
+        $this->initializedProduct->expects($this->any())->method('getId')->willReturn(100);
         $this->model->save($this->product);
     }
 }

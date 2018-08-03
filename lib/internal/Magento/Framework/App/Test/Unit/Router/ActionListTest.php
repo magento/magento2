@@ -65,8 +65,7 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
             ->method('save');
         $this->readerMock->expects($this->once())
             ->method('getActionFiles')
-            ->willReturn('data')
-        ;
+            ->willReturn('data');
         $this->createActionListInstance();
     }
 
@@ -93,6 +92,9 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->actionList->get($module, $area, $namespace, $action));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $mockClassName = 'Mock_Action_Class';

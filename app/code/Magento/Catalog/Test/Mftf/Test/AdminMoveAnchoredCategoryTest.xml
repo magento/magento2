@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminMoveAnchoredCategoryTest">
+        <annotations>
+            <features value="Category Moving"/>
+            <title value="Move Anchored Category with Products"/>
+            <description value="You should be able to move a category via categories tree and made changes should be applied on frontend without forced cache cleaning"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-76273"/>
+            <group value="category"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategoryOne"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategoryTwo"/>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategoryWithParent">
+                <requiredEntity createDataKey="simpleSubCategoryOne"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="productOne">
+                <requiredEntity createDataKey="simpleSubCategoryWithParent"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="productTwo">
+                <requiredEntity createDataKey="simpleSubCategoryOne"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutAdminUserAfterTest"/>
+            <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
+            <deleteData createDataKey="simpleSubCategoryTwo" stepKey="deleteSubcategoryTwo"/>
+        </after>
+        <!--Move category one to category two-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
+        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad1"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToSimpleSubCategoryTwo">
+            <argument name="childCategory" value="$$simpleSubCategoryOne.name$$"/>
+            <argument name="parentCategory" value="$$simpleSubCategoryTwo.name$$"/>
+        </actionGroup>
+        <!--Verify that navigation menu categories level is correct-->
+        <amOnPage url="/" stepKey="amOnStorefrontPage1"/>
+        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened1"/>
+        <seeElement selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryTwo.name$$)}}" stepKey="verifyThatTopCategoryIsSubCategoryTwo"/>
+        <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryTwo.name$$)}}" stepKey="mouseOverSubCategoryTwo"/>
+        <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryTwo"/>
+        <seeElement selector="{{StorefrontNavigationSection.subCategory($$simpleSubCategoryOne.name$$)}}" stepKey="verifyThatFirstLevelIsSubCategoryOne"/>
+        <moveMouseOver selector="{{StorefrontNavigationSection.subCategory($$simpleSubCategoryOne.name$$)}}" stepKey="mouseOverSubCategoryOne"/>
+        <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryOne"/>
+        <seeElement selector="{{StorefrontNavigationSection.subCategory($$simpleSubCategoryWithParent.name$$)}}" stepKey="verifyThatSecondLevelIsSubCategoryWithParent1"/>
+        <!--Open category one via navigation menu. Verify that subcategory is shown in layered navigation-->
+        <click selector="{{StorefrontNavigationSection.subCategory($$simpleSubCategoryOne.name$$)}}" stepKey="openSimpleSubCategoryOneByNavigationMenu1"/>
+        <actionGroup ref="CheckItemInLayeredNavigationActionGroup" stepKey="verifySimpleSubCategoryWithParentInLayeredNavigation1">
+            <argument name="itemType" value="Category"/>
+            <argument name="itemName" value="$$simpleSubCategoryWithParent.name$$"/>
+        </actionGroup>
+        <!--Open category one by direct URL. Verify simple product is visible on it. Open this product and perform assertions-->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openFirstProductFromSubCategoryOneCategoryPage1">
+            <argument name="category" value="$$simpleSubCategoryOne$$"/>
+            <argument name="product" value="$$productOne$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs1"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryTwo.name$$" stepKey="seeSubCategoryTwoInBreadcrumbsOnSubCategoryOne"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryOneInBreadcrumbsOnSubCategoryOne1"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeProductInBreadcrumbsOnSubCategoryOne1"/>
+        <!--Open category two by direct URL. Verify simple product is visible on it. Open this product and perform assertions-->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openFirstProductFromSubCategoryWithParentCategoryPage">
+            <argument name="category" value="$$simpleSubCategoryWithParent$$"/>
+            <argument name="product" value="$$productOne$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbsOnSubCategoryWithParent"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryTwo.name$$" stepKey="seeSubCategoryTwoInBreadcrumbsOnSubCategoryWithParent"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryOneInBreadcrumbsOnSubCategoryWithParent"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryWithParentInBreadcrumbsOnSubCategoryWithParent"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeProductInBreadcrumbsOnSubCategoryWithParent"/>
+        <!--Move category one to the same level as category two-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage2"/>
+        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad2"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToDefaultCategory">
+            <argument name="childCategory" value="$$simpleSubCategoryOne.name$$"/>
+            <argument name="parentCategory" value="Default Category"/>
+        </actionGroup>
+        <!--Verify that navigation menu categories level is correct-->
+        <amOnPage url="/" stepKey="amOnStorefrontPage2"/>
+        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened2"/>
+        <seeElement selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryOne.name$$)}}" stepKey="verifyThatSubCategoryOneIsTopCategory"/>
+        <seeElement selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryTwo.name$$)}}" stepKey="verifyThatSubCategoryTwoIsTopCategory"/>
+        <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryOne.name$$)}}" stepKey="mouseOverTopSubCategoryOne"/>
+        <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverTopSubCategoryOne"/>
+        <seeElement selector="{{StorefrontNavigationSection.subCategory($$simpleSubCategoryWithParent.name$$)}}" stepKey="verifyThatSecondLevelIsSubCategoryWithParent2"/>
+        <!--Open category one via navigation menu. Verify that subcategory is shown in layered navigation-->
+        <click selector="{{StorefrontNavigationSection.topCategory($$simpleSubCategoryOne.name$$)}}" stepKey="openSimpleSubCategoryOneByNavigationMenu2"/>
+        <actionGroup ref="CheckItemInLayeredNavigationActionGroup" stepKey="verifySimpleSubCategoryWithParentInLayeredNavigation2">
+            <argument name="itemType" value="Category"/>
+            <argument name="itemName" value="$$simpleSubCategoryWithParent.name$$"/>
+        </actionGroup>
+        <!--Open category one by direct URL. Verify simple product is visible on it. Open this product and perform assertions-->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openFirstProductFromSubCategoryOneCategoryPage2">
+            <argument name="category" value="$$simpleSubCategoryOne$$"/>
+            <argument name="product" value="$$productOne$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs2"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryOneInBreadcrumbsOnSubCategoryOne2"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeProductInBreadcrumbsOnSubCategoryOne2"/>
+        <!--Open category subcategory by direct URL. Verify simple product is visible on it. Open this product and perform assertions-->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openFirstProductFromSubCategoryOneCategoryPage3">
+            <argument name="category" value="$$simpleSubCategoryWithParent$$"/>
+            <argument name="product" value="$$productOne$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs3"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryOneInBreadcrumbsOnSubCategoryOne3"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$simpleSubCategoryOne.name$$" stepKey="seeSubCategoryWithParentInBreadcrumbsOnSubCategoryWithParent3"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeProductInBreadcrumbsOnSubCategoryOne3"/>
+    </test>
+</tests>

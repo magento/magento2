@@ -499,11 +499,11 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleResource = $this->_scheduleFactory->create()->getResource();
         $connection = $scheduleResource->getConnection();
         $count = 0;
-        foreach ($historyLifetimes as $time) {
+        foreach ($historyLifetimes as $status => $time) {
             $count += $connection->delete(
                 $scheduleResource->getMainTable(),
                 [
-                    'status = ?' => Schedule::STATUS_PENDING,
+                    'status = ?' => $status,
                     'job_code in (?)' => array_keys($jobs),
                     'created_at < ?' => $connection->formatDate($currentTime - $time)
                 ]

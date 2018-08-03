@@ -2022,7 +2022,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getMessages() as $message) {
             /* @var $error \Magento\Framework\Message\AbstractMessage */
             if ($message->getType() == \Magento\Framework\Message\MessageInterface::TYPE_ERROR) {
-                array_push($errors, $message);
+                $errors[] = $message;
             }
         }
         return $errors;
@@ -2342,6 +2342,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             foreach ($this->getAllItems() as $quoteItem) {
                 if ($quoteItem->compare($item)) {
                     $quoteItem->setQty($quoteItem->getQty() + $item->getQty());
+                    $this->itemProcessor->merge($item, $quoteItem);
                     $found = true;
                     break;
                 }

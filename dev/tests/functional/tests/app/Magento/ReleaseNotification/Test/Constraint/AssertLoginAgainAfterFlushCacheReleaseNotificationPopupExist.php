@@ -21,10 +21,15 @@ class AssertLoginAgainAfterFlushCacheReleaseNotificationPopupExist extends Abstr
      * @param Dashboard $dashboard
      * @param User $user
      * @param AdminCache $adminCache
+     * @param string $releaseContentVersion
      * @return void
      */
-    public function processAssert(Dashboard $dashboard, User $user, AdminCache $adminCache)
-    {
+    public function processAssert(
+        Dashboard $dashboard,
+        User $user,
+        AdminCache $adminCache,
+        string $releaseContentVersion
+    ) {
         // Flush cache
         $adminCache->open();
         $adminCache->getActionsBlock()->flushMagentoCache();
@@ -39,10 +44,18 @@ class AssertLoginAgainAfterFlushCacheReleaseNotificationPopupExist extends Abstr
             ['user' => $user]
         )->run();
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $dashboard->getReleaseNotificationBlock()->isVisible(),
-            "Release Notification Popup is absent on dashboard."
+        $value = version_compare(
+            $dashboard->getApplicationVersion()->getVersion(),
+            $releaseContentVersion,
+            '<='
         );
+
+        if (!$value) {
+            \PHPUnit_Framework_Assert::assertTrue(
+                $dashboard->getReleaseNotificationBlock()->isVisible(),
+                "Release Notification Popup is absent on dashboard."
+            );
+        }
     }
 
     /**
