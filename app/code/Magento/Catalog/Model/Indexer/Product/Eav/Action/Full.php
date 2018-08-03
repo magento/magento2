@@ -44,7 +44,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator $batchSizeCalculator
      * @param ActiveTableSwitcher|null $activeTableSwitcher
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
@@ -55,6 +55,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
         ActiveTableSwitcher $activeTableSwitcher = null,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
+        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        );
         parent::__construct($eavDecimalFactory, $eavSourceFactory, $scopeConfig);
         $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\EntityManager\MetadataPool::class
@@ -67,9 +70,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
         );
         $this->activeTableSwitcher = $activeTableSwitcher ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             ActiveTableSwitcher::class
-        );
-        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
         );
     }
 

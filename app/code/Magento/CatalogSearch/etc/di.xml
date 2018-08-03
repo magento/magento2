@@ -332,6 +332,6 @@
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config">
-        <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Model\Plugin\Config" />
+        <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Plugin\EnableEavIndexer" />
     </type>
 </config>

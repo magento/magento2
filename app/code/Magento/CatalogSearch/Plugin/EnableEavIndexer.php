@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Model\Plugin;
+namespace Magento\CatalogSearch\Plugin;
 
-class Config
+/**
+ * Enable Product EAV indexer by default for MySQL search engine
+ */
+class EnableEavIndexer
 {
     /**
      * Config search engine path
