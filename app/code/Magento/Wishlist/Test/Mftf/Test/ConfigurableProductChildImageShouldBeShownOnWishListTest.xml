@@ -35,6 +35,10 @@
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfPresent"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchProductGrid">
+            <argument name="keyword" value="_defaultProduct.name"/>
+        </actionGroup>
         <click selector="{{AdminProductGridSection.selectRowBasedOnName(_defaultProduct.name)}}" stepKey="selectProductToAddImage"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
         <actionGroup ref="addProductImage" stepKey="addImageForParentProduct">
