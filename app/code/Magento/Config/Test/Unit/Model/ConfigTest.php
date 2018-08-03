@@ -63,7 +63,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_settingsChecker;
+    private $_settingsChecker;
 
     protected function setUp()
     {
