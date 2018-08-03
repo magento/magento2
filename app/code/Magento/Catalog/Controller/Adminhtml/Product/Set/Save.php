@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
@@ -17,22 +22,49 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
-
+    
+    /*
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
+    private $attributeSetFactory;
+    
+    /*
+     * @var \Magento\Framework\Filter\FilterManager
+     */
+    private $filterManager;
+    
+    /*
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    private $jsonHelper;
+    
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory = null,
+        \Magento\Framework\Filter\FilterManager $filterManager = null,
+        \Magento\Framework\Json\Helper\Data $jsonHelper = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->attributeSetFactory =  $attributeSetFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Eav\Model\Entity\Attribute\SetFactory::class);
+        $this->filterManager =  $filterManager ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Filter\FilterManager::class);
+        $this->jsonHelper =  $jsonHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Json\Helper\Data::class);
     }
 
     /**
@@ -74,7 +106,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         try {
             if ($isNewSet) {
                 //filter html tags
-                $name = $filterManager->stripTags($this->getRequest()->getParam('attribute_set_name'));
+                $name = $this->filterManager->stripTags($this->getRequest()->getParam('attribute_set_name'));
                 $model->setAttributeSetName(trim($name));
             } else {
                 if ($attributeSetId) {
@@ -89,7 +121,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                     ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags
-                $data['attribute_set_name'] = $filterManager->stripTags($data['attribute_set_name']);
+                $data['attribute_set_name'] = $this->filterManager->stripTags($data['attribute_set_name']);
 
                 $model->organizeData($data);
             }
