@@ -335,8 +335,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testCanCreditMemoForZeroTotal()
     {
         $grandTotal = 0;
+        $totalPaid = 0;
         $totalRefunded = 0;
         $this->order->setGrandTotal($grandTotal);
+        $this->order->setTotalPaid($totalPaid);
         $this->assertFalse($this->order->canCreditmemoforZeroTotal($totalRefunded));
     }
 
