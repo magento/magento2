@@ -21,7 +21,6 @@
         <element name="fillOptionValueTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//label[text()='Title']/parent::span/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
         <element name="fillOptionValuePrice" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='Price']/parent::label/parent::div//div[@class='admin__control-addon']/input" parameterized="true"/>
         <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//label[text()='Price Type']/parent::span/parent::div//select" parameterized="true"/>
-        <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//span[text()='Price Type']/parent::label/parent::div//select" parameterized="true"/>
         <!-- Elements that make it easier to select the most recently added element -->
         <element name="lastOptionTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, '_required')]//input" />
         <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]" />
