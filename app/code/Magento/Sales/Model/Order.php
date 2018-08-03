@@ -614,11 +614,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if ($this->hasForcedCanCreditmemo()) {
             return $this->getForcedCanCreditmemo();
         }
+        $isOnHoldReview = $this->canUnhold() || $this->isPaymentReview();
+        $isOrderCanceled = $this->isCanceled() || $this->getState() === self::STATE_CLOSED;
 
-        if (($this->canUnhold() || $this->isPaymentReview()) ||
-            ($this->isCanceled() || $this->getState() === self::STATE_CLOSED)) {
+        if ($isOnHoldReview || $isOrderCanceled) {
             return false;
         }
+
         /**
          * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
          * for this we have additional diapason for 0
@@ -630,16 +632,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->canCreditmemoforZeroTotal($totalRefunded);
         }
 
-        if (abs($totalRefunded) < .0001)   {
-            return false;
-        }
+        $isRefundZero = abs($totalRefunded) < .0001;
 
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
-            return false;
-        }
+        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
 
-        if ($this->getActionFlag(self::ACTION_FLAG_EDIT) === false) {
+        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+
+        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
             return false;
         }
 
@@ -653,17 +653,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canCreditmemoforZeroTotal($totalRefunded)
     {
+        //check if total paid is less than grandtotal
+        $checkAmtTotalPaid = $this->getTotalPaid() <= $this->getGrandTotal();
+
         //case when amount is due for invoice
-        if ($this->canInvoice() && ($this->getTotalPaid() <= $this->getGrandTotal())) {
-            return false;
-        }
+        $dueAmountCondition = $this->canInvoice() && ($checkAmtTotalPaid);
+
         //case when paid amount is refunded and order has creditmemo created
-        if ($this->getTotalRefunded() == $this->getTotalPaid() && count($this->getCreditmemosCollection()) > 0) {
-            return false;
-        }
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $this->getTotalPaid() && count($this->getCreditmemosCollection()) > 0;
+
+        $state1 = $dueAmountCondition || $paidAmtIsRefunded;
+
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (!($this->getTotalPaid() <= $this->getGrandTotal()) &&
-            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+        $state2 = !($checkAmtTotalPaid) &&
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+
+        if ($state1 || $state2) {
             return false;
         }
 
