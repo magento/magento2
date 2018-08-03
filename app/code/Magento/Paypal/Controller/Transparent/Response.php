@@ -21,7 +21,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 
 /**
- * Class Response
+ *  @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
