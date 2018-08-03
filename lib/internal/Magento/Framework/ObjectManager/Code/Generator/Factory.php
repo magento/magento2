@@ -21,7 +21,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $properties = parent::_getClassProperties();
 
-        // protected $_instanceName = null;
         $properties[] = [
             'name' => '_instanceName',
             'visibility' => 'protected',
@@ -69,7 +68,6 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $construct = $this->_getDefaultConstructorDefinition();
 
-        // public function create(array $data = array())
         $create = [
             'name' => 'create',
             'parameters' => [['name' => 'data', 'type' => 'array', 'defaultValue' => []]],
