@@ -118,7 +118,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attribute = $this->getAttributeObject();
 
-        if ($collection->isEnabledFlat()) {
+        if ($attribute->getUsedInProductListing() && $collection->isEnabledFlat()) {
             if ($attribute->isEnabledInFlat()) {
                 $alias = array_keys($collection->getSelect()->getPart('from'))[0];
                 $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
