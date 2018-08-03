@@ -38,6 +38,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $configData = $this->config->getType(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
 
-        return isset($configData['allowed_selection_types']) ? $configData['allowed_selection_types'] : [];
+        return $configData['allowed_selection_types'] ?? [];
     }
 }

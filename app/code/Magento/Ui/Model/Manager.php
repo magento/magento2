@@ -224,12 +224,8 @@ class Manager implements ManagerInterface
     public function createRawComponentData($component, $evaluated = true)
     {
         $componentData = $this->componentConfigProvider->getComponentData($component);
-        $componentData[Converter::DATA_ATTRIBUTES_KEY] = isset($componentData[Converter::DATA_ATTRIBUTES_KEY])
-            ? $componentData[Converter::DATA_ATTRIBUTES_KEY]
-            : [];
-        $componentData[Converter::DATA_ARGUMENTS_KEY] = isset($componentData[Converter::DATA_ARGUMENTS_KEY])
-            ? $componentData[Converter::DATA_ARGUMENTS_KEY]
-            : [];
+        $componentData[Converter::DATA_ATTRIBUTES_KEY] = $componentData[Converter::DATA_ATTRIBUTES_KEY] ?? [];
+        $componentData[Converter::DATA_ARGUMENTS_KEY] = $componentData[Converter::DATA_ARGUMENTS_KEY] ?? [];
         if ($evaluated) {
             foreach ($componentData[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
                 $componentData[Converter::DATA_ARGUMENTS_KEY][$argumentName]
@@ -386,8 +382,6 @@ class Manager implements ManagerInterface
      */
     protected function createName(array $componentData, $key, $componentName)
     {
-        return isset($componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY])
-            ? $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY]
-            : sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
+        return $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY] ?? sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
     }
 }

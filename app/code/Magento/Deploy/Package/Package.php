@@ -209,7 +209,7 @@ class Package
      */
     public function getParam($name)
     {
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return $this->params[$name] ?? null;
     }
 
     /**
@@ -241,7 +241,7 @@ class Package
      */
     public function getFile($fileId)
     {
-        return isset($this->files[$fileId]) ? $this->files[$fileId] : false;
+        return $this->files[$fileId] ?? false;
     }
 
     /**

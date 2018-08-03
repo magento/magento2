@@ -281,9 +281,7 @@ class ConfigurableAttributesData extends DataSource
     protected function getAttributeOptionId($compositeKey)
     {
         list($attributeKey, $optionKey) = explode(':', $compositeKey);
-        return isset($this->attributesData[$attributeKey]['options'][$optionKey]['id'])
-            ? $this->attributesData[$attributeKey]['options'][$optionKey]['id']
-            : null;
+        return $this->attributesData[$attributeKey]['options'][$optionKey]['id'] ?? null;
     }
 
     /**

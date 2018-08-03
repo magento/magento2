@@ -369,6 +369,6 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
         }
         preg_match("~<h1 class=\"page-title\">#(.*)</h1>~", $response, $matches);
 
-        return isset($matches[1]) ? $matches[1] : null;
+        return $matches[1] ?? null;
     }
 }

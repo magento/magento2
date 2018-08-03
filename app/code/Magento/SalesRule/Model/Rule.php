@@ -592,7 +592,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getIsValidForAddress($address)
     {
         $addressId = $this->_getAddressId($address);
-        return isset($this->_validatedAddresses[$addressId]) ? $this->_validatedAddresses[$addressId] : false;
+        return $this->_validatedAddresses[$addressId] ?? false;
     }
 
     /**

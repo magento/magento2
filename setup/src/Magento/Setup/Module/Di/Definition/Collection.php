@@ -70,7 +70,7 @@ class Collection
      */
     public function getInstanceArguments($instanceName)
     {
-        return isset($this->definitions[$instanceName]) ? $this->definitions[$instanceName] : null;
+        return $this->definitions[$instanceName] ?? null;
     }
 
     /**

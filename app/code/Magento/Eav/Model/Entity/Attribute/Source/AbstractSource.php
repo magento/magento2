@@ -68,7 +68,7 @@ abstract class AbstractSource implements
         if (sizeof($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
-                    return isset($option['label']) ? $option['label'] : $option['value'];
+                    return $option['label'] ?? $option['value'];
                 }
             }
         }

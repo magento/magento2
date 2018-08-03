@@ -74,6 +74,6 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     protected function getAlt($row)
     {
         $altField = $this->getData('config/altField') ?: self::ALT_FIELD;
-        return isset($row[$altField]) ? $row[$altField] : null;
+        return $row[$altField] ?? null;
     }
 }

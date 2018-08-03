@@ -35,7 +35,7 @@ class StockRegistryStorage
      */
     public function getStock($scopeId)
     {
-        return isset($this->stocks[$scopeId]) ? $this->stocks[$scopeId] : null;
+        return $this->stocks[$scopeId] ?? null;
     }
 
     /**
@@ -68,7 +68,7 @@ class StockRegistryStorage
      */
     public function getStockItem($productId, $scopeId)
     {
-        return isset($this->stockItems[$productId][$scopeId]) ? $this->stockItems[$productId][$scopeId] : null;
+        return $this->stockItems[$productId][$scopeId] ?? null;
     }
 
     /**
@@ -103,7 +103,7 @@ class StockRegistryStorage
      */
     public function getStockStatus($productId, $scopeId)
     {
-        return isset($this->stockStatuses[$productId][$scopeId]) ? $this->stockStatuses[$productId][$scopeId] : null;
+        return $this->stockStatuses[$productId][$scopeId] ?? null;
     }
 
     /**

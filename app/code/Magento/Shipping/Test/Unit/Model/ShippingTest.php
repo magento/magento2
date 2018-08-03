@@ -46,7 +46,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             $configData = [
                 'max_package_weight' => 10,
             ];
-            return isset($configData[$key]) ? $configData[$key] : 0;
+            return $configData[$key] ?? 0;
         }));
         $this->stockRegistry = $this->createMock(\Magento\CatalogInventory\Model\StockRegistry::class);
         $this->stockItemData = $this->createMock(\Magento\CatalogInventory\Model\Stock\Item::class);

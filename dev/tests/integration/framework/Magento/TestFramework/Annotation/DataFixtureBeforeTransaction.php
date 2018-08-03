@@ -120,9 +120,7 @@ class DataFixtureBeforeTransaction
     protected function getDbIsolationState(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
-        return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])
-            ? $annotations[DbIsolation::MAGENTO_DB_ISOLATION]
-            : null;
+        return $annotations[DbIsolation::MAGENTO_DB_ISOLATION] ?? null;
     }
 
     /**
