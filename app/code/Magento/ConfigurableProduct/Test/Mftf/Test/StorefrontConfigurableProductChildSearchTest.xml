@@ -169,21 +169,21 @@
         <waitForPageLoad stepKey="waitForStorefront"/>
         <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="searchStorefront1"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch1"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct1"/>
 
         <!-- Quick search the storefront for the second attribute option -->
         <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="searchStorefront2"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch2"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct2"/>
 
         <!-- Quick search the storefront for the first product description -->
         <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.custom_attributes[short_description]$$'" stepKey="searchStorefront3"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct3"/>
 
         <!-- Quick search the storefront for the first product name -->
         <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.name$$'" stepKey="searchStorefront4"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch4"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct4"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct4"/>
     </test>
 </tests>
