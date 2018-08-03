@@ -53,6 +53,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject $currencyFactory */
         $currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->formatModel = new \Magento\Framework\Locale\Format(
@@ -87,7 +88,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
             ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
-            ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
+            ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 
