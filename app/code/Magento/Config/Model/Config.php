@@ -79,6 +79,7 @@ class Config extends \Magento\Framework\DataObject
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
+
     /**
      * @var SettingChecker|null
      */
