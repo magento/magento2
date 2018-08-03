@@ -29,7 +29,8 @@
         </actionGroup>
 
         <!-- Add downloadable links -->
-        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection" after="addProductVideo"/>
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToSection" after="addProductVideo"/>
+        <conditionalClick selector="{{AdminProductDownloadableSection.sectionHeader}}" dependentSelector="{{AdminProductDownloadableSection.isDownloadableProduct}}" visible="false" stepKey="openDownloadableSection" after="scrollToSection"/>
         <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkOptionIsDownloadable" after="openDownloadableSection"/>
         <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillLinkTitle" after="checkOptionIsDownloadable"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="fillLinkTitle"/>

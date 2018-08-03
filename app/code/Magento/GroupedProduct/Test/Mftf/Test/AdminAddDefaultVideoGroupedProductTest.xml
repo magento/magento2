@@ -37,10 +37,9 @@
         </actionGroup>
 
         <!-- Add two simple products to grouped product -->
-        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollTo" after="addProductVideo"/>
-        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection" after="scrollTo"/>
-        <click selector="body" stepKey="clickBody" after="openGroupedProductSection"/>
-        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup" after="clickBody"/>
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToSection" after="addProductVideo"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection" after="scrollToSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup" after="openGroupedProductSection"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForFilter" after="clickAddProductsToGroup"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1" after="waitForFilter">
             <argument name="product" value="$$simpleProduct1$$"/>

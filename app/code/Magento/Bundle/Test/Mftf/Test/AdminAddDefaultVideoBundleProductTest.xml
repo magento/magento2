@@ -29,15 +29,16 @@
 
         <!-- Create a bundle product -->
         <!-- Replacing steps in base AdminAddDefaultVideoSimpleProductTest -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage" after="waitForProductIndexPageLoad">
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillMainProductForm" after="goToCreateProductPage">
+        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillMainProductForm">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
         <!-- Add two bundle items -->
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="openBundleSection" after="addProductVideo"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" x="0" y="-100" stepKey="scrollToSection" after="addProductVideo"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="openBundleSection" after="scrollToSection"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption" after="openBundleSection"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleTitle" after="clickAddOption"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillBundleTitle" after="waitForBundleTitle"/>
