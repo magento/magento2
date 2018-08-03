@@ -47,11 +47,6 @@ class Redis implements \SessionHandlerInterface
         $this->config = $config;
         $this->logger = $logger;
         $this->filesystem = $filesystem;
-        try {
-            $this->connection[getmypid()] = new \Cm\RedisSession\Handler($this->config, $this->logger);
-        } catch (ConnectionFailedException $e) {
-            throw new SessionException(new Phrase($e->getMessage()));
-        }
     }
 
     /**
