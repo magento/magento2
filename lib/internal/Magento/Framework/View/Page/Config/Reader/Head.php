@@ -80,7 +80,7 @@ class Head implements Layout\ReaderInterface
         }
 
         ksort($orderedNodes);
-        foreach ($orderedNodes as $nodes ) {
+        foreach ($orderedNodes as $nodes) {
             /** @var \Magento\Framework\View\Layout\Element $node */
             foreach ($nodes as $node) {
                 switch ($node->getName()) {
