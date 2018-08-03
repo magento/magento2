@@ -56,6 +56,10 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(3, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[3]);
         $this->assertEquals('cache-backend-redis-port', $options[3]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[4]);
+        $this->assertEquals('cache-backend-redis-password', $options[4]->getName());
     }
 
     public function testCreateConfigCacheRedis()
@@ -70,7 +74,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
-                            'database' => ''
+                            'database' => '',
+                            'password' => ''
                         ]
                     ]
                 ]
@@ -92,7 +97,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
-                            'database' => '5'
+                            'database' => '5',
+                            'password' => ''
                         ]
                     ]
                 ]
