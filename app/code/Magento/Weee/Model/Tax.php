@@ -248,10 +248,20 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $round = true
     ) {
         $result = [];
-
-        $websiteId = $this->_storeManager->getWebsite($website)->getId();
+        $websiteId = null;
         /** @var \Magento\Store\Model\Store $store */
-        $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+        $store = null;
+        if (!$website) {
+            $store = $product->getStore();
+            if ($store) {
+                $websiteId = $store->getWebsiteId();
+            }
+        }
+        if (!$websiteId) {
+            $websiteObject = $this->_storeManager->getWebsite($website);
+            $websiteId = $websiteObject->getId();
+            $store = $websiteObject->getDefaultGroup()->getDefaultStore();
+        }
 
         $allWeee = $this->getWeeeTaxAttributeCodes($store);
         if (!$allWeee) {
