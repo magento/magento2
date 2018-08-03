@@ -1074,7 +1074,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
                     if ($match[1] == '?') {
                         return isset($match[3]) ? '?' : '';
                     } elseif ($match[1] == '&amp;' || $match[1] == '&') {
-                        return isset($match[3]) ? $match[3] : '';
+                        return $match[3] ?? '';
                     }
                 }
             },

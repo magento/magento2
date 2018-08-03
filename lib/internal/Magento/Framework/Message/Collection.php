@@ -142,7 +142,7 @@ class Collection
      */
     public function getItemsByType($type)
     {
-        return isset($this->messages[$type]) ? $this->messages[$type] : [];
+        return $this->messages[$type] ?? [];
     }
 
     /**
