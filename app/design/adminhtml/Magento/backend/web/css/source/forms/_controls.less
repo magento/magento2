@@ -100,11 +100,6 @@
     &::-ms-expand {
         display: none;
     }
-
-    .ie9 & {
-        background-image: none;
-        padding-right: @field-control__padding-horizontal;
-    }
 }
 
 //  ToDo UI: add month and date styles
@@ -335,36 +330,4 @@ option:empty {
 
 .admin__addon-prefix {
     .lib-vendor-prefix-order(0);
-}
-
-.ie9 {
-    .admin__control-addon {
-        &:after {
-            clear: both;
-            content: '';
-            display: block;
-            height: 0;
-            overflow: hidden;
-        }
-    }
-
-    .admin__addon {
-        min-width: 0;
-        overflow: hidden;
-        text-align: right;
-        white-space: nowrap;
-        width: auto;
-
-        [class*='admin__control-'] {
-            display: inline;
-        }
-
-        &-prefix {
-            float: left;
-        }
-
-        &-suffix {
-            float: right;
-        }
-    }
 }

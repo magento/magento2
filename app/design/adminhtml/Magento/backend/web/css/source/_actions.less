@@ -142,16 +142,6 @@
                 box-shadow: @button__hover__box-shadow;
             }
         }
-
-        &[disabled],
-        &.disabled {
-            .ie9 &,
-            .ie10 & {
-                background-color: @button-triangle__base__disabled__background-color;
-                opacity: 1;
-                text-shadow: none;
-            }
-        }
     }
 }
 
@@ -180,17 +170,6 @@
         &:focus {
             &:after {
                 border-left-color: @button__hover__background-color;
-            }
-        }
-
-        //  Disabled state for IE9, IE10
-        &.disabled,
-        &[disabled] {
-            &:after {
-                .ie9 &,
-                .ie10 & {
-                    border-color: transparent transparent transparent @button-triangle__base__disabled__background-color;
-                }
             }
         }
     }
@@ -236,17 +215,6 @@
         &:focus {
             &:after {
                 border-right-color: @button__hover__background-color;
-            }
-        }
-
-        //  Disabled state for IE9, IE10
-        &.disabled,
-        &[disabled] {
-            &:after {
-                .ie9 &,
-                .ie10 & {
-                    border-color: transparent @button-triangle__base__disabled__background-color transparent transparent;
-                }
             }
         }
     }
@@ -495,11 +463,6 @@ button {
         position: absolute;
         right: auto;
         top: auto;
-
-        .ie9 & {
-            margin-left: 99%;
-            margin-top: -3.5rem;
-        }
     }
 
     a {
