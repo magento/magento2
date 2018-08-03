@@ -77,7 +77,7 @@ class SwitchAction extends Action
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->messageManager = $context->getMessageManager();
-        $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcher::class);
+        $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcherInterface::class);
     }
 
     /**
