@@ -1,6 +1,6 @@
 {
     "name": "magento2",
-    "author": "Magento Commerce Inc.",
+    "author": "Magento an Adobe company.",
     "description": "Magento2 node modules dependencies for local development",
     "license": "(OSL-3.0 OR AFL-3.0)",
     "repository": {

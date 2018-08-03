@@ -75,7 +75,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Magento Commerce Inc.',
+                'company' => 'Magento an Adobe company.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
                 'street' => ['1234 Monterey Rd', 'Apt 13'],
@@ -130,7 +130,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Magento Commerce Inc.',
+                'company' => 'Magento an Adobe company.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
                 // omit street and city to fail validation
