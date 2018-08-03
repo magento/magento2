@@ -92,6 +92,7 @@
         <data key="city">London</data>
         <data key="country_id">GB</data>
         <data key="telephone">512-345-6789</data>
+        <data key="province">JS</data>
     </entity>
     <entity name="UK_Not_Default_Address" type="address">
         <data key="firstname">Jane</data>

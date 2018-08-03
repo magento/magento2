@@ -53,6 +53,18 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid by the Name field-->
+    <actionGroup name="filterProductGridByName2">
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{name}}" stepKey="fillProductNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+
     <!--Filter the product grid by new from date filter-->
     <actionGroup name="filterProductGridBySetNewFromDate">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
