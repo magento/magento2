@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurationsWithVisualSwatch">
+        <arguments>
+            <argument name="attribute" defaultValue="VisualSwatchAttribute"/>
+            <argument name="option1" defaultValue="VisualSwatchOption1"/>
+            <argument name="option2" defaultValue="VisualSwatchOption2"/>
+        </arguments>
+        <seeInCurrentUrl url="{{AdminCatalogProductPage.url}}" stepKey="seeOnProductEditPage"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanelSection.createNewAttribute}}" stepKey="waitForSlideOut"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
+        <waitForPageLoad stepKey="waitForIFrame"/>
+
+        <switchToIFrame selector="{{AdminNewAttributePanelSection.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <fillField selector="{{AdminNewAttributePanelSection.defaultLabel}}" userInput="{{attribute.default_label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AdminNewAttributePanelSection.inputType}}" userInput="{{attribute.input_type}}" stepKey="selectInputType"/>
+        <!--Add swatch options-->
+        <click selector="{{AdminNewAttributePanelSection.addVisualSwatchOption}}" stepKey="clickAddSwatch1"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.visualSwatchOptionAdminValue('0')}}" stepKey="waitForOption1Row"/>
+        <fillField selector="{{AdminNewAttributePanelSection.visualSwatchOptionAdminValue('0')}}" userInput="{{option1.admin_label}}" stepKey="fillAdminLabel1"/>
+        <fillField selector="{{AdminNewAttributePanelSection.visualSwatchOptionDefaultStoreValue('0')}}" userInput="{{option1.default_label}}" stepKey="fillDefaultStoreLabel1"/>
+        <click selector="{{AdminNewAttributePanelSection.addVisualSwatchOption}}" stepKey="clickAddSwatch2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.visualSwatchOptionAdminValue('1')}}" stepKey="waitForOption2Row"/>
+        <fillField selector="{{AdminNewAttributePanelSection.visualSwatchOptionAdminValue('1')}}" userInput="{{option2.admin_label}}" stepKey="fillAdminLabel2"/>
+        <fillField selector="{{AdminNewAttributePanelSection.visualSwatchOptionDefaultStoreValue('1')}}" userInput="{{option2.default_label}}" stepKey="fillDefaultStoreLabel2"/>
+
+        <!--Save attribute-->
+        <click selector="{{AdminNewAttributePanelSection.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
+        <waitForPageLoad stepKey="waitForSaveAttribute"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+
+        <!--Find attribute in grid and select-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}" userInput="{{attribute.default_label}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickNextStep1"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.selectAllByAttribute(attribute.default_label)}}" stepKey="clickSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickNextStep2"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanelSection.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="clickOnNextStep3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanelSection.next}}" stepKey="generateProducts"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <click selector="{{AdminChooseAffectedAttributeSetSection.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+</actionGroups>

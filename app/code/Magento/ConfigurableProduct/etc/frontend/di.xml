@@ -7,13 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
-        <arguments>
-            <argument name="itemMap" xsi:type="array">
-                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\CustomerData\ConfigurableItem</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
         <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
     </type>
