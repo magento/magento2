@@ -16,6 +16,7 @@
     font-size: 14px;
     color: #000;
     box-sizing: initial;
+    word-wrap: break-all;
 }
 
 .magento-placeholder-error {
