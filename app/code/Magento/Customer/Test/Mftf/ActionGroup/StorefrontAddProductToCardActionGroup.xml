@@ -31,12 +31,7 @@
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
-
     <actionGroup name="FindAndAddProductToCardActionGroup">
-        <arguments>
-            <argument name="product" defaultValue="SimpleProductOne"/>
-        </arguments>
-
         <click selector="{{StorefrontAddProductToCartSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
         <click selector="{{StorefrontAddProductToCartSection.showCard}}" stepKey="clickToOpenCard"/>
@@ -46,30 +41,20 @@
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
     </actionGroup>
 
-
-    <actionGroup name="AgainGoToProductCategory">
-
-        <amOnPage url="/admin" stepKey="GoToDashboard"/>
-
-        <click selector="{{GoToProductPageSection.catalog}}" stepKey="clickOnCatalog" />
-        <waitForPageLoad stepKey="waitForPage"/>
-        <click selector="{{GoToProductPageSection.product}}" stepKey="clickToSelectProductsItem" />
-        <waitForPageLoad stepKey="waitForPageProducts"/>
-    </actionGroup>
-
     <actionGroup name="DeleteCreatedProduct">
-
-        <click selector="{{DeleteCreatedProduct.createdProductID(SimpleProductOne.name)}}" stepKey="selectCreatedProduct"/>
+        <fillField stepKey="searchToKeyword" selector="{{DeleteCreatedProduct.searchToKeyword}}" userInput="{{SimpleProductOne.name}}"/>
+        <click stepKey="clickSearchButton" selector="{{DeleteCreatedProduct.searchButton}}"/>
+        <wait stepKey="waitForFiltering" time="2"/>
+        <click selector="{{DeleteCreatedProduct.createdProductID}}" stepKey="selectCreatedProduct"/>
         <wait stepKey="waitSelectCreatedProduct" time="2"/>
         <waitForElementVisible selector="{{DeleteCreatedProduct.actionSelectBox}}" stepKey="waitToSelectActionVisible" time="50"/>
         <click stepKey="clickToSelectAction"  selector="{{DeleteCreatedProduct.actionSelectBox}}"/>
-        <wait stepKey="waitClickToSelectAction" time="2"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.deleteButton}}" stepKey="waitForDeleteButtonAppeared" time="2"/>
         <click selector="{{DeleteCreatedProduct.deleteButton}}" stepKey="clickToDeleteProduct"/>
-        <wait stepKey="waitClickToDeleteProduct" time="2"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.okButton}}" stepKey="waitForOkButtonAppeared" time="2"/>
         <click selector="{{DeleteCreatedProduct.okButton}}" stepKey="clickToConfirm"/>
-        <wait stepKey="waitClickToConfirmButton" time="2"/>
+        <wait stepKey="waitForRecordIsDeleted" time="2"/>
         <see userInput="A total of 1 record(s) have been deleted." stepKey="productDeletedSuccessfully"/>
-
     </actionGroup>
 
 </actionGroups>

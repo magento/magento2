@@ -40,8 +40,8 @@
 
         <after>
             <!--Delete created product-->
-            <actionGroup ref="AgainGoToProductCategory" stepKey="againGoToProductCategory"/>
-            <wait stepKey="waitForProductPageLoaded" time="3"/>
+            <amOnPage url="/admin" stepKey="GoToDashboard"/>
+            <actionGroup ref="GoToProductPage" stepKey="againGoToProductPage"/>
             <actionGroup ref="DeleteCreatedProduct" stepKey="deleteCreatedProduct"/>
         </after>
 
