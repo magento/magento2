@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\Cart;
 
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * {@inheritdoc}
@@ -37,6 +39,11 @@ class CreateEmptyCart implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
+
+    /**
      * @var UserContextInterface
      */
     private $userContext;
@@ -46,17 +53,20 @@ class CreateEmptyCart implements ResolverInterface
      * @param GuestCartManagementInterface $guestCartManagement
      * @param ValueFactory $valueFactory
      * @param UserContextInterface $userContext
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         GuestCartManagementInterface $guestCartManagement,
         ValueFactory $valueFactory,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->cartManagement = $cartManagement;
         $this->guestCartManagement = $guestCartManagement;
         $this->valueFactory = $valueFactory;
         $this->userContext = $userContext;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -68,6 +78,10 @@ class CreateEmptyCart implements ResolverInterface
 
         if ($customerId) {
             $cartId = $this->cartManagement->createEmptyCartForCustomer($customerId);
+            /** @var QuoteIdMask $quoteIdMask */
+            $quoteIdMask = $this->quoteIdMaskFactory->create();
+            $quoteIdMask->setQuoteId($cartId)->save();
+            $cartId = $quoteIdMask->getMaskedId();
         } else {
             $cartId = $this->guestCartManagement->createEmptyCart();
         }
