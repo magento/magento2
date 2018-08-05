@@ -90,22 +90,29 @@ class Curl extends AbstractCurl implements StoreInterface
      */
     protected function getStoreId($name)
     {
-        //Set pager limit to 2000 in order to find created store view by name
-        $url = $_ENV['app_backend_url'] . 'admin/system_store/index/sort/store_title/dir/asc/limit/2000';
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'store_listing',
+            'filters' => [
+                'placeholder' => true,
+                'store_title' => $name,
+            ],
+            'paging' => [
+                'pageSize' => 1,
+            ]
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write($url, [], CurlInterface::GET);
+
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
+        $curl->close();
 
-        $expectedUrl = '/admin/system_store/editStore/store_id/';
-        $expectedUrl = preg_quote($expectedUrl);
-        $expectedUrl = str_replace('/', '\/', $expectedUrl);
-        preg_match('/' . $expectedUrl . '([0-9]*)\/(.)*>' . $name . '<\/a>/', $response, $matches);
+        preg_match('/store_listing_data_source.+items.+"store_id":"(\d+)"/', $response, $match);
 
-        if (empty($matches)) {
+        if (empty($match)) {
             throw new \Exception('Cannot find store id');
         }
 
-        return empty($matches[1]) ? null : $matches[1];
+        return intval($match[1]);
     }
 }

@@ -12,6 +12,7 @@ namespace Magento\Backend\Block\System\Store;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
+ * @deprecated
  */
 class Store extends \Magento\Backend\Block\Widget\Grid\Container
 {

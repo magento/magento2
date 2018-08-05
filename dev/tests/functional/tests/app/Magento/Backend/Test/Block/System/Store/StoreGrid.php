@@ -6,30 +6,23 @@
 
 namespace Magento\Backend\Test\Block\System\Store;
 
-use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Adminhtml Store View management grid.
  */
-class StoreGrid extends Grid
+class StoreGrid extends DataGrid
 {
     /**
      * Locator value for opening needed row.
      *
      * @var string
      */
-    protected $editLink = 'td[data-column="store_title"] > a';
-
-    /**
-     * Secondary part of row locator template for getRow() method with strict option.
-     *
-     * @var string
-     */
-    protected $rowTemplateStrict = '//*[text()[normalize-space()="%s"]]';
+    protected $editLink = '[href*="editStore"]';
 
     /**
      * Filters array mapping.
@@ -38,13 +31,13 @@ class StoreGrid extends Grid
      */
     protected $filters = [
         'store_title' => [
-            'selector' => '#storeGrid_filter_store_title',
+            'selector' => '[name="store_title"]',
         ],
         'group_title' => [
-            'selector' => '#storeGrid_filter_group_title',
+            'selector' => '[name="group_title"]',
         ],
         'website_title' => [
-            'selector' => '#storeGrid_filter_website_title',
+            'selector' => '[name="name"]',
         ],
     ];
 
@@ -53,7 +46,7 @@ class StoreGrid extends Grid
      *
      * @var string
      */
-    protected $titleFormat = '//td[a[.="%s"]]';
+    protected $titleFormat = '//a[.="%s"]';
 
     /**
      * Store name link selector.
