@@ -12,7 +12,7 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Add configurable product to cart"/>
-            <title value="Correct error message and redirect with invalid file option"/>
+            <title value="Configurable product with swatch option and file custom option"/>
             <description value="Configurable product with swatch option and file custom option. When adding to cart with an invalid filetype, the correct error message is shown, and options remain selected."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93101"/>
