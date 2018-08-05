@@ -25,6 +25,13 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     protected $_coreRegistry = null;
 
     /**
+     * Zend Validator Uri
+     *
+     * @var \Zend\Validator\Uri
+     */
+    protected $_zendValidatorUri;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
@@ -32,9 +39,12 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        \Zend\Validator\Uri $zendValidatorUri,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
+        $this->_zendValidatorUri = $zendValidatorUri;
+        $this->_zendValidatorUri->setAllowAbsolute(true)->setAllowRelative(false);
         parent::__construct($context, $data);
     }
 

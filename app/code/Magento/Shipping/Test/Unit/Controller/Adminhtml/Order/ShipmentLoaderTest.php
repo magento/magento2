@@ -100,8 +100,8 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             'shipment_id' => 1000065,
             'shipment' => ['items' => [1 => 1, 2 => 2]],
             'tracking' => [
-                ['number' => 'jds0395', 'title' => 'DHL', 'carrier_code' => 'dhl'],
-                ['number' => 'lsk984g', 'title' => 'UPS', 'carrier_code' => 'ups'],
+                ['number' => 'jds0395', 'title' => 'DHL', 'carrier_code' => 'dhl', 'track_url' => ''],
+                ['number' => 'lsk984g', 'title' => 'UPS', 'carrier_code' => 'ups', 'track_url' => ''],
             ],
         ];
 

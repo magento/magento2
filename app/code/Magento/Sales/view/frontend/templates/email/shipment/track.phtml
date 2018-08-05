@@ -19,11 +19,23 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
-        <tr>
-            <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
-            <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
-        </tr>
+    <?php
+    foreach ($_shipment->getAllTracks() as $_item): ?>
+    <tr>
+        <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
+        <td>
+            <?php if($_itemUrl = $_item->getValidTrackUrl()): ?>
+                <a href="<?= $block->escapeUrl($_itemUrl) ?>"
+                   target="_blank"
+                   rel="noreferrer nofollow noopener"
+                >
+                    <?= $block->escapeHtml($_item->getNumber()) ?>
+                </a>
+            <?php else: ?>
+                <?= $block->escapeHtml($_item->getNumber()) ?>
+            <?php endif;?>
+        </td>
+    </tr>
     <?php endforeach ?>
     </tbody>
 </table>

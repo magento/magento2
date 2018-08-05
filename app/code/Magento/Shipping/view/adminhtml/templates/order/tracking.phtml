@@ -26,6 +26,7 @@ require(['prototype'], function(){
             $('trackingC' + this.index).disabled = false;
             $('trackingT' + this.index).disabled = false;
             $('trackingN' + this.index).disabled = false;
+            $('trackingU' + this.index).disabled = false;
             this.bindCurrierOnchange();
         },
         deleteRow : function(event) {
@@ -89,6 +90,14 @@ require(['prototype'], function(){
                    value=""
                    disabled="disabled" />
         </td>
+        <td class="col-url">
+            <input class="input-text admin__control-text"
+                   type="text"
+                   name="tracking[<%- data.index %>][track_url]"
+                   id="trackingU<%- data.index %>"
+                   value=""
+                   disabled="disabled" />
+        </td>
         <td class="col-delete">
             <button
                 type="button"
@@ -107,12 +116,13 @@ require(['prototype'], function(){
             <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
             <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
             <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
+            <th class="col-title"><?= /* @escapeNotVerified */ __('URL') ?></th>
             <th class="col-delete"><?= /* @escapeNotVerified */ __('Action') ?></th>
         </tr>
         </thead>
         <tfoot>
         <tr>
-            <td colspan="4" class="col-actions-add"><?= $block->getChildHtml('add_button') ?></td>
+            <td colspan="5" class="col-actions-add"><?= $block->getChildHtml('add_button') ?></td>
         </tr>
         </tfoot>
         <tbody id="track_row_container">

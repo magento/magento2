@@ -169,6 +169,7 @@ class ShipmentLoader extends DataObject
             $trackCreation = $this->trackFactory->create();
             $trackCreation->setTrackNumber($track['number']);
             $trackCreation->setTitle($track['title']);
+            $trackCreation->setTrackUrl($track['track_url']);
             $trackCreation->setCarrierCode($track['carrier_code']);
             $trackingCreation[] = $trackCreation;
         }
