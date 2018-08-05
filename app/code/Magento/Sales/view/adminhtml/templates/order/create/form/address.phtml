@@ -15,10 +15,8 @@ if ($block->getIsShipping()):
     ?>
     <script>
     require(["Magento_Sales/order/create/form"], function(){
-
         order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
         order.setAddresses(<?= /* @escapeNotVerified */ $block->getAddressCollectionJson() ?>);
-
     });
     </script>
     <?php
@@ -29,6 +27,7 @@ else:
     <script>
         require(["Magento_Sales/order/create/form"], function(){
             order.billingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
+            order.setAddresses(<?= /* @escapeNotVerified */ $block->getAddressCollectionJson() ?>);
         });
     </script>
     <?php

@@ -5,25 +5,30 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 
+use Magento\Backend\Block\AbstractBlock;
+use Magento\Backend\Block\Context;
+use Magento\Directory\Helper\Data;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+
 /**
  * Customer address region field renderer
  */
-class Region extends \Magento\Backend\Block\AbstractBlock implements
-    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Region extends AbstractBlock implements RendererInterface
 {
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var Data
      */
     protected $_directoryHelper;
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param Context $context
+     * @param Data $directoryHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Directory\Helper\Data $directoryHelper,
+        Context $context,
+        Data $directoryHelper,
         array $data = []
     ) {
         $this->_directoryHelper = $directoryHelper;
@@ -33,24 +38,24 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * Output the region element and javasctipt that makes it dependent from country element
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
-        if ($country = $element->getForm()->getElement('country_id')) {
-            $countryId = $country->getValue();
-        } else {
+        $country = $element->getForm()->getElement('country_id');
+        if (!$country) {
             return $element->getDefaultHtml();
         }
 
+        $regionRequired = $this->isRegionRequiredForCountryId($country->getValue());
         $regionId = $element->getForm()->getElement('region_id')->getValue();
 
-        $html = '<div class="field field-state required admin__field _required">';
+        $html = '<div class="field field-state admin__field'. ($regionRequired ? ' required _required' : '') .'">';
         $element->setClass('input-text admin__control-text');
-        $element->setRequired(true);
+        $element->setRequired($regionRequired);
         $html .= $element->getLabelHtml() . '<div class="control admin__field-control">';
         $html .= $element->getElementHtml();
 
@@ -60,7 +65,8 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             $selectId .
             '" name="' .
             $selectName .
-            '" class="select required-entry admin__control-select" style="display:none">';
+            '" class="select admin__control-select'. ($regionRequired ? ' required-entry' : '') .'" 
+            style="display:none">';
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
 
@@ -84,5 +90,16 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
         $html .= '</div></div>' . "\n";
 
         return $html;
+    }
+
+    /**
+     * Whether the region is required for the current selected country
+     *
+     * @param string $countryId
+     * @return bool
+     */
+    private function isRegionRequiredForCountryId(string $countryId)
+    {
+        return in_array($countryId, $this->_directoryHelper->getCountriesWithStatesRequired());
     }
 }
