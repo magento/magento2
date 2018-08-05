@@ -97,7 +97,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      *
      * @return int
      */
-    public function getUploadImageMaxWidth()
+    public function getImageUploadMaxWidth()
     {
         return $this->imageConfig->getMaxWidth();
     }
@@ -107,7 +107,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      *
      * @return int
      */
-    public function getUploadImageMaxHeight()
+    public function getImageUploadMaxHeight()
     {
         return $this->imageConfig->getMaxHeight();
     }
