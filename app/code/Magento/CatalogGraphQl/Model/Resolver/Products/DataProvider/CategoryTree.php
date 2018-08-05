@@ -119,6 +119,7 @@ class CategoryTree
             $iterator->next();
             $nextCategory = $iterator->current();
             $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
+            $tree[$category->getId()]['model'] = $category;
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->processTree($iterator);
             }

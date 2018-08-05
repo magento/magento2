@@ -110,6 +110,7 @@ class Categories implements ResolverInterface
                     $categories[$item->getId()] = $this->customAttributesFlattener
                         ->flatten($categories[$item->getId()]);
                     $categories[$item->getId()]['product_count'] = $item->getProductCount();
+                    $categories[$item->getId()]['model'] = $item;
                 }
             }
 
