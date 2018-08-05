@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\Cart;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -44,28 +43,20 @@ class CreateEmptyCart implements ResolverInterface
     private $quoteIdMaskFactory;
 
     /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
      * @param CartManagementInterface $cartManagement
      * @param GuestCartManagementInterface $guestCartManagement
      * @param ValueFactory $valueFactory
-     * @param UserContextInterface $userContext
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         GuestCartManagementInterface $guestCartManagement,
         ValueFactory $valueFactory,
-        UserContextInterface $userContext,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->cartManagement = $cartManagement;
         $this->guestCartManagement = $guestCartManagement;
         $this->valueFactory = $valueFactory;
-        $this->userContext = $userContext;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
@@ -74,7 +65,7 @@ class CreateEmptyCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
-        $customerId = $this->userContext->getUserId();
+        $customerId = $context->getUserId();
 
         if ($customerId) {
             $cartId = $this->cartManagement->createEmptyCartForCustomer($customerId);
