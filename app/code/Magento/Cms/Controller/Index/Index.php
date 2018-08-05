@@ -21,7 +21,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var ForwardFactory
      */
-    private $resultForwardFactory;
+    protected $resultForwardFactory;
 
     /**
      * @var ScopeConfigInterface
