@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Indexer\Dimension;
+namespace Magento\Framework\Indexer;
 
 /**
  * @api
- * Run indexer by specific dimension
+ * Run indexer by dimensions
  */
 interface DimensionalIndexerInterface
 {
@@ -17,9 +17,9 @@ interface DimensionalIndexerInterface
      * Execute indexer by specified dimension.
      * Accept array of dimensions DTO that represent indexer dimension
      *
-     * @param \Magento\Framework\Indexer\Dimension[] $dimension
-     * @param \Traversable|null $entityIds
+     * @param \Magento\Framework\Indexer\Dimension[] $dimensions
+     * @param \Traversable $entityIds
      * @return void
      */
-    public function executeByDimension(array $dimension, \Traversable $entityIds = null);
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds);
 }
