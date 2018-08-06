@@ -83,7 +83,6 @@
         <amOnPage url="$$secondProduct.name$$.html" stepKey="navigateToProductPageOnSecondStore"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$secondProduct.name$$" stepKey="assertSecondProductNameTitle"/>
         <click stepKey="addSecondProductToWishlist" selector="{{StorefrontProductPageSection.AddToWishlist}}"/>
-        <click stepKey="addSecondProductToWishlist" selector="{{StorefrontProductPageSection.addToWishlist}}"/>
         <see stepKey="seeProduct1InWishlistOnSecondStore" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
         <see stepKey="seeProduct2InWishlistOnSecondStore" userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
         <click stepKey="ClickSwitchStoreButtonOnSecondStore" selector="{{StorefrontFooterSection.SwitchStoreButton}}"/>
