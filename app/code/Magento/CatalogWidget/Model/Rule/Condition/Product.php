@@ -156,7 +156,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-
         switch ($attribute->getBackendType()) {
             case 'decimal':
             case 'datetime':

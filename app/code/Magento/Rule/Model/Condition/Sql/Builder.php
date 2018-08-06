@@ -157,6 +157,8 @@ class Builder
         $bindValue = $condition->getBindArgumentValue();
         $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
 
+        // values for multiselect attributes can be saved in comma separated format
+        // below is a solution for matching such conditions with selected values
         if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
             foreach ($bindValue as $item) {
                 $expression .= $this->_connection->quoteInto(
