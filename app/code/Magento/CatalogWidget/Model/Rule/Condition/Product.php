@@ -173,7 +173,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
                 $collection->getSelect()->join(
                     [$alias => $collection->getTable('catalog_product_entity_varchar')],
-                   // [$alias => $collection->getTable('catalog_product_entity_varchar')],
                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []
