@@ -244,6 +244,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
                                     'type' => 'float',
+                                    'store' => true,
                                 ],
                             ],
                         ],
