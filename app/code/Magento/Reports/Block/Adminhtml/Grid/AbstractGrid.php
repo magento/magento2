@@ -409,7 +409,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
