@@ -102,12 +102,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->productBuilder->build($this->getRequest())
                 );
                 $this->productTypeManager->processProduct($product);
-
                 if (isset($data['product'][$product->getIdFieldName()])) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save product'));
                 }
 
                 $originalSku = $product->getSku();
+                $canSaveCustomOptions = $product->getCanSaveCustomOptions();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
                 $this->getCategoryLinkManagement()->assignProductToCategories(
@@ -117,8 +117,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
-
-                $this->copyToStores($data, $productId);
+                $extendedData = $data;
+                $extendedData['can_save_custom_options'] = $canSaveCustomOptions;
+                $this->copyToStores($extendedData, $productId);
 
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
@@ -238,6 +239,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                                     ->setStoreId($copyFrom)
                                     ->load($productId)
                                     ->setStoreId($copyTo)
+                                    ->setCanSaveCustomOptions($data['can_save_custom_options'])
                                     ->setCopyFromView(true)
                                     ->save();
                             }
