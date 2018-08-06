@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface as Logger;
  * Quote shipping address write service object.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
+class ShippingAddressManagement implements \Magento\Quote\Api\ShippingAddressManagementInterface
 {
     /**
      * Quote repository.

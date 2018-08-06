@@ -376,6 +376,54 @@
         </data>
     </route>
 
+    <!-- Managing Cart Shipping address -->
+    <route url="/V1/carts/:cartId/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+
+    <!-- Managing Guest Cart Shipping address -->
+    <route url="/V1/guest-carts/:cartId/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\GuestShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\GuestShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Managing My Cart Shipping address -->
+    <route url="/V1/carts/mine/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Coupons -->
     <route url="/V1/carts/:cartId/coupons" method="GET">
         <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
