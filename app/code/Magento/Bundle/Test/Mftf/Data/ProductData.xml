@@ -23,6 +23,7 @@
         <data key="urlKey2" unique="suffix">bundleproduct2</data>
         <data key="default_quantity1">10</data>
         <data key="default_quantity2">20</data>
+        <data key="quantity">30</data>
         <data key="set">4</data>
         <data key="type">bundle</data>
         <data key="price">10</data>

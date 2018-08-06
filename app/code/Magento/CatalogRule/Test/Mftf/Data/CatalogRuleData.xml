@@ -33,7 +33,7 @@
             <item>1</item>
         </array>
         <data key="simple_action">by_fixed</data>
-        <data key="discount_amount">10</data>
+        <data key="discount_amount">12.3</data>
     </entity>
 
     <entity name="CatalogRuleToPercent" type="catalogRule">
@@ -61,6 +61,6 @@
             <item>1</item>
         </array>
         <data key="simple_action">to_fixed</data>
-        <data key="discount_amount">100</data>
+        <data key="discount_amount">110.7</data>
     </entity>
 </entities>
