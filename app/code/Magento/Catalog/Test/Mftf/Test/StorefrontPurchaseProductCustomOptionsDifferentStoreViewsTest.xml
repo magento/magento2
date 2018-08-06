@@ -67,19 +67,19 @@
         <!-- Open Product Grid, Filter product and open -->
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <!-- Update Product with Option Value DropDown 1-->
 
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="checkAddOption1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad7"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle('New Option')}}" userInput="Custom Options 1" stepKey="fillOptionTitle1"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkSelect('Custom Options 1')}}" stepKey="clickSelect1"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkDropDown('Custom Options 1')}}" stepKey="clickDropDown1"/>
@@ -105,12 +105,12 @@
 
         <!-- Open tab Customizable Options -->
 
-        <waitForPageLoad time="10" stepKey="waitForPageLoad2"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad4"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses3"/>
 
         <!-- Update Option Customizable Options and Option Value 1-->
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="uncheckUseDefaultOptionTitle"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle('Custom Options 1')}}" userInput="FR Custom Options 1" stepKey="fillOptionTitle2"/>
         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionValueTitleByIndex('0')}}" stepKey="uncheckUseDefaultOptionValueTitle1"/>
@@ -126,6 +126,7 @@
         <!-- Login Customer Storefront -->
 
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <fillField  userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
         <fillField  userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
         <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
@@ -133,6 +134,7 @@
         <!-- Go to Product Page -->
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct1Page"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeproductOptionDropDownOptionTitle1"/>
@@ -184,7 +186,7 @@
         <!-- Open Order -->
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
         <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
@@ -198,12 +200,14 @@
         <!-- Switch to FR Store View Storefront -->
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
         <click selector="{{StorefrontHeaderSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForPageLoad stepKey="waitForPageLoad10"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('FR Custom Options 1')}}" stepKey="seeProductFrOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option1')}}" stepKey="productFrOptionDropDownOptionTitle1"/>
@@ -253,13 +257,13 @@
         <!-- Open Product Grid, Filter product and open -->
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions1">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
 
         <!-- Switcher to Store FR-->
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
@@ -269,24 +273,25 @@
 
         <!-- Open tab Customizable Options -->
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4" />
 
         <!-- Update Option Customizable Options and Option Value 1-->
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad16"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="checkUseDefaultOptionTitle"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionValueTitleByIndex('0')}}" stepKey="checkUseDefaultOptionValueTitle1"/>
 
         <!-- Update Product with Option Value 1 DropDown 1-->
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad17"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionValueTitleByIndex('1')}}" stepKey="checkUseDefaultOptionValueTitle2"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton3"/>
 
         <!--Go to Product Page-->
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad18"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeProductOptionDropDownOptionTitle3"/>
