@@ -37,6 +37,9 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('getData')
             ->willReturn('elasticsearch');
+        $this->config->expects($this->never())
+            ->method('setData')
+            ->willReturnSelf();
 
         $this->model->beforeSave($this->config);
     }
