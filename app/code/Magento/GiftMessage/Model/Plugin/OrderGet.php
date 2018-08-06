@@ -11,16 +11,24 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class OrderGet
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     */
     protected $giftMessageOrderItemRepository;
 
-    /** @var \Magento\Sales\Api\Data\OrderExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
+     */
     protected $orderExtensionFactory;
 
-    /** @var \Magento\Sales\Api\Data\OrderItemExtensionFactory */
+    /**
+     * @var \Magento\Sales\Api\Data\OrderItemExtensionFactory
+     */
     protected $orderItemExtensionFactory;
 
     /**

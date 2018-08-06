@@ -16,7 +16,7 @@ class Matrix extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'system/currency/rate/matrix.phtml';
+    protected $_template = 'Magento_CurrencySymbol::system/currency/rate/matrix.phtml';
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory

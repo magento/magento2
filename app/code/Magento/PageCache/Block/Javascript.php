@@ -9,6 +9,7 @@ namespace Magento\PageCache\Block;
  * Class Form
  *
  * @api
+ * @since 100.0.2
  */
 class Javascript extends \Magento\Framework\View\Element\Template
 {

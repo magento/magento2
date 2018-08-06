@@ -66,7 +66,7 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled()) {
+        if ($this->isHttpsRedirect($request) || (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled())) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
@@ -98,7 +98,7 @@ class RequestPreprocessor
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getBaseUrlChecker()
     {
@@ -109,5 +109,21 @@ class RequestPreprocessor
         }
 
         return $this->baseUrlChecker;
+    }
+
+    /**
+     * Check is request should be redirected, if https enabled.
+     *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return bool
+     */
+    private function isHttpsRedirect(\Magento\Framework\App\RequestInterface $request)
+    {
+        $result = false;
+        if ($this->getBaseUrlChecker()->isFrontendSecure() && $request->isPost() && !$request->isSecure()) {
+            $result = true;
+        }
+
+        return $result;
     }
 }

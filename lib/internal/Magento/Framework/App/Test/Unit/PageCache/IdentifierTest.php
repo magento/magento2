@@ -12,7 +12,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class IdentifierTest extends \PHPUnit_Framework_TestCase
+class IdentifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test value for cache vary string
@@ -144,6 +144,9 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
         $this->model->getValue();
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

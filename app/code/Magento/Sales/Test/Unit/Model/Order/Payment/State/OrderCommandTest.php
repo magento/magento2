@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @see OrderCommand
  */
-class OrderCommandTest extends \PHPUnit_Framework_TestCase
+class OrderCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var float

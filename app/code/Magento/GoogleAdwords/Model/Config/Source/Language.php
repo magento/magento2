@@ -10,6 +10,7 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  * @api
+ * @since 100.0.2
  */
 class Language implements \Magento\Framework\Option\ArrayInterface
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
+class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Possible flags for assertion

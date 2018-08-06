@@ -7,7 +7,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\Http;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array Result of get_headers() function */
     public static $headers;
@@ -40,6 +40,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, (new Http())->isExists(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestIsExists()
     {
         return [['200 OK', true], ['404 Not Found', false]];
@@ -54,6 +57,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, (new Http())->stat(''));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestStat()
     {
         $headers1 = [

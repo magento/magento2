@@ -13,7 +13,7 @@ use Magento\Analytics\Model\SubscriptionStatusProvider;
 /**
  * Class ReSignUpTest
  */
-class ReSignUpTest extends \PHPUnit_Framework_TestCase
+class ReSignUpTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()
     {

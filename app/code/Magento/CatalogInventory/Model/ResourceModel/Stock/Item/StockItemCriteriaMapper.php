@@ -29,7 +29,7 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @var StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $storeManager;
 
@@ -99,12 +99,9 @@ class StockItemCriteriaMapper extends GenericMapper
     /**
      * @inheritdoc
      */
-    public function mapProductsFilter($products)
+    public function mapProductsFilter(...$products)
     {
         $productIds = [];
-        if (!is_array($products)) {
-            $products = [$products];
-        }
         foreach ($products as $product) {
             if ($product instanceof \Magento\Catalog\Model\Product) {
                 $productIds[] = $product->getId();
@@ -167,7 +164,7 @@ class StockItemCriteriaMapper extends GenericMapper
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

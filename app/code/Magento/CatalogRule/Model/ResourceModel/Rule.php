@@ -257,7 +257,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return array
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {
@@ -271,7 +271,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEntityManager()
     {

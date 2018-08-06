@@ -10,7 +10,7 @@ use Magento\Framework\Api\CriteriaInterface;
 /**
  * Class AbstractCriteriaTest
  */
-class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
+class AbstractCriteriaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Test\Unit\Criteria\Sample

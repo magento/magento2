@@ -6,7 +6,10 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
-class UploaderTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
@@ -39,9 +42,14 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Writer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryMock;
+
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryResolver;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject
@@ -72,7 +80,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Writer::class)
-            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
+            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'isReadable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,6 +88,12 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
+
+        $this->directoryResolver = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validatePath'])
+            ->getMock();
+
         $this->filesystem->expects($this->any())
                         ->method('getDirectoryWrite')
                         ->will($this->returnValue($this->directoryMock));
@@ -92,6 +106,8 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 $this->validator,
                 $this->filesystem,
                 $this->readFactory,
+                null,
+                $this->directoryResolver
             ])
             ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
             ->getMock();
@@ -127,10 +143,12 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
-            ->willReturn(['name' => $expectedFileName]);
+            ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
 
         $this->uploader->setDestDir($destDir);
-        $this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
+        $result = $this->uploader->move($fileUrl);
+        $this->assertEquals(['name' => $expectedFileName], $result);
+        $this->assertArrayNotHasKey('path', $result);
     }
 
     public function testMoveFileName()
@@ -157,8 +175,8 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
-        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
+        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverMock = $this->createPartialMock($expectedDriverPool, ['readAll', 'isExists']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverMock->expects($this->any())->method('readAll')->willReturn(null);
         $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
@@ -187,9 +205,13 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $uploaderMock->move($fileUrl);
+        $result = $uploaderMock->move($fileUrl);
+        $this->assertNull($result);
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDriverPoolDataProvider()
     {
         return [
@@ -208,6 +230,9 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDataProvider()
     {
         return [
@@ -221,6 +246,37 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 '$expectedHost' => '!:^&`;file',
                 '$expectedFileName' => 'httpsfile',
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider validatePathDataProvider
+     *
+     * @param bool $pathIsValid
+     */
+    public function testSetTmpDir($pathIsValid)
+    {
+        $path = 'path';
+        $absolutePath = 'absolute_path';
+        $this->directoryMock->expects($this->atLeastOnce())->method('isReadable')->with($path)->willReturn(true);
+        $this->directoryMock->expects($this->atLeastOnce())->method('getAbsolutePath')->with($path)
+            ->willReturn($absolutePath);
+        $this->directoryResolver->expects($this->atLeastOnce())->method('validatePath')->with($absolutePath, 'base')
+            ->willReturn($pathIsValid);
+
+        $this->assertEquals($pathIsValid, $this->uploader->setTmpDir($path));
+    }
+
+    /**
+     * Data provider for the testSetTmpDir()
+     *
+     * @return array
+     */
+    public function validatePathDataProvider()
+    {
+        return [
+            [true],
+            [false]
         ];
     }
 }

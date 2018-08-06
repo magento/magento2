@@ -10,7 +10,9 @@ namespace Magento\Cookie\Model\Config\Backend;
  */
 class Domain extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookieDomainValidator
+     */
     protected $configValidator;
 
     /**

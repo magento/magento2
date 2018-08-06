@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface
+ *
+ */
 interface FieldInterface
 {
     const TYPE_FLAT = 1;

@@ -10,7 +10,7 @@ use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedTest extends \PHPUnit_Framework_TestCase
+class AdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid
@@ -55,13 +55,13 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
-        $this->formFactory = $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false);
-        $this->yesNo = $this->getMock(\Magento\Config\Model\Config\Source\Yesno::class);
-        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->eavData = $this->getMock(\Magento\Eav\Helper\Data::class, [], [], '', false);
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->propertyLocker = $this->getMock(PropertyLocker::class, [], [], '', false);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->formFactory = $this->createMock(\Magento\Framework\Data\FormFactory::class);
+        $this->yesNo = $this->createMock(\Magento\Config\Model\Config\Source\Yesno::class);
+        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->eavData = $this->createMock(\Magento\Eav\Helper\Data::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->propertyLocker = $this->createMock(PropertyLocker::class);
 
         $this->block = $objectManager->getObject(
             \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced::class,
@@ -79,12 +79,15 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtml()
     {
-        $fieldSet = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
-        $form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
-        $attributeModel = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
-        $entityType = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
-        $formElement = $this->getMock(\Magento\Framework\Data\Form\Element\Text::class, ['setDisabled'], [], '', false);
-        $directoryReadInterface = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $fieldSet = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
+        $form = $this->createMock(\Magento\Framework\Data\Form::class);
+        $attributeModel = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getDefaultValue', 'setDisabled', 'getId', 'getEntityType', 'getIsUserDefined', 'getAttributeCode']
+        );
+        $entityType = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
+        $formElement = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Text::class, ['setDisabled']);
+        $directoryReadInterface = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
         $this->registry->expects($this->any())->method('registry')->with('entity_attribute')
             ->willReturn($attributeModel);

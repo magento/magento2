@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Order\Email\Sender;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class OrderSenderTest extends \PHPUnit_Framework_TestCase
+class OrderSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php

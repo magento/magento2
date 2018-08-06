@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Block;
 
-class OnepageTest extends \PHPUnit_Framework_TestCase
+class OnepageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Block\Onepage
@@ -39,27 +39,17 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
-        $this->formKeyMock = $this->getMock(\Magento\Framework\Data\Form\FormKey::class, [], [], '', false);
-        $this->configProviderMock = $this->getMock(
-            \Magento\Checkout\Model\CompositeConfigProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->formKeyMock = $this->createMock(\Magento\Framework\Data\Form\FormKey::class);
+        $this->configProviderMock = $this->createMock(\Magento\Checkout\Model\CompositeConfigProvider::class);
 
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
-        $this->layoutProcessorMock = $this->getMock(
-            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->layoutProcessorMock = $this->createMock(
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class
         );
 
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
@@ -74,7 +64,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrl()
     {
         $baseUrl = 'http://magento.com';
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
@@ -103,9 +93,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $processedLayout = ['layout' => ['processed' => true]];
         $jsonLayout = '{"layout":{"processed":true}}';
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue(json_encode($processedLayout))
-        );
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
@@ -114,9 +101,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     {
         $checkoutConfig = ['checkout', 'config'];
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue(json_encode($checkoutConfig))
-        );
 
         $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }

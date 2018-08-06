@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\System\Store;
 /**
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

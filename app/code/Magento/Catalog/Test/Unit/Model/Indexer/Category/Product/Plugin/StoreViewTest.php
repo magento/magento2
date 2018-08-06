@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Store;
 
-class StoreViewTest extends \PHPUnit_Framework_TestCase
+class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Store|\PHPUnit_Framework_MockObject_MockObject
@@ -34,6 +34,11 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $tableMaintainer;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
@@ -49,29 +54,32 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock(Group::class, [], [], '', false);
-        $this->indexerRegistryMock = $this->getMock(
-            IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->storeMock = $this->getMock(
+        $this->subject = $this->createMock(Group::class);
+        $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
+        $this->storeMock = $this->createPartialMock(
             Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
+            [
+                'isObjectNew',
+                'getId',
+                'dataHasChangedFor',
+                '__wakeup'
+            ]
+        );
+        $this->tableMaintainer = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer::class,
+            [
+                'createTablesForStore'
+            ]
         );
 
-        $this->model = new StoreView($this->indexerRegistryMock);
+        $this->model = new StoreView($this->indexerRegistryMock, $this->tableMaintainer);
     }
 
     public function testAroundSaveNewObject()
     {
         $this->mockIndexerMethods();
-        $this->storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->storeMock->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
+        $this->storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
         $this->model->beforeSave($this->subject, $this->storeMock);
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }

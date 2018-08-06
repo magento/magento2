@@ -11,7 +11,7 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
-class FileInfoTest extends \PHPUnit_Framework_TestCase
+class FileInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject

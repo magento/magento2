@@ -11,12 +11,11 @@ namespace Magento\Directory\Model;
 /**
  * Country model
  *
- * @method \Magento\Directory\Model\ResourceModel\Country _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Country getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Country extends \Magento\Framework\Model\AbstractModel
 {

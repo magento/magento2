@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
  * Interface ResultInterface
  * @package Magento\Payment\Gateway\Validator
  * @api
+ * @since 100.0.2
  */
 interface ResultInterface
 {

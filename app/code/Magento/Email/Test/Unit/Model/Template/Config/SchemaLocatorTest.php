@@ -5,7 +5,7 @@
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Config\SchemaLocator
@@ -19,13 +19,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleReader = $this->getMock(
-            \Magento\Framework\Module\Dir\Reader::class,
-            ['getModuleDir'],
-            [],
-            '',
-            false
-        );
+        $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $this->_moduleReader->expects(
             $this->once()
         )->method(

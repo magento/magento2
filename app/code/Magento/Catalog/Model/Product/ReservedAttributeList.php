@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Product;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ReservedAttributeList
 {

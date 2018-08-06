@@ -21,7 +21,7 @@ use Magento\Framework\Message\ManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPostTest extends \PHPUnit_Framework_TestCase
+class EditPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EditPost

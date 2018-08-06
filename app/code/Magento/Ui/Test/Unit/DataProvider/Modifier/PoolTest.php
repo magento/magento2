@@ -13,7 +13,7 @@ use Magento\Ui\DataProvider\Modifier\Pool;
 /**
  * Class PoolTest
  */
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

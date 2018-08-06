@@ -30,11 +30,7 @@ class Template implements \Zend_Filter_Interface
 
     /**#@-*/
 
-    /**
-     * Callbacks that will be applied after filtering
-     *
-     * @var array
-     */
+    /**#@-*/
     private $afterFilterCallbacks = [];
 
     /**
@@ -324,7 +320,7 @@ class Template implements \Zend_Filter_Interface
             } elseif (isset($stackVars[$i - 1]['variable'])
                     && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {
-                // If object calling methods or getting properties
+                // If data object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {
                     $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
                     $stackVars[$i]['variable'] = method_exists(
@@ -334,7 +330,7 @@ class Template implements \Zend_Filter_Interface
                         $stackVars[$i]['name']
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {
-                    // Calling of object method
+                    // Calling of data object method
                     if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
                             || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
@@ -344,6 +340,16 @@ class Template implements \Zend_Filter_Interface
                             $stackVars[$i]['args']
                         );
                     }
+                }
+                $last = $i;
+            } elseif (isset($stackVars[$i - 1]['variable']) && $stackVars[$i]['type'] == 'method') {
+                // Calling object methods
+                if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
+                    $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
+                    $stackVars[$i]['variable'] = call_user_func_array(
+                        [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
+                        $stackVars[$i]['args']
+                    );
                 }
                 $last = $i;
             }

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {

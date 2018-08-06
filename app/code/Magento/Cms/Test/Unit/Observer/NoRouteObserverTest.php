@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Observer;
 
-class NoRouteObserverTest extends \PHPUnit_Framework_TestCase
+class NoRouteObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Observer\NoRouteObserver

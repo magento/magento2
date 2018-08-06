@@ -8,7 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Index
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {

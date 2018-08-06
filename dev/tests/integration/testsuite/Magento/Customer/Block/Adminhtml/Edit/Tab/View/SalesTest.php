@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class SalesTest extends \PHPUnit_Framework_TestCase
+class SalesTest extends \PHPUnit\Framework\TestCase
 {
     const MAIN_WEBSITE = 1;
 

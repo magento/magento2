@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\ScopeInterface;
 
-class ScopeTypeNormalizerTest extends \PHPUnit_Framework_TestCase
+class ScopeTypeNormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeTypeNormalizer

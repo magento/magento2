@@ -7,7 +7,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\
 
 use \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\QtyProcessor;
 
-class QtyProcessorTest extends \PHPUnit_Framework_TestCase
+class QtyProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QtyProcessor

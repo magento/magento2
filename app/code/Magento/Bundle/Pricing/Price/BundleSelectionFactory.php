@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Bundle selection price factory
  * @api
+ * @since 100.0.2
  */
 class BundleSelectionFactory
 {

@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * Integration test for Magento\Bundle\Model\OptionList
  */
-class OptionListTest extends \PHPUnit_Framework_TestCase
+class OptionListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product
@@ -28,6 +28,7 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      */
     public function testGetItems()
     {

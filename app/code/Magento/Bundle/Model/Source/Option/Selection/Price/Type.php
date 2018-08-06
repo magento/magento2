@@ -11,6 +11,7 @@ use Magento\Bundle\Api\Data\LinkInterface;
  * Extended Attributes Source Model
  *
  * @api
+ * @since 100.0.2
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {

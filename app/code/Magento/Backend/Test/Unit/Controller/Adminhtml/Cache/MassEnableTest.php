@@ -20,7 +20,7 @@ use Magento\Framework\App\Cache\StateInterface as CacheState;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassEnableTest extends \PHPUnit_Framework_TestCase
+class MassEnableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MassEnable
@@ -155,7 +155,7 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['someCache']);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Specified cache type(s) don\'t exist: someCache')
             ->willReturnSelf();
 
@@ -175,7 +175,7 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'An error occurred while enabling cache.')
             ->willReturnSelf();
 
@@ -215,7 +215,7 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
             ->method('persist');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 cache type(s) enabled.')
             ->willReturnSelf();
 

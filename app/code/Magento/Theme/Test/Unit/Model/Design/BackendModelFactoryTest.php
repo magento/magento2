@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Design;
 
 // @codingStandardsIgnoreFile
 
-class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
+class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Model\Design\BackendModelFactory */
     protected $model;

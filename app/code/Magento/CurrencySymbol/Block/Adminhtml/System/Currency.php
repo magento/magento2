@@ -13,13 +13,14 @@ namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'system/currency/rates.phtml';
+    protected $_template = 'Magento_CurrencySymbol::system/currency/rates.phtml';
 
     /**
      * Prepare layout

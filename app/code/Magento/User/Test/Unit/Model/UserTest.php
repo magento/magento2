@@ -14,7 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\User */
     protected $model;
@@ -134,7 +134,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateHash'])
             ->getMockForAbstractClass();
 
-        $this->serializer = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $this->serializer = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -183,11 +183,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->setPassword($password);
         $this->model->setOrigData('password', $origPassword);
 
-        $this->model->setUsername($username);
+        $this->model->setUserName($username);
         $this->model->setOrigData('username', $origUsername);
 
-        $this->model->setFirstname($firstName);
-        $this->model->setLastname($lastName);
+        $this->model->setFirstName($firstName);
+        $this->model->setLastName($lastName);
 
         $this->configMock->expects($this->exactly(4))
             ->method('getValue')
@@ -255,8 +255,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $lastName = 'Bar';
 
         $this->model->setEmail($email);
-        $this->model->setFirstname($firstName);
-        $this->model->setLastname($lastName);
+        $this->model->setFirstName($firstName);
+        $this->model->setLastName($lastName);
 
         $this->configMock->expects($this->at(0))
             ->method('getValue')
@@ -350,7 +350,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->model->getPassword())
             ->willReturn(true);
         $this->model->setIsActive(false);
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
             'You did not sign in correctly or your account is temporarily disabled.'
         );
@@ -370,7 +370,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->model->setIsActive(true);
         $this->resourceMock->expects($this->once())->method('hasAssigned2Role')->willReturn(false);
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
             'You need more permissions to access this.'
         );
@@ -781,14 +781,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         if ($lockExpires) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\State\UserLockedException::class,
                 __('Your account is temporarily disabled.')
             );
         }
 
         if (!$verifyIdentityResult) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\AuthenticationException::class,
                 __('You have entered an invalid password for current user.')
             );

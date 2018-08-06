@@ -51,23 +51,26 @@ class AttributeLoader implements AttributeLoaderInterface
      * Retrieve configuration for all attributes
      *
      * @param AbstractEntity $resource
-     * @param DataObject|null $object
+     * @param DataObject|null $entity
      * @return AbstractEntity
      * @throws LocalizedException
      */
-    public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
+    public function loadAllAttributes(AbstractEntity $resource, DataObject $entity = null)
     {
-        $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $object);
+        $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $entity);
         $attributeCodes = array_keys($attributes);
         /**
          * Check and init default attributes
          */
         $defaultAttributesCodes = array_diff($resource->getDefaultAttributes(), $attributeCodes);
+
+        $resource->unsetAttributes();
+
         foreach ($defaultAttributesCodes as $attributeCode) {
-            $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
+            $resource->addAttributeByScope($this->_getDefaultAttribute($resource, $attributeCode), $entity);
         }
         foreach ($attributes as $attributeCode => $attribute) {
-            $resource->addAttribute($attribute);
+            $resource->addAttributeByScope($attribute, $entity);
         }
         return $resource;
     }

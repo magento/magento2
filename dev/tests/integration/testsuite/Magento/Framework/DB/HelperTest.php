@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Helper

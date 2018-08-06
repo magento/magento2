@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
+class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\Generator\InterfaceGenerator
@@ -75,7 +75,8 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {
-            $this->setExpectedException($expectedException, $expectedExceptionMessage);
+            $this->expectException($expectedException);
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
         $methodsData = array_merge_recursive($this->methodsData, $additionalMethodsData);
         $this->interfaceGenerator->setClassDocBlock($this->interfaceDocBlock)
@@ -113,6 +114,9 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
+    /**
+     * @return array
+     */
     public function generateDataProvider()
     {
         return [

@@ -10,6 +10,7 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {

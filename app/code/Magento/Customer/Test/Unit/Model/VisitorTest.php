@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class VisitorTest
  * @package Magento\Customer\Model
  */
-class VisitorTest extends \PHPUnit_Framework_TestCase
+class VisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Visitor
@@ -41,7 +41,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
@@ -77,14 +77,14 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testInitByRequest()
     {
-        $this->session->expects($this->once())->method('getSessionId')
-            ->will($this->returnValue('asdfhasdfjhkj2198sadf8sdf897'));
+        $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
+        $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
+        $this->session->expects($this->any())->method('getSessionId')
+            ->will($this->returnValue($newSessionId));
+        $this->session->expects($this->atLeastOnce())->method('getVisitorData')
+            ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
-        $this->assertEquals('asdfhasdfjhkj2198sadf8sdf897', $this->visitor->getSessionId());
-
-        $this->visitor->setData(['visitor_id' => 1]);
-        $this->visitor->initByRequest(null);
-        $this->assertNull($this->visitor->getSessionId());
+        $this->assertEquals($newSessionId, $this->visitor->getSessionId());
     }
 
     public function testSaveByRequest()

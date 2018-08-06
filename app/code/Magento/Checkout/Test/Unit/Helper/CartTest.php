@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Item;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -87,7 +87,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetRemoveUrl()
     {
         $quoteItemId = 1;
-        $quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue($quoteItemId));
         $currentUrl = 'http://www.example.com/';
         $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
@@ -107,7 +107,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuote()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->assertEquals($quoteMock, $this->helper->getQuote());
     }
@@ -138,9 +138,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $productEntityId = 1;
         $storeId = 1;
         $isRequestSecure = false;
-        $productMock = $this->getMock(
+        $productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
+            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']
+        );
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')
@@ -167,7 +168,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetIsVirtualQuote()
     {
         $isVirtual = true;
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
         $this->assertEquals($isVirtual, $this->helper->getIsVirtualQuote());
@@ -187,9 +188,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $productEntityId = 1;
         $storeId = 1;
         $isRequestSecure = false;
-        $productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']);
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')
@@ -227,7 +226,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
-        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
 
         $item->expects($this->once())
             ->method('getId')

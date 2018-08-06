@@ -14,6 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * This interface represents all manner of product buttons: add to cart, add to compare, etc...
  * The buttons describes by this interface should have interaction with backend
  * @api
+ * @since 101.1.0
  */
 interface ButtonInterface extends ExtensibleDataInterface
 {
@@ -21,6 +22,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * @param string $postData Post data should be serialized (JSON/serialized) string
      * Post data can be empty
      * @return void
+     * @since 101.1.0
      */
     public function setPostData($postData);
 
@@ -31,6 +33,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * to handle product action
      *
      * @return string
+     * @since 101.1.0
      */
     public function getPostData();
 
@@ -41,6 +44,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      *
      * @param string $url
      * @return void
+     * @since 101.1.0
      */
     public function setUrl($url);
 
@@ -48,6 +52,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * Retrieve url, needed to add product to cart
      *
      * @return string
+     * @since 101.1.0
      */
     public function getUrl();
 
@@ -57,6 +62,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      *
      * @param bool $requiredOptions
      * @return void
+     * @since 101.1.0
      */
     public function setRequiredOptions($requiredOptions);
 
@@ -64,6 +70,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * Retrieve flag whether a product has options or not
      *
      * @return bool
+     * @since 101.1.0
      */
     public function hasRequiredOptions();
 
@@ -71,6 +78,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface|null
+     * @since 101.1.0
      */
     public function getExtensionAttributes();
 
@@ -79,6 +87,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface $extensionAttributes
      * @return $this
+     * @since 101.1.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface $extensionAttributes

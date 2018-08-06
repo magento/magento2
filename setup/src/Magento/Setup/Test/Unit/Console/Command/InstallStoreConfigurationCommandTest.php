@@ -19,7 +19,7 @@ use Magento\Framework\Validator\Currency as CurrencyValidator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
+class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -68,21 +68,15 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlValidatorMock = $this->getMock(UrlValidator::class, [], [], '', false);
-        $this->localeValidatorMock = $this->getMock(LocaleValidator::class, [], [], '', false);
-        $this->timezoneValidatorMock = $this->getMock(TimezoneValidator::class, [], [], '', false);
-        $this->currencyValidatorMock = $this->getMock(CurrencyValidator::class, [], [], '', false);
+        $this->urlValidatorMock = $this->createMock(UrlValidator::class);
+        $this->localeValidatorMock = $this->createMock(LocaleValidator::class);
+        $this->timezoneValidatorMock = $this->createMock(TimezoneValidator::class);
+        $this->currencyValidatorMock = $this->createMock(CurrencyValidator::class);
 
-        $this->installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
-        $objectManagerProvider = $this->getMock(
-            \Magento\Setup\Model\ObjectManagerProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
             [],

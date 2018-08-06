@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class LicenseTest extends \PHPUnit_Framework_TestCase
+class LicenseTest extends \PHPUnit\Framework\TestCase
 {
     public function testLegacyComment()
     {

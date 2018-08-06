@@ -8,9 +8,10 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Class AbstractProduct
  * @api
- * @deprecated
+ * @deprecated 101.1.0
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
@@ -98,6 +99,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
 
     /**
      * @var ImageBuilder
+     * @since 101.1.0
      */
     protected $imageBuilder;
 
@@ -193,7 +195,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Gets minimal sales quantity
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return int|null
+     * @return float|null
      */
     public function getMinimalQty($product)
     {

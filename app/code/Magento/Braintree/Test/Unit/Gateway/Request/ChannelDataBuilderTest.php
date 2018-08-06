@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ChannelDataBuilderTest extends \PHPUnit_Framework_TestCase
+class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductMetadataInterface|MockObject

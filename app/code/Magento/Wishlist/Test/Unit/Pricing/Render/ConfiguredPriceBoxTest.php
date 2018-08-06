@@ -7,7 +7,7 @@ namespace Magento\Wishlist\Test\Unit\Pricing\Render;
 
 use Magento\Wishlist\Pricing\Render\ConfiguredPriceBox;
 
-class ConfiguredPriceBoxTest extends \PHPUnit_Framework_TestCase
+class ConfiguredPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject

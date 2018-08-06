@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogRule\Model\Rule\Condition\Product */
     protected $product;
@@ -33,10 +33,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
-        $this->productModel = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->config = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getAttribute']);
+        $this->productModel = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 '__wakeup',
                 'hasData',
                 'getData',
@@ -44,11 +42,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'getStoreId',
                 'getResource',
                 'addAttributeToSelect',
-            ],
-            [],
-            '',
-            false
-        );
+                'getAttributesByCode'
+            ]);
 
         $this->productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
             ->disableOriginalConstructor()
@@ -59,7 +54,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eavAttributeResource = $this->getMock(
+        $this->eavAttributeResource = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
@@ -69,11 +64,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'getFrontendLabel',
                 'isScopeGlobal',
                 'getBackendType',
-                'getFrontendInput'
-            ],
-            [],
-            '',
-            false
+                'getFrontendInput',
+                'getAttributesByCode'
+            ]
         );
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')

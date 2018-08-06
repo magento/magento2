@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Interface \Magento\Framework\App\DefaultPathInterface
+ *
+ */
 interface DefaultPathInterface
 {
     /**

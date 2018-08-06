@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_REQUEST_NAME = 'test_request_name';
 

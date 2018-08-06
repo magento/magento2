@@ -28,16 +28,12 @@ class Reader
     private $preProcessor;
 
     /**
-     * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
-     */
-    private $postProcessor;
-
-    /**
      * Reader constructor.
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
      * @param \Magento\Store\Model\Config\Processor\Fallback $fallback
      * @param \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor
      * @param \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -48,7 +44,6 @@ class Reader
         $this->source = $source;
         $this->fallback = $fallback;
         $this->preProcessor = $preProcessor;
-        $this->postProcessor = $postProcessor;
     }
 
     /**
@@ -60,11 +55,9 @@ class Reader
      */
     public function read()
     {
-        return $this->postProcessor->process(
-            $this->fallback->process(
-                $this->preProcessor->process(
-                    $this->source->get()
-                )
+        return $this->fallback->process(
+            $this->preProcessor->process(
+                $this->source->get()
             )
         );
     }

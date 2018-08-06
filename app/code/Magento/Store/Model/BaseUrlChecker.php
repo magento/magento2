@@ -47,9 +47,30 @@ class BaseUrlChecker
      */
     public function isEnabled()
     {
-        return (bool) $this->scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             'web/url/redirect_to_base',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Cheks whether frontend is completely secure or not.
+     *
+     * @return bool
+     */
+    public function isFrontendSecure()
+    {
+        $baseUrl = $this->scopeConfig->getValue(
+            'web/unsecure/base_url',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $baseUrlParts = explode('://', $baseUrl);
+        $baseUrlProtocol = array_shift($baseUrlParts);
+        $isSecure = (bool) $this->scopeConfig->getValue(
+            'web/secure/use_in_frontend',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        return $isSecure && $baseUrlProtocol == 'https';
     }
 }

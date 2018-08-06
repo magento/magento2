@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\ReportXml\Config\Converter;
 /**
  * A unit test for testing of the reports configuration converter (XML to PHP array).
  */
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\Config\Converter\Xml

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\FrontendStorageConfigurationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FrontendStorageConfigurationPoolTest extends \PHPUnit_Framework_TestCase
+class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool */
     protected $model;
@@ -24,8 +24,8 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->defaultStorageConfiguration = $this->getMock(FrontendStorageConfigurationInterface::class);
-        $productStorageConfiguration = $this->getMock(ProductInterface::class);
+        $this->defaultStorageConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
+        $productStorageConfiguration = $this->createMock(ProductInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\FrontendStorageConfigurationPool::class,

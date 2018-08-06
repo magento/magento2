@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Block\Catalog\Category;
 
 /**
@@ -10,12 +11,12 @@ namespace Magento\UrlRewrite\Block\Catalog\Category;
  *
  * @magentoAppArea adminhtml
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Block\Catalog\Category\Tree
      */
-    private $_treeBlock;
+    private $treeBlock;
 
     /**
      * Set up
@@ -23,7 +24,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             \Magento\UrlRewrite\Block\Catalog\Category\Tree::class
@@ -38,11 +39,45 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTreeArray()
     {
-        $tree = $this->_treeBlock->getTreeArray();
+        $tree = $this->treeBlock->getTreeArray();
         $this->assertEquals(false, $tree['is_active']);
         $this->assertEquals('Root', (string)$tree['name']);
         $this->assertEquals(true, $tree['expanded']);
         $this->assertCount(1, $tree['children']);
+    }
+
+    /**
+     * Test that the getTreeArray() method scrubs single quotes and apostrophes from names
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_with_apostrophe.php
+     */
+    public function testGetTreeArrayApostropheReplaced()
+    {
+        $tree = $this->treeBlock->getTreeArray(523);
+
+        $this->assertNotContains('\'', $tree[0]['name']);
+        $this->assertEquals(
+            '&#039;Category 6&#039;',
+            $tree[0]['name']
+        );
+    }
+
+    /**
+     * Test that the getTreeArray() method scrubs single quotes and apostrophes from names
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_with_doublequotes.php
+     */
+    public function testGetTreeArrayDoubleQuotesReplaced()
+    {
+        $tree = $this->treeBlock->getTreeArray(523);
+
+        $this->assertNotContains('\"', $tree[0]['name']);
+        $this->assertEquals(
+            '&quot;Category 6&quot;',
+            $tree[0]['name']
+        );
     }
 
     /**
@@ -53,7 +88,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $row = new \Magento\Framework\DataObject(['id' => 1]);
         $this->assertStringStartsWith(
             'http://localhost/index.php',
-            $this->_treeBlock->getLoadTreeUrl($row),
+            $this->treeBlock->getLoadTreeUrl($row),
             'Tree load URL is invalid'
         );
     }
@@ -63,7 +98,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCategoryCollection()
     {
-        $collection = $this->_treeBlock->getCategoryCollection();
+        $collection = $this->treeBlock->getCategoryCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Collection::class, $collection);
     }
 }

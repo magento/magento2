@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel;
 /**
  * @api
  * Interface GridInterface
+ * @since 100.0.2
  */
 interface GridInterface
 {
@@ -28,7 +29,7 @@ interface GridInterface
      *
      * Only rows created/updated since the last method call should be added.
      *
-     * @return \Zend_Db_Statement_Interface
+     * @return void
      */
     public function refreshBySchedule();
 

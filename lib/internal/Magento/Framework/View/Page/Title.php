@@ -25,10 +25,14 @@ class Title
      */
     private $scopeConfig;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $prependedValues = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $appendedValues = [];
 
     /**

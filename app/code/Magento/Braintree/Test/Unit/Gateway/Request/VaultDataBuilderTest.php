@@ -7,7 +7,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\VaultDataBuilder;
 
-class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
+class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     public function testBuild()
     {
@@ -20,7 +20,7 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
         $buildSubject = [];
 
         $builder = new VaultDataBuilder();
-        static::assertEquals(
+        self::assertEquals(
             $expectedResult,
             $builder->build($buildSubject)
         );

@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
+class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ServiceMetadata

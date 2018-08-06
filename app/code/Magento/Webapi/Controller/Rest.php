@@ -22,6 +22,7 @@ use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
  * Front controller for WebAPI REST area.
@@ -36,70 +37,97 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * @var Router
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_router;
 
     /**
      * @var Route
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_route;
 
-    /** @var RestRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     */
     protected $_request;
 
-    /** @var RestResponse */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Response
+     */
     protected $_response;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var \Magento\Framework\App\State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     protected $_appState;
 
     /**
      * @var Authorization
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $authorization;
 
     /**
      * @var ServiceInputProcessor
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $serviceInputProcessor;
 
-    /** @var ErrorProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ErrorProcessor
+     */
     protected $_errorProcessor;
 
-    /** @var PathProcessor */
+    /**
+     * @var \Magento\Webapi\Controller\PathProcessor
+     */
     protected $_pathProcessor;
 
-    /** @var \Magento\Framework\App\AreaList */
+    /**
+     * @var \Magento\Framework\App\AreaList
+     */
     protected $areaList;
 
-    /** @var FieldsFilter */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Response\FieldsFilter
+     */
     protected $fieldsFilter;
 
-    /** @var \Magento\Framework\Session\Generic */
+    /**
+     * @var \Magento\Framework\Session\Generic
+     */
     protected $session;
 
     /**
      * @var ParamsOverrider
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $paramsOverrider;
 
-    /** @var ServiceOutputProcessor $serviceOutputProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ServiceOutputProcessor
+     */
     protected $serviceOutputProcessor;
 
-    /** @var Generator */
+    /**
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
+     */
     protected $swaggerGenerator;
 
     /**
+     * @var RequestProcessorPool
+     */
+    protected $requestProcessorPool;
+
+    /**
      * @var StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $storeManager;
 
@@ -167,6 +195,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
+        $this->requestProcessorPool = $this->_objectManager->get(RequestProcessorPool::class);
     }
 
     /**
@@ -188,7 +217,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
     {
@@ -211,15 +240,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            if ($this->isSchemaRequest()) {
-                $this->processSchemaRequest();
-            } else {
-                $this->processApiRequest();
-            }
+            $processor = $this->requestProcessorPool->getProcessor($this->_request);
+            $processor->process($this->_request);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
         }
+
         return $this->_response;
     }
 
@@ -237,7 +264,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * Retrieve current route.
      *
      * @return Route
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
@@ -253,7 +280,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
      */
     protected function checkPermissions()
@@ -281,7 +308,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $this->_request->getScheme(),
-            $this->_request->getHttpHost(),
+            $this->_request->getHttpHost(false),
             $this->_request->getRequestUri()
         );
         $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
@@ -327,7 +354,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws AuthorizationException
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
@@ -348,7 +375,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getInputParamsResolver()
     {

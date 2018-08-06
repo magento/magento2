@@ -25,9 +25,7 @@ class Body implements Layout\ReaderInterface
     const BODY_ATTRIBUTE = 'attribute';
     /**#@-*/
 
-    /**
-     * @var Layout\ReaderPool
-     */
+    /**#@-*/
     protected $readerPool;
 
     /**

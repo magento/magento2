@@ -10,7 +10,7 @@ namespace Magento\Framework\Oauth\Test\Unit\Helper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Phrase;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Oauth\Helper\Request */
     protected $oauthRequestHelper;
@@ -24,13 +24,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->oauthRequestHelper = new \Magento\Framework\Oauth\Helper\Request();
-        $this->response = $this->getMock(
-            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
-            ['setHttpResponseCode'],
-            [],
-            '',
-            false
-        );
+        $this->response =
+            $this->createPartialMock(\Magento\Framework\HTTP\PhpEnvironment\Response::class, ['setHttpResponseCode']);
     }
 
     /**
@@ -90,12 +85,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequestUrl($url, $host)
     {
-        $httpRequestMock = $this->getMock(
+        $httpRequestMock = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getHttpHost', 'getScheme', 'getRequestUri'],
-            [],
-            '',
-            false
+            ['getHttpHost', 'getScheme', 'getRequestUri']
         );
 
         $httpRequestMock->expects($this->any())->method('getHttpHost')->will($this->returnValue($host));

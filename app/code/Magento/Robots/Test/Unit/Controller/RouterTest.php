@@ -6,7 +6,7 @@
 
 namespace Magento\Robots\Test\Unit\Controller;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ActionFactory|\PHPUnit_Framework_MockObject_MockObject

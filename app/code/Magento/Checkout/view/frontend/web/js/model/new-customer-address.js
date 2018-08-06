@@ -6,8 +6,9 @@
  * @api
  */
 define([
-    'underscore'
-], function (_) {
+    'underscore',
+    'Magento_Checkout/js/model/default-post-code-resolver'
+], function (_, DefaultPostCodeResolver) {
     'use strict';
 
     /**
@@ -16,18 +17,26 @@ define([
      */
     return function (addressData) {
         var identifier = Date.now(),
+            countryId,
             regionId;
 
-        if (addressData.region && addressData.region['region_id']) {
-            regionId = addressData.region['region_id'];
-        } else if (addressData['country_id'] && addressData['country_id'] == window.checkoutConfig.defaultCountryId) { //eslint-disable-line
-            regionId = window.checkoutConfig.defaultRegionId || undefined;
+        countryId = addressData['country_id'] || addressData.countryId;
+
+        if (countryId) {
+            if (addressData.region && addressData.region['region_id']) {
+                regionId = addressData.region['region_id'];
+            } else if (countryId === window.checkoutConfig.defaultCountryId) {
+                regionId = window.checkoutConfig.defaultRegionId;
+            }
+        } else {
+            countryId = window.checkoutConfig.defaultCountryId;
+            regionId = window.checkoutConfig.defaultRegionId;
         }
 
         return {
             email: addressData.email,
-            countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
-            regionId: regionId || addressData.regionId,
+            countryId: countryId,
+            regionId: regionId,
             regionCode: addressData.region ? addressData.region['region_code'] : null,
             region: addressData.region ? addressData.region.region : null,
             customerId: addressData['customer_id'] || addressData.customerId,
@@ -35,7 +44,7 @@ define([
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
+            postcode: addressData.postcode ? addressData.postcode : DefaultPostCodeResolver.resolve(),
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

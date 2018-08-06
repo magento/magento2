@@ -168,20 +168,19 @@ class AttributeMerger
 
         $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
-            'config' => [
-                // customScope is used to group elements within a single form (e.g. they can be validated separately)
-                'customScope' => $dataScopePrefix,
-                'customEntry' => isset($additionalConfig['config']['customEntry'])
-                    ? $additionalConfig['config']['customEntry']
-                    : null,
-                'template' => 'ui/form/field',
-                'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
-                    ? $additionalConfig['config']['elementTmpl']
-                    : $elementTemplate,
-                'tooltip' => isset($additionalConfig['config']['tooltip'])
-                    ? $additionalConfig['config']['tooltip']
-                    : null
-            ],
+            'config' => $this->mergeConfigurationNode(
+                'config',
+                $additionalConfig,
+                [
+                    'config' => [
+                        // customScope is used to group elements within a single
+                        // form (e.g. they can be validated separately)
+                        'customScope' => $dataScopePrefix,
+                        'template' => 'ui/form/field',
+                        'elementTmpl' => $elementTemplate,
+                    ],
+                ]
+            ),
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
@@ -379,7 +378,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function orderCountryOptions(array $countryOptions)
     {
@@ -395,9 +394,9 @@ class AttributeMerger
         ]];
         foreach ($countryOptions as $countryOption) {
             if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
-                array_push($headOptions, $countryOption);
+                $headOptions[] = $countryOption;
             } else {
-                array_push($tailOptions, $countryOption);
+                $tailOptions[] = $countryOption;
             }
         }
         return array_merge($headOptions, $tailOptions);

@@ -11,20 +11,23 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Test for ProcessorFacade.
  *
  * @see ProcessorFacade
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
+class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProcessorFacade
@@ -57,6 +60,11 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
     private $hashMock;
 
     /**
+     * @var Config|Mock
+     */
+    private $configMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -79,12 +87,16 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
         $this->hashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new ProcessorFacade(
             $this->scopeValidatorMock,
             $this->pathValidatorMock,
             $this->configSetProcessorFactoryMock,
-            $this->hashMock
+            $this->hashMock,
+            $this->configMock
         );
     }
 
@@ -106,10 +118,18 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
         $this->hashMock->expects($this->once())
             ->method('regenerate')
             ->with(System::CONFIG_TYPE);
+        $this->configMock->expects($this->once())
+            ->method('clean');
 
         $this->assertSame(
             'Value was saved.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false)
+            $this->model->processWithLockTarget(
+                'test/test/test',
+                'test',
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null,
+                false
+            )
         );
     }
 
@@ -119,12 +139,19 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessWithValidatorException(LocalizedException $exception)
     {
-        $this->setExpectedException(ValidatorException::class, 'Some error');
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('Some error');
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willThrowException($exception);
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget(
+            'test/test/test',
+            'test',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            null,
+            false
+        );
     }
 
     /**
@@ -156,8 +183,16 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new ConfigurationMismatchException(__('Some error')));
         $this->processorMock->expects($this->never())
             ->method('process');
+        $this->configMock->expects($this->never())
+            ->method('clean');
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget(
+            'test/test/test',
+            'test',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            null,
+            false
+        );
     }
 
     /**
@@ -180,26 +215,70 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
             ->method('process')
             ->with('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)
             ->willThrowException(new CouldNotSaveException(__('Some error')));
+        $this->configMock->expects($this->never())
+            ->method('clean');
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget(
+            'test/test/test',
+            'test',
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            null,
+            false
+        );
     }
 
-    public function testExecuteLock()
+    public function testExecuteLockEnv()
     {
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
         $this->configSetProcessorFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ConfigSetProcessorFactory::TYPE_LOCK)
+            ->with(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
             ->willReturn($this->processorMock);
         $this->processorMock->expects($this->once())
             ->method('process')
             ->with('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+        $this->configMock->expects($this->once())
+            ->method('clean');
 
         $this->assertSame(
-            'Value was saved and locked.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true)
+            'Value was saved in app/etc/env.php and locked.',
+            $this->model->processWithLockTarget(
+                'test/test/test',
+                'test',
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null,
+                true
+            )
+        );
+    }
+
+    public function testExecuteLockConfig()
+    {
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+        $this->configSetProcessorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ConfigSetProcessorFactory::TYPE_LOCK_CONFIG)
+            ->willReturn($this->processorMock);
+        $this->processorMock->expects($this->once())
+            ->method('process')
+            ->with('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+        $this->configMock->expects($this->once())
+            ->method('clean');
+
+        $this->assertSame(
+            'Value was saved in app/etc/config.php and locked.',
+            $this->model->processWithLockTarget(
+                'test/test/test',
+                'test',
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null,
+                true,
+                ConfigFilePool::APP_CONFIG
+            )
         );
     }
 }

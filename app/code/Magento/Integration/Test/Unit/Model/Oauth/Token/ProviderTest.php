@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Token\Provider
  */
-class ProviderTest extends \PHPUnit_Framework_TestCase
+class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Model\Oauth\Token\Provider */
     protected $tokenProvider;

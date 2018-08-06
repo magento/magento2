@@ -23,7 +23,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeployTest extends \PHPUnit_Framework_TestCase
+class DeployTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem

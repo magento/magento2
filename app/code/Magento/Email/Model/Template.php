@@ -10,8 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Template model
  *
- * @method \Magento\Email\Model\ResourceModel\Template _getResource()
- * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()
@@ -38,20 +36,27 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Template extends AbstractTemplate implements \Magento\Framework\Mail\TemplateInterface
 {
     /**
-     * Configuration path for default email templates
+     * Configuration path to source of Return-Path and whether it should be set at all
+     * @deprecated
+     * @see \Magento\Email\Model\Transport::XML_PATH_SENDING_SET_RETURN_PATH
      */
     const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
 
+    /**
+     * Configuration path for custom Return-Path email
+     * @deprecated
+     * @see \Magento\Email\Model\Transport::XML_PATH_SENDING_RETURN_PATH_EMAIL
+     */
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
      * Config path to mail sending setting that shows if email communications are disabled
      * @deprecated
-     * @see \Magento\Email\Model\Mail\TransportInterfacePlugin::XML_PATH_SYSTEM_SMTP_DISABLE
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 

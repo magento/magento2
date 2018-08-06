@@ -97,10 +97,10 @@ class StockItemDataChecker
             StockItemInterface::IS_IN_STOCK => 0,
             StockItemInterface::QTY => 0,
         ]);
-        \PHPUnit_Framework_Assert::assertNotNull($product->getQuantityAndStockStatus());
+        \PHPUnit\Framework\Assert::assertNotNull($product->getQuantityAndStockStatus());
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getQuantityAndStockStatus());
 
-        \PHPUnit_Framework_Assert::assertNotNull($product->getData('quantity_and_stock_status'));
+        \PHPUnit\Framework\Assert::assertNotNull($product->getData('quantity_and_stock_status'));
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getData('quantity_and_stock_status'));
     }
 
@@ -112,7 +112,7 @@ class StockItemDataChecker
     private function assertArrayContains(array $expected, array $actual)
     {
         foreach ($expected as $key => $value) {
-            \PHPUnit_Framework_Assert::assertArrayHasKey(
+            \PHPUnit\Framework\Assert::assertArrayHasKey(
                 $key,
                 $actual,
                 "Expected value for key '{$key}' is missed"
@@ -120,7 +120,7 @@ class StockItemDataChecker
             if (is_array($value)) {
                 $this->assertArrayContains($value, $actual[$key]);
             } else {
-                \PHPUnit_Framework_Assert::assertEquals(
+                \PHPUnit\Framework\Assert::assertEquals(
                     $value,
                     $actual[$key],
                     "Expected value for key '{$key}' doesn't match"

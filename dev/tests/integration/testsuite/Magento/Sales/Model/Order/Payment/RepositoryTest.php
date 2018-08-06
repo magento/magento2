@@ -15,7 +15,7 @@ use Magento\Framework\Api\SortOrderBuilder;
  * @package Magento\Sales\Model\Order\Payment\
  * @magentoDbIsolation enabled
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Repository */
     protected $repository;

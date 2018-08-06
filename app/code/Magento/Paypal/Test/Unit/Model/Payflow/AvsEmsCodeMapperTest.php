@@ -11,7 +11,7 @@ use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AvsEmsCodeMapperTest extends \PHPUnit_Framework_TestCase
+class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AvsEmsCodeMapper
@@ -85,17 +85,17 @@ class AvsEmsCodeMapperTest extends \PHPUnit_Framework_TestCase
     public function getCodeDataProvider()
     {
         return [
-            ['avsZip' => null, 'avsStreet' => null, 'expected' => 'U'],
-            ['avsZip' => null, 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'Y', 'avsStreet' => null, 'expected' => 'U'],
+            ['avsZip' => null, 'avsStreet' => null, 'expected' => ''],
+            ['avsZip' => null, 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'Y', 'avsStreet' => null, 'expected' => ''],
             ['avsZip' => 'Y', 'avsStreet' => 'Y', 'expected' => 'Y'],
             ['avsZip' => 'N', 'avsStreet' => 'Y', 'expected' => 'A'],
             ['avsZip' => 'Y', 'avsStreet' => 'N', 'expected' => 'Z'],
             ['avsZip' => 'N', 'avsStreet' => 'N', 'expected' => 'N'],
-            ['avsZip' => 'X', 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'N', 'avsStreet' => 'X', 'expected' => 'U'],
-            ['avsZip' => '', 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'N', 'avsStreet' => '', 'expected' => 'U']
+            ['avsZip' => 'X', 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'N', 'avsStreet' => 'X', 'expected' => ''],
+            ['avsZip' => '', 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'N', 'avsStreet' => '', 'expected' => '']
         ];
     }
 }

@@ -131,7 +131,7 @@ class Generator
      * @return BatchIteratorInterface
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
      * @see \Magento\Framework\DB\Query\Generator
-     * @deprecated This is a temporary solution which is made due to the fact that we
+     * @deprecated 100.2.0 This is a temporary solution which is made due to the fact that we
      *             can't change method generate() in version 2.1 due to a backwards incompatibility.
      *             In 2.2 version need to use original method generate() with additional parameter.
      */

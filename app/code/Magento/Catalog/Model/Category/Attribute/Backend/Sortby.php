@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
  * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Class RestrictAdminBillingAgreementUsageObserverTest
  */
-class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_TestCase
+class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver
@@ -48,6 +48,9 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
 
+    /**
+     * @return array
+     */
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
         return [

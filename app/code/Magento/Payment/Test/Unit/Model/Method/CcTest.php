@@ -11,7 +11,7 @@ use Magento\Payment\Model\Method\Cc;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 
-class CcTest extends \PHPUnit_Framework_TestCase
+class CcTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cc

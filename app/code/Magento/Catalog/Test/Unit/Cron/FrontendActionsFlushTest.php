@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Cron;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FrontendActionsFlushTest extends \PHPUnit_Framework_TestCase
+class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Cron\FrontendActionsFlush */
     protected $model;
@@ -46,9 +46,9 @@ class FrontendActionsFlushTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
-        $frontendConfiguration = $this->getMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
 
         $selectMock
             ->expects($this->once())

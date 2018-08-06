@@ -9,7 +9,7 @@ use Magento\Ui\Config\Converter\Buttons;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
-class ButtonsTest extends \PHPUnit_Framework_TestCase
+class ButtonsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Buttons

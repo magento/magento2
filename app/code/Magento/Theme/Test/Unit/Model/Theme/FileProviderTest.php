@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Theme\Model\Theme\FileProvider;
 
-class FileProviderTest extends \PHPUnit_Framework_TestCase
+class FileProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileProvider

@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -91,6 +91,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($languages, $this->_helper->getLanguageCodes());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestConvertLanguage()
     {
         return [

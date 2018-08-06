@@ -12,7 +12,7 @@ use \Magento\CatalogInventory\Helper\Stock;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
@@ -167,6 +167,9 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->stock->addInStockFilterToCollection($collectionMock));
     }
 
+    /**
+     * @return array
+     */
     public function filterProvider()
     {
         $configMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)

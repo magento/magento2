@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 
-class ReindexRuleProductPriceTest extends \PHPUnit_Framework_TestCase
+class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice

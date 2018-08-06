@@ -12,7 +12,7 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context

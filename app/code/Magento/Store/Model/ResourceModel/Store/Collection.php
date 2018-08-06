@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel\Store;
  * Stores collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -88,6 +89,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $status
      * @return $this
+     * @since 100.1.0
      */
     public function addStatusFilter($status)
     {

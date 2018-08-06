@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPool;
 use Magento\Payment\Gateway\CommandInterface;
 
-class CommandPoolTest extends \PHPUnit_Framework_TestCase
+class CommandPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {
@@ -47,7 +47,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGetException()
     {
-        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
 
         $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()

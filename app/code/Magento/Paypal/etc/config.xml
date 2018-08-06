@@ -95,8 +95,11 @@
                 <cvv_ems_adapter>Magento\Paypal\Model\Payflow\CvvEmsCodeMapper</cvv_ems_adapter>
             </payflowpro>
             <payflowpro_cc_vault>
-               <model>PayflowProCreditCardVaultFacade</model>
-               <title>Stored Cards (Payflow Pro)</title>
+                <model>PayflowProCreditCardVaultFacade</model>
+                <title>Stored Cards (Payflow Pro)</title>
+                <instant_purchase>
+                    <tokenFormat>\Magento\Paypal\Model\InstantPurchase\Payflow\Pro\TokenFormatter</tokenFormat>
+                </instant_purchase>
             </payflowpro_cc_vault>
             <paypal_billing_agreement>
                 <active>1</active>

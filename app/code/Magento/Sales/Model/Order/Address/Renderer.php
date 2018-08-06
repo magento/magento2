@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Address;
 /**
  * Class Renderer used for formatting an order address
  * @api
+ * @since 100.0.2
  */
 class Renderer
 {

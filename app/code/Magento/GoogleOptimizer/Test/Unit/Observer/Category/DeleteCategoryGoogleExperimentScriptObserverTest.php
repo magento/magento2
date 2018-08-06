@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
 
-class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
+class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -29,11 +29,11 @@ class DeleteCategoryGoogleExperimentScriptObserverTest extends \PHPUnit_Framewor
 
     protected function setUp()
     {
-        $this->_codeMock = $this->getMock(\Magento\GoogleOptimizer\Model\Code::class, [], [], '', false);
-        $this->_category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
-        $event = $this->getMock(\Magento\Framework\Event::class, ['getCategory'], [], '', false);
+        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
+        $this->_category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getCategory']);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_category));
-        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

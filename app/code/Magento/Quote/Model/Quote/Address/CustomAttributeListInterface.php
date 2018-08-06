@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * Interface \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface
+ *
+ */
 interface CustomAttributeListInterface
 {
     /**

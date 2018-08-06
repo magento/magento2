@@ -23,7 +23,6 @@ class AttributeHandler implements HandlerInterface
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
         if (isset($fieldInfo['bind'])) {
-
             if (!method_exists($source, 'joinAttribute')) {
                 return;
             }
@@ -36,7 +35,7 @@ class AttributeHandler implements HandlerInterface
                 'left'
             );
         } else {
-            $source->addAttributeToSelect($fieldInfo['origin'], 'left');
+            $source->addFieldToSelect($fieldInfo['origin'], 'left');
         }
     }
 }

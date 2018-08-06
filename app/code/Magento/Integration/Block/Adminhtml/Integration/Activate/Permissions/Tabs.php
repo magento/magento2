@@ -14,6 +14,7 @@ use Magento\Backend\Block\Widget\Tabs as TabsWidget;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Tabs extends TabsWidget
 {

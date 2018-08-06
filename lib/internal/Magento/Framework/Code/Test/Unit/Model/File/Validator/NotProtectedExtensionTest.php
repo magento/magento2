@@ -7,7 +7,7 @@ namespace Magento\Framework\Code\Test\Unit\Model\File\Validator;
 
 use Magento\Framework\Phrase;
 
-class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
+class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
@@ -26,7 +26,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_scopeConfig->expects(
             $this->atLeastOnce()
         )->method(

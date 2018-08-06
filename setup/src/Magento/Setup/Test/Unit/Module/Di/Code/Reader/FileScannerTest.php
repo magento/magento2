@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
-class FileScannerTest extends \PHPUnit_Framework_TestCase
+class FileScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\FileScanner

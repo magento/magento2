@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class EncodedContextTest
  */
-class EncodedContextTest extends \PHPUnit_Framework_TestCase
+class EncodedContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

@@ -38,7 +38,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.search.grid.columnSet.query_id" as="query_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="filter" xsi:type="string">0</argument>
@@ -48,7 +48,7 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_text">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.search.grid.columnSet.query_text" as="query_text">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Search Query</argument>
                             <argument name="index" xsi:type="string">query_text</argument>
@@ -56,7 +56,7 @@
                             <argument name="header_css_class" xsi:type="string">col-query</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.report.search.grid.columnSet.store_id" as="store_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store</argument>
                             <argument name="index" xsi:type="string">store_id</argument>
@@ -68,7 +68,7 @@
                             <argument name="header_css_class" xsi:type="string">col-store</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="num_results">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.search.grid.columnSet.num_results" as="num_results">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Results</argument>
                             <argument name="type" xsi:type="string">number</argument>
@@ -77,7 +77,7 @@
                             <argument name="header_css_class" xsi:type="string">col-results</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="popularity">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.report.search.grid.columnSet.popularity" as="popularity">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Hits</argument>
                             <argument name="type" xsi:type="string">number</argument>

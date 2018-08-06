@@ -14,7 +14,9 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const MIME_TYPE = 'application/json';
 
-    /** @var \Magento\Framework\Json\Encoder */
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     */
     protected $encoder;
 
     /**

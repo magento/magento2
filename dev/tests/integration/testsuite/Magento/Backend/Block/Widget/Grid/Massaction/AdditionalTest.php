@@ -5,20 +5,14 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml
      */
     public function testToHtml()
     {
-        $interpreter = $this->getMock(
-            \Magento\Framework\View\Layout\Argument\Interpreter\Options::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\Options::class);
         /**
          * @var Additional $block
          */

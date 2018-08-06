@@ -7,7 +7,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 
-class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
+class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
@@ -22,64 +22,48 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
      */
-    protected $processingErrorMock1;
+    protected $processingError1;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
      */
-    protected $processingErrorMock2;
+    protected $processingError2;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError
      */
-    protected $processingErrorMock3;
+    protected $processingError3;
 
     /**
      * Preparing mock objects
      */
     protected function setUp()
     {
-        $this->processingErrorFactoryMock = $this->getMock(
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->processingErrorFactoryMock = $this->createPartialMock(
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->processingErrorMock1 = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
-            null,
-            [],
-            '',
-            false
+        $this->processingError1 = $objectManager->getObject(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class
         );
 
-        $this->processingErrorMock2 = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
-            null,
-            [],
-            '',
-            false
+        $this->processingError2 = $objectManager->getObject(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class
         );
 
-        $this->processingErrorMock3 = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
-            null,
-            [],
-            '',
-            false
+        $this->processingError3 = $objectManager->getObject(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class
         );
 
         $this->processingErrorFactoryMock->expects($this->any())->method('create')->willReturnOnConsecutiveCalls(
-            $this->processingErrorMock1,
-            $this->processingErrorMock2,
-            $this->processingErrorMock3
+            $this->processingError1,
+            $this->processingError2,
+            $this->processingError3
         );
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->model = $objectManager->getObject(
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
@@ -94,7 +78,15 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddError()
     {
-        $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
+        $result = $this->model->addError(
+            'systemException',
+            'critical',
+            7,
+            'Some column name',
+            'Message',
+            'Description'
+        );
+        $this->assertEquals($result, $this->model);
     }
 
     /**
@@ -116,7 +108,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
         $this->model->addError('systemException');
         $this->model->addError('columnNotFound', 'critical', 7, 'Some column name', null, 'Description');
         $this->model->addError('columnEmptyHeader', 'not-critical', 4, 'Some column name', 'No header', 'Description');
-        $result = $this->model->getRowsGroupedByErrorCode(['systemException']);
+        $result = $this->model->getRowsGroupedByErrorCode(['systemException'], [], false);
         $expectedResult = ['systemException' => [0 => 1]];
         $this->assertEquals($expectedResult, $result);
     }
@@ -203,7 +195,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitValidationStrategyException()
     {
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->model->initValidationStrategy(null);
     }
 
@@ -311,6 +303,10 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddTheSameErrorTwice()
     {
+        $this->processingErrorFactoryMock->expects($this->any())->method('create')->willReturnOnConsecutiveCalls(
+            $this->processingError1,
+            $this->processingError2
+        );
         $this->model->addError('systemException', 'not-critical', 1);
         $this->model->addError('systemException', 'not-critical', 1);
         $result = $this->model->getErrorByRowNumber(1);

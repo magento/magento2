@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Model;
@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
-class UiComponentGeneratorTest extends \PHPUnit_Framework_TestCase
+class UiComponentGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Ui\Model\UiComponentGenerator */
     protected $model;
@@ -47,9 +47,9 @@ class UiComponentGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateUiComponent()
     {
-        $uiComponentMock = $this->getMock(UiComponentInterface::class);
-        $uiComponentMockChild1 = $this->getMock(UiComponentInterface::class);
-        $uiComponentMockChild2 = $this->getMock(UiComponentInterface::class);
+        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild1 = $this->createMock(UiComponentInterface::class);
+        $uiComponentMockChild2 = $this->createMock(UiComponentInterface::class);
         $uiComponentMockChild1->expects($this->once())
             ->method('prepare');
         $uiComponentMockChild2->expects($this->once())
@@ -62,7 +62,7 @@ class UiComponentGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->uiComponentFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($uiComponentMock);
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->model->generateUiComponent('widget_recently_viewed', $layoutMock);
     }
 }

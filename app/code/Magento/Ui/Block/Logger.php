@@ -12,6 +12,7 @@ use Magento\Ui\Model\Config;
  * Logger block
  *
  * @api
+ * @since 100.0.2
  */
 class Logger extends Template
 {

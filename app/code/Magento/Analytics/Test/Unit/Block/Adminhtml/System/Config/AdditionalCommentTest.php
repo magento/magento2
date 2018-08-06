@@ -9,8 +9,9 @@ use Magento\Analytics\Block\Adminhtml\System\Config\AdditionalComment;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
+class AdditionalCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AdditionalComment
@@ -32,9 +33,6 @@ class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
      */
     private $formMock;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
@@ -48,12 +46,15 @@ class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->additionalComment = new AdditionalComment($this->contextMock);
+        $objectManager = new ObjectManager($this);
+        $this->additionalComment = $objectManager->getObject(
+            AdditionalComment::class,
+            [
+                'context' => $this->contextMock
+            ]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testRender()
     {
         $this->abstractElementMock->setForm($this->formMock);
@@ -64,11 +65,11 @@ class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getLabel')
             ->willReturn('Comment label');
         $html = $this->additionalComment->render($this->abstractElementMock);
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/New comment/",
             $html
         );
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Comment label/",
             $html
         );

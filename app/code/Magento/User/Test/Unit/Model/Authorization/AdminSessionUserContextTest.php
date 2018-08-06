@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 /**
  * Tests Magento\User\Model\Authorization\AdminSessionUserContext
  */
-class AdminSessionUserContextTest extends \PHPUnit_Framework_TestCase
+class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -12,6 +12,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
@@ -44,6 +45,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function getSortOrder()
     {

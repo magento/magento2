@@ -9,11 +9,9 @@ namespace Magento\Framework\Setup;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
-use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
@@ -242,6 +240,10 @@ class BackupRollback
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
         $dbRollback->setResourceModel($this->objectManager->create(\Magento\Backup\Model\ResourceModel\Db::class));
+        if ($dbRollback->getBackupFilename() !== $rollbackFile) {
+            $correctName = $this->getCorrectFileNameWithoutPrefix($dbRollback, $rollbackFile);
+            $dbRollback->setName($correctName);
+        }
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
@@ -328,5 +330,26 @@ class BackupRollback
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create(\Magento\Framework\Backup\Db::class);
         return $dbBackup->getDBSize();
+    }
+
+    /**
+     * Get correct file name without prefix.
+     *
+     * @param \Magento\Framework\Backup\Db $dbRollback
+     * @param string $rollbackFile
+     *
+     * @return string
+     */
+    private function getCorrectFileNameWithoutPrefix(\Magento\Framework\Backup\Db $dbRollback, $rollbackFile)
+    {
+        $namePrefix = $dbRollback->getTime() . '_' . $dbRollback->getType();
+        //delete prefix.
+        $fileNameWithoutPrefix = str_replace($namePrefix, '', $rollbackFile);
+        //change '_' to ' '.
+        $fileNameWithoutPrefix = str_replace('_', ' ', $fileNameWithoutPrefix);
+        //delete file extension.
+        $fileNameWithoutPrefix = pathinfo($fileNameWithoutPrefix, PATHINFO_FILENAME);
+
+        return $fileNameWithoutPrefix;
     }
 }

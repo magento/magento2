@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class WishlistSettings
     /**
      * Add tax data to result
      *
-     * @param \Magento\Checkout\CustomerData\Cart $subject
+     * @param \Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

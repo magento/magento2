@@ -10,6 +10,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Stock Status collection interface
  * @api
+ * @since 100.0.2
  */
 interface StockStatusCollectionInterface extends SearchResultsInterface
 {

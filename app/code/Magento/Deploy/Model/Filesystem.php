@@ -5,17 +5,16 @@
  */
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\Locale;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate static files, compile
  *
- * Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+ * Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -49,21 +48,6 @@ class Filesystem
      * Default theme when no theme is stored in configuration
      */
     const DEFAULT_THEME = 'Magento/blank';
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader
-     */
-    private $reader;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -101,33 +85,35 @@ class Filesystem
     private $userCollection;
 
     /**
-     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @var Locale
+     */
+    private $locale;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
      * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\ShellInterface $shell
+     * @param UserCollection $userCollection
+     * @param Locale $locale
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig\Writer $writer,
-        \Magento\Framework\App\DeploymentConfig\Reader $reader,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
-        \Magento\Framework\ShellInterface $shell
+        \Magento\Framework\ShellInterface $shell,
+        UserCollection $userCollection,
+        Locale $locale
     ) {
-        $this->writer = $writer;
-        $this->reader = $reader;
-        $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
+        $this->userCollection = $userCollection;
+        $this->locale = $locale;
         $this->functionCallPath =
             PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -141,13 +127,14 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+        // Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
                 DirectoryList::GENERATED_CODE,
                 DirectoryList::GENERATED_METADATA,
-                DirectoryList::TMP_MATERIALIZATION_DIR
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW
             ]
         );
         
@@ -192,7 +179,7 @@ class Filesystem
     private function getAdminUserInterfaceLocales()
     {
         $locales = [];
-        foreach ($this->getUserCollection() as $user) {
+        foreach ($this->userCollection as $user) {
             $locales[] = $user->getInterfaceLocale();
         }
         return $locales;
@@ -202,6 +189,7 @@ class Filesystem
      * Get used store and admin user locales
      *
      * @return array
+     * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
      */
     private function getUsedLocales()
     {
@@ -209,25 +197,18 @@ class Filesystem
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
         );
-        return array_unique($usedLocales);
-    }
-
-    /**
-     * Get user collection
-     *
-     * @return UserCollection
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     * by injecting the new dependency directly.
-     * The method can be removed in a future major release, when constructor signature can be changed.
-     */
-    private function getUserCollection()
-    {
-        if (!($this->userCollection instanceof UserCollection)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                UserCollection::class
-            );
-        }
-        return $this->userCollection;
+        return array_map(
+            function ($locale) {
+                if (!$this->locale->isValid($locale)) {
+                    throw new \InvalidArgumentException(
+                        $locale .
+                        ' argument has invalid value, run info:language:list for list of available locales'
+                    );
+                }
+                return $locale;
+            },
+            array_unique($usedLocales)
+        );
     }
 
     /**
@@ -306,7 +287,8 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
-     * @deprecated As magento2 doesn't control indirectly the access permissions to the files and directories anymore.
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly
+     * the access permissions to the files and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value
      * of inverse mask for setting access permissions to files and directories generated by Magento.
@@ -330,7 +312,8 @@ class Filesystem
      * Change permissions on static resources
      *
      * @return void
-     * @deprecated As magento2 doesn't control indirectly the access permissions to the files and directories anymore.
+     * @deprecated 100.0.6 As magento2 doesn't control indirectly the access permissions to the files
+     * and directories anymore.
      * Access permissions to the files and directories are set during deploy Magento 2, directly after
      * uploading code of Magento. Also it is possible to specify the value
      * of inverse mask for setting access permissions to files and directories generated by Magento.

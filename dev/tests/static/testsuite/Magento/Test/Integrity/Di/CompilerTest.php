@@ -23,7 +23,7 @@ use Magento\TestFramework\Integrity\PluginValidator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompilerTest extends \PHPUnit_Framework_TestCase
+class CompilerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -62,6 +62,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected $pluginValidator;
 
+    /**
+     * @var string[]|null
+     */
+    private $pluginBlacklist;
+
     protected function setUp()
     {
         $this->_shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
@@ -79,7 +84,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $argumentInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
                 'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
@@ -105,6 +110,31 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
         $this->pluginValidator = new PluginValidator(new InterfaceValidator());
+    }
+
+    /**
+     * Return plugin blacklist class names
+     *
+     * @return string[]
+     */
+    private function getPluginBlacklist(): array
+    {
+        if ($this->pluginBlacklist === null) {
+            $blacklistFiles = str_replace(
+                '\\',
+                '/',
+                realpath(__DIR__) . '/../_files/blacklist/compiler_plugins*.txt'
+            );
+            $blacklistItems = [];
+            foreach (glob($blacklistFiles) as $fileName) {
+                $blacklistItems = array_merge(
+                    $blacklistItems,
+                    file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                );
+            }
+            $this->pluginBlacklist = $blacklistItems;
+        }
+        return $this->pluginBlacklist;
     }
 
     /**
@@ -156,7 +186,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks if class is a real one or generated Factory
      * @param string $instanceName class name
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      * @return bool
      */
     protected function _classExistsAsReal($instanceName)
@@ -360,6 +390,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      * Get application plugins
      *
      * @return array
+     * @throws \Exception
      */
     protected function pluginDataProvider()
     {
@@ -376,8 +407,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 $type = \Magento\Framework\App\Utility\Classes::resolveVirtualType($type);
                 if ($node->attributes->getNamedItem('type')) {
                     $plugin = $node->attributes->getNamedItem('type')->nodeValue;
-                    $plugin = \Magento\Framework\App\Utility\Classes::resolveVirtualType($plugin);
-                    $plugins[] = ['plugin' => $plugin, 'intercepted type' => $type];
+                    if (!in_array($plugin, $this->getPluginBlacklist())) {
+                        $plugin = \Magento\Framework\App\Utility\Classes::resolveVirtualType($plugin);
+                        $plugins[] = ['plugin' => $plugin, 'intercepted type' => $type];
+                    }
                 }
             }
         }

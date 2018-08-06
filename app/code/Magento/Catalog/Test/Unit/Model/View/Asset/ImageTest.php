@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\ContextInterface;
 /**
  * Class ImageTest
  */
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\View\Asset\Image
@@ -145,6 +145,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getPathDataProvider()
     {
         return [

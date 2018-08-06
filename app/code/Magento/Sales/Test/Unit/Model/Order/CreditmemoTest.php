@@ -18,7 +18,7 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCo
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends \PHPUnit_Framework_TestCase
+class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
@@ -37,13 +37,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderFactory = $this->getMock(
-            \Magento\Sales\Model\OrderFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
@@ -53,31 +47,19 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         ->getMock();
 
         $arguments = [
-            'context' => $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false),
-            'registry' => $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
-            'localeDate' => $this->getMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, [], [], '', false),
-            'dateTime' => $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false),
-            'creditmemoConfig' => $this->getMock(
-                \Magento\Sales\Model\Order\Creditmemo\Config::class, [], [], '', false),
+            'context' => $this->createMock(\Magento\Framework\Model\Context::class),
+            'registry' => $this->createMock(\Magento\Framework\Registry::class),
+            'localeDate' => $this->createMock(
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+            'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
+            'creditmemoConfig' => $this->createMock(
+                \Magento\Sales\Model\Order\Creditmemo\Config::class),
             'orderFactory' => $this->orderFactory,
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
-            'calculatorFactory' => $this->getMock(\Magento\Framework\Math\CalculatorFactory::class, [], [], '', false),
-            'storeManager' => $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false),
-            'commentFactory' => $this->getMock(
-                \Magento\Sales\Model\Order\Creditmemo\CommentFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'commentCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+            'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
+            'storeManager' => $this->createMock(\Magento\Store\Model\StoreManagerInterface::class),
+            'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
+            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class),
         ];
         $this->creditmemo = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Creditmemo::class,
@@ -90,13 +72,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         $orderId = 100000041;
         $this->creditmemo->setOrderId($orderId);
         $entityName = 'creditmemo';
-        $order = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            ['load', 'setHistoryEntityName', '__wakeUp'],
-            [],
-            '',
-            false
-        );
+        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['load', 'setHistoryEntityName', '__wakeUp']);
         $this->creditmemo->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')

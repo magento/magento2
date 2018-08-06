@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.onepage.review.item.renderers">
-            <block class="Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped" as="grouped" template="Magento_Checkout::onepage/review/item.phtml"/>
+            <block class="Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped" name="checkout.onepage.review.item.renderers.grouped" as="grouped" template="Magento_Checkout::onepage/review/item.phtml"/>
         </referenceBlock>
     </body>
 </page>

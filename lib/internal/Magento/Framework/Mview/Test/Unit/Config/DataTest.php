@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mview\Test\Unit\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\Config\Data
@@ -44,7 +44,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock(\Magento\Framework\Mview\Config\Reader::class, ['read'], [], '', false);
+        $this->reader = $this->createPartialMock(\Magento\Framework\Mview\Config\Reader::class, ['read']);
         $this->cache = $this->getMockForAbstractClass(
             \Magento\Framework\Config\CacheInterface::class,
             [],
@@ -64,7 +64,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['getItems']
         );
 
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testConstructorWithCache()
@@ -96,23 +96,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->reader->expects($this->once())->method('read')->will($this->returnValue($this->views));
 
-        $stateExistent = $this->getMock(
-            \Magento\Framework\Mview\Indexer\State::class,
-            ['getViewId', '__wakeup', 'delete'],
-            [],
-            '',
-            false
-        );
+        $stateExistent = $this->getMockBuilder(\Magento\Framework\Mview\View\StateInterface::class)
+            ->setMethods(['getViewId', '__wakeup', 'delete'])
+            ->getMockForAbstractClass();
         $stateExistent->expects($this->once())->method('getViewId')->will($this->returnValue('view1'));
         $stateExistent->expects($this->never())->method('delete');
 
-        $stateNonexistent = $this->getMock(
-            \Magento\Framework\Mview\Indexer\State::class,
-            ['getViewId', '__wakeup', 'delete'],
-            [],
-            '',
-            false
-        );
+        $stateNonexistent = $this->getMockBuilder(\Magento\Framework\Mview\View\StateInterface::class)
+            ->setMethods(['getViewId', '__wakeup', 'delete'])
+            ->getMockForAbstractClass();
         $stateNonexistent->expects($this->once())->method('getViewId')->will($this->returnValue('view2'));
         $stateNonexistent->expects($this->once())->method('delete');
 

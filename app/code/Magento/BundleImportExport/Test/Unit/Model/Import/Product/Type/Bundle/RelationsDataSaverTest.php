@@ -13,7 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Class RelationsDataSaverTest
  */
-class RelationsDataSaverTest extends \PHPUnit_Framework_TestCase
+class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RelationsDataSaver

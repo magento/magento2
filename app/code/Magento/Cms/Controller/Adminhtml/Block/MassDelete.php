@@ -17,6 +17,13 @@ use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::block';
+
+    /**
      * @var Filter
      */
     protected $filter;
@@ -53,7 +60,7 @@ class MassDelete extends \Magento\Backend\App\Action
             $block->delete();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));
+        $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been deleted.', $collectionSize));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

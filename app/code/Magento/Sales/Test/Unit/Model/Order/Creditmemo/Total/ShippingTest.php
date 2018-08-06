@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -47,7 +47,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 ]
             )->getMock();
 
-        $priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(
@@ -56,7 +56,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $this->taxConfig = $this->getMock(\Magento\Tax\Model\Config::class, [], [], '', false);
+        $this->taxConfig = $this->createMock(\Magento\Tax\Model\Config::class);
 
         $this->shippingCollector = $objectManager->getObject(
             \Magento\Sales\Model\Order\Creditmemo\Total\Shipping::class,

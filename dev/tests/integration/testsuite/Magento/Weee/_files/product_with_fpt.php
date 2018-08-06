@@ -4,16 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$installer = Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class
 );
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
-$entityModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity::class);
-$entityTypeId = $entityModel->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId();
+$entityModel = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity::class);
+$entityTypeId = $entityModel->setType(Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$attribute = Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setAttributeCode(
@@ -30,7 +33,7 @@ $attribute->setAttributeCode(
     1
 )->save();
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+$product = Bootstrap::getObjectManager()->create(Product::class);
 $product->setTypeId(
     'simple'
 )->setAttributeSetId(
@@ -39,6 +42,12 @@ $product->setTypeId(
     1
 )->setWebsiteIds(
     [1]
+)->setVisibility(
+    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+)->setStatus(
+    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+)->setStockData(
+    ['qty' => 100, 'is_in_stock' => 1]
 )->setName(
     'Simple Product FPT'
 )->setSku(

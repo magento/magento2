@@ -10,7 +10,7 @@ use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 /**
  * Unit tests for Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver class.
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject

@@ -88,7 +88,9 @@ class Product extends \Magento\Framework\Url\Helper\Data
      */
     protected $categoryRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**

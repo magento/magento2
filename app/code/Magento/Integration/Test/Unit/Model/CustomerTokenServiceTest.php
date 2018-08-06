@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Integration\Model\CustomerTokenService
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,7 +9,7 @@ namespace Magento\Integration\Test\Unit\Model;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
-class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\CustomerTokenService */
     protected $_tokenService;
@@ -49,12 +47,12 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getToken', 'loadByCustomerId', 'setRevoked', 'save', '__wakeup'])->getMock();
+            ->setMethods(['getToken', 'loadByCustomerId', 'delete', '__wakeup'])->getMock();
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
+            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
@@ -95,10 +93,8 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->method('_fetchAll')
             ->will($this->returnValue(1));
         $this->_tokenMock->expects($this->once())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->returnValue($this->_tokenMock));
-        $this->_tokenMock->expects($this->once())
-            ->method('save');
 
         $this->assertTrue($this->_tokenService->revokeCustomerAccessToken($customerId));
     }
@@ -114,9 +110,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->with(null)
             ->will($this->returnValue($this->_tokenModelCollectionMock));
         $this->_tokenMock->expects($this->never())
-            ->method('save');
-        $this->_tokenMock->expects($this->never())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->returnValue($this->_tokenMock));
         $this->_tokenService->revokeCustomerAccessToken(null);
     }
@@ -140,10 +134,8 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
 
-        $this->_tokenMock->expects($this->never())
-            ->method('save');
         $this->_tokenMock->expects($this->once())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->throwException($exception));
         $this->_tokenService->revokeCustomerAccessToken($customerId);
     }

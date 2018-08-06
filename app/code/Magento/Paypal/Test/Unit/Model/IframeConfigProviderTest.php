@@ -7,7 +7,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\IframeConfigProvider;
 
-class IframeConfigProviderTest extends \PHPUnit_Framework_TestCase
+class IframeConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConfig()
     {
@@ -19,14 +19,13 @@ class IframeConfigProviderTest extends \PHPUnit_Framework_TestCase
         );
         $urlBuilder->expects($this->atLeastOnce())->method('getUrl')->willReturn('http://iframe.url');
 
-        $payment = $this->getMock(
-            \Magento\Paypal\Model\Payflowpro::class,
-            ['isAvailable', 'getFrameActionUrl'],
-            [],
-            'paymentInstance',
-            false
-        );
-        $paymentHelper= $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $payment = $this->getMockBuilder(\Magento\Paypal\Model\Payflowpro::class)
+            ->setMethods(['isAvailable', 'getFrameActionUrl'])
+            ->setMockClassName('paymentInstance')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $paymentHelper= $this->createMock(\Magento\Payment\Helper\Data::class);
 
         $payment->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
 

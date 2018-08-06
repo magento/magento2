@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Shipment;
  * Shipment notifier.
  *
  * @api
+ * @since 100.1.2
  */
 class Notifier implements \Magento\Sales\Model\Order\Shipment\NotifierInterface
 {
@@ -27,6 +28,7 @@ class Notifier implements \Magento\Sales\Model\Order\Shipment\NotifierInterface
 
     /**
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

@@ -17,6 +17,7 @@ use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Webapi\Model\UrlDecoder;
 
 /**
  * Handler of requests to SOAP server.
@@ -29,33 +30,52 @@ class Handler
 {
     const RESULT_NODE_NAME = 'result';
 
-    /** @var SoapRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Request
+     */
     protected $_request;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var SoapConfig */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Config
+     */
     protected $_apiConfig;
 
-    /** @var Authorization */
+    /**
+     * @var \Magento\Framework\Webapi\Authorization
+     */
     protected $authorization;
 
-    /** @var SimpleDataObjectConverter */
+    /**
+     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     */
     protected $_dataObjectConverter;
 
-    /** @var ServiceInputProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     */
     protected $serviceInputProcessor;
 
-    /** @var DataObjectProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
     protected $_dataObjectProcessor;
 
-    /** @var MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMapProcessor;
 
     /**
-     * Initialize dependencies.
-     *
+     * @var UrlDecoder
+     */
+    private $urlDecoder;
+
+    /**
      * @param SoapRequest $request
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
@@ -64,6 +84,7 @@ class Handler
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
+     * @param UrlDecoder $urlDecoder
      */
     public function __construct(
         SoapRequest $request,
@@ -73,7 +94,8 @@ class Handler
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
-        MethodsMap $methodsMapProcessor
+        MethodsMap $methodsMapProcessor,
+        UrlDecoder $urlDecoder = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -83,6 +105,7 @@ class Handler
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
+        $this->urlDecoder = $urlDecoder ?: \Magento\Framework\App\ObjectManager::getInstance()->get(UrlDecoder::class);
     }
 
     /**
@@ -90,7 +113,7 @@ class Handler
      *
      * @param string $operation
      * @param array $arguments
-     * @return \stdClass|null
+     * @return array
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
@@ -134,6 +157,7 @@ class Handler
         /** SoapServer wraps parameters into array. Thus this wrapping should be removed to get access to parameters. */
         $arguments = reset($arguments);
         $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
+        $arguments = $this->urlDecoder->decodeParams($arguments);
         return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $arguments);
     }
 

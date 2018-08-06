@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option\Validator\Select
@@ -20,8 +20,9 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $configMock = $this->getMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
-        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
+        $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
         $config = [
             [
                 'label' => 'group label 1',
@@ -46,7 +47,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getData'];
-        $this->valueMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, $methods, [], '', false);
+        $this->valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods, []);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\Select(
             $configMock,
             $priceConfigMock
@@ -68,6 +69,9 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidSuccessDataProvider()
     {
         return [
@@ -86,7 +90,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                false,
+                true,
                 [
                     'title' => 'Some Title',
                     'price_type' => 'fixed',
@@ -153,10 +157,12 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @return array
+     */
     public function isValidateWithInvalidDataDataProvider()
     {
         return [
-            'invalid_price' => ['fixed', -10, 'Title'],
             'invalid_price_type' => ['some_value', '10', 'Title'],
             'empty_title' => ['fixed', 10, null]
         ];

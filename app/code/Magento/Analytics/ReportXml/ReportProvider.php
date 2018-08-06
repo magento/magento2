@@ -57,18 +57,16 @@ class ReportProvider
     private function getIteratorName(Query $query)
     {
         $config = $query->getConfig();
-        return isset($config['iterator']) ? $config['iterator'] : null;
+        return $config['iterator'] ?? null;
     }
 
     /**
      * Returns report data by name and criteria
      *
      * @param string $name
-     * @param SearchCriteria|null $criteria
      * @return \IteratorIterator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getReport($name, SearchCriteria $criteria = null)
+    public function getReport($name)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());

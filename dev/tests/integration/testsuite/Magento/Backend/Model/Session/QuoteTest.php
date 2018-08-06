@@ -8,7 +8,7 @@ namespace Magento\Backend\Model\Session;
 /**
  * Class QuoteTest
  */
-class QuoteTest extends \PHPUnit_Framework_TestCase
+class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php

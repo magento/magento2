@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ConfigurableTest
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Magento\ConfigurableProduct\Model\Product\VariationHandler|MockObject
@@ -150,7 +150,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $paramValueMap = [
-            ['configurable-matrix-serialized', '[]', json_encode($simpleProducts)],
+            ['configurable-matrix-serialized', "[]", json_encode($simpleProducts)],
             ['attributes', null, $attributes],
         ];
 
@@ -212,11 +212,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids_serialized', '[]', []],
+            ['associated_product_ids_serialized', "[]", "[]"],
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $paramValueMap = [
-            ['configurable-matrix-serialized', '[]', []],
+            ['configurable-matrix-serialized', "[]", "[]"],
             ['attributes', null, $attributes],
         ];
 

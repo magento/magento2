@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * @inheritdoc
  */
-class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
+class DataDifferenceCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataDifferenceCalculator

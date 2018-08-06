@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\Serialize\Serializer\Json;
 
-class ExceptionsTest extends \PHPUnit_Framework_TestCase
+class ExceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Design\Backend\Exceptions

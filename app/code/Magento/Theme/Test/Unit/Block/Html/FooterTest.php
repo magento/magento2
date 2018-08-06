@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Html;
 
-class FooterTest extends \PHPUnit_Framework_TestCase
+class FooterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Block\Html\Footer

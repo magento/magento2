@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\OfflinePayments\Model\Checkmo;
 
-class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
+class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BeforeOrderPaymentSaveObserver

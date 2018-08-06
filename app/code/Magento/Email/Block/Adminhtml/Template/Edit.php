@@ -42,7 +42,7 @@ class Edit extends Widget implements ContainerInterface
      *
      * @var string
      */
-    protected $_template = 'template/edit.phtml';
+    protected $_template = 'Magento_Email::template/edit.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -102,7 +102,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -111,7 +111,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -119,7 +119,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function removeButton($buttonId)
     {
@@ -222,7 +222,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {

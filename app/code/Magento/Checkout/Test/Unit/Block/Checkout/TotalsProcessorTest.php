@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Unit\Block\Checkout;
 
-class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
+class TotalsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Block\Checkout\TotalsProcessor
@@ -20,31 +20,28 @@ class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->model = new \Magento\Checkout\Block\Checkout\TotalsProcessor($this->scopeConfigMock);
     }
 
     public function testProcess()
     {
+        $jsLayoutData = [
+            'sub-total' => [],
+            'grand-total' => [],
+            'non-existant-total' => null
+        ];
+        $expectedResultData = [
+            'sub-total' => ['sortOrder' => 10],
+            'grand-total' => ['sortOrder' => 20],
+            'non-existant-total' => null
+        ];
         $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
-            ['children']['totals']['children'] = [
-                'sub-total' => [],
-                'grand-total' => [],
-                'non-existant-total' => null
-            ];
+            ['children']['totals']['children'] = $jsLayoutData;
         $expectedResult['components']['checkout']['children']['sidebar']['children']['summary']
-            ['children']['totals']['children'] = [
-                'sub-total' => ['sortOrder' => 10],
-                'grand-total' => ['sortOrder' => 20],
-                'non-existant-total' => null
-            ];
+            ['children']['totals']['children'] = $expectedResultData;
+
         $configData = ['sub_total' => 10, 'grand_total' => 20];
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with('sales/totals_sort')

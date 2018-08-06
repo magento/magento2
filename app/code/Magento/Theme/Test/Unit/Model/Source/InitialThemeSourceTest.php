@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
+class InitialThemeSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InitialThemeSource
@@ -74,6 +74,7 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
+            ->setMethods(['sort', 'from'])
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();

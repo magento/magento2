@@ -96,7 +96,7 @@ class ScopeOverriddenValue
      * @param \Magento\Catalog\Model\AbstractModel $entity
      * @return array
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getDefaultValues($entityType, $entity)
     {

@@ -99,6 +99,9 @@ class Importer implements ImporterInterface
                     implode(', ', array_column($newGroups, 'name'))
                 );
             }
+            // during import websites/stores database already has new entities
+            // but cache is outdated which can cause to error in some cases
+            $this->reinitStores();
 
             $this->resource->beginTransaction();
 

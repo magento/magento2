@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Test\Unit\Model;
 
-class SynonymGroupTest extends \PHPUnit_Framework_TestCase
+class SynonymGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymGroup

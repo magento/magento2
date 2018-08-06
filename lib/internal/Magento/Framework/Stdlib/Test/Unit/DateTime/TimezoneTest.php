@@ -12,7 +12,10 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TimezoneTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for @see Timezone
+ */
+class TimezoneTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string|null
@@ -88,14 +91,26 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     public function dateIncludeTimeDataProvider()
     {
         return [
-            'Parse date without time' => [
+            'Parse d/m/y date without time' => [
                 '19/05/2017', // date
                 'ar_KW', // locale
                 false, // include time
                 1495170000 // expected timestamp
             ],
-            'Parse date with time' => [
-                '05/19/2017 00:01 am', // date
+            'Parse d/m/y date with time' => [
+                '19/05/2017 00:01 صباحاً', // datetime (00:01 am)
+                'ar_KW', // locale
+                true, // include time
+                1495170060 // expected timestamp
+            ],
+            'Parse m/d/y date without time' => [
+                '05/19/2017', // date
+                'en_US', // locale
+                false, // include time
+                1495170000 // expected timestamp
+            ],
+            'Parse m/d/y date with time' => [
+                '05/19/2017 00:01 am', // datetime
                 'en_US', // locale
                 true, // include time
                 1495170060 // expected timestamp
@@ -138,6 +153,38 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
                 'UTC',
                 '2016-10-10 10:00:00'
             ]
+        ];
+    }
+
+    /**
+     * @param string $locale
+     * @param string $expectedResult
+     * @dataProvider getDateFormatDataProvider
+     */
+    public function testGetDateFormat(string $locale, string $expectedResult)
+    {
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        /** @var Timezone $timezone */
+        $timezone = $this->objectManager->getObject(
+            Timezone::class,
+            ['_localeResolver' => $this->localeResolver]
+        );
+
+        $this->assertSame($expectedResult, $timezone->getDateFormat());
+    }
+
+    /**
+     * Data provider for testGetDateFormat
+     * @return array
+     */
+    public function getDateFormatDataProvider()
+    {
+        return [
+            ['en_GB', 'dd/MM/y'],
+            ['en_US', 'M/d/yy'],
         ];
     }
 

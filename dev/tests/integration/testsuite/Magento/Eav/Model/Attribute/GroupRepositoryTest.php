@@ -13,7 +13,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeGroupRepositoryInterface

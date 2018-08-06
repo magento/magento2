@@ -11,6 +11,7 @@ use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 /**
  * Form fieldset renderer
  * @api
+ * @since 100.0.2
  */
 class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
@@ -24,7 +25,7 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     /**
      * @var string
      */
-    protected $_template = 'store/switcher/form/renderer/fieldset.phtml';
+    protected $_template = 'Magento_Backend::store/switcher/form/renderer/fieldset.phtml';
 
     /**
      * Retrieve an element

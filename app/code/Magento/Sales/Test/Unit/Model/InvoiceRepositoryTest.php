@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 /**
  * Class InvoiceRepositoryTest
  */
-class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
+class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\InvoiceRepository
@@ -36,7 +36,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->invoiceMetadata = $this->getMock(\Magento\Sales\Model\ResourceModel\Metadata::class, [], [], '', false);
+        $this->invoiceMetadata = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
         $this->searchResultFactory = $this->getMockBuilder(
             \Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory::class
         )
@@ -53,7 +53,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
-        $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
+        $this->type = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId']);
     }
 
     public function testGet()

@@ -19,7 +19,7 @@ use Magento\Quote\Model\Quote\Payment;
  * Class AbstractAgreementTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
+class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject

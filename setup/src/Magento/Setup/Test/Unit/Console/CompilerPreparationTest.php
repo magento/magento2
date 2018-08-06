@@ -15,7 +15,7 @@ use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Console\CompilerPreparation;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
+class CompilerPreparationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompilerPreparation|Mock

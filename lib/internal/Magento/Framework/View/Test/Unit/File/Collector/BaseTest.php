@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\File\Collector;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\File;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\Collector\Base
@@ -39,7 +39,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
 
-        $this->dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $this->dirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
 
         $this->fileCollector = new \Magento\Framework\View\File\Collector\Base(
             $this->dirSearch,
@@ -53,7 +53,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $files = [];
         foreach (['shared', 'theme'] as $fileType) {
             for ($i = 0; $i < 2; $i++) {
-                $file = $this->getMock(\Magento\Framework\Component\ComponentFile::class, [], [], '', false);
+                $file = $this->createMock(\Magento\Framework\Component\ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')
                     ->will($this->returnValue("{$fileType}/module/{$i}/path"));

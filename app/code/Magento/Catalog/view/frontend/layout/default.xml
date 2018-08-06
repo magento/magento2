@@ -22,6 +22,11 @@
                                 <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
                             </item>
                         </item>
+                        <item name="product_data_storage" xsi:type="array">
+                            <item name="updateRequestConfig" xsi:type="array">
+                                <item name="url" xsi:type="serviceUrl" path="/products-render-info"/>
+                            </item>
+                        </item>
                     </argument>
                 </arguments>
             </block>

@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Structure;
 
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 
-class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
+class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
 {
     private static $specialGroups = [
         'account',
@@ -175,6 +175,9 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
         return $availableGroups;
     }
 
+    /**
+     * @return mixed
+     */
     public function caseProvider()
     {
         return include __DIR__ . '/_files/payment_section_structure_variations.php';

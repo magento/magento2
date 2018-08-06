@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Cache\Config\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storage = $this->getMock(\Magento\Framework\Cache\Config\Data::class, ['get'], [], '', false);
+        $this->_storage = $this->createPartialMock(\Magento\Framework\Cache\Config\Data::class, ['get']);
         $this->_model = new \Magento\Framework\Cache\Config($this->_storage);
     }
 

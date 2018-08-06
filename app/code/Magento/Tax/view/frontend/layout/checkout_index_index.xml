@@ -70,7 +70,7 @@
                                                             <item name="config" xsi:type="array">
                                                                 <item name="exclTaxLabel" xsi:type="string" translate="true">Order Total Excl. Tax</item>
                                                                 <item name="inclTaxLabel" xsi:type="string" translate="true">Order Total Incl. Tax</item>
-                                                                <item name="basicCurrencyMessage" xsi:type="string" translate="true">Your credit card will be charged for</item>
+                                                                <item name="basicCurrencyMessage" xsi:type="string" translate="true">You will be charged for</item>
                                                                 <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                             </item>
                                                         </item>

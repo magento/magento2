@@ -21,7 +21,7 @@ use Magento\Store\Model\StoreManager;
  * Class ReviewTest
  * @package Magento\Review\Test\Unit\Block\Product
  */
-class ReviewTest extends \PHPUnit_Framework_TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Block\Product\Review
@@ -204,6 +204,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($actionUrl . '/id/' . $productId, $this->block->getProductReviewUrl());
     }
 
+    /**
+     * @return array
+     */
     public function getProductReviewUrlDataProvider()
     {
         return [

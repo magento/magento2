@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Asset\Bundle;
 
 use Magento\Framework\View\Asset\Bundle\Manager;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $manager;

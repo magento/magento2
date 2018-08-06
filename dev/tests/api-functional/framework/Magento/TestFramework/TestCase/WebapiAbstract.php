@@ -15,7 +15,7 @@ use Magento\Webapi\Model\Soap\Fault;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
+abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 {
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
     /**#@+

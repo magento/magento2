@@ -17,6 +17,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class DefaultType extends \Magento\Framework\DataObject
 {
@@ -275,7 +276,7 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getCustomizedView($optionInfo)
     {
-        return isset($optionInfo['value']) ? $optionInfo['value'] : $optionInfo;
+        return $optionInfo['value'] ?? $optionInfo;
     }
 
     /**
@@ -337,7 +338,7 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->_getChargableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
+        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -391,14 +392,27 @@ class DefaultType extends \Magento\Framework\DataObject
     }
 
     /**
-     * Return final chargable price for option
+     * @param float $price Price of option
+     * @param boolean $isPercent Price type - percent or fixed
+     * @param float $basePrice For percent price type
+     * @return float
+     * @deprecated 102.0.4 typo in method name
+     * @see _getChargeableOptionPrice
+     */
+    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    {
+        return $this->_getChargeableOptionPrice($price, $isPercent, $basePrice);
+    }
+
+    /**
+     * Return final chargeable price for option
      *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
      */
-    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {
         if ($isPercent) {
             return $basePrice * $price / 100;

@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface CartTotalRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface CartTotalRepositoryInterface
 {

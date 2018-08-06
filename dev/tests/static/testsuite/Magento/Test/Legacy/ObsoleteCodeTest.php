@@ -18,7 +18,7 @@ use Magento\TestFramework\Utility\ChangedFiles;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
+class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**@#+
      * Lists of obsolete entities from fixtures

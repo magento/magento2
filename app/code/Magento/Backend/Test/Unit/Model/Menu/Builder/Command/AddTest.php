@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Builder\Command;
 
-class AddTest extends \PHPUnit_Framework_TestCase
+class AddTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Builder\Command\Add

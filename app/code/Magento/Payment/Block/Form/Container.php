@@ -14,6 +14,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
  * @method \Magento\Quote\Model\Quote getQuote()
  *
  * @api
+ * @since 100.0.2
  */
 class Container extends \Magento\Framework\View\Element\Template
 {
@@ -22,7 +23,9 @@ class Container extends \Magento\Framework\View\Element\Template
      */
     protected $_paymentHelper;
 
-    /** @var  \Magento\Payment\Model\Checks\SpecificationFactory */
+    /**
+     * @var \Magento\Payment\Model\Checks\SpecificationFactory
+     */
     protected $methodSpecificationFactory;
 
     /**
@@ -37,6 +40,7 @@ class Container extends \Magento\Framework\View\Element\Template
 
     /**
      * @var array
+     * @since 100.1.3
      */
     protected $additionalChecks;
 
@@ -178,7 +182,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method list.
      *
      * @return \Magento\Payment\Api\PaymentMethodListInterface
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getPaymentMethodList()
     {
@@ -194,7 +198,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * Get payment method instance factory.
      *
      * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getPaymentMethodInstanceFactory()
     {

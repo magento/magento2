@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Account\Dashboard;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Info

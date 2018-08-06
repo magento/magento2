@@ -8,7 +8,7 @@ namespace Magento\Framework\Data\Test\Unit\Tree\Node;
 
 use \Magento\Framework\Data\Tree\Node\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Tree\Node\Collection
@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->collection->offsetExists('node1'), true);
         $this->collection->offsetSet('node1', 'Hello');
         $this->assertSame($this->collection->offsetExists('node1'), true);
-        $this->assertSame($this->collection->offsetget('node1'), 'Hello');
+        $this->assertSame($this->collection->offsetGet('node1'), 'Hello');
         $this->collection->offsetUnset('node1');
         $this->assertSame($this->collection->offsetExists('node1'), false);
     }

@@ -7,7 +7,7 @@ namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Translation\Model\Js\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config

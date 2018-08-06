@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Request;
 use Magento\Payment\Gateway\Request\BuilderComposite;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
-class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
+class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testBuildEmpty()
     {

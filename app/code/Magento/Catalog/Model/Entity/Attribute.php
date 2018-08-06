@@ -12,8 +12,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Product attribute extension with event dispatching
  *
- * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
  * @method string getFrontendInputRenderer()
  * @method \Magento\Catalog\Model\Entity\Attribute setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)

@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ShippingProcessorTest
  */
-class ShippingProcessorTest extends \PHPUnit_Framework_TestCase
+class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShippingAddressManagement|MockObject

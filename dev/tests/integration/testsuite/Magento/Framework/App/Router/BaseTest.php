@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Router;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Router\Base

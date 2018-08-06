@@ -60,7 +60,7 @@ class SaveHandler implements ExtensionInterface
         if ($dtoCategoryLinks !== null) {
             $hydrator = $this->hydratorPool->getHydrator(CategoryLinkInterface::class);
             $dtoCategoryLinks = array_map(function ($categoryLink) use ($hydrator) {
-                return $hydrator->extract($categoryLink) ;
+                return $hydrator->extract($categoryLink);
             }, $dtoCategoryLinks);
             $processLinks = $this->mergeCategoryLinks($dtoCategoryLinks, $modelCategoryLinks);
         } else {
@@ -119,7 +119,9 @@ class SaveHandler implements ExtensionInterface
 
             if ($key === false) {
                 $result[] = $newCategoryPosition;
-            } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
+            } elseif (isset($oldCategoryPositions[$key])
+                && $oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']
+            ) {
                 $result[] = $newCategoryPositions[$key];
                 unset($oldCategoryPositions[$key]);
             }

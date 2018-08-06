@@ -87,10 +87,12 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     public function getSectionData()
     {
         $totals = $this->getQuote()->getTotals();
+        $subtotalAmount = $totals['subtotal']->getValue();
         return [
             'summary_count' => $this->getSummaryCount(),
+            'subtotalAmount' => $subtotalAmount,
             'subtotal' => isset($totals['subtotal'])
-                ? $this->checkoutHelper->formatPrice($totals['subtotal']->getValue())
+                ? $this->checkoutHelper->formatPrice($subtotalAmount)
                 : 0,
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),

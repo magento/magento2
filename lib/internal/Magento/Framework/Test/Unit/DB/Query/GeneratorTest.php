@@ -11,7 +11,7 @@ use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generator
@@ -43,10 +43,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->factoryMock = $this->getMock(BatchIteratorFactory::class, [], [], '', false, false);
-        $this->rangeFactoryMock = $this->getMock(BatchRangeIteratorFactory::class, ['create'], [], '', false, false);
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false, false);
-        $this->iteratorMock = $this->getMock(BatchIterator::class, [], [], '', false, false);
+        $this->factoryMock = $this->createMock(BatchIteratorFactory::class);
+        $this->rangeFactoryMock = $this->createPartialMock(BatchRangeIteratorFactory::class, ['create']);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->iteratorMock = $this->createMock(BatchIterator::class);
         $this->model = new Generator($this->factoryMock, $this->rangeFactoryMock);
     }
 

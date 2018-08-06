@@ -21,9 +21,7 @@ class Config
     const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
     /**#@-*/
 
-    /**
-     * @var ScopeConfigInterface
-     */
+    /**#@-*/
     protected $scopeConfig;
 
     /**

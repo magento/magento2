@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Layout;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\Element

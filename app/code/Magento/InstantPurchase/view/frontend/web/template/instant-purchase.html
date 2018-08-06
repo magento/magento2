@@ -1,0 +1,34 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="showButton()">
+    <button type="button"
+            class="action primary instant-purchase"
+            click="instantPurchase"
+            attr="title: $t(buttonText)">
+        <span translate="buttonText" />
+    </button>
+    <input if="paymentToken()"
+           type="hidden"
+           name="instant_purchase_payment_token"
+           ko-value="paymentToken().publicHash" />
+    <input if="shippingAddress()"
+           type="hidden"
+           name="instant_purchase_shipping_address"
+           ko-value="shippingAddress().id" />
+    <input if="billingAddress()"
+           type="hidden"
+           name="instant_purchase_billing_address"
+           ko-value="billingAddress().id" />
+    <if args="shippingMethod()">
+        <input type="hidden"
+               name="instant_purchase_carrier"
+               ko-value="shippingMethod().carrier" />
+        <input type="hidden"
+               name="instant_purchase_shipping"
+               ko-value="shippingMethod().method" />
+    </if>
+</if>

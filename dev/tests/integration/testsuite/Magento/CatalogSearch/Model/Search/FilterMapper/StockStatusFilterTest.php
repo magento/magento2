@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
 
-class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
+class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Const to define if 'show out of stock' configuration flag enabled or not

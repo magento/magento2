@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Helper;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Helper\Address */
     protected $helper;

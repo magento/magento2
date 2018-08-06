@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 
 use \Magento\Payment\Model\Checks\TotalMinMax;
 
-class TotalMinMaxTest extends \PHPUnit_Framework_TestCase
+class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Payment min total value

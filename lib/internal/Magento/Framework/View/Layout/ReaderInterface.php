@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Layout;
 
+/**
+ * Interface \Magento\Framework\View\Layout\ReaderInterface
+ *
+ */
 interface ReaderInterface
 {
     /**

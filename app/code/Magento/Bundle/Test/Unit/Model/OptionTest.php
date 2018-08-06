@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -31,32 +31,20 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectionFirst = $this->getMock(
+        $this->selectionFirst = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId'],
-            [],
-            '',
-            false
+            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
         );
-        $this->selectionSecond = $this->getMock(
+        $this->selectionSecond = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId'],
-            [],
-            '',
-            false
+            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
         );
-        $this->resource = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
-            [
+        $this->resource = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
                 '_construct',
                 'getConnection',
                 'getIdFieldName',
                 'getSearchableData',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Model\Option::class, [
             'resource' => $this->resource,
         ]);

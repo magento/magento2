@@ -11,7 +11,7 @@ use Magento\Theme\Controller\Adminhtml\System\Design\Theme\DownloadCustomCss;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
+class DownloadCustomCssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject

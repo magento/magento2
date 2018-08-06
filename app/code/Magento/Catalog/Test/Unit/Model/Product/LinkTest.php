@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use \Magento\Catalog\Model\Product\Link;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Link
@@ -60,7 +60,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->productCollection));
 
-        $this->resource = $this->getMock(
+        $this->resource = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [
                 'saveProductLinks',

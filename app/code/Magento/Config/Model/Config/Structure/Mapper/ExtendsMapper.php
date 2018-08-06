@@ -11,6 +11,7 @@ namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {

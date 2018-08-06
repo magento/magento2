@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Helper;
  * Newsletter Data Helper
  *
  * @api
+ * @since 100.0.2
  */
 class Data
 {

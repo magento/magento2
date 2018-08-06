@@ -9,6 +9,7 @@ namespace Magento\Directory\Api;
  * Currency information acquirer interface
  *
  * @api
+ * @since 100.0.2
  */
 interface CurrencyInformationAcquirerInterface
 {

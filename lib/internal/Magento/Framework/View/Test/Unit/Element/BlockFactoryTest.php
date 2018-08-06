@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-class BlockFactoryTest extends \PHPUnit_Framework_TestCase
+class BlockFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\BlockFactory
@@ -21,7 +21,7 @@ class BlockFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->blockFactory = $objectManagerHelper->getObject(
             \Magento\Framework\View\Element\BlockFactory::class,

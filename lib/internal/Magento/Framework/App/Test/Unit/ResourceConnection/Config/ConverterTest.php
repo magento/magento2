@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\Config\Converter

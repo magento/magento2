@@ -11,12 +11,17 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Quote\Model\Quote;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Framework\Webapi\Rest\Request;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartRepositoryTest extends WebapiAbstract
 {
+    private static $mineCartUrl = '/V1/carts/mine';
+
     /**
      * @var ObjectManager
      */
@@ -238,5 +243,125 @@ class CartRepositoryTest extends WebapiAbstract
         $searchCriteria = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
         $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Invalid state change requested
+     * @dataProvider customerIdDataProvider
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     */
+    public function testSaveQuoteException($customerId)
+    {
+        $token = $this->getToken();
+
+        /** @var Quote $quote */
+        $quote = $this->getCart('test_order_1');
+
+        $requestData = $this->getRequestData($quote->getId());
+        // Replace to customer id not much with current user id..
+        $requestData['quote']['customer']['id'] = $customerId;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::$mineCartUrl,
+                'httpMethod'   => Request::HTTP_METHOD_PUT,
+                'token'        => $token
+            ],
+            'soap' => [
+                'service' => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'quoteCartRepositoryV1Save',
+                'token' => $token
+            ]
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Saving quote - positive case: successful change correct customer data.
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     */
+    public function testSaveQuote()
+    {
+        $token = $this->getToken();
+
+        /** @var Quote $quote */
+        $quote = $this->getCart('test_order_1');
+
+        $requestData = $this->getRequestData($quote->getId());
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::$mineCartUrl,
+                'httpMethod'   => Request::HTTP_METHOD_PUT,
+                'token'        => $token
+            ],
+            'soap' => [
+                'service'        => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation'      => 'quoteCartRepositoryV1Save',
+                'token'          => $token
+            ]
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+
+        $quote->loadActive($requestData["quote"]["id"]);
+        $this->assertEquals($requestData["quote"]["customer"]["firstname"], $quote->getCustomerFirstname());
+        $this->assertEquals($requestData["quote"]["customer"]["middlename"], $quote->getCustomerMiddlename());
+        $this->assertEquals($requestData["quote"]["customer"]["lastname"], $quote->getCustomerLastname());
+        $this->assertEquals($requestData["quote"]["customer"]["email"], $quote->getCustomerEmail());
+    }
+
+    /**
+     * Request to api for the current user token.
+     *
+     * @return string
+     */
+    private function getToken()
+    {
+        $customerTokenService = $this->objectManager->create(
+            CustomerTokenServiceInterface::class
+        );
+
+        return $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+    }
+
+    /**
+     * Request's data for tests.
+     *
+     * @param $quoteId Int
+     * @return array
+     */
+    private function getRequestData($quoteId)
+    {
+        $requestData['quote'] = [
+            'id'       => $quoteId,
+            'store_id' => 1,
+            'customer' => [
+                'id'         => 1,
+                'middlename' => 'Middlename_Test',
+                'firstname'  => 'Firstname_Test',
+                'lastname'   => 'Lastname_Test',
+                'email'      => 'customer@test.com'
+            ]
+        ];
+
+        return $requestData;
+    }
+
+    /**
+     * Provides different types of customer id.
+     *
+     * @return array
+     */
+    public function customerIdDataProvider()
+    {
+        return [[999],[null],['25']];
     }
 }

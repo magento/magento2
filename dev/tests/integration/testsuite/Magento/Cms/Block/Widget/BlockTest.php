@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Block\Widget;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Cms/_files/block.php

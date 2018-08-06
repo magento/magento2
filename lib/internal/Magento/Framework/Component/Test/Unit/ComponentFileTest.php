@@ -7,7 +7,7 @@ namespace Magento\Framework\Component\Test\Unit;
 
 use Magento\Framework\Component\ComponentFile;
 
-class ComponentFileTest extends \PHPUnit_Framework_TestCase
+class ComponentFileTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetters()
     {

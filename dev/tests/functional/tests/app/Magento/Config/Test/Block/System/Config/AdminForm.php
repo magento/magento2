@@ -21,4 +21,14 @@ class AdminForm extends Form
     {
         return $this->_rootElement->find($this->adminAccountSharingField, Locator::SELECTOR_CSS)->isVisible();
     }
+
+    /**
+     * Check if form is empty.
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isVisible() && $this->_rootElement->getText() == '';
+    }
 }

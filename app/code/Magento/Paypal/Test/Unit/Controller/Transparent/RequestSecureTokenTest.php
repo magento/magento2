@@ -19,7 +19,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
+class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Transparent|\PHPUnit_Framework_MockObject_MockObject

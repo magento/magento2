@@ -11,7 +11,7 @@ use Magento\Framework\Convert\DataSize;
 /**
  * Class DataSizeTest
  */
-class DataSizeTest extends \PHPUnit_Framework_TestCase
+class DataSizeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Convert\DataSize

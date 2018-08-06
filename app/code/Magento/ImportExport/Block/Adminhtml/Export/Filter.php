@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -211,6 +212,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @return \Magento\Framework\Phrase
+     * @since 100.2.0
      */
     protected function getFromAttributePrefix(Attribute $attribute)
     {

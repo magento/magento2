@@ -109,7 +109,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getLogger()
     {

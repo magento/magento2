@@ -9,11 +9,9 @@ namespace Magento\ImportExport\Model;
  * Import history model
  *
  * @api
- *
- * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
- * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {

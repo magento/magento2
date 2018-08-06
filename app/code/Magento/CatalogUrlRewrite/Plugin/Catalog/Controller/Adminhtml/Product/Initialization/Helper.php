@@ -7,7 +7,9 @@ namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\
 
 class Helper
 {
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
     /**

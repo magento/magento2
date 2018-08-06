@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test \Magento\Customer\Model\Config\Share
  */
-class ShareTest extends \PHPUnit_Framework_TestCase
+class ShareTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSharedWebsiteIds()
     {

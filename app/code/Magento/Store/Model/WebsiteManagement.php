@@ -10,6 +10,7 @@ use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class WebsiteManagement implements WebsiteManagementInterface
 {

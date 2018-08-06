@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
 {

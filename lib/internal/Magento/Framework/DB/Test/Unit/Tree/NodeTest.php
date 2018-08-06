@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Tree;
 
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data
@@ -20,7 +20,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $expectedException,
         $expectedExceptionMessage
     ) {
-        $this->setExpectedException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
         new \Magento\Framework\DB\Tree\Node($data['node_data'], $data['keys']);
     }
 

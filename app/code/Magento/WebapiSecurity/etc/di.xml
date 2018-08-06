@@ -41,6 +41,10 @@
                 <item name="/V1/configurable-products/:sku/children::GET" xsi:type="string"/>
                 <item name="/V1/configurable-products/:sku/options/:id::GET" xsi:type="string"/>
                 <item name="/V1/configurable-products/:sku/options/all::GET" xsi:type="string"/>
+                <item name="/V1/bundle-products/:productSku/children::GET" xsi:type="string"/>
+                <item name="/V1/bundle-products/:sku/options/all::GET" xsi:type="string"/>
+                <item name="/V1/bundle-products/options/types::GET" xsi:type="string"/>
+                <item name="/V1/bundle-products/:sku/options/:optionId::GET" xsi:type="string"/>
                 <item name="/V1/cmsPage/:pageId::GET" xsi:type="string"/>
                 <item name="/V1/cmsBlock/:blockId::GET" xsi:type="string"/>
                 <item name="/V1/store/storeViews::GET" xsi:type="string"/>

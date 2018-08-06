@@ -68,7 +68,7 @@ class InvalidateVarnishObserver implements ObserverInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return \Magento\Framework\App\Cache\Tag\Resolver
      */
     private function getTagResolver()

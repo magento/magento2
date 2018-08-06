@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Setup\UpgradeData;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class UpgradeDataTest extends \PHPUnit_Framework_TestCase
+class UpgradeDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -102,6 +102,9 @@ class UpgradeDataTest extends \PHPUnit_Framework_TestCase
         $this->model->upgrade($this->setupMock, $this->contextMock);
     }
 
+    /**
+     * @return array
+     */
     public function upgradeDataProvider()
     {
         return [

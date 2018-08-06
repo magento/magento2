@@ -369,23 +369,53 @@ class AbstractAction
         }
         $values = [];
 
-        foreach ($entityIds as $entityId) {
-            $values[$entityId] = [];
+        $linkIds = $this->getLinkIds($entityIds);
+        foreach ($linkIds as $linkId) {
+            $values[$linkId] = [];
         }
+
         $attributes = $this->getAttributes();
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
+        $linkField = $this->getCategoryMetadata()->getLinkField();
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row[$this->getCategoryMetadata()->getLinkField()]) && isset($row['attribute_id'])) {
+                if (isset($row[$linkField]) && isset($row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
-                        $values[$row[$this->getCategoryMetadata()->getLinkField()]][$attributeCode] = $row['value'];
+                        $values[$row[$linkField]][$attributeCode] = $row['value'];
                     }
                 }
             }
         }
+
         return $values;
+    }
+
+    /**
+     * Translate entity ids into link ids
+     *
+     * Used for rows with no EAV attributes set.
+     *
+     * @param array $entityIds
+     * @return array
+     */
+    private function getLinkIds(array $entityIds)
+    {
+        $linkField = $this->getCategoryMetadata()->getLinkField();
+        if ($linkField === 'entity_id') {
+            return $entityIds;
+        }
+
+        $select = $this->connection->select()->from(
+            ['e' => $this->connection->getTableName($this->getTableName('catalog_category_entity'))],
+            [$linkField]
+        )->where(
+            'e.entity_id IN (?)',
+            $entityIds
+        );
+
+        return $this->connection->fetchCol($select);
     }
 
     /**

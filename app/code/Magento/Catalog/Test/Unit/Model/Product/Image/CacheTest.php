@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CacheTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -185,6 +185,58 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->imageHelper->expects($this->exactly(3))
             ->method('save')
             ->will($this->returnSelf());
+
+        $this->model->generate($this->product);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     */
+    public function testGenerateWithException()
+    {
+        $imageFile = 'image.jpg';
+        $imageItem = $this->objectManager->getObject(
+            \Magento\Framework\DataObject::class,
+            [
+                'data' => ['file' => $imageFile]
+            ]
+        );
+        $this->mediaGalleryCollection->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$imageItem]));
+
+        $this->product->expects($this->atLeastOnce())
+            ->method('getMediaGalleryImages')
+            ->willReturn($this->mediaGalleryCollection);
+
+        $data = $this->getTestData();
+        $this->config->expects($this->once())
+            ->method('getMediaEntities')
+            ->with('Magento_Catalog')
+            ->willReturn($data);
+
+        $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeMock->expects($this->exactly(3))
+            ->method('getCode')
+            ->willReturn('Magento\theme');
+
+        $this->themeCollection->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn([$themeMock]);
+
+        $this->viewConfig->expects($this->once())
+            ->method('getViewConfig')
+            ->with([
+                'area' => Area::AREA_FRONTEND,
+                'themeModel' => $themeMock,
+            ])
+            ->willReturn($this->config);
+
+        $this->imageHelper->expects($this->exactly(3))
+            ->method('init')
+            ->willThrowException(new \Exception('Some text '));
 
         $this->model->generate($this->product);
     }

@@ -7,7 +7,7 @@ namespace Magento\Backend\Test\Unit\Model\View\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\View\Result\Page

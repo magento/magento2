@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
-class SalableProcessorTest extends \PHPUnit_Framework_TestCase
+class SalableProcessorTest extends \PHPUnit\Framework\TestCase
 {
     const STOCK_FLAG = 'has_stock_status_filter';
 

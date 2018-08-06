@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

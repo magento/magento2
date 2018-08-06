@@ -9,6 +9,11 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry

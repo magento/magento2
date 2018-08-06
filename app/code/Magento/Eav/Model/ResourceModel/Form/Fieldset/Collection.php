@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface as Logger;
  * Eav Form Fieldset Resource Collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

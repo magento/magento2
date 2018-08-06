@@ -13,6 +13,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      */
     public function testViewAction()
     {
@@ -32,6 +33,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
         $this->assertNotContains('class="options-container-big"', $responseBody);
-        $this->assertSelectCount('#product-options-wrapper', 1, $responseBody);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="product-options-wrapper"]',
+                $responseBody
+            )
+        );
     }
 }

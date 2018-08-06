@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\System\Config;
 
-class ModeTest extends \PHPUnit_Framework_TestCase
+class ModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode
@@ -29,20 +29,14 @@ class ModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->indexerStateMock = $this->getMock(
+        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->indexerStateMock = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer\State::class,
-            ['loadByIndexer', 'setStatus', 'save', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByIndexer', 'setStatus', 'save', '__wakeup']
         );
-        $this->indexerProcessorMock = $this->getMock(
+        $this->indexerProcessorMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
-            ['getIndexer'],
-            [],
-            '',
-            false
+            ['getIndexer']
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -56,6 +50,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueEqual()
     {
         return [['0', '0'], ['', '0'], ['0', ''], ['1', '1']];
@@ -90,6 +87,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         $this->model->processValue();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueOn()
     {
         return [['0', '1'], ['', '1']];
@@ -140,6 +140,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         $this->model->processValue();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueOff()
     {
         return [['1', '0'], ['1', '']];

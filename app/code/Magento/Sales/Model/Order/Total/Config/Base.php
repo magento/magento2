@@ -43,7 +43,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
-     * @param mixed $sourceData
+     * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param SerializerInterface $serializer
      */
     public function __construct(

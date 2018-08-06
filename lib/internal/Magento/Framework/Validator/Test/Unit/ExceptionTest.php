@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 /**
  * Test case for \Magento\Framework\Validator\Exception
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Testing \Magento\Framework\Validator\Exception::getMessage

@@ -14,7 +14,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirect
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser
  */
-class RowParserTest extends \PHPUnit_Framework_TestCase
+class RowParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  ColumnResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -128,6 +128,9 @@ class RowParserTest extends \PHPUnit_Framework_TestCase
         throw $exception;
     }
 
+    /**
+     * @return array
+     */
     public function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];

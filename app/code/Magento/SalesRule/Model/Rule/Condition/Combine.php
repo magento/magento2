@@ -7,6 +7,7 @@ namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {

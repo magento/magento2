@@ -13,7 +13,7 @@ use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValid
 use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters;
 use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed;
 
-class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
+class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,13 +27,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->argumentsReaderMock = $this->getMock(
-            \Magento\Framework\Code\Reader\ArgumentsReader::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
 
         $this->argumentsReaderMock->expects($this->any())->method('isCompatibleType')
             ->will($this->returnCallback(function ($arg1, $arg2) {

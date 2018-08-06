@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoAppIsolation enabled
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Session\Config */
     protected $_model;
@@ -35,16 +35,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if ($sessionManager->isSessionExists()) {
             $sessionManager->writeClose();
         }
-        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-
-        $this->deploymentConfigMock->expects($this->at(0))
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfigMock
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_PATH)
-            ->will($this->returnValue(null));
-        $this->deploymentConfigMock->expects($this->at(1))
-            ->method('get')
-            ->with(Config::PARAM_SESSION_CACHE_LIMITER)
-            ->will($this->returnValue($this->_cacheLimiter));
+            ->willReturnCallback(function ($configPath) {
+                switch ($configPath) {
+                    case Config::PARAM_SESSION_SAVE_METHOD:
+                        return 'files';
+                    case Config::PARAM_SESSION_CACHE_LIMITER:
+                        return $this->_cacheLimiter;
+                    default:
+                        return null;
+                }
+            });
 
         $this->_model = $this->_objectManager->create(
             \Magento\Framework\Session\Config::class,
@@ -81,15 +84,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->_model->getCookieSecure());
         $this->assertEquals(true, $this->_model->getCookieHttpOnly());
         $this->assertEquals($this->_model->getSavePath(), $this->_model->getOption('save_path'));
-    }
-
-    /**
-     * Unable to add integration tests for testGetLifetimePathNonDefault
-     *
-     * Error: Cannot modify header information - headers already sent
-     */
-    public function testGetLifetimePathNonDefault()
-    {
     }
 
     public function testSetOptionsInvalidValue()
@@ -171,7 +165,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testWrongMethodCall()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\BadMethodCallException',
             'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
         );
@@ -280,16 +274,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Cannot set session.save_path with ini_set');
         }
 
-        $this->deploymentConfigMock->expects($this->at(0))
+        $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $deploymentConfigMock
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_PATH)
-            ->will($this->returnValue($given));
+            ->willReturnCallback(function ($configPath) use ($given) {
+                switch ($configPath) {
+                    case Config::PARAM_SESSION_SAVE_METHOD:
+                        return 'files';
+                    case Config::PARAM_SESSION_CACHE_LIMITER:
+                        return $this->_cacheLimiter;
+                    case Config::PARAM_SESSION_SAVE_PATH:
+                        return $given;
+                    default:
+                        return null;
+                }
+            });
 
-        $this->_model = $this->_objectManager->create(
+        $model = $this->_objectManager->create(
             \Magento\Framework\Session\Config::class,
-            ['deploymentConfig' => $this->deploymentConfigMock]
+            ['deploymentConfig' => $deploymentConfigMock]
         );
-        $this->assertEquals($expected, $this->_model->getOption('save_path'));
+        $this->assertEquals($expected, $model->getOption('save_path'));
 
         if ($sessionSavePath != ini_get('session.save_path')) {
             ini_set('session.save_path', $sessionSavePath);

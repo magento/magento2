@@ -7,13 +7,13 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo as Resource;
-use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\CreditmemoInterface
@@ -38,7 +38,9 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -136,6 +138,8 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
+        } catch (LocalizedException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()), $e);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save credit memo'), $e);
         }
@@ -145,7 +149,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

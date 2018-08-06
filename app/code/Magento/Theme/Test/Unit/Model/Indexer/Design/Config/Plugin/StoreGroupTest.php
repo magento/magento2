@@ -10,7 +10,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup;
 
-class StoreGroupTest extends \PHPUnit_Framework_TestCase
+class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /** @var StoreGroup */
     protected $model;

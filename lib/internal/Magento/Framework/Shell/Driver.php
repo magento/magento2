@@ -12,7 +12,9 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Driver
 {
-    /** @var CommandRendererInterface */
+    /**
+     * @var \Magento\Framework\Shell\CommandRendererInterface
+     */
     private $commandRenderer;
 
     /**

@@ -11,7 +11,7 @@ namespace Magento\Weee\Test\Unit\Model;
 
 use \Magento\Weee\Model\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue($configValue));
 
-        $taxData = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
+        $taxData = $this->createMock(\Magento\Tax\Helper\Data::class);
 
         /** @var \Magento\Weee\Model\Config */
         $model = new Config($scopeConfigMock, $taxData);

@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Block\Adminhtml;
 
-class MainTest extends \PHPUnit_Framework_TestCase
+class MainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php

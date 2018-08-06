@@ -9,6 +9,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeSetRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeSetRepositoryInterface
 {

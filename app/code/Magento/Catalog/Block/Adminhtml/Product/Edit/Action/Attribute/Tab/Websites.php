@@ -16,6 +16,7 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

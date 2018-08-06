@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RateRepositoryTest extends \PHPUnit_Framework_TestCase
+class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
@@ -557,7 +557,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @param \Magento\Framework\Api\Filter[] $filters
      * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param $expectedRateCodes
@@ -629,7 +628,17 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 ['US - 42 - 7.5', 'US - 12 - 7.5'],
-            ]
+            ],
+            'like_region_name' => [
+                [
+                    $filterBuilder->setField(Rate::KEY_REGION_NAME)
+                        ->setValue('%NM%')
+                        ->setConditionType('like')
+                        ->create(),
+                ],
+                null,
+                ['US - 42 - 7.5', 'US - 42 - 22'],
+            ],
         ];
     }
 }

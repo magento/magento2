@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
 
-class ProductCategoryFilterTest extends \PHPUnit_Framework_TestCase
+class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ProductCategoryFilter */
     private $model;
@@ -31,7 +31,7 @@ class ProductCategoryFilterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $filterMock->expects($this->exactly(2))
+        $filterMock->expects($this->exactly(1))
             ->method('getConditionType')
             ->willReturn('condition');
         $filterMock->expects($this->once())
@@ -66,7 +66,7 @@ class ProductCategoryFilterTest extends \PHPUnit_Framework_TestCase
 
         $collectionMock->expects($this->once())
             ->method('addCategoriesFilter')
-            ->with(['eq' => ['value']]);
+            ->with(['in' => ['value']]);
 
         $this->assertTrue($this->model->apply($filterMock, $collectionMock));
     }

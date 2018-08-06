@@ -13,7 +13,7 @@ namespace Magento\Webapi;
 
 use Magento\Webapi\Model\Config\Converter;
 
-class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
+class ServiceNameCollisionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test there are no collisions between service names.

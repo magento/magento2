@@ -9,7 +9,7 @@ namespace Magento\Braintree\Gateway\Config;
 use Magento\Config\Model\Config as SystemConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     const METHOD_CODE = 'braintree';
 

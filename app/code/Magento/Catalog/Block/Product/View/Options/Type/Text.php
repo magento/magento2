@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
+ * @since 100.0.2
  */
 class Text extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {

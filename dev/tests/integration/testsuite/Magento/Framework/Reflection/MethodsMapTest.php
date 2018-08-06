@@ -9,7 +9,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class MethodsMapTest extends \PHPUnit_Framework_TestCase
+class MethodsMapTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Reflection\MethodsMap */
     private $object;

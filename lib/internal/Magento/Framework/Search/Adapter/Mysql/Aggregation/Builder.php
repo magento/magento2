@@ -117,7 +117,7 @@ class Builder
      *
      * @param Table $documentsTable
      * @return array
-     * @deprecated Added for backward compatibility
+     * @deprecated 100.1.0 Added for backward compatibility
      */
     private function getDocumentIds(Table $documentsTable)
     {

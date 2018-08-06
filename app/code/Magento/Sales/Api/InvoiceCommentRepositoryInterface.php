@@ -11,6 +11,7 @@ namespace Magento\Sales\Api;
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
  * @api
+ * @since 100.0.2
  */
 interface InvoiceCommentRepositoryInterface
 {
@@ -35,6 +36,7 @@ interface InvoiceCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentInterface $entity The invoice comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\InvoiceCommentInterface $entity);
 
@@ -43,6 +45,7 @@ interface InvoiceCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\InvoiceCommentInterface $entity The invoice comment.
      * @return \Magento\Sales\Api\Data\InvoiceCommentInterface Invoice comment interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\InvoiceCommentInterface $entity);
 }

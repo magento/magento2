@@ -43,6 +43,7 @@ class Index extends Action
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create(true);
         $resultPage->addHandle('robots_index_index');
+        $resultPage->setHeader('Content-Type', 'text/plain');
         return $resultPage;
     }
 }

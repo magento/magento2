@@ -7,7 +7,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\BackupRollbackFactory;
 
-class BackupRollbackFactoryTest extends \PHPUnit_Framework_TestCase
+class BackupRollbackFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
@@ -17,8 +17,8 @@ class BackupRollbackFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $consoleLogger = $this->getMock(\Magento\Framework\Setup\ConsoleLogger::class, [], [], '', false);
-        $factory = $this->getMock(\Magento\Framework\Setup\BackupRollback::class, [], [], '', false);
+        $consoleLogger = $this->createMock(\Magento\Framework\Setup\ConsoleLogger::class);
+        $factory = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
         $output = $this->getMockForAbstractClass(
             \Symfony\Component\Console\Output\OutputInterface::class,
             [],

@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Interface RowValidatorInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorInterface
 {

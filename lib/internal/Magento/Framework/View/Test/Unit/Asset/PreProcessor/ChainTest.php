@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  *
  * @package Magento\Framework\View\Asset\PreProcessor
  */
-class ChainTest extends \PHPUnit_Framework_TestCase
+class ChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject

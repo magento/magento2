@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Config\App\Config\Type\System\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -81,10 +81,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->with($data)
             ->willReturn($data);
         $this->fallback->expects($this->once())
-            ->method('process')
-            ->with($data)
-            ->willReturn($data);
-        $this->postProcessor->expects($this->once())
             ->method('process')
             ->with($data)
             ->willReturn($data);

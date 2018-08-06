@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 use \Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\Filesystem;
 
-class RulePoolTest extends \PHPUnit_Framework_TestCase
+class RulePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RulePool
@@ -18,7 +18,7 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnCallback(function ($code) {
@@ -32,45 +32,22 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 return $dirMock;
             }));
 
-        $simpleFactory = $this->getMock(
-            \Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $simpleFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class);
         $rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $simpleFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($rule));
 
-        $themeFactory = $this->getMock(
-            \Magento\Framework\View\Design\Fallback\Rule\ThemeFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $themeFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ThemeFactory::class);
         $themeFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($rule));
-        $moduleFactory = $this->getMock(
-            \Magento\Framework\View\Design\Fallback\Rule\ModuleFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $moduleFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ModuleFactory::class);
         $moduleFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($rule));
-        $moduleSwitchFactory = $this->getMock(
-            \Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $moduleSwitchFactory =
+            $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory::class);
         $moduleSwitchFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($rule));

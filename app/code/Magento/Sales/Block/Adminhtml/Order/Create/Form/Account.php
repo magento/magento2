@@ -18,6 +18,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Account extends AbstractForm
 {
@@ -133,7 +134,15 @@ class Account extends AbstractForm
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $this->_form->addFieldNameSuffix('order[account]');
-        $this->_form->setValues($this->getFormValues());
+
+        $formValues = $this->getFormValues();
+        foreach ($attributes as $code => $attribute) {
+            $defaultValue = $attribute->getDefaultValue();
+            if (isset($defaultValue) && !isset($formValues[$code])) {
+                $formValues[$code] = $defaultValue;
+            }
+        }
+        $this->_form->setValues($formValues);
 
         return $this;
     }
@@ -148,7 +157,7 @@ class Account extends AbstractForm
     {
         switch ($element->getId()) {
             case 'email':
-                $element->setRequired(0);
+                $element->setRequired(1);
                 $element->setClass('validate-email admin__control-text');
                 break;
         }

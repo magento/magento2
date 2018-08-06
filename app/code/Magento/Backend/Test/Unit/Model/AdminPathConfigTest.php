@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model;
 use Magento\Backend\Model\AdminPathConfig;
 use Magento\Store\Model\Store;
 
-class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
+class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject

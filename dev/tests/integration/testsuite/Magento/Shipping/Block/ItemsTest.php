@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Block;
 
-class ItemsTest extends \PHPUnit_Framework_TestCase
+class ItemsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetCommentsHtml()
     {

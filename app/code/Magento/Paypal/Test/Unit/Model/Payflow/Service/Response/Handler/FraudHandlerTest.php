@@ -11,7 +11,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
 
-class FraudHandlerTest extends \PHPUnit_Framework_TestCase
+class FraudHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InfoInterface | \PHPUnit_Framework_MockObject_MockObject

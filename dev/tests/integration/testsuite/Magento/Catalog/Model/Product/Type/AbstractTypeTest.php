@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Product\Type;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTypeTest extends \PHPUnit_Framework_TestCase
+class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\AbstractType
@@ -23,18 +23,12 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $catalogProductOption = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Option::class
         );
-        $catalogProductType = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
-        $eventManager = $this->getMock(
-            \Magento\Framework\Event\ManagerInterface::class,
-            ['dispatch'],
-            [],
-            '',
-            false
-        );
-        $fileStorageDb = $this->getMock(\Magento\MediaStorage\Helper\File\Storage\Database::class, [], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $catalogProductType = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $eventManager = $this->createPartialMock(\Magento\Framework\Event\ManagerInterface::class, ['dispatch']);
+        $fileStorageDb = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Serialize\Serializer\Json::class
         );

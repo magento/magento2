@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
  * Order configuration model
  *
  * @api
+ * @since 100.0.2
  */
 class Config
 {
@@ -121,8 +122,14 @@ class Config
      */
     public function getStatusLabel($code)
     {
-        $code = $this->maskStatusForArea($this->state->getAreaCode(), $code);
+        $area = $this->state->getAreaCode();
+        $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
+
+        if ($area == 'adminhtml') {
+            return $status->getLabel();
+        }
+
         return $status->getStoreLabel();
     }
 
@@ -210,7 +217,7 @@ class Config
                 foreach ($collection as $item) {
                     $status = $item->getData('status');
                     if ($addLabels) {
-                        $statuses[$status] = $item->getStoreLabel();
+                        $statuses[$status] = $this->getStatusLabel($status);
                     } else {
                         $statuses[] = $status;
                     }
@@ -269,6 +276,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
+     * @since 100.2.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

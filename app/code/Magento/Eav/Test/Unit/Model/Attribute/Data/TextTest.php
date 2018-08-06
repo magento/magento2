@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Attribute\Data\Text
@@ -14,46 +15,22 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $locale = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $localeResolver = $this->getMock(
-            \Magento\Framework\Locale\ResolverInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $helper = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false, false);
+        $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $helper = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
 
-        $attributeData = [
-            'store_label' => 'Test',
-            'attribute_code' => 'test',
-            'is_required' => 1,
-            'validate_rules' => ['min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0],
-        ];
-
-        $attributeClass = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eavTypeFactory = $this->getMock(\Magento\Eav\Model\Entity\TypeFactory::class, [], [], '', false, false);
-        $arguments = $objectManagerHelper->getConstructArguments(
-            $attributeClass,
-            ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
-        );
-
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|
-         * \PHPUnit_Framework_MockObject_MockObject
-         */
-        $attribute = $this->getMock($attributeClass, ['_init'], $arguments);
         $this->_model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $localeResolver, $helper);
-        $this->_model->setAttribute($attribute);
+        $this->_model->setAttribute(
+            $this->createAttribute(
+                [
+                    'store_label' => 'Test',
+                    'attribute_code' => 'test',
+                    'is_required' => 1,
+                    'validate_rules' => ['min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0],
+                ]
+            )
+        );
     }
 
     protected function tearDown()
@@ -74,5 +51,48 @@ class TextTest extends \PHPUnit_Framework_TestCase
         $expectedResult = ['"Test" is a required value.'];
         $result = $this->_model->validateValue($inputValue);
         $this->assertEquals($expectedResult, [(string)$result[0]]);
+    }
+
+    public function testWithoutLengthValidation()
+    {
+        $expectedResult = true;
+        $defaultAttributeData = [
+            'store_label' => 'Test',
+            'attribute_code' => 'test',
+            'is_required' => 1,
+            'validate_rules' => ['min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0],
+        ];
+
+        $defaultAttributeData['validate_rules']['min_text_length'] = 2;
+        $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
+        $this->assertEquals($expectedResult, $this->_model->validateValue('t'));
+
+        $defaultAttributeData['validate_rules']['max_text_length'] = 3;
+        $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
+        $this->assertEquals($expectedResult, $this->_model->validateValue('test'));
+    }
+
+    /**
+     * @param array $attributeData
+     * @return \Magento\Eav\Model\Attribute
+     */
+    protected function createAttribute($attributeData): \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+    {
+        $attributeClass = \Magento\Eav\Model\Attribute::class;
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $eavTypeFactory = $this->createMock(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $arguments = $objectManagerHelper->getConstructArguments(
+            $attributeClass,
+            ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
+        );
+
+        /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|
+         * \PHPUnit_Framework_MockObject_MockObject
+         */
+        $attribute = $this->getMockBuilder($attributeClass)
+            ->setMethods(['_init'])
+            ->setConstructorArgs($arguments)
+            ->getMock();
+        return $attribute;
     }
 }

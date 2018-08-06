@@ -128,7 +128,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/customers/:id" method="PUT">
+    <route url="/V1/customers/:customerId" method="PUT">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>
@@ -190,6 +190,12 @@
     </route>
     <route url="/V1/customers/password" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="initiatePasswordReset"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/customers/resetPassword" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPassword"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

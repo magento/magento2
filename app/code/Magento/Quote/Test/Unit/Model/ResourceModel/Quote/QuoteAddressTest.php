@@ -10,7 +10,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 /**
  * Class QuoteAddressTest
  */
-class QuoteAddressTest extends \PHPUnit_Framework_TestCase
+class QuoteAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Address
@@ -52,47 +52,18 @@ class QuoteAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->addressMock = $this->getMock(
+        $this->addressMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
-        $this->quoteMock = $this->getMock(
-            \Magento\Quote\Model\Quote::class,
-            ['__wakeup', 'getId'],
-            [],
-            '',
-            false
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['__wakeup', 'getId']);
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
-        $this->appResourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->relationCompositeMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class,
-            [],
-            [],
-            '',
-            false
+        $this->relationCompositeMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class
         );
         $this->appResourceMock->expects($this->any())
                               ->method('getConnection')

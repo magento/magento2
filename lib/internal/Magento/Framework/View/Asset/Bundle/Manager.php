@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated since 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
@@ -28,22 +28,34 @@ class Manager
 
     const ASSET_TYPE_HTML = 'html';
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     protected $filesystem;
 
-    /** @var  Bundle */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle
+     */
     protected $bundle;
 
-    /** @var Bundle\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
-    /** @var Asset\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface
+     */
     protected $assetConfig;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $excluded = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
 
     /**

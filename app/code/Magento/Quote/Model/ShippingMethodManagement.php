@@ -251,7 +251,7 @@ class ShippingMethodManagement implements
      * @param string $region
      * @param \Magento\Framework\Api\ExtensibleDataInterface|null $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function getEstimatedRates(
         \Magento\Quote\Model\Quote $quote,
@@ -319,7 +319,7 @@ class ShippingMethodManagement implements
      * Gets the data object processor
      *
      * @return \Magento\Framework\Reflection\DataObjectProcessor
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getDataObjectProcessor()
     {

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @inheritdoc
  */
-class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
+class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DbVersionInfo|Mock
@@ -85,6 +85,9 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedCode, $tester->getStatusCode());
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

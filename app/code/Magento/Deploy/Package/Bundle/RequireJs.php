@@ -240,9 +240,12 @@ class RequireJs implements BundleInterface
     private function getFileContent($sourcePath)
     {
         if (!isset($this->fileContent[$sourcePath])) {
-            $this->fileContent[$sourcePath] = utf8_encode(
-                $this->staticDir->readFile($this->minification->addMinifiedSign($sourcePath))
-            );
+            $content = $this->staticDir->readFile($this->minification->addMinifiedSign($sourcePath));
+            if (mb_detect_encoding($content) !== "UTF-8") {
+                $content = mb_convert_encoding($content, "UTF-8");
+            }
+
+            $this->fileContent[$sourcePath] = $content;
         }
         return $this->fileContent[$sourcePath];
     }

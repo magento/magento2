@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Interception;
 
+/**
+ * Interface \Magento\Framework\Interception\PluginListInterface
+ *
+ */
 interface PluginListInterface
 {
     /**

@@ -89,15 +89,16 @@ class File extends BackendFile
         $values = $this->getValue();
         $value = reset($values) ?: [];
         if (!isset($value['file'])) {
-             throw new LocalizedException(
-                 __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
-             );
+            throw new LocalizedException(
+                __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
+            );
         }
         if (isset($value['exists'])) {
             $this->setValue($value['file']);
             return $this;
         }
-        $filename = $value['file'];
+
+        $filename = basename($value['file']);
         $result = $this->_mediaDirectory->copyFile(
             $this->getTmpMediaPath($filename),
             $this->_getUploadDir() . '/' . $filename
@@ -221,7 +222,7 @@ class File extends BackendFile
      *
      * @return Mime
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getMime()
     {

@@ -17,7 +17,9 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class ClearProductUrlsObserver implements ObserverInterface
 {
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
     /**
@@ -41,10 +43,11 @@ class ClearProductUrlsObserver implements ObserverInterface
             $oldSku = $observer->getEvent()->getAdapter()->getOldSku();
             $idToDelete = [];
             foreach ($products as $product) {
-                if (!isset($oldSku[$product[ImportProduct::COL_SKU]])) {
+                $sku = strtolower($product[ImportProduct::COL_SKU]);
+                if (!isset($oldSku[$sku])) {
                     continue;
                 }
-                $productData = $oldSku[$product[ImportProduct::COL_SKU]];
+                $productData = $oldSku[$sku];
                 $idToDelete[] = $productData['entity_id'];
             }
             if (!empty($idToDelete)) {

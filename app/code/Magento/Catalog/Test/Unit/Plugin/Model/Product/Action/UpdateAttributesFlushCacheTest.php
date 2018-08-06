@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Plugin\Model\Product\Action;
 
 use Magento\Catalog\Model\Product;
 
-class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
+class UpdateAttributesFlushCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache
@@ -16,9 +16,9 @@ class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+        $cacheContextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
 
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $cacheContextMock]);
@@ -36,14 +36,14 @@ class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
     public function testAroundUpdateAttributes()
     {
         /** @var \Magento\Catalog\Model\Product\Action $productActionMock */
-        $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
+        $productActionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
         $this->model->afterUpdateAttributes($productActionMock, $productActionMock);
     }
 
     public function testAroundUpdateWebsites()
     {
         /** @var \Magento\Catalog\Model\Product\Action $productActionMock */
-        $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
+        $productActionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
         $this->model->afterUpdateWebsites($productActionMock, $productActionMock);
     }
 }

@@ -8,6 +8,7 @@ namespace Magento\Backend\Model\Menu\Builder\Command;
 /**
  * Command to remove menu item
  * @api
+ * @since 100.0.2
  */
 class Remove extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {

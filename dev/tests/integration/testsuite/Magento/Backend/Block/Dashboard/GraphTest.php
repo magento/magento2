@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Dashboard;
 /**
  * @magentoAppArea adminhtml
  */
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Dashboard\Graph

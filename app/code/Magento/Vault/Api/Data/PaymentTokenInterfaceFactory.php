@@ -8,7 +8,7 @@ namespace Magento\Vault\Api\Data;
 
 /**
  * Interface PaymentTokenInterfaceFactory
- * @deprecated
+ * @deprecated 100.3.0
  * @see PaymentTokenFactoryInterface
  */
 interface PaymentTokenInterfaceFactory

@@ -28,7 +28,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_title">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.theme_title" as="theme_title">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Theme Title</argument>
                             <argument name="index" xsi:type="string">theme_title</argument>
@@ -36,7 +36,7 @@
                             <argument name="column_css_class" xsi:type="string">theme-title</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="parent_theme_title">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.parent_theme_title" as="parent_theme_title">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Parent Theme</argument>
                             <argument name="index" xsi:type="string">parent_theme_title</argument>
@@ -44,7 +44,7 @@
                             <argument name="column_css_class" xsi:type="string">parent-theme-title</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_path">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="theme.grid.columnSet.theme_path" as="theme_path">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Theme Path</argument>
                             <argument name="index" xsi:type="string">theme_path</argument>

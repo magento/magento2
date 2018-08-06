@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
 
-class CustomerGroupsOptionsProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupsOptionsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider
@@ -29,15 +29,9 @@ class CustomerGroupsOptionsProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->groupRepositoryMock = $this->getMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
-        $this->searchCriteriaBuilderMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectConverterMock = $this->getMock(\Magento\Framework\Convert\DataObject::class, [], [], '', false);
+        $this->groupRepositoryMock = $this->createMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->objectConverterMock = $this->createMock(\Magento\Framework\Convert\DataObject::class);
         $this->model = new \Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider(
             $this->groupRepositoryMock,
             $this->searchCriteriaBuilderMock,
@@ -53,8 +47,8 @@ class CustomerGroupsOptionsProviderTest extends \PHPUnit_Framework_TestCase
             ['label' => 'label', 'value' => 'value']
         ];
 
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $searchResultMock = $this->getMock(\Magento\Customer\Api\Data\GroupSearchResultsInterface::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchResultMock = $this->createMock(\Magento\Customer\Api\Data\GroupSearchResultsInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
 
         $this->groupRepositoryMock->expects($this->once())

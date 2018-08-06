@@ -9,7 +9,7 @@
  */
 namespace Magento\Payment\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetInfoBlock()
     {

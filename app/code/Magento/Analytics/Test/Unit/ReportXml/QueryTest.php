@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class QueryTest
  */
-class QueryTest extends \PHPUnit_Framework_TestCase
+class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Select|\PHPUnit_Framework_MockObject_MockObject
@@ -49,7 +49,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->selectHydratorMock = $this->getMockBuilder(selectHydrator::class)
+        $this->selectHydratorMock = $this->getMockBuilder(SelectHydrator::class)
             ->disableOriginalConstructor()
             ->getMock();
 

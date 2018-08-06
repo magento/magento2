@@ -11,20 +11,28 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ColumnFactory
 {
-    /** @var \Magento\Framework\View\Element\UiComponentFactory  */
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentFactory
+     */
     protected $componentFactory;
 
-    /** @var InlineEditUpdater */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+     */
     protected $inlineEditUpdater;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',

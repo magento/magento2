@@ -171,16 +171,6 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      */
     public function updatePathParams(array $arguments)
     {
-        if ($this->_session->getCookieShouldBeReceived()
-            && $this->_sidResolver->getUseSessionInUrl()
-            && $this->_canUseSessionIdInParam
-        ) {
-            $arguments += [
-                '_query' => [
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
-                ]
-            ];
-        }
         return $arguments;
     }
 

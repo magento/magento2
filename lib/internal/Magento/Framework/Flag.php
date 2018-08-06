@@ -8,8 +8,6 @@ namespace Magento\Framework;
 /**
  * Flag model
  *
- * @method \Magento\Framework\Flag\FlagResource _getResource()
- * @method \Magento\Framework\Flag\FlagResource getResource()
  * @method string getFlagCode()
  * @method \Magento\Framework\Flag setFlagCode(string $value)
  * @method int getState()

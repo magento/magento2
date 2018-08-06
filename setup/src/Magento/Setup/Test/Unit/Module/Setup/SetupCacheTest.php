@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Setup;
 
 use Magento\Setup\Module\Setup\SetupCache;
 
-class SetupCacheTest extends \PHPUnit_Framework_TestCase
+class SetupCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SetupCache
@@ -88,6 +88,9 @@ class SetupCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->object->has($table, $parentId, $rowId, $field));
     }
 
+    /**
+     * @return array
+     */
     public function hasDataProvider()
     {
         return [

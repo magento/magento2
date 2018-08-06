@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Download\Link */
     protected $link;
@@ -87,7 +87,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
@@ -97,56 +97,30 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 'setHeader'
             ]
         );
-        $this->session = $this->getMock(
-            \Magento\Customer\Model\Session::class,
-            [
+        $this->session = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
                 'getCustomerId',
                 'authenticate',
                 'setBeforeAuthUrl'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->helperData = $this->getMock(
-            \Magento\Downloadable\Helper\Data::class,
-            [
+            ]);
+        $this->helperData = $this->createPartialMock(\Magento\Downloadable\Helper\Data::class, [
                 'getIsShareable'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->downloadHelper = $this->getMock(
-            \Magento\Downloadable\Helper\Download::class,
-            [
+            ]);
+        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
                 'setResource',
                 'getFilename',
                 'getContentType',
                 'getFileSize',
                 'getContentDisposition',
                 'output'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+            ]);
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 '_wakeup',
                 'load',
                 'getId',
                 'getProductUrl',
                 'getName'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->linkPurchasedItem = $this->getMock(
-            \Magento\Downloadable\Model\Link\Purchased\Item::class,
-            [
+            ]);
+        $this->linkPurchasedItem = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased\Item::class, [
                 'load',
                 'getId',
                 'getProductId',
@@ -160,52 +134,18 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 'setNumberOfDownloadsUsed',
                 'setStatus',
                 'save',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->linkPurchased = $this->getMock(
-            \Magento\Downloadable\Model\Link\Purchased::class,
-            [
+            ]);
+        $this->linkPurchased = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased::class, [
                 'load',
                 'getCustomerId'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->messageManager = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirect = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlInterface = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [
+            ]);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
                 'create',
                 'get'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->link = $this->objectManagerHelper->getObject(
             \Magento\Downloadable\Controller\Download\Link::class,
             [
@@ -333,7 +273,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testExceptionInUpdateLinkStatus()
+    /**
+     * @param string $mimeType
+     * @param string $disposition
+     * @dataProvider downloadTypesDataProvider
+     * @return void
+     */
+    public function testExceptionInUpdateLinkStatus($mimeType, $disposition)
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -363,7 +309,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');
 
-        $this->processDownload('link_url', 'url');
+        $this->processDownload('link_url', 'url', $mimeType, $disposition);
 
         $this->linkPurchasedItem->expects($this->any())->method('setNumberOfDownloadsUsed')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
@@ -377,8 +323,18 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    private function processDownload($resource, $resourceType)
+    /**
+     * @param string $resource
+     * @param string $resourceType
+     * @param string $mimeType
+     * @param string $disposition
+     * @return void
+     */
+    private function processDownload($resource, $resourceType, $mimeType, $disposition)
     {
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
+
         $this->objectManager->expects($this->at(3))
             ->method('get')
             ->with(\Magento\Downloadable\Helper\Download::class)
@@ -387,30 +343,23 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('setResource')
             ->with($resource, $resourceType)
             ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn('file_name');
-        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn('content_type');
+        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn($fileName);
+        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn($mimeType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
-        $this->response->expects($this->at(1))->method('setHeader')->with('Pragma', 'public', true)->willReturnSelf();
-        $this->response->expects($this->at(2))
+        $this->response
+            ->expects($this->any())
             ->method('setHeader')
-            ->with('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
+                ['Content-type', $mimeType, true],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', $disposition . '; filename=' . $fileName]
+            )
             ->willReturnSelf();
-        $this->response->expects($this->at(3))
-            ->method('setHeader')
-            ->with('Content-type', 'content_type', true)
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn('file_size');
-        $this->response->expects($this->at(4))
-            ->method('setHeader')
-            ->with('Content-Length', 'file_size')
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())
-            ->method('getContentDisposition')
-            ->willReturn('content_disposition');
-        $this->response->expects($this->at(5))
-            ->method('setHeader')
-            ->with('Content-Disposition', 'content_disposition; filename=file_name')
-            ->willReturnSelf();
+
+        $this->downloadHelper->expects($this->once())->method('getContentDisposition')->willReturn($disposition);
+        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn($fileSize);
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('output');
@@ -464,6 +413,17 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ['addNotice', 'pending', 'The link is not available.'],
             ['addNotice', 'payment_review', 'The link is not available.'],
             ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function downloadTypesDataProvider()
+    {
+        return [
+            ['mimeType' => 'text/html',  'disposition' => \Zend_Mime::DISPOSITION_ATTACHMENT],
+            ['mimeType' => 'image/jpeg', 'disposition' => \Zend_Mime::DISPOSITION_INLINE],
         ];
     }
 }

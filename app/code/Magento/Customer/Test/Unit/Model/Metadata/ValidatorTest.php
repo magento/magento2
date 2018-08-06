@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Metadata;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\Customer\Model\Metadata\Validator;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Validator */
     protected $validator;
@@ -79,6 +79,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Framework\DataObject($data)));
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

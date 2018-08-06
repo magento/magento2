@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnection()
     {

@@ -36,7 +36,9 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      */
     protected $resourceRuleFactory;
 
-    /** @var RulePricesStorage  */
+    /**
+     * @var \Magento\CatalogRule\Observer\RulePricesStorage
+     */
     protected $rulePricesStorage;
 
     /**

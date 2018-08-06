@@ -11,6 +11,7 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class AddStoreFieldToCollection implements AddFilterToCollectionInterface
 {

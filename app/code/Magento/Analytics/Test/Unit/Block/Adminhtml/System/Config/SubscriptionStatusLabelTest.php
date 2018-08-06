@@ -10,11 +10,12 @@ use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class SignupTest
  */
-class SubscriptionStatusLabelTest extends \PHPUnit_Framework_TestCase
+class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubscriptionStatusLabel
@@ -41,9 +42,6 @@ class SubscriptionStatusLabelTest extends \PHPUnit_Framework_TestCase
      */
     private $formMock;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->subscriptionStatusProviderMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
@@ -60,15 +58,16 @@ class SubscriptionStatusLabelTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->subscriptionStatusLabel = new SubscriptionStatusLabel(
-            $this->contextMock,
-            $this->subscriptionStatusProviderMock
+        $objectManager = new ObjectManager($this);
+        $this->subscriptionStatusLabel = $objectManager->getObject(
+            SubscriptionStatusLabel::class,
+            [
+                'context' => $this->contextMock,
+                'subscriptionStatusProvider' => $this->subscriptionStatusProviderMock
+            ]
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRender()
     {
         $this->abstractElementMock->setForm($this->formMock);
@@ -78,7 +77,7 @@ class SubscriptionStatusLabelTest extends \PHPUnit_Framework_TestCase
         $this->abstractElementMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Subscription status: Enabled');
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Subscription status: Enabled/",
             $this->subscriptionStatusLabel->render($this->abstractElementMock)
         );

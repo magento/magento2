@@ -14,6 +14,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 /**
  * Abstract class AbstractFilter
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFilter extends AbstractComponent
 {

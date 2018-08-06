@@ -15,6 +15,7 @@ use Magento\Payment\Gateway\CommandInterface;
  * or in case if command invoked by Magento has no sense for payment method.
  *
  * @api
+ * @since 100.0.2
  */
 class NullCommand implements CommandInterface
 {

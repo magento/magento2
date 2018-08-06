@@ -10,7 +10,7 @@ namespace Magento\Reports\Block\Product;
  * Reports Recently Compared Products Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Compared extends \Magento\Reports\Block\Product\AbstractProduct
 {

@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -120,7 +121,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
          * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
          * @see https://github.com/magento/magento2/issues/5897
          */
-        if (is_null($this->_itemCollection)) {
+        if ($this->_itemCollection === null) {
             $this->_prepareData();
         }
         return $this->_itemCollection;

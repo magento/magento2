@@ -38,22 +38,34 @@ abstract class Integration extends Action
      */
     protected $_registry;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $_logger;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     */
     protected $_integrationService;
 
-    /** @var \Magento\Integration\Api\OauthServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\OauthServiceInterface
+     */
     protected $_oauthService;
 
-    /** @var \Magento\Framework\Json\Helper\Data */
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
     protected $jsonHelper;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     */
     protected $_integrationData;
 
-    /** @var \Magento\Integration\Model\ResourceModel\Integration\Collection */
+    /**
+     * @var \Magento\Integration\Model\ResourceModel\Integration\Collection
+     */
     protected $_integrationCollection;
 
     /**

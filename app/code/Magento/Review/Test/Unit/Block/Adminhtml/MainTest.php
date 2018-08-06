@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Unit\Block\Adminhtml;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class MainTest extends \PHPUnit_Framework_TestCase
+class MainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Block\Adminhtml\Main
@@ -34,7 +34,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerRepository = $this
             ->getMockForAbstractClass(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $this->customerViewHelper = $this->getMock(\Magento\Customer\Helper\View::class, [], [], '', false);
+        $this->customerViewHelper = $this->createMock(\Magento\Customer\Helper\View::class);
         $dummyCustomer = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
 
         $this->customerRepository->expects($this->once())

@@ -35,11 +35,7 @@ class StoreConfigurationDataMapper
     const KEY_JS_LOGGING = 'js-logging';
     /**#@- */
 
-    /**
-     * Map of configuration paths to data keys
-     *
-     * @var array
-     */
+    /**#@- */
     private $pathDataMap = [
         Store::XML_PATH_USE_REWRITES => self::KEY_USE_SEF_URL,
         Store::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,

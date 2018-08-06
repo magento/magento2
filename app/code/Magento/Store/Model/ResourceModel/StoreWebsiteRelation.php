@@ -12,7 +12,9 @@ use Magento\Framework\App\ResourceConnection;
  */
 class StoreWebsiteRelation
 {
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $resource;
 
     /**

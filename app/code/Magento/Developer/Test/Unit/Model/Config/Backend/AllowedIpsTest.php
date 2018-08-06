@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AllowedIpsTest
  */
-class AllowedIpsTest extends \PHPUnit_Framework_TestCase
+class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Developer\Model\Config\Backend\AllowedIps

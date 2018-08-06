@@ -16,8 +16,6 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Tax Rate Model
  *
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
@@ -38,11 +36,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     const KEY_TITLES          = 'titles';
     /**#@-*/
 
-    /**
-     * List of tax titles
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_titles = null;
 
     /**
@@ -233,7 +227,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     public function saveTitles($titles = null)
     {
-        if (is_null($titles)) {
+        if ($titles === null) {
             $titles = $this->getTitle();
         }
 
@@ -262,7 +256,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     public function getTitleModel()
     {
-        if (is_null($this->_titleModel)) {
+        if ($this->_titleModel === null) {
             $this->_titleModel = $this->_titleFactory->create();
         }
         return $this->_titleModel;
@@ -276,7 +270,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         if ($this->getData(self::KEY_TITLES)) {
             return $this->getData(self::KEY_TITLES);
         }
-        if (is_null($this->_titles)) {
+        if ($this->_titles === null) {
             $this->_titles = $this->getTitleModel()->getCollection()->loadByRateId($this->getId())->getItems();
         }
         return $this->_titles;

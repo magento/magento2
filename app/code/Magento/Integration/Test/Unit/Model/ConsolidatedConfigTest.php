@@ -12,7 +12,7 @@ use Magento\Integration\Model\Cache\TypeConsolidated as Type;
 /**
  * Unit test for \Magento\Integration\Model\ConsolidatedConfig
  */
-class ConsolidatedConfigTest extends \PHPUnit_Framework_TestCase
+class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Integration config model

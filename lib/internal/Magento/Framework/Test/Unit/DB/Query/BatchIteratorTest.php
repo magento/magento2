@@ -9,7 +9,7 @@ use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
-class BatchIteratorTest extends \PHPUnit_Framework_TestCase
+class BatchIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchIterator
@@ -63,9 +63,9 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
         $this->rangeField = 'rangeField';
         $this->rangeFieldAlias = 'rangeFieldAlias';
 
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false, false);
-        $this->wrapperSelectMock = $this->getMock(Select::class, [], [], '', false, false);
-        $this->connectionMock = $this->getMock(AdapterInterface::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->wrapperSelectMock = $this->createMock(Select::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Authorization;
 
-class RoleLocatorTest extends \PHPUnit_Framework_TestCase
+class RoleLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Authorization\RoleLocator
@@ -19,12 +19,9 @@ class RoleLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_sessionMock = $this->getMock(
+        $this->_sessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Auth\Session::class,
-            ['getUser', 'getAclRole', 'hasUser'],
-            [],
-            '',
-            false
+            ['getUser', 'getAclRole', 'hasUser']
         );
         $this->_model = new \Magento\Backend\Model\Authorization\RoleLocator($this->_sessionMock);
     }

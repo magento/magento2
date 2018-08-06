@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 /**
  * Class ProductLimitationTest
  */
-class ProductLimitationTest extends \PHPUnit_Framework_TestCase
+class ProductLimitationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductLimitation

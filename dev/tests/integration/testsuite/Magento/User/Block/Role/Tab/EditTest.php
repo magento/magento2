@@ -8,7 +8,7 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Block\Role\Tab\Edit

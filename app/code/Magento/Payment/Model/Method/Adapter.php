@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api Use this class as a base for virtual types declaration
+ * @since 100.0.2
  */
 class Adapter implements MethodInterface
 {
@@ -316,7 +317,7 @@ class Adapter implements MethodInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getConfiguredValue('active', $storeId);
+        return (bool)$this->getConfiguredValue('active', $storeId);
     }
 
     /**
@@ -397,7 +398,6 @@ class Adapter implements MethodInterface
         try {
             $validator = $this->getValidatorPool()->get('global');
         } catch (\Exception $e) {
-            $this->logger->critical($e);
             return $this;
         }
 

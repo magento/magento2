@@ -88,6 +88,7 @@ class Sidebar extends AbstractCart
 
     /**
      * @return string
+     * @since 100.2.0
      */
     public function getSerializedConfig()
     {

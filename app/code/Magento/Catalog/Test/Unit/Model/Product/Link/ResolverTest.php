@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Link;
 
 use Magento\Catalog\Model\Product\Link\Resolver;
 
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

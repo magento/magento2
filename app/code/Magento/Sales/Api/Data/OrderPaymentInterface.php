@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -472,7 +473,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS issue for the order payment.
      *
      * @return string|null Credit card SS issue.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue();
 
@@ -480,7 +481,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start month for the order payment.
      *
      * @return string|null Credit card SS start month.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth();
 
@@ -488,7 +489,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start year for the order payment.
      *
      * @return string|null Credit card SS start year.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear();
 

@@ -11,7 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
  * Temporary test that will be removed in scope of MAGETWO-28356.
  * Test verifies obsolete usages in modules that were refactored to work with ResultInterface.
  */
-class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
+class ObsoleteResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

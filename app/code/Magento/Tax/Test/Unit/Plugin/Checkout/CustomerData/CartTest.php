@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Plugin\Checkout\CustomerData;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -41,11 +41,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
-        $this->checkoutHelper = $this->getMock(\Magento\Checkout\Helper\Data::class, [], [], '', false);
-        $this->itemPriceRenderer = $this->getMock(\Magento\Tax\Block\Item\Price\Renderer::class, [], [], '', false);
-        $this->checkoutCart = $this->getMock(\Magento\Checkout\CustomerData\Cart::class, [], [], '', false);
-        $this->quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutHelper = $this->createMock(\Magento\Checkout\Helper\Data::class);
+        $this->itemPriceRenderer = $this->createMock(\Magento\Tax\Block\Item\Price\Renderer::class);
+        $this->checkoutCart = $this->createMock(\Magento\Checkout\CustomerData\Cart::class);
+        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
 
         $this->checkoutSession->expects(
             $this->any()
@@ -83,8 +83,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
             'formatPrice'
         )->willReturn('formatted');
 
-        $item1 = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
-        $item2 = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $item1 = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $item2 = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
 
         $item1->expects(
             $this->atLeastOnce()

@@ -5,13 +5,16 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\Config\DependencyInfoProvider;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Indexer\Model\IndexerFactory;
 
 /**
  * Command to run indexers
@@ -24,27 +27,33 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private $sharedIndexesComplete = [];
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface
+     * @var ConfigInterface
      */
     private $config;
 
     /**
-     * @var IndexerFactory
+     * @var IndexerRegistry
      */
-    private $indexerFactory;
+    private $indexerRegistry;
 
     /**
-     * Constructor
-     *
+     * @var DependencyInfoProvider|null
+     */
+    private $dependencyInfoProvider;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
-     * @param IndexerFactory|null $indexerFactory
+     * @param IndexerRegistry|null $indexerRegistry
+     * @param DependencyInfoProvider|null $dependencyInfoProvider
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        IndexerFactory $indexerFactory = null
+        IndexerRegistry $indexerRegistry = null,
+        DependencyInfoProvider $dependencyInfoProvider = null
     ) {
-        parent::__construct($objectManagerFactory, $indexerFactory);
-        $this->indexerFactory = $indexerFactory;
+        $this->indexerRegistry = $indexerRegistry;
+        $this->dependencyInfoProvider = $dependencyInfoProvider;
+        parent::__construct($objectManagerFactory);
     }
 
     /**
@@ -64,9 +73,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input);
-        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        foreach ($indexers as $indexer) {
+        $returnValue = Cli::RETURN_FAILURE;
+        foreach ($this->getIndexers($input) as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
                 $startTime = microtime(true);
@@ -84,30 +92,115 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln(
                     $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
                 );
+                $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
-                // we must have an exit code higher than zero to indicate something was wrong
-                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
                 $output->writeln($e->getMessage());
-                // we must have an exit code higher than zero to indicate something was wrong
-                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
         return $returnValue;
     }
 
     /**
+     * {@inheritdoc} Returns the ordered list of specified indexers and related indexers.
+     */
+    protected function getIndexers(InputInterface $input)
+    {
+        $indexers =  parent::getIndexers($input);
+        $allIndexers = $this->getAllIndexers();
+        if (!array_diff_key($allIndexers, $indexers)) {
+            return $indexers;
+        }
+
+        $relatedIndexers = [];
+        $dependentIndexers = [];
+        foreach ($indexers as $indexer) {
+            $relatedIndexers = array_merge(
+                $relatedIndexers,
+                $this->getRelatedIndexerIds($indexer->getId())
+            );
+            $dependentIndexers = array_merge(
+                $dependentIndexers,
+                $this->getDependentIndexerIds($indexer->getId())
+            );
+        }
+
+        $invalidRelatedIndexers = [];
+        foreach (array_unique($relatedIndexers) as $relatedIndexer) {
+            if ($allIndexers[$relatedIndexer]->isInvalid()) {
+                $invalidRelatedIndexers[] = $relatedIndexer;
+            }
+        }
+
+        return array_intersect_key(
+            $allIndexers,
+            array_flip(
+                array_unique(
+                    array_merge(
+                        array_keys($indexers),
+                        $invalidRelatedIndexers,
+                        $dependentIndexers
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Return all indexer Ids on which the current indexer depends (directly or indirectly).
+     *
+     * @param string $indexerId
+     * @return array
+     */
+    private function getRelatedIndexerIds(string $indexerId)
+    {
+        $relatedIndexerIds = [];
+        foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
+            $relatedIndexerIds = array_merge(
+                $relatedIndexerIds,
+                [$relatedIndexerId],
+                $this->getRelatedIndexerIds($relatedIndexerId)
+            );
+        }
+
+        return array_unique($relatedIndexerIds);
+    }
+
+    /**
+     * Return all indexer Ids which depend on the current indexer (directly or indirectly).
+     *
+     * @param string $indexerId
+     * @return array
+     */
+    private function getDependentIndexerIds(string $indexerId)
+    {
+        $dependentIndexerIds = [];
+        foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
+            $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
+            if (array_search($indexerId, $dependencies) !== false) {
+                $dependentIndexerIds = array_merge(
+                    $dependentIndexerIds,
+                    [$id],
+                    $this->getDependentIndexerIds($id)
+                );
+            }
+        };
+
+        return array_unique($dependentIndexerIds);
+    }
+
+    /**
      * Validate that indexer is not locked
      *
-     * @param \Magento\Framework\Indexer\IndexerInterface $indexer
+     * @param IndexerInterface $indexer
      * @return void
      * @throws LocalizedException
      */
-    private function validateIndexerStatus(\Magento\Framework\Indexer\IndexerInterface $indexer)
+    private function validateIndexerStatus(IndexerInterface $indexer)
     {
-        if ($indexer->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_WORKING) {
+        if ($indexer->getStatus() == StateInterface::STATUS_WORKING) {
             throw new LocalizedException(
                 __(
                     '%1 index is locked by another reindex process. Skipping.',
@@ -151,12 +244,10 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             return $this;
         }
         foreach ($indexerIds as $indexerId) {
-            /** @var \Magento\Indexer\Model\Indexer $indexer */
-            $indexer = $this->getIndexerFactory()->create();
-            $indexer->load($indexerId);
+            $indexer = $this->getIndexerRegistry()->get($indexerId);
             /** @var \Magento\Indexer\Model\Indexer\State $state */
             $state = $indexer->getState();
-            $state->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_VALID);
+            $state->setStatus(StateInterface::STATUS_VALID);
             $state->save();
         }
         $this->sharedIndexesComplete[] = $sharedIndex;
@@ -166,8 +257,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     /**
      * Get config
      *
-     * @return \Magento\Framework\Indexer\ConfigInterface
-     * @deprecated
+     * @return ConfigInterface
+     * @deprecated 100.1.0
      */
     private function getConfig()
     {
@@ -178,16 +269,26 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * Get indexer factory
-     *
-     * @return IndexerFactory
-     * @deprecated
+     * @return IndexerRegistry
+     * @deprecated 100.2.0
      */
-    private function getIndexerFactory()
+    private function getIndexerRegistry()
     {
-        if (null === $this->indexerFactory) {
-            $this->indexerFactory = $this->getObjectManager()->get(IndexerFactory::class);
+        if (!$this->indexerRegistry) {
+            $this->indexerRegistry = $this->getObjectManager()->get(IndexerRegistry::class);
         }
-        return $this->indexerFactory;
+        return $this->indexerRegistry;
+    }
+
+    /**
+     * @return DependencyInfoProvider
+     * @deprecated 100.2.0
+     */
+    private function getDependencyInfoProvider()
+    {
+        if (!$this->dependencyInfoProvider) {
+            $this->dependencyInfoProvider = $this->getObjectManager()->get(DependencyInfoProvider::class);
+        }
+        return $this->dependencyInfoProvider;
     }
 }

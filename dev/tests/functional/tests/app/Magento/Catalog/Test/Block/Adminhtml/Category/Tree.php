@@ -169,7 +169,7 @@ class Tree extends Block
      */
     public function assignCategory($parentCategoryName, $childCategoryName)
     {
-        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->hover();
         $this->getTemplateBlock()->waitLoader();
         $targetElement = $this->_rootElement->find(
             sprintf($this->categoryInTree, $parentCategoryName),

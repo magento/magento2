@@ -13,7 +13,7 @@ class Kernel
     /**
      * @var \Magento\PageCache\Model\Cache\Type
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $cache;
 

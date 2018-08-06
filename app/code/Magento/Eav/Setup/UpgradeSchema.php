@@ -25,6 +25,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $this->addUniqueKeyToEavAttributeGroupTable($setup);
         }
+
+        if (version_compare($context->getVersion(), '2.1.1', '<')) {
+            $this->modifyAttributeCodeColumnForNotNullable($setup);
+        }
         $setup->endSetup();
     }
 
@@ -43,6 +47,25 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             ['attribute_set_id', 'attribute_group_code'],
             \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        );
+    }
+
+    /**
+     * Column attribute_code from eav_attribute should not be nullable.
+     *
+     * @param SchemaSetupInterface $setup
+     */
+    private function modifyAttributeCodeColumnForNotNullable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->modifyColumn(
+            $setup->getTable('eav_attribute'),
+            'attribute_code',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'nullable' => false,
+                'comment' => 'Attribute Code',
+            ]
         );
     }
 }

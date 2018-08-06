@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit\FormTest
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get form instance

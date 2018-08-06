@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Layer\Filter\Item as FilterItem;
  * Class RenderLayered Render Swatches at Layered Navigation
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class RenderLayered extends Template
 {

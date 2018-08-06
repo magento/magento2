@@ -10,7 +10,7 @@ use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Select\InQueryModifier;
 use Magento\Framework\ObjectManagerInterface;
 
-class QueryModifierFactoryTest extends \PHPUnit_Framework_TestCase
+class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -35,8 +35,8 @@ class QueryModifierFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
-        $this->inQueryModifierMock = $this->getMock(InQueryModifier::class, [], [], '', false);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->inQueryModifierMock = $this->createMock(InQueryModifier::class);
     }
 
     public function testCreate()

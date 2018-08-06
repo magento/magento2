@@ -9,7 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
-class EraserTest extends \PHPUnit_Framework_TestCase
+class EraserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,21 +33,17 @@ class EraserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
-        $this->indexerHelper = $this->getMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
-            [],
-            [], '', false
-        );
+        $this->indexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->indexerHelper->expects($this->any())->method('getTable')->will($this->returnArgument(0));
         $this->indexerHelper->expects($this->any())->method('getFlatTableName')->will($this->returnValueMap([
             [1, 'store_1_flat'],
             [2, 'store_2_flat'],
         ]));
 
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->model = new \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser(
             $resource,
             $this->indexerHelper,
@@ -58,12 +54,12 @@ class EraserTest extends \PHPUnit_Framework_TestCase
     public function testRemoveDeletedProducts()
     {
         $productsToDeleteIds = [1, 2];
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $select->expects($this->once())->method('from')->with('catalog_product_entity')->will($this->returnSelf());
         $select->expects($this->once())->method('where')->with('entity_id IN(?)', $productsToDeleteIds)
             ->will($this->returnSelf());
         $products = [['entity_id' => 2]];
-        $statement = $this->getMock(\Zend_Db_Statement_Interface::class);
+        $statement = $this->createMock(\Zend_Db_Statement_Interface::class);
         $statement->expects($this->once())->method('fetchAll')->will($this->returnValue($products));
         $this->connection->expects($this->once())->method('query')->with($select)
             ->will($this->returnValue($statement));
@@ -76,9 +72,9 @@ class EraserTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteProductsFromStoreForAllStores()
     {
-        $store1 = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store1 = $this->createMock(\Magento\Store\Model\Store::class);
         $store1->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $store2 = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store2 = $this->createMock(\Magento\Store\Model\Store::class);
         $store2->expects($this->any())->method('getId')->will($this->returnValue(2));
         $this->storeManager->expects($this->once())->method('getStores')
             ->will($this->returnValue([$store1, $store2]));

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
  * Class EditTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -96,9 +96,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->categoryMock = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [
+        $this->categoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
                 'getPath',
                 'addData',
                 'getId',
@@ -106,15 +104,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 'getResource',
                 'setStoreId',
                 'toArray'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getTitle',
                 'getRequest',
                 'getObjectManager',
@@ -123,25 +115,15 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 'getMessageManager',
                 'getResultRedirectFactory',
                 'getSession'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->resultRedirectFactoryMock = $this->getMock(
+            ]);
+        $this->resultRedirectFactoryMock = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->resultPageMock = $this->getMock(
+        $this->resultPageMock = $this->createPartialMock(
             \Magento\Framework\View\Result\Page::class,
-            ['setActiveMenu', 'getConfig', 'addBreadcrumb', 'getLayout', 'getBlock', 'getTitle', 'prepend'],
-            [],
-            '',
-            false
+            ['setActiveMenu', 'getConfig', 'addBreadcrumb', 'getLayout', 'getBlock', 'getTitle', 'prepend']
         );
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
@@ -150,23 +132,17 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->will($this->returnSelf());
 
-        $this->resultPageFactoryMock = $this->getMock(
+        $this->resultPageFactoryMock = $this->createPartialMock(
             \Magento\Framework\View\Result\PageFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->resultPageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $this->resultJsonFactoryMock = $this->getMock(
+        $this->resultJsonFactoryMock = $this->createPartialMock(
             \Magento\Framework\Controller\Result\JsonFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->storeManagerInterfaceMock = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
@@ -198,13 +174,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             true,
             ['dispatch']
         );
-        $this->sessionMock = $this->getMock(
-            \Magento\Backend\Model\Session::class,
-            ['__call'],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['__call']);
 
         $this->contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
@@ -292,13 +262,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Framework\View\Element\Template
          * |\PHPUnit_Framework_MockObject_MockObject $blockMock
          */
-        $blockMock = $this->getMock(
-            \Magento\Framework\View\Element\Template::class,
-            ['setStoreId'],
-            [],
-            '',
-            false
-        );
+        $blockMock = $this->createPartialMock(\Magento\Framework\View\Element\Template::class, ['setStoreId']);
         $blockMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
@@ -342,24 +306,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Framework\Registry
          * |\PHPUnit_Framework_MockObject_MockObject $registryMock
          */
-        $registryMock = $this->getMock(
-            \Magento\Framework\Registry::class,
-            ['register'],
-            [],
-            '',
-            false
-        );
+        $registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['register']);
         /**
          * @var \Magento\Cms\Model\Wysiwyg\Config
          * |\PHPUnit_Framework_MockObject_MockObject $wysiwygConfigMock
          */
-        $wysiwygConfigMock = $this->getMock(
-            \Magento\Cms\Model\Wysiwyg\Config::class,
-            ['setStoreId'],
-            [],
-            '',
-            false
-        );
+        $wysiwygConfigMock = $this->createPartialMock(\Magento\Cms\Model\Wysiwyg\Config::class, ['setStoreId']);
         /**
          * @var \Magento\Store\Model\StoreManagerInterface
          * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock

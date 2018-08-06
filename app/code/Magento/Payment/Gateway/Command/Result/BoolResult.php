@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Command\ResultInterface;
  * Container for boolean value that should be returned as command result.
  *
  * @api
+ * @since 100.0.2
  */
 class BoolResult implements ResultInterface
 {
@@ -36,6 +37,6 @@ class BoolResult implements ResultInterface
      */
     public function get()
     {
-        return (bool) $this->result;
+        return (bool)$this->result;
     }
 }

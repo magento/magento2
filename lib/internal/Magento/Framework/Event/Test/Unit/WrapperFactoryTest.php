@@ -15,16 +15,16 @@ use \Magento\Framework\Event\WrapperFactory;
  *
  * @package Magento\Framework\Event
  */
-class WrapperFactoryTest extends \PHPUnit_Framework_TestCase
+class WrapperFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
         $expectedInstance = \Magento\Framework\Event\Observer::class;
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $wrapperFactory = new WrapperFactory($objectManagerMock);
         $arguments = ['argument' => 'value', 'data' => 'data'];
-        $observerInstanceMock = $this->getMock($expectedInstance);
+        $observerInstanceMock = $this->createMock($expectedInstance);
 
         $objectManagerMock->expects($this->once())
             ->method('create')

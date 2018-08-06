@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
  * Database saving file helper
  *
  * @api
+ * @since 100.0.2
  */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {

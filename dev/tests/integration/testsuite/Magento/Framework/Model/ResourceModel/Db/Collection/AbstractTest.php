@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

@@ -5,11 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractElementTest extends \PHPUnit_Framework_TestCase
+class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\AbstractElement
@@ -35,13 +35,10 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     {
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
-        $this->moduleManagerMock = $this->getMock(
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->moduleManagerMock = $this->createPartialMock(
             \Magento\Framework\Module\Manager::class,
-            ['isOutputEnabled'],
-            [],
-            '',
-            false
+            ['isOutputEnabled']
         );
 
         $this->_model = $this->getMockForAbstractClass(
@@ -144,6 +141,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
@@ -173,6 +173,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [

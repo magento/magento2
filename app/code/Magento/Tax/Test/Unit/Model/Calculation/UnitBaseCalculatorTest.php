@@ -6,12 +6,12 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\UnitBaseCalculator;
+use Magento\Tax\Model\Calculation\UnitBaseCalculator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
+class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     const STORE_ID = 2300;
     const QUANTITY = 1;
@@ -85,24 +85,18 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->addressRateRequest = new \Magento\Framework\DataObject();
 
         $this->appliedTaxRate = $objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class);
-        $this->appliedTaxRateDataObjectFactoryMock = $this->getMock(
+        $this->appliedTaxRateDataObjectFactoryMock = $this->createPartialMock(
             \Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->appliedTaxRateDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->appliedTaxRate);
 
         $appliedTaxDataObject = $objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTax::class);
-        $appliedTaxDataObjectFactoryMock = $this->getMock(
+        $appliedTaxDataObjectFactoryMock = $this->createPartialMock(
             \Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $appliedTaxDataObjectFactoryMock->expects($this->any())
             ->method('create')

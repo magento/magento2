@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order\PrintOrder;
 
-class CreditmemoTest extends \PHPUnit_Framework_TestCase
+class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

@@ -9,6 +9,7 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
  * Directory tree renderer for Cms Wysiwyg Images
  *
  * @api
+ * @since 100.0.2
  */
 class Tree extends \Magento\Backend\Block\Template
 {

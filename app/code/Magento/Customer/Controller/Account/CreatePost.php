@@ -11,6 +11,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -27,49 +28,77 @@ use Magento\Framework\Escaper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $accountManagement;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     */
     protected $addressHelper;
 
-    /** @var FormFactory */
+    /**
+     * @var \Magento\Customer\Model\Metadata\FormFactory
+     */
     protected $formFactory;
 
-    /** @var SubscriberFactory */
+    /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     */
     protected $subscriberFactory;
 
-    /** @var RegionInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     */
     protected $regionDataFactory;
 
-    /** @var AddressInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     */
     protected $addressDataFactory;
 
-    /** @var Registration */
+    /**
+     * @var \Magento\Customer\Model\Registration
+     */
     protected $registration;
 
-    /** @var CustomerInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     */
     protected $customerDataFactory;
 
-    /** @var CustomerUrl */
+    /**
+     * @var \Magento\Customer\Model\Url
+     */
     protected $customerUrl;
 
-    /** @var Escaper */
+    /**
+     * @var \Magento\Framework\Escaper
+     */
     protected $escaper;
 
-    /** @var CustomerExtractor */
+    /**
+     * @var \Magento\Customer\Model\CustomerExtractor
+     */
     protected $customerExtractor;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlModel;
 
-    /** @var DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
     /**
@@ -93,6 +122,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private $cookieMetadataManager;
 
     /**
+     * @var Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -111,6 +145,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
+     * @param Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -132,7 +167,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         Escaper $escaper,
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
-        AccountRedirect $accountRedirect
+        AccountRedirect $accountRedirect,
+        Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -151,19 +187,20 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->urlModel = $urlFactory->create();
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
+        $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
         parent::__construct($context);
     }
 
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
     {
         if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->cookieMetadataManager = ObjectManager::getInstance()->get(
                 \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
             );
         }
@@ -173,13 +210,13 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()
     {
         if (!$this->cookieMetadataFactory) {
-            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->cookieMetadataFactory = ObjectManager::getInstance()->get(
                 \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
             );
         }
@@ -252,7 +289,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             return $resultRedirect;
         }
 
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
             $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
             $resultRedirect->setUrl($this->_redirect->error($url));
             return $resultRedirect;

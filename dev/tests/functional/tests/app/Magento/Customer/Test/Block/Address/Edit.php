@@ -31,6 +31,13 @@ class Edit extends Form
     protected $vatFieldId = 'vat_id';
 
     /**
+     * Locator for address simple (input, textarea, not multiple fields) attribute
+     *
+     * @var string
+     */
+    private $addressSimpleAttribute = "[name='%s']";
+
+    /**
      * Edit customer address
      *
      * @param Address $fixture
@@ -76,5 +83,16 @@ class Edit extends Form
             $this->applyPlaceholders();
         }
         return parent::dataMapping($fields, $parent);
+    }
+
+    /**
+     * Check if Customer Address Simple(input, textarea, not multiple fields) Attribute visible
+     *
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function isAddressSimpleAttributeVisible($attributeCode)
+    {
+        return $this->_rootElement->find(sprintf($this->addressSimpleAttribute, $attributeCode))->isVisible();
     }
 }

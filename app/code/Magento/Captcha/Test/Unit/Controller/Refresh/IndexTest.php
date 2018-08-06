@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Test\Unit\Controller\Refresh;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -59,21 +59,15 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->captchaHelperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
-        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->flagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
+        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->flagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
@@ -99,7 +93,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $imgSource = ['imgSrc' => 'source'];
 
         $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
-        $blockMock = $this->getMock(\Magento\Captcha\Block\Captcha::class, $blockMethods, [], '', false);
+        $blockMock = $this->createPartialMock(\Magento\Captcha\Block\Captcha::class, $blockMethods);
 
         $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
         $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')

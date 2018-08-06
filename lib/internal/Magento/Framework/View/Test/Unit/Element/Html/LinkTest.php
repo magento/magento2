@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -35,6 +35,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $link->getLinkAttributes());
     }
 
+    /**
+     * @return array
+     */
     public function getLinkAttributesDataProvider()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

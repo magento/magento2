@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product
@@ -60,6 +60,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
         );
+        $product->setPrice(49.95);
         $product->setFinalPrice(49.95);
         $this->assertEquals(49.95, $this->helper->getFinalPrice($product));
     }

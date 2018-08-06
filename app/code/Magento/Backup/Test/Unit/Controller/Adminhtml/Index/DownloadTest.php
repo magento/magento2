@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @covers \Magento\Backup\Controller\Adminhtml\Index\Download
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadTest extends \PHPUnit_Framework_TestCase
+class DownloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

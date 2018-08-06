@@ -12,7 +12,7 @@ use Magento\User\Model\ResourceModel\User as UserResourceModel;
 /**
  * @magentoAppArea adminhtml
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var UserResourceModel */
     private $model;

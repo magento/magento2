@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-class CompareTest extends \PHPUnit_Framework_TestCase
+class CompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
@@ -25,6 +25,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoDbIsolation disabled
      */
     public function testGetListUrl()
     {
@@ -97,6 +98,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      * getItemCount()
      * hasItems()
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoDbIsolation disabled
      */
     public function testCalculate()
     {

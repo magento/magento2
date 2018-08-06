@@ -12,7 +12,7 @@ use Magento\Framework\App\State\CleanupFiles;
 use Magento\Developer\Model\Config\Source\WorkflowType as SourceWorkflowType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
+class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WorkflowType
@@ -36,14 +36,14 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->appStateMock = $this->getMock(State::class, [], [], '', false);
+        $this->appStateMock = $this->createMock(State::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $contextArgs = $this->objectManagerHelper->getConstructArguments(
             Context::class,
             ['appState' => $this->appStateMock]
         );
 
-        $this->cleanerMock = $this->getMock(CleanupFiles::class, [], [], '', false);
+        $this->cleanerMock = $this->createMock(CleanupFiles::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             WorkflowType::class,

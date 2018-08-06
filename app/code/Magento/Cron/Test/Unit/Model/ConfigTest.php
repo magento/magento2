@@ -8,7 +8,7 @@ namespace Magento\Cron\Test\Unit\Model;
 /**
  * Class \Magento\Cron\Model\Config
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cron\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject

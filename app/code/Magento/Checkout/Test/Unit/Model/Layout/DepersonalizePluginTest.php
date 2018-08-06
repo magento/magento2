@@ -11,7 +11,7 @@ namespace Magento\Checkout\Test\Unit\Model\Layout;
 /**
  * Class DepersonalizePluginTest
  */
-class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
+class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Layout\DepersonalizePluginTest
@@ -38,31 +38,13 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock(
-            \Magento\Framework\Session\Generic::class,
-            ['clearStorage', 'setData', 'getData'],
-            [],
-            '',
-            false
-        );
-        $this->checkoutSessionMock = $this->getMock(
-            \Magento\Checkout\Model\Session::class,
-            ['clearStorage'],
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->moduleManagerMock = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
-        $this->cacheConfigMock = $this->getMock(\Magento\PageCache\Model\Config::class, [], [], '', false);
-        $this->depersonalizeCheckerMock = $this->getMock(
-            \Magento\PageCache\Model\DepersonalizeChecker::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->checkoutSessionMock = $this->createPartialMock(\Magento\Framework\Session\Generic::class, ['clearStorage', 'setData', 'getData']);
+        $this->checkoutSessionMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['clearStorage']);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->cacheConfigMock = $this->createMock(\Magento\PageCache\Model\Config::class);
+        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
 
         $this->plugin = new \Magento\Checkout\Model\Layout\DepersonalizePlugin(
             $this->depersonalizeCheckerMock,
@@ -75,7 +57,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXml()
     {
-        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
 
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->checkoutSessionMock
@@ -89,7 +71,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGenerateXmlNoDepersonalize()
     {
-        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
 
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->checkoutSessionMock

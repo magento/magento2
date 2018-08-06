@@ -11,7 +11,7 @@ namespace Magento\Bundle\Model\Product;
  *
  * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
  */
-class IsSaleableTest extends \PHPUnit_Framework_TestCase
+class IsSaleableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

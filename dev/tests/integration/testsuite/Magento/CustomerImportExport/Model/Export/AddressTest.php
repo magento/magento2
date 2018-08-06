@@ -14,7 +14,7 @@ use Magento\CustomerImportExport\Model\Import\Address as ImportAddress;
  *
  * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Address

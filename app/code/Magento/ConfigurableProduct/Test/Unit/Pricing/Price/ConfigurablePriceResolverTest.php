@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
+class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -33,12 +33,12 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $className = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class;
-        $this->configurable = $this->getMock($className, ['getUsedProducts'], [], '', false);
+        $this->configurable = $this->createPartialMock($className, ['getUsedProducts']);
 
         $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
-        $this->lowestPriceOptionsProvider = $this->getMock(LowestPriceOptionsProviderInterface::class);
+        $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
@@ -54,35 +54,74 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * situation: one product is supplying the price, which could be a price of zero (0)
      *
-     * @dataProvider testResolvePriceDataProvider
+     * @dataProvider resolvePriceDataProvider
+     *
+     * @param $variantPrices
+     * @param $expectedPrice
      */
-    public function testResolvePrice($expectedValue)
+    public function testResolvePrice($variantPrices, $expectedPrice)
     {
-        $price = $expectedValue;
-
         $product = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
         )->disableOriginalConstructor()->getMock();
 
         $product->expects($this->never())->method('getSku');
 
-        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn([$product]);
-        $this->priceResolver->expects($this->once())
-            ->method('resolvePrice')
-            ->with($product)
-            ->willReturn($price);
+        $products = array_map(function () {
+            return $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        }, $variantPrices);
 
-        $this->assertEquals($expectedValue, $this->resolver->resolvePrice($product));
+        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn($products);
+        $this->priceResolver
+            ->method('resolvePrice')
+            ->willReturnOnConsecutiveCalls(...$variantPrices);
+
+        $actualPrice = $this->resolver->resolvePrice($product);
+        self::assertSame($expectedPrice, $actualPrice);
     }
 
     /**
      * @return array
      */
-    public function testResolvePriceDataProvider()
+    public function resolvePriceDataProvider()
     {
         return [
-            'price of zero' => [0.00],
-            'price of five' => [5],
+            'Single variant at price 0.00 (float), should return 0.00 (float)' => [
+                $variantPrices = [
+                    0.00,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Single variant at price 5 (integer), should return 5.00 (float)' => [
+                $variantPrices = [
+                    5,
+                ],
+                $expectedPrice = 5.00,
+            ],
+            'Single variants at price null (null), should return 0.00 (float)' => [
+                $variantPrices = [
+                    null,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 0, 10, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    0,
+                    10,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 10, 0, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    10,
+                    0,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
         ];
     }
 }

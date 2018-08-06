@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\DataObject\Test\Unit;
 
-class CopyTest extends \PHPUnit_Framework_TestCase
+class CopyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Copy
@@ -40,12 +40,12 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fieldsetConfigMock = $this->getMock(\Magento\Framework\DataObject\Copy\Config::class, [], [], '', false);
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->sourceMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
-        $this->targetMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
+        $this->fieldsetConfigMock = $this->createMock(\Magento\Framework\DataObject\Copy\Config::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->sourceMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $this->targetMock = $this->createMock(\Magento\Framework\DataObject::class);
         $this->extensionAttributesFactoryMock =
-            $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
         $this->copy = new \Magento\Framework\DataObject\Copy(
             $this->eventManagerMock,
             $this->fieldsetConfigMock,
@@ -176,26 +176,14 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue($fields));
 
-        $sourceMock = $this->getMock(
-            \Magento\Framework\Api\ExtensibleDataInterface::class,
-            [
+        $sourceMock = $this->createPartialMock(\Magento\Framework\Api\ExtensibleDataInterface::class, [
                 'getExtensionAttributes', 'getCode'
-            ],
-            [],
-            '',
-            false
-        );
-        $targetMock = $this->getMock(
-            \Magento\Framework\Api\ExtensibleDataInterface::class,
-            [
+            ]);
+        $targetMock = $this->createPartialMock(\Magento\Framework\Api\ExtensibleDataInterface::class, [
                 'getExtensionAttributes',
                 'setCode',
                 'setExtensionAttributes'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $sourceMock
             ->expects($this->any())
@@ -234,24 +222,12 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue($fields));
 
-        $sourceMock = $this->getMock(
-            \Magento\Framework\Api\AbstractSimpleObject::class,
-            [
+        $sourceMock = $this->createPartialMock(\Magento\Framework\Api\AbstractSimpleObject::class, [
                 '__toArray'
-            ],
-            [],
-            '',
-            false
-        );
-        $targetMock = $this->getMock(
-            \Magento\Framework\Api\AbstractSimpleObject::class,
-            [
+            ]);
+        $targetMock = $this->createPartialMock(\Magento\Framework\Api\AbstractSimpleObject::class, [
                 'setData'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $sourceMock
             ->expects($this->once())

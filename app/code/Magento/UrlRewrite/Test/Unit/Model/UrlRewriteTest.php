@@ -5,7 +5,7 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Model;
 
-class UrlRewriteTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewrite
@@ -16,17 +16,14 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $resource = $this->getMock(
+        $context = $this->createMock(\Magento\Framework\Model\Context::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $resource = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
-            ['getIdFieldName', '_construct', 'getConnection'],
-            [],
-            '',
-            false
+            ['getIdFieldName', '_construct', 'getConnection']
         );
-        $resourceCollection = $this->getMock(\Magento\Framework\Data\Collection\AbstractDb::class, [], [], '', false);
-        $serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $resourceCollection = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
+        $serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(

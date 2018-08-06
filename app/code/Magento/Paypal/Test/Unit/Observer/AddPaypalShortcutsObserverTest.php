@@ -22,7 +22,7 @@ use Magento\Paypal\Observer\AddPaypalShortcutsObserver;
  * @see \Magento\Paypal\Observer\AddPaypalShortcutsObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
+class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
 {
     const PAYMENT_CODE = 'code';
 

@@ -11,7 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
  * Temporary test
  * Test verifies obsolete usages in modules that were refactored to work with getConnection.
  */
-class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
+class ObsoleteConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

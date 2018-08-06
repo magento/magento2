@@ -9,6 +9,7 @@ namespace Magento\Backup\Model;
  * Database backup model
  *
  * @api
+ * @since 100.0.2
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {
@@ -153,7 +154,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
                 if ($tableStatus->getDataLength() > self::BUFFER_LENGTH) {
                     if ($tableStatus->getAvgRowLength() < self::BUFFER_LENGTH) {
-                        $limit = floor(self::BUFFER_LENGTH / $tableStatus->getAvgRowLength());
+                        $limit = floor(self::BUFFER_LENGTH / max($tableStatus->getAvgRowLength(), 1));
                         $multiRowsLength = ceil($tableStatus->getRows() / $limit);
                     } else {
                         $limit = 1;
@@ -172,6 +173,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
             }
         }
         $backup->write($this->getResource()->getTableForeignKeysSql());
+        $backup->write($this->getResource()->getTableTriggersSql());
         $backup->write($this->getResource()->getFooter());
 
         $this->getResource()->commitTransaction();

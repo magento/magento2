@@ -9,7 +9,7 @@ namespace Magento\Framework\Code\Test\Unit;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\GeneratedFiles;
 
-class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
+class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
@@ -29,15 +29,11 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->directoryList =
-            $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
-        $writeFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class, [], [], '', false);
-        $this->writeInterface = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+            $this->createPartialMock(\Magento\Framework\App\Filesystem\DirectoryList::class, ['getPath']);
+        $writeFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
+        $this->writeInterface = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+            ->setMethods(['getPath', 'delete'])
+            ->getMockForAbstractClass();
         $writeFactory->expects($this->once())->method('create')->willReturn($this->writeInterface);
         $this->model = new GeneratedFiles($this->directoryList, $writeFactory);
     }

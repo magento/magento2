@@ -13,7 +13,9 @@ use Magento\Framework\App\Action\Context;
 
 class Create extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var Registration */
+    /**
+     * @var \Magento\Customer\Model\Registration
+     */
     protected $registration;
 
     /**

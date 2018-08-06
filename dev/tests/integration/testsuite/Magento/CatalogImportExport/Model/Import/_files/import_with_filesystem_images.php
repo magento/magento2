@@ -20,7 +20,7 @@ $dirPath = $mediaDirectory->getAbsolutePath($path);
 $items = [
     [
         'source' => __DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg',
-        'dest' => $dirPath . '/magento_image.jpg',
+        'dest' => $dirPath . '/magento_image(1).jpg',
     ],
     [
         'source' => __DIR__ . '/../../../../../Magento/Catalog/_files/magento_small_image.jpg',

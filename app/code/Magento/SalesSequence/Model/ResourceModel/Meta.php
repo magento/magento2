@@ -16,6 +16,7 @@ use Magento\SalesSequence\Model\Profile as ModelProfile;
  * Class Meta represents metadata for sequence as sequence table and store id
  *
  * @api
+ * @since 100.0.2
  */
 class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

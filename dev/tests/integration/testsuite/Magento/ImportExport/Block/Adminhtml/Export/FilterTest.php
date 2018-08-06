@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

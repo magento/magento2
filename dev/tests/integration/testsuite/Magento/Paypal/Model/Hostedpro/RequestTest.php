@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order;
  * Class RequestTest
  * @package Magento\Paypal\Model
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Hostedpro\Request

@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\ResourceModel\Grid;
 
-class TypeListTest extends \PHPUnit_Framework_TestCase
+class TypeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Payment\Model\ResourceModel\Grid\TypeList
@@ -20,7 +20,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->helperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->typesArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\TypeList($this->helperMock);
     }
 

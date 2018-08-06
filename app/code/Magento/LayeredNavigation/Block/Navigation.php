@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Navigation extends \Magento\Framework\View\Element\Template
 {
@@ -106,7 +107,8 @@ class Navigation extends \Magento\Framework\View\Element\Template
      */
     public function canShowBlock()
     {
-        return $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
+        return $this->getLayer()->getCurrentCategory()->getDisplayMode() !== \Magento\Catalog\Model\Category::DM_PAGE
+            && $this->visibilityFlag->isEnabled($this->getLayer(), $this->getFilters());
     }
 
     /**

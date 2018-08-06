@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use \Magento\Catalog\Model\Product\CopyConstructorFactory;
 
-class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
+class CopyConstructorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CopyConstructorFactory
@@ -21,13 +21,13 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new CopyConstructorFactory($this->_objectManagerMock);
     }
 
     public function testCreateWithInvalidType()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\InvalidArgumentException',
             'Magento\Framework\DataObject does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
         );

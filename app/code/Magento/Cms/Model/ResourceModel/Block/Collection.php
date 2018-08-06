@@ -19,6 +19,20 @@ class Collection extends AbstractCollection
     protected $_idFieldName = 'block_id';
 
     /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'cms_block_collection';
+
+    /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'block_collection';
+
+    /**
      * Perform operations after collection load
      *
      * @return $this

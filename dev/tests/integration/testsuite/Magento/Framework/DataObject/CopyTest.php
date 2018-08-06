@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DataObject;
 
-class CopyTest extends \PHPUnit_Framework_TestCase
+class CopyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Copy

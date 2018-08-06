@@ -12,6 +12,7 @@ use Magento\Config\App\Config\Type\System\Reader;
 /**
  * System configuration type
  * @api
+ * @since 100.1.2
  */
 class System implements ConfigTypeInterface
 {
@@ -129,6 +130,7 @@ class System implements ConfigTypeInterface
      * '{scopeType}/{scopeCode}/some/config/variable' - will return value of the config variable in the specified scope
      *
      * @inheritdoc
+     * @since 100.1.2
      */
     public function get($path = '')
     {
@@ -139,7 +141,7 @@ class System implements ConfigTypeInterface
         $pathParts = explode('/', $path);
         if (count($pathParts) === 1 && $pathParts[0] !== 'default') {
             if (!isset($this->data[$pathParts[0]])) {
-                $data = $this->reader->read();
+                $data = $this->readData();
                 $this->data = array_replace_recursive($data, $this->data);
             }
             return $this->data[$pathParts[0]];
@@ -169,7 +171,7 @@ class System implements ConfigTypeInterface
     {
         $cachedData = $this->cache->load($this->configType);
         if ($cachedData === false) {
-            $data = $this->reader->read();
+            $data = $this->readData();
         } else {
             $data = $this->serializer->unserialize($cachedData);
         }
@@ -186,7 +188,7 @@ class System implements ConfigTypeInterface
     {
         $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
         if ($cachedData === false) {
-            $data = $this->reader->read();
+            $data = $this->readData();
             $this->cacheData($data);
         } else {
             $data = [$scopeType => $this->serializer->unserialize($cachedData)];
@@ -214,7 +216,7 @@ class System implements ConfigTypeInterface
             if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
                 return [$scopeType => [$scopeId => []]];
             }
-            $data = $this->reader->read();
+            $data = $this->readData();
             $this->cacheData($data);
         } else {
             $data = [$scopeType => [$scopeId => $this->serializer->unserialize($cachedData)]];
@@ -281,6 +283,21 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * The freshly read data.
+     *
+     * @return array
+     */
+    private function readData(): array
+    {
+        $this->data = $this->reader->read();
+        $this->data = $this->postProcessor->process(
+            $this->data
+        );
+
+        return $this->data;
+    }
+
+    /**
      * Clean cache and global variables cache
      *
      * Next items cleared:
@@ -288,6 +305,7 @@ class System implements ConfigTypeInterface
      * - All records in cache storage tagged with CACHE_TAG
      *
      * @return void
+     * @since 100.1.2
      */
     public function clean()
     {

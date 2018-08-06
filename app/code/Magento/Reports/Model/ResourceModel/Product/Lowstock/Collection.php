@@ -11,9 +11,12 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
 {
@@ -245,13 +248,13 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return $this
      */
     public function filterByProductType($typeFilter)
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
+            throw new LocalizedException(__('The product type filter specified is incorrect.'));
         }
         $this->addAttributeToFilter('type_id', $typeFilter);
         return $this;

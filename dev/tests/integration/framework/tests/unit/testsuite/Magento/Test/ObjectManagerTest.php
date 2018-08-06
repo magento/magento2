@@ -16,7 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\ObjectManager\Config;
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array Instances that shouldn't be destroyed by clearing cache.

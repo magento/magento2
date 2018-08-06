@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Test\Unit;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
+class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\DesignExceptions */
     private $designExceptions;
@@ -34,9 +34,9 @@ class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->designExceptions = $this->objectManagerHelper->getObject(

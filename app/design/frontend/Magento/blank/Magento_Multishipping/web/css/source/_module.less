@@ -9,6 +9,75 @@
 
 & when (@media-common = true) {
     .multicheckout {
+        &.results,
+        &.success {
+            h3 {
+                font-size: 1.6rem;
+                margin-bottom: @indent__base;
+                margin-top: @indent__l;
+                a {
+                    color: @text__color;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            ul.orders-list {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .orders-list {
+                margin-top: @indent__m;
+                padding-left: @indent__base - 4px;
+
+                .shipping-list {
+                    .shipping-item {
+                        margin-left: 84px;
+                    }
+
+                    .shipping-label {
+                        font-weight: @font-weight__bold;
+                        margin-right: @indent__s;
+                    }
+
+                    .shipping-address {
+                        font-weight: @font-weight__regular;
+                    }
+
+                    .error-block {
+                        color: @color-red10;
+
+                        .error-label {
+                            font-weight: @font-weight__bold;
+                            margin-right: @indent__s;
+                        }
+
+                        .error-description {
+                            font-weight: @font-weight__regular;
+                        }
+                    }
+                }
+            }
+
+            .orders-succeed {
+                .orders-list {
+                    margin-top: 0;
+
+                    .shipping-list {
+                        .order-id {
+                            float: left;
+                        }
+
+                        .shipping-item {
+                            margin-left: 100px;
+                        }
+                    }
+                }
+            }
+        }
+
         .title {
             margin-bottom: @indent__l;
 
@@ -158,6 +227,13 @@
                 .block-content:not(:last-child) {
                     margin-bottom: @indent__xl;
                 }
+            }
+
+            .error-description {
+                color: @color-red10;
+                font-weight: @font-weight__regular;
+                margin-bottom: @indent__s;
+                margin-top: -@indent__s;
             }
         }
 

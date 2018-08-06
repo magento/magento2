@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
@@ -52,14 +53,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         } elseif ($store) {
             $storeId = (int)$store;
         } else {
-            $storeId = '';
+            $storeId = null;
         }
 
         /** @var $collection \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection  */
         $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
             '*'
-        )->setStoreId(
-            $storeId
         )->filterByIsQtyProductTypes()->joinInventoryItem(
             'qty'
         )->useManageStockFilter(

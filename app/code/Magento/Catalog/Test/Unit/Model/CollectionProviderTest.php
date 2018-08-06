@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Catalog\Model\Product;
 
-class CollectionProviderTest extends \PHPUnit_Framework_TestCase
+class CollectionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionProvider
@@ -41,10 +41,10 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(Product::class, [], [], '', false, false);
-        $this->converterPoolMock = $this->getMock(ConverterPool::class, [], [], '', false, false);
-        $this->providerMock = $this->getMock(CollectionProviderInterface::class);
-        $this->converterMock = $this->getMock(ConverterInterface::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->converterPoolMock = $this->createMock(ConverterPool::class);
+        $this->providerMock = $this->createMock(CollectionProviderInterface::class);
+        $this->converterMock = $this->createMock(ConverterInterface::class);
 
         $this->model = new CollectionProvider($this->converterPoolMock, ['crosssell' => $this->providerMock]);
     }
@@ -54,9 +54,9 @@ class CollectionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCollection()
     {
-        $linkedProductOneMock = $this->getMock(Product::class, [], [], '', false, false);
-        $linkedProductTwoMock = $this->getMock(Product::class, [], [], '', false, false);
-        $linkedProductThreeMock = $this->getMock(Product::class, [], [], '', false, false);
+        $linkedProductOneMock = $this->createMock(Product::class);
+        $linkedProductTwoMock = $this->createMock(Product::class);
+        $linkedProductThreeMock = $this->createMock(Product::class);
 
         $linkedProductOneMock->expects($this->once())->method('getId')->willReturn(1);
         $linkedProductTwoMock->expects($this->once())->method('getId')->willReturn(2);

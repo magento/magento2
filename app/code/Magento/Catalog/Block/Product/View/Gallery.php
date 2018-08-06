@@ -17,6 +17,7 @@ use Magento\Catalog\Helper\Image;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -115,9 +116,11 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption' => $image->getLabel(),
+                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ];
         }
         if (empty($imagesItems)) {
@@ -128,6 +131,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);
@@ -170,7 +175,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $attributes =
             $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
-        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+        return $attributes[$attributeName] ?? $default;
     }
 
     /**

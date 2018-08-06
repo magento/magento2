@@ -104,7 +104,7 @@ class SensitiveConfigSetCommand extends Command
         $this->addArgument(
             self::INPUT_ARGUMENT_PATH,
             InputArgument::OPTIONAL,
-            'Configuration path for example section/group/field_name'
+            'Configuration path for example group/section/field_name'
         );
         $this->addArgument(
             self::INPUT_ARGUMENT_VALUE,
@@ -155,8 +155,8 @@ class SensitiveConfigSetCommand extends Command
         try {
             $this->emulatedAreaProcessor->process(function () use ($input, $output) {
                 $this->facade->process($input, $output);
-                $this->hash->regenerate(System::CONFIG_TYPE);
             });
+            $this->hash->regenerate(System::CONFIG_TYPE);
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {

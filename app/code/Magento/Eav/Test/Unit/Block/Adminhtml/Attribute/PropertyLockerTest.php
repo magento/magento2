@@ -7,7 +7,7 @@ namespace Magento\Eav\Test\Unit\Block\Adminhtml\Attribute;
 
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 
-class PropertyLockerTest extends \PHPUnit_Framework_TestCase
+class PropertyLockerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PropertyLocker */
     protected $object;

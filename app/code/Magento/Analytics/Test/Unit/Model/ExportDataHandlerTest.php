@@ -19,7 +19,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class ExportDataHandlerTest
  */
-class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
+class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject

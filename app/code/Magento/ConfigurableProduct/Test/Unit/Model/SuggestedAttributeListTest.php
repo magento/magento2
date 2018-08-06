@@ -8,7 +8,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
-class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
+class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\SuggestedAttributeList
@@ -42,27 +42,9 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configurableAttributeHandler = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resourceHelperMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Helper::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configurableAttributeHandler = $this->createMock(\Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class);
+        $this->resourceHelperMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Helper::class);
+        $this->collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $this->resourceHelperMock->expects(
             $this->once()
         )->method(
@@ -91,13 +73,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             $this->returnValueMap($valueMap)
         );
         $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
-        $this->attributeMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            $methods,
-            [],
-            '',
-            false
-        );
+        $this->attributeMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, $methods);
         $this->collectionMock->expects(
             $this->once()
         )->method(
@@ -113,13 +89,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuggestedAttributesIfTheyApplicable()
     {
-        $source = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $source = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
         $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));

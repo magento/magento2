@@ -10,7 +10,7 @@ namespace Magento\Customer\Block\Widget;
  *
  * @magentoAppArea frontend
  */
-class FaxTest extends \PHPUnit_Framework_TestCase
+class FaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

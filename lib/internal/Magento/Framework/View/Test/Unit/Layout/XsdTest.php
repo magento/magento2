@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to xsd schema file

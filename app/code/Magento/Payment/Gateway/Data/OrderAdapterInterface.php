@@ -8,6 +8,7 @@ namespace Magento\Payment\Gateway\Data;
 /**
  * Interface OrderAdapterInterface
  * @api
+ * @since 100.0.2
  */
 interface OrderAdapterInterface
 {

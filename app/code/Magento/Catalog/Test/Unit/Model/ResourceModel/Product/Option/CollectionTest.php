@@ -12,7 +12,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreFile
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -82,42 +82,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class, ['create'], [], '', false
-        );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll'], [], '', false
-        );
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
-        $this->optionsFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->entityFactoryMock = $this->createPartialMock(\Magento\Framework\Data\Collection\EntityFactory::class, ['create']);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createPartialMock(\Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll']);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->optionsFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class, ['create']);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $this->joinProcessor = $this->getMockBuilder(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resourceMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Option::class,
-            ['getConnection', '__wakeup', 'getMainTable', 'getTable'],
-            [],
-            '',
-            false
-        );
-        $this->selectMock = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            ['from', 'reset', 'join'],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class, ['getConnection', '__wakeup', 'getMainTable', 'getTable']);
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'reset', 'join']);
         $this->connection =
-            $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select']);
         $this->connection->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
@@ -138,14 +116,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'catalog_product_entity',
                 'catalog_product_entity'
             );
-        $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $metadata = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
+        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->selectMock->expects($this->exactly(2))->method('join');

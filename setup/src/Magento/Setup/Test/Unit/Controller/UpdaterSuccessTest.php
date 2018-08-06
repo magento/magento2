@@ -8,12 +8,12 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\UpdaterSuccess;
 
-class UpdaterSuccessTest extends \PHPUnit_Framework_TestCase
+class UpdaterSuccessTest extends \PHPUnit\Framework\TestCase
 {
     public function testIndexAction()
     {
         /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
-        $maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
+        $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $maintenanceMode->expects($this->once())->method('set')->with(false);
         /** @var $controller UpdaterSuccess */
         $controller = new UpdaterSuccess($maintenanceMode);

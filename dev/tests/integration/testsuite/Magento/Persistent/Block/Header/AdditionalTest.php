@@ -9,7 +9,7 @@ namespace Magento\Persistent\Block\Header;
 /**
  * @magentoDataFixture Magento/Persistent/_files/persistent.php
  */
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Block\Header\Additional

@@ -7,7 +7,7 @@ namespace Magento\GroupedProduct\Test\Unit\Controller\Adminhtml\Edit;
 
 use Magento\Framework\Controller\ResultFactory;
 
-class PopupTest extends \PHPUnit_Framework_TestCase
+class PopupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -51,9 +51,9 @@ class PopupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
-        $this->factory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->factory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,12 +90,9 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $typeId = 4;
         $productId = null;
         $setId = 0;
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setStoreId', 'setTypeId', 'setData', '__wakeup'],
-            [],
-            '',
-            false
+            ['setStoreId', 'setTypeId', 'setData', '__wakeup']
         );
 
         $this->request->expects($this->at(0))->method('getParam')->with('id')->will($this->returnValue($productId));
@@ -127,12 +124,9 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $typeId = 4;
         $setId = 0;
         $productId = 399;
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setStoreId', 'setTypeId', 'setData', 'load', '__wakeup'],
-            [],
-            '',
-            false
+            ['setStoreId', 'setTypeId', 'setData', 'load', '__wakeup']
         );
 
         $this->request->expects($this->at(0))->method('getParam')->with('id')->will($this->returnValue($productId));

@@ -144,6 +144,8 @@ class FileProcessor
         $uploader->addValidateCallback('size', $backendModel, 'validateMaxSize');
 
         $result = $uploader->save($destination);
+        unset($result['path']);
+
         return $result;
     }
 

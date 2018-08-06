@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model\ResourceModel\Problem;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection

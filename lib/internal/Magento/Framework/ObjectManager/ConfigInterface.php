@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\ConfigInterface
+ *
+ */
 interface ConfigInterface
 {
     /**

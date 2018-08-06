@@ -8,7 +8,7 @@ namespace Magento\Review\Block\Adminhtml\Edit\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

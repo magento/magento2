@@ -5,7 +5,7 @@
  */
 namespace Magento\OfflinePayments\Test\Unit\Block\Form;
 
-class AbstractInstructionTest extends \PHPUnit_Framework_TestCase
+class AbstractInstructionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflinePayments\Block\Form\AbstractInstruction
@@ -14,7 +14,7 @@ class AbstractInstructionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->_model = $this->getMockForAbstractClass(
             \Magento\OfflinePayments\Block\Form\AbstractInstruction::class,
             ['context' => $context]

@@ -6,7 +6,9 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
-class NavigationTest extends \PHPUnit_Framework_TestCase
+use Magento\Catalog\Model\Category;
+
+class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -35,15 +37,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->catalogLayerMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);
-        $this->filterListMock = $this->getMock(\Magento\Catalog\Model\Layer\FilterList::class, [], [], '', false);
-        $this->visibilityFlagMock = $this->getMock(
-            \Magento\Catalog\Model\Layer\AvailabilityFlagInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->catalogLayerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
+        $this->filterListMock = $this->createMock(\Magento\Catalog\Model\Layer\FilterList::class);
+        $this->visibilityFlagMock = $this->createMock(\Magento\Catalog\Model\Layer\AvailabilityFlagInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
@@ -63,7 +59,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                 'visibilityFlag' => $this->visibilityFlagMock
             ]
         );
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
     }
 
     public function testGetStateHtml()
@@ -104,7 +100,63 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
             ->will($this->returnValue($enabled));
+
+        $category = $this->createMock(Category::class);
+        $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
+        $category->expects($this->once())->method('getDisplayMode')->willReturn(Category::DM_PRODUCT);
+
         $this->assertEquals($enabled, $this->model->canShowBlock());
+    }
+
+    /**
+     * Test canShowBlock() with different category display types.
+     *
+     * @param string $mode
+     * @param bool $result
+     *
+     * @dataProvider canShowBlockDataProvider
+     */
+    public function testCanShowBlockWithDifferentDisplayModes(string $mode, bool $result)
+    {
+        $filters = ['To' => 'be', 'or' => 'not', 'to' => 'be'];
+
+        $this->filterListMock->expects($this->atLeastOnce())->method('getFilters')
+            ->with($this->catalogLayerMock)
+            ->will($this->returnValue($filters));
+        $this->assertEquals($filters, $this->model->getFilters());
+
+        $this->visibilityFlagMock
+            ->expects($this->any())
+            ->method('isEnabled')
+            ->with($this->catalogLayerMock, $filters)
+            ->will($this->returnValue(true));
+
+        $category = $this->createMock(Category::class);
+        $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
+        $category->expects($this->once())->method('getDisplayMode')->willReturn($mode);
+
+        $this->assertEquals($result, $this->model->canShowBlock());
+    }
+
+    /**
+     * @return array
+     */
+    public function canShowBlockDataProvider()
+    {
+        return [
+            [
+                Category::DM_PRODUCT,
+                true,
+            ],
+            [
+                Category::DM_PAGE,
+                false,
+            ],
+            [
+                Category::DM_MIXED,
+                true,
+            ],
+        ];
     }
 
     public function testGetClearUrl()

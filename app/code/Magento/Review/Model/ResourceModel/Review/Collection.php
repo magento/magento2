@@ -9,6 +9,7 @@ namespace Magento\Review\Model\ResourceModel\Review;
  * Review collection resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * \Magento\Framework\Filesystem\Driver
@@ -40,14 +40,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
-        $this->fileFactory = $this->getMock(
-            \Magento\Framework\Filesystem\File\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->fileFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
         $this->read = new \Magento\Framework\Filesystem\Directory\Read(
             $this->fileFactory,
             $this->driver,

@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePasswordTest extends \PHPUnit_Framework_TestCase
+class CreatePasswordTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Controller\Account\CreatePassword */
     protected $model;

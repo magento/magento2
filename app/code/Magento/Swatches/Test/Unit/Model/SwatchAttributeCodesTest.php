@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
 
-class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
+class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_TABLE = 'eav_attribute';
     const ATTRIBUTE_OPTION_TABLE = 'eav_attribute_option';
@@ -45,26 +45,17 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cache = $this->getMock(
-            CacheInterface::class,
-            [
+        $this->cache = $this->createPartialMock(CacheInterface::class, [
                 'getFrontend',
                 'load',
                 'save',
                 'remove',
                 'clean'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->resourceConnection = $this->getMock(
+        $this->resourceConnection = $this->createPartialMock(
             ResourceConnection::class,
-            ['getConnection', 'getTableName'],
-            [],
-            '',
-            false
+            ['getConnection', 'getTableName']
         );
 
         $this->swatchAttributeCodesModel = (new ObjectManager($this))->getObject(SwatchAttributeCodes::class, [
@@ -87,21 +78,9 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
             ->with(self::CACHE_KEY)
             ->willReturn($swatchAttributeCodesCache);
 
-        $adapterMock = $this->getMock(
-            Mysql::class,
-            ['select', 'fetchPairs'],
-            [],
-            '',
-            false
-        );
+        $adapterMock = $this->createPartialMock(Mysql::class, ['select', 'fetchPairs']);
 
-        $selectMock = $this->getMock(
-            Select::class,
-            ['from', 'where', 'join'],
-            [],
-            '',
-            false
-        );
+        $selectMock = $this->createPartialMock(Select::class, ['from', 'where', 'join']);
         $selectMock
             ->method('from')
             ->withConsecutive(

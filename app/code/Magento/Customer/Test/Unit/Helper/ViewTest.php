@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Helper;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -23,9 +23,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMetadataService = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
 
-        $attributeMetadata = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $attributeMetadata = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $attributeMetadata->expects($this->any())->method('isVisible')->will($this->returnValue(true));
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')

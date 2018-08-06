@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory;
 use Magento\Framework\View\Layout;
 
-class HtmlContentFactoryTest extends \PHPUnit_Framework_TestCase
+class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Layout|\PHPUnit_Framework_MockObject_MockObject

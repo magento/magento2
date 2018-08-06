@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Observer;
 
 use \Magento\Wishlist\Observer\CustomerLogin as Observer;
 
-class CustomerLoginTest extends \PHPUnit_Framework_TestCase
+class CustomerLoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Observer

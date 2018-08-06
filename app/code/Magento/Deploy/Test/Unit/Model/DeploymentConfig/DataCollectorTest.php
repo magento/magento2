@@ -9,7 +9,7 @@ use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Framework\App\DeploymentConfig;
 
-class DataCollectorTest extends \PHPUnit_Framework_TestCase
+class DataCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject

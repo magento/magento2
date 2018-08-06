@@ -226,6 +226,7 @@ class Config extends AbstractConfig
         'TWD',
         'THB',
         'USD',
+        'INR',
     ];
 
     /**

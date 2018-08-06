@@ -33,7 +33,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     * @deprecated
+     * @deprecated 101.1.0
      * @see $mediaDirectory
      */
     protected $_rootDirectory;
@@ -126,7 +126,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
-        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -405,7 +405,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      *
-     * @deprecated
+     * @deprecated 101.1.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -429,7 +429,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated
+     * @deprecated 101.1.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {

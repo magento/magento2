@@ -16,7 +16,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 
-class SequenceApplierTest extends \PHPUnit_Framework_TestCase
+class SequenceApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject

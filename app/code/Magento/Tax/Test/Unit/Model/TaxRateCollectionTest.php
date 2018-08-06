@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model;
 
 use \Magento\Tax\Model\TaxRateCollection;
  
-class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TaxRateCollection
@@ -61,53 +61,23 @@ class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterBuilderMock = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
+        $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->searchCriteriaBuilderMock =
-            $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
-        $this->sortOrderBuilderMock = $this->getMock(\Magento\Framework\Api\SortOrderBuilder::class, [], [], '', false);
-        $this->rateServiceMock = $this->getMock(
-            \Magento\Tax\Api\TaxRateRepositoryInterface::class,
-            [
+            $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->sortOrderBuilderMock = $this->createMock(\Magento\Framework\Api\SortOrderBuilder::class);
+        $this->rateServiceMock = $this->createPartialMock(\Magento\Tax\Api\TaxRateRepositoryInterface::class, [
                 'save',
                 'get',
                 'deleteById',
                 'getList',
                 'delete',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->rateConverterMock = $this->getMock(
-            \Magento\Tax\Model\Calculation\Rate\Converter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteriaInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultsMock = $this->getMock(
-            \Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->taxRateMock = $this->getMock(\Magento\Tax\Model\Calculation\Rate::class, [], [], '', false);
+            ]);
+        $this->rateConverterMock = $this->createMock(\Magento\Tax\Model\Calculation\Rate\Converter::class);
+        $this->searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $this->searchResultsMock = $this->createMock(\Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class);
+        $this->taxRateMock = $this->createMock(\Magento\Tax\Model\Calculation\Rate::class);
 
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')

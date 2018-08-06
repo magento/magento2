@@ -17,9 +17,13 @@ use Symfony\Component\Console\Command\Command;
  */
 class StoreListCommand extends Command
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
+    /**
+     */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {

@@ -12,7 +12,7 @@ use Magento\Analytics\Model\Connector\ResponseHandler\SignUp;
 /**
  * Class SignUpTest
  */
-class SignUpTest extends \PHPUnit_Framework_TestCase
+class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()
     {

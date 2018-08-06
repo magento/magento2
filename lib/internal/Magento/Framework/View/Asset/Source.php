@@ -47,7 +47,7 @@ class Source
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private $themeList;
 
@@ -269,7 +269,8 @@ class Source
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      *
      * @return bool|string
-     * @deprecated If custom vendor directory is outside Magento root, then this method will return unexpected result
+     * @deprecated 100.1.0 If custom vendor directory is outside Magento root,
+     * then this method will return unexpected result.
      */
     public function findRelativeSourceFilePath(LocalInterface $asset)
     {

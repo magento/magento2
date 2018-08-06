@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Config;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

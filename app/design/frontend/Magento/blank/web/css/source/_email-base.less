@@ -160,8 +160,8 @@ body {
 
 .main {
     margin: 0 auto;
+    max-width: @email-body__width;
     text-align: left; // Necessary to prevent all text from centering in Outlook 2003
-    width: @email-body__width;
 }
 
 .header {
@@ -238,7 +238,7 @@ body {
         a:visited {
             //  Undo general link hover state
             border: 1px solid @button-primary__hover__background;
-            color: @button-primary__color !important;
+            color: @button-primary__hover__color !important;
             text-decoration: none !important;
         }
     }

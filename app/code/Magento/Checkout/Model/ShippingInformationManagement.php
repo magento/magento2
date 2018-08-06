@@ -49,25 +49,25 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * @var QuoteAddressValidator
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $addressValidator;
 
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $addressRepository;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $scopeConfig;
 
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollector
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $totalsCollector;
 

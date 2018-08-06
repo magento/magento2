@@ -7,7 +7,7 @@ namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use \Magento\Framework\Config\Dom\NodeMergingConfig;
 
-class NodeMergingConfigTest extends \PHPUnit_Framework_TestCase
+class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NodeMergingConfig
@@ -21,7 +21,7 @@ class NodeMergingConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->nodePathMatcher = $this->getMock(\Magento\Framework\Config\Dom\NodePathMatcher::class);
+        $this->nodePathMatcher = $this->createMock(\Magento\Framework\Config\Dom\NodePathMatcher::class);
         $this->object = new NodeMergingConfig(
             $this->nodePathMatcher,
             ['/root/one' => 'name', '/root/two' => 'id', '/root/three' => 'key']

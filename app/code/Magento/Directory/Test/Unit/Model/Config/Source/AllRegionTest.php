@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Config\Source;
 
-class AllRegionTest extends \PHPUnit_Framework_TestCase
+class AllRegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Config\Source\AllRegion

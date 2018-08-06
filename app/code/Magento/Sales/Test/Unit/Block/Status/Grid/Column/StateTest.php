@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Block\Status\Grid\Column;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Sales\Block\Status\Grid\Column\State
@@ -26,13 +26,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderStatusCollectionFactoryMock = $this->getMock(
+        $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
         $this->configMock = $helper->getObject(
             \Magento\Sales\Model\Order\Config::class,
@@ -51,9 +47,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     public function testDecorateState()
     {
-        $rowMock = $this->getMock(\Magento\Sales\Model\Order\Status::class, [], [], '', false);
+        $rowMock = $this->createPartialMock(\Magento\Sales\Model\Order\Status::class, ['getStatus']);
         $rowMock->expects($this->any())->method('getStatus')->willReturn('fraud');
-        $columnMock = $this->getMock(\Magento\Backend\Block\Widget\Grid\Column::class, [], [], '', false);
+        $columnMock = $this->createMock(\Magento\Backend\Block\Widget\Grid\Column::class);
         $statuses = [
             new \Magento\Framework\DataObject(
                 [
@@ -70,13 +66,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         ];
-        $collectionMock = $this->getMock(
+        $collectionMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
-            ['create', 'joinStates'],
-            [],
-            '',
-            false,
-            false
+            ['create', 'joinStates']
         );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -86,6 +78,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($statuses));
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
-        $this->assertSame('processing[processing]', $result);
+        $this->assertSame('processing[Suspected Fraud]', $result);
     }
 }

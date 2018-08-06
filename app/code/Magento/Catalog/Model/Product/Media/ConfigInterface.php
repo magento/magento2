@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\Product\Media;
 
+/**
+ * Interface \Magento\Catalog\Model\Product\Media\ConfigInterface
+ *
+ */
 interface ConfigInterface
 {
     /**

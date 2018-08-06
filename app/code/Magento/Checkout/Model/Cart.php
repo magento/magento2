@@ -13,9 +13,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Shopping cart model
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -735,7 +736,7 @@ class Cart extends DataObject implements CartInterface
     /**
      * Getter for RequestInfoFilter
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @return \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
      */
     private function getRequestInfoFilter()

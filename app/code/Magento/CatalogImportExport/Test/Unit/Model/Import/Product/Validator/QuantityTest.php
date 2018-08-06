@@ -11,7 +11,7 @@ use Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity;
 /**
  * Class QuantityTest
  */
-class QuantityTest extends \PHPUnit_Framework_TestCase
+class QuantityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Quantity

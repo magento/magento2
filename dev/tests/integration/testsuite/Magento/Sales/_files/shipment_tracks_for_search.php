@@ -5,10 +5,11 @@
  */
 
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require 'default_rollback.php';
@@ -75,6 +76,9 @@ $tracks = [
     ],
 ];
 
+/** @var ShipmentTrackRepositoryInterface $shipmentTrackRepository */
+$shipmentTrackRepository = Bootstrap::getObjectManager()->get(ShipmentTrackRepositoryInterface::class);
+
 foreach ($tracks as $data) {
     /** @var $track Track */
     $track = Bootstrap::getObjectManager()->create(Track::class);
@@ -86,5 +90,5 @@ foreach ($tracks as $data) {
     $track->setDescription($data['description']);
     $track->setQty($data['qty']);
     $track->setWeight($data['weight']);
-    $track->save();
+    $shipmentTrackRepository->save($track);
 }

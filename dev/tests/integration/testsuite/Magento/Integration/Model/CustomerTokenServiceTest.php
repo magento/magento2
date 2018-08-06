@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test class for \Magento\Integration\Model\CustomerTokenService.
  */
-class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerTokenServiceInterface

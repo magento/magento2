@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
 /**
  * Integration tests for invoices reports collection which is used to obtain invoice reports by invoice date.
  */
-class InvoicedTest extends \PHPUnit_Framework_TestCase
+class InvoicedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection\Invoiced

@@ -21,7 +21,7 @@ use Magento\MediaStorage\Model\File\UploaderFactory;
  * Class FileTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var File */
     protected $model;

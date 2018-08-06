@@ -14,9 +14,8 @@ use Magento\Sales\Model\AbstractModel;
 
 /**
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ShipmentItemInterface
 {
@@ -147,7 +146,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Declare qty
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return \Magento\Sales\Model\Order\Shipment\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)

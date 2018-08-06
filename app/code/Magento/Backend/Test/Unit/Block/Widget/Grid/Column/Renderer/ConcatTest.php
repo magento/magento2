@@ -7,7 +7,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Framework\DataObject;
 
-class ConcatTest extends \PHPUnit_Framework_TestCase
+class ConcatTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
@@ -40,19 +40,18 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
     public function testRender($method, $getters)
     {
         $object = new DataObject(['test' => 'a', 'best' => 'b']);
-        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods([$method, 'getSeparator'])
-            ->getMock();
+        $column = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid\Column::class, [$method, 'getSeparator']);
         $column->expects($this->any())
             ->method('getSeparator')
             ->will($this->returnValue('-'));
         $column->expects($this->any())
             ->method($method)
             ->will($this->returnValue($getters));
-        $column->expects($this->any())
-            ->method('getGetter')
-            ->willReturn(['getTest', 'getBest']);
+        if ($method == 'getGetter') {
+            $column->expects($this->any())
+                ->method('getGetter')
+                ->willReturn(['getTest', 'getBest']);
+        }
         $this->renderer->setColumn($column);
         $this->assertEquals('a-b', $this->renderer->render($object));
     }

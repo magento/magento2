@@ -175,7 +175,7 @@ class RefreshSpecialPrices
      * Get MetadataPool instance
      * @return MetadataPool
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {

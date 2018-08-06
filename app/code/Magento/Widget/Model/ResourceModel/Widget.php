@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\ResourceModel;
 /**
  * Resource model for widget.
  *
- * @deprecated Data from this table was moved to xml(widget.xml).
+ * @deprecated 100.2.0 Data from this table was moved to xml(widget.xml).
  */
 class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

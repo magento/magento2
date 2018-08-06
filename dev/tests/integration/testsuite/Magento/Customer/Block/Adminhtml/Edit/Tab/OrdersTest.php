@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class OrdersTest extends \PHPUnit_Framework_TestCase
+class OrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The orders block under test.

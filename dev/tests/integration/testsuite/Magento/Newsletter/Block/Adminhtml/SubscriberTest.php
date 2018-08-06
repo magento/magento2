@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Block\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class SubscriberTest extends \PHPUnit_Framework_TestCase
+class SubscriberTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetShowQueueAdd()
     {

@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $className
@@ -17,9 +17,9 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor($className)
     {
-        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $poolMock = $this->getMock(\Magento\Framework\App\Cache\Type\FrontendPool::class, [], [], '', false);
+        $poolMock = $this->createMock(\Magento\Framework\App\Cache\Type\FrontendPool::class);
         $poolMock->expects(
             $this->atLeastOnce()
         )->method(

@@ -12,6 +12,7 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
@@ -77,6 +78,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
+     * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {
@@ -138,7 +140,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param string $table
      * @param array|int $attributeIds
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadAttributesSelect($table, $attributeIds = [])
     {

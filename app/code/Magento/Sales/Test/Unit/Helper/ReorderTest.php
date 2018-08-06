@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Helper;
 
 use \Magento\Sales\Helper\Reorder;
 
-class ReorderTest extends \PHPUnit_Framework_TestCase
+class ReorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Helper\Reorder

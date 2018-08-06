@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 use Magento\Framework\View\Design\Theme\Label;
 use Magento\Framework\View\Design\Theme\Label\ListInterface;
 
-class LabelTest extends \PHPUnit_Framework_TestCase
+class LabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Label

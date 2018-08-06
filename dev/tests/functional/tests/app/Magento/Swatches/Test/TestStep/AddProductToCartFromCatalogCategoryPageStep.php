@@ -81,6 +81,8 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
         $productItemBlock = $productsList->getProductItem($this->product);
         $productItemBlock->fillData($this->product);
         $productItemBlock->clickAddToCart();
+        $this->categoryView->getMessagesBlock()->waitSuccessMessage();
+
         $cart = [
             'data' => [
                 'items' => [

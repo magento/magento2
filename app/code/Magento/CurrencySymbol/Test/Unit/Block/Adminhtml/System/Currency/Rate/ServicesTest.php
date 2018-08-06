@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
 
-class ServicesTest extends \PHPUnit_Framework_TestCase
+class ServicesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager helper
@@ -29,26 +29,14 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         $options = [['value' => 'value', 'label' => 'label']];
         $service = 'service';
 
-        $sourceServiceFactoryMock = $this->getMock(
+        $sourceServiceFactoryMock = $this->createPartialMock(
             \Magento\Directory\Model\Currency\Import\Source\ServiceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $sourceServiceMock = $this->getMock(
-            \Magento\Directory\Model\Currency\Import\Source\Service::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $backendSessionMock = $this->getMock(
+        $sourceServiceMock = $this->createMock(\Magento\Directory\Model\Currency\Import\Source\Service::class);
+        $backendSessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,
-            ['getCurrencyRateService'],
-            [],
-            '',
-            false
+            ['getCurrencyRateService']
         );
 
         /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -62,12 +50,9 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             ['createBlock']
         );
 
-        $blockMock = $this->getMock(
+        $blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Html\Select::class,
-            ['setOptions', 'setId', 'setName', 'setValue', 'setTitle'],
-            [],
-            '',
-            false
+            ['setOptions', 'setId', 'setName', 'setValue', 'setTitle']
         );
 
         $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);

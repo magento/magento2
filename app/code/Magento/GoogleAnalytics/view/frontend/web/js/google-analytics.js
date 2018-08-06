@@ -51,11 +51,13 @@ define([
             if (config.pageTrackingData.isAnonymizedIpActive) {
                 ga('set', 'anonymizeIp', true);
             }
-            ga('send', 'pageview' + config.pageTrackingData.optPageUrl);
 
             // Process orders data
-            if (config.ordersTrackingData) {
+            if (config.ordersTrackingData.hasOwnProperty('currency')) {
                 ga('require', 'ec', 'ec.js');
+
+                //Set currency code
+                ga('set', 'currencyCode', config.ordersTrackingData.currency);
 
                 // Collect product data for GA
                 if (config.ordersTrackingData.products) {
@@ -72,6 +74,9 @@ define([
                 }
 
                 ga('send', 'pageview');
+            }else{
+                // Process Data if not orders
+                ga('send', 'pageview' + config.pageTrackingData.optPageUrl);
             }
         }
     }

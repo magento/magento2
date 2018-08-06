@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 /**
  * Class AuthenticationExceptionTest
  */
-class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
+class AuthenticationExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

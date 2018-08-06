@@ -11,7 +11,7 @@ use Magento\Translation\Model\Js\Config\Source\Strategy;
 /**
  * Class StrategyTest
  */
-class StrategyTest extends \PHPUnit_Framework_TestCase
+class StrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Strategy

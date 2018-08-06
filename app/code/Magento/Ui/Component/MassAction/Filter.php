@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filter
 {
@@ -97,14 +98,12 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
+
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $this->getFilterIds()]
+        );
+
         return $collection;
     }
 
@@ -222,7 +221,9 @@ class Filter
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
-            $searchResult = $this->getDataProvider()->getSearchResult();
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
             // Use compatible search api getItems when searchResult is not a collection.
             foreach ($searchResult->getItems() as $item) {
                 /** @var $item \Magento\Framework\Api\Search\DocumentInterface */

@@ -15,6 +15,7 @@ namespace Magento\Sales\Api;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * @api
+ * @since 100.0.2
  */
 interface OrderStatusHistoryRepositoryInterface
 {
@@ -39,6 +40,7 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 
@@ -47,6 +49,7 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface Order status history interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 }

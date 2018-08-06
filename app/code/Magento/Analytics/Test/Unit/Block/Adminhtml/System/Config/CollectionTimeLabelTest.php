@@ -10,8 +10,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
+class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionTimeLabel
@@ -33,9 +34,6 @@ class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
      */
     private $abstractElementMock;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
@@ -55,12 +53,16 @@ class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
-        $this->collectionTimeLabel = new CollectionTimeLabel($this->contextMock);
+
+        $objectManager = new ObjectManager($this);
+        $this->collectionTimeLabel = $objectManager->getObject(
+            CollectionTimeLabel::class,
+            [
+                'context' => $this->contextMock
+            ]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testRender()
     {
         $timeZone = "America/New_York";
@@ -71,7 +73,7 @@ class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
         $this->abstractElementMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Eastern Standard Time (America/New_York)');
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );

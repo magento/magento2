@@ -14,6 +14,7 @@ namespace Magento\Developer\Model\TemplateEngine\Decorator;
  * Decorates block with block and template hints
  *
  * @api
+ * @since 100.0.2
  */
 class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {

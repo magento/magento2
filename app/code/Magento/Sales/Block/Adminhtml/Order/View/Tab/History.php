@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order history tab
  *
  * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -17,7 +18,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @var string
      */
-    protected $_template = 'order/view/tab/history.phtml';
+    protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
      * Core registry

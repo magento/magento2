@@ -22,6 +22,12 @@ class Totals extends Block
     protected $grandTotal = '//tr[normalize-space(td)="Grand Total"]//span';
 
     /**
+     * Total paid search mask.
+     * @var string
+     */
+    private $totalPaid = '//tr[normalize-space(td)="Total Paid"]//span';
+
+    /**
      * Grand total excluding tax search mask.
      *
      * @var string
@@ -92,7 +98,19 @@ class Totals extends Block
     public function getGrandTotal()
     {
         $grandTotal = $this->_rootElement->find($this->grandTotal, Locator::SELECTOR_XPATH)->getText();
+
         return $this->escapeCurrency($grandTotal);
+    }
+
+    /**
+     * Gets order total paid.
+     *
+     * @return string
+     */
+    public function getTotalPaid()
+    {
+        $totalPaid = $this->_rootElement->find($this->totalPaid, Locator::SELECTOR_XPATH)->getText();
+        return $this->escapeCurrency($totalPaid);
     }
 
     /**

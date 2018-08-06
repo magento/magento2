@@ -9,7 +9,7 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\VersionControl;
 /**
  * Class RelationCompositeTest
  */
-class RelationCompositeTest extends \PHPUnit_Framework_TestCase
+class RelationCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite

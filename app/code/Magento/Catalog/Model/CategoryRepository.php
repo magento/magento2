@@ -129,7 +129,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = null !== $storeId ? $storeId : 'all';
+        $cacheKey = $storeId ?? 'all';
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
@@ -210,7 +210,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getExtensibleDataObjectConverter()
     {

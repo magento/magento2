@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 
 /**
  * Class StockDataFilterTest
  */
-class StockDataFilterTest extends \PHPUnit_Framework_TestCase
+class StockDataFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -32,16 +32,13 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
-        $this->stockConfiguration = $this->getMock(
+        $this->stockConfiguration = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Configuration::class,
-            ['getManageStock'],
-            [],
-            '',
-            false
+            ['getManageStock']
         );
 
         $this->stockDataFilter = new StockDataFilter($this->scopeConfigMock, $this->stockConfiguration);

@@ -13,7 +13,7 @@ use Magento\Framework\View\EntitySpecificHandlesList;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Result\Page
@@ -110,7 +110,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $this->pageConfigRenderer = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Renderer::class)
             ->disableOriginalConstructor()
@@ -125,7 +125,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with(['pageConfig' => $this->pageConfig])
             ->willReturn($this->pageConfigRenderer);
 
-        $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
+        $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(

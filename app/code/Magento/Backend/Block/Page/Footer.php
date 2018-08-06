@@ -10,16 +10,18 @@ namespace Magento\Backend\Block\Page;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Footer extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'page/footer.phtml';
+    protected $_template = 'Magento_Backend::page/footer.phtml';
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
+     * @since 100.1.0
      */
     protected $productMetadata;
 
@@ -49,6 +51,7 @@ class Footer extends \Magento\Backend\Block\Template
      * Get product version
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMagentoVersion()
     {

@@ -162,7 +162,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
@@ -391,7 +392,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath));
+                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
         }
@@ -555,6 +556,29 @@ class Files
     public function getPageLayoutFiles($incomingParams = [], $asDataSet = true)
     {
         return $this->getLayoutXmlFiles('page_layout', $incomingParams, $asDataSet);
+    }
+
+    /**
+     * Returns list of UI Component files, used by Magento application
+     *
+     * An incoming array can contain the following items
+     * array (
+     *     'namespace'      => 'namespace_name',
+     *     'module'         => 'module_name',
+     *     'area'           => 'area_name',
+     *     'theme'          => 'theme_name',
+     *     'include_code'   => true|false,
+     *     'include_design' => true|false,
+     *     'with_metainfo'  => true|false,
+     * )
+     *
+     * @param array $incomingParams
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getUiComponentXmlFiles($incomingParams = [], $asDataSet = true)
+    {
+        return $this->getLayoutXmlFiles('ui_component', $incomingParams, $asDataSet);
     }
 
     /**

@@ -59,11 +59,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**#@-*/
 
-    /**
-     * Capture type (make authorization close or remain open)
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_captureTypeComplete = 'Y';
 
     /**

@@ -10,7 +10,7 @@ use \Magento\Framework\View\Layout\ScheduledStructure;
 /**
  * Test class for \Magento\Framework\View\Layout\ScheduledStructure
  */
-class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
+class ScheduledStructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScheduledStructure

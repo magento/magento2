@@ -18,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class RetryTest
  */
-class RetryTest extends \PHPUnit_Framework_TestCase
+class RetryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * Tests dev:query-log:disable command.
  * Tests that the correct configuration is passed to the deployment config writer.
  */
-class QueryLogDisableCommandTest extends \PHPUnit_Framework_TestCase
+class QueryLogDisableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer

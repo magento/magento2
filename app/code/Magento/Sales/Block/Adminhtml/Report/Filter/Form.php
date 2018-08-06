@@ -11,6 +11,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {

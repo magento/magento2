@@ -19,7 +19,7 @@ use Magento\Paypal\Model\Config as PaypalConfig;
  * Class ProTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProTest extends \PHPUnit_Framework_TestCase
+class ProTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Pro
@@ -45,7 +45,10 @@ class ProTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var $pro \Magento\Paypal\Model\Pro */
-        $this->pro = $this->getMock(\Magento\Paypal\Model\Pro::class, ['_isPaymentReviewRequired'], $args);
+        $this->pro = $this->getMockBuilder(\Magento\Paypal\Model\Pro::class)
+            ->setMethods(['_isPaymentReviewRequired'])
+            ->setConstructorArgs($args)
+            ->getMock();
         $this->pro->setMethod(PaypalConfig::METHOD_PAYMENT_PRO, $storeId);
     }
 
@@ -116,6 +119,9 @@ class ProTest extends \PHPUnit_Framework_TestCase
         $paymentMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($orderMock);
+
+        $paymentMock->method('isCaptureFinal')
+            ->willReturn(true);
 
         $this->apiMock->expects(static::once())
             ->method('getTransactionId')
@@ -209,7 +215,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
-            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod'])
+            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount', ])
             ->getMock();
 
         $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);
@@ -225,16 +231,14 @@ class ProTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction'
+                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal'
             ])
             ->getMock();
         $parentTransactionId = 43;
         $paymentMock->expects(static::once())
             ->method('getParentTransactionId')
             ->willReturn($parentTransactionId);
-        $paymentMock->expects(static::once())
-            ->method('getShouldCloseParentTransaction')
-            ->willReturn(true);
+
         return $paymentMock;
     }
 

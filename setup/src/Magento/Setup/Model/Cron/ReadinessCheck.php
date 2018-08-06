@@ -35,9 +35,7 @@ class ReadinessCheck
     const KEY_LAST_TIMESTAMP = 'last_timestamp';
     /**#@-*/
 
-    /**
-     * @var \Magento\Setup\Validator\DbValidator
-     */
+    /**#@-*/
     private $dbValidator;
 
     /**
@@ -135,7 +133,7 @@ class ReadinessCheck
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMessage;
             $errorLogMessages[] = $errorMessage;
         }
-        
+
         // Prepare list of magento specific files and directory paths for updater application to check write
         // permissions
         $errorMessage = '';

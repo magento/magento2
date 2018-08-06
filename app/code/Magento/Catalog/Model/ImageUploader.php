@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 /**
@@ -63,6 +65,18 @@ class ImageUploader
      * @var string
      */
     protected $allowedExtensions;
+
+    /**
+     * List of allowed image mime types
+     *
+     * @var array
+     */
+    private $allowedMimeTypes = [
+        'image/jpg',
+        'image/jpeg',
+        'image/gif',
+        'image/png'
+    ];
 
     /**
      * ImageUploader constructor
@@ -218,16 +232,21 @@ class ImageUploader
      * @return string[]
      *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function saveFileToTmpDir($fileId)
     {
         $baseTmpPath = $this->getBaseTmpPath();
 
+        /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowedExtensions($this->getAllowedExtensions());
         $uploader->setAllowRenameFiles(true);
-
+        if (!$uploader->checkMimeType($this->allowedMimeTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('File validation failed.'));
+        }
         $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
+        unset($result['path']);
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -239,7 +258,6 @@ class ImageUploader
          * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
          */
         $result['tmp_name'] = str_replace('\\', '/', $result['tmp_name']);
-        $result['path'] = str_replace('\\', '/', $result['path']);
         $result['url'] = $this->storeManager
                 ->getStore()
                 ->getBaseUrl(

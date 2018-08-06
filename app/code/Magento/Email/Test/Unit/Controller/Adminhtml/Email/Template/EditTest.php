@@ -9,7 +9,7 @@ namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
  * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Controller\Adminhtml\Email\Template\Edit
@@ -152,6 +152,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\Template::class)
+            ->setMethods(['getId', 'getTemplateCode', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
         $templateMock->expects($this->once())
@@ -160,6 +161,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $templateMock->expects($this->any())
             ->method('getTemplateCode')
             ->willReturn('My Template');
+        $templateMock->expects($this->any())
+            ->method('load')
+            ->willReturnSelf();
         $objectManagerMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -17,7 +17,7 @@ use Magento\Vault\Model\CreditCardTokenFactory;
  * Test class for \Magento\Paypal\Model\Payflow\Transparent
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TransparentTest extends \PHPUnit_Framework_TestCase
+class TransparentTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Transparent|\PHPUnit_Framework_MockObject_MockObject */
     protected $object;
@@ -365,11 +365,11 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
 
-        $paymentTokenMock = $this->getMock(PaymentTokenInterface::class);
+        $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
         $extensionAttributes = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setVaultPaymentToken'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $ccDetails = [
             'cc_type' => 'VI',
             'cc_number' => '1111'

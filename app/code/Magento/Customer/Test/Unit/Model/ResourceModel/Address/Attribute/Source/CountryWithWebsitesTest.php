@@ -12,8 +12,14 @@ use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
-class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
+/**
+ * Tests for \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -40,6 +46,9 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
      */
     private $shareConfigMock;
 
+    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $objectManagerMock;
+
     public function setUp()
     {
         $this->countriesFactoryMock =
@@ -58,10 +67,25 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->shareConfigMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        ObjectManager::setInstance($this->objectManagerMock);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Framework\Escaper::class)
+            ->willReturn($escaper);
+
         $this->countryByWebsite = new CountryWithWebsites(
             $eavCollectionFactoryMock,
             $optionsFactoryMock,
@@ -74,8 +98,8 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllOptions()
     {
-        $website1 = $this->getMock(WebsiteInterface::class);
-        $website2 = $this->getMock(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
+        $website2 = $this->createMock(WebsiteInterface::class);
 
         $website1->expects($this->atLeastOnce())
             ->method('getId')
@@ -116,5 +140,13 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             ['value' => 'AM', 'label' => 'UZ', 'website_ids' => [1, 2]]
         ], $this->countryByWebsite->getAllOptions());
+    }
+
+    protected function tearDown()
+    {
+        $property = (new \ReflectionClass(ObjectManager::class))->getProperty('_instance');
+        $property->setAccessible(true);
+        $property->setValue(null, null);
+        parent::tearDown();
     }
 }

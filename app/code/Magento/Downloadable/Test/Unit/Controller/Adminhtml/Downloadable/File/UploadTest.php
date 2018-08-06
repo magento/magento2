@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UploadTest extends \PHPUnit_Framework_TestCase
+class UploadTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload */
     protected $upload;
@@ -91,8 +91,8 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
@@ -102,15 +102,9 @@ class UploadTest extends \PHPUnit_Framework_TestCase
                 'setHeader'
             ]
         );
-        $this->fileHelper = $this->getMock(
-            \Magento\Downloadable\Helper\File::class,
-            [
+        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
                 'uploadFromTmp'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));

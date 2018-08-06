@@ -6,15 +6,18 @@
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector\OTPRequest;
+use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
+class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,6 +33,11 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
      * @var OTPRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $otpRequestMock;
+
+    /**
+     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flagManagerMock;
 
     /**
      * @var ObjectManagerHelper
@@ -63,6 +71,10 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->reportUrlProvider = $this->objectManagerHelper->getObject(
@@ -71,6 +83,7 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->configMock,
                 'analyticsToken' => $this->analyticsTokenMock,
                 'otpRequest' => $this->otpRequestMock,
+                'flagManager' => $this->flagManagerMock,
                 'urlReportConfigPath' => $this->urlReportConfigPath,
             ]
         );
@@ -118,5 +131,19 @@ class ReportUrlProviderTest extends \PHPUnit_Framework_TestCase
             'TokenExistAndOtpEmpty' => [true, null],
             'TokenExistAndOtpValid' => [true, '249e6b658877bde2a77bc4ab'],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetUrlWhenSubscriptionUpdateRunning()
+    {
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('getFlagData')
+            ->with(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE)
+            ->willReturn('http://store.com');
+        $this->expectException(SubscriptionUpdateException::class);
+        $this->reportUrlProvider->getUrl();
     }
 }

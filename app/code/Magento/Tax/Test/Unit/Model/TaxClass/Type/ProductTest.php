@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Type;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsAssignedToObjects()
     {

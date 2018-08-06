@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test for TaxRuleRegistry
  *
  */
-class TaxRuleRegistryTest extends \PHPUnit_Framework_TestCase
+class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\Calculation\TaxRuleRegistry

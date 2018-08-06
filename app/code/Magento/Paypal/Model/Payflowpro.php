@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
@@ -27,6 +28,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInterface
 {
+    use Formatter;
+
     /**
      * Transaction action codes
      */
@@ -84,12 +87,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     const PNREF = 'pnref';
 
     /**#@-*/
-
-    /**
-     * Response params mappings
-     *
-     * @var array
-     */
     protected $_responseParamsMappings = [
         'firstname' => 'billtofirstname',
         'lastname' => 'billtolastname',
@@ -395,14 +392,14 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Get capture amount
      *
      * @param float $amount
-     * @return float
+     * @return float|int
      */
     protected function _getCaptureAmount($amount)
     {
         $infoInstance = $this->getInfoInstance();
-        $amountToPay = round($amount, 2);
-        $authorizedAmount = round($infoInstance->getAmountAuthorized(), 2);
-        return $amountToPay != $authorizedAmount ? $amountToPay : 0;
+        $amountToPay = $amount;
+        $authorizedAmount = $infoInstance->getAmountAuthorized();
+        return abs($amountToPay - $authorizedAmount) < 0.00001 ? 0 : $amountToPay;
     }
 
     /**
@@ -418,7 +415,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         if ($payment->getAdditionalInformation(self::PNREF)) {
             $request = $this->buildBasicRequest();
-            $request->setAmt(round($amount, 2));
+            $request->setAmt($this->formatPrice($amount));
             $request->setTrxtype(self::TRXTYPE_SALE);
             $request->setOrigid($payment->getAdditionalInformation(self::PNREF));
             $payment->unsAdditionalInformation(self::PNREF);
@@ -427,7 +424,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request->setOrigid($payment->getParentTransactionId());
             $captureAmount = $this->_getCaptureAmount($amount);
             if ($captureAmount) {
-                $request->setAmt($captureAmount);
+                $request->setAmt($this->formatPrice($captureAmount));
             }
             $trxType = $this->getInfoInstance()->hasAmountPaid() ? self::TRXTYPE_SALE : self::TRXTYPE_DELAYED_CAPTURE;
             $request->setTrxtype($trxType);
@@ -515,7 +512,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setTrxtype(self::TRXTYPE_CREDIT);
         $request->setOrigid($payment->getParentTransactionId());
-        $request->setAmt(round($amount, 2));
+        $request->setAmt($this->formatPrice($amount));
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
 
@@ -610,7 +607,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
         $request = $this->buildBasicRequest();
-        $request->setAmt(round($amount, 2));
+        $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
         $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
         $request->setCvv2($payment->getCcCid());
@@ -650,6 +647,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param DataObject $response
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Payment\Gateway\Command\CommandException
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function processErrors(DataObject $response)
@@ -661,9 +659,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED &&
             $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
         } elseif ($response->getOrigresult() == self::RESPONSE_CODE_DECLINED_BY_FILTER) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
+            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
         }
     }
 

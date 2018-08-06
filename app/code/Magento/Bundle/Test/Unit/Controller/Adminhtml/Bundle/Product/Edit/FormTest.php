@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form */
     protected $controller;
@@ -56,8 +56,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'sendResponse',
@@ -74,7 +74,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['initialize'])
             ->getMock();
-        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -102,7 +102,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getId'])
             ->getMock();
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $block = $this->getMockBuilder(\Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle::class)
             ->disableOriginalConstructor()
             ->setMethods(['setIndex', 'toHtml'])

@@ -16,7 +16,7 @@
                 <item name="boolTrue" xsi:type="number">10</item>
                 <item name="boolOne" xsi:type="string">1</item>
                 <item name="boolZero" xsi:type="boolean">false</item>
-                <item name="stringPattern" xsi:type="string" translate="true">Az-Value</item>
+                <item name="stringPattern" xsi:type="string">Az-Value</item>
             </argument>
             <argument name="constParam" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</argument>
             <argument name="boolFalseParam" xsi:type="number">100</argument>

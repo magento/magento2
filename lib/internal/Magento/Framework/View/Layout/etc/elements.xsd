@@ -138,7 +138,7 @@
 
     <xs:simpleType name="blockClassType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z][a-zA-Z\d]*(\\[A-Z][a-zA-Z\d]*)*"/>
+            <xs:pattern value="[A-Z][_a-zA-Z\d]*(\\[A-Z][_a-zA-Z\d]*)*"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -21,12 +21,11 @@ class InvalidateTokenButton extends GenericButton implements ButtonProviderInter
         $customerId = $this->getCustomerId();
         $data = [];
         if ($customerId) {
-            $deleteConfirmMsg = __("Are you sure you want to revoke the customer\'s tokens?");
+            $deleteConfirmMsg = __("Are you sure you want to revoke the customer's tokens?");
             $data = [
                 'label' => __('Force Sign-In'),
                 'class' => 'invalidate-token',
-                'on_click' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $this->getInvalidateTokenUrl() .
-                    '\')',
+                'on_click' => 'deleteConfirm("' . $deleteConfirmMsg . '", "' . $this->getInvalidateTokenUrl() . '")',
                 'sort_order' => 65,
             ];
         }

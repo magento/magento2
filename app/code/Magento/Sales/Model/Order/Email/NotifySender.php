@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class NotifySender
  * @api
+ * @since 100.0.2
  */
 abstract class NotifySender extends Sender
 {

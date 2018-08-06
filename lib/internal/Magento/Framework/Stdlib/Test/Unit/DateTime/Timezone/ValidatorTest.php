@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Timezone;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator

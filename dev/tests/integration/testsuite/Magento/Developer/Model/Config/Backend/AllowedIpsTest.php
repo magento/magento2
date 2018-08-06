@@ -5,7 +5,7 @@
  */
 namespace Magento\Developer\Model\Config\Backend;
 
-class AllowedIpsTest extends \PHPUnit_Framework_TestCase
+class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $value

@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,24 +34,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->model = new \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable(
             $this->requestMock
         );
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['setTypeId', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Model\Product\TypeTransitionManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['setTypeId', '__wakeup']);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
         $this->closureMock = function () {
             return 'Expected';
         };

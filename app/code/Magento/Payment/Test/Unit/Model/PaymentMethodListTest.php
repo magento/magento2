@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class PaymentMethodListTest.
  */
-class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
+class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

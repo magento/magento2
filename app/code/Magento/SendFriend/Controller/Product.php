@@ -33,7 +33,9 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     protected $sendFriend;
 
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**

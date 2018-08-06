@@ -7,7 +7,7 @@ namespace Magento\Wishlist\Test\Unit\Model;
 
 use \Magento\Wishlist\Model\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Model\Config

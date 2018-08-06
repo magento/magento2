@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -136,6 +137,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
              */
             $this->_defaultOperatorInputByType['category'] = ['==', '!=', '{}', '!{}', '()', '!()'];
             $this->_arrayInputTypes[] = 'category';
+            $this->_defaultOperatorInputByType['sku'] = ['==', '!=', '{}', '!{}', '()', '!()'];
         }
         return $this->_defaultOperatorInputByType;
     }
@@ -240,7 +242,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 } else {
                     $addEmptyOption = true;
                 }
-                $selectOptions = $attributeObject->getSource()->getAllOptions($addEmptyOption);
+                $selectOptions = $this->removeTagsFromLabel(
+                    $attributeObject->getSource()->getAllOptions($addEmptyOption)
+                );
             }
         }
 
@@ -378,6 +382,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         }
         if ($this->getAttributeObject()->getAttributeCode() == 'category_ids') {
             return 'category';
+        }
+        if ($this->getAttributeObject()->getAttributeCode() == 'sku') {
+            return 'sku';
         }
         switch ($this->getAttributeObject()->getFrontendInput()) {
             case 'select':
@@ -603,7 +610,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                     $this->getValueParsed()
                 )->__toString()
             );
+        } elseif ($this->getAttribute() === 'sku') {
+            $value = $this->getData('value');
+            $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+            $this->setValueParsed($value);
         }
+
         return parent::getBindArgumentValue();
     }
 
@@ -701,7 +713,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getOperatorForValidate()
     {
         $operator = $this->getOperator();
-        if ($this->getInputType() == 'category') {
+        if (in_array($this->getInputType(), ['category', 'sku'])) {
             if ($operator == '==') {
                 $operator = '{}';
             } elseif ($operator == '!=') {
@@ -732,5 +744,22 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attribute = $this->getAttributeObject();
 
         return 'at_' . $attribute->getAttributeCode();
+    }
+
+    /**
+     * Remove html tags from attribute labels.
+     *
+     * @param array $selectOptions
+     * @return array
+     */
+    private function removeTagsFromLabel(array $selectOptions)
+    {
+        foreach ($selectOptions as &$option) {
+            if (isset($option['label'])) {
+                $option['label'] = strip_tags($option['label']);
+            }
+        }
+
+        return $selectOptions;
     }
 }

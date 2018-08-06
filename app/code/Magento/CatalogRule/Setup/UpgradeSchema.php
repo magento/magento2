@@ -40,7 +40,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
-        if (version_compare($context->getVersion(), '2.2.0', '<')) {
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $connection = $setup->getConnection();
             $connection->dropForeignKey(
                 $setup->getTable('catalogrule_group_website'),

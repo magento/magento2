@@ -12,6 +12,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
  * @method
  *  \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files setStorage(\Magento\Theme\Model\Wysiwyg\Storage $storage)
  * @method \Magento\Theme\Model\Wysiwyg\Storage getStorage()
+ * @since 100.0.2
  */
 class Files extends \Magento\Backend\Block\Template
 {

@@ -83,7 +83,6 @@ class Converter implements ConverterInterface
                         );
                     }
                     $result[ $attributes[static::NAME_ATTRIBUTE_KEY] ] = $this->argumentParser->parse($node);
-
                 } else {
                     list($arguments, $childResult) = $this->convertChildNodes($node);
 
@@ -156,7 +155,6 @@ class Converter implements ConverterInterface
                     $result
                 );
             }
-
         }
 
         if (isset($componentData[static::CURRENT_SCHEMA_KEY])) {

@@ -21,7 +21,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         "Magento_Ui/js/modal/modal"
     ], function(jQuery){
 
-        packaging = new Packaging(<?= /* @escapeNotVerified */ $block->getConfigDataJson() ?>);
+        window.packaging = new Packaging(<?= /* @escapeNotVerified */ $block->getConfigDataJson() ?>);
         packaging.changeContainerType($$('select[name=package_container]')[0]);
         packaging.checkSizeAndGirthParameter(
             $$('select[name=package_container]')[0],
@@ -76,6 +76,8 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
                     }
             }]
         });
+        jQuery(document).trigger('packaging:inited');
+        jQuery(document).data('packagingInited', true);
     });
 </script>
 <?php include ($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')) ?>

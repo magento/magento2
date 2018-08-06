@@ -8,7 +8,7 @@ namespace Magento\Multishipping\Test\Unit\Model\Payment\Method\Specification;
 /**
  * Enabled method Test
  */
-class EnabledTest extends \PHPUnit_Framework_TestCase
+class EnabledTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager helper
@@ -26,7 +26,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentConfigMock = $this->getMock(\Magento\Payment\Model\Config::class, [], [], '', false);
+        $this->paymentConfigMock = $this->createMock(\Magento\Payment\Model\Config::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 

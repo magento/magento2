@@ -22,9 +22,7 @@ class Msrp extends AbstractModifier
     const FIELD_MSRP_DISPLAY_ACTUAL_PRICE = 'msrp_display_actual_price_type';
     /**#@-*/
 
-    /**
-     * @var LocatorInterface
-     */
+    /**#@-*/
     protected $locator;
 
     /**

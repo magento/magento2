@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $mediaDirectory;
@@ -168,17 +168,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBeforeSave()
+    /**
+     * @dataProvider beforeSaveDataProvider
+     * @param string $fileName
+     */
+    public function testBeforeSave($fileName)
     {
-        $value = 'filename.jpg';
-        $tmpMediaPath = 'tmp/design/file/' . $value;
+        $expectedFileName = basename($fileName);
+        $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
         $this->fileBackend->setScope('store');
         $this->fileBackend->setScopeId(1);
         $this->fileBackend->setValue(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
-                    'file' => $value,
+                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
+                    'file' => $fileName,
                     'size' => 234234,
                 ]
             ]
@@ -194,14 +198,25 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('copyFile')
-            ->with($tmpMediaPath, '/' . $value)
+            ->with($expectedTmpMediaPath, '/' . $expectedFileName)
             ->willReturn(true);
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
-            ->with($tmpMediaPath);
+            ->with($expectedTmpMediaPath);
 
         $this->fileBackend->beforeSave();
-        $this->assertEquals('filename.jpg', $this->fileBackend->getValue());
+        $this->assertEquals($expectedFileName, $this->fileBackend->getValue());
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveDataProvider()
+    {
+        return [
+            'Normal file name' => ['filename.jpg'],
+            'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
+        ];
     }
 
     /**

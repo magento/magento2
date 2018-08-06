@@ -11,9 +11,9 @@ use Magento\Catalog\Model\Category;
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  */
-class ProductIndexerTest extends \PHPUnit_Framework_TestCase
+class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 {
     const DEFAULT_ROOT_CATEGORY = 2;
 

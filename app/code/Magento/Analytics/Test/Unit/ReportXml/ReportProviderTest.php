@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\ReportXml;
 /**
  * A unit test for testing of the reports provider.
  */
-class ReportProviderTest extends \PHPUnit_Framework_TestCase
+class ReportProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\ReportProvider

@@ -18,8 +18,6 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Perform fetching reports from remote servers with following saving them to database
  * Prepare report rows for \Magento\Paypal\Model\Report\Settlement\Row model
  *
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement getResource()
  * @method string getReportDate()
  * @method \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
  * @method string getAccountId()
@@ -378,7 +376,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
-                    for ($i = 1; $i < count($line); $i++) {
+                    $count = count($line);
+                    for ($i = 1; $i < $count; $i++) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);

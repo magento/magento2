@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Filter;
 
 use \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Text | \PHPUnit_Framework_MockObject_MockObject */
     private $textFilterBlock;

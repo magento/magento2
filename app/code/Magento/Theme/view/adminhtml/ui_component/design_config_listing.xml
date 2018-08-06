@@ -21,6 +21,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Config::config_design</aclResource>
         <dataProvider class="Magento\Theme\Ui\Component\Design\Config\DataProvider" name="design_config_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

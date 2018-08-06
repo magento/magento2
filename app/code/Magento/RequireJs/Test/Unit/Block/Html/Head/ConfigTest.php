@@ -8,7 +8,7 @@ namespace Magento\RequireJs\Test\Unit\Block\Html\Head;
 
 use \Magento\RequireJs\Block\Html\Head\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -47,11 +47,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Context::class, [], [], '', false);
-        $this->config = $this->getMock(\Magento\Framework\RequireJs\Config::class, [], [], '', false);
-        $this->fileManager = $this->getMock(\Magento\RequireJs\Model\FileManager::class, [], [], '', false);
-        $this->pageConfig = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
-        $this->bundleConfig = $this->getMock(\Magento\Framework\View\Asset\ConfigInterface::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Context::class);
+        $this->config = $this->createMock(\Magento\Framework\RequireJs\Config::class);
+        $this->fileManager = $this->createMock(\Magento\RequireJs\Model\FileManager::class);
+        $this->pageConfig = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $this->bundleConfig = $this->createMock(\Magento\Framework\View\Asset\ConfigInterface::class);
     }
 
     public function testSetLayout()
@@ -97,7 +97,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('createMinResolverAsset')
             ->will($this->returnValue($minResolverAsset));
 
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $assetCollection = $this->getMockBuilder(\Magento\Framework\View\Asset\GroupedCollection::class)
             ->disableOriginalConstructor()

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $string

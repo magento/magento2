@@ -14,6 +14,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

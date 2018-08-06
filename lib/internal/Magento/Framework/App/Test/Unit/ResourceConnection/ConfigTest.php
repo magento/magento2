@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\ResourceConnection;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\Config
@@ -46,17 +46,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->scopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
 
-        $this->readerMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Framework\App\ResourceConnection\Config\Reader::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -74,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($serializedData)
             ->willReturn($this->resourcesConfig);
 
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->config = new \Magento\Framework\App\ResourceConnection\Config(
             $this->readerMock,
             $this->scopeMock,
@@ -106,7 +100,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionNameWithException()
     {
-        $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(ConfigOptionsListConstants::KEY_RESOURCE)

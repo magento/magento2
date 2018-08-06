@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Shipment\ItemFactory;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Sales\Api\ShipmentItemRepositoryInterface;
 
 require 'default_rollback.php';
 require __DIR__ . '/order.php';
@@ -89,6 +90,9 @@ $items = [
     ],
 ];
 
+/** @var ShipmentItemRepositoryInterface $shipmentItemRepository */
+$shipmentItemRepository = Bootstrap::getObjectManager()->get(ShipmentItemRepositoryInterface::class);
+
 foreach ($items as $data) {
     /** @var OrderItem $orderItem */
     $orderItem = $objectManager->create(OrderItem::class);
@@ -111,6 +115,6 @@ foreach ($items as $data) {
         ->setOrderItem($orderItem)
         ->setOrderItemId($orderItem->getItemId())
         ->setQty($data['qty'])
-        ->setPrice($data['price'])
-        ->save();
+        ->setPrice($data['price']);
+    $shipmentItemRepository->save($shipmentItem);
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-class RemoteTest extends \PHPUnit_Framework_TestCase
+class RemoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Remote

@@ -7,7 +7,7 @@ namespace Magento\TestFramework\Dependency;
 
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
-class DiRuleTest extends \PHPUnit_Framework_TestCase
+class DiRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $module

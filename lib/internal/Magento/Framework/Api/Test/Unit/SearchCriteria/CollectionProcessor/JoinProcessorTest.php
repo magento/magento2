@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class JoinProcessorTest extends \PHPUnit_Framework_TestCase
+class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return model
@@ -33,7 +33,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $customJoinMock */
-        $customJoinMock = $this->getMock(
+        $customJoinMock = $this->createMock(
             \Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface::class
         );
 

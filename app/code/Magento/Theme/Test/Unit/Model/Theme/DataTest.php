@@ -9,7 +9,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Theme\Data;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Data
@@ -18,51 +18,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $customizationConfig = $this->getMock(\Magento\Theme\Model\Config\Customization::class, [], [], '', false);
-        $this->customizationFactory = $this->getMock(
+        $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
+        $this->customizationFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\CustomizationFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resourceCollection = $this->getMock(
-            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_imageFactory = $this->getMock(
+        $this->resourceCollection = $this->createMock(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
+        $this->_imageFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\ImageFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->themeFactory = $this->getMock(
+        $this->themeFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\FlyweightFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->domainFactory = $this->getMock(
+        $this->domainFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\Domain\Factory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->themeModelFactory = $this->getMock(
-            \Magento\Theme\Model\ThemeFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->validator = $this->getMock(\Magento\Framework\View\Design\Theme\Validator::class, [], [], '', false);
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->themeModelFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
+        $this->validator = $this->createMock(\Magento\Framework\View\Design\Theme\Validator::class);
+        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(

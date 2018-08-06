@@ -19,6 +19,7 @@ use Magento\Framework\Filesystem;
  * It is used to parse config paths from
  * comment section in provided configuration file.
  * @api
+ * @since 100.2.0
  */
 class Comment implements CommentParserInterface
 {
@@ -83,6 +84,7 @@ class Comment implements CommentParserInterface
      * @param string $fileName the basename of file
      * @return array
      * @throws FileSystemException
+     * @since 100.2.0
      */
     public function execute($fileName)
     {

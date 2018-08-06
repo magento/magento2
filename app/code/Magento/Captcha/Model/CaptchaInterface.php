@@ -11,6 +11,7 @@ namespace Magento\Captcha\Model;
  * Captcha Model Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface CaptchaInterface
 {

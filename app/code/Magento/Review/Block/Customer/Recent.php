@@ -11,6 +11,7 @@ use Magento\Review\Model\ResourceModel\Review\Product\Collection;
  * Recent Customer Reviews Block
  *
  * @api
+ * @since 100.0.2
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
@@ -19,7 +20,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'customer/list.phtml';
+    protected $_template = 'Magento_Review::customer/list.phtml';
 
     /**
      * Product reviews collection

@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
 {

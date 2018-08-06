@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
-class MviewStateTest extends \PHPUnit_Framework_TestCase
+class MviewStateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return array
      */
-    public function testAfterSetStatusSuspendDataProvider()
+    public function afterSetStatusSuspendDataProvider()
     {
         return [['suspended', 'idle'], ['suspended', 'working']];
     }
@@ -18,7 +18,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusSuspendDataProvider
+     * @dataProvider afterSetStatusSuspendDataProvider
      */
     public function testAfterSetStatusSuspend($stateStatus, $relatedStatus)
     {
@@ -100,7 +100,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testAfterSetStatusResumeDataProvider()
+    public function afterSetStatusResumeDataProvider()
     {
         return [['idle', 'suspended'], ['working', 'suspended']];
     }
@@ -108,7 +108,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusResumeDataProvider
+     * @dataProvider afterSetStatusResumeDataProvider
      */
     public function testAfterSetStatusResume($stateStatus, $relatedStatus)
     {
@@ -169,7 +169,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testAfterSetStatusSkipDataProvider()
+    public function afterSetStatusSkipDataProvider()
     {
         return [
             ['idle', 'idle'],
@@ -183,7 +183,7 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $stateStatus
      * @param string $relatedStatus
-     * @dataProvider testAfterSetStatusSkipDataProvider
+     * @dataProvider afterSetStatusSkipDataProvider
      */
     public function testAfterSetStatusSkip($stateStatus, $relatedStatus)
     {
@@ -236,14 +236,14 @@ class MviewStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testAfterSetStatusDisabledDataProvider()
+    public function afterSetStatusDisabledDataProvider()
     {
         return [['idle'], ['working'], ['suspended']];
     }
 
     /**
      * @param string $stateStatus
-     * @dataProvider testAfterSetStatusDisabledDataProvider
+     * @dataProvider afterSetStatusDisabledDataProvider
      */
     public function testAfterSetStatusDisabled($stateStatus)
     {

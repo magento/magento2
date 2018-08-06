@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
 
-class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
+class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -38,7 +38,7 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
         $errorMessage = isset($initData['errorMessage']) ? $initData['errorMessage'] : null;
         $errorDescription = isset($initData['errorDescription']) ? $initData['errorDescription'] : null;
 
-        $this->model->init(
+        $result = $this->model->init(
             $initData['errorCode'],
             $errorLevel,
             $rowNumber,
@@ -46,6 +46,7 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
             $errorMessage,
             $errorDescription
         );
+        $this->assertNull($result);
     }
 
     /**

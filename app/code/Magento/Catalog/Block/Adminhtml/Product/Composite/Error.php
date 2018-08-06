@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
  * Adminhtml block for showing product options fieldsets
  *
  * @api
+ * @since 100.0.2
  */
 class Error extends \Magento\Framework\View\Element\Template
 {

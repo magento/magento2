@@ -6,10 +6,13 @@
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
-use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use \PHPUnit\Framework\TestCase;
+use \Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use \Magento\Framework\App\Response\RedirectInterface;
 use \Magento\Framework\Controller\Result\Redirect;
+use \Magento\Framework\UrlInterface;
 
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends TestCase
 {
     /** @var \Magento\Framework\Controller\Result\Redirect */
     protected $redirect;
@@ -28,34 +31,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->redirectInterface = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlBuilder = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlInterface = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->response = $this->getMock(
-            HttpResponseInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->redirectInterface = $this->createMock(RedirectInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlInterface = $this->createMock(UrlInterface::class);
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->redirect = new Redirect($this->redirectInterface, $this->urlInterface);
     }
 
@@ -63,7 +42,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $this->redirectInterface->expects($this->once())->method('getRefererUrl');
         $this->assertInstanceOf(
-            \Magento\Framework\Controller\Result\Redirect::class,
+            Redirect::class,
             $this->redirect->setRefererUrl()
         );
     }
@@ -72,7 +51,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $this->redirectInterface->expects($this->once())->method('getRedirectUrl');
         $this->assertInstanceOf(
-            \Magento\Framework\Controller\Result\Redirect::class,
+            Redirect::class,
             $this->redirect->setRefererOrBaseUrl()
         );
     }
@@ -80,7 +59,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     public function testSetUrl()
     {
         $url = 'http://test.com';
-        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Redirect::class, $this->redirect->setUrl($url));
+        $this->assertInstanceOf(Redirect::class, $this->redirect->setUrl($url));
     }
 
     public function testSetPath()
@@ -91,17 +70,39 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($params)
         );
         $this->assertInstanceOf(
-            \Magento\Framework\Controller\Result\Redirect::class,
+            Redirect::class,
             $this->redirect->setPath($path, $params)
         );
     }
 
-    public function testRender()
+    /**
+     * @return array
+     */
+    public function httpRedirectResponseStatusCodes()
     {
-        $this->response->expects($this->once())->method('setRedirect');
-        $this->assertInstanceOf(
-            \Magento\Framework\Controller\Result\Redirect::class,
-            $this->redirect->renderResult($this->response)
-        );
+        return [
+            [302, null],
+            [302, 302],
+            [303, 303]
+        ];
+    }
+
+    /**
+     * @param int $expectedStatusCode
+     * @param int|null $actualStatusCode
+     * @dataProvider httpRedirectResponseStatusCodes
+     */
+    public function testRender($expectedStatusCode, $actualStatusCode)
+    {
+        $url = 'http://test.com';
+        $this->redirect->setUrl($url);
+        $this->redirect->setHttpResponseCode($actualStatusCode);
+
+        $this->response
+            ->expects($this->once())
+            ->method('setRedirect')
+            ->with($url, $expectedStatusCode);
+
+        $this->redirect->renderResult($this->response);
     }
 }

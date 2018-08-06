@@ -13,6 +13,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Detail extends \Magento\Backend\Block\Widget\Container
 {

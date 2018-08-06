@@ -26,38 +26,50 @@ class CurrentUrlRewritesRegenerator
 {
     /**
      * @var Product
-     * @deprecated
+     * @deprecated 100.1.4
      */
     protected $product;
 
     /**
      * @var ObjectRegistry
-     * @deprecated
+     * @deprecated 100.1.4
      */
     protected $productCategories;
 
     /**
      * @var UrlFinderInterface
-     * @deprecated
+     * @deprecated 100.1.4
      */
     protected $urlFinder;
 
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     */
     private $urlRewritePrototype;
 
-    /** @var UrlRewriteFinder */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder
+     */
     private $urlRewriteFinder;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
-    /** @var CategoryRepository */
+    /**
+     * @var \Magento\Catalog\Model\CategoryRepository
+     */
     private $categoryRepository;
 
     /**

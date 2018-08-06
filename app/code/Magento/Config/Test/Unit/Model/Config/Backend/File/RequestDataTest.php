@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Backend\File;
 
-class RequestDataTest extends \PHPUnit_Framework_TestCase
+class RequestDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\File\RequestData

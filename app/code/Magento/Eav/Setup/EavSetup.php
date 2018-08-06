@@ -17,6 +17,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class EavSetup
 {
@@ -557,6 +558,7 @@ class EavSetup
     /**
      * @param string $groupName
      * @return string
+     * @since 100.1.0
      */
     public function convertToAttributeGroupCode($groupName)
     {
@@ -629,6 +631,7 @@ class EavSetup
      * @param string $code
      * @param string $field
      * @return mixed
+     * @since 100.1.0
      */
     public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
     {
@@ -768,19 +771,24 @@ class EavSetup
      */
     private function _validateAttributeData($data)
     {
-        $attributeCodeMaxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
+        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
 
-        if (isset(
-            $data['attribute_code']
-        ) && !\Zend_Validate::is(
-            $data['attribute_code'],
+        $isAllowedLength = \Zend_Validate::is(
+            trim($attributeCode),
             'StringLength',
-            ['max' => $attributeCodeMaxLength]
-        )
-        ) {
-            throw new LocalizedException(
-                __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)
+            ['min' => $minLength, 'max' => $maxLength]
+        );
+
+        if (!$isAllowedLength) {
+            $errorMessage = __(
+                'An attribute code must not be less than %1 and more than %2 characters.',
+                $minLength,
+                $maxLength
             );
+
+            throw new LocalizedException($errorMessage);
         }
 
         return true;

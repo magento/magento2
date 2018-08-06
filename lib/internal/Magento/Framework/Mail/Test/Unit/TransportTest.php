@@ -5,22 +5,22 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class TransportTest extends \PHPUnit_Framework_TestCase
+class TransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit\Framework_MockObject
      */
-    protected $_messageMock;
+    protected $messageMock;
 
     /**
      * @var \Magento\Framework\Mail\Transport
      */
-    protected $_transport;
+    protected $transport;
 
     protected function setUp()
     {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\Message::class, [], [], '', false);
-        $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
+        $this->messageMock = $this->createMock(\Magento\Framework\Mail\Message::class);
+        $this->transport = new \Magento\Framework\Mail\Transport($this->messageMock);
     }
 
     /**
@@ -29,8 +29,8 @@ class TransportTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransportWithIncorrectMessageObject()
     {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\MessageInterface::class);
-        $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
+        $this->messageMock = $this->createMock(\Magento\Framework\Mail\MessageInterface::class);
+        $this->transport = new \Magento\Framework\Mail\Transport($this->messageMock);
     }
 
     /**
@@ -40,10 +40,15 @@ class TransportTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendMessageBrokenMessage()
     {
-        $this->_messageMock->expects($this->any())
+        $this->messageMock->expects($this->any())
             ->method('getParts')
             ->will($this->returnValue(['a', 'b']));
 
-        $this->_transport->sendMessage();
+        $this->transport->sendMessage();
+    }
+
+    public function testGetMessage()
+    {
+        $this->assertSame($this->messageMock, $this->transport->getMessage());
     }
 }

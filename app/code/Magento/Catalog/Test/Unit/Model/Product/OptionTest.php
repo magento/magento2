@@ -8,7 +8,10 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+/**
+ * Tests \Magento\Catalog\Model\Product\Option.
+ */
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option
@@ -22,7 +25,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);
@@ -67,5 +70,42 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(25, $this->model->getRegularPrice());
         $this->model->setPriceType(null);
         $this->assertEquals(50, $this->model->getRegularPrice());
+    }
+
+    /**
+     * Tests removing ineligible characters from file_extension.
+     *
+     * @param string $rawExtensions
+     * @param string $expectedExtensions
+     * @dataProvider beforeSaveFileOptionDataProvider
+     */
+    public function testBeforeSaveFileOption($rawExtensions, $expectedExtensions)
+    {
+        $this->model->setType(Option::OPTION_GROUP_FILE);
+        $this->model->setFileExtension($rawExtensions);
+        $this->model->beforeSave();
+        $actualExtensions = $this->model->getFileExtension();
+        $this->assertEquals(
+            $expectedExtensions,
+            $actualExtensions
+        );
+    }
+
+    /**
+     * Data provider for testBeforeSaveFileOption.
+     *
+     * @return array
+     */
+    public function beforeSaveFileOptionDataProvider()
+    {
+        return [
+            ['JPG, PNG, GIF', 'jpg, png, gif'],
+            ['jpg, jpg, jpg', 'jpg'],
+            ['jpg, png, gif', 'jpg, png, gif'],
+            ['jpg png gif', 'jpg, png, gif'],
+            ['!jpg@png#gif%', 'jpg, png, gif'],
+            ['jpg, png, 123', 'jpg, png, 123'],
+            ['', ''],
+        ];
     }
 }

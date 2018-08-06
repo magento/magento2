@@ -13,8 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for \Magento\Customer\Model\CustomerRegistry
+ * @magentoAppIsolation enabled
  */
-class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
+class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\CustomerRegistry

@@ -51,9 +51,7 @@ class Config
     const FALSE = 'false';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
+    /**#@-*/
     protected $scopeConfig;
 
     /**
@@ -161,6 +159,16 @@ class Config
     public function getNewRelicAppName()
     {
         return (string)$this->scopeConfig->getValue('newrelicreporting/general/app_name');
+    }
+
+    /**
+     * Returns configured separate apps value
+     *
+     * @return bool
+     */
+    public function isSeparateApps()
+    {
+        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/separate_apps');
     }
 
     /**

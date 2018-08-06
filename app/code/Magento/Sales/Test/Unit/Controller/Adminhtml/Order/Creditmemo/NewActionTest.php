@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewActionTest extends \PHPUnit_Framework_TestCase
+class NewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\NewAction
@@ -84,29 +84,20 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $this->creditmemoLoaderMock = $this->getMock(
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->creditmemoLoaderMock = $this->createPartialMock(
             \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class,
-            ['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId', 'load'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId', 'load']
         );
-        $this->creditmemoMock = $this->getMock(
+        $this->creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,
-            ['getInvoice', '__wakeup', 'setCommentText'],
-            [],
-            '',
-            false
+            ['getInvoice', '__wakeup', 'setCommentText']
         );
-        $this->invoiceMock = $this->getMock(
+        $this->invoiceMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice::class,
-            ['getIncrementId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getIncrementId', '__wakeup']
         );
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->requestMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
             [],
@@ -125,17 +116,11 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->titleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $this->titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendSessionMock = $this->getMock(
-            \Magento\Backend\Model\Session::class,
-            ['getCommentText'],
-            [],
-            '',
-            false
-        );
+        $this->backendSessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['getCommentText']);
         $this->layoutMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],

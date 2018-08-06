@@ -11,7 +11,7 @@
  */
 namespace Magento\Test\Legacy\Magento\Widget;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     public function testClassFactoryNames()
     {

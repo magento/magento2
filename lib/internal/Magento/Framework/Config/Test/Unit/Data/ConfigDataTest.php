@@ -7,7 +7,7 @@ namespace Magento\Framework\Config\Test\Unit\Data;
 
 use Magento\Framework\Config\Data\ConfigData;
 
-class ConfigDataTest extends \PHPUnit_Framework_TestCase
+class ConfigDataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSet()
     {
@@ -42,10 +42,14 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
 
         $configData = new ConfigData('testKey');
 
-        $this->setExpectedException('InvalidArgumentException', $expectedException);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($expectedException);
         $configData->set($key, 'value');
     }
 
+    /**
+     * @return array
+     */
     public function setWrongKeyDataProvider()
     {
         return [

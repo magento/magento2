@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Source;
 
 use \Magento\Payment\Model\Source\Invoice;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Invoice

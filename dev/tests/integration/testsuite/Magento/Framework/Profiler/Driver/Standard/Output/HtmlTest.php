@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
-class HtmlTest extends \PHPUnit_Framework_TestCase
+class HtmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Profiler\Driver\Standard\Output\Html

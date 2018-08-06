@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * PAY ATTENTION: Current implementation does not support of virtual types
  */
-class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
+class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Observer interface

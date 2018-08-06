@@ -10,7 +10,7 @@ use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 /**
  * Tests Aggregate
  */
-class AggregatedTest extends \PHPUnit_Framework_TestCase
+class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject

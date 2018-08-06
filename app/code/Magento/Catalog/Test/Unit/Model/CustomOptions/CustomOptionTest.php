@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
 
-class CustomOptionTest extends \PHPUnit_Framework_TestCase
+class CustomOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomOption

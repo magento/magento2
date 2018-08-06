@@ -56,7 +56,7 @@
                 <fax_show/>
             </address>
             <startup>
-                <redirect_dashboard>1</redirect_dashboard>
+                <redirect_dashboard>0</redirect_dashboard>
             </startup>
             <address_templates>
                 <text>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}
@@ -95,6 +95,9 @@
 {{depend fax}}F: {{var fax}}|{{/depend}}|
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
+            <online_customers>
+                <section_data_lifetime>60</section_data_lifetime>
+            </online_customers>
         </customer>
     </default>
 </config>

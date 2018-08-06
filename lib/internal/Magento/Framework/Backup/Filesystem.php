@@ -308,7 +308,7 @@ class Filesystem extends AbstractBackup
 
     /**
      * @return \Magento\Framework\Backup\Filesystem\Rollback\Ftp
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function getRollBackFtp()
     {
@@ -324,7 +324,7 @@ class Filesystem extends AbstractBackup
 
     /**
      * @return \Magento\Framework\Backup\Filesystem\Rollback\Fs
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function getRollBackFs()
     {

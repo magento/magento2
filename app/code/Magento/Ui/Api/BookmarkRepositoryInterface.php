@@ -9,6 +9,7 @@ namespace Magento\Ui\Api;
  * Bookmark CRUD interface
  *
  * @api
+ * @since 100.0.2
  */
 interface BookmarkRepositoryInterface
 {

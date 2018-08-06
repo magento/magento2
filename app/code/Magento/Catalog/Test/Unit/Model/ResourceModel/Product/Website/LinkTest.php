@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Website;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Link
@@ -32,9 +32,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->connection =
-            $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->dbSelect = $this->getMockBuilder(\Magento\Framework\Db\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,7 +74,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $newWebsiteIds = [2,3];
         $websiteIds = [1,2];
         $productId = 1;
-        $product = $this->getMock(ProductInterface::class);
+        $product = $this->createMock(ProductInterface::class);
         $product->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($productId);

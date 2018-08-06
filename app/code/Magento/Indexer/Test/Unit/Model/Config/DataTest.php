@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Indexer\Model\Config\Data
@@ -44,7 +44,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock(\Magento\Framework\Indexer\Config\Reader::class, ['read'], [], '', false);
+        $this->reader = $this->createPartialMock(\Magento\Framework\Indexer\Config\Reader::class, ['read']);
         $this->cache = $this->getMockForAbstractClass(
             \Magento\Framework\Config\CacheInterface::class,
             [],
@@ -54,14 +54,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
             true,
             ['test', 'load', 'save']
         );
-        $this->stateCollection = $this->getMock(
+        $this->stateCollection = $this->createPartialMock(
             \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection::class,
-            ['getItems'],
-            [],
-            '',
-            false
+            ['getItems']
         );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testConstructorWithCache()
@@ -96,22 +93,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->reader->expects($this->once())->method('read')->will($this->returnValue($this->indexers));
 
-        $stateExistent = $this->getMock(
+        $stateExistent = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer\State::class,
-            ['getIndexerId', '__wakeup', 'delete'],
-            [],
-            '',
-            false
+            ['getIndexerId', '__wakeup', 'delete']
         );
         $stateExistent->expects($this->once())->method('getIndexerId')->will($this->returnValue('indexer1'));
         $stateExistent->expects($this->never())->method('delete');
 
-        $stateNonexistent = $this->getMock(
+        $stateNonexistent = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer\State::class,
-            ['getIndexerId', '__wakeup', 'delete'],
-            [],
-            '',
-            false
+            ['getIndexerId', '__wakeup', 'delete']
         );
         $stateNonexistent->expects($this->once())->method('getIndexerId')->will($this->returnValue('indexer2'));
         $stateNonexistent->expects($this->once())->method('delete');

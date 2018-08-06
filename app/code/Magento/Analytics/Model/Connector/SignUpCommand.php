@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Config\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
@@ -36,7 +36,7 @@ class SignUpCommand implements CommandInterface
     private $integrationManager;
 
     /**
-     * @var Config
+     * @var ScopeConfigInterface
      */
     private $config;
 
@@ -60,7 +60,7 @@ class SignUpCommand implements CommandInterface
      *
      * @param AnalyticsToken $analyticsToken
      * @param IntegrationManager $integrationManager
-     * @param Config $config
+     * @param ScopeConfigInterface $config
      * @param Http\ClientInterface $httpClient
      * @param LoggerInterface $logger
      * @param ResponseResolver $responseResolver
@@ -68,7 +68,7 @@ class SignUpCommand implements CommandInterface
     public function __construct(
         AnalyticsToken $analyticsToken,
         IntegrationManager $integrationManager,
-        Config $config,
+        ScopeConfigInterface $config,
         Http\ClientInterface $httpClient,
         LoggerInterface $logger,
         ResponseResolver $responseResolver
@@ -101,12 +101,10 @@ class SignUpCommand implements CommandInterface
             $this->integrationManager->activateIntegration();
             $response = $this->httpClient->request(
                 ZendClient::POST,
-                $this->config->getConfigDataValue($this->signUpUrlPath),
+                $this->config->getValue($this->signUpUrlPath),
                 [
                     "token" => $integrationToken->getData('token'),
-                    "url" => $this->config->getConfigDataValue(
-                        Store::XML_PATH_SECURE_BASE_URL
-                    )
+                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
                 ]
             );
 
@@ -121,6 +119,6 @@ class SignUpCommand implements CommandInterface
             }
         }
 
-        return $result;
+        return (bool)$result;
     }
 }

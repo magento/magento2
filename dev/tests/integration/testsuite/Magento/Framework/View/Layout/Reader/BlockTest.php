@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     const IDX_TYPE = 0;
     const IDX_PARENT = 2;

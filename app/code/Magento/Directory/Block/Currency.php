@@ -13,6 +13,7 @@ use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Framework\View\Element\Template
 {

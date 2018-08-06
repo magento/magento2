@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class EncryptedTest extends \PHPUnit_Framework_TestCase
+class EncryptedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDbIsolation enabled

@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Url;
 
 use \Magento\Framework\View\Url\CssResolver;
 
-class CssResolverTest extends \PHPUnit_Framework_TestCase
+class CssResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Url\CssResolver

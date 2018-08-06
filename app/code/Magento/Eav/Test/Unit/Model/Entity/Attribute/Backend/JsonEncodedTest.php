@@ -8,7 +8,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
 use Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded;
 
-class JsonEncodedTest extends \PHPUnit_Framework_TestCase
+class JsonEncodedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded
@@ -83,6 +83,25 @@ class JsonEncodedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test before save handler with already encoded attribute value
+     */
+    public function testBeforeSaveWithAlreadyEncodedValue()
+    {
+        $product = new \Magento\Framework\DataObject(
+            [
+                'json_encoded' => [1, 2, 3]
+            ]
+        );
+
+        // save twice
+        $this->model->beforeSave($product);
+        $this->model->beforeSave($product);
+        
+        // check it is encoded only once
+        $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
+    }
+
+    /**
      * Test after load handler
      */
     public function testAfterLoad()
@@ -94,5 +113,19 @@ class JsonEncodedTest extends \PHPUnit_Framework_TestCase
         );
         $this->model->afterLoad($product);
         $this->assertEquals([1, 2, 3], $product->getData('json_encoded'));
+    }
+
+    /**
+     * Test after load handler with null attribute value
+     */
+    public function testAfterLoadWithNullAttributeValue()
+    {
+        $product = new \Magento\Framework\DataObject(
+            [
+                'json_encoded' => null
+            ]
+        );
+        $this->model->afterLoad($product);
+        $this->assertEquals([], $product->getData('json_encoded'));
     }
 }

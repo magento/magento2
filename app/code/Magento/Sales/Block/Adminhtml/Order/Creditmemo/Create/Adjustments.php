@@ -9,6 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Adjustments extends \Magento\Backend\Block\Template
 {
@@ -107,5 +108,21 @@ class Adjustments extends \Magento\Backend\Block\Template
             $label = __('Refund Shipping');
         }
         return $label;
+    }
+
+    /**
+     * Get update totals url
+     *
+     * @return string
+     */
+    public function getUpdateTotalsUrl()
+    {
+        return $this->getUrl(
+            'sales/*/updateQty',
+            [
+                'order_id' => $this->getSource()->getOrderId(),
+                'invoice_id' => $this->getRequest()->getParam('invoice_id', null)
+            ]
+        );
     }
 }

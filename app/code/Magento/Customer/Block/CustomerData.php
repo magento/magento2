@@ -7,18 +7,27 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
     /**
+     * @var array
+     */
+    private $expirableSectionNames;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
+     * @param array $expirableSectionNames
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
+        array $data = [],
+        array $expirableSectionNames = []
     ) {
         parent::__construct($context, $data);
+        $this->expirableSectionNames = $expirableSectionNames;
     }
 
     /**
@@ -42,5 +51,29 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     public function getCustomerDataUrl($route)
     {
         return $this->getUrl($route, ['_secure' => $this->getRequest()->isSecure()]);
+    }
+
+    /**
+     * Retrieve lifetime period (in minutes) of the frontend section configuration.
+     *
+     * Once this period has expired the corresponding section must be invalidated and reloaded.
+     *
+     * @return int section lifetime in minutes
+     * @since 100.2.0
+     */
+    public function getExpirableSectionLifetime()
+    {
+        return (int)$this->_scopeConfig->getValue('customer/online_customers/section_data_lifetime');
+    }
+
+    /**
+     * Retrieve the list of sections that can expire.
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function getExpirableSectionNames()
+    {
+        return array_values($this->expirableSectionNames);
     }
 }

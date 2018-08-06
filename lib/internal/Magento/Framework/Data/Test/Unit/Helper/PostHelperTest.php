@@ -7,7 +7,7 @@ namespace Magento\Framework\Data\Test\Unit\Helper;
 
 use Magento\Framework\App\Action\Action;
 
-class PostHelperTest extends \PHPUnit_Framework_TestCase
+class PostHelperTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetPostData()
     {
@@ -21,13 +21,8 @@ class PostHelperTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $contextMock = $this->getMock(
-            \Magento\Framework\App\Helper\Context::class,
-            ['getUrlBuilder', 'getUrlEncoder'],
-            [],
-            '',
-            false
-        );
+        $contextMock =
+            $this->createPartialMock(\Magento\Framework\App\Helper\Context::class, ['getUrlBuilder', 'getUrlEncoder']);
         $urlHelper = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
             ->disableOriginalConstructor()->getMock();
         $urlHelper->expects($this->once())

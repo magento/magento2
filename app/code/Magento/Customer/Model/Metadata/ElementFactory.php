@@ -20,9 +20,7 @@ class ElementFactory
 
     // available only for multiply attributes
 
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
+    // available only for multiply attributes
     protected $_objectManager;
 
     /**

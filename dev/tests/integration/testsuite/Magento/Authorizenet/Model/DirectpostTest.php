@@ -20,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class contains tests for Direct Post integration
  */
-class DirectpostTest extends \PHPUnit_Framework_TestCase
+class DirectpostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

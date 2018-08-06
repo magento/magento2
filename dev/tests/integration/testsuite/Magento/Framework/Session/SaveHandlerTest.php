@@ -10,7 +10,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Session\SaveHandler;
 use Magento\Framework\App\ObjectManager;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var string Original session.save_handler ini config value */
     private $originalSaveHandler;

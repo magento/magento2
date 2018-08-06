@@ -27,11 +27,7 @@ class RulePool
     const TYPE_EMAIL_TEMPLATE = 'email';
     /**#@-*/
 
-    /**
-     * File system
-     *
-     * @var \Magento\Framework\Filesystem
-     */
+    /**#@-*/
     protected $filesystem;
 
     /**

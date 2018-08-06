@@ -13,6 +13,7 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Custom extends \Magento\Framework\App\Config\Value
 {
@@ -53,7 +54,9 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_CARRIERS = 'carriers';
     const XML_PATH_PAYMENT = 'payment';
 
-    /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
+    /**
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     */
     protected $_configWriter;
 
     /**

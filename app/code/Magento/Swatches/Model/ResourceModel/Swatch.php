@@ -10,6 +10,7 @@ namespace Magento\Swatches\Model\ResourceModel;
  * @codeCoverageIgnore
  * Swatch Resource Model
  * @api
+ * @since 100.0.2
  */
 class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -34,6 +35,26 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $bind = ['default_value' => $defaultValue];
             $where = ['attribute_id = ?' => $id];
             $this->getConnection()->update($this->getTable('eav_attribute'), $bind, $where);
+        }
+    }
+
+    /**
+     * Cleaned swatch option values when switching to dropdown input type
+     *
+     * @param $optionIDs
+     * @param $type
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function clearSwatchOptionByOptionIdAndType($optionIDs, $type = null)
+    {
+        if (count($optionIDs)) {
+            foreach ($optionIDs as $optionId) {
+                $where = ['option_id' => $optionId];
+                if ($type !== null) {
+                    $where['type = ?'] = $type;
+                }
+                $this->getConnection()->delete($this->getMainTable(), $where);
+            }
         }
     }
 }

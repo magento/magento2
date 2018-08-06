@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product;
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {

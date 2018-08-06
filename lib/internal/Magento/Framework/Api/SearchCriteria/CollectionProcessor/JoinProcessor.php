@@ -22,7 +22,9 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private $fieldMapping;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     private $appliedFields = [];
 
     /**
@@ -119,6 +121,6 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private function getFieldMapping($field)
     {
-        return isset($this->fieldMapping[$field]) ? $this->fieldMapping[$field] : $field;
+        return $this->fieldMapping[$field] ?? $field;
     }
 }

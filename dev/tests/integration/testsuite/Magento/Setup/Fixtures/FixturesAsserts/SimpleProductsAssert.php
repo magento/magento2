@@ -43,7 +43,7 @@ class SimpleProductsAssert
     /**
      * Asserts that generated simple products are valid
      *
-     * @return void
+     * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \AssertionError
      */
@@ -52,5 +52,7 @@ class SimpleProductsAssert
         $product = $this->productRepository->get(sprintf(SimpleProductsFixture::SKU_PATTERN, 1));
         $this->productAssert->assertProductsCount(SimpleProductsFixture::SKU_PATTERN, 2);
         $this->productAssert->assertProductType('simple', $product);
+
+        return true;
     }
 }

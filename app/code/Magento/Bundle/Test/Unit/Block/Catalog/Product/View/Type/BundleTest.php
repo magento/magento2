@@ -10,7 +10,7 @@ use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -244,12 +244,14 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 ),
             ]
         );
+        $bundleOptionPriceMock = $this->getAmountPriceMock(
+            $baseAmount,
+            $regularPriceMock,
+            [['item' => $selections[0], 'value' => $basePriceValue, 'base_amount' => 321321]]
+        );
         $prices = [
-            'bundle_option' => $this->getAmountPriceMock(
-                $baseAmount,
-                $regularPriceMock,
-                [['item' => $selections[0], 'value' => $basePriceValue, 'base_amount' => 321321]]
-            ),
+            'bundle_option' => $bundleOptionPriceMock,
+            'bundle_option_regular_price' => $bundleOptionPriceMock,
             \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE => $finalPriceMock,
             \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE => $regularPriceMock,
         ];
@@ -328,6 +330,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
     }
 
+    /**
+     * @param $price
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getPriceInfoMock($price)
     {
         $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
@@ -352,6 +359,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         return $priceInfoMock;
     }
 
+    /**
+     * @param $prices
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getPriceMock($prices)
     {
         $methods = [];
@@ -461,6 +473,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $isSalable = true
     ) {
         $selection = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(
+                [
+                    'getSelectionId',
+                    'getName',
+                    'getSelectionQty',
+                    'getPriceInfo',
+                    'getSelectionCanChangeQty',
+                    'getIsDefault',
+                    'isSalable'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $tierPrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\TierPrice::class)
@@ -514,7 +537,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectionConnection);
         $this->product->expects($this->any())
             ->method('getTypeInstance')->willReturn($typeInstance);
-        $this->product->expects($this->any())->method('getStoreId')  ->willReturn(0);
+        $this->product->expects($this->any())->method('getStoreId')->willReturn(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
         $this->assertEquals($newOptions, $this->bundleBlock->getOptions($stripSelection));

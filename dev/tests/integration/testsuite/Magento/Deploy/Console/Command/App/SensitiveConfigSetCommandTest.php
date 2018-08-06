@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -87,41 +87,44 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
      * @dataProvider executeDataProvider
+     * @return void
      */
     public function testExecute($scope, $scopeCode, callable $assertCallback)
     {
-        $outputMock = $this->getMock(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with('<info>Configuration value saved in app/etc/env.php</info>');
 
-        $inputMock = $this->getMock(InputInterface::class);
-        $inputMock->expects($this->exactly(2))
-            ->method('getArgument')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH],
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'some/config/path_two',
-                'sensitiveValue'
-            );
-        $inputMock->expects($this->exactly(3))
-            ->method('getOption')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE_CODE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_INTERACTIVE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeCode,
-                null
-            );
+        $inputMocks = [];
 
-        /** @var SensitiveConfigSetCommand command */
-        $command = $this->objectManager->create(SensitiveConfigSetCommand::class);
-        $command->run($inputMock, $outputMock);
+        $inputMocks[] = $this->createInputMock(
+            'some/config/path_two',
+            'sensitiveValue',
+            $scope,
+            $scopeCode
+        );
+
+        $inputMocks[] = $this->createInputMock(
+            'some/config/path_three',
+            'sensitiveValue',
+            $scope,
+            $scopeCode
+        );
+
+        // attempt to overwrite existing value for path with null (should not be allowed)
+        $inputMocks[] = $this->createInputMock(
+            'some/config/path_three',
+            null,
+            $scope,
+            $scopeCode
+        );
+
+        foreach ($inputMocks as $inputMock) {
+            /** @var SensitiveConfigSetCommand command */
+            $command = $this->objectManager->create(SensitiveConfigSetCommand::class);
+            $command->run($inputMock, $outputMock);
+        }
 
         $config = $this->loadEnvConfig();
 
@@ -136,9 +139,14 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 null,
                 function (array $config) {
                     $this->assertTrue(isset($config['system']['default']['some']['config']['path_two']));
+                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_three']));
                     $this->assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_two']
+                    );
+                    $this->assertEquals(
+                        'sensitiveValue',
+                        $config['system']['default']['some']['config']['path_three']
                     );
                 }
             ],
@@ -150,6 +158,10 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_two']
+                    );
+                    $this->assertEquals(
+                        'sensitiveValue',
+                        $config['system']['website']['test']['some']['config']['path_three']
                     );
                 }
             ]
@@ -163,62 +175,26 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
      * @dataProvider executeInteractiveDataProvider
+     * @return void
      */
     public function testExecuteInteractive($scope, $scopeCode, callable $assertCallback)
     {
-        $inputMock = $this->getMock(InputInterface::class);
-        $outputMock = $this->getMock(OutputInterface::class);
+        $inputMock = $this->createInputMock(null, null, $scope, $scopeCode);
+
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with('<info>Please set configuration values or skip them by pressing [Enter]:</info>');
         $outputMock->expects($this->at(1))
             ->method('writeln')
             ->with('<info>Configuration values saved in app/etc/env.php</info>');
-        $inputMock->expects($this->exactly(3))
-            ->method('getOption')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE_CODE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_INTERACTIVE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeCode,
-                true
-            );
 
-        $questionHelperMock = $this->getMock(QuestionHelper::class);
-        $questionHelperMock->expects($this->exactly(3))
-            ->method('ask')
-            ->willReturn('sensitiveValue');
+        $command = $this->createInteractiveCommand('sensitiveValue');
+        $command->run($inputMock, $outputMock);
 
-        $interactiveCollectorMock = $this->objectManager->create(
-            InteractiveCollector::class,
-            [
-                'questionHelper' => $questionHelperMock
-            ]
-        );
-        $collectorFactoryMock = $this->getMockBuilder(CollectorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectorFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(CollectorFactory::TYPE_INTERACTIVE)
-            ->willReturn($interactiveCollectorMock);
-
-        /** @var SensitiveConfigSetCommand command */
-        $command = $this->objectManager->create(
-            SensitiveConfigSetCommand::class,
-            [
-                'facade' => $this->objectManager->create(
-                    SensitiveConfigSetFacade::class,
-                    [
-                        'collectorFactory' => $collectorFactoryMock
-                    ]
-                )
-            ]
-        );
+        // attempt to overwrite existing value for path with null (should not be allowed)
+        $inputMock = $this->createInputMock(null, null, $scope, $scopeCode);
+        $command = $this->createInteractiveCommand(null);
         $command->run($inputMock, $outputMock);
 
         $config = $this->loadEnvConfig();
@@ -311,5 +287,88 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private function loadConfig()
     {
         return $this->reader->load(ConfigFilePool::APP_CONFIG);
+    }
+
+    /**
+     * @param string|null $key
+     * @param string|null $val
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @return InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createInputMock($key, $val, $scope, $scopeCode)
+    {
+        $inputMock = $this->createMock(InputInterface::class);
+        $isInteractive = $key === null;
+        
+        if (!$isInteractive) {
+            $inputMock->expects($this->exactly(2))
+                ->method('getArgument')
+                ->withConsecutive(
+                    [SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH],
+                    [SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE]
+                )
+                ->willReturnOnConsecutiveCalls(
+                    $key,
+                    $val
+                );
+        }
+
+        $inputMock->expects($this->exactly(3))
+            ->method('getOption')
+            ->withConsecutive(
+                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE],
+                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE_CODE],
+                [SensitiveConfigSetCommand::INPUT_OPTION_INTERACTIVE]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $scope,
+                $scopeCode,
+                $isInteractive
+            );
+
+        return $inputMock;
+    }
+
+    /**
+     * @param string|null $inputValue
+     * @return SensitiveConfigSetCommand
+     */
+    private function createInteractiveCommand($inputValue)
+    {
+        $questionHelperMock = $this->createMock(QuestionHelper::class);
+        $questionHelperMock->expects($this->exactly(3))
+            ->method('ask')
+            ->willReturn($inputValue);
+
+        $interactiveCollectorMock = $this->objectManager->create(
+            InteractiveCollector::class,
+            [
+                'questionHelper' => $questionHelperMock
+            ]
+        );
+        $collectorFactoryMock = $this->getMockBuilder(CollectorFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collectorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(CollectorFactory::TYPE_INTERACTIVE)
+            ->willReturn($interactiveCollectorMock);
+
+        /** @var SensitiveConfigSetCommand command */
+        $command = $this->objectManager->create(
+            SensitiveConfigSetCommand::class,
+            [
+                'facade' => $this->objectManager->create(
+                    SensitiveConfigSetFacade::class,
+                    [
+                        'collectorFactory' => $collectorFactoryMock
+                    ]
+                )
+            ]
+        );
+
+        return $command;
     }
 }

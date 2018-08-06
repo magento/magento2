@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Creditmemo;
  * CreditMemo notifier.
  *
  * @api
+ * @since 100.1.3
  */
 class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterface
 {
@@ -27,6 +28,7 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
 
     /**
      * {@inheritdoc}
+     * @since 100.1.3
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

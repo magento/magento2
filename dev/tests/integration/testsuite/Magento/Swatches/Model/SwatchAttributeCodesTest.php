@@ -5,7 +5,7 @@
  */
 namespace Magento\Swatches\Model;
 
-class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
+class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Swatches\Model\SwatchAttributeCodes */
     private $swatchAttributeCodes;

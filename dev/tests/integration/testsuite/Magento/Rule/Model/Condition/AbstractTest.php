@@ -9,11 +9,11 @@
  */
 namespace Magento\Rule\Model\Condition;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetValueElement()
     {
-        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $context = $objectManager->create(\Magento\Rule\Model\Condition\Context::class, ['layout' => $layoutMock]);

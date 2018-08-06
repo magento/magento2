@@ -7,7 +7,7 @@ namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Module\Dir;
 
-class MenuConfigFilesTest extends \PHPUnit_Framework_TestCase
+class MenuConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Config\Reader

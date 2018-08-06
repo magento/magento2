@@ -68,7 +68,7 @@ class Website
         if ($storeId = $this->locator->getStore()->getId()) {
             /** @var WebsiteInterface $website */
             $website = $this->storeManager->getStore($storeId)->getWebsite();
-            $websites[$website->getId()] = [
+            $websites[] = [
                 'value' => $website->getId(),
                 'label' => $this->formatLabel(
                     $website->getName(),
@@ -81,7 +81,7 @@ class Website
                 if (!in_array($website->getId(), $product->getWebsiteIds())) {
                     continue;
                 }
-                $websites[$website->getId()] = [
+                $websites[] = [
                     'value' => $website->getId(),
                     'label' => $this->formatLabel(
                         $website->getName(),

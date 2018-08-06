@@ -9,7 +9,7 @@ namespace Magento\Translation\Test\Unit\Model\Inline;
 /**
  * @covers \Magento\Translation\Model\Inline\CacheManager
  */
-class CacheManagerTest extends \PHPUnit_Framework_TestCase
+class CacheManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Translation\Model\Inline\CacheManager

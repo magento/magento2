@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\CustomerData;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SectionConfigConverterTest extends \PHPUnit_Framework_TestCase
+class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\CustomerData\SectionConfigConverter */
     protected $converter;

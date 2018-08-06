@@ -84,7 +84,6 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function displayPrices($dataObject, $basePrice, $price, $strong = false, $separator = '<br/>')
     {
-        $order = false;
         if ($dataObject instanceof \Magento\Sales\Model\Order) {
             $order = $dataObject;
         } else {

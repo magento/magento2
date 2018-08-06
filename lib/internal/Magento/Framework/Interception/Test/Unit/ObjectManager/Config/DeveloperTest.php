@@ -7,7 +7,7 @@ namespace Magento\Framework\Interception\Test\Unit\ObjectManager\Config;
 
 use \Magento\Framework\Interception\ObjectManager\Config\Developer;
 
-class DeveloperTest extends \PHPUnit_Framework_TestCase
+class DeveloperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Interception\ObjectManager\Config\Developer
@@ -21,7 +21,7 @@ class DeveloperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->interceptionConfig = $this->getMock(\Magento\Framework\Interception\ConfigInterface::class);
+        $this->interceptionConfig = $this->createMock(\Magento\Framework\Interception\ConfigInterface::class);
         $this->model = new Developer();
     }
 

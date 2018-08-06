@@ -9,6 +9,11 @@
     <node_one attributeOne = '10' attributeTwo = '20'>
         <subnode attributeThree = '30'></subnode>
         <subnode attributeThree = '40' attributeFour = '40' >Value1</subnode>
+        <subnode attributeThree = '50'>
+            value_from_new_line
+        </subnode>
+        <subnode attributeThree = '60'>auto_formatted_by_ide_value_due_to_line_size_restriction
+        </subnode>
         <books attributeFive = '50' />
     </node_one>
     <multipleNode id="one" name="name1">
@@ -19,4 +24,18 @@
     </multipleNode>
     <someOtherVal></someOtherVal>
     <someDataVal><![CDATA[]]></someDataVal>
+    <multipleNode id="three" name="name3">
+        <value>
+            value_from_new_line
+        </value>
+    </multipleNode>
+    <multipleNode id="four" name="name4">
+        <value>auto_formatted_by_ide_value_due_to_line_size_restriction
+        </value>
+    </multipleNode>
+    <valueFromNewLine>
+        value_from_new_line
+    </valueFromNewLine>
+    <autoFormattedValue>auto_formatted_by_ide_value_due_to_line_size_restriction
+    </autoFormattedValue>
 </root>

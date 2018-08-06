@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsersToNewRelic;
 /**
  * Class ReportConcurrentUsersToNewRelicTest
  */
-class ReportConcurrentUsersToNewRelicTest extends \PHPUnit_Framework_TestCase
+class ReportConcurrentUsersToNewRelicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportConcurrentUsersToNewRelic

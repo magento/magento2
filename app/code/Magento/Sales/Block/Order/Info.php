@@ -16,13 +16,14 @@ use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'order/info.phtml';
+    protected $_template = 'Magento_Sales::order/info.phtml';
 
     /**
      * Core registry

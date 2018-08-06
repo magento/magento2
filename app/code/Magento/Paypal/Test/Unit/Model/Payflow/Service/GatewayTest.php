@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayTest extends \PHPUnit_Framework_TestCase
+class GatewayTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Gateway|\PHPUnit_Framework_MockObject_MockObject */
     protected $object;

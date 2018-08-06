@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractType
 {
@@ -165,6 +166,7 @@ abstract class AbstractType
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 101.1.0
      */
     protected $serializer;
 
@@ -249,7 +251,7 @@ abstract class AbstractType
     }
 
     /**
-     * Retrieve parent ids array by requered child
+     * Retrieve parent ids array by required child
      *
      * @param int|array $childId
      * @return array
@@ -289,13 +291,7 @@ abstract class AbstractType
         $sortOne = $attributeOne->getGroupSortPath() * 1000 + $attributeOne->getSortPath() * 0.0001;
         $sortTwo = $attributeTwo->getGroupSortPath() * 1000 + $attributeTwo->getSortPath() * 0.0001;
 
-        if ($sortOne > $sortTwo) {
-            return 1;
-        } elseif ($sortOne < $sortTwo) {
-            return -1;
-        }
-
-        return 0;
+        return $sortOne <=> $sortTwo;
     }
 
     /**
@@ -1107,6 +1103,7 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @since 101.1.0
      */
     public function isPossibleBuyFromList($product)
     {

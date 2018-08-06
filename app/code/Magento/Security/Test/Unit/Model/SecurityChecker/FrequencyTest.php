@@ -6,15 +6,15 @@
 
 namespace Magento\Security\Test\Unit\Model\SecurityChecker;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Model\SecurityChecker\Frequency testing
  */
-class FrequencyTest extends \PHPUnit_Framework_TestCase
+class FrequencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\SecurityChecker\Frequency
@@ -59,8 +59,9 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->setMethods(['getScopeByEventType'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
             ->method('getScopeByEventType')
             ->willReturnMap(
@@ -70,20 +71,14 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->collectionFactoryMock = $this->getMock(
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->collectionMock = $this->getMock(
+        $this->collectionMock = $this->createPartialMock(
             \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
-            ['addFieldToFilter', 'filterLastItem', 'getFirstItem'],
-            [],
-            '',
-            false
+            ['addFieldToFilter', 'filterLastItem', 'getFirstItem']
         );
 
         $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)

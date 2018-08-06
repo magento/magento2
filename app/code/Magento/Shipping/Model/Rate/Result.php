@@ -10,6 +10,7 @@ namespace Magento\Shipping\Model\Rate;
  * Container for Rates
  *
  * @api
+ * @since 100.0.2
  */
 class Result
 {

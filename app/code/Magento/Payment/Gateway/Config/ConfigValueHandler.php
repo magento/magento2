@@ -14,6 +14,7 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
  * This class is designed to be injected into other classes. Inheritance in not recommended.
  *
  * @api
+ * @since 100.0.2
  */
 class ConfigValueHandler implements ValueHandlerInterface
 {

@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Adminhtml;
  * Test class for \Magento\Reports\Block\Adminhtml\Grid
  * @magentoAppArea adminhtml
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDateFormat()
     {

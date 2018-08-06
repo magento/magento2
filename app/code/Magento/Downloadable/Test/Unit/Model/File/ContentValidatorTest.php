@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Test\Unit\Model\File;
 
 use Magento\Downloadable\Model\File\ContentValidator;
 
-class ContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContentValidator
@@ -23,7 +23,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validator = new \Magento\Downloadable\Model\File\ContentValidator();
 
-        $this->fileContentMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
+        $this->fileContentMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
     }
 
     public function testIsValid()

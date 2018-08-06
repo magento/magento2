@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\ObjectManager\Config\Reader;
+
+use Magento\Framework\Phrase;
 
 /**
  * Class DomTest @covers \Magento\Framework\ObjectManager\Config\Reader\Dom
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\Config\Reader\Dom
@@ -55,17 +58,20 @@ class DomTest extends \PHPUnit_Framework_TestCase
             file_get_contents($fixturePath . 'config_two.xml'),
         ];
 
-        $this->_fileResolverMock = $this->getMock(
-            \Magento\Framework\App\Arguments\FileResolver\Primary::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\App\Arguments\FileResolver\Primary::class);
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
-        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
-            ['argumentInterpreter' => $this->getArgumentInterpreterWithMockedStringUtils()]
+
+        /** @var Phrase\Renderer\Composite|\PHPUnit_Framework_MockObject_MockObject $renderer */
+        $renderer = $this->getMockBuilder(Phrase\Renderer\Composite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** check arguments won't be translated for ObjectManager, even if has attribute 'translate'=true. */
+        $renderer->expects(self::never())
+            ->method('render');
+        Phrase::setRenderer($renderer);
+
+        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class
         );
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT
@@ -85,48 +91,5 @@ class DomTest extends \PHPUnit_Framework_TestCase
             $this->_validationState
         );
         $this->assertEquals($this->_mapper->convert($this->_mergedConfig), $model->read('scope'));
-    }
-
-    /**
-     * Replace Magento\Framework\Data\Argument\Interpreter\StringUtils with mock to check arguments wasn't translated.
-     *
-     * Check argument $data has not key $data['translate'], therefore
-     * Magento\Framework\Data\Argument\Interpreter\StringUtils::evaluate($data) won't translate $data['value'].
-     *
-     * @return \Magento\Framework\Data\Argument\Interpreter\Composite
-     */
-    private function getArgumentInterpreterWithMockedStringUtils()
-    {
-        $booleanUtils = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Stdlib\BooleanUtils::class
-        );
-        $stringUtilsMock = $this->getMockBuilder(\Magento\Framework\Data\Argument\Interpreter\StringUtils::class)
-            ->setConstructorArgs(['booleanUtils' => $booleanUtils])
-            ->setMethods(['evaluate'])
-            ->getMock();
-        $stringUtilsMock->expects($this->any())
-            ->method('evaluate')
-            ->with(self::callback(function ($data) {
-                return !isset($data['translate']);
-            }))
-            ->will(self::returnCallback(function ($data) {
-                return isset($data['value']) ? $data['value'] : '';
-            }));
-        $constInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Constant();
-        $composite = new \Magento\Framework\Data\Argument\Interpreter\Composite(
-            [
-                'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => $stringUtilsMock,
-                'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
-                'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
-                'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
-                'const' => $constInterpreter,
-                'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
-            ],
-            \Magento\Framework\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
-        );
-        $composite->addInterpreter('array', new \Magento\Framework\Data\Argument\Interpreter\ArrayType($composite));
-
-        return $composite;
     }
 }

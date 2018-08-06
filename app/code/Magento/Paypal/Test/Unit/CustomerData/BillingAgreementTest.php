@@ -12,7 +12,7 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BillingAgreementTest extends \PHPUnit_Framework_TestCase
+class BillingAgreementTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -37,7 +37,7 @@ class BillingAgreementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paypalConfig = $this->getMock(Config::class, [], [], '', false);
+        $this->paypalConfig = $this->createMock(Config::class);
         $this->paypalConfig
             ->expects($this->once())
             ->method('setMethod')
@@ -47,18 +47,18 @@ class BillingAgreementTest extends \PHPUnit_Framework_TestCase
             ->method('setMethod')
             ->with(Config::METHOD_EXPRESS);
 
-        $paypalConfigFactory = $this->getMock(ConfigFactory::class, ['create'], [], '', false);
+        $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->paypalConfig));
 
         $customerId = 20;
-        $this->currentCustomer = $this->getMock(CurrentCustomer::class, [], [], '', false);
+        $this->currentCustomer = $this->createMock(CurrentCustomer::class);
         $this->currentCustomer->expects($this->any())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paypalData = $this->getMock(Data::class, [], [], '', false);
+        $this->paypalData = $this->createMock(Data::class);
 
         $helper = new ObjectManager($this);
         $this->billingAgreement = $helper->getObject(

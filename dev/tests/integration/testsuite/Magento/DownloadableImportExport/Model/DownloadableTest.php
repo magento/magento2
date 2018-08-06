@@ -82,6 +82,23 @@ class DownloadableTest extends AbstractProductExportImportTestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
+    }
+
+    /**
      * @param \Magento\Catalog\Model\Product $expectedProduct
      * @param \Magento\Catalog\Model\Product $actualProduct
      */

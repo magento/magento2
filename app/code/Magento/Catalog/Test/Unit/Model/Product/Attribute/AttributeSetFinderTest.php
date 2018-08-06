@@ -14,7 +14,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AttributeSetFinderTest extends \PHPUnit_Framework_TestCase
+class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -63,7 +63,7 @@ class AttributeSetFinderTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->once())->method('where')->with('entity_id IN (?)', $productIds)->willReturnSelf();
         $select->expects($this->once())->method('group')->with(ProductInterface::ATTRIBUTE_SET_ID)->willReturnSelf();
 
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($attributeSetIds);
 
         $this->productCollection->expects($this->once())->method('getSelect')->willReturn($select);

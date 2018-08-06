@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see Importer
  */
-class SaveProcessorTest extends \PHPUnit_Framework_TestCase
+class SaveProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveProcessor
@@ -67,7 +67,7 @@ class SaveProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->currencyValueMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope', 'getScopeId', 'beforeSave', 'afterSave', 'addData'])
+            ->setMethods(['beforeSave', 'afterSave'])
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
@@ -97,15 +97,6 @@ class SaveProcessorTest extends \PHPUnit_Framework_TestCase
         $value1 = clone $this->valueMock;
         $value2 = clone $this->valueMock;
 
-        $this->currencyValueMock->expects($this->once())
-            ->method('getScope')
-            ->willReturn('default');
-        $this->currencyValueMock->expects($this->once())
-            ->method('getScopeId')
-            ->willReturn(null);
-        $this->currencyValueMock->expects($this->once())
-            ->method('addData')
-            ->with(['groups' => ['options' => ['fields' => ['allow' => ['value' => ['EUR', 'USD']]]]]]);
         $this->arrayUtilsMock->expects($this->exactly(2))
             ->method('flatten')
             ->willReturnMap([
@@ -128,12 +119,11 @@ class SaveProcessorTest extends \PHPUnit_Framework_TestCase
                     ['web/unsecure/base_url' => 'http://magento3.local/']
                 ]
             ]);
-        $this->scopeConfigMock->expects($this->exactly(4))
+        $this->scopeConfigMock->expects($this->exactly(3))
             ->method('getValue')
             ->willReturnMap([
                 ['web/unsecure/base_url', 'default', null, 'http://magento2.local/'],
                 ['currency/options/base', 'default', null, 'EUR'],
-                ['currency/options/allow', 'default', null, 'EUR,USD'],
                 ['web/unsecure/base_url', 'websites', 'base', 'http://magento3.local/']
             ]);
         $this->valueFactoryMock->expects($this->exactly(3))

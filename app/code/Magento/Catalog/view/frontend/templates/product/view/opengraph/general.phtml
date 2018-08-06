@@ -9,7 +9,7 @@
 /** @var $block \Magento\Catalog\Block\Product\View */
 ?>
 
-<meta property="og:type" content="og:product" />
+<meta property="og:type" content="product" />
 <meta property="og:title" content="<?= $block->escapeHtmlAttr($block->stripTags($block->getProduct()->getName())) ?>" />
 <meta property="og:image" content="<?= $block->escapeUrl($block->getImage($block->getProduct(), 'product_base_image')->getImageUrl()) ?>" />
 <meta property="og:description" content="<?= $block->escapeHtmlAttr($block->stripTags($block->getProduct()->getShortDescription())) ?>" />

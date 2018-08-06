@@ -10,13 +10,14 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox
 {
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/checkbox.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/checkbox.phtml';
 
     /**
      * @param  string $elementId

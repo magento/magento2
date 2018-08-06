@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Comment;
 /**
  * Class ValidatorTest
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice\Comment\Validator
@@ -25,12 +25,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->commentModelMock = $this->getMock(
+        $this->commentModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice\Comment::class,
-            ['hasData', 'getData', '__wakeup'],
-            [],
-            '',
-            false
+            ['hasData', 'getData', '__wakeup']
         );
         $this->validator = new \Magento\Sales\Model\Order\Invoice\Comment\Validator();
     }

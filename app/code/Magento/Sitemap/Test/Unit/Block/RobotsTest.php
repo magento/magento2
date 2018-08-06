@@ -8,7 +8,7 @@ namespace Magento\Sitemap\Test\Unit\Block;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RobotsTest extends \PHPUnit_Framework_TestCase
+class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -41,6 +41,11 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     private $eventManagerMock;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManager;
@@ -50,6 +55,9 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->getMockForAbstractClass();
 
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,6 +65,10 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
+
+        $this->context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
 
         $this->storeResolver = $this->getMockBuilder(\Magento\Store\Model\StoreResolver::class)
             ->disableOriginalConstructor()
@@ -95,6 +107,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $expected = '';
 
         $this->initEventManagerMock($expected);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->storeResolver->expects($this->once())
             ->method('getCurrentStoreId')
@@ -150,6 +163,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             . PHP_EOL;
 
         $this->initEventManagerMock($expected);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->storeResolver->expects($this->once())
             ->method('getCurrentStoreId')

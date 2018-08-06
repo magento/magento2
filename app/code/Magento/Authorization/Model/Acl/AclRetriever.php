@@ -24,16 +24,24 @@ class AclRetriever
     const PERMISSION_ANONYMOUS = 'anonymous';
     const PERMISSION_SELF = 'self';
 
-    /** @var Logger */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var RulesCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
+     */
     protected $rulesCollectionFactory;
 
-    /** @var AclBuilder */
+    /**
+     * @var \Magento\Framework\Acl\Builder
+     */
     protected $aclBuilder;
 
-    /** @var RoleCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory
+     */
     protected $roleCollectionFactory;
 
     /**

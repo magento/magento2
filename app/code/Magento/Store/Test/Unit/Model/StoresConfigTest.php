@@ -8,7 +8,7 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-class StoresConfigTest extends \PHPUnit_Framework_TestCase
+class StoresConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoresConfig
@@ -37,10 +37,10 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeOne = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->_storeTwo = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->_config = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_storeOne = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->_storeTwo = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_config = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_model = new \Magento\Store\Model\StoresConfig(
             $this->_storeManager,

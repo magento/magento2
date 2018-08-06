@@ -9,8 +9,6 @@ namespace Magento\Store\Model;
  * Core Website model
  *
  * @api
- * @method \Magento\Store\Model\ResourceModel\Website _getResource()
- * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
@@ -23,6 +21,7 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -572,6 +571,21 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Clear configuration cache after creation website
+     *
+     * @return $this
+     * @since 100.2.0
+     */
+    public function afterSave()
+    {
+        if ($this->isObjectNew()) {
+            $this->_storeManager->reinitStores();
+        }
+
+        return parent::afterSave();
+    }
+
+    /**
      * Retrieve website base currency code
      *
      * @return string
@@ -658,6 +672,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -666,6 +681,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

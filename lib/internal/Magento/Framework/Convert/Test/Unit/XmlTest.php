@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Convert\Xml
@@ -31,6 +31,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getXml()
     {
         return <<<XML

@@ -5,6 +5,10 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
+/**
+ * Interface \Magento\Store\Model\StoreResolver\ReaderInterface
+ *
+ */
 interface ReaderInterface
 {
     /**

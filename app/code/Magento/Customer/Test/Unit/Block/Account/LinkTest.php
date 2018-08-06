@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetHref()
     {

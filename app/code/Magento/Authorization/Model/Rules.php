@@ -9,8 +9,6 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Rules Model
  *
- * @method \Magento\Authorization\Model\ResourceModel\Rules _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Rules getResource()
  * @method int getRoleId()
  * @method \Magento\Authorization\Model\Rules setRoleId(int $value)
  * @method string getResourceId()
@@ -22,6 +20,7 @@ namespace Magento\Authorization\Model;
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
  * @api
+ * @since 100.0.2
  */
 class Rules extends \Magento\Framework\Model\AbstractModel
 {

@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 
 /**
  * Bundle Type Model
@@ -21,6 +22,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as Sel
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -47,7 +49,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -485,7 +487,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             \Magento\Catalog\Api\Data\ProductInterface::class
         );
 
-        $selectionsCollection = $this->_bundleCollection->create()
+        /** @var Selections $selectionsCollection */
+        $selectionsCollection = $this->_bundleCollection->create();
+        $selectionsCollection
             ->addAttributeToSelect($this->_config->getProductAttributes())
             ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
             ->setFlag('product_children', true)
@@ -532,12 +536,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         foreach ($selections as $selection) {
             if ($selection->getProductId() == $optionProduct->getId()) {
-                foreach ($options as &$option) {
-                    if ($option->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
+                foreach ($options as $quoteItemOption) {
+                    if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $option->setValue(intval($option->getValue()));
+                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
                         } else {
-                            $option->setValue($value);
+                            $quoteItemOption->setValue($value);
                         }
                     }
                 }
@@ -586,6 +590,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
+            /** @var Selections $selectionsCollection */
             $selectionsCollection = $this->_bundleCollection->create();
             $selectionsCollection->addAttributeToSelect('status');
             $selectionsCollection->addQuantityFilter();
@@ -686,7 +691,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $options
                     );
 
-                    $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
+                    $optionsCollection->appendSelections($selections, true, $_appendAllSelections);
 
                     $selections = $selections->getItems();
                 } else {
@@ -703,7 +708,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ->getOptionsIds($product);
                 $selectionCollection = $product->getTypeInstance()
                     ->getSelectionsCollection($optionIds, $product);
-                $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
+                $options = $optionCollection->appendSelections($selectionCollection, true, $_appendAllSelections);
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
@@ -854,8 +859,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if (!$usedSelections || $usedSelectionsIds !== $selectionIds) {
             $storeId = $product->getStoreId();
-            $usedSelections = $this->_bundleCollection
-                ->create()
+            /** @var Selections $usedSelections */
+            $usedSelections = $this->_bundleCollection->create();
+            $usedSelections
                 ->addAttributeToSelect('*')
                 ->setFlag('product_children', true)
                 ->addStoreFilter($this->getStoreFilter($product))
@@ -1009,9 +1015,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
         if ($aPosition == $bPosition) {
             return 0;
-        } else {
-            return $aPosition < $bPosition ? -1 : 1;
         }
+        return $aPosition < $bPosition ? -1 : 1;
     }
 
     /**

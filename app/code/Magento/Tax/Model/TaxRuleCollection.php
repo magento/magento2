@@ -27,14 +27,14 @@ class TaxRuleCollection extends AbstractServiceCollection
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param EntityFactory $entityFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param TaxRuleRepositoryInterface $ruleService
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
+        EntityFactory $entityFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
@@ -78,6 +78,7 @@ class TaxRuleCollection extends AbstractServiceCollection
         $collectionItem->setCalculateSubtotal($taxRule->getCalculateSubtotal() ? '1' : '0');
         $collectionItem->setCustomerTaxClasses($taxRule->getCustomerTaxClassIds());
         $collectionItem->setProductTaxClasses($taxRule->getProductTaxClassIds());
+        $collectionItem->setTaxRatesCodes($taxRule->getTaxRatesCodes());
         $collectionItem->setTaxRates($taxRule->getTaxRateIds());
         return $collectionItem;
     }

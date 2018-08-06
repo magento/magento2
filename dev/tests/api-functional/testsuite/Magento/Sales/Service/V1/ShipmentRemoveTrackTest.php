@@ -5,7 +5,14 @@
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -31,11 +38,14 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -45,36 +55,35 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
      */
     public function testShipmentRemoveTrack()
     {
+        $shipmentCollection = $this->objectManager->get(Collection::class);
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get(
-            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
-        );
         $shipment = $shipmentCollection->getFirstItem();
 
-        /** @var \Magento\Sales\Model\Order\Shipment\Track $track */
-        $track = $this->objectManager->create(\Magento\Sales\Model\Order\Shipment\TrackFactory::class)->create();
-        $track->addData(
-            [
-                ShipmentTrackInterface::ENTITY_ID => null,
-                ShipmentTrackInterface::ORDER_ID => 12,
-                ShipmentTrackInterface::CREATED_AT => null,
-                ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
-                ShipmentTrackInterface::WEIGHT => 20,
-                ShipmentTrackInterface::QTY => 5,
-                ShipmentTrackInterface::TRACK_NUMBER => 2,
-                ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
-                ShipmentTrackInterface::TITLE => 'Shipment title',
-                ShipmentTrackInterface::CARRIER_CODE => \Magento\Sales\Model\Order\Shipment\Track::CUSTOM_CARRIER_CODE,
-                ShipmentTrackInterface::CREATED_AT => null,
-                ShipmentTrackInterface::UPDATED_AT => null,
-            ]
-        );
-        $track->save();
+        $trackEntity = $this->objectManager->get(TrackFactory::class)
+            ->create(
+                [
+                    'data' => [
+                        ShipmentTrackInterface::ENTITY_ID => null,
+                        ShipmentTrackInterface::ORDER_ID => $shipment->getOrderId(),
+                        ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
+                        ShipmentTrackInterface::WEIGHT => 20,
+                        ShipmentTrackInterface::QTY => 5,
+                        ShipmentTrackInterface::TRACK_NUMBER => 2,
+                        ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
+                        ShipmentTrackInterface::TITLE => 'Shipment title',
+                        ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
+                    ]
+                ]
+            );
+
+        /** @var ShipmentTrackInterface $trackEntity */
+        $trackEntity = $this->objectManager->get(ShipmentTrackRepositoryInterface::class)
+            ->save($trackEntity);
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/shipment/track/' . $track->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'resourcePath' => '/V1/shipment/track/' . $trackEntity->getEntityId(),
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
@@ -83,7 +92,29 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
             ],
         ];
 
-        $result = $this->_webApiCall($serviceInfo, ['id' => $track->getId()]);
-        $this->assertNotEmpty($result);
+        $result = $this->_webApiCall($serviceInfo, ['id' => $trackEntity->getEntityId()]);
+
+        self::assertTrue($result);
+        $this->assertNoAvailableTrackItems($shipment->getId());
+    }
+
+    /**
+     * Performs assertion for provided shipment.
+     *
+     * @param int $shipmentId
+     * @return void
+     */
+    private function assertNoAvailableTrackItems($shipmentId)
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter(ShipmentTrackInterface::PARENT_ID, $shipmentId)
+            ->create();
+
+        $items = $this->objectManager->get(ShipmentTrackRepositoryInterface::class)
+            ->getList($searchCriteria)
+            ->getItems();
+
+        self::assertEmpty($items);
     }
 }

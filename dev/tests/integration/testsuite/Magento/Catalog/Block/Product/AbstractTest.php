@@ -11,7 +11,7 @@ namespace Magento\Catalog\Block\Product;
  * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
  * @magentoAppArea frontend
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Stub class name for class under test

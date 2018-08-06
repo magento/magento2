@@ -43,7 +43,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Crontab\CrontabManager">
+    <type name="Magento\Framework\Crontab\CrontabManagerInterface">
         <arguments>
             <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
         </arguments>

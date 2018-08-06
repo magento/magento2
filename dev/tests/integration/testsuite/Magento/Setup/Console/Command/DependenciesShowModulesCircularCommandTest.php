@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_TestCase
+class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DependenciesShowModulesCircularCommand
@@ -27,26 +27,14 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
             'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
         ];
 
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
-        $objectManager = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
-        $themePackageListMock = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $componentRegistrarMock = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrar::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $themePackageListMock = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
+        $componentRegistrarMock = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
-        $dirSearchMock = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
             [\Magento\Framework\View\Design\Theme\ThemePackageList::class, $themePackageListMock],
             [\Magento\Framework\Component\ComponentRegistrar::class, $componentRegistrarMock],

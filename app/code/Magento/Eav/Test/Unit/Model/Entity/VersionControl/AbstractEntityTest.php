@@ -26,20 +26,14 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
 
     protected function setUp()
     {
-        $this->entitySnapshot = $this->getMock(
+        $this->entitySnapshot = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            ['isModified', 'registerSnapshot'],
-            [],
-            '',
-            false
+            ['isModified', 'registerSnapshot']
         );
 
-        $this->entityRelationComposite = $this->getMock(
+        $this->entityRelationComposite = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class,
-            ['processRelations'],
-            [],
-            '',
-            false
+            ['processRelations']
         );
 
         parent::setUp();
@@ -56,12 +50,9 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
      */
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
     {
-        $object = $this->getMock(
+        $object = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave'],
-            [],
-            '',
-            false
+            ['getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave']
         );
 
         $object->setEntityTypeId(1);
@@ -80,7 +71,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
         /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
-        $backendModel = $this->getMock(
+        $backendModel = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [
                 'getBackend',
@@ -157,7 +148,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         $objectManager = new ObjectManager($this);
 
         /** @var $object \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $arguments = $objectManager->getConstructArguments(
             \Magento\Eav\Model\Entity\VersionControl\AbstractEntity::class,

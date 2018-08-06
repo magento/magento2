@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity\Magento\Widget;
 /**
  * @magentoAppArea frontend
  */
-class TemplateFilesTest extends \PHPUnit_Framework_TestCase
+class TemplateFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Check if all the declared widget templates actually exist

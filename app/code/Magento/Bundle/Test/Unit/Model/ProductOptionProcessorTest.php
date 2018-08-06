@@ -12,7 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
+class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductOptionProcessor
@@ -46,6 +46,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
                 'getBundleOption',
                 'getBundleOptionQty',
                 'create',
+                'addData'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,6 +185,8 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
         if (!empty($expected)) {
             $this->assertArrayHasKey($expected, $result);
             $this->assertTrue(is_array($result[$expected]));
+        } else {
+            $this->assertEmpty($result);
         }
     }
 

@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\Page\Source;
 use Magento\Cms\Model\Page;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class IsActiveTest extends \PHPUnit_Framework_TestCase
+class IsActiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Page|\PHPUnit_Framework_MockObject_MockObject

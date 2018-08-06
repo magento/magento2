@@ -11,7 +11,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\State;
 
-class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
+class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WorkflowType
@@ -41,14 +41,8 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->elementMock = $this->getMock(
-            AbstractElement::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->appStateMock = $this->getMock(State::class, [], [], '', false);
+        $this->elementMock = $this->createMock(AbstractElement::class);
+        $this->appStateMock = $this->createMock(State::class);
 
         $contextArgs = $this->objectManagerHelper->getConstructArguments(
             Context::class,

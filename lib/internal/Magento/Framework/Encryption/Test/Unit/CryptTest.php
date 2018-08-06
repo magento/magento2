@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Encryption\Test\Unit;
 
-class CryptTest extends \PHPUnit_Framework_TestCase
+class CryptTest extends \PHPUnit\Framework\TestCase
 {
     private $_key;
 
@@ -30,6 +30,11 @@ class CryptTest extends \PHPUnit_Framework_TestCase
         $this->_key = substr(__CLASS__, -32, 32);
     }
 
+    /**
+     * @param $length
+     *
+     * @return bool|string
+     */
     protected function _getRandomString($length)
     {
         $result = '';
@@ -64,18 +69,33 @@ class CryptTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $cipherName
+     * @param $modeName
+     *
+     * @return mixed
+     */
     protected function _getKeySize($cipherName, $modeName)
     {
         $this->_requireCipherInfo();
         return self::$_cipherInfo[$cipherName][$modeName]['key_size'];
     }
 
+    /**
+     * @param $cipherName
+     * @param $modeName
+     *
+     * @return mixed
+     */
     protected function _getInitVectorSize($cipherName, $modeName)
     {
         $this->_requireCipherInfo();
         return self::$_cipherInfo[$cipherName][$modeName]['iv_size'];
     }
 
+    /**
+     * @return array
+     */
     public function getCipherModeCombinations()
     {
         $result = [];
@@ -102,6 +122,9 @@ class CryptTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($initVector, $crypt->getInitVector());
     }
 
+    /**
+     * @return array
+     */
     public function getConstructorExceptionData()
     {
         $result = [];
@@ -137,6 +160,9 @@ class CryptTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cryptExpected->getInitVector(), $cryptActual->getInitVector());
     }
 
+    /**
+     * @return mixed
+     */
     public function getCryptData()
     {
         $fixturesFilename = __DIR__ . '/Crypt/_files/_crypt_fixtures.php';

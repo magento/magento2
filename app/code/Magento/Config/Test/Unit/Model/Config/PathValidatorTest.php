@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see PathValidator
  */
-class PathValidatorTest extends \PHPUnit_Framework_TestCase
+class PathValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PathValidator

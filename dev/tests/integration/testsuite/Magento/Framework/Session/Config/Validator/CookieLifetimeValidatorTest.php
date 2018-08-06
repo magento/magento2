@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Session\Config\Validator;
 
-class CookieLifetimeValidatorTest extends \PHPUnit_Framework_TestCase
+class CookieLifetimeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator   */
     private $model;

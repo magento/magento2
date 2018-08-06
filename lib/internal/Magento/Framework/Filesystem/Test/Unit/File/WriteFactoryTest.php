@@ -10,11 +10,11 @@ use \Magento\Framework\Filesystem\File\WriteFactory;
 /**
  * Class WriteFactoryTest
  */
-class WriteFactoryTest extends \PHPUnit_Framework_TestCase
+class WriteFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
-        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverPool->expects($this->never())->method('getDriver');
         $factory = new WriteFactory($driverPool);
         $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
@@ -25,7 +25,7 @@ class WriteFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithDriverCode()
     {
-        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverPool->expects($this->once())->method('getDriver')->willReturn($driverMock);
@@ -36,7 +36,7 @@ class WriteFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithMode()
     {
-        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverPool->expects($this->never())->method('getDriver');
         $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driver->expects($this->any())->method('isExists')->willReturn(true);

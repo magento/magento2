@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 /**
  * Customer address CRUD interface.
  * @api
+ * @since 100.0.2
  */
 interface AddressRepositoryInterface
 {

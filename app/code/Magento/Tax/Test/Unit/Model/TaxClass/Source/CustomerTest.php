@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model\TaxClass\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -52,19 +52,13 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            ['addFilters', 'create'],
-            [],
-            '',
-            false
+            ['addFilters', 'create']
         );
-        $this->filterBuilderMock = $this->getMock(
+        $this->filterBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\FilterBuilder::class,
-            ['setField', 'setValue', 'create'],
-            [],
-            '',
-            false
+            ['setField', 'setValue', 'create']
         );
 
         $this->customer = $this->objectManager->getObject(
@@ -86,20 +80,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllOptions($isEmpty, array $expected)
     {
-        $filterMock = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $searchResultsMock = $this->getMockForAbstractClass(
             \Magento\Tax\Api\Data\TaxClassSearchResultsInterface::class,
             [],
@@ -190,20 +172,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllOptionsNameIntegrity(array $value)
     {
-        $filterMock = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $searchResultsMock = $this->getMockForAbstractClass(
             \Magento\Tax\Api\Data\TaxClassSearchResultsInterface::class,
             [],

@@ -6,7 +6,7 @@
 
 namespace Magento\Marketplace\Test\Unit\Model;
 
-class PartnersTest extends \PHPUnit_Framework_TestCase
+class PartnersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
@@ -123,7 +123,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->getMock(\Magento\Marketplace\Block\Partners::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Marketplace\Block\Partners::class, $methods);
     }
 
     /**
@@ -133,7 +133,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->getMock(\Magento\Marketplace\Model\Partners::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Marketplace\Model\Partners::class, $methods, []);
     }
 
     /**
@@ -143,7 +143,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getCurlMock($methods)
     {
-        return $this->getMock(\Magento\Framework\HTTP\Client\Curl::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\HTTP\Client\Curl::class, $methods, []);
     }
 
     /**
@@ -153,6 +153,6 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheMock($methods)
     {
-        return $this->getMock(\Magento\Marketplace\Helper\Cache::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Marketplace\Helper\Cache::class, $methods, []);
     }
 }

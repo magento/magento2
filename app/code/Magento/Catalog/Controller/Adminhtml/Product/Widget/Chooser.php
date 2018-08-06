@@ -9,6 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;

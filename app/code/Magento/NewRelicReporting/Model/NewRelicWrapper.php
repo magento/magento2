@@ -29,6 +29,32 @@ class NewRelicWrapper
     }
 
     /**
+     * Wrapper for 'newrelic_notice_error' function
+     *
+     * @param  Exception $exception
+     * @return void
+     */
+    public function reportError($exception)
+    {
+        if (extension_loaded('newrelic')) {
+            newrelic_notice_error($exception->getMessage(), $exception);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_set_appname'
+     *
+     * @param string $appName
+     * @return void
+     */
+    public function setAppName(string $appName)
+    {
+        if (extension_loaded('newrelic')) {
+            newrelic_set_appname($appName);
+        }
+    }
+
+    /**
      * Checks whether newrelic-php5 agent is installed
      *
      * @return bool

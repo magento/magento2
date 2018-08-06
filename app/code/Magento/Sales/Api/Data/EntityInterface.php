@@ -8,6 +8,7 @@ namespace Magento\Sales\Api\Data;
 /**
  * Interface EntityInterface
  * @api
+ * @since 100.1.2
  */
 interface EntityInterface
 {
@@ -25,6 +26,7 @@ interface EntityInterface
      * Gets the created-at timestamp for the invoice.
      *
      * @return string|null Created-at timestamp.
+     * @since 100.1.2
      */
     public function getCreatedAt();
 
@@ -33,6 +35,7 @@ interface EntityInterface
      *
      * @param string $createdAt timestamp
      * @return $this
+     * @since 100.1.2
      */
     public function setCreatedAt($createdAt);
 
@@ -40,6 +43,7 @@ interface EntityInterface
      * Gets the ID for the invoice.
      *
      * @return int|null Invoice ID.
+     * @since 100.1.2
      */
     public function getEntityId();
 
@@ -48,6 +52,7 @@ interface EntityInterface
      *
      * @param int $entityId
      * @return $this
+     * @since 100.1.2
      */
     public function setEntityId($entityId);
 }

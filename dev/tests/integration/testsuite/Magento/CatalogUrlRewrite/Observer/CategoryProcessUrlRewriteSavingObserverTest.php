@@ -21,7 +21,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * - has rewrites history
  * @magentoAppArea adminhtml
  */
-class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
+class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;

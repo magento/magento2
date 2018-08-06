@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeMessDetectorTest extends \PHPUnit_Framework_TestCase
+class CodeMessDetectorTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanRun()
     {

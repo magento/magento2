@@ -17,7 +17,7 @@ use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\OrdersFixture;
 use Magento\Store\Model\StoreManagerInterface;
 
-class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
+class OrdersFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -72,12 +72,9 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             $this->fixtureModelMock
         );
 
-        $orderMock = $this->getMock(
+        $orderMock = $this->createPartialMock(
             Order::class,
-            ['getTable', 'getConnection', 'getTableName', 'query', 'fetchColumn'],
-            [],
-            '',
-            false
+            ['getTable', 'getConnection', 'getTableName', 'query', 'fetchColumn']
         );
 
         $path = explode('\\', Order::class);
@@ -96,7 +93,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn(strtolower($name) . '_table_name');
 
-        $objectManagerMock = $this->getMock(ObjectManager::class, [], [], '', false);
+        $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->atLeastOnce())
             ->method('get')
             ->willReturn($orderMock);

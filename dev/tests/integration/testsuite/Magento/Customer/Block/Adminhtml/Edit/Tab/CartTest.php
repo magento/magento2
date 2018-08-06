@@ -12,7 +12,7 @@ use Magento\Customer\Controller\RegistryConstants;
  *
  * @magentoAppArea adminhtml
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOMER_ID_VALUE = 1234;
 

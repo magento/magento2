@@ -10,7 +10,7 @@ use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo;
 
-class AdditionalInfoTest extends \PHPUnit_Framework_TestCase
+class AdditionalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  AdditionalInfo */
     private $model;
@@ -21,7 +21,7 @@ class AdditionalInfoTest extends \PHPUnit_Framework_TestCase
     }
     public function testGet()
     {
-        $productRenderInfo = $this->getMock(ProductRenderInterface::class);
+        $productRenderInfo = $this->createMock(ProductRenderInterface::class);
         $productRenderInfo->expects($this->once())
             ->method('setIsSalable')
             ->with(true);

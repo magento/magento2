@@ -13,7 +13,7 @@ use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 /**
  * Class CategoryBasedProductRewriteGeneratorTest
  */
-class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject

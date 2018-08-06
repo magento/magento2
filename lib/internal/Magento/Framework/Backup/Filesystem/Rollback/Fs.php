@@ -78,7 +78,7 @@ class Fs extends AbstractRollback
 
     /**
      * @return \Magento\Framework\Backup\Filesystem\Helper
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getFsHelper()
     {

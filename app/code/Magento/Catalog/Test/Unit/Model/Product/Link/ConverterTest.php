@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Link;
 
 use Magento\Catalog\Model\Product\Link\Converter;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Converter

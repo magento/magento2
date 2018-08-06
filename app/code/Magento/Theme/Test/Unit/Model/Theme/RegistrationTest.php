@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme\Registration;
 
-class RegistrationTest extends \PHPUnit_Framework_TestCase
+class RegistrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Registration

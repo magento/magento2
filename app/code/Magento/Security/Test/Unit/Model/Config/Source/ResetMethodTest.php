@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\Config\Source\ResetMethod testing
  */
-class ResetMethodTest extends \PHPUnit_Framework_TestCase
+class ResetMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Security\Model\Config\Source\ResetMethod

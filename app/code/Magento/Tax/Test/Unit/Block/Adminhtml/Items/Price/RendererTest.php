@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Items\Price;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer

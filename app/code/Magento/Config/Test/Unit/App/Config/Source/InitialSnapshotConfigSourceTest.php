@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * @inheritdoc
  */
-class InitialSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
+class InitialSnapshotConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InitialSnapshotConfigSource

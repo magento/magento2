@@ -16,6 +16,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 /**
  * Class IncludeElement
  * @api
+ * @since 100.0.2
  */
 class IncludeElement implements ElementInterface
 {

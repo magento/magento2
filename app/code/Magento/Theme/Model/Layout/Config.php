@@ -17,7 +17,9 @@ class Config
      */
     protected $_pageLayouts;
 
-    /** @var  \Magento\Framework\Config\DataInterface */
+    /**
+     * @var \Magento\Framework\Config\DataInterface
+     */
     protected $_dataStorage;
 
     /**

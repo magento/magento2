@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockItemSave\StockItemDataChecker;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ByStockDataTest extends \PHPUnit_Framework_TestCase
+class ByStockDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -43,6 +43,7 @@ class ByStockDataTest extends \PHPUnit_Framework_TestCase
      * Test saving of stock item on product save by 'setStockData' method (deprecated) via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetStockData()
     {
@@ -59,6 +60,7 @@ class ByStockDataTest extends \PHPUnit_Framework_TestCase
      * via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetData()
     {

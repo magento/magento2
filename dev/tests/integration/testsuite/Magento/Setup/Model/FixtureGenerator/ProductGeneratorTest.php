@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Catalog/_files/category.php
  */
-class ProductGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductGenerator
@@ -69,6 +69,9 @@ class ProductGeneratorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testProductGeneration()
     {
         $name = 'Simple Product Name';

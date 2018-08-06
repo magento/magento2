@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentCommentInterface extends ExtensibleDataInterface, CommentInterface, EntityInterface
 {

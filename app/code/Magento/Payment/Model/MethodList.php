@@ -13,18 +13,19 @@ use Magento\Payment\Model\Method\AbstractMethod;
  * Methods List service class.
  *
  * @api
+ * @since 100.0.2
  */
 class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 100.1.3 Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 100.2.0 Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
 

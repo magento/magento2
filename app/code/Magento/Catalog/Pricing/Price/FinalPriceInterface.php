@@ -10,6 +10,7 @@ namespace Magento\Catalog\Pricing\Price;
  * Special price interface
  *
  * @api
+ * @since 100.0.2
  */
 interface FinalPriceInterface
 {

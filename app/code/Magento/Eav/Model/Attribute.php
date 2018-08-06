@@ -19,6 +19,7 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -29,9 +30,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     //const MODULE_NAME = 'Magento_Eav';
 
     /**
-     * Prefix of model events object
-     *
-     * @var string
+     * Name of the module
+     * Override it
      */
     protected $_eventObject = 'attribute';
 
@@ -62,7 +62,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      */
     public function getWebsite()
     {
-        if (is_null($this->_website)) {
+        if ($this->_website === null) {
             $this->_website = $this->_storeManager->getWebsite();
         }
 
@@ -88,7 +88,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     public function getUsedInForms()
     {
         $forms = $this->getData('used_in_forms');
-        if (is_null($forms)) {
+        if ($forms === null) {
             $forms = $this->_getResource()->getUsedInForms($this);
             $this->setData('used_in_forms', $forms);
         }

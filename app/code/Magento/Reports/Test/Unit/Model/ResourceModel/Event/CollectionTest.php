@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Model\ResourceModel\Event;
 
 use Magento\Reports\Model\ResourceModel\Event\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Event\Collection

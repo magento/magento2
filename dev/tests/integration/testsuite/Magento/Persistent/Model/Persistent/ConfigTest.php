@@ -9,7 +9,7 @@ namespace Magento\Persistent\Model\Persistent;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Model\Persistent\Config

@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @package Magento\Framework
  * @magentoAppIsolation enabled
  */
-class TranslateCachingTest extends \PHPUnit_Framework_TestCase
+class TranslateCachingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Phrase\RendererInterface

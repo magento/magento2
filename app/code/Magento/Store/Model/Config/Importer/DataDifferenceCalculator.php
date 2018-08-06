@@ -79,9 +79,7 @@ class DataDifferenceCalculator
         );
 
         foreach ($runtimeScopeData as $entityCode => $entityData) {
-            if (
-                isset($data[$entityCode]) && array_diff_assoc($entityData, $data[$entityCode])
-            ) {
+            if (isset($data[$entityCode]) && array_diff_assoc($entityData, $data[$entityCode])) {
                 $itemsToUpdate[$entityCode] = array_replace($entityData, $data[$entityCode]);
             }
         }

@@ -13,6 +13,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Instance extends \Magento\Backend\Block\Widget\Grid\Container
 {

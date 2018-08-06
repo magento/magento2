@@ -6,7 +6,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
+class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\GuestCart\GuestCartTotalRepository

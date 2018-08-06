@@ -13,6 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class EngineProvider
 {

@@ -12,6 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
  * Catalog Product visibility model and attribute source model
  *
  * @api
+ * @since 100.0.2
  */
 class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {

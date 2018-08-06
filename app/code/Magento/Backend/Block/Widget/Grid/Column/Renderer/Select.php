@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Grid select input column renderer
  *
  * @api
+ * @since 100.0.2
  */
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

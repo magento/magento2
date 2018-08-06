@@ -10,6 +10,7 @@ namespace Magento\Customer\Api;
 /**
  * Customer CRUD interface.
  * @api
+ * @since 100.0.2
  */
 interface CustomerRepositoryInterface
 {
@@ -37,7 +38,7 @@ interface CustomerRepositoryInterface
     public function get($email, $websiteId = null);
 
     /**
-     * Get customer by customer ID.
+     * Get customer by Customer ID.
      *
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -69,7 +70,7 @@ interface CustomerRepositoryInterface
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer);
 
     /**
-     * Delete customer by ID.
+     * Delete customer by Customer ID.
      *
      * @param int $customerId
      * @return bool true on success

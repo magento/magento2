@@ -9,7 +9,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Amount;
 /**
  * Class AmountFactoryTest
  */
-class AmountFactoryTest extends \PHPUnit_Framework_TestCase
+class AmountFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountFactory
@@ -31,8 +31,8 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
-        $this->amountMock = $this->getMock(\Magento\Framework\Pricing\Amount\Base::class, [], [], '', false);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $this->amountMock = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
         $this->factory = new \Magento\Framework\Pricing\Amount\AmountFactory($this->objectManagerMock);
     }
 

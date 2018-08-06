@@ -8,6 +8,7 @@ namespace Magento\PageCache\Model;
 
 /**
  * @api
+ * @since 100.2.0
  */
 interface VclGeneratorInterface
 {
@@ -16,6 +17,7 @@ interface VclGeneratorInterface
      *
      * @param int $version
      * @return string
+     * @since 100.2.0
      */
     public function generateVcl($version);
 }

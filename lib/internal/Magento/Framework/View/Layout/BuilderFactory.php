@@ -20,11 +20,7 @@ class BuilderFactory
     const TYPE_PAGE   = 'page';
     /**#@-*/
 
-    /**
-     * Map of types which are references to classes
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $typeMap = [
         self::TYPE_LAYOUT => \Magento\Framework\View\Layout\Builder::class,
         self::TYPE_PAGE   => \Magento\Framework\View\Page\Builder::class,

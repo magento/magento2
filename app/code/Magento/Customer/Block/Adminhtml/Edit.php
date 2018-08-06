@@ -10,7 +10,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
- * Customer edit block
+ * @deprecated 100.2.0 for UiComponent replacement
+ * @see app/code/Magento/Customer/view/base/ui_component/customer_form.xml
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -115,12 +116,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($customerId) {
             $url = $this->getUrl('customer/customer/invalidateToken', ['customer_id' => $customerId]);
-            $deleteConfirmMsg = __("Are you sure you want to revoke the customer\'s tokens?");
+            $deleteConfirmMsg = __("Are you sure you want to revoke the customer's tokens?");
             $this->buttonList->add(
                 'invalidate_token',
                 [
                     'label' => __('Force Sign-In'),
-                    'onclick' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $url . '\')',
+                    'onclick' => 'deleteConfirm(\'' . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
+                        '\', \'' . $url . '\')',
                     'class' => 'invalidate-token'
                 ],
                 10

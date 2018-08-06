@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit;
 
 use Magento\Framework\View\EntitySpecificHandlesList;
 
-class EntitySpecificHandlesListTest extends \PHPUnit_Framework_TestCase
+class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EntitySpecificHandlesList

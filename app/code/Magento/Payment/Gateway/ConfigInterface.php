@@ -9,6 +9,7 @@ namespace Magento\Payment\Gateway;
  * Interface ConfigInterface
  * @package Magento\Payment\Gateway
  * @api
+ * @since 100.0.2
  */
 interface ConfigInterface
 {

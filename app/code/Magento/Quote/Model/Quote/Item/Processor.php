@@ -71,9 +71,6 @@ class Processor
             return $item;
         }
 
-        $item->setOptions($product->getCustomOptions());
-        $item->setProduct($product);
-
         if ($request->getResetCount() && !$product->getStickWithinParent() && $item->getId() === $request->getId()) {
             $item->setData(CartItemInterface::KEY_QTY, 0);
         }
@@ -104,6 +101,20 @@ class Processor
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }
+    }
+
+    /**
+     * Merge two quote items.
+     *
+     * @param Item $source
+     * @param Item $target
+     * @return Item
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function merge(Item $source, Item $target): Item
+    {
+        return $target;
     }
 
     /**

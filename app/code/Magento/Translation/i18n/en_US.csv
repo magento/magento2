@@ -1,5 +1,7 @@
 "Dictionary (Translation on Storefront side)","Dictionary (Translation on Storefront side)"
 "Embedded (Translation on Admin side)","Embedded (Translation on Admin side)"
+"Error while translating phrase ""%s"" in file %s.","Error while translating phrase ""%s"" in file %s."
+"Error while generating js translation dictionary: ""%s""","Error while generating js translation dictionary: ""%s"""
 "Translation Strategy","Translation Strategy"
 Translations,Translations
 "Translation files","Translation files"

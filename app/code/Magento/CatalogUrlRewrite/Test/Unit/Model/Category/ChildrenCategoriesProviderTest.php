@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
+class ChildrenCategoriesProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $category;
@@ -37,7 +37,7 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
         $categoryCollection->expects($this->any())->method('addIdFilter')->with(['id'])->willReturnSelf();
         $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
-        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $categoryResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
             ->disableOriginalConstructor()->getMock();
         $this->category->expects($this->any())->method('getResource')->willReturn($categoryResource);

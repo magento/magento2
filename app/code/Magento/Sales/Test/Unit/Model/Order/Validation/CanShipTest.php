@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 /**
  * Test for \Magento\Sales\Model\Order\Validation\CanShip class
  */
-class CanShipTest extends \PHPUnit_Framework_TestCase
+class CanShipTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Validation\CanShip|\PHPUnit_Framework_MockObject_MockObject

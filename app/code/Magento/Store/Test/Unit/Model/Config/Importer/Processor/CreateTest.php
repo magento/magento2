@@ -21,7 +21,7 @@ use Magento\Store\Model\WebsiteFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataDifferenceCalculator|\PHPUnit_Framework_MockObject_MockObject
@@ -325,10 +325,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 return $function();
             });
 
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('store_group_save', ['group' => $this->groupMock]);
-
         $this->processor->run($this->data);
     }
 
@@ -381,10 +377,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
-
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('store_add', ['store' => $this->storeMock]);
 
         $this->processor->run($this->data);
     }

@@ -12,7 +12,7 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Class PaymentDataObjectTest
  */
-class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
+class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PaymentDataObject */
     protected $model;
@@ -40,11 +40,11 @@ class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrder()
     {
-        $this->assertSame($this->orderMock, $this->model->getOrder()) ;
+        $this->assertSame($this->orderMock, $this->model->getOrder());
     }
 
     public function testGetPayment()
     {
-        $this->assertSame($this->paymentMock, $this->model->getPayment()) ;
+        $this->assertSame($this->paymentMock, $this->model->getPayment());
     }
 }

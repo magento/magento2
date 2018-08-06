@@ -14,6 +14,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  * @method int getProductId()
  *
  * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface

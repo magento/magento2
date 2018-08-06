@@ -16,7 +16,7 @@ use Magento\Framework\View\Page\Config\Generator;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Renderer
@@ -157,14 +157,13 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             . '<meta http-equiv="X-UA-Compatible" content="x_ua_compatible_value"/>' . "\n"
             . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n";
 
-        $this->stringMock->expects($this->at(0))
-            ->method('upperCaseWords')
-            ->with('charset', '_', '')
-            ->willReturn('Charset');
-
         $this->pageConfigMock->expects($this->once())
             ->method('getCharset')
             ->willReturn($metadataValueCharset);
+
+        $this->pageConfigMock->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content_type_value');
 
         $this->pageConfigMock
             ->expects($this->once())
@@ -261,7 +260,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('my message'));
 
-        $assetMockOne = $this->getMock(\Magento\Framework\View\Asset\AssetInterface::class);
+        $assetMockOne = $this->createMock(\Magento\Framework\View\Asset\AssetInterface::class);
         $assetMockOne->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturn($assetUrl);
@@ -284,7 +283,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 ['ie_condition', $groupOne['condition']],
             ]);
 
-        $assetMockTwo = $this->getMock(\Magento\Framework\View\Asset\AssetInterface::class);
+        $assetMockTwo = $this->createMock(\Magento\Framework\View\Asset\AssetInterface::class);
         $assetMockTwo->expects($this->once())
             ->method('getUrl')
             ->willThrowException($exception);

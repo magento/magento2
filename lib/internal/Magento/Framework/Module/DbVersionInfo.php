@@ -22,9 +22,7 @@ class DbVersionInfo
     const KEY_REQUIRED = 'required';
     /**#@-*/
 
-    /**
-     * @var ModuleListInterface
-     */
+    /**#@-*/
     private $moduleList;
 
     /**

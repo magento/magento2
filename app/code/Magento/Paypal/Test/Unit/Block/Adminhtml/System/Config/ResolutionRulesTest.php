@@ -15,7 +15,7 @@ use Magento\Paypal\Model\Config\Rules\Reader;
  *
  * Test for class \Magento\Paypal\Block\Adminhtml\System\Config\ResolutionRules
  */
-class ResolutionRulesTest extends \PHPUnit_Framework_TestCase
+class ResolutionRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResolutionRules

@@ -14,7 +14,7 @@ use Magento\Payment\Block\Transparent\Iframe;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorizenet\Model\Directpost
@@ -107,7 +107,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->setMethods(['getId', 'getState', 'getIncrementId', 'registerCancellation', 'loadByIncrementId', 'save'])
             ->disableOriginalConstructor()
@@ -139,8 +139,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getParams'])
             ->getMockForAbstractClass();
         $responseMock = $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class);
-        $redirectMock = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->setMethods(['getObjectManager', 'getRequest', 'getResponse', 'getRedirect', 'getMessageManager'])

@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class CcTypeTest
  */
-class CcTypeTest extends \PHPUnit_Framework_TestCase
+class CcTypeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
