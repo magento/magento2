@@ -159,7 +159,10 @@ class Builder
 
         if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
             foreach ($bindValue as $item) {
-                $expression .= " OR (FIND_IN_SET ({$item}, {$argument}) > 0)";
+                $expression .= $this->_connection->quoteInto(
+                    " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
+                    $item
+                );
             }
         }
 
