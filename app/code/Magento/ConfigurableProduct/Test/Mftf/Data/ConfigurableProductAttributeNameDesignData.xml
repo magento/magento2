@@ -9,20 +9,20 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="NewProductsData" type="user">
-        <data key="productName">Shoes</data>
+        <data key="productName" unique="prefix">Shoes</data>
         <data key="price">60</data>
         <data key="weight">100</data>
         <data key="defaultLabel">design</data>
-        <data key="adminField1">red</data>
-        <data key="defaultStoreViewField1">red123</data>
-        <data key="adminField2">blue</data>
-        <data key="defaultStoreViewField2">blue123</data>
-        <data key="adminField3">yellow</data>
-        <data key="defaultStoreViewField3">yellow123</data>
-        <data key="adminField4">green</data>
-        <data key="defaultStoreViewField4">green123</data>
-        <data key="adminField5">black</data>
-        <data key="defaultStoreViewField5">black123</data>
+        <data key="adminFieldRed">red</data>
+        <data key="defaultStoreViewFieldRed">red123</data>
+        <data key="adminFieldBlue">blue</data>
+        <data key="defaultStoreViewFieldBlue">blue123</data>
+        <data key="adminFieldYellow">yellow</data>
+        <data key="defaultStoreViewFieldYellow">yellow123</data>
+        <data key="adminFieldGreen">green</data>
+        <data key="defaultStoreViewFieldGreen">green123</data>
+        <data key="adminFieldBlack">black</data>
+        <data key="defaultStoreViewFieldBlack">black123</data>
         <data key="attributeCodeField">bug91524</data>
     </entity>
 

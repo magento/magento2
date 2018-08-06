@@ -13,13 +13,11 @@
 
         <!--Click on Catalog item-->
         <click stepKey="clickOnCatalogItem" selector="{{CatalogProductsSection.catalogItem}}"/>
-
-        <waitForPageLoad stepKey="waitForCatalogLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCatalogLoad"/>
 
         <!--Click on Products item-->
         <click stepKey="clickOnProductItem" selector="{{CatalogProductsSection.productItem}}"/>
-
-        <waitForPageLoad stepKey="waitForCatalogProductPageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCatalogProductPageLoad"/>
 
         <!--Assert we have gone desired page successfully-->
         <seeInCurrentUrl stepKey="assertWeAreOnTheCatalogProductPage" url="{{assertionData.catalogProduct}}"/>
@@ -33,8 +31,7 @@
 
         <!--Click on Configuration Product item-->
         <click stepKey="clickOnConfigurationProductItem" selector="{{ConfigurableProductSection.configProductItem}}"/>
-
-        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
 
         <!--Assert we have gone desired page successfully-->
         <seeInCurrentUrl stepKey="assertWeAreOnTheConfigurableProductPage" url="{{assertionData.configurableProduct}}"/>
@@ -54,17 +51,16 @@
 
         <!--Click "Create Configurations" button in configurations field-->
         <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
-
-        <wait stepKey="waitForCreateProductConfigurationsPageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCreateProductConfigurationsPageLoad"/>
 
         <!--Click "Create New Attribute" button-->
         <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
-
-        <wait stepKey="waitForNewAttributePageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
 
     </actionGroup>
 
-    <actionGroup name="FillNewAttributeFields">
+
+    <actionGroup name="CreateNewAttribute">
 
         <switchToIFrame stepKey="NewAttributePage" selector="{{NewProduct.newAttributeIFrame}}"/>
 
@@ -73,71 +69,92 @@
 
         <!--Add option 1 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption1"/>
-        <fillField stepKey="fillInAdminField1" selector="{{NewProduct.adminField1}}" userInput="{{NewProductsData.adminField1}}"/>
-        <fillField stepKey="fillInDefaultStoreViewField1" selector="{{NewProduct.defaultStoreViewField1}}" userInput="{{NewProductsData.defaultStoreViewField1}}"/>
+        <fillField stepKey="fillInAdminFieldRed" selector="{{NewProduct.adminFieldRed}}" userInput="{{NewProductsData.adminFieldRed}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldRed" selector="{{NewProduct.defaultStoreViewFieldRed}}" userInput="{{NewProductsData.defaultStoreViewFieldRed}}"/>
 
         <!--Add option 2 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption2"/>
-        <fillField stepKey="fillInAdminField2" selector="{{NewProduct.adminField2}}" userInput="{{NewProductsData.adminField2}}"/>
-        <fillField stepKey="fillInDefaultStoreViewField2" selector="{{NewProduct.defaultStoreViewField2}}" userInput="{{NewProductsData.defaultStoreViewField2}}"/>
+        <fillField stepKey="fillInAdminFieldBlue" selector="{{NewProduct.adminFieldBlue}}" userInput="{{NewProductsData.adminFieldBlue}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldBlue" selector="{{NewProduct.defaultStoreViewFieldBlue}}" userInput="{{NewProductsData.defaultStoreViewFieldBlue}}"/>
 
         <!--Add option 3 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption3"/>
-        <fillField stepKey="fillInAdminField3" selector="{{NewProduct.adminField3}}" userInput="{{NewProductsData.adminField3}}"/>
-        <fillField stepKey="fillInDefaultStoreViewField3" selector="{{NewProduct.defaultStoreViewField3}}" userInput="{{NewProductsData.defaultStoreViewField3}}"/>
+        <fillField stepKey="fillInAdminFieldYellow" selector="{{NewProduct.adminFieldYellow}}" userInput="{{NewProductsData.adminFieldYellow}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldYellow" selector="{{NewProduct.defaultStoreViewFieldYellow}}" userInput="{{NewProductsData.defaultStoreViewFieldYellow}}"/>
 
         <!--Add option 4 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption4"/>
-        <fillField stepKey="fillInAdminField4" selector="{{NewProduct.adminField4}}" userInput="{{NewProductsData.adminField4}}"/>
-        <fillField stepKey="fillInDefaultStoreViewField4" selector="{{NewProduct.defaultStoreViewField4}}" userInput="{{NewProductsData.defaultStoreViewField4}}"/>
+        <fillField stepKey="fillInAdminFieldGreen" selector="{{NewProduct.adminFieldGreen}}" userInput="{{NewProductsData.adminFieldGreen}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldGreen" selector="{{NewProduct.defaultStoreViewFieldGreen}}" userInput="{{NewProductsData.defaultStoreViewFieldGreen}}"/>
 
         <!--Add option 5 to attribute-->
         <click selector="{{NewProduct.addOptionButton}}" stepKey="clickAddOption5"/>
-        <fillField stepKey="fillInAdminField5" selector="{{NewProduct.adminField5}}" userInput="{{NewProductsData.adminField5}}"/>
-        <fillField stepKey="fillInDefaultStoreViewField5" selector="{{NewProduct.defaultStoreViewField5}}" userInput="{{NewProductsData.defaultStoreViewField5}}"/>
+        <fillField stepKey="fillInAdminFieldBlack" selector="{{NewProduct.adminFieldBlack}}" userInput="{{NewProductsData.adminFieldBlack}}"/>
+        <fillField stepKey="fillInDefaultStoreViewFieldBlack" selector="{{NewProduct.defaultStoreViewFieldBlack}}" userInput="{{NewProductsData.defaultStoreViewFieldBlack}}"/>
 
         <!--Click Save Attribute button-->
         <click selector="{{NewProduct.saveAttributeButton}}" stepKey="clickSaveAttributeButton"/>
-
-        <wait stepKey="waitForSavingSettings" time="3"/>
+        <waitForPageLoad stepKey="waitForSavingSettings"/>
 
         <!--Select created Attribute -->
         <click selector="{{ConfigurableProductSection.selectCreatedAttribute}}" stepKey="selectCreatedAttribute"/>
 
         <!--Click Next button-->
         <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton"/>
-
-        <wait stepKey="waitForNextPageLoaded" time="3"/>
+        <waitForPageLoad stepKey="waitForNextPageLoaded"/>
 
         <!--Select all the options of all the attributes button-->
-        <click selector="{{CreateProductConfigurations.item1}}" stepKey="selectItem1"/>
-        <click selector="{{CreateProductConfigurations.item2}}" stepKey="selectItem2"/>
-        <click selector="{{CreateProductConfigurations.item3}}" stepKey="selectItem3"/>
-        <click selector="{{CreateProductConfigurations.item4}}" stepKey="selectItem4"/>
-        <click selector="{{CreateProductConfigurations.item5}}" stepKey="selectItem5"/>
+        <click selector="{{CreateProductConfigurations.checkboxRed}}" stepKey="selectCheckboxRed"/>
+        <click selector="{{CreateProductConfigurations.checkboxBlue}}" stepKey="selectCheckboxBlue"/>
+        <click selector="{{CreateProductConfigurations.checkboxYellow}}" stepKey="selectCheckboxYellow"/>
+        <click selector="{{CreateProductConfigurations.checkboxGreen}}" stepKey="selectCheckboxGreen"/>
+        <click selector="{{CreateProductConfigurations.checkboxBlack}}" stepKey="selectCheckboxBlack"/>
 
         <!--Click Next button-->
         <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton2"/>
-
-        <wait stepKey="waitForBulkImagesPricePageLoaded" time="3"/>
+        <waitForPageLoad stepKey="waitForBulkImagesPricePageLoaded"/>
 
         <!--Click Next button-->
         <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton3"/>
-
-        <wait stepKey="waitForSummaryPageLoaded" time="3"/>
+        <waitForPageLoad stepKey="waitForSummaryPageLoaded"/>
 
         <!--Click Generate Configure button-->
         <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="generateConfigure"/>
-
-        <wait stepKey="waitForGenerateConfigure" time="3"/>
+        <waitForPageLoad stepKey="waitForGenerateConfigure"/>
 
         <!-- This Error message shouldn't appear: Test will pass when bug will be fixed-->
         <dontSee selector="{{CreateProductConfigurations.errorMessage}}" userInput="{{assertionData.errorMessage}}"  stepKey="dontSeeError"/>
 
         <!--Close frame-->
         <conditionalClick selector="{{ConfigurableProductSection.closeFrame}}" dependentSelector="{{ConfigurableProductSection.closeFrame}}" visible="1" stepKey="closeFrame"/>
+        <waitForPageLoad stepKey="waitForClosingFrame"/>
 
-        <wait stepKey="waitForClosingFrame" time="3"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteCreatedAttribute">
+
+        <!--Click on Stores item-->
+        <click stepKey="clickOnStoresItem" selector="{{CatalogProductsSection.storesItem}}"/>
+
+        <!--Click on Products item-->
+        <waitForElementVisible selector="{{CatalogProductsSection.storesProductItem}}" stepKey="waitForCatalogLoad"/>
+        <click stepKey="clickOnStoresProductItem" selector="{{CatalogProductsSection.storesProductItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresProductPageLoad"/>
+
+        <!--Click on created Attribute -->
+        <fillField stepKey="searchProductDefaultLabel" selector="{{CatalogProductsSection.searchDefaultLabelField}}" userInput="{{NewProductsData.defaultLabel}}"/>
+        <click stepKey="clickSearchButton" selector="{{CatalogProductsSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
+        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForAttributePropertiesPageLoad"/>
+
+        <!--Click on Delete Attribute item-->
+        <click stepKey="clickOnDeleteAttributeItem" selector="{{CatalogProductsSection.deleteAttributeItem}}"/>
+        <waitForPageLoad stepKey="waitForDeletedDialogOpened"/>
+
+        <!--Click on OK button-->
+        <click stepKey="clickOnOKButton" selector="{{CatalogProductsSection.okButton}}"/>
+        <waitForPageLoad stepKey="waitFordAttributeDeleted"/>
 
     </actionGroup>
 
@@ -145,28 +162,23 @@
 
         <!--Click on Stores item-->
         <click stepKey="clickOnStoresItem" selector="{{CatalogProductsSection.storesItem}}"/>
-
-        <waitForPageLoad stepKey="waitForCatalogLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCatalogLoad"/>
 
         <!--Click on Products item-->
         <click stepKey="clickOnStoresProductItem" selector="{{CatalogProductsSection.storesProductItem}}"/>
-
-        <waitForPageLoad stepKey="waitForStoresProductPageLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForStoresProductPageLoad"/>
 
         <!--Click on created Attribute item if it exist-->
         <conditionalClick selector="{{CatalogProductsSection.createdAttributeItem}}" dependentSelector="{{CatalogProductsSection.createdAttributeItem}}" visible="1" stepKey="clickOnCreatedAttributeItem"/>
-
-        <waitForPageLoad stepKey="waitForCreatedAttributeLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
 
         <!--Click on Delete Attribute item-->
         <conditionalClick stepKey="clickOnDeleteAttributeItem" selector="{{CatalogProductsSection.deleteAttributeItem}}" dependentSelector="{{CatalogProductsSection.deleteAttributeItem}}" visible="1"/>
-
-        <waitForPageLoad stepKey="waitForDeletedDialogOpened" time="3"/>
+        <waitForPageLoad stepKey="waitForDeletedDialogOpened"/>
 
         <!--Click on OK button-->
         <conditionalClick stepKey="clickOnOKButton" selector="{{CatalogProductsSection.okButton}}" dependentSelector="{{CatalogProductsSection.okButton}}" visible="1"/>
-
-        <waitForPageLoad stepKey="waitFordAttributeDeleted" time="3"/>
+        <waitForPageLoad stepKey="waitFordAttributeDeleted"/>
 
     </actionGroup>
 

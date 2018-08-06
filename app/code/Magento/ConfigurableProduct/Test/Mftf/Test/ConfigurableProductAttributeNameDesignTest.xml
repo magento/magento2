@@ -18,17 +18,26 @@
             <group value="product"/>
         </annotations>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <before>
+            <!-- Log in to Dashboard page -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!-- This actionGroup should be deleted and Test will pass after fixing the bug.-->
+            <actionGroup ref="DeleteCreatedAttributeIfExist" stepKey="deleteCreatedAttributeIfExist"/>
+        </before>
 
-        <actionGroup ref="DeleteCreatedAttributeIfExist" stepKey="deleteCreatedAttributeIfExist"/>
 
+        <!-- Navigate to Catalog-> Products -->
         <actionGroup ref="GotoCatalogProductsPage" stepKey="goToCatalogProductsPage"/>
-
+        <!-- Fill the fields on Configurable Product-->
         <actionGroup ref="GotoConfigurableProductPage" stepKey="goToConfigurableProductPage"/>
-
         <actionGroup ref="FillAllRequiredFields" stepKey="fillInAllRequiredFields"/>
+        <!-- Create New Attribute (Default Label= design) -->
+        <actionGroup ref="CreateNewAttribute" stepKey="createNewAttribute"/>
 
-        <actionGroup ref="FillNewAttributeFields" stepKey="fillInNewAttributeFields"/>
+        <after>
+            <!-- Delete Created Attribute -->
+            <actionGroup ref="DeleteCreatedAttribute" stepKey="deleteCreatedAttribute"/>
+        </after>
 
     </test>
 </tests>
