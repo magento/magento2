@@ -275,6 +275,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getMultipleValueSeparator()
     {
-        return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] ?? Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        return isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 }

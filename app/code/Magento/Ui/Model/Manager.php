@@ -382,6 +382,8 @@ class Manager implements ManagerInterface
      */
     protected function createName(array $componentData, $key, $componentName)
     {
-        return $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY] ?? sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
+        return isset($componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY])
+            ? $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY]
+            : sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
     }
 }
