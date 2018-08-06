@@ -191,6 +191,7 @@
         <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
         <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -200,14 +201,14 @@
         <!-- Switch to FR Store View Storefront -->
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
         <click selector="{{StorefrontHeaderSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
-        <waitForPageLoad stepKey="waitForPageLoad10"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('FR Custom Options 1')}}" stepKey="seeProductFrOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option1')}}" stepKey="productFrOptionDropDownOptionTitle1"/>
@@ -257,13 +258,13 @@
         <!-- Open Product Grid, Filter product and open -->
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions1">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
 
         <!-- Switcher to Store FR-->
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
@@ -273,7 +274,7 @@
 
         <!-- Open tab Customizable Options -->
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses4" />
 
         <!-- Update Option Customizable Options and Option Value 1-->
