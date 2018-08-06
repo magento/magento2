@@ -120,7 +120,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $extendedData = $data;
                 $extendedData['can_save_custom_options'] = $canSaveCustomOptions;
                 $this->copyToStores($extendedData, $productId);
-
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
