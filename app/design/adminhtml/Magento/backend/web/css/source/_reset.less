@@ -11,6 +11,7 @@ html {
     //  Prevent iOS text size adjust after orientation change, without disabling user zoom.
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     box-sizing: border-box;
 }
 
@@ -234,6 +235,7 @@ html input[type='button'],
 input[type='reset'],
 input[type='submit'] {
     -webkit-appearance: button;
+    appearance: button;
     cursor: pointer;
 }
 
@@ -275,6 +277,7 @@ input[type='number'] {
 //  Address 'appearance' set to 'searchfield' in Safari and Chrome.
 input[type='search'] {
     -webkit-appearance: textfield;
+    appearance: textfield;
 }
 
 //  Remove inner padding and search cancel button in Safari and Chrome on OS X.
@@ -283,6 +286,7 @@ input[type='search'] {
     &::-webkit-search-cancel-button,
     &::-webkit-search-decoration {
         -webkit-appearance: none;
+        appearance: none;
     }
 }
 
