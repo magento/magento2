@@ -202,10 +202,10 @@ class Subscription implements SubscriptionInterface
                 break;
 
             case Trigger::EVENT_UPDATE:
+                $tableName = $this->resource->getTableName($this->getTableName());
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-
-                if ($this->connection->isTableExists($this->getTableName())
-                    && $describe = $this->connection->describeTable($this->getTableName())
+                if ($this->connection->isTableExists($tableName) &&
+                    $describe = $this->connection->describeTable($tableName)
                 ) {
                     $columnNames = array_column($describe, 'COLUMN_NAME');
                     $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
@@ -213,7 +213,7 @@ class Subscription implements SubscriptionInterface
                         $columns = [];
                         foreach ($columnNames as $columnName) {
                             $columns[] = sprintf(
-                                'NEW.%1$s != OLD.%1$s',
+                                'NEW.%1$s <=> OLD.%1$s',
                                 $this->connection->quoteIdentifier($columnName)
                             );
                         }

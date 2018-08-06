@@ -48,6 +48,15 @@
         <requiredEntity type="product_option_value">ProductOptionValueDropdown1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueDropdown2</requiredEntity>
     </entity>
+    <entity name="ProductOptionDropDownWithLongValuesTitle" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDownWithLongTitles</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdownLongTitle1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdownLongTitle2</requiredEntity>
+    </entity>
     <entity name="ProductOptionRadiobutton" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionRadioButtons</data>
