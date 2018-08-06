@@ -52,7 +52,7 @@ class UpdaterTest extends TestCase
         }
         include $tmp;
 
-        return 'FakeNamespace\\FakeAction' .($index === 1? '' : $index);
+        return 'FakeNamespace\\FakeSubNamespace\\FakeAction' .($index === 1? '' : $index);
     }
 
     /**
@@ -84,9 +84,13 @@ class UpdaterTest extends TestCase
         if (!$wrote) {
             throw new \RuntimeException("Failed to write $updated");
         }
-        include $updated;
+        try {
+            include $updated;
+        } catch (\Throwable $exception) {
+            throw new \RuntimeException("Failed to include $updated", 0, $exception);
+        }
 
-        return "FakeNamespace\\$updatedName";
+        return "FakeNamespace\\FakeSubNamespace\\$updatedName";
     }
 
     /**
@@ -102,8 +106,8 @@ class UpdaterTest extends TestCase
     }
 
     /**
-     * @param int   $index
-     * @param array $methods
+     * @param int $index
+     * @param string[] $methods
      */
     private function tryFile(int $index, array $methods): void
     {

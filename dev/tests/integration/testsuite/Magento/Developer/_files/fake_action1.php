@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace FakeNamespace;
+namespace FakeNamespace\FakeSubNamespace;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Exception\NotFoundException;

@@ -40,6 +40,7 @@ class Updater
         $reflection = new \ReflectionClass($class);
         $file = $reflection->getFileName();
         $className = $reflection->getShortName();
+        $interfaceShortName = preg_replace('/^[a-z0-9\_\\\]+\\\/i', '', $interface);
         $fileContent = file_get_contents($file);
         if ($fileContent === false) {
             throw new \RuntimeException("Failed to read $file");
@@ -52,19 +53,24 @@ class Updater
             $beginning = preg_replace('/\s+?\n?\{$/', '', $found[0]);
             $rewrite = str_replace(
                 $found[0],
-                $beginning ." implements \\$interface\n{",
+                $beginning ." implements $interfaceShortName\n{",
                 $fileContent
             );
         } elseif (preg_match($withImplementsRegex, $fileContent, $found)) {
             $beginning = preg_replace('/\s+?\n?\{$/', '', $found[0]);
             $rewrite = str_replace(
                 $found[0],
-                $beginning .", \\$interface\n{",
+                $beginning .", $interfaceShortName\n{",
                 $fileContent
             );
         } else {
             throw new \RuntimeException("Cannot update $class");
         }
+        $rewrite = preg_replace(
+            '/(\nnamespace\s+[a-z0-9\_\\\\]+;\r?\n)/i',
+            '$1' .PHP_EOL .'use ' .$interface.' as ' .$interfaceShortName .';',
+            $rewrite
+        );
 
         $result = file_put_contents($file, $rewrite);
         if (!$result) {
