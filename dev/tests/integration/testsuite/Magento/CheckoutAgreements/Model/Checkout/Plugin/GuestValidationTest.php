@@ -41,7 +41,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
     private $paymentMethodManagement;
 
     /**
-     * @var \Magento\Quote\Model\ShippingAddressManagementInterface
+     * @var \Magento\Quote\Api\ShippingAddressManagementInterface
      */
     private $shippingAddressManagement;
 
@@ -70,7 +70,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             \Magento\Checkout\Api\TotalsInformationManagementInterface::class
         );
         $this->shippingAddressManagement = $this->objectManager->create(
-            \Magento\Quote\Model\ShippingAddressManagementInterface::class
+            \Magento\Quote\Api\ShippingAddressManagementInterface::class
         );
     }
 

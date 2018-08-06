@@ -62,7 +62,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
     protected $billingAddressManagement;
 
     /**
-     * @var \Magento\Quote\Model\ShippingAddressManagementInterface
+     * @var \Magento\Quote\Api\ShippingAddressManagementInterface
      */
     protected $shippingAddressManagement;
 
@@ -107,7 +107,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
             \Magento\Checkout\Api\TotalsInformationManagementInterface::class
         );
         $this->shippingAddressManagement = $this->objectManager->create(
-            \Magento\Quote\Model\ShippingAddressManagementInterface::class
+            \Magento\Quote\Api\ShippingAddressManagementInterface::class
         );
     }
 
