@@ -9,7 +9,7 @@ namespace Magento\Quote\Test\Unit\Model\GuestCart;
 class GuestShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface
+     * @var \Magento\Quote\Api\GuestShippingAddressManagementInterface
      */
     protected $model;
 
@@ -48,7 +48,7 @@ class GuestShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->shippingAddressManagementMock = $this->createMock(
-            \Magento\Quote\Model\ShippingAddressManagementInterface::class
+            \Magento\Quote\Api\ShippingAddressManagementInterface::class
         );
         $this->quoteAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
 

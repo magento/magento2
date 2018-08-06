@@ -5,10 +5,10 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface;
+use Magento\Quote\Api\GuestShippingAddressManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\ShippingAddressManagementInterface;
+use Magento\Quote\Api\ShippingAddressManagementInterface;
 
 /**
  * Shipping address management class for guest carts.
