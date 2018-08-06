@@ -6,7 +6,9 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-class UpdatePost extends \Magento\Checkout\Controller\Cart
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Empty customer's shopping cart

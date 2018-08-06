@@ -5,10 +5,11 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends RatingController
+class Index extends RatingController implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

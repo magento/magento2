@@ -6,11 +6,12 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
 
-class Result extends \Magento\Framework\App\Action\Action
+class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * Url factory

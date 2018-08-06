@@ -5,11 +5,12 @@
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
-class ListAjax extends ProductController
+class ListAjax extends ProductController implements HttpGetActionInterface
 {
     /**
      * Show list of product's reviews

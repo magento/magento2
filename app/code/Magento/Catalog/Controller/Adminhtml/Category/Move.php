@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Move extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

@@ -7,6 +7,7 @@
 
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
@@ -31,7 +32,7 @@ use Magento\Framework\Phrase;
  * Class EditPost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPost extends AbstractAccount implements CsrfAwareActionInterface
+class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Form code for data extractor

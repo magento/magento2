@@ -5,7 +5,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-class Index extends \Magento\Customer\Controller\Adminhtml\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
      * Customers list action

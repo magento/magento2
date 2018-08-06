@@ -6,7 +6,9 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-class Delete extends \Magento\Checkout\Controller\Cart
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Delete shopping cart item action

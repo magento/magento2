@@ -7,11 +7,12 @@
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpPostActionInterface
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator

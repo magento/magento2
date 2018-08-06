@@ -5,7 +5,9 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
-class RemoveItem extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class RemoveItem extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Checkout\Model\Sidebar

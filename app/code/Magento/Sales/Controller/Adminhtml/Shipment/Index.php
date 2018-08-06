@@ -6,6 +6,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index implements HttpGetActionInterface
 {
 }

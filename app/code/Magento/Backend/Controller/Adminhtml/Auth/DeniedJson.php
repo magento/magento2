@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

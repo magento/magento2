@@ -7,6 +7,7 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -20,7 +21,7 @@ use Magento\Sales\Model\Service\InvoiceService;
  * Class UpdateQty
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements HttpPostActionInterface
 {
     /**
      * @var JsonFactory

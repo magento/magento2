@@ -6,9 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Clear extends \Magento\Catalog\Controller\Product\Compare
+class Clear extends \Magento\Catalog\Controller\Product\Compare implements HttpPostActionInterface
 {
     /**
      * Remove all items from comparison list

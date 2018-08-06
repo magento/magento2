@@ -7,6 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -33,7 +34,7 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends Attribute
+class Save extends Attribute implements HttpPostActionInterface
 {
     /**
      * @var BuildFactory

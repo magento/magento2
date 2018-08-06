@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

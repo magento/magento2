@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Eav\Api\AttributeSetRepositoryInterface

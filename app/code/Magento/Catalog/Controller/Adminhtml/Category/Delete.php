@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Delete extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface

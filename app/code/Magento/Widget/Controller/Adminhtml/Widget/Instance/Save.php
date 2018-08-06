@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implements HttpPostActionInterface
 {
     /**
      * Save action

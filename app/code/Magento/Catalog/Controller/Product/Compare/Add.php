@@ -6,9 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Add extends \Magento\Catalog\Controller\Product\Compare
+class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPostActionInterface
 {
     /**
      * Add item to compare list

@@ -5,10 +5,11 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Start extends ImportResultController
+class Start extends ImportResultController implements HttpPostActionInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Import

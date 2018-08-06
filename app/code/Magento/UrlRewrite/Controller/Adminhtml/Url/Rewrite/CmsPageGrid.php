@@ -6,7 +6,9 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class CmsPageGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class CmsPageGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpPostActionInterface
 {
     /**
      * Ajax CMS pages grid action

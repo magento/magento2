@@ -6,6 +6,7 @@
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
@@ -13,7 +14,7 @@ use Magento\Security\Model\SecurityCookie;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\User\Controller\Adminhtml\User
+class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie

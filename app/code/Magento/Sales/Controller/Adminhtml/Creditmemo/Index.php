@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Index
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Index implements HttpGetActionInterface
 {
     /**
      * Index page

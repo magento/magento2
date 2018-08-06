@@ -6,7 +6,9 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol implements HttpGetActionInterface
 {
     /**
      * Show Currency Symbols Management dialog

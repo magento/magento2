@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
@@ -13,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-class Validate extends ImportResultController
+class Validate extends ImportResultController implements HttpPostActionInterface
 {
     /**
      * @var Import

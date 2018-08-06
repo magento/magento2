@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -21,7 +22,7 @@ use Magento\Quote\Model\Quote;
  * @package Magento\Paypal\Controller\Transparent
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestSecureToken extends \Magento\Framework\App\Action\Action
+class RequestSecureToken extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
      * @var JsonFactory

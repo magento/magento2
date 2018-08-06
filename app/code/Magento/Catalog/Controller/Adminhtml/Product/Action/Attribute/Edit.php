@@ -6,10 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

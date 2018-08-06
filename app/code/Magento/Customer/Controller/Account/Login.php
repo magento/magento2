@@ -6,12 +6,13 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Controller\AbstractAccount;
 
-class Login extends AbstractAccount
+class Login extends AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var Session

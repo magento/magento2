@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpPostActionInterface
 {
     /**
      * Save status form processing

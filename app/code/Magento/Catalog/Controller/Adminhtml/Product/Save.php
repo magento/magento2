@@ -7,6 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Store\Model\StoreManagerInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * @var Initialization\Helper

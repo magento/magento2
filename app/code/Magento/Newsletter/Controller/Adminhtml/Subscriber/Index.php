@@ -6,7 +6,9 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber implements HttpGetActionInterface
 {
     /**
      * Newsletter subscribers page

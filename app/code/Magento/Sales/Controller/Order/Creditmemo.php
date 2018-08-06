@@ -6,8 +6,9 @@
  */
 namespace Magento\Sales\Controller\Order;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Sales\Controller\OrderInterface;
 
-class Creditmemo extends \Magento\Sales\Controller\AbstractController\Creditmemo implements OrderInterface
+class Creditmemo extends \Magento\Sales\Controller\AbstractController\Creditmemo implements OrderInterface, HttpGetActionInterface
 {
 }

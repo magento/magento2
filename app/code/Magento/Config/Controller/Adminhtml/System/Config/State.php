@@ -6,7 +6,9 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-class State extends AbstractScopeConfig
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class State extends AbstractScopeConfig implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory

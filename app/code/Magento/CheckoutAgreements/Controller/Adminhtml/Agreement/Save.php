@@ -6,7 +6,9 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpPostActionInterface
 {
     /**
      * @return void

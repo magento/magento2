@@ -6,7 +6,9 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
-class Success extends \Magento\Checkout\Controller\Onepage
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Success extends \Magento\Checkout\Controller\Onepage implements HttpGetActionInterface
 {
     /**
      * Order success action

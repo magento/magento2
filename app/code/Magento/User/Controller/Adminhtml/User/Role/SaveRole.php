@@ -7,6 +7,7 @@
 
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -16,7 +17,7 @@ use Magento\Security\Model\SecurityCookie;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
+class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements HttpPostActionInterface
 {
     /**
      * Session keys for Info form data

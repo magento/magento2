@@ -6,7 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class NewAction extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory

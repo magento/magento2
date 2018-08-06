@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
