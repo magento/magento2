@@ -154,11 +154,11 @@ class Builder
             $this->_conditionOperatorMap[$conditionOperator]
         );
 
-        $bindedValue = $condition->getBindArgumentValue();
-        $expression = $value . $this->_connection->quoteInto($sql, $bindedValue);
+        $bindValue = $condition->getBindArgumentValue();
+        $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
 
-        if (in_array($conditionOperator, ['()', '{}']) && is_array($bindedValue)) {
-            foreach ($bindedValue as $item) {
+        if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
+            foreach ($bindValue as $item) {
                 $expression .= " OR (FIND_IN_SET ({$item}, {$argument}) > 0)";
             }
         }
