@@ -66,9 +66,10 @@ class Updater
         } else {
             throw new \RuntimeException("Cannot update $class");
         }
+        $addNewLine = !preg_match('/(\nnamespace\s+[a-z0-9\_\\\\]+;\r?\n\r?\nuse)/i', $rewrite);
         $rewrite = preg_replace(
             '/(\nnamespace\s+[a-z0-9\_\\\\]+;\r?\n)/i',
-            '$1' .PHP_EOL .'use ' .$interface.' as ' .$interfaceShortName .';',
+            '$1' .PHP_EOL .'use ' .$interface.' as ' .$interfaceShortName .';' .($addNewLine ? PHP_EOL : ''),
             $rewrite
         );
 
