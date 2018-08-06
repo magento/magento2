@@ -69,7 +69,7 @@ class Company extends AbstractWidget
         parent::_construct();
 
         // default template location
-        $this->setTemplate('widget/company.phtml');
+        $this->setTemplate('Magento_Customer::widget/company.phtml');
     }
 
     /**
