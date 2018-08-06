@@ -125,7 +125,7 @@ class Form extends \Magento\Framework\View\Element\Template
             );
         }
 
-        $this->setTemplate('form.phtml');
+        $this->setTemplate('Magento_Review::form.phtml');
     }
 
     /**
