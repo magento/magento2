@@ -8,6 +8,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSampleInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 
@@ -278,7 +279,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['method name' => 'addData', 'type' => 'array[]'],
-            ['method name' => 'addObjectList', 'type' => 'TSampleInterface[]']
+            ['method name' => 'addObjectList', 'type' => TSampleInterface::class . '[]']
         ];
     }
 
