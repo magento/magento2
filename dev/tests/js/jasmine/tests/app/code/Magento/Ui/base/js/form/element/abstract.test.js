@@ -303,5 +303,11 @@ define([
                 expect(model.validate).toHaveBeenCalled();
             });
         });
+        describe('serviceDisabled property', function () {
+            it('check property state', function () {
+                expect(typeof model.serviceDisabled).toEqual('function');
+                expect(model.serviceDisabled()).toBeFalsy();
+            });
+        });
     });
 });
