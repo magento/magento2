@@ -81,6 +81,7 @@
         "zendframework/zend-view": "~2.10.0"
     },
     "require-dev": {
+        "magento/magento2-functional-testing-framework": "2.3.0",
         "friendsofphp/php-cs-fixer": "~2.12.0",
         "lusitanian/oauth": "~0.8.10",
         "pdepend/pdepend": "2.5.2",
@@ -278,7 +279,8 @@
         },
         "psr-0": {
             "": [
-                "app/code/"
+                "app/code/",
+                "generated/code/"
             ]
         },
         "files": [
