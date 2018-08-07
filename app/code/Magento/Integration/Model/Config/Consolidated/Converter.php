@@ -82,13 +82,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             // Add root resource if any child has been added
-            if (! empty($result[$integrationName][self::API_RESOURCES])) {
+            if (!empty($result[$integrationName][self::API_RESOURCES])) {
                 array_unshift($result[$integrationName][self::API_RESOURCES], $allResources[1]['id']);
             }
 
             // Remove any duplicates added parents
-            $result[$integrationName][self::API_RESOURCES] =
-                array_values(array_unique($result[$integrationName][self::API_RESOURCES]));
+            $result[$integrationName][self::API_RESOURCES] = array_values(
+                array_unique($result[$integrationName][self::API_RESOURCES])
+            );
         }
         return $result;
     }
