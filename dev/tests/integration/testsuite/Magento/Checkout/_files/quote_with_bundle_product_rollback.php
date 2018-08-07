@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /*
  * Since the bundle product creation GUI doesn't allow to choose values for bundled products' custom options,
