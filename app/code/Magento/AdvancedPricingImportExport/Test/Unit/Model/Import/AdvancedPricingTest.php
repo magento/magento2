@@ -209,6 +209,10 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Test method validateRow against its result.
      *
      * @dataProvider validateRowResultDataProvider
+     * @param array $rowData
+     * @param string|null $behavior
+     * @param bool $expectedResult
+     * @throws \ReflectionException
      */
     public function testValidateRowResult($rowData, $behavior, $expectedResult)
     {
@@ -234,6 +238,10 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Test method validateRow whether AddRowError is called.
      *
      * @dataProvider validateRowAddRowErrorCallDataProvider
+     * @param array $rowData
+     * @param string|null $behavior
+     * @param string $error
+     * @throws \ReflectionException
      */
     public function testValidateRowAddRowErrorCall($rowData, $behavior, $error)
     {
@@ -324,6 +332,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * Take into consideration different data and check relative internal calls.
      *
      * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
+     * @param array $data
+     * @param string $tierCustomerGroupId
+     * @param string $groupCustomerGroupId
+     * @param string $tierWebsiteId
+     * @param string $groupWebsiteId
+     * @param array $expectedTierPrices
+     * @throws \ReflectionException
      */
     public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
         $data,
@@ -956,6 +971,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param $object
      * @param $property
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function getPropertyValue($object, $property)
     {
@@ -972,6 +988,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param $object
      * @param $property
      * @param $value
+     * @return mixed
+     * @throws \ReflectionException
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
@@ -989,8 +1007,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param object $object
      * @param string $method
      * @param array $args
-     *
-     * @return mixed the method result.
+     * @return mixed
+     * @throws \ReflectionException
      */
     private function invokeMethod($object, $method, $args = [])
     {
@@ -1007,6 +1025,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      * @param array $methods
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \ReflectionException
      */
     private function getAdvancedPricingMock($methods = [])
     {

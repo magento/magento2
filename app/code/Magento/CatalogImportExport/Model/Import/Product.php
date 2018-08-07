@@ -294,7 +294,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually'
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => "Value for multiselect attribute %s contains duplicated values",
     ];
     //@codingStandardsIgnoreEnd
 
@@ -907,6 +908,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
         }
         return Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+    }
+
+    /**
+     * Return empty attribute value constant
+     *
+     * @return string
+     */
+    public function getEmptyAttributeValueConstant()
+    {
+        if (!empty($this->_parameters[Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT])) {
+            return $this->_parameters[Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT];
+        }
+        return Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT;
     }
 
     /**

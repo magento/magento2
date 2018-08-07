@@ -87,7 +87,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
             return false;
         }
         $this->_loadVersion('db');
-        return isset(self::$schemaVersions[$moduleName]) ? self::$schemaVersions[$moduleName] : false;
+        return self::$schemaVersions[$moduleName] ?? false;
     }
 
     /**
@@ -119,7 +119,7 @@ class ModuleResource extends AbstractDb implements ResourceInterface
             return false;
         }
         $this->_loadVersion('data');
-        return isset(self::$dataVersions[$moduleName]) ? self::$dataVersions[$moduleName] : false;
+        return self::$dataVersions[$moduleName] ?? false;
     }
 
     /**

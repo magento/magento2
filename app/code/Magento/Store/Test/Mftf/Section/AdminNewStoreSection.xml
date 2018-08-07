@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminNewStoreSection">
+        <element name="storeNameTextField" type="input" selector="#store_name"/>
+        <element name="storeCodeTextField" type="input" selector="#store_code"/>
+        <element name="statusDropdown" type="select" selector="#store_is_active"/>
+        <element name="storeGrpDropdown" type="select" selector="#store_group_id"/>
+        <element name="sortOrderTextField" type="input" selector="#store_sort_order"/>
+        <element name="acceptNewStoreViewCreation" type="button" selector=".action-primary.action-accept" />
+    </section>
+</sections>

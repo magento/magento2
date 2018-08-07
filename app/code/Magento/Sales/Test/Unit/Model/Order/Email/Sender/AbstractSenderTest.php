@@ -168,8 +168,8 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
      */
     protected function stepSend(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendExpects,
+        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $sendCopyToExpects
     ) {
         $senderMock = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send', 'sendCopyTo']);
         $senderMock->expects($sendExpects)

@@ -38,6 +38,9 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
                     "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
                         'Magento_ConfigurableProduct') ?: 'replace'; ?>"
                 }
+            },
+            "*" : {
+                "Magento_ConfigurableProduct/js/catalog-add-to-cart": {}
             }
         }
     </script>

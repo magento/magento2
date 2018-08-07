@@ -18,6 +18,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         '/config/indexer/source'         => 'name',
         '/config/indexer/fieldset'       => 'name',
         '/config/indexer/fieldset/field' => 'name',
+        '/config/indexer/dependencies/indexer' => 'id',
     ];
 
     /**

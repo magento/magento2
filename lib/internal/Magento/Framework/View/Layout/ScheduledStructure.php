@@ -146,7 +146,7 @@ class ScheduledStructure
      */
     public function getElementToSort($elementName, array $default = [])
     {
-        return isset($this->elementsToSort[$elementName]) ? $this->elementsToSort[$elementName] : $default;
+        return $this->elementsToSort[$elementName] ?? $default;
     }
 
     /**
@@ -257,7 +257,7 @@ class ScheduledStructure
      */
     public function getElementToMove($elementName, $default = null)
     {
-        return isset($this->scheduledMoves[$elementName]) ? $this->scheduledMoves[$elementName] : $default;
+        return $this->scheduledMoves[$elementName] ?? $default;
     }
 
     /**
@@ -370,7 +370,7 @@ class ScheduledStructure
      */
     public function getStructureElementData($elementName, $default = null)
     {
-        return isset($this->scheduledData[$elementName]) ? $this->scheduledData[$elementName] : $default;
+        return $this->scheduledData[$elementName] ?? $default;
     }
 
     /**
@@ -524,6 +524,6 @@ class ScheduledStructure
      */
     private function getArrayValueByKey($key, array $array)
     {
-        return isset($array[$key]) ? $array[$key] : [];
+        return $array[$key] ?? [];
     }
 }

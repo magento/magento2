@@ -658,7 +658,6 @@ Comma-separated.,Comma-separated.
 "Product Listing Sort by","Product Listing Sort by"
 "Allow All Products per Page","Allow All Products per Page"
 "Whether to show ""All"" option in the ""Show X Per Page"" dropdown","Whether to show ""All"" option in the ""Show X Per Page"" dropdown"
-"Allow Dynamic Media URLs","Allow Dynamic Media URLs"
 "E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance."
 "Product Image Placeholders","Product Image Placeholders"
 "Search Engine Optimization","Search Engine Optimization"
