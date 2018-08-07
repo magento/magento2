@@ -136,10 +136,6 @@
         <!--Visibilty-->
         <selectOption selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Not Visible Individually" stepKey="openVisibility"/>
 
-        <!--Categories-->
-        <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="clickOnCategoriesDropDown"/>
-        <click selector="{{AdminProductFormBundleSection.categoryFieldName}}" stepKey="clickOnCategoriesFieldName"/>
-
         <!--New from - to-->
         <fillField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="10/20/2018" stepKey="fillInFirstDate"/>
         <fillField selector="{{AdminProductFormBundleSection.toDate}}" userInput="10/20/2018" stepKey="fillInSecondDate"/>
