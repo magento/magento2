@@ -328,5 +328,4 @@ class CarrierNegotiatedRatesTest extends \PHPUnit\Framework\TestCase
             [1, 1, '/_files/ups_rates_response_negotiated.xml', '03', 9.43 ],
         ];
     }
-
 }
