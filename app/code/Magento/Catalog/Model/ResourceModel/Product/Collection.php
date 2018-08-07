@@ -663,12 +663,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_prepareUrlDataObject();
+        $this->prepareStoreId();
 
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
         }
 
         return $this;
+    }
+
+    /**
+     * Add Store ID to products from collection.
+     *
+     * @return void
+     */
+    private function prepareStoreId()
+    {
+        if ($this->getStoreId() !== null) {
+            /** @var $item \Magento\Catalog\Model\Product */
+            foreach ($this->_items as $item) {
+                $item->setStoreId($this->getStoreId());
+            }
+        }
     }
 
     /**
