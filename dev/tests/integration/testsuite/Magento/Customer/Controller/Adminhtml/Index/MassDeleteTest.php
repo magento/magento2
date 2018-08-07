@@ -7,6 +7,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -38,7 +39,10 @@ class MassDeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testMassDeleteAction()
     {
-        $this->getRequest()->setPostValue('selected', [1])->setPostValue('namespace', 'customer_listing');
+        $this->getRequest()
+            ->setPostValue('selected', [1])
+            ->setPostValue('namespace', 'customer_listing')
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were deleted.']),
@@ -53,7 +57,9 @@ class MassDeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testMassDeleteActionNoCustomerIds()
     {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
+        $this->getRequest()
+            ->setPostValue('namespace', 'customer_listing')
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['An item needs to be selected. Select and try again.']),

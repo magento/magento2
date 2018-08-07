@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -114,7 +115,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Request getter
      *
-     * @return \Magento\Framework\App\RequestInterface
+     * @return \Magento\Framework\App\RequestInterface|HttpRequest
      */
     public function getRequest()
     {
@@ -127,7 +128,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Response getter
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface|HttpResponse
      */
     public function getResponse()
     {

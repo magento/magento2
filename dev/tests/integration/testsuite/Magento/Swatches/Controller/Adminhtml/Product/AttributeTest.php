@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -175,6 +176,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         int $expectedOptionsCount,
         array $expectedLabels
     ) : void {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($attributeData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(

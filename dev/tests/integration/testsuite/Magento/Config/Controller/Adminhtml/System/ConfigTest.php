@@ -7,6 +7,7 @@
 namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -43,6 +44,8 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->setParam(
             'section',
             'web'
+        )->setMethod(
+            HttpRequest::METHOD_POST
         );
         $this->dispatch('backend/admin/system_config/save');
 

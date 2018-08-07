@@ -7,6 +7,7 @@ namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -130,6 +131,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
         $this->getRequest()->setParam('id', $groupId);
         $this->getRequest()->setParam('code', self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -164,6 +166,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testSaveActionCreateNewGroupWithoutCode()
     {
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -175,6 +178,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     public function testSaveActionForwardNewCreateNewGroup()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/group/save');
         $responseBody = $this->getResponse()->getBody();
         $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
@@ -186,6 +190,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testSaveActionForwardNewEditExistingGroup()
     {
         $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('id', $groupId);
         $this->dispatch('backend/customer/group/save');
 
@@ -197,6 +202,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $this->getRequest()->setParam('id', 10000);
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -220,6 +226,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
         $this->getRequest()->setParam('code', self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -240,6 +247,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $originalCode = $this->groupRepository->getById($groupId)->getCode();
 
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 

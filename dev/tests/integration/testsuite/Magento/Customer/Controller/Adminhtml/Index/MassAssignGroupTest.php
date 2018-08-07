@@ -8,6 +8,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -58,7 +59,8 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()
             ->setParam('group', 0)
             ->setPostValue('namespace', 'customer_listing')
-            ->setPostValue('selected', [1]);
+            ->setPostValue('selected', [1])
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were updated.']),
@@ -84,7 +86,8 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()
             ->setParam('group', 0)
             ->setPostValue('namespace', 'customer_listing')
-            ->setPostValue('selected', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);
+            ->setPostValue('selected', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21])
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 21 record(s) were updated.']),
@@ -103,7 +106,10 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
-        $this->getRequest()->setParam('group', 0)->setPostValue('namespace', 'customer_listing');
+        $this->getRequest()
+            ->setParam('group', 0)
+            ->setPostValue('namespace', 'customer_listing')
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['An item needs to be selected. Select and try again.']),

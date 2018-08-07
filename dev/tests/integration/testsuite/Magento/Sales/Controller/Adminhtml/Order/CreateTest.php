@@ -8,6 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -29,6 +30,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
     public function testLoadBlockAction()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -46,6 +48,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->addProducts(
             [$product->getId() => ['qty' => 1]]
         );
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', 'data');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -61,6 +64,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testLoadBlockActions($block, $expected)
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', $block);
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -90,6 +94,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         )->addProducts(
             [$product->getId() => ['qty' => 1]]
         );
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('block', 'items');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
@@ -230,6 +235,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea('adminhtml');
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/sales/order_create/save');
         $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
     }
@@ -263,6 +269,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             'region' => 'Kyivska',
             'region_id' => 1
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'order' => ['billing_address' => $data],

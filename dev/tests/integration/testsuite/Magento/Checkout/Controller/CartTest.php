@@ -18,6 +18,7 @@ use Magento\TestFramework\Request;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -211,6 +212,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'update_cart_action' => 'update_qty',
             'form_key' => $formKey->getFormKey(),
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         /** @var $customerSession \Magento\Customer\Model\Session */
         $customerSession = $this->_objectManager->create(\Magento\Customer\Model\Session::class);
@@ -273,6 +275,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'isAjax' => 1
         ];
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
         $quote =  $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);

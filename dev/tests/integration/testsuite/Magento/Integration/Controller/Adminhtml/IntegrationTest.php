@@ -7,6 +7,7 @@
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\TestFramework\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * \Magento\Integration\Controller\Adminhtml\Integration
@@ -94,6 +95,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $integrationName = $this->_integration->getName();
         $this->getRequest()->setParam('id', $integrationId);
         $url = 'http://magento.ll/endpoint_url';
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,
@@ -115,6 +117,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     {
         $url = 'http://magento.ll/endpoint_url';
         $integrationName = md5(rand());
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,

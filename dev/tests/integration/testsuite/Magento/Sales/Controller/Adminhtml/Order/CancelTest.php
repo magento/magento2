@@ -5,12 +5,15 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Request\Http;
+
 class CancelTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {
         $this->resource = 'Magento_Sales::cancel';
         $this->uri = 'backend/sales/order/cancel';
+        $this->httpMethod = Http::METHOD_POST;
         parent::setUp();
     }
 }

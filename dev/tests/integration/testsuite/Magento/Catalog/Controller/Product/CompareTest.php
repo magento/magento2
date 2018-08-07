@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Product;
 
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
@@ -39,6 +40,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $product = $this->productRepository->get('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch(
             sprintf(
                 'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
@@ -72,6 +74,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireVisitorWithTwoProducts();
         $product = $this->productRepository->get('simple_product_2');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
         $this->assertSessionMessages(
@@ -88,6 +91,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireCustomerWithTwoProducts();
         $product = $this->productRepository->get('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
         $secondProduct = $this->productRepository->get('simple_product_2');
 
@@ -131,6 +135,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_requireVisitorWithTwoProducts();
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/clear');
 
         $this->assertSessionMessages(
@@ -150,6 +155,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_prepareCompareListWithProductNameXss();
         $product = $this->productRepository->get('product-with-xss');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
 
         $this->assertSessionMessages(

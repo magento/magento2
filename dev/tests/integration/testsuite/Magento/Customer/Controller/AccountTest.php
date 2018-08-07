@@ -22,6 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -94,10 +95,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $email = 'customer@example.com';
 
-        $this->getRequest()
-            ->setPostValue([
-                'email' => $email,
-            ]);
+        $this->getRequest()->setPostValue(['email' => $email]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
@@ -374,10 +373,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $email = 'customer@example.com';
 
-        $this->getRequest()
-            ->setPostValue([
-                'email' => $email,
-            ]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['email' => $email]);
 
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
@@ -397,6 +394,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testForgotPasswordPostWithBadEmailAction()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()
             ->setPostValue([
                 'email' => 'bad@email',

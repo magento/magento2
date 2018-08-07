@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
  * A parent class for backend controllers - contains directives for admin user creation and authentication
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -35,6 +37,11 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      * @var string
      */
     protected $uri = null;
+
+    /**
+     * @var string
+     */
+    protected $httpMethod = HttpRequest::METHOD_GET;
 
     protected function setUp()
     {
@@ -91,6 +98,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->uri === null) {
             $this->markTestIncomplete('AclHasAccess test is not complete');
         }
+        $this->getRequest()->setMethod($this->httpMethod);
         $this->dispatch($this->uri);
         $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
@@ -101,6 +109,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->resource === null) {
             $this->markTestIncomplete('Acl test is not complete');
         }
+        $this->getRequest()->setMethod($this->httpMethod);
         $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl()
             ->deny(null, $this->resource);
