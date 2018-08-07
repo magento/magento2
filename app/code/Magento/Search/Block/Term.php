@@ -71,6 +71,7 @@ class Term extends Template
      * Load terms and try to sort it by names
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _loadTerms()
     {
@@ -109,6 +110,7 @@ class Term extends Template
 
     /**
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTerms()
     {
