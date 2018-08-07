@@ -932,7 +932,7 @@ abstract class AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return floatval($qty);
+        return (float)$qty;
     }
 
     /**
