@@ -69,7 +69,7 @@ class Fax extends AbstractWidget
         parent::_construct();
 
         // default template location
-        $this->setTemplate('widget/fax.phtml');
+        $this->setTemplate('Magento_Customer::widget/fax.phtml');
     }
 
     /**
