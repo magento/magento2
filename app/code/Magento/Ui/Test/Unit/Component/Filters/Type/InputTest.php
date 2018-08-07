@@ -196,7 +196,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
                 'test_date',
                 ['test_date' => '%'],
                 ['like' => '%\%%'],
-            ],
+            ]
         ];
     }
 }
