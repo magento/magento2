@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
@@ -149,7 +151,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      *
      * @return bool
      */
-    private function isEavIndexerEnabled()
+    private function isEavIndexerEnabled(): bool
     {
         $eavIndexerStatus = $this->scopeConfig->getValue(
             self::ENABLE_EAV_INDEXER,
