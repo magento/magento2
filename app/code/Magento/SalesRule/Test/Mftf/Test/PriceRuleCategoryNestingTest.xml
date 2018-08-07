@@ -4,7 +4,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<tests xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <test name="PriceRuleCategoryNestingTest">
         <annotations>
             <description value="Category nesting level must be the same as were created in categories."/>
