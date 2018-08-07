@@ -11,6 +11,7 @@
     <test name="ThemeTest">
         <annotations>
             <features value="Theme Test"/>
+            <stories value="Themes"/>
             <title value="Magento Rush theme should not be available in Themes grid"/>
             <description value="Magento Rush theme should not be available in Themes grid"/>
             <severity value="MAJOR"/>

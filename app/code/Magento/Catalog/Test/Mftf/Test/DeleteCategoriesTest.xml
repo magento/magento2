@@ -11,6 +11,7 @@
     <test name="DeleteCategoriesTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Delete categories"/>
             <title value="Admin should be able to delete the default root category and subcategories and still see products in the storefront"/>
             <description value="Admin should be able to delete the default root category and subcategories and still see products in the storefront"/>
             <severity value="CRITICAL"/>

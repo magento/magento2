@@ -16,6 +16,7 @@
             <description value="admin should be able to delete a configurable product"/>
             <testCaseId value="MC-87"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -106,6 +107,7 @@
             <description value="admin should be able to mass delete configurable products"/>
             <testCaseId value="MC-99"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>

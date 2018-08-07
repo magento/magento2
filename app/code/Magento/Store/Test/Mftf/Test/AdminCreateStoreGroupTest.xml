@@ -14,6 +14,7 @@
             <title value="Admin should be able to create a store group"/>
             <description value="Admin should be able to create a store group"/>
             <group value="store"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData stepKey="b1" entity="customStoreGroup"/>

@@ -11,6 +11,7 @@
     <test name="StorefrontPurchaseProductCustomOptionsDifferentStoreViewsTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Custom options different storeviews"/>
             <title value="Admin should be able to sell products with different variants of their own"/>
             <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>

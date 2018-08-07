@@ -11,6 +11,7 @@
     <test name="AdminMultipleWebsitesUseDefaultValuesTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Create websites"/>
             <title value="Use Default Value checkboxes should be checked for new website scope"/>
             <description value="Use Default Value checkboxes for product attribute should be checked for new website scope"/>
             <severity value="MAJOR"/>
