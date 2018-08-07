@@ -6,8 +6,9 @@
 define([
     'jquery',
     'mage/translate',
+    'underscore',
     'jquery/ui'
-], function ($, $t) {
+], function ($, $t, _) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -75,17 +76,33 @@ define([
         /**
          * Handler for the form 'submit' event
          *
-         * @param {Object} form
+         * @param {jQuery} form
          */
         submitForm: function (form) {
             this.ajaxSubmit(form);
         },
 
         /**
-         * @param {String} form
+         * Extract product Id from form data.
+         *
+         * @param {jQuery} $form - jQuery form
+         * @return {String}
+         * @private
+         */
+        _getProductId: function ($form) {
+            var product = _.findWhere($form.serializeArray(), {
+                name: 'product'
+            });
+
+            return _.isUndefined(product) ? '' : product.value;
+        },
+
+        /**
+         * @param {jQuery} form
          */
         ajaxSubmit: function (form) {
             var self = this,
+                productId = this._getProductId(form),
                 formData = new FormData(form[0]);
 
             $(self.options.minicartSelector).trigger('contentLoading');
@@ -113,6 +130,7 @@ define([
 
                     $(document).trigger('ajax:addToCart', {
                         'sku': form.data().productSku,
+                        'productId': productId,
                         'form': form,
                         'response': res
                     });
