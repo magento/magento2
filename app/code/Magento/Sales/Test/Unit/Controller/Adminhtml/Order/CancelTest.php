@@ -77,7 +77,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
         $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -117,7 +117,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('You have not canceled the item.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
