@@ -34,27 +34,17 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeSave()
     {
-        $this->config->expects($this->once())
-            ->method('getData')
-            ->willReturn('elasticsearch');
-        $this->config->expects($this->never())
-            ->method('setData')
-            ->willReturnSelf();
+        $this->config->expects($this->once())->method('getData')->willReturn('elasticsearch');
+        $this->config->expects($this->never())->method('setData')->willReturnSelf();
 
         $this->model->beforeSave($this->config);
     }
 
     public function testBeforeSaveMysqlSearchEngine()
     {
-        $this->config->expects($this->at(0))
-            ->method('getData')
-            ->willReturn('mysql');
-        $this->config->expects($this->at(1))
-            ->method('getData')
-            ->willReturn([]);
-        $this->config->expects($this->once())
-            ->method('setData')
-            ->willReturnSelf();
+        $this->config->expects($this->at(0))->method('getData')->willReturn('mysql');
+        $this->config->expects($this->at(1))->method('getData')->willReturn([]);
+        $this->config->expects($this->once())->method('setData')->willReturnSelf();
 
         $this->model->beforeSave($this->config);
     }
