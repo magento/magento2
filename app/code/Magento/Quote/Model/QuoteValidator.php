@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
+use \Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
@@ -75,34 +76,38 @@ class QuoteValidator
     public function validateBeforeSubmit(QuoteEntity $quote)
     {
         if (!$quote->isVirtual()) {
-            if ($quote->getShippingAddress()->validate() !== true) {
+            $address = $quote->getShippingAddress();
+            $address->setStoreId($quote->getStoreId());
+            if ($address->validate() !== true) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Please check the shipping address information. %1',
-                        implode(' ', $quote->getShippingAddress()->validate())
+                        implode(' ', $address->validate())
                     )
                 );
             }
 
             // Checks if country id present in the allowed countries list.
             if (!in_array(
-                $quote->getShippingAddress()->getCountryId(),
-                $this->allowedCountryReader->getAllowedCountries()
+                $address->getCountryId(),
+                $this->allowedCountryReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $quote->getStoreId())
             )) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __("Some addresses can't be used due to the configurations for specific countries.")
                 );
             }
 
-            $method = $quote->getShippingAddress()->getShippingMethod();
-            $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
+            $method = $address->getShippingMethod();
+            $rate = $address->getShippingRateByCode($method);
             if (!$method || !$rate) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('The shipping method is missing. Select the shipping method and try again.')
                 );
             }
         }
-        if ($quote->getBillingAddress()->validate() !== true) {
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->setStoreId($quote->getStoreId());
+        if ($billingAddress->validate() !== true) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Please check the billing address information. %1',
