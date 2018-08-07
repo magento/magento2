@@ -154,7 +154,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
                 if ($tableStatus->getDataLength() > self::BUFFER_LENGTH) {
                     if ($tableStatus->getAvgRowLength() < self::BUFFER_LENGTH) {
-                        $limit = floor(self::BUFFER_LENGTH / $tableStatus->getAvgRowLength());
+                        $limit = floor(self::BUFFER_LENGTH / max($tableStatus->getAvgRowLength(), 1));
                         $multiRowsLength = ceil($tableStatus->getRows() / $limit);
                     } else {
                         $limit = 1;

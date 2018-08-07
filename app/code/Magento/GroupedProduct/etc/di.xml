@@ -48,6 +48,7 @@
             <argument name="prices" xsi:type="array">
                 <item name="final_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\FinalPrice</item>
                 <item name="configured_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\ConfiguredPrice</item>
+                <item name="configured_regular_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\ConfiguredRegularPrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
@@ -87,8 +88,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\GroupedInterface"
-                type="Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
             <argument name="estimators" xsi:type="array">
@@ -96,6 +95,13 @@
             </argument>
             <argument name="batchSizeAdjusters" xsi:type="array">
                 <item name="grouped" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjuster</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
             </argument>
         </arguments>
     </type>

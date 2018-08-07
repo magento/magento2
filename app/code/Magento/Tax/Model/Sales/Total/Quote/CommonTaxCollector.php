@@ -531,7 +531,7 @@ class CommonTaxCollector extends AbstractTotal
         $total->setSubtotalInclTax($subtotalInclTax);
         $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
         $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
-        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);;
+        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
 
         return $this;
     }
@@ -771,7 +771,7 @@ class CommonTaxCollector extends AbstractTotal
                 $previouslyAppliedTaxes[$row['id']] = $row;
             }
 
-            if (!is_null($row['percent'])) {
+            if ($row['percent'] !== null) {
                 $row['percent'] = $row['percent'] ? $row['percent'] : 1;
                 $rate = $rate ? $rate : 1;
 

@@ -45,6 +45,25 @@ define([
         },
 
         /**
+         * Get discount title
+         *
+         * @returns {null|String}
+         */
+        getTitle: function () {
+            var discountSegments;
+
+            if (!this.totals()) {
+                return null;
+            }
+
+            discountSegments = this.totals()['total_segments'].filter(function (segment) {
+                return segment.code.indexOf('discount') !== -1;
+            });
+
+            return discountSegments.length ? discountSegments[0].title : null;
+        },
+
+        /**
          * @return {Number}
          */
         getPureValue: function () {

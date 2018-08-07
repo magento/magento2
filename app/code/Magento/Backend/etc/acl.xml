@@ -38,7 +38,21 @@
                         <resource id="Magento_Backend::custom" title="Package Extensions" translate="title" sortOrder="20" />
                     </resource>
                     <resource id="Magento_Backend::tools" title="Tools" translate="title" sortOrder="50">
-                        <resource id="Magento_Backend::cache" title="Cache Management" translate="title"  sortOrder="10" />
+                        <resource id="Magento_Backend::cache" title="Cache Management" translate="title"  sortOrder="10">
+                            <resource id="Magento_Backend::main_actions" title="Clean Cache Actions" translate="title" sortOrder="10">
+                                <resource id="Magento_Backend::flush_cache_storage" title="Flush Cache Storage" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::flush_magento_cache" title="Flush Magento Cache" translate="title" sortOrder="20" />
+                            </resource>
+                            <resource id="Magento_Backend::mass_actions" title="Cache Types Management" translate="title" sortOrder="20">
+                                <resource id="Magento_Backend::toggling_cache_type" title="Toggle Cache Type" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::refresh_cache_type" title="Refresh Cache Type" translate="title" sortOrder="20" />
+                            </resource>
+                            <resource id="Magento_Backend::additional_cache_management" title="Additional Cache Management" translate="title" sortOrder="30">
+                                <resource id="Magento_Backend::flush_catalog_images" title="Catalog Images Cache" translate="title" sortOrder="10" />
+                                <resource id="Magento_Backend::flush_js_css" title="Flush Js/Css" translate="title" sortOrder="20" />
+                                <resource id="Magento_Backend::flush_static_files" title="Flush Static Files" translate="title" sortOrder="30" />
+                            </resource>
+                        </resource>
                         <resource id="Magento_Backend::setup_wizard" title="Web Setup Wizard" translate="title" sortOrder="20" />
                     </resource>
                     <resource id="Magento_Backend::system_other_settings" title="Other Settings" translate="title"  sortOrder="80" />

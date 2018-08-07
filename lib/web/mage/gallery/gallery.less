@@ -7,7 +7,6 @@
 @import '../../css/source/lib/_lib.less'; // Global lib
 @import '../../css/source/_theme.less'; // Theme overrides
 @import '../../css/source/_variables.less'; // Local theme variables
-@import '../../css/source/lib/_responsive.less';
 @import 'module/_mixins.less'; //Mixins in gallery
 @import 'module/_extends.less';
 @import 'module/_focus.less';
@@ -642,7 +641,7 @@
     }
     &.fotorama__shadows--top:before,
     &.fotorama__shadows--bottom:after {
-        background-size: 100% 1px, 100% 5px ;
+        background-size: 100% 1px, 100% 5px;
         height:10px;
         left: 0;
         right:0;
@@ -736,16 +735,21 @@
     text-align: center;
     top: 0;
     z-index: @z-index-10;
+    overflow: hidden;
+
+    .magnifier-large {
+        width: auto;
+        height: auto;
+        max-height: none;
+        max-width: none;
+        border: none;
+        position: absolute;
+        z-index: @z-index-1;
+    }
 }
 
 .magnifier-loader-text {
     margin-top: 10px;
-}
-
-.magnifier-large {
-    position: absolute;
-    width: 32%;
-    z-index: @z-index-1;
 }
 
 .magnifier-preview {
@@ -754,6 +758,7 @@
     overflow: hidden;
     padding: 0;
     position: absolute;
+    z-index: 2;
     top: 215px;
     &:not(.hidden) {
         background-color: @color-white;

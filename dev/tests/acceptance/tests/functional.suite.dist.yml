@@ -21,6 +21,7 @@ modules:
             depends: PhpBrowser
             part: Json
         - \Magento\FunctionalTestingFramework\Module\MagentoSequence
+        - \Magento\FunctionalTestingFramework\Module\MagentoAssert
         - Asserts
     config:
         \Magento\FunctionalTestingFramework\Module\MagentoWebDriver:

@@ -58,6 +58,9 @@ class TransportBuilderByStoreTest extends \PHPUnit\Framework\TestCase
             ->method('setFrom')
             ->with('from@example.com', 'name')
             ->willReturnSelf();
+        $this->messageMock->expects($this->once())
+            ->method('clearFrom')
+            ->willReturnSelf();
 
         $this->model->setFromByStore($sender, $store);
     }

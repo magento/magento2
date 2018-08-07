@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontAddMultipleStoreProductsToWishlistTest">
+        <annotations>
+            <title value="Add products to wishlist from different stores"/>
+            <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <getData entity="DefaultRootCategoryGetter" stepKey="getDefaultRootCategory"/>
+            <createData stepKey="storeGroup" entity="customStoreGroup">
+                <requiredEntity createDataKey="getDefaultRootCategory"/>
+            </createData>
+            <createData stepKey="product" entity="SimpleOne" />
+            <createData stepKey="secondProduct" entity="SimpleOne" />
+            <createData stepKey="customer" entity="Simple_US_Customer"/>
+            <!-- Create new store view and assign it to non default store -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteFirstProduct" createDataKey="product"/>
+            <deleteData stepKey="deleteSecondProduct" createDataKey="secondProduct"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
+                <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Change products visibility on store-view level -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <click stepKey="clickSwitchStoreMenuForProduct1" selector="{{AdminProductFormActionSection.changeStoreButton}}"/>
+        <click stepKey="clickOnStoreNameItemForProduct1" selector="{{AdminProductFormChangeStoreSection.storeSelector(customStore.name)}}"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForConfirmationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal"/>
+        <click stepKey="uncheckVisibilityUseDefaultValueForProduct1" selector="{{AdminProductFormSection.visibilityUseDefault}}"/>
+        <selectOption stepKey="makeProductNotVisibleOnSecondaryStoreView" selector="{{AdminProductFormSection.visibility}}" userInput="Not Visible Individually"/>
+        <click stepKey="saveEditedProductForProduct1" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
+            <argument name="product" value="$$secondProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$secondProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+        <click stepKey="clickSwitchStoreMenuForProduct2" selector="{{AdminProductFormActionSection.changeStoreButton}}"/>
+        <click stepKey="clickOnStoreNameItemForProduct2" selector="{{AdminProductFormChangeStoreSection.storeSelector('Default Store View')}}"/>
+        <click stepKey="acceptStoreSwitchingForProduct2" selector="{{AdminProductFormChangeStoreSection.acceptButton}}"/>
+        <click stepKey="uncheckVisibilityUseDefaultValueForProduct2" selector="{{AdminProductFormSection.visibilityUseDefault}}"/>
+        <selectOption stepKey="makeProductNotVisibleOnDefaultStoreView" selector="{{AdminProductFormSection.visibility}}" userInput="Not Visible Individually"/>
+        <click stepKey="saveEditedProductForProduct2" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <!-- Sign in as customer -->
+        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+        <fillField  stepKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <waitForElementVisible stepKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <!-- Add product visible on default store to wishlist -->
+        <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$product.name$$" stepKey="assertFirstProductNameTitle"/>
+        <click stepKey="addFirstProductToWishlist" selector="{{StorefrontProductPageSection.addToWishlist}}"/>
+        <!-- Switch to second store and add second product (visible on second store) to wishlist -->
+        <click stepKey="ClickSwitchStoreButtonOnDefaultStore" selector="{{StorefrontFooterSection.SwitchStoreButton}}"/>
+        <click stepKey="SelectSecondStoreToSwitchOn" selector="{{StorefrontFooterSection.StoreLink($$storeGroup.group[name]$$)}}"/>
+        <!-- Verify that both products are visible in wishlist on both stores -->
+        <amOnPage url="$$secondProduct.name$$.html" stepKey="navigateToProductPageOnSecondStore"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$secondProduct.name$$" stepKey="assertSecondProductNameTitle"/>
+        <click stepKey="addSecondProductToWishlist" selector="{{StorefrontProductPageSection.addToWishlist}}"/>
+        <see stepKey="seeProduct2InWishlistOnSecondStore" userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+        <click stepKey="ClickSwitchStoreButtonOnSecondStore" selector="{{StorefrontFooterSection.SwitchStoreButton}}"/>
+        <click stepKey="SelectDefaultStoreToSwitchOn" selector="{{StorefrontFooterSection.StoreLink('Main Website Store')}}"/>
+        <see stepKey="seeProduct1InWishlistOnDefaultStore" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+    </test>
+</tests>

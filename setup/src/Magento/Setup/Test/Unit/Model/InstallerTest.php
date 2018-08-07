@@ -148,11 +148,6 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         ConfigOptionsListConstants::KEY_PASSWORD => '',
     ];
 
-    /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $contextMock;
-
     protected function setUp()
     {
         $this->filePermissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
@@ -177,8 +172,6 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->contextMock =
-            $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $this->configModel = $this->createMock(\Magento\Setup\Model\ConfigModel::class);
         $this->cleanupFiles = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
         $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
@@ -223,7 +216,6 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             $this->maintenanceMode,
             $this->filesystem,
             $objectManagerProvider,
-            $this->contextMock,
             $this->configModel,
             $this->cleanupFiles,
             $this->dbValidator,
@@ -262,9 +254,6 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $table->expects($this->any())->method('setComment')->willReturn($table);
         $table->expects($this->any())->method('addIndex')->willReturn($table);
         $connection->expects($this->any())->method('newTable')->willReturn($table);
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
         $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
@@ -277,19 +266,24 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $appState->expects($this->once())
             ->method('setAreaCode')
             ->with(\Magento\Framework\App\Area::AREA_GLOBAL);
-        $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
+        $moduleResource = $this->createMock(\Magento\Framework\Module\ModuleResource::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->setupFactory->expects($this->atLeastOnce())->method('create')->willReturn($setup);
         $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\Cache\Manager::class, [], $cacheManager],
                 [\Magento\Framework\App\State::class, [], $appState],
+                [\Magento\Framework\Module\ModuleResource::class, [], $moduleResource]
             ]));
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
-                [\Magento\Framework\App\Cache\Manager::class, $cacheManager]
+                [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
+                [\Magento\Framework\Module\ModuleResource::class, [], $moduleResource],
+                [\Magento\Framework\Registry::class, $registry]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->createMock(\Magento\Setup\Model\AdminAccount::class)

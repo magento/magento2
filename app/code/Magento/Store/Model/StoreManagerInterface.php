@@ -6,6 +6,8 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Store manager interface
  *
@@ -46,6 +48,7 @@ interface StoreManagerInterface
      *
      * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
      * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException If given store doesn't exist.
      */
     public function getStore($storeId = null);
 

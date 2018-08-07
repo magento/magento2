@@ -99,6 +99,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
                 . '</info>'
             );
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

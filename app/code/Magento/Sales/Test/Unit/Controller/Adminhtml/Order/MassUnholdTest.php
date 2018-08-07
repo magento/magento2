@@ -85,6 +85,11 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
      */
     protected $filterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderManagementMock;
+
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -146,12 +151,15 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->orderCollectionMock);
 
+        $this->orderManagementMock = $this->createMock(\Magento\Sales\Api\OrderManagementInterface::class);
+
         $this->massAction = $objectManagerHelper->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\MassUnhold::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
-                'collectionFactory' => $this->orderCollectionFactoryMock
+                'collectionFactory' => $this->orderCollectionFactoryMock,
+                'orderManagement' => $this->orderManagementMock
             ]
         );
     }
@@ -175,9 +183,7 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
             ->method('canUnhold')
             ->willReturn(true);
         $order1->expects($this->once())
-            ->method('unhold');
-        $order1->expects($this->once())
-            ->method('save');
+            ->method('getEntityId');
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
@@ -186,6 +192,8 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
         $order2->expects($this->once())
             ->method('canUnhold')
             ->willReturn(false);
+
+        $this->orderManagementMock->expects($this->atLeastOnce())->method('unHold')->willReturn(true);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')

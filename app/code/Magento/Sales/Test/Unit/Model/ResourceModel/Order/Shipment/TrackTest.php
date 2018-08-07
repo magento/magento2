@@ -89,6 +89,8 @@ class TrackTest extends \PHPUnit\Framework\TestCase
      */
     public function testSave()
     {
+        $shipmentMock = $this->createMock(\Magento\Sales\Model\Order\Shipment::class);
+        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->trackModelMock)
@@ -98,6 +100,8 @@ class TrackTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($this->trackModelMock))
             ->will($this->returnValue([]));
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
+        $this->trackModelMock->expects($this->atLeastOnce())->method('getShipment')->willReturn($shipmentMock);
+        $shipmentMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
     }

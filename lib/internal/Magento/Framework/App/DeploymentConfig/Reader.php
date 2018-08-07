@@ -9,7 +9,9 @@ namespace Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration reader.
@@ -87,6 +89,7 @@ class Reader
      * @param string $fileKey The file key (deprecated)
      * @return array
      * @throws FileSystemException If file can not be read
+     * @throws RuntimeException If file is invalid
      * @throws \Exception If file key is not correct
      * @see FileReader
      */
@@ -99,6 +102,9 @@ class Reader
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
             if ($fileDriver->isExists($filePath)) {
                 $result = include $filePath;
+                if (!is_array($result)) {
+                    throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
+                }
             }
         } else {
             $configFiles = $this->configFilePool->getPaths();
@@ -108,11 +114,14 @@ class Reader
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 if ($fileDriver->isExists($configFile)) {
                     $fileData = include $configFile;
+                    if (!is_array($fileData)) {
+                        throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$configFile]));
+                    }
                 } else {
                     continue;
                 }
                 $allFilesData[$configFile] = $fileData;
-                if (is_array($fileData) && count($fileData) > 0) {
+                if ($fileData) {
                     $result = array_replace_recursive($result, $fileData);
                 }
             }

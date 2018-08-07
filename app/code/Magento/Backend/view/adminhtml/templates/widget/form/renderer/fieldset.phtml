@@ -45,7 +45,7 @@ if ($isField) {
             <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
-                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
+                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
             </strong>
             <?= /* @escapeNotVerified */ $titleActions ?>
         </div>
@@ -58,7 +58,7 @@ if ($isField) {
         <fieldset class="<?= /* @escapeNotVerified */ $cssClass ?>" id="<?= /* @escapeNotVerified */ $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
             <legend class="<?= /* @escapeNotVerified */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
-                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
+                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
             </legend><br />
         <?php endif; ?>
     <?php endif; ?>

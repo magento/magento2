@@ -535,7 +535,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
+        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/10f519365b01716ddb90abc57de5a837/';
         $this->_sitemapProductMock->expects(
             $this->any()
         )->method(

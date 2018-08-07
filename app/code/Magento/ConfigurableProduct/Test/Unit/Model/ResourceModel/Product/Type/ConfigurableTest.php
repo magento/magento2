@@ -142,19 +142,48 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->optionProvider->expects($this->once())
             ->method('getProductEntityLinkField')
             ->willReturnSelf();
-        $this->connectionMock->expects($this->once())
-            ->method('insertOnDuplicate')
-            ->willReturnSelf();
-
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('table name');
 
-        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
-        $statement->method('fetchAll')->willReturn([1]);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->setMethods(['from', 'where'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $select->expects($this->exactly(1))->method('where')->willReturnSelf();
+
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($select);
+
+        $existingProductIds = [1, 2];
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($select)
+            ->willReturn($existingProductIds);
+
+        $this->connectionMock->expects($this->once())
+            ->method('insertMultiple')
+            ->with(
+                'table name',
+                [
+                    ['product_id' => 3, 'parent_id' => 3],
+                    ['product_id' => 4, 'parent_id' => 3],
+                ]
+            )
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with(
+                'table name',
+                ['parent_id = ?' => 3, 'product_id IN (?)' => [1]]
+            )
+            ->willReturnSelf();
 
         $this->assertSame(
             $this->configurable,
-            $this->configurable->saveProducts($this->product, [1, 2, 3])
+            $this->configurable->saveProducts($this->product, [2, 3, 4])
         );
     }
 

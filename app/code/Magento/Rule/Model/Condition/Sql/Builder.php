@@ -6,9 +6,14 @@
 
 namespace Magento\Rule\Model\Condition\Sql;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
  * Class SQL Builder
@@ -42,11 +47,21 @@ class Builder
     protected $_expressionFactory;
 
     /**
-     * @param ExpressionFactory $expressionFactory
+     * @var AttributeRepositoryInterface
      */
-    public function __construct(ExpressionFactory $expressionFactory)
-    {
+    private $attributeRepository;
+
+    /**
+     * @param ExpressionFactory $expressionFactory
+     * @param AttributeRepositoryInterface|null $attributeRepository
+     */
+    public function __construct(
+        ExpressionFactory $expressionFactory,
+        AttributeRepositoryInterface $attributeRepository = null
+    ) {
         $this->_expressionFactory = $expressionFactory;
+        $this->attributeRepository = $attributeRepository ?:
+            ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
     }
 
     /**
@@ -88,12 +103,12 @@ class Builder
     /**
      * Join tables from conditions combination to collection
      *
-     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param AbstractCollection $collection
      * @param Combine $combine
      * @return $this
      */
     protected function _joinTablesToCollection(
-        \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,
+        AbstractCollection $collection,
         Combine $combine
     ) {
         foreach ($this->_getCombineTablesToJoin($combine) as $alias => $joinTable) {
@@ -112,10 +127,12 @@ class Builder
      *
      * @param AbstractCondition $condition
      * @param string $value
+     * @param bool $isDefaultStoreUsed no longer used because caused an issue about not existing table alias
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
+    protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '', $isDefaultStoreUsed = true)
     {
         $argument = $condition->getMappedSqlField();
 
@@ -130,9 +147,10 @@ class Builder
             throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
         }
 
+        $defaultValue = 0;
         $sql = str_replace(
             ':field',
-            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
+            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
             $this->_conditionOperatorMap[$conditionOperator]
         );
 
@@ -144,10 +162,11 @@ class Builder
     /**
      * @param Combine $combine
      * @param string $value
+     * @param bool $isDefaultStoreUsed
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getMappedSqlCombination(Combine $combine, $value = '')
+    protected function _getMappedSqlCombination(Combine $combine, $value = '', $isDefaultStoreUsed = true)
     {
         $out = (!empty($value) ? $value : '');
         $value = ($combine->getValue() ? '' : ' NOT ');
@@ -158,9 +177,9 @@ class Builder
             $con = ($getAggregator == 'any' ? Select::SQL_OR : Select::SQL_AND);
             $con = (isset($conditions[$key+1]) ? $con : '');
             if ($condition instanceof Combine) {
-                $out .= $this->_getMappedSqlCombination($condition, $value);
+                $out .= $this->_getMappedSqlCombination($condition, $value, $isDefaultStoreUsed);
             } else {
-                $out .= $this->_getMappedSqlCondition($condition, $value);
+                $out .= $this->_getMappedSqlCondition($condition, $value, $isDefaultStoreUsed);
             }
             $out .=  $out ? (' ' . $con) : '';
         }
@@ -170,13 +189,12 @@ class Builder
     /**
      * Attach conditions filter to collection
      *
-     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param AbstractCollection $collection
      * @param Combine $combine
-     *
      * @return void
      */
     public function attachConditionToCollection(
-        \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection,
+        AbstractCollection $collection,
         Combine $combine
     ) {
         $this->_connection = $collection->getResource()->getConnection();

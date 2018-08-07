@@ -803,7 +803,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     {
         $tableAlias = null;
         if (is_array($table)) {
-            list($tableAlias, $tableName) = each($table);
+            list($tableAlias, $tableName) = [key($table), current($table)];
         } else {
             $tableName = $table;
         }
@@ -1114,7 +1114,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(true, true, $query);
+            $this->printLogQuery(false, true, $query);
             throw $e;
         }
 

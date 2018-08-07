@@ -425,23 +425,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function canVoid()
     {
         return false;
-        $canVoid = false;
-        if ($this->getState() == self::STATE_REFUNDED) {
-            $canVoid = $this->getCanVoidFlag();
-            /**
-             * If we not retrieve negative answer from payment yet
-             */
-            if (is_null($canVoid)) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid();
-                if ($canVoid === false) {
-                    $this->setCanVoidFlag(false);
-                    $this->_saveBeforeDestruct = true;
-                }
-            } else {
-                $canVoid = (bool)$canVoid;
-            }
-        }
-        return $canVoid;
     }
 
     /**
@@ -451,7 +434,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(static::$_states)) {
+        if (static::$_states === null) {
             static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
@@ -469,11 +452,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 
-        if (is_null(static::$_states)) {
+        if (static::$_states === null) {
             static::getStates();
         }
         if (isset(static::$_states[$stateId])) {
@@ -488,13 +471,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function setShippingAmount($amount)
     {
-        // base shipping amount calculated in total model
-        //        $amount = $this->getStore()->round($amount);
-        //        $this->setData('base_shipping_amount', $amount);
-        //
-        //        $amount = $this->getStore()->round(
-        //            $amount*$this->getOrder()->getStoreToOrderRate()
-        //        );
         return $this->setData(CreditmemoInterface::SHIPPING_AMOUNT, $amount);
     }
 
@@ -601,13 +577,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         $collection = $this->_commentCollectionFactory->create()->setCreditmemoFilter($this->getId())
             ->setCreatedAtOrder();
-//
-//            $this->setComments($comments);
-//            /**
-//             * When credit memo created with adding comment,
-//             * comments collection must be loaded before we added this comment.
-//             */
-//            $this->getComments()->load();
 
         if ($this->getId()) {
             foreach ($collection as $comment) {

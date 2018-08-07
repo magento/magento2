@@ -195,6 +195,8 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');

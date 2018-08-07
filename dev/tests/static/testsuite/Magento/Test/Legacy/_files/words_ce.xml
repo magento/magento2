@@ -64,6 +64,9 @@
             <word>twig</word>
         </item>
         <item>
+            <path>dev/tests/acceptance/composer.lock</path>
+        </item>
+        <item>
             <path>dev/build/publication/sanity/ce.xml</path>
         </item>
     </whitelist>

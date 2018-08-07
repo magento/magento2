@@ -8,6 +8,7 @@ namespace Magento\Swatches\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\Product\View;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
@@ -16,6 +17,20 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class ViewWithSwatches extends View
 {
     /**
+     * Locator for "Swatch Attribute" block on "Product" Storefront page.
+     *
+     * @var string
+     */
+    protected $swatchBlockSelector = '//*[@attribute-code="%s"]';
+
+    /**
+     * Locator for concrete Swatch Option to select.
+     *
+     * @var string
+     */
+    protected $swatchOptionSelector = '//div[@option-label="%s"]';
+
+    /**
      * Selector for all swatch attributes
      *
      * @var string
@@ -23,7 +38,7 @@ class ViewWithSwatches extends View
     private $swatchAttributesSelector = '.swatch-attribute';
 
     /**
-     * Selector for swatch attribute label
+     * Locator for Swatch Attribute label.
      *
      * @var string
      */
@@ -109,5 +124,44 @@ class ViewWithSwatches extends View
         }
 
         return $formData;
+    }
+
+    /**
+     * Customer configures Swatches on "Product" Storefront page.
+     *
+     * @param \Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product
+     * @return void
+     */
+    public function fillData(\Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product)
+    {
+        $attributesSource = $product->getDataFieldConfig('configurable_attributes_data')['source'];
+        $attributes = $attributesSource->getData()['attributes_data'];
+
+        $checkoutData = $product->getCheckoutData();
+        $options = $checkoutData['options']['configurable_options'];
+
+        foreach ($attributes as $attributeKey => $attribute) {
+            foreach ($options as $option) {
+                if ($option['title'] === $attributeKey) {
+                    $optionLabel = $attribute['options'][$option['value']]['label'];
+                    $this->clickOnSwatch($attribute['attribute_code'], $optionLabel);
+                }
+            }
+        }
+    }
+
+    /**
+     * Customer specifies concrete Option inside concrete Swatch Attribute.
+     *
+     * @param string $attributeCode
+     * @param string $optionLabel
+     * @return void
+     */
+    private function clickOnSwatch($attributeCode, $optionLabel)
+    {
+        $swatchBlockSelector = sprintf($this->swatchBlockSelector, $attributeCode);
+        $swatchOptionSelector = sprintf($this->swatchOptionSelector, $optionLabel);
+
+        $this->_rootElement->find($swatchBlockSelector . $swatchOptionSelector, Locator::SELECTOR_XPATH)->click();
     }
 }

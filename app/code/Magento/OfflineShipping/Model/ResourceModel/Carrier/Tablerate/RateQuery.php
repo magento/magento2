@@ -99,7 +99,7 @@ class RateQuery
             }
         } else {
             $bind[':condition_name'] = $this->request->getConditionName();
-            $bind[':condition_value'] = $this->request->getData($this->request->getConditionName());
+            $bind[':condition_value'] = round($this->request->getData($this->request->getConditionName()), 4);
         }
 
         return $bind;
