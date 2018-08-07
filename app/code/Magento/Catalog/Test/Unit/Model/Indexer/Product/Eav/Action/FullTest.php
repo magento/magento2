@@ -44,7 +44,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
     private $batchProvider;
 
     /**
-     * BatchSizeCalculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchSizeCalculator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $batchSizeCalculator;
 
@@ -60,26 +60,12 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->eavDecimalFactory = $this->createPartialMock(
-            DecimalFactory::class,
-            ['create']
-        );
-        $this->eavSourceFactory = $this->createPartialMock(
-            SourceFactory::class,
-            ['create']
-        );
-        $this->metadataPool = $this->createMock(
-            MetadataPool::class
-        );
-        $this->batchProvider = $this->getMockForAbstractClass(
-            BatchProviderInterface::class
-        );
-        $this->batchSizeCalculator = $this->createMock(
-            BatchSizeCalculator::class
-        );
-        $this->activeTableSwitcher = $this->createMock(
-            ActiveTableSwitcher::class
-        );
+        $this->eavDecimalFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
+        $this->eavSourceFactory = $this->createPartialMock(SourceFactory::class, ['create']);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->batchProvider = $this->getMockForAbstractClass(BatchProviderInterface::class);
+        $this->batchSizeCalculator = $this->createMock(BatchSizeCalculator::class);
+        $this->activeTableSwitcher = $this->createMock(ActiveTableSwitcher::class);
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -104,9 +90,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
+        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(1);
 
         $ids = [1, 2, 3];
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -130,21 +114,13 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $eavSource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
 
-        $eavDecimal->expects($this->once())
-            ->method('reindexEntities')
-            ->with($ids);
+        $eavDecimal->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $eavSource->expects($this->once())
-            ->method('reindexEntities')
-            ->with($ids);
+        $eavSource->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $this->eavDecimalFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($eavSource));
+        $this->eavDecimalFactory->expects($this->once())->method('create')->will($this->returnValue($eavSource));
 
-        $this->eavSourceFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($eavDecimal));
+        $this->eavSourceFactory->expects($this->once())->method('create')->will($this->returnValue($eavDecimal));
 
         $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -169,18 +145,15 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->atLeastOnce())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 
-        $this->model->execute(null);
+        $this->model->execute();
     }
 
     public function testExecuteWithDisabledEavIndexer()
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->willReturn(0);
+        $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);
 
-        $this->metadataPool->expects($this->never())
-            ->method('getMetadata');
+        $this->metadataPool->expects($this->never())->method('getMetadata');
 
-        $this->model->execute(null);
+        $this->model->execute();
     }
 }
