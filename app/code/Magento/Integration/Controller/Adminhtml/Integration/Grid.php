@@ -6,9 +6,11 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Integration\Controller\Adminhtml\Integration as IntegrationAction;
 
-class Grid extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpPostActionInterface
+class Grid extends IntegrationAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * AJAX integrations grid.

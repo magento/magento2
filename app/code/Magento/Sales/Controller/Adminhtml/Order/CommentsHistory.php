@@ -6,7 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
  * Class CommentsHistory
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
+class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

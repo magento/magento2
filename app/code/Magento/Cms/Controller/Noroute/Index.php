@@ -6,9 +6,10 @@
  */
 namespace Magento\Cms\Controller\Noroute;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory

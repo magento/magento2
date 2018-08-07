@@ -12,7 +12,6 @@ use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class Validate extends ImportResultController implements HttpPostActionInterface
 {
@@ -162,7 +161,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     /**
      * Collect errors and add error messages to Result block
      *
-     * Get all errors from ProcessingErrorAggregatorInterface and add appropriated error messages
+     * Get all errors from Error Aggregator and add appropriated error messages
      * to Result block.
      *
      * @param Result $resultBlock

@@ -6,9 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Noroute;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-
-class Index extends \Magento\Backend\App\Action implements HttpGetActionInterface
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

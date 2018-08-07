@@ -6,9 +6,9 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
+class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
 {
     /**
      * Delete promo quote action

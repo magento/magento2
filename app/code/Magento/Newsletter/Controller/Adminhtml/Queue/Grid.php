@@ -6,9 +6,11 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Newsletter\Controller\Adminhtml\Queue as QueueAction;
 
-class Grid extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpPostActionInterface
+class Grid extends QueueAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Queue list Ajax action

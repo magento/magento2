@@ -6,9 +6,9 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpGetActionInterface
+class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpPostActionInterface
 {
     /**
      * @return void

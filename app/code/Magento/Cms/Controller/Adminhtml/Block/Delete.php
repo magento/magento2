@@ -6,9 +6,9 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\Cms\Controller\Adminhtml\Block implements HttpGetActionInterface
+class Delete extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostActionInterface
 {
     /**
      * Delete action

@@ -6,9 +6,9 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class State extends AbstractScopeConfig implements HttpGetActionInterface
+class State extends AbstractScopeConfig implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
