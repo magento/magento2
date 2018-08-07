@@ -11,6 +11,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {

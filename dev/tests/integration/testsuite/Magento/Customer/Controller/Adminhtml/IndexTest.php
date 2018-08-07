@@ -106,13 +106,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $this->logicalNot($this->isEmpty()),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
+        /** @var \Magento\Backend\Model\Session $session */
+        $session = $this->objectManager->get(\Magento\Backend\Model\Session::class);;
         /**
          * Check that customer data were set to session
          */
-        $this->assertEquals(
-            $post,
-            $this->objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerFormData()
-        );
+        $this->assertNotEmpty($session->getCustomerFormData());
+        $this->assertArraySubset($post, $session->getCustomerFormData());
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
@@ -145,7 +145,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         /**
          * Check that customer data were set to session
          */
-        $this->assertEquals(
+        $this->assertArraySubset(
             $post,
             $this->objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerFormData()
         );
@@ -503,7 +503,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $this->equalTo(['A customer with the same email address already exists in an associated website.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
-        $this->assertEquals(
+        $this->assertArraySubset(
             $post,
             Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerFormData()
         );

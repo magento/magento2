@@ -39,9 +39,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     protected $uri = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $httpMethod = HttpRequest::METHOD_GET;
+    protected $httpMethod;
 
     protected function setUp()
     {
@@ -98,7 +98,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->uri === null) {
             $this->markTestIncomplete('AclHasAccess test is not complete');
         }
-        $this->getRequest()->setMethod($this->httpMethod);
+        if ($this->httpMethod) {
+            $this->getRequest()->setMethod($this->httpMethod);
+        }
         $this->dispatch($this->uri);
         $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
@@ -109,7 +111,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->resource === null) {
             $this->markTestIncomplete('Acl test is not complete');
         }
-        $this->getRequest()->setMethod($this->httpMethod);
+        if ($this->httpMethod) {
+            $this->getRequest()->setMethod($this->httpMethod);
+        }
         $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl()
             ->deny(null, $this->resource);
