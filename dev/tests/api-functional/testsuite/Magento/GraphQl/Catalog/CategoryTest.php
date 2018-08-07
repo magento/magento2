@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -62,9 +64,6 @@ class CategoryTest extends GraphQlAbstract
           children {
             level
             id
-            children {
-              id
-            }
           }
         }
       }
@@ -254,7 +253,6 @@ QUERY;
           default_group_id
           is_default
         }
-        
       }
     }
   }
@@ -279,6 +277,51 @@ QUERY;
         $this->assertBaseFields($firstProduct, $response['category']['products']['items'][0]);
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testAnchorCategory()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
+        $categoryCollection->addFieldToFilter('name', 'Category 1');
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->getFirstItem();
+        $categoryId = $category->getId();
+
+        $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
+
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+    name
+    products(sort: {sku: ASC}) {
+      total_count
+      items {
+        sku
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'name' => 'Category 1',
+                'products' => [
+                    'total_count' => 3,
+                    'items' => [
+                        ['sku' => '12345'],
+                        ['sku' => 'simple'],
+                        ['sku' => 'simple-4']
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
     }
 
     /**

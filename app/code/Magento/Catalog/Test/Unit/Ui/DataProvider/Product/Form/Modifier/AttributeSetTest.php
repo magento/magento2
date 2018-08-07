@@ -106,6 +106,9 @@ class AttributeSetTest extends AbstractModifierTest
         );
     }
 
+    /**
+     * @return array
+     */
     public function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];

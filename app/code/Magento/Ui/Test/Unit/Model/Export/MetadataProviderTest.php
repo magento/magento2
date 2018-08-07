@@ -40,18 +40,37 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetHeaders()
+    /**
+     * @param array $columnLabels
+     * @param array $expected
+     * @return void
+     * @dataProvider getColumnsDataProvider
+     */
+    public function testGetHeaders(array $columnLabels, array $expected): void
     {
         $componentName = 'component_name';
         $columnName = 'column_name';
-        $columnLabel = 'column_label';
 
-        $component = $this->prepareColumns($componentName, $columnName, $columnLabel);
-
+        $component = $this->prepareColumns($componentName, $columnName, $columnLabels[0]);
         $result = $this->model->getHeaders($component);
         $this->assertTrue(is_array($result));
         $this->assertCount(1, $result);
-        $this->assertEquals($columnLabel, $result[0]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumnsDataProvider(): array
+    {
+        return [
+            [['ID'],['"ID"']],
+            [['Name'],['Name']],
+            [['Id'],['Id']],
+            [['id'],['id']],
+            [['IDTEST'],['"IDTEST"']],
+            [['ID TEST'],['"ID TEST"']],
+        ];
     }
 
     public function testGetFields()

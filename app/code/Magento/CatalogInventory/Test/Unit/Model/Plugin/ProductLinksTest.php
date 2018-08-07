@@ -48,6 +48,9 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }
 
+    /**
+     * @return array
+     */
     private function buildMocks()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collectionMock */
