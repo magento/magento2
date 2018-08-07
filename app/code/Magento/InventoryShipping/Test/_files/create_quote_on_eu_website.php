@@ -48,7 +48,7 @@ $address = $addressFactory->create(
         ]
     ]
 );
-$cart->setReservedOrderId('test_order_virt_1');
+$cart->setReservedOrderId('created_order_for_test');
 $cart->setBillingAddress($address);
 $cart->setShippingAddress($address);
 $cart->getPayment()->setMethod('checkmo');
