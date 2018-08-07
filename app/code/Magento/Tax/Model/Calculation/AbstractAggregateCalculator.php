@@ -101,7 +101,10 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $discountTaxCompensationAmount = 0;
 
         // Calculate $rowTotal
-        $price = $this->calculationTool->round($item->getUnitPrice());
+        $price = $item->getUnitPrice();
+        if ($round) {
+            $price = $this->calculationTool->round($item->getUnitPrice());
+        }
         $rowTotal = $price * $quantity;
         $rowTaxes = [];
         $rowTaxesBeforeDiscount = [];
