@@ -47,10 +47,6 @@
         top: 0;
         width: @select-check__size;
         z-index: -2;
-
-        .ie9 & {
-            display: none;
-        }
     }
 
     &:before {
@@ -66,10 +62,6 @@
         top: 50%;
         width: 0;
         z-index: -1;
-
-        .ie9 & {
-            display: none;
-        }
     }
 
     .form-el-select {
@@ -81,11 +73,6 @@
         margin: 0;
         padding: @form-el__padding-top ~'calc(@{select-check__size} + 10%)' @form-el__padding-bottom @form-el__padding-side;
         width: 110%;
-
-        .ie9 & {
-            padding-right: @form-el__padding-side;
-            width: 100%;
-        }
 
         &::-ms-expand {
             display: none;
