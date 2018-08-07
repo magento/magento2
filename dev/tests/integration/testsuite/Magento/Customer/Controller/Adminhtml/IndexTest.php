@@ -107,7 +107,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         /** @var \Magento\Backend\Model\Session $session */
-        $session = $this->objectManager->get(\Magento\Backend\Model\Session::class);;
+        $session = $this->objectManager->get(\Magento\Backend\Model\Session::class);
         /**
          * Check that customer data were set to session
          */
