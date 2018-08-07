@@ -355,8 +355,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     {
         if (!$this->hasValueParsed()) {
             $value = $this->getData('value');
-            if (is_array($value) && count($value) == 1) {
-                $value = $value[0];
+            if (is_array($value) && count($value) === 1) {
+                $value = reset($value);
             }
             if (!is_array($value) && $this->isArrayOperatorType() && $value) {
                 $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
