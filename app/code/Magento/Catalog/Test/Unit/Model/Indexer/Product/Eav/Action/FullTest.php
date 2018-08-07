@@ -19,7 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full|\PHPUnit_Framework_MockObject_MockObject
      */
     private $model;
 
@@ -151,9 +151,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithDisabledEavIndexer()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);
-
         $this->metadataPool->expects($this->never())->method('getMetadata');
-
         $this->model->execute();
     }
 }
