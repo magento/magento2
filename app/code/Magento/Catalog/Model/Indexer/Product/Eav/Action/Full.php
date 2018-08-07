@@ -149,7 +149,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      *
      * @return bool
      */
-    private function isEavIndexerEnabled(): bool
+    private function isEavIndexerEnabled()
     {
         $eavIndexerStatus = $this->scopeConfig->getValue(
             self::ENABLE_EAV_INDEXER,

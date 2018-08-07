@@ -171,7 +171,7 @@ abstract class AbstractAction
      *
      * @return bool
      */
-    private function isEavIndexerEnabled(): bool
+    private function isEavIndexerEnabled()
     {
         $eavIndexerStatus = $this->scopeConfig->getValue(
             self::ENABLE_EAV_INDEXER,
