@@ -40,7 +40,9 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
-                $this->messageManager->addError(__('We found another order status with the same order status code.'));
+                $this->messageManager->addErrorMessage(
+                    __('We found another order status with the same order status code.')
+                );
                 $this->_getSession()->setFormData($data);
                 return $resultRedirect->setPath('sales/*/new');
             }
@@ -49,12 +51,12 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 
             try {
                 $status->save();
-                $this->messageManager->addSuccess(__('You saved the order status.'));
+                $this->messageManager->addSuccessMessage(__('You saved the order status.'));
                 return $resultRedirect->setPath('sales/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('We can\'t add the order status right now.')
                 );
