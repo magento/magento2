@@ -31,16 +31,16 @@ interface ItemRequestInterface
     /**
      * Set SKU
      *
-     * @param $sku
+     * @param string $sku
      * @return void
      */
-    public function setSku($sku);
+    public function setSku(string $sku): void;
 
     /**
      * Set Quantity
      *
-     * @param $qty
+     * @param float $qty
      * @return void
      */
-    public function setQty($qty);
+    public function setQty(float $qty): void;
 }
