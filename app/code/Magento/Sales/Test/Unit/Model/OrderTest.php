@@ -332,6 +332,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->order->canCreditmemo());
     }
 
+    public function testCanCreditMemoForZeroTotal()
+    {
+        $grandTotal = 0;
+        $totalPaid = 0;
+        $totalRefunded = 0;
+        $this->order->setGrandTotal($grandTotal);
+        $this->order->setTotalPaid($totalPaid);
+        $this->assertFalse($this->order->canCreditmemoforZeroTotal($totalRefunded));
+    }
+
     public function testCanNotCreditMemoWithTotalNull()
     {
         $totalPaid = 0;

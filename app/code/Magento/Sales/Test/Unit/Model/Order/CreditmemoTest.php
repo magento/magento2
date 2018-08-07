@@ -38,6 +38,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
@@ -60,6 +61,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'storeManager' => $this->createMock(\Magento\Store\Model\StoreManagerInterface::class),
             'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
             'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class),
+            'scopeConfig' => $this->scopeConfigMock,
         ];
         $this->creditmemo = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Creditmemo::class,
@@ -104,7 +106,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     public function testIsValidGrandTotalGrandTotal()
     {
         $this->creditmemo->setGrandTotal(0);
-        $this->creditmemo->getAllowZeroGrandTotal(true);
+        $this->creditmemo->isAllowZeroGrandTotal(true);
         $this->assertFalse($this->creditmemo->isValidGrandTotal());
     }
 
@@ -112,6 +114,16 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     {
         $this->creditmemo->setGrandTotal(1);
         $this->assertTrue($this->creditmemo->isValidGrandTotal());
+    }
+
+    public function testIsAllowZeroGrandTotal()
+    {
+        $isAllowed = 0;
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with('sales/zerograndtotal_creditmemo/allow_zero_grandtotal', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn($isAllowed);
+        $this->assertEquals($isAllowed,$this->creditmemo->isAllowZeroGrandTotal());
     }
 
     public function testGetIncrementId()
