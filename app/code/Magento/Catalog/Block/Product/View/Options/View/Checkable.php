@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Product\View\Options\View;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
+use Magento\Catalog\Model\Product\Option;
 
 /**
  * Class Checkable
@@ -51,10 +52,10 @@ class Checkable extends AbstractOptions
     }
 
     /**
-     * @param mixed $option
+     * @param Option $option
      * @return string|array|null
      */
-    public function getPreconfiguredValue($option)
+    public function getPreconfiguredValue(Option $option)
     {
         return $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId());
     }
