@@ -336,6 +336,8 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.clear();
+
             if (page === 1 && !this.recordData().length) {
                 return false;
             }
