@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\Paypal;
+namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\PayPal;
 
 use Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter as PaypalTokenFormatter;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
