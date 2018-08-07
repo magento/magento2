@@ -298,6 +298,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
             );
 
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
+            $this->_addCustomFilter($totalsCollection, $filterData);
 
             if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
                 $this->setTotals(new \Magento\Framework\DataObject());
@@ -309,6 +310,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
                 }
             }
         }
+
         return parent::getCountTotals();
     }
 
@@ -407,7 +409,6 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */

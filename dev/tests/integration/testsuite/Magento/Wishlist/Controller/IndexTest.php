@@ -122,6 +122,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_product_qty_increments.php
      */
     public function testAllcartAction()
