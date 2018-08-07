@@ -170,7 +170,7 @@ define([
             file.previewType = this.getFilePreviewType(file);
 
             if (!file.id && file.name) {
-                file.id = Base64.mageEncode(file.name).replace(/g/);
+                file.id = Base64.mageEncode(file.name);
             }
 
             this.observe.call(file, true, [
