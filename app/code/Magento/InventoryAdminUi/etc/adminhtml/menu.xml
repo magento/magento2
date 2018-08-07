@@ -7,20 +7,27 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
+        <add id="Magento_InventoryAdminUi::inventory"
+             title="Inventory"
+             translate="title"
+             module="Magento_Backend"
+             sortOrder="15"
+             parent="Magento_Backend::stores"
+             resource="Magento_InventoryAdminUi::inventory"/>
         <add id="Magento_InventoryAdminUi::source"
-             title="Manage Sources"
+             title="Sources"
              translate="title"
              module="Magento_InventoryAdminUi"
-             sortOrder="60"
-             parent="Magento_Backend::stores_settings"
+             sortOrder="10"
+             parent="Magento_InventoryAdminUi::inventory"
              action="inventory/source/index"
              resource="Magento_InventoryApi::source"/>
         <add id="Magento_InventoryAdminUi::stock"
-             title="Manage Stocks"
+             title="Stocks"
              translate="title"
              module="Magento_InventoryAdminUi"
-             sortOrder="70"
-             parent="Magento_Backend::stores_settings"
+             sortOrder="20"
+             parent="Magento_InventoryAdminUi::inventory"
              action="inventory/stock/index"
              resource="Magento_InventoryApi::stock"/>
     </menu>
