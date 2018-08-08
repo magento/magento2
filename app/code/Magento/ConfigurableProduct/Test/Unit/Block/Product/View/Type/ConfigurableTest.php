@@ -84,6 +84,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $variationPricesMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->mockContextObject();
@@ -346,13 +349,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve array with expected parameters for method getJsonConfig()
      *
-     * @param $productId
-     * @param $amount
-     * @param $priceQty
-     * @param $percentage
+     * @param int $productId
+     * @param double $amount
+     * @param int $priceQty
+     * @param int $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage)
+    private function getExpectedArray($productId, $amount, $priceQty, $percentage): array
     {
         $expectedArray = [
             'attributes' => [],

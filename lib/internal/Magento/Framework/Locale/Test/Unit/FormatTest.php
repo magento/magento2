@@ -33,6 +33,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
      */
     protected $currency;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
@@ -64,11 +67,11 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $localeCode
-     * @param $expectedResult
+     * @param string $localeCode
+     * @param array $expectedResult
      * @dataProvider getPriceFormatDataProvider
      */
-    public function testGetPriceFormat($localeCode, $expectedResult)
+    public function testGetPriceFormat($localeCode, array $expectedResult): void
     {
         $this->scope->expects($this->once())
             ->method('getCurrentCurrency')
@@ -80,9 +83,10 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
      * @return array
      */
-    public function getPriceFormatDataProvider()
+    public function getPriceFormatDataProvider(): array
     {
         return [
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
@@ -93,16 +97,18 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param float | null $expected
-     * @param string|float|int $value
+     *
+     * @param        mixed $value
+     * @param        float $expected
      * @dataProvider provideNumbers
      */
-    public function testGetNumber($value, $expected)
+    public function testGetNumber($value, $expected): void
     {
         $this->assertEquals($expected, $this->formatModel->getNumber($value));
     }
 
     /**
+     *
      * @return array
      */
     public function provideNumbers(): array

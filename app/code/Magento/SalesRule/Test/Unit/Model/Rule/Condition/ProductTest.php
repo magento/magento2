@@ -207,7 +207,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $this->model->getValueElementChooserUrl());
     }
 
-    public function testValidateCategoriesIgnoresVisibility()
+    /**
+     * test ValidateCategoriesIgnoresVisibility
+     */
+    public function testValidateCategoriesIgnoresVisibility(): void
     {
         /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
