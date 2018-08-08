@@ -114,6 +114,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function isValidReturnDataProvider()
     {
         return [

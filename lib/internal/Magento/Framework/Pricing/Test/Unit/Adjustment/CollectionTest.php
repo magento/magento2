@@ -79,6 +79,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty(array_diff($expectedResult, array_keys($result)));
     }
 
+    /**
+     * @return array
+     */
     public function getItemsDataProvider()
     {
         return [
@@ -104,6 +107,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $item->getAdjustmentCode());
     }
 
+    /**
+     * @return array
+     */
     public function getItemByCodeDataProvider()
     {
         return [

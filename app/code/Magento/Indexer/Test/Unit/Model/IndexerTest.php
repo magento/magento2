@@ -323,6 +323,9 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->model->reindexAll();
     }
 
+    /**
+     * @return array
+     */
     protected function getIndexerData()
     {
         return [

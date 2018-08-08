@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductImagesSection">
+        <element name="productImagesToggle" type="button" selector="div[data-index=gallery] .admin__collapsible-title"/>
+        <element name="imageFileUpload" type="input" selector="#fileupload"/>
+        <element name="imageUploadButton" type="button" selector="div.image div.fileinput-button"/>
+        <element name="imageFile" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="removeImageButton" type="button" selector=".action-remove"/>
+        <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
+        <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
+
+        <element name="nthProductImage" type="button" selector="#media_gallery_content > div:nth-child({{var}}) img.product-image" parameterized="true"/>
+        <element name="nthRemoveImageBtn" type="button" selector="#media_gallery_content > div:nth-child({{var}}) button.action-remove" parameterized="true"/>
+
+        <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
+
+        <element name="roleBase" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Base']"/>
+        <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
+        <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>
+        <element name="roleSwatch" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Swatch']"/>
+
+        <element name="isBaseSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Base']"/>
+        <element name="isSmallSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Small']"/>
+        <element name="isThumbnailSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Thumbnail']"/>
+        <element name="isSwatchSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Swatch']"/>
+    </section>
+</sections>

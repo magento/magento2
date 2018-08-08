@@ -33,12 +33,12 @@ class ReinstallInstance
 
     public function startTest()
     {
-        $this->application->reinitialize();
         /** @var ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
         $resourceConnection = $objectManager->create(ResourceConnection::class);
         $objectManager->removeSharedInstance(ResourceConnection::class);
         $objectManager->addSharedInstance($resourceConnection, ResourceConnection::class);
+        $this->application->reinitialize();
     }
 
     /**

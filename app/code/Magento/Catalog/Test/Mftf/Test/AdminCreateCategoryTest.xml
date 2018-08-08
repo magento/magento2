@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Category via the Admin"/>
+            <title value="Admin should be able to create a Category"/>
+            <description value="Admin should be able to create a Category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-72102"/>
+            <group value="category"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="enterURLKey"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+
+        <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
+        <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
+        <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
+    </test>
+    <test name="AdminConfigDefaultCategoryLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
+            <description value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89024"/>
+            <group value="category"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waitForDefaultCategoryLayout" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected" />
+        <selectOption selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="2 columns with right bar" stepKey="select2ColumnsLayout"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
+        <seeOptionIsSelected selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="see2ColumnsSelected" />
+    </test>
+</tests>

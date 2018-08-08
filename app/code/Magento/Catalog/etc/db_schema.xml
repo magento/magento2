@@ -1809,7 +1809,7 @@
         <constraint xsi:type="foreign" name="CAT_PRD_FRONTEND_ACTION_CSTR_ID_CSTR_ENTT_ENTT_ID"
                     table="catalog_product_frontend_action" column="customer_id" referenceTable="customer_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="PRODUCT_FRONTEND_ACTION_PRODUCT_ID"
+        <constraint xsi:type="foreign" name="CAT_PRD_FRONTEND_ACTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_product_frontend_action" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE" />
         <constraint xsi:type="unique" name="CATALOG_PRODUCT_FRONTEND_ACTION_VISITOR_ID_PRODUCT_ID_TYPE_ID">
