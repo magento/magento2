@@ -95,6 +95,9 @@ class HelperTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeFilterMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
