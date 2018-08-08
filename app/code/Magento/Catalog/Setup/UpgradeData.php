@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Setup;
 
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -397,10 +396,6 @@ class UpgradeData implements UpgradeDataInterface
             $this->enableSegmentation($setup);
         }
 
-        if (version_compare($context->getVersion(), '2.2.6') < 0) {
-            $this->savePriceIndexerDimensionsMode($setup);
-        }
-
         $setup->endSetup();
     }
 
@@ -484,22 +479,5 @@ class UpgradeData implements UpgradeDataInterface
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index'));
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_replica'));
         $setup->getConnection()->truncateTable($setup->getTable('catalog_category_product_index_tmp'));
-    }
-
-    /**
-     * @param ModuleDataSetupInterface $setup
-     * @return void
-     */
-    private function savePriceIndexerDimensionsMode(ModuleDataSetupInterface $setup)
-    {
-        $setup->getConnection()->insert(
-            $setup->getTable('core_config_data'),
-            [
-                'scope' => 'default',
-                'scope_id' => 0,
-                'path' => \Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE,
-                'value' => DimensionModeConfiguration::DIMENSION_NONE
-            ]
-        );
     }
 }
