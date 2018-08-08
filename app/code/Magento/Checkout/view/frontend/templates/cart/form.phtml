@@ -13,7 +13,9 @@
 <form action="<?= /* @escapeNotVerified */ $block->getUrl('checkout/cart/updatePost') ?>"
           method="post"
           id="form-validate"
-          data-mage-init='{"validation":{}}'
+          data-mage-init='{"Magento_Checkout/js/action/update-shopping-cart":
+              {"validationURL" : "/checkout/cart/updateItemQty"}
+          }'
           class="form form-cart">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
