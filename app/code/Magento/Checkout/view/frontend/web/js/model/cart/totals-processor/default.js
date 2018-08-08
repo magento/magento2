@@ -38,7 +38,7 @@ define([
             payload.addressInformation['shipping_carrier_code'] = quote.shippingMethod()['carrier_code'];
         }
 
-        storage.post(
+        return storage.post(
             serviceUrl, JSON.stringify(payload), false
         ).done(function (result) {
             var data = {
@@ -96,7 +96,7 @@ define([
             ) {
                 quote.setTotals(cartCache.get('totals'));
             } else {
-                loadFromServer(address);
+                return loadFromServer(address);
             }
         }
     };
