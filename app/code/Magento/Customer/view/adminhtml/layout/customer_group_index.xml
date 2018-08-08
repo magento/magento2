@@ -8,48 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Adminhtml\Group" name="adminhtml.block.customer.group.grid.container">
-                <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.customer.group.grid" as="grid">
-                    <arguments>
-                        <argument name="id" xsi:type="string">customerGroupGrid</argument>
-                        <argument name="dataSource" xsi:type="object">Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection</argument>
-                        <argument name="default_sort" xsi:type="string">type</argument>
-                        <argument name="default_dir" xsi:type="string">asc</argument>
-                        <argument name="save_parameters_in_session" xsi:type="string">1</argument>
-                    </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.customer.group.grid.columnSet">
-                        <arguments>
-                            <argument name="rowUrl" xsi:type="array">
-                                <item name="path" xsi:type="string">customer/*/edit</item>
-                                <item name="extraParamsTemplate" xsi:type="array">
-                                    <item name="id" xsi:type="string">getId</item>
-                                </item>
-                            </argument>
-                        </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.time" as="time">
-                            <arguments>
-                                <argument name="header" xsi:type="string" translate="true">ID</argument>
-                                <argument name="id" xsi:type="string">id</argument>
-                                <argument name="index" xsi:type="string">id</argument>
-                                <argument name="column_css_class" xsi:type="string">col-id</argument>
-                                <argument name="header_css_class" xsi:type="string">col-id</argument>
-                            </arguments>
-                        </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.type" as="type">
-                            <arguments>
-                                <argument name="header" xsi:type="string" translate="true">Group</argument>
-                                <argument name="index" xsi:type="string">code</argument>
-                            </arguments>
-                        </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.group.grid.columnSet.class_name" as="class_name">
-                            <arguments>
-                                <argument name="header" xsi:type="string" translate="true">Tax Class</argument>
-                                <argument name="index" xsi:type="string">tax_class_name</argument>
-                            </arguments>
-                        </block>
-                    </block>
-                </block>
-            </block>
+            <uiComponent name="customer_group_listing"/>
         </referenceContainer>
     </body>
 </page>

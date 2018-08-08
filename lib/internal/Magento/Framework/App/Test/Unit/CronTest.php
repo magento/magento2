@@ -56,6 +56,9 @@ class CronTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function prepareAreaListMock()
     {
         $areaMock = $this->createMock(\Magento\Framework\App\Area::class);

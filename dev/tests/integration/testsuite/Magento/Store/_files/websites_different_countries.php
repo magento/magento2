@@ -44,9 +44,6 @@ if (!$store->getId()) {
     $store->save();
 }
 
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
-
 //Setting up allowed countries
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 //Allowed countries for default website.
