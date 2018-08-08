@@ -47,10 +47,11 @@ class Website implements ReaderInterface
         foreach ($this->storeRepository->getList() as $store) {
             if ($store->getIsActive()) {
                 if (($scopeCode && $store->getWebsiteId() == $website->getId()) || (!$scopeCode)) {
-                    $stores[] = $store->getId();
+                    $stores[$store->getId()] = $store->getId();
                 }
             }
         }
+        sort($stores);
         return $stores;
     }
 
