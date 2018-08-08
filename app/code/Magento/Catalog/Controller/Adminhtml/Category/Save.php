@@ -281,7 +281,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                 continue;
             }
 
-            $data[$attributeCode] = false;
+            $data[$attributeCode] = '';
         }
 
         return $data;

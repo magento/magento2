@@ -58,10 +58,10 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->_reloadQuote();
-            $this->messageManager->addException($e, $e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
         $asJson = $request->getParam('json');
