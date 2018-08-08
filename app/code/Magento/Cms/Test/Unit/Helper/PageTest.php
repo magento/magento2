@@ -118,6 +118,9 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     private $httpRequestMock;
 
+    /**
+     * Test Setup
+     */
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)

@@ -41,6 +41,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for getAllowedCountries
+     */
     public function testGetAllowedCountriesWithEmptyFilter()
     {
         $website1 = $this->createMock(WebsiteInterface::class);
@@ -58,6 +61,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['AM' => 'AM'], $this->allowedCountriesReader->getAllowedCountries());
     }
 
+    /**
+     * Test for getAllowedCountries
+     */
     public function testGetAllowedCountries()
     {
         $this->scopeConfigMock->expects($this->once())
@@ -71,6 +77,9 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for getAllowedCountries
+     */
     public function testGetAllowedCountriesDefaultScope()
     {
         $this->storeManagerMock->expects($this->never())

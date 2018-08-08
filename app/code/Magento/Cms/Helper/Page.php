@@ -116,7 +116,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Return result CMS page
      *
      * @param Action $action
-     * @param null $pageId
+     * @param int $pageId
      * @return \Magento\Framework\View\Result\Page|bool
      */
     public function prepareResultPage(Action $action, $pageId = null)
