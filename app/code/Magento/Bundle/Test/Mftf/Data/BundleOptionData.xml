@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DropDownBundleOption" type="bundle_option">
+        <data key="title" unique="suffix">bundle-option-dropdown</data>
+        <data key="required">true</data>
+        <data key="type">select</data>
+        <data key="position">0</data>
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="RadioButtonsOption" type="bundle_option">
+        <data key="title" unique="suffix">bundle-option-radio</data>
+        <data key="required">true</data>
+        <data key="type">radio</data>
+        <data key="position">1</data>
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="CheckboxOption" type="bundle_option">
+        <data key="title" unique="suffix">bundle-option-checkbox</data>
+        <data key="required">true</data>
+        <data key="type">checkbox</data>
+        <data key="position">3</data>
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="MultipleSelectOption" type="bundle_option">
+        <data key="title" unique="suffix">bundle-option-multipleselect</data>
+        <data key="required">true</data>
+        <data key="type">multi</data>
+        <data key="position">4</data>
+        <var key="sku" entityKey="sku" entityType="product2"/>
+    </entity>
+</entities>

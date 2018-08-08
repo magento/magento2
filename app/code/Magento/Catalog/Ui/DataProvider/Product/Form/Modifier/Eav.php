@@ -40,6 +40,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier
@@ -608,7 +609,7 @@ class Eav extends AbstractModifier
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
-
+        $attributeCode = $attribute->getAttributeCode();
         $meta = $this->arrayManager->set($configPath, [], [
             'dataType' => $attribute->getFrontendInput(),
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
@@ -617,7 +618,7 @@ class Eav extends AbstractModifier
             'notice' => $attribute->getNote(),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
-            'code' => $attribute->getAttributeCode(),
+            'code' => $attributeCode,
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
@@ -647,7 +648,8 @@ class Eav extends AbstractModifier
             ]);
         }
 
-        if (in_array($attribute->getAttributeCode(), $this->attributesToDisable)) {
+        $product = $this->locator->getProduct();
+        if (in_array($attributeCode, $this->attributesToDisable) || $product->isLockedAttribute($attributeCode)) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
             ]);

@@ -498,7 +498,8 @@ class Checkout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? \Magento\Paypal\Model\Config::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $this->_getApi()->setAmount($this->_quote->getBaseGrandTotal())
+        $totalAmount = round($this->_quote->getBaseGrandTotal(), 2);
+        $this->_getApi()->setAmount($totalAmount)
             ->setCurrencyCode($this->_quote->getBaseCurrencyCode())
             ->setInvNum($this->_quote->getReservedOrderId())
             ->setReturnUrl($returnUrl)
