@@ -73,6 +73,11 @@ class Media extends \Magento\Framework\App\Action\Action
         return $resultJson;
     }
 
+    /**
+     * @param Product $currentConfigurable
+     * @param array $attributes
+     * @return bool|\Magento\Catalog\Api\Data\ProductInterface|null
+     */
     protected function getProductVariationWithMedia(Product $currentConfigurable, array $attributes)
     {
         $product = null;

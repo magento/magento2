@@ -143,6 +143,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $this->object->update($this->itemMock, ['qty' => $qty]);
     }
 
+    /**
+     * @return array
+     */
     public function qtyProvider()
     {
         return [
@@ -155,6 +158,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function qtyProviderDecimal()
     {
         return [

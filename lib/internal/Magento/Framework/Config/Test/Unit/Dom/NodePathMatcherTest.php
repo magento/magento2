@@ -32,6 +32,9 @@ class NodePathMatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function getNodeInfoDataProvider()
     {
         return [

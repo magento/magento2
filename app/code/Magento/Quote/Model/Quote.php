@@ -2001,7 +2001,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getMessages() as $message) {
             /* @var $error \Magento\Framework\Message\AbstractMessage */
             if ($message->getType() == \Magento\Framework\Message\MessageInterface::TYPE_ERROR) {
-                array_push($errors, $message);
+                $errors[] = $message;
             }
         }
         return $errors;
@@ -2363,13 +2363,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Trigger collect totals after loading, if required
      *
      * @return $this
+     * @throws \Exception
      */
     protected function _afterLoad()
     {
         // collect totals and save me, if required
         if (1 == $this->getData('trigger_recollect')) {
-            $this->collectTotals()->save();
+            $this->collectTotals()
+                ->setTriggerRecollect(0)
+                ->save();
         }
+
         return parent::_afterLoad();
     }
 

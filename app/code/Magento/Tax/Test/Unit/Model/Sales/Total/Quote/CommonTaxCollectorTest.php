@@ -178,6 +178,9 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getShippingDataObjectDataProvider()
     {
         $data = [

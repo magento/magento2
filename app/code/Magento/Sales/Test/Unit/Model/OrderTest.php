@@ -839,6 +839,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($itemCollectionMock));
     }
 
+    /**
+     * @return array
+     */
     public function canVoidPaymentDataProvider()
     {
         $data = [];
@@ -850,6 +853,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderActionFlag()
     {
         return [
@@ -1023,6 +1029,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function notInvoicingStatesProvider()
     {
         return [
@@ -1032,6 +1041,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function canNotCreditMemoStatesProvider()
     {
         return [

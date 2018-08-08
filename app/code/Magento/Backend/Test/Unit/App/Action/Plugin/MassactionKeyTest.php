@@ -75,6 +75,9 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function aroundDispatchDataProvider()
     {
         return [

@@ -44,6 +44,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->displayShipping());
     }
 
+    /**
+     * @return array
+     */
     public function displayShippingDataProvider()
     {
         return [

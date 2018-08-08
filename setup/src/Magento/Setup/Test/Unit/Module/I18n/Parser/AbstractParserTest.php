@@ -35,6 +35,9 @@ class AbstractParserTest extends \PHPUnit_Framework_TestCase
         $this->_parserMock->parse($options);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForValidateOptions()
     {
         return [

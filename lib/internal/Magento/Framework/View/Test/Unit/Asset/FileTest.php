@@ -134,6 +134,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
 
+    /**
+     * @return array
+     */
     public function getContentDataProvider()
     {
         return [

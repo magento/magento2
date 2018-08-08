@@ -76,6 +76,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $object->getData($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function beforeSaveDataProvider()
     {
         return [
@@ -122,6 +125,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $object->getData($attributeCode));
     }
 
+    /**
+     * @return array
+     */
     public function afterLoadDataProvider()
     {
         return [
@@ -164,6 +170,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->_model->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [
@@ -256,6 +265,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->validate($object));
     }
 
+    /**
+     * @return array
+     */
     public function validateDefaultSortDataProvider()
     {
         return [
@@ -299,6 +311,9 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->_model->validate($object);
     }
 
+    /**
+     * @return array
+     */
     public function validateDefaultSortException()
     {
         return [

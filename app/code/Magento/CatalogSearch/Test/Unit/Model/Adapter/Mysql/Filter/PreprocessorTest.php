@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -327,6 +327,9 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
 
+    /**
+     * @return array
+     */
     public function testTermFilterDataProvider()
     {
         return [

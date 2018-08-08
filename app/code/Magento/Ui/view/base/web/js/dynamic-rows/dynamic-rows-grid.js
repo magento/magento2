@@ -104,9 +104,8 @@ define([
          * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
-            this._super();
-
             this.updateInsertData(recordId);
+            this._super();
         },
 
         /**

@@ -123,7 +123,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnvalueMap(
+            ->will($this->returnValueMap(
                 [
                     [
                         'some_main_table',
@@ -195,6 +195,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->model->getSelectCountSql()->assemble();
     }
 
+    /**
+     * @return array
+     */
     public function initSelectDataProvider()
     {
         return [

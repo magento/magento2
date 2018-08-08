@@ -500,6 +500,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($initCategoryCollection, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryCollectionCollectionNullDataProvider()
     {
         return [
@@ -610,13 +613,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function getProductReindexProvider()
     {
-        return array(
+        return [
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
             'set 3' => [false, false, 1, 0]
-        );
+        ];
     }
 
     public function testPriceReindexCallback()

@@ -64,6 +64,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isArchive, $this->archive->isArchive($file));
     }
 
+    /**
+     * @return array
+     */
     public function isArchiveProvider()
     {
         return [
@@ -98,6 +101,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isArchive, $this->archive->isTar($file));
     }
 
+    /**
+     * @return array
+     */
     public function isTarProvider()
     {
         return [
@@ -143,6 +149,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith($this->destinationDir, $this->unpacked);
     }
 
+    /**
+     * @return array
+     */
     public function destinationProvider()
     {
         return [
@@ -200,6 +209,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith($this->destinationDir, $this->unpacked);
     }
 
+    /**
+     * @return array
+     */
     public function tarProvider()
     {
         return [

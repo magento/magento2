@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Minifier\Adapter\Css;
 
-use CSSmin as CssMinLibrary;
+use tubalmartin\CssMin\Minifier as CssMinLibrary;
 use Magento\Framework\Code\Minifier\AdapterInterface;
 
 /**
@@ -35,12 +35,12 @@ class CSSmin implements AdapterInterface
     /**
      * Get CSS Minifier
      *
-     * @return \CSSMin
+     * @return CssMinLibrary
      */
     private function getCssMin()
     {
-        if (!($this->cssMinifier instanceof \CSSMin)) {
-            $this->cssMinifier = new \CSSmin(false);
+        if (!($this->cssMinifier instanceof CssMinLibrary)) {
+            $this->cssMinifier = new CssMinLibrary(false);
         }
         return $this->cssMinifier;
     }

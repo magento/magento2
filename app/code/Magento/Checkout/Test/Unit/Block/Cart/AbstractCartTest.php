@@ -136,6 +136,9 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getTotalsCache());
     }
 
+    /**
+     * @return array
+     */
     public function getTotalsCacheDataProvider()
     {
         return [

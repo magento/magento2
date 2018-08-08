@@ -51,7 +51,7 @@ define([
             this.autoComplete = $(this.options.destinationSelector);
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
-            this.searchLabel = $(this.options.searchLabel);
+            this.searchLabel = this.searchForm.find(this.options.searchLabel);
             this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
@@ -89,7 +89,9 @@ define([
                 }, this), 250);
             }, this));
 
-            this.element.trigger('blur');
+            if (this.element.get(0) === document.activeElement) {
+                this.setActiveState(true);
+            }
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
@@ -207,6 +209,7 @@ define([
                     break;
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
                 case $.ui.keyCode.DOWN:
                     if (this.responseList.indexList) {

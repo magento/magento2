@@ -382,7 +382,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath));
+                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
         }

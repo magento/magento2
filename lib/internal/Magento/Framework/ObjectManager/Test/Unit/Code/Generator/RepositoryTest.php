@@ -18,21 +18,33 @@ class RepositoryTest extends EntityChildTestAbstract
     const GENERATOR_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Repository';
     const OUTPUT_FILE_NAME = 'SampleConverter.php';
 
+    /**
+     * @return string
+     */
     protected function getSourceClassName()
     {
         return self::SOURCE_CLASS_NAME;
     }
 
+    /**
+     * @return string
+     */
     protected function getResultClassName()
     {
         return self::RESULT_CLASS_NAME;
     }
 
+    /**
+     * @return string
+     */
     protected function getGeneratorClassName()
     {
         return self::GENERATOR_CLASS_NAME;
     }
 
+    /**
+     * @return string
+     */
     protected function getOutputFileName()
     {
         return self::OUTPUT_FILE_NAME;

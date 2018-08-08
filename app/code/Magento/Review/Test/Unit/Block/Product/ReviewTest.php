@@ -201,6 +201,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($actionUrl . '/id/' . $productId, $this->block->getProductReviewUrl());
     }
 
+    /**
+     * @return array
+     */
     public function getProductReviewUrlDataProvider()
     {
         return [

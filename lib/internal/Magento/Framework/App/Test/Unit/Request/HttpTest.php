@@ -267,6 +267,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
     }
 
+    /**
+     * @return array
+     */
     public function getDistroBaseUrlPathDataProvider()
     {
         return [
@@ -282,6 +285,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @return array
+     */
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -370,7 +376,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->_model->IsSafeMethod());
+        $this->assertEquals(true, $this->_model->isSafeMethod());
     }
 
     /**
@@ -382,9 +388,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->_model->IsSafeMethod());
+        $this->assertEquals(false, $this->_model->isSafeMethod());
     }
 
+    /**
+     * @return array
+     */
     public function httpSafeMethodProvider()
     {
         return [
@@ -395,6 +404,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function httpNotSafeMethodProvider()
     {
         return [
@@ -407,6 +419,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isSecureDataProvider()
     {
         /**
@@ -449,6 +464,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getPathInfo());
     }
 
+    /**
+     * @return array
+     */
     public function setPathInfoDataProvider()
     {
         return [

@@ -180,6 +180,9 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($currencySymbol, $this->priceCurrency->getCurrencySymbol($storeId, $currencyMock));
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getCurrentCurrencyMock()
     {
         $currency = $this->getMockBuilder('Magento\Directory\Model\Currency')
@@ -189,6 +192,10 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
         return $currency;
     }
 
+    /**
+     * @param $baseCurrency
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getStoreMock($baseCurrency)
     {
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -202,6 +209,12 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
         return $store;
     }
 
+    /**
+     * @param $amount
+     * @param $convertedAmount
+     * @param $currency
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getBaseCurrencyMock($amount, $convertedAmount, $currency)
     {
         $baseCurrency = $this->getMockBuilder('Magento\Directory\Model\Currency')

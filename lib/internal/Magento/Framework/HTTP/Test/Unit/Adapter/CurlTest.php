@@ -38,6 +38,9 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/curl_response_expected.txt'), $this->model->read());
     }
 
+    /**
+     * @return array
+     */
     public function readDataProvider()
     {
         return [

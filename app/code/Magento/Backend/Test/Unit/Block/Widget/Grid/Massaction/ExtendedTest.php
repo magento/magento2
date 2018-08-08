@@ -155,6 +155,9 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_block->getGridIdsJson());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetGridIdsJsonWithUseSelectAll()
     {
         return [

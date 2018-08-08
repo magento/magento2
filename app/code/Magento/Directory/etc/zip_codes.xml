@@ -81,6 +81,7 @@
     <zip countryCode="CA">
         <codes>
             <code id="pattern_1" active="true" example="A1B 2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}\s[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
+            <code id="pattern_2" active="true" example="A1B2C3">^[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}[a-zA-z]{1}[0-9]{1}$</code>
         </codes>
     </zip>
     <zip countryCode="IC">

@@ -107,6 +107,9 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->basePrice->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function getValueDataProvider()
     {
         return [[77, 77], [0, 0], [false, 99]];

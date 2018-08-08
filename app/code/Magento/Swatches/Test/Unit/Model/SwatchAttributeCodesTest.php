@@ -156,6 +156,9 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataForGettingCodes()
     {
         return [

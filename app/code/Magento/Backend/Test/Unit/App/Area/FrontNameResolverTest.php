@@ -118,6 +118,9 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->isHostBackend(), $expectedValue);
     }
 
+    /**
+     * @return array
+     */
     public function hostsDataProvider()
     {
         return [

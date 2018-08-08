@@ -364,7 +364,7 @@ class File extends AbstractIo
             $dirCallback = $fileCallback;
         }
         if (is_dir($dir)) {
-            foreach (scandir($dir) as $item) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }

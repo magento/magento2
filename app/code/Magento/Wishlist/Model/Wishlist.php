@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -611,6 +612,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $item = null;
         if ($itemId instanceof Item) {
             $item = $itemId;
+            $itemId = $item->getId();
         } else {
             $item = $this->getItem((int)$itemId);
         }

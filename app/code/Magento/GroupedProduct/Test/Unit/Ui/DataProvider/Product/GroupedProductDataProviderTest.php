@@ -75,6 +75,9 @@ class GroupedProductDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return object
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(GroupedProductDataProvider::class, [

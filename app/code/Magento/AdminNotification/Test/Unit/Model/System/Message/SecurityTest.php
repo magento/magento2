@@ -79,6 +79,9 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function isDisplayedDataProvider()
     {
         return [

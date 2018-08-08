@@ -18,7 +18,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/alert.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/alert.phtml';
 
     /**
      * @return $this

@@ -6116,3 +6116,9 @@ table tfoot tr td:last-child {
   content: ' Test\';\A}' "\A" '\A.test + .test._other ~ ul > li' " {\A    height: @var;\A    content: ' + ';\A}";
   white-space: pre;
 }
+.test-content-calc {
+  width: calc((100% / 12 * 2) - 10px);
+}
+.test-svg-xml-image {
+  background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 38 40"><style>.st0{fill:none;stroke:%23ffffff;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}</style><circle cx="14.7" cy="14.7" r="13.7" class="st0"/><path d="M23.9 24.7L37 39" class="st0"/></svg>') no-repeat left center;
+}

@@ -64,6 +64,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getEntities('entities'));
     }
 
+    /**
+     * @return array
+     */
     public function getEntitiesDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_model->getEntityTypes($entity));
     }
 
+    /**
+     * @return array
+     */
     public function getEntityTypesDataProvider()
     {
         return [

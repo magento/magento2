@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,7 @@ class FixtureModel
      */
     public function loadFixtures()
     {
-        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
+        $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN, GLOB_NOSORT);
 
         foreach ($files as $file) {
             $file = basename($file, '.php');

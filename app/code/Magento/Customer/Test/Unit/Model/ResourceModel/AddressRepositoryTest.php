@@ -6,8 +6,8 @@
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Customer\Api\Data\AddressInterface as AddressData;
-use Magento\Directory\Model\ResourceModel\Country\Collection as Countries;
 use Magento\Framework\Exception\InputException;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Unit test for Magento\Customer\Model\ResourceModel\AddressRepository
@@ -70,6 +70,16 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\AddressRepository
      */
     protected $repository;
+
+    /**
+     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountriesReaderMock;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shareConfigMock;
 
     protected function setUp()
     {
@@ -137,6 +147,26 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->allowedCountriesReaderMock = $this->getMock(
+            \Magento\Directory\Model\AllowedCountries::class,
+            ['getAllowedCountries'],
+            [],
+            '',
+            false
+        );
+        $this->shareConfigMock = $this->getMock(
+            \Magento\Customer\Model\Config\Share::class,
+            ['isGlobalScope'],
+            [],
+            '',
+            false
+        );
+        $this->shareConfigMock->method('isGlobalScope')->willReturn(false);
+        $this->allowedCountriesReaderMock
+            ->method('getAllowedCountries')
+            ->with(ScopeInterface::SCOPE_WEBSITE, null)
+            ->willReturn(['1', '2']);
+
         $this->repository = new \Magento\Customer\Model\ResourceModel\AddressRepository(
             $this->addressFactory,
             $this->addressRegistry,
@@ -145,7 +175,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->directoryData,
             $this->addressSearchResultsFactory,
             $this->addressCollectionFactory,
-            $this->extensionAttributesJoinProcessor
+            $this->extensionAttributesJoinProcessor,
+            $this->allowedCountriesReaderMock,
+            $this->shareConfigMock
         );
     }
 
@@ -315,15 +347,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getRegion')
             ->willReturn('');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $countryCollection */
-        $countryCollection = $this->getMockBuilder(Countries::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $countryCollection->expects($this->once())->method('getAllIds')->willReturn(['1', '2']);
-        $this->directoryData->expects($this->once())
-            ->method('getCountryCollection')
-            ->willReturn($countryCollection);
-
         $this->repository->save($customerAddress);
     }
 
@@ -407,15 +430,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getRegion')
             ->willReturn('');
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject $countryCollection */
-        $countryCollection = $this->getMockBuilder(Countries::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $countryCollection->expects($this->once())->method('getAllIds')->willReturn(['1', '2']);
-        $this->directoryData->expects($this->once())
-            ->method('getCountryCollection')
-            ->willReturn($countryCollection);
 
         $this->repository->save($customerAddress);
     }
@@ -713,15 +727,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->any())->method('getCountryModel')->willReturn($countryModel);
         $countryModel->expects($this->any())->method('getRegionCollection')->willReturn($regionCollection);
         $regionCollection->expects($this->any())->method('getAllIds')->willReturn(['3', '4']);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject $countryCollection */
-        $countryCollection = $this->getMockBuilder(Countries::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $countryCollection->expects($this->once())->method('getAllIds')->willReturn(['1', '2']);
-        $this->directoryData->expects($this->once())
-            ->method('getCountryCollection')
-            ->willReturn($countryCollection);
 
         return $customerAddress;
     }

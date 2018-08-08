@@ -62,17 +62,16 @@
 //  Common
 //  _____________________________________________
 
+.page-wrapper {
+    .ie9 & {
+        .lib-css(background-color, @page__background-color);
+        min-height: 0;
+    }
+}
+
 & when (@media-common = true) {
     body {
         .lib-css(background-color, @page__background-color);
-    }
-
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
-    .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
-        }
     }
 
     //
@@ -328,6 +327,9 @@
         .widget.block {
             .lib-css(margin, @indent__base 0);
         }
+        .links .widget.block {
+            margin: 0;
+        }
     }
 
     .no-display:extend(.abs-no-display all) {
@@ -415,6 +417,17 @@
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .cms-page-view .page-main {
+        padding-top: 41px;
+        position: relative;
     }
 }
 

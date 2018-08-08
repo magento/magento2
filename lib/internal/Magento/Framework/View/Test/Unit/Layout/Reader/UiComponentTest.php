@@ -77,6 +77,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         $this->model->interpret($this->context, $element);
     }
 
+    /**
+     * @return array
+     */
     public function interpretDataProvider()
     {
         return [

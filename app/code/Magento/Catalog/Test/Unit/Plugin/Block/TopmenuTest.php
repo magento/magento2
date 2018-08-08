@@ -122,6 +122,9 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
         return $this->getMock($className, [], [], '', false);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function _preparationData()
     {
         $this->_childrenCategory = $this->getMock(

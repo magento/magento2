@@ -512,6 +512,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed

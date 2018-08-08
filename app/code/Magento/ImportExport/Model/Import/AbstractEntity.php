@@ -803,7 +803,7 @@ abstract class AbstractEntity
                 if (!$this->isAttributeParticular($columnName)) {
                     if (trim($columnName) == '') {
                         $emptyHeaderColumns[] = $columnNumber;
-                    } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                    } elseif (!preg_match('/^[a-z][\w]*$/u', $columnName)) {
                         $invalidColumns[] = $columnName;
                     } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                         $invalidAttributes[] = $columnName;

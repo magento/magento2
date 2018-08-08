@@ -203,6 +203,9 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($paymentExpected->getData(), $payment->getData());
     }
 
+    /**
+     * @return array
+     */
     public function setTransStatusDataProvider()
     {
         return [

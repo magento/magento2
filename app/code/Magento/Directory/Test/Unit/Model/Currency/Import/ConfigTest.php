@@ -33,6 +33,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         new \Magento\Directory\Model\Currency\Import\Config($configData);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
@@ -78,6 +81,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_model->getServiceClass($serviceName));
     }
 
+    /**
+     * @return array
+     */
     public function getServiceClassDataProvider()
     {
         return ['known' => ['service_one', 'Service_One'], 'unknown' => ['unknown', null]];
@@ -93,6 +99,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_model->getServiceLabel($serviceName));
     }
 
+    /**
+     * @return array
+     */
     public function getServiceLabelDataProvider()
     {
         return ['known' => ['service_one', 'Service One'], 'unknown' => ['unknown', null]];

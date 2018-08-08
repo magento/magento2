@@ -62,6 +62,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         ], $this->link->toHtml());
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [

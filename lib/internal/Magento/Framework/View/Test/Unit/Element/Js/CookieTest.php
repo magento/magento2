@@ -83,6 +83,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public static function domainDataProvider()
     {
         return [

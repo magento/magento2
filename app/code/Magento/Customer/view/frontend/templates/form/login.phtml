@@ -32,7 +32,7 @@
                 <div class="field email required">
                     <label class="label" for="email"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
                     <div class="control">
-                        <input name="login[username]" value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr(__('Email')) ?>" data-validate="{required:true, 'validate-email':true}">
+                        <input name="login[username]" value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr(__('Email')) ?>" data-mage-init='{"mage/trim-input":{}}' data-validate="{required:true, 'validate-email':true}">
                     </div>
                 </div>
                 <div class="field password required">
@@ -50,3 +50,4 @@
         </form>
     </div>
 </div>
+

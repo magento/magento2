@@ -15,7 +15,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var string
      */
-    protected $_template = 'dashboard/grid.phtml';
+    protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**
      * Setting default for every grid on dashboard

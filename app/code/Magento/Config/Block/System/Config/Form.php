@@ -366,15 +366,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $data = $this->getConfigValue($path);
             }
         }
-        $fieldRendererClass = $field->getFrontendModel();
-        if ($fieldRendererClass) {
-            $fieldRenderer = $this->_layout->getBlockSingleton($fieldRendererClass);
-        } else {
-            $fieldRenderer = $this->_fieldRenderer;
-        }
-
-        $fieldRenderer->setForm($this);
-        $fieldRenderer->setConfigData($this->_configData);
 
         $elementName = $this->_generateElementName($field->getPath(), $fieldPrefix);
         $elementId = $this->_generateElementId($field->getPath($fieldPrefix));
@@ -420,7 +411,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($field->hasOptions()) {
             $formField->setValues($field->getOptions());
         }
-        $formField->setRenderer($fieldRenderer);
+        $formField->setRenderer($this->resolveFieldRenderer($field));
     }
 
     /**
@@ -684,7 +675,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
+     * Temporary moved those $this->getRequest()->getParam('blabla') from the code across this block
      * to getBlala() methods to be later set from controller with setters
      */
 
@@ -790,5 +781,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
         }
         return $data->getData($path);
+    }
+
+    /**
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @return Form\Field|\Magento\Framework\View\Element\BlockInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function resolveFieldRenderer(\Magento\Config\Model\Config\Structure\Element\Field $field)
+    {
+        $fieldRendererClass = $field->getFrontendModel();
+        if ($fieldRendererClass) {
+            $fieldRenderer = $this->_layout->getBlockSingleton($fieldRendererClass);
+        } else {
+            $fieldRenderer = $this->_fieldRenderer;
+        }
+
+        $fieldRenderer->setForm($this);
+        $fieldRenderer->setConfigData($this->_configData);
+        return $fieldRenderer;
     }
 }

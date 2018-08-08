@@ -65,6 +65,9 @@ class BuilderFactoryTest extends \PHPUnit_Framework_TestCase
         $this->buildFactory->create($type, $arguments);
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

@@ -60,6 +60,9 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

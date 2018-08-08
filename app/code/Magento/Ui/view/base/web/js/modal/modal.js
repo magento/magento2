@@ -100,11 +100,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -196,7 +197,7 @@ define([
          */
         setSubTitle: function (subTitle) {
             this.options.subTitle = subTitle;
-            this.modal.find(this.options.modalSubTitle).html(subTitle);
+            this.modal.find(this.options.modalSubTitle).text(subTitle);
         },
 
         /**

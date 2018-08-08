@@ -1112,6 +1112,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->initializedProductMock, $results);
     }
 
+    /**
+     * @return mixed
+     */
     public function saveWithLinksDataProvider()
     {
         // Scenario 1

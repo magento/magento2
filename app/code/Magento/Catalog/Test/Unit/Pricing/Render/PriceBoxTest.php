@@ -88,6 +88,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->object->getCanDisplayQty($product));
     }
 
+    /**
+     * @return array
+     */
     public function getCanDisplayQtyDataProvider()
     {
         return [

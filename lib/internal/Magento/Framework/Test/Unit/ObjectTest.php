@@ -366,6 +366,9 @@ string',
         $this->assertEquals($expectedOutput, $output);
     }
 
+    /**
+     * @return array
+     */
     public function underscoreDataProvider()
     {
         return [

@@ -38,6 +38,9 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         $this->_model->evaluate($inputData);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         return [
@@ -62,6 +65,9 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateDataProvider()
     {
         return [

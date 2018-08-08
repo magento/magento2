@@ -141,6 +141,9 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($secureRequest, $adminConfig->getCookieSecure());
     }
 
+    /**
+     * @return array
+     */
     public function requestSecureDataProvider()
     {
         return [[true], [false]];

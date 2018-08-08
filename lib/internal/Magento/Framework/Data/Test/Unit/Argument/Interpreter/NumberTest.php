@@ -30,6 +30,9 @@ class NumberTest extends \PHPUnit_Framework_TestCase
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         return ['no value' => [[]], 'non-numeric value' => [['value' => 'non-numeric']]];
@@ -47,6 +50,9 @@ class NumberTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateDataProvider()
     {
         return [

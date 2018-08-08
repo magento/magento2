@@ -86,6 +86,9 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->plugin->beforeStart($this->sessionManager);
     }
 
+    /**
+     * @return array
+     */
     public function testBeforeStartDataProvider()
     {
         return [

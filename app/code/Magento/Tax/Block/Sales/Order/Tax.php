@@ -260,12 +260,6 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initDiscount()
     {
-        //        $store  = $this->getStore();
-        //        $parent = $this->getParentBlock();
-        //        if ($this->_config->displaySales) {
-        //
-        //        } elseif ($this->_config->displaySales) {
-        //        }
     }
 
     /**

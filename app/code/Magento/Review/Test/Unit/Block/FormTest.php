@@ -125,6 +125,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($actionUrl . '/id/' . $productId, $this->object->getAction());
     }
 
+    /**
+     * @return array
+     */
     public function getActionDataProvider()
     {
         return [

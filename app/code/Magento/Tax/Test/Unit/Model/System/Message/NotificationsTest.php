@@ -73,6 +73,9 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->notifications->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderIsDisplayed()
     {
         return [

@@ -176,6 +176,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
+    /**
+     * @param bool $id
+     * @return mixed
+     */
     protected function mockPayment($id = false)
     {
         $payment = $this->getMock(

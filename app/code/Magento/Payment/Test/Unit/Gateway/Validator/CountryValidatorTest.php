@@ -68,6 +68,9 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificTrueDataProvider()
     {
         return [
@@ -96,6 +99,9 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificFalseDataProvider()
     {
         return [

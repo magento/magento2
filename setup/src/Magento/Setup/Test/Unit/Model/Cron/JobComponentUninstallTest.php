@@ -282,6 +282,9 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->job->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeWrongFormatDataProvider()
     {
         return [
