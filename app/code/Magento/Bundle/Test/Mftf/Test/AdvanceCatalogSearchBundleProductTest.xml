@@ -22,20 +22,17 @@
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="DropdownBundleOption" stepKey="bundleOption">
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-            <getData entity="AllBundleOptions" index="0" stepKey="getBundleOption">
-                <requiredEntity createDataKey="product"/>
-            </getData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -60,20 +57,17 @@
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="DropdownBundleOption" stepKey="bundleOption">
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-            <getData entity="AllBundleOptions" index="0" stepKey="getBundleOption">
-                <requiredEntity createDataKey="product"/>
-            </getData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -98,20 +92,17 @@
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="DropdownBundleOption" stepKey="bundleOption">
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-            <getData entity="AllBundleOptions" index="0" stepKey="getBundleOption">
-                <requiredEntity createDataKey="product"/>
-            </getData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -136,20 +127,17 @@
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="DropdownBundleOption" stepKey="bundleOption">
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-            <getData entity="AllBundleOptions" index="0" stepKey="getBundleOption">
-                <requiredEntity createDataKey="product"/>
-            </getData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -174,20 +162,17 @@
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
             <createData entity="ApiBundleProduct" stepKey="product"/>
-            <createData entity="DropdownBundleOption" stepKey="bundleOption">
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-            <getData entity="AllBundleOptions" index="0" stepKey="getBundleOption">
-                <requiredEntity createDataKey="product"/>
-            </getData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
-                <requiredEntity createDataKey="getBundleOption"/>
+                <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="simple2"/>
             </createData>
             <getData entity="GetProduct" stepKey="arg1">
