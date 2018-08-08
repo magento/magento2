@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Add Product to wishlist from the category page and check message -->
+    <actionGroup name="StorefrontCustomerAddCategoryProductToWishlistActionGroup">
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
+        <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
+    </actionGroup>
+
+    <!-- Add Product to wishlist from the product page and check message -->
+    <actionGroup name="StorefrontCustomerAddProductToWishlistActionGroup">
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+        <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
+    </actionGroup>
+
+    <!-- Check product in wishlist -->
+    <actionGroup name="StorefrontCustomerCheckProductInWishlist">
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistAddToCart" />
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistProductImage" />
+    </actionGroup>
+
+    <!-- Check product in wishlist sidebar -->
+    <actionGroup name="StorefrontCustomerCheckProductInWishlistSidebar">
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart" />
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage" />
+    </actionGroup>
+</actionGroups>

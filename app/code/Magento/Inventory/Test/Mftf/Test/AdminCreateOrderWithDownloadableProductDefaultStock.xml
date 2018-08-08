@@ -18,6 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <group value="skip" />
         </annotations>
 
         <before>
@@ -74,6 +75,7 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
 
         <comment userInput="Assign default source to product and set quantity to 100." stepKey="assignDefaultSourceToProductComment"/>
+        <waitForPageLoad stepKey="waitForPage" />
         <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
             <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="filter_value" value="_defaultSource.source_code"/>
@@ -98,6 +100,10 @@
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
+
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
         <actionGroup ref="addDownloadableProductToOrder" stepKey="addDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
             <argument name="link" value="downloadableLink"/>
@@ -116,7 +122,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="{{DownloadableProduct.sku}}"/>
+            <argument name="value" value="DownloadableProduct.sku"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="99" stepKey="checkSalableQtyAfterPlaceOrder"/>

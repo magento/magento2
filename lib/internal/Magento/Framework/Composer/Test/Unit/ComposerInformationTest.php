@@ -28,12 +28,12 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     private $lockerMock;
 
     /**
-     * @var \Composer\Repository\RepositoryInterface|\PHPUnit\Framework_MockObject_Builder_InvocationMocker:
+     * @var \Composer\Repository\RepositoryInterface|\PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     private $lockerRepositoryMock;
 
     /**
-     * @var \Composer\Package\CompletePackageInterface|\PHPUnit\Framework_MockObject_Builder_InvocationMocker:
+     * @var \Composer\Package\CompletePackageInterface|\PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     private $packageMock;
 
@@ -92,6 +92,9 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->composerInformation->isMagentoRoot());
     }
 
+    /**
+     * @return array
+     */
     public function isMagentoRootDataProvider()
     {
         return [

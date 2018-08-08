@@ -9,6 +9,7 @@ namespace Magento\InventorySourceSelection\Model\Request;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 
 /**
  * @inheritdoc
@@ -26,13 +27,34 @@ class InventoryRequest implements InventoryRequestInterface
     private $items;
 
     /**
+     * @var ItemRequestInterfaceFactory
+     */
+    private $itemRequestFactory;
+
+    /**
+     * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param int $stockId
      * @param ItemRequestInterface[] $items
      */
-    public function __construct(int $stockId = null, array $items = null)
-    {
+    public function __construct(
+        ItemRequestInterfaceFactory $itemRequestFactory,
+        int $stockId,
+        array $items
+    ) {
         $this->stockId = $stockId;
-        $this->items = $items;
+        $this->itemRequestFactory = $itemRequestFactory;
+
+        //TODO: Temporary fix for resolving issue with webApi (https://github.com/magento-engcom/msi/issues/1524)
+        foreach ($items as $item) {
+            if (false === $item instanceof ItemRequestInterface) {
+                $this->items[] = $this->itemRequestFactory->create([
+                    'sku' => $item['sku'],
+                    'qty' => $item['qty']
+                ]);
+            } else {
+                $this->items[] = $item;
+            }
+        }
     }
 
     /**
@@ -54,7 +76,7 @@ class InventoryRequest implements InventoryRequestInterface
     /**
      * @inheritdoc
      */
-    public function setStockId($stockId)
+    public function setStockId(int $stockId): void
     {
         $this->stockId = $stockId;
     }
@@ -62,7 +84,7 @@ class InventoryRequest implements InventoryRequestInterface
     /**
      * @inheritdoc
      */
-    public function setItems($items)
+    public function setItems(array $items): void
     {
         $this->items = $items;
     }

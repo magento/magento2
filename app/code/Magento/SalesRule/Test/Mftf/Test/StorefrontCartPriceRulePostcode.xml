@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontCartPriceRulePostcode">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Customer should only see cart price rule discount if condition shipping postcode"/>
+            <description value="Customer should only see cart price rule discount if condition shipping postcode"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-238"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" stepKey="createPreReqProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Create the rule... -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
+        <!-- Scroll down to fix some flaky behavior... -->
+        <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
+        <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule"/>
+        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Shipping Postcode" stepKey="selectProductAttributes"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '1')}}" stepKey="startEditOperator"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="is one of" stepKey="fillOperator"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '2')}}" stepKey="startEditValue"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="78613" stepKey="fillValue"/>
+        <waitForPageLoad stepKey="wait5"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="9.99" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+
+        <!-- Add the product we created to our cart -->
+        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+
+        <!-- Should not see the discount yet because we have not filled in postcode -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
+
+        <!-- See discount if we use valid postcode -->
+        <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="expandShipping"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="78613" stepKey="fillPostcode"/>
+        <waitForPageLoad stepKey="waitForPostcode1"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$9.99" stepKey="seeDiscountTotal"/>
+
+        <!-- Do not see discount with other postcode -->
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="90210" stepKey="fillPostcode2"/>
+        <waitForPageLoad stepKey="waitForPostcode2"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount2"/>
+    </test>
+</tests>

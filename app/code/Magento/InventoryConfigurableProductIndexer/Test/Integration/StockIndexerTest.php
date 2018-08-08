@@ -13,6 +13,8 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 use Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData;
 use Magento\InventorySalesApi\Model\GetStockItemDataInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\InventoryIndexer\Test\Integration\Indexer\RemoveIndexData;
@@ -21,6 +23,9 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StockIndexerTest extends TestCase
 {
     /**
@@ -69,6 +74,16 @@ class StockIndexerTest extends TestCase
     private $productRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StoreRepository
+     */
+    private $storeRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -83,7 +98,8 @@ class StockIndexerTest extends TestCase
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->storeRepository = Bootstrap::getObjectManager()->get(StoreRepository::class);
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
     }
@@ -135,8 +151,10 @@ class StockIndexerTest extends TestCase
     public function testReindexListSetAllSimplesOutOfStock()
     {
         $configurableSku = 'configurable_1';
-
+        $store = $this->storeRepository->get('store_for_us_website');
+        $this->storeManager->setCurrentStore($store->getId());
         $children = $this->linkManagement->getChildren($configurableSku);
+
         foreach ($children as $child) {
             $sku = $child->getSku();
             $sourceItems = $this->getSourceItemsBySku->execute($sku);
@@ -180,8 +198,10 @@ class StockIndexerTest extends TestCase
         $configurableSku = 'configurable_1';
 
         $sourceCodes = ['eu-1', 'eu-2', 'eu-3'];
-
+        $store = $this->storeRepository->get('store_for_us_website');
+        $this->storeManager->setCurrentStore($store->getId());
         $children = $this->linkManagement->getChildren($configurableSku);
+
         foreach ($children as $child) {
             $sku = $child->getSku();
             $searchCriteria = $this->searchCriteriaBuilder

@@ -491,6 +491,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function eventsDataProvider()
     {
         return [
