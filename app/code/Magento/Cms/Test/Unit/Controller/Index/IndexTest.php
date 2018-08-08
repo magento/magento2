@@ -42,6 +42,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageId = 'home';
 
+    /**
+     * Test setUp
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -91,6 +94,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultPage()
     {
         $this->cmsHelperMock->expects($this->once())
@@ -100,6 +106,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultForward()
     {
         $this->forwardMock->expects($this->once())
