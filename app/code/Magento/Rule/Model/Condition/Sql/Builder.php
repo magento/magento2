@@ -166,9 +166,9 @@ class Builder
         $bindValue = $condition->getBindArgumentValue();
         $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
 
-        // values for multiselect attributes can be saved in comma separated format
+        // values for multiselect attributes can be saved in comma-separated format
         // below is a solution for matching such conditions with selected values
-        if (in_array($conditionOperator, ['()', '{}']) && is_array($bindValue)) {
+        if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {
             foreach ($bindValue as $item) {
                 $expression .= $this->_connection->quoteInto(
                     " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
@@ -184,10 +184,11 @@ class Builder
 
     /**
      * @param Combine $combine
-     * @param string $value
-     * @param bool $isDefaultStoreUsed
+     * @param string  $value
+     * @param bool    $isDefaultStoreUsed
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getMappedSqlCombination(
         Combine $combine,
