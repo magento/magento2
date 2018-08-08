@@ -49,6 +49,9 @@ class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
         $scopeResolver->get($scope);
     }
 
+    /**
+     * @return array
+     */
     public function testGetExceptionDataProvider()
     {
         return [

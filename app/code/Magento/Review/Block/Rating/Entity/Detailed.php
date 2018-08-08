@@ -15,7 +15,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'detailed.phtml';
+    protected $_template = 'Magento_Review::detailed.phtml';
 
     /**
      * @var \Magento\Review\Model\RatingFactory

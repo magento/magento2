@@ -112,6 +112,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -163,6 +166,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->compactValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function compactAndRestoreValueDataProvider()
     {
         return [

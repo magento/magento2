@@ -49,7 +49,8 @@
     },
     "constraint": {
       "PRIMARY": true,
-      "IDX_EAA51B56FF092A0DCB795D1CEF812B7B": true
+      "IDX_EAA51B56FF092A0DCB795D1CEF812B7B": true,
+      "UNQ_EAA51B56FF092A0DCB795D1CEF812B7B": true
     }
   },
   "catalogrule_product_price": {
@@ -146,7 +147,8 @@
     },
     "constraint": {
       "PRIMARY": true,
-      "UNQ_BDF2B92A4F0B28D7896648B3B8A26089": true
+      "IDX_EAA51B56FF092A0DCB795D1CEF812B7B": true,
+      "UNQ_EAA51B56FF092A0DCB795D1CEF812B7B": true
     }
   },
   "catalogrule_product_price_replica": {

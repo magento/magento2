@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductLink" dataType="product_link" type="create">
+        <field key="sku">string</field>
+        <field key="link_type">string</field>
+        <field key="linked_product_sku">string</field>
+        <field key="linked_product_type">string</field>
+        <field key="position">integer</field>
+        <object key="extension_attributes" dataType="product_link_extension_attribute">
+            <field key="qty">integer</field>
+        </object>
+    </operation>
+    <operation name="UpdateProductLink" dataType="product_link" type="update">
+        <field key="sku">string</field>
+        <field key="link_type">string</field>
+        <field key="linked_product_sku">string</field>
+        <field key="linked_product_type">string</field>
+        <field key="position">integer</field>
+        <object key="extension_attributes" dataType="product_link_extension_attribute">
+            <field key="qty">integer</field>
+        </object>
+    </operation>
+</operations>

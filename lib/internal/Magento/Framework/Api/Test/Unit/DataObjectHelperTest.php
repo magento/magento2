@@ -367,6 +367,9 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($firstAddressDataObject->getRegion(), $secondAddressDataObject->getRegion());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestMergeDataObjects()
     {
         return [
