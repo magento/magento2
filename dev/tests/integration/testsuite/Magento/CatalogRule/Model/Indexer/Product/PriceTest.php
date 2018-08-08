@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\CatalogRule\Model\Indexer\Product;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -21,9 +19,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceRule;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->resourceRule = Bootstrap::getObjectManager()->get(Rule::class);
@@ -35,7 +30,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
-    public function testPriceApplying() : void
+    public function testPriceApplying()
     {
         $customerGroupId = 1;
         $websiteId = 1;
@@ -67,10 +62,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
-     *
-     * @return void
      */
-    public function testSortByPrice() : void
+    public function testSortByPrice()
     {
         $searchCriteria = Bootstrap::getObjectManager()->create(SearchCriteriaInterface::class);
         $sortOrder = Bootstrap::getObjectManager()->create(SortOrder::class);
