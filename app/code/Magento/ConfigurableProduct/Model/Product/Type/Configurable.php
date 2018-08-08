@@ -930,6 +930,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         return $result;
                     }
                 }
+            } elseif (is_string($result)) {
+                return __($result)->render();
             }
         }
 
