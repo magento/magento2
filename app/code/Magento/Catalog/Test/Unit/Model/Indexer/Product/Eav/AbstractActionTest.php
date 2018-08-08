@@ -27,6 +27,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeConfig;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
@@ -50,6 +53,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetIndexers()
     {
         $expectedIndexers = [
@@ -85,6 +91,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->getIndexer('unknown_type');
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testGetIndexer()
     {
         $this->_eavSourceFactoryMock->expects($this->once())
@@ -98,6 +108,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('source_return_value', $this->_model->getIndexer('source'));
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testReindexWithoutArgumentsExecutesReindexAll()
     {
         $eavSource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class)
@@ -197,6 +211,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         $this->_model->reindex($ids);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public function testReindexWithDisabledEavIndexer()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(0);

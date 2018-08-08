@@ -39,6 +39,11 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test with other search engine (not MySQL) selected in config
+     *
+     * @return void
+     */
     public function testBeforeSave()
     {
         $this->config->expects($this->once())->method('getData')->willReturn('elasticsearch');
@@ -47,6 +52,11 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeSave($this->config);
     }
 
+    /**
+     * Test with MySQL search engine selected in config
+     *
+     * @return void
+     */
     public function testBeforeSaveMysqlSearchEngine()
     {
         $this->config->expects($this->at(0))->method('getData')->willReturn('mysql');
