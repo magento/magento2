@@ -13,6 +13,9 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
@@ -33,19 +36,28 @@ class TextTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown()
     {
         $this->_model = null;
     }
 
-    public function testValidateValueString()
+    /**
+     * Test for string validation
+     */
+    public function testValidateValueString(): void
     {
         $inputValue = '0';
         $expectedResult = true;
         $this->assertEquals($expectedResult, $this->_model->validateValue($inputValue));
     }
 
-    public function testValidateValueInteger()
+    /**
+     * Test for integer validation
+     */
+    public function testValidateValueInteger(): void
     {
         $inputValue = 0;
         $expectedResult = ['"Test" is a required value.'];
@@ -53,7 +65,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, [(string)$result[0]]);
     }
 
-    public function testWithoutLengthValidation()
+    /**
+     * Test without length validation
+     */
+    public function testWithoutLengthValidation(): void
     {
         $expectedResult = true;
         $defaultAttributeData = [

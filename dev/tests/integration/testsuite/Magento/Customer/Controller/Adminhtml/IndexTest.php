@@ -44,6 +44,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var \Magento\TestFramework\ObjectManager */
     protected $objectManager;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -67,6 +70,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown()
     {
         /**
@@ -522,7 +528,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
-    public function testNewAction()
+    /**
+     * Tests new action
+     */
+    public function testNewAction(): void
     {
         $this->dispatch('backend/customer/index/edit');
         $body = $this->getResponse()->getBody();

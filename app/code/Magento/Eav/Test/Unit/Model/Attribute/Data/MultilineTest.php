@@ -21,6 +21,9 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      */
     protected $stringMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         /** @var TimezoneInterface $timezoneMock */

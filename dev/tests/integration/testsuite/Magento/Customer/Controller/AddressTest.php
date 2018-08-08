@@ -18,6 +18,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /** @var FormKey */
     private $formKey;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         parent::setUp();
