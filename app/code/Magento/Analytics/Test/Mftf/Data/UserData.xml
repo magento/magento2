@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="adminNoReport" type="user">
+        <data key="username" unique="suffix">noreport</data>
+        <data key="firstname">No</data>
+        <data key="lastname">Report</data>
+        <data key="email" unique="prefix">noreport@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="is_active">true</data>
+        <data key="current_password">123123q</data>
+</entity>
+    <entity name="restrictedWebUser" type="user">
+        <data key="username" unique="suffix">restrictedWebUser</data>
+        <data key="firstname">restricted</data>
+        <data key="lastname">webUser</data>
+        <data key="email" unique="prefix">restrictedWebUser@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="is_active">true</data>
+        <data key="current_password">123123q</data>
+    </entity>
+</entities>

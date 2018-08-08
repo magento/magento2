@@ -37,6 +37,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function generateHashDataProvider()
     {
         return [
@@ -57,6 +60,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param $merchantMd5
+     * @param $merchantApiLogin
+     * @param $amount
+     * @param $transactionId
+     * @return string
+     */
     protected function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
         return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));

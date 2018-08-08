@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssignAttributeToGroup">
+        <arguments>
+            <argument name="group" type="string"/>
+            <argument name="attribute" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemAttributeGroup(group, '1')}}" stepKey="dragAndDropToGroupProductDetails"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+    </actionGroup>
+    <actionGroup name="UnassignAttributeFromGroup">
+        <arguments>
+            <argument name="group" type="string"/>
+            <argument name="attribute" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(group)}}" dependentSelector="{{AdminProductAttributeSetEditSection.attributeGroupCollapsed(group)}}" visible="true" stepKey="extendGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute(attribute)}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDropToUnassigned"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{attribute}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+    </actionGroup>
+    <actionGroup name="SaveAttributeSet">
+        <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
+        <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>

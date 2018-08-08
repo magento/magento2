@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameWithDoubleQuote">
+        <annotations>
+            <title value="Product with double quote in name"/>
+            <description value="Product with a double quote in the name should appear correctly on the storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-92384"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!--Create product via admin-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToProductCreatePage">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <actionGroup ref="addProductImage" stepKey="addImageToProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Check product in category listing-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(SimpleProductNameWithDoubleQuote.name, ProductImage.fileName)}}" stepKey="seeCorrectImageCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectNameCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPriceCategoryPage"/>
+        <!--Open product display page-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" stepKey="clickProductToGoProductPage"/>
+        <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{SimpleProductNameWithDoubleQuote.sku}}" stepKey="seeCorrectSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ProductImage.fileName)}}" stepKey="seeCorrectImage"/>
+        <see selector="{{StorefrontProductInfoMainSection.stock}}" userInput="In Stock" stepKey="seeInStock"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategory.name$$" stepKey="seeCorrectBreadCrumbCategory"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectBreadCrumbProduct"/>
+
+        <!--Remove product-->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+    </test>
+</tests>
