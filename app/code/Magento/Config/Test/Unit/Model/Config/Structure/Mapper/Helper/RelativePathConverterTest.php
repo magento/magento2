@@ -52,11 +52,17 @@ class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
     }
 
+    /**
+     * @return array
+     */
     public function convertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
 
+    /**
+     * @return array
+     */
     public function convertDataProvider()
     {
         return [

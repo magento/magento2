@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CmsNewPagePageActionsSection">
+        <element name="savePage" type="button" selector="#save_and_close" timeout="10"/>
+        <element name="reset" type="button" selector="#reset"/>
+        <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
+        <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
+        <element name="splitButtonMenu" type="button" selector="//ul[@data-ui-id='save-button-dropdown-menu']" timeout="10"/>
+        <element name="expandSplitButton" type="button" selector="//button[@data-ui-id='save-button-dropdown']" timeout="10"/>
+        <element name="cmsPageTitle" type="text" selector=".page-header .page-title"/>
+        <element name="pageTitle" type="input" selector="input[name='title']"/>
+        <element name="showHideEditor" type="button" selector="//*[@id='togglecms_page_form_content']"/>
+        <element name="contentSectionName" type="input" selector="//div[@class='fieldset-wrapper-title']//span[.='Content']"/>
+        <element name="content" type="input" selector="//textarea[@name='content']"/>
+        <element name="spinner" type="input" selector='//div[@data-component="cms_page_form.cms_page_form"]' />
+        <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
+    </section>
+</sections>

@@ -110,6 +110,7 @@ class AddColumn implements OperationInterface
             Index::TYPE,
             [
                 'name' => self::TEMPORARY_KEY,
+                'column' => $column->getName(),
                 'columns' => [$column],
                 'table' => $column->getTable()
             ]
