@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateStoreGroupTest">
+        <annotations>
+            <features value="Store"/>
+            <stories value="Create a store group in admin"/>
+            <title value="Admin should be able to create a store group"/>
+            <description value="Admin should be able to create a store group"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <createData stepKey="b1" entity="customStoreGroup"/>
+            <createData stepKey="b2" entity="customStoreGroup"/>
+        </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+        <amOnPage stepKey="s9" url="{{AdminSystemStorePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+
+        <click stepKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="s15" time="10"/>
+
+        <fillField stepKey="s17" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b1.group[name]$$"/>
+        <click stepKey="s19" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="s21" time="10"/>
+        <see stepKey="s23" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b1.group[name]$$"/>
+
+        <click stepKey="s31" selector="{{AdminStoresGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="s35" time="10"/>
+        <fillField stepKey="s37" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b2.group[name]$$"/>
+        <click stepKey="s39" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="s41" time="10"/>
+        <see stepKey="s43" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b2.group[name]$$"/>
+    </test>
+</tests>

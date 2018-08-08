@@ -154,6 +154,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         unset($this->_oauth);
     }
 
+    /**
+     * @param array $amendments
+     * @return array
+     */
     protected function _getRequestTokenParams($amendments = [])
     {
         $requiredParams = [
@@ -231,6 +235,9 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
 
+    /**
+     * @param bool $isLoadable
+     */
     protected function _setupConsumer($isLoadable = true)
     {
         $this->_consumerMock->expects($this->any())->method('loadByKey')->will($this->returnSelf());
@@ -291,6 +298,9 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForGetRequestTokenNonceTimestampRefusedTest()
     {
         return [
@@ -300,6 +310,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param bool $isUsed
+     * @param int $timestamp
+     */
     protected function _setupNonce($isUsed = false, $timestamp = 0)
     {
         $nonceMock = $this->getMockBuilder(
@@ -359,6 +373,13 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
 
+    /**
+     * @param bool $doesExist
+     * @param string $type
+     * @param int $consumerId
+     * @param null $verifier
+     * @param bool $isRevoked
+     */
     protected function _setupToken(
         $doesExist = true,
         $type = \Magento\Integration\Model\Oauth\Token::TYPE_VERIFIER,
@@ -602,6 +623,9 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForGetAccessTokenVerifierInvalidTest()
     {
         // Verifier is not a string
@@ -785,6 +809,9 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_oauth->buildAuthorizationHeader($request, $requestUrl);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderMissingParamForBuildAuthorizationHeaderTest()
     {
         return [
@@ -834,6 +861,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param array $amendments
+     * @return array
+     */
     protected function _getAccessTokenRequiredParams($amendments = [])
     {
         $requiredParams = [
@@ -851,6 +882,10 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         return array_merge($requiredParams, $amendments);
     }
 
+    /**
+     * @param $length
+     * @return bool|string
+     */
     private function _generateRandomString($length)
     {
         return substr(

@@ -49,6 +49,9 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $productResourceMock);
     }
 
+    /**
+     * @return array
+     */
     public function aroundUpdateDataProvider()
     {
         return [

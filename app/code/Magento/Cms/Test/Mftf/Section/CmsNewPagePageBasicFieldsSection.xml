@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CmsNewPagePageBasicFieldsSection">
+        <element name="pageTitle" type="input" selector="input[name=title]"/>
+        <element name="isActive" type="button" selector="//input[@name='is_active' and @value='{{var1}}']" parameterized="true"/>
+        <element name="duplicatedURLKey" type="input" selector="//input[contains(@data-value,'{{var1}}')]" parameterized="true"/>
+    </section>
+</sections>

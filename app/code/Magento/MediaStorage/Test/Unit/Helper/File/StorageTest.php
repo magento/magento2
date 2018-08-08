@@ -77,6 +77,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->isInternalStorage($storage));
     }
 
+    /**
+     * @return array
+     */
     public function isInternalStorageDataProvider()
     {
         return [
@@ -146,6 +149,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->helper->processStorageFile($filename));
     }
 
+    /**
+     * @return array
+     */
     public function processStorageFileDataProvider()
     {
         return [

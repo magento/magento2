@@ -18,7 +18,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
 interface SourceSelectionServiceInterface
 {
     /**
-     * @param InventoryRequestInterface $inventoryRequest
+     * @param \Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface $inventoryRequest
      * @param string $algorithmCode
      * @return \Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface
      */

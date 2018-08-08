@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Check the configurable product on the product page -->
+    <actionGroup name="StorefrontCheckConfigurableProduct">
+        <arguments>
+            <argument name="product"/>
+            <argument name="optionProduct"/>
+        </arguments>
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart" />
+        <see userInput="{{product.custom_attributes[description]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+        <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
+    </actionGroup>
+</actionGroups>
