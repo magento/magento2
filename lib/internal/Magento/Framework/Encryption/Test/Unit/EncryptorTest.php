@@ -86,6 +86,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateHashDataProvider()
     {
         return [
@@ -112,6 +115,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $model->encrypt($value));
     }
 
+    /**
+     * @return array
+     */
     public function encryptWithEmptyKeyDataProvider()
     {
         return [[null], [0], [''], ['0']];
@@ -134,6 +140,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $model->decrypt($value));
     }
 
+    /**
+     * @return array
+     */
     public function decryptWithEmptyKeyDataProvider()
     {
         return [[null], [0], [''], ['0']];
@@ -208,6 +217,9 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($crypt->decrypt($expectedEncryptedData), $actual->decrypt($actualEncryptedData));
     }
 
+    /**
+     * @return array
+     */
     public function testUseSpecifiedHashingAlgoDataProvider()
     {
         return [

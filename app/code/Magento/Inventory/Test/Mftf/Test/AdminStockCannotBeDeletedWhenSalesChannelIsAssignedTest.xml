@@ -91,7 +91,7 @@
         </actionGroup>
 
         <click selector="{{AdminGridRow.checkboxByValue($$createStock1.stock[name]$$)}}" stepKey="clickOnEditForDefaultStock3"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
         <click selector="{{AdminGridActionsMenu.dropDown}}" stepKey="clickOnTheActionMenu1"/>
         <click selector="{{AdminGridActionsMenu.delete}}" stepKey="clickOnDelete1"/>

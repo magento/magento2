@@ -78,6 +78,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**
+     * Import empty attribute value constant.
+     */
+    const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+
+    /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
     const FIELDS_ENCLOSURE = 'fields_enclosure';
@@ -88,6 +93,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
      */
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+
+    /**
+     * default empty attribute value constant
+     */
+    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
 
     /**#@+
      * Import constants

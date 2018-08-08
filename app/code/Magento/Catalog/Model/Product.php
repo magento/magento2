@@ -1124,11 +1124,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return  array || double
+     * @return  array|double
+     */
+    public function getFormattedPrice()
+    {
+        return $this->getPriceModel()->getFormattedPrice($this);
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @return  array|double
+     *
+     * @deprecated
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice()
     {
-        return $this->getPriceModel()->getFormatedPrice($this);
+        return $this->getFormattedPrice();
     }
 
     /**

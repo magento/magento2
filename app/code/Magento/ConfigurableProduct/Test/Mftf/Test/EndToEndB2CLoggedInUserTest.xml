@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CLoggedInUserTest">
+        <before>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createConfigChildProduct1Image">
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryMagentoLogo" stepKey="createConfigChildProduct2Image">
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createConfigProductImage">
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateConfigProduct" createDataKey="createConfigProduct"/>
+        </before>
+        <after>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigChildProduct1Image" stepKey="deleteConfigChildProduct1Image"/>-->
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigChildProduct2Image" stepKey="deleteConfigChildProduct2Image"/>-->
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigProductImage" stepKey="deleteConfigProductImage"/>-->
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+        </after>
+
+        <!-- Verify Configurable Product in checkout cart items -->
+        <comment userInput="Verify Configurable Product in checkout cart items" stepKey="commentVerifyConfigurableProductInCheckoutCartItems" after="checkoutCheckSimpleProduct2InCartItems" />
+        <actionGroup ref="CheckConfigurableProductInCheckoutCartItemsActionGroup" stepKey="checkoutCheckConfigurableProductInCartItems" after="commentVerifyConfigurableProductInCheckoutCartItems">
+            <argument name="productVar" value="$$createConfigProduct$$"/>
+            <argument name="optionLabel" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$" />
+            <argument name="optionValue" value="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" />
+        </actionGroup>
+
+        <!-- Check configurable product in category -->
+        <comment userInput="Verify Configurable Product in category" stepKey="commentVerifyConfigurableProductInCategory" after="browseAssertSimpleProduct2ImageNotDefault" />
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="browseAssertCategoryConfigProduct" after="commentVerifyConfigurableProductInCategory">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="browseGrabConfigProductImageSrc" after="browseAssertCategoryConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabConfigProductImageSrc" stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc"/>
+
+        <!-- View Configurable Product -->
+        <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory2" after="commentViewConfigurableProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="browseClickCategoryConfigProductView" after="clickCategory2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductViewloaded" after="browseClickCategoryConfigProductView"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="browseAssertConfigProductPage" after="waitForConfigurableProductViewloaded">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabConfigProductPageImageSrc" after="browseAssertConfigProductPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabConfigProductPageImageSrc" stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc"/>
+
+        <!-- Add Configurable Product to cart -->
+        <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory2" after="commentAddConfigurableProductToCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategory2loaded" after="cartClickCategory2"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="waitForCartCategory2loaded">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="productCount" value="3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="cartAssertConfigProduct" after="cartAssertCategory1ForConfigurableProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartGrabConfigProductImageSrc" after="cartAssertConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabConfigProductImageSrc" stepKey="cartAssertConfigProductImageNotDefault" after="cartGrabConfigProductImageSrc"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createConfigProduct.name$$)}}" stepKey="cartClickCategoryConfigProductAddToCart" after="cartAssertConfigProductImageNotDefault"/>
+        <waitForElement selector="{{StorefrontMessagesSection.message('You need to choose options for your item.')}}" time="30" stepKey="cartWaitForConfigProductPageLoad" after="cartClickCategoryConfigProductAddToCart"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertConfigProductPage" after="cartWaitForConfigProductPageLoad">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabConfigProductPageImageSrc1" after="cartAssertConfigProductPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc1" stepKey="cartAssertConfigProductPageImageNotDefault1" after="cartGrabConfigProductPageImageSrc1"/>
+        <selectOption userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="cartConfigProductFillOption" after="cartAssertConfigProductPageImageNotDefault1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductOptionloaded" after="cartConfigProductFillOption"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertConfigProductWithOptionPage" after="waitForConfigurableProductOptionloaded">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabConfigProductPageImageSrc2" after="cartAssertConfigProductWithOptionPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc2" stepKey="cartAssertConfigProductPageImageNotDefault2" after="cartGrabConfigProductPageImageSrc2"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigProductToCart" after="cartAssertConfigProductPageImageNotDefault2">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="productCount" value="3"/>
+        </actionGroup>
+
+        <!-- Check configurable product in minicart -->
+        <comment userInput="Check configurable product in minicart" stepKey="commentCheckConfigurableProductInMinicart" after="cartMinicartAssertSimpleProduct2PageImageNotDefault" />
+        <actionGroup ref="StorefrontOpenMinicartAndCheckConfigurableProductActionGroup" stepKey="cartOpenMinicartAndCheckConfigProduct" after="commentCheckConfigurableProductInMinicart">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartMinicartGrabConfigProductImageSrc" after="cartOpenMinicartAndCheckConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabConfigProductImageSrc" stepKey="cartMinicartAssertConfigProductImageNotDefault" after="cartMinicartGrabConfigProductImageSrc"/>
+        <click selector="{{StorefrontMinicartSection.productOptionsDetailsByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProductDetails" after="cartMinicartAssertConfigProductImageNotDefault"/>
+        <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontMinicartSection.productOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartMinicartCheckConfigProductOption" after="cartMinicartClickConfigProductDetails"/>
+        <click selector="{{StorefrontMinicartSection.productLinkByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProduct" after="cartMinicartCheckConfigProductOption"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartConfigProductloaded" after="cartMinicartClickConfigProduct"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertMinicartConfigProductPage" after="waitForMinicartConfigProductloaded">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartMinicartGrabConfigProductPageImageSrc" after="cartAssertMinicartConfigProductPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabConfigProductPageImageSrc" stepKey="cartMinicartAssertConfigProductPageImageNotDefault" after="cartMinicartGrabConfigProductPageImageSrc"/>
+
+        <!-- Check configurable product in cart -->
+        <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart2" after="commentCheckConfigurableProductInCart"/>
+        <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="cartAssertCartConfigProduct" after="cartOpenCart2">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productQuantity" value="CONST.one"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartCartGrabConfigProduct2ImageSrc" after="cartAssertCartConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabConfigProduct2ImageSrc" stepKey="cartCartAssertConfigProduct2ImageNotDefault" after="cartCartGrabConfigProduct2ImageSrc"/>
+        <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartCheckConfigProductOption" after="cartCartAssertConfigProduct2ImageNotDefault"/>
+        <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createConfigProduct.name$$)}}" stepKey="cartClickCartConfigProduct" after="cartCheckConfigProductOption"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCartConfigProductloaded" after="cartClickCartConfigProduct"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertCartConfigProductPage" after="waitForCartConfigProductloaded">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabConfigProductPageImageSrc" after="cartAssertCartConfigProductPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabConfigProductPageImageSrc" stepKey="cartCartAssertConfigProductPageImageNotDefault" after="cartCartGrabConfigProductPageImageSrc"/>
+
+        <!-- Add Configurable Product to comparison -->
+        <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare" />
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="compareAssertConfigProduct" after="commentAddConfigurableProductToComparison">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrc" after="compareAssertConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrc" stepKey="compareAssertConfigProductImageNotDefault" after="compareGrabConfigProductImageSrc"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddConfigProductToCompare" after="compareAssertConfigProductImageNotDefault">
+            <argument name="productVar" value="$$createConfigProduct$$"/>
+        </actionGroup>
+
+        <!-- Check configurable product in comparison sidebar -->
+        <comment userInput="Add Configurable Product in comparison sidebar" stepKey="commentAddConfigurableProductInComparisonSidebar" after="compareSimpleProduct2InSidebar" />
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareConfigProductInSidebar" after="commentAddConfigurableProductInComparisonSidebar">
+            <argument name="productVar" value="$$createConfigProduct$$"/>
+        </actionGroup>
+
+        <!-- Check configurable product on comparison page -->
+        <comment userInput="Add Configurable Product on comparison page" stepKey="commentAddConfigurableProductOnComparisonPage" after="compareAssertSimpleProduct2ImageNotDefaultInComparison" />
+        <actionGroup ref="StorefrontCheckCompareConfigurableProductActionGroup" stepKey="compareAssertConfigProductInComparison" after="commentAddConfigurableProductOnComparisonPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrcInComparison" after="compareAssertConfigProductInComparison"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrcInComparison" stepKey="compareAssertConfigProductImageNotDefaultInComparison" after="compareGrabConfigProductImageSrcInComparison"/>
+    </test>
+</tests>

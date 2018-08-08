@@ -1,50 +1,17 @@
 {
-    "name": "magento/magento2-functional-test-module-inventory",
-    "description": "Magento 2 Functional Test Module Inventory",
-    "repositories": [
-        {
-            "type" : "composer",
-            "url" : "https://repo.magento.com/"
-        }
-    ],
+    "name": "magento/functional-test-module-inventory",
+    "description": "N/A",
     "config": {
         "sort-packages": true
     },
     "require": {
-        "php": "~7.0",
-        "allure-framework/allure-codeception": "dev-master",
-        "codeception/codeception": "2.2|2.3",
-        "consolidation/robo": "^1.0.0",
-        "henrikbjorn/lurker": "^1.2",
-        "magento/magento2-functional-testing-framework": "dev-develop",
-        "vlucas/phpdotenv": "~2.4"
+        "php": "~7.1.3||~7.2.0",
+        "magento/magento2-functional-testing-framework": "2.2.0",
+        "magento/functional-test-module-inventory-api": "100.0.0-dev"
     },
-    "type": "magento2-test-module",
-    "version": "dev-master",
+    "type": "magento2-test",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
-    ],
-    "autoload": {
-        "psr-0": {
-            "Yandex": "vendor/allure-framework/allure-codeception/src/"
-        },
-        "psr-4": {
-            "Magento\\FunctionalTestingFramework\\": [
-                "vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework"
-            ],
-            "Magento\\FunctionalTest\\": [
-                "tests/functional/Magento/FunctionalTest",
-                "generated/Magento/FunctionalTest"
-            ]
-        }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "app/code/Magento/Inventory/Acceptance"
-            ]
-        ]
-    }
+    ]
 }

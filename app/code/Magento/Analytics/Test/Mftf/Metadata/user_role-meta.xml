@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateUserRole" dataType="user_role" type="create"
+               auth="adminFormKey" url="/admin/user_role/saverole/" method="POST" successRegex="/messages-message-success/" returnRegex="" >
+        <contentType>application/x-www-form-urlencoded</contentType>
+        <field key="rolename">string</field>
+        <field key="current_password">string</field>
+        <array key="resource">
+            <value>string</value>
+        </array>
+    </operation>
+</operations>
