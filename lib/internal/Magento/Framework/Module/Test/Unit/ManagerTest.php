@@ -83,6 +83,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_One'));
     }
 
+    /**
+     * @return array
+     */
     public function isOutputEnabledGenericConfigPathDataProvider()
     {
         return ['output disabled' => [true, false], 'output enabled' => [false, true]];
@@ -103,6 +106,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_Two'));
     }
 
+    /**
+     * @return array
+     */
     public function isOutputEnabledCustomConfigPathDataProvider()
     {
         return [

@@ -119,6 +119,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->model->execute($ids);
     }
 
+    /**
+     * @param $stores
+     */
     private function setupDataProvider($stores)
     {
         $this->dimensionProviderMock->expects($this->once())->method('getIterator')->willReturn(

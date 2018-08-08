@@ -34,24 +34,24 @@
             </argument>
             <argument name="extensions" xsi:type="array">
                 <item name="allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="number">1</item>
-                    <item name="jpeg" xsi:type="number">1</item>
-                    <item name="png" xsi:type="number">1</item>
-                    <item name="gif" xsi:type="number">1</item>
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
                 </item>
                 <item name="image_allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="number">1</item>
-                    <item name="jpeg" xsi:type="number">1</item>
-                    <item name="png" xsi:type="number">1</item>
-                    <item name="gif" xsi:type="number">1</item>
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
                 </item>
                 <item name="media_allowed" xsi:type="array">
-                    <item name="flv" xsi:type="number">1</item>
-                    <item name="swf" xsi:type="number">1</item>
-                    <item name="avi" xsi:type="number">1</item>
-                    <item name="mov" xsi:type="number">1</item>
-                    <item name="rm" xsi:type="number">1</item>
-                    <item name="wmv" xsi:type="number">1</item>
+                    <item name="flv" xsi:type="string">video/x-flv</item>
+                    <item name="swf" xsi:type="string">application/x-shockwave-flash</item>
+                    <item name="avi" xsi:type="string">video/x-msvideo</item>
+                    <item name="mov" xsi:type="string">video/x-sgi-movie</item>
+                    <item name="rm" xsi:type="string">application/vnd.rn-realmedia</item>
+                    <item name="wmv" xsi:type="string">video/x-ms-wmv</item>
                 </item>
             </argument>
             <argument name="dirs" xsi:type="array">

@@ -9,7 +9,8 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
     <form data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
-        <fieldset id="billing-new-address-form" class="fieldset address">
+        <fieldset data-bind="attr: { id:'billing-new-address-form-'+index, value:index}"
+                  class="billing-new-address-form fieldset address">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->

@@ -55,6 +55,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->converter->fromBody('body'));
     }
 
+    /**
+     * @return array
+     */
     public function convertBodyDataProvider()
     {
         return [

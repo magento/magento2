@@ -22,8 +22,8 @@
     vertical-align: middle;
     width: @component-indicator__size;
 
-    &::before,
-    &::after {
+    &:before,
+    &:after {
         background: @color-white;
         display: block;
         opacity: 0;
@@ -32,7 +32,7 @@
         visibility: hidden;
     }
 
-    &::before {
+    &:before {
         border: 1px solid @color-gray68;
         border-radius: 1px;
         box-shadow: 0 0 2px rgba(0,0,0,.4);
@@ -43,7 +43,7 @@
         padding: 4px 5px;
     }
 
-    &::after {
+    &:after {
         border-color: darken(@color-gray68, 8);
         border-style: solid;
         border-width: 1px 0 0 1px;
@@ -56,8 +56,8 @@
     }
 
     &:hover {
-        &::before,
-        &::after {
+        &:before,
+        &:after {
             opacity: 1;
             transition: opacity .2s linear;
             visibility: visible;
@@ -115,7 +115,7 @@
 
     &._tooltip {
         background: transparent;
-        margin: 0px 0px 8px 5px;
+        margin: 0 0 8px 5px;
 
         a {
             width: 21px;

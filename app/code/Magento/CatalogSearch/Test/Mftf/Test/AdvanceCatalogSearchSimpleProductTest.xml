@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="search">
+            <argument name="name" value="$$product.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="search">
+            <argument name="sku" value="$$product.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByDescriptionActionGroup" stepKey="search">
+            <argument name="description" value="$$product.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup" stepKey="search">
+            <argument name="shortDescription" value="$$product.custom_attributes[short_description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+    <test name="AdvanceCatalogSearchSimpleProductByPriceTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">
+            <argument name="name" value="$$arg1.name$$"/>
+            <argument name="priceFrom" value="$$arg2.price$$"/>
+            <argument name="priceTo" value="$$arg3.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$arg1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+</tests>

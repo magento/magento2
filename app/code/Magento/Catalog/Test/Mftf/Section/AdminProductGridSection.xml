@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductGridSection">
+        <element name="loadingMask" type="text" selector=".admin__data-grid-loading-mask[data-component*='product_listing']"/>
+        <element name="columnHeader" type="button" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]/thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="column" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+        <element name="productGridElement1" type="input" selector="#addselector" />
+        <element name="productGridElement2" type="text" selector="#addselector" />
+        <element name="productGridRows" type="text" selector="table.data-grid tr.data-row"/>
+        <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
+        <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
+        <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>
+        <element name="productGridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+        <element name="productGridHeaderCell" type="text" selector="//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]" parameterized="true"/>
+        <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
+        <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
+        <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
+        <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
+        <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
+        <element name="table" type="text" selector="#container > div > div.admin__data-grid-wrap > table"/>
+        <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
+        <element name="productGridCheckboxOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td[1]//input" parameterized="true"/>
+        <element name="productGridNameProduct" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
+    </section>
+</sections>

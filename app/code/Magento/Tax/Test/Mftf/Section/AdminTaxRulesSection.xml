@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRulesSection">
+        <!-- on page /admin/tax/rule/new/ -->
+        <element name="ruleName" type="input" selector="#anchor-content #code"/>
+        <element name="addNewTaxRate" type="block" selector="//*[text()='Add New Tax Rate']" timeout="30"/>
+        <element name="taxIdentifier" type="input" selector="aside #code"/>
+        <element name="zipIsRange" type="checkbox" selector="#zip_is_range"/>
+        <element name="zipCode" type="input" selector="#tax_postcode"/>
+        <element name="state" type="select" selector="#tax_region_id"/>
+        <element name="country" type="select" selector="#tax_country_id"/>
+        <element name="rate" type="input" selector="#rate"/>
+        <element name="save" type="button" selector=".action-save" timeout="30"/>
+    </section>
+</sections>

@@ -64,6 +64,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
             'ref',
             'foreign',
             $table,
+            'ref',
             $column,
             $refTable,
             $refColumn,

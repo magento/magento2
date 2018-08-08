@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminConfigureTaxSection">
+        <!-- on page /admin/admin/system_config/edit/section/tax/ -->
+        <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
+        <element name="calculationSettings" type="block" selector="#tax_calculation-head:not(.open)" timeout="30"/>
+        
+        <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
+        <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
+        <element name="dropdownDefaultState" type="select" selector="#row_tax_defaults_region select"/>
+        <element name="defaultPostCode" type="input" selector="#tax_defaults_postcode"/>
+        
+        <element name="priceDisplaySettings" type="block" selector="#tax_display-head:not(.open)" timeout="30"/>
+
+        <element name="shoppingCartDisplay" type="block" selector="#tax_cart_display-head" timeout="30"/>
+        <element name="systemValueIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal input[type='checkbox']"/>
+        <element name="dropdownIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal select"/>
+        <element name="systemValueDisplayTaxSummaryCart" type="checkbox" selector="#row_tax_cart_display_full_summary input[type='checkbox']"/>
+        <element name="dropdownDisplayTaxSummaryCart" type="checkbox" selector="#row_tax_cart_display_full_summary select"/>
+        <element name="systemValueDisplayZeroTaxCart" type="checkbox" selector="#row_tax_cart_display_zero_tax input[type='checkbox']"/>
+        <element name="dropdownDisplayZeroTaxCart" type="checkbox" selector="#row_tax_cart_display_zero_tax select"/>
+
+        <element name="ordersInvoicesCreditSales" type="block" selector="#tax_sales_display-head" timeout="30"/>
+        <element name="systemValueIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal input[type='checkbox']"/>
+        <element name="dropdownIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal select"/>
+        <element name="systemValueDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary input[type='checkbox']"/>
+        <element name="dropdownDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary select"/>
+        <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
+        <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
+
+        <element name="priceDisplaySettings" type="block" selector="#tax_weee-head" timeout="30"/>
+    </section>
+</sections>
