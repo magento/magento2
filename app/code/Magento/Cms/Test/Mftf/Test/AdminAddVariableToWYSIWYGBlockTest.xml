@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddVariableToWYSIWYGBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42158-Variable with WYSIWYG"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to add variable to WYSIWYG content of Block"/>
+            <description value="You should be able to add variable to WYSIWYG content Block"/>
+            <testCaseId value="MAGETWO-84378"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <!--Create Custom Variable-->
+        <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
+        <!--Setup Store information-->
+        <waitForPageLoad stepKey="wait" />
+        <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+        <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
+        <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+        <!--Main test-->
+        <actionGroup ref="AssignBlockToCMSPage" stepKey="assignBlockToCMSPage">
+            <argument name="Block" value="$$createPreReqBlock$$"/>
+            <argument name="CmsPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+        <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
+        <!--see Insert Variable button disabled-->
+        <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
+        <!--see Cancel button enabed-->
+        <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <!--see 4 colums-->
+        <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
+        <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
+        <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />
+        <see selector="{{VariableSection.ColName('Code')}}" userInput="Code" stepKey="codeCol" />
+        <!--select default variable-->
+        <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
+        <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
+        <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
+        <scrollTo selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" stepKey="scrollToBlockTitle" />
+        <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideoutCloses" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <!--see custom variable-->
+        <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
+        <seeElement selector="{{VariableSection.SearchTxtbox}}"  stepKey="searchBox"/>
+        <!--press Enter-->
+        <pressKey selector="{{VariableSection.SearchTxtbox}}" parameterArray="['Test Variable',\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKeyEnter"/>
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <!--see result-->
+        <see selector="{{VariableSection.searchResult(customVariable.code)}}" userInput="{{customVariable.code}}" stepKey="seeResult" />
+        <!--Insert custom variable-->
+        <click selector="{{VariableSection.VariableRadio(customVariable.code)}}" stepKey="selectCustomVariable1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
+        <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter1" visible="true"/>
+        <waitForPageLoad stepKey="waitForFilterReload"/>
+        <click selector="{{CmsPagesPageActionsSection.filterButton}}" stepKey="clickFiltersBtn" />
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
+        <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
+        <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
+        <waitForPageLoad stepKey="waitForPageLoad8" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad9" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearAfterClickingBtnChooser" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
+        <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
+        <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
+        <wait time="3" stepKey="wait1" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSaveCmsPage" />
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad11" />
+        <!--see Default Variable on Storefront-->
+        <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
+        <!--see Custom Variable on Storefront-->
+        <see userInput="{{customVariable.html}}" stepKey="seeCustomVariable2" />
+        <!--Delete Custom Variable-->
+        <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+        <!--Refresh Storefront-->
+        <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoad12" />
+        <!--see custom variable blank-->
+        <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
+        <after>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

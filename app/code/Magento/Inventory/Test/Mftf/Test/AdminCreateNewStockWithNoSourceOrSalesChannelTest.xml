@@ -12,7 +12,7 @@
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Add Stock"/>
-            <title value="New Stock created by Admin user"/>
+            <title value="New Stock created by Admin user with no Source and Sales Channel assigned"/>
             <description value="You should be able to create a New Stock, via the Admin, without adding a Source or Sales Channel."/>
             <testCaseId value="513"/>
             <severity value="CRITICAL"/>
@@ -31,14 +31,14 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddStock1"/>
 
-        <fillField userInput="{{_defaultStock.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillStockName1"/>
+        <fillField userInput="{{BasicMsiStock1.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillStockName1"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword1">
-            <argument name="keyword" value="_defaultStock.name"/>
+            <argument name="keyword" value="BasicMsiStock1.name"/>
         </actionGroup>
 
-        <see userInput="{{_defaultStock.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="{{BasicMsiStock1.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
     </test>
 </tests>

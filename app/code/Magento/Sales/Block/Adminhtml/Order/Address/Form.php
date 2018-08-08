@@ -19,7 +19,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      *
      * @var string
      */
-    protected $_template = 'order/address/form.phtml';
+    protected $_template = 'Magento_Sales::order/address/form.phtml';
 
     /**
      * Core registry

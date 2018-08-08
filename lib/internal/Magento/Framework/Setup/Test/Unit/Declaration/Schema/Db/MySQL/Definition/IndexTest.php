@@ -82,6 +82,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function toDefinitionDataProvider()
     {
         return [

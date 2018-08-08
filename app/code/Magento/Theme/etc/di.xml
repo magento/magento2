@@ -108,6 +108,7 @@
         <arguments>
              <argument name="collections" xsi:type="array">
                  <item name="design_config_listing_data_source" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection</item>
+                 <item name="design_theme_listing_data_source" xsi:type="string">Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult</item>
              </argument>
          </arguments>
      </type>
@@ -271,6 +272,13 @@
     <type name="\Magento\Theme\Model\Design\Config\Plugin\Dump">
         <arguments>
             <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">theme</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme</argument>
+            <argument name="identifierName" xsi:type="string">theme_id</argument>
         </arguments>
     </type>
 </config>

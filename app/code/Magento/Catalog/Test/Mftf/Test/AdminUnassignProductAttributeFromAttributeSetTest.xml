@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminUnassignProductAttributeFromAttributeSetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/Update attribute set"/>
+            <title value="Admin should be able to unassign attributes from an attribute set"/>
+            <description value="Admin should be able to unassign attributes from an attribute set"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-194"/>
+            <group value="Catalog"/>
+            <!-- Skip because of MAGETWO-92780 -->
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData entity="productDropDownAttribute" stepKey="attribute"/>
+
+            <createData entity="productAttributeOption1" stepKey="option1">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="option2">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+
+            <createData entity="ApiProductWithDescription" stepKey="product"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Assert attribute presence in storefront product additional information -->
+        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="attributeValue" value="$$option2.option[store_labels][0][label]$$"/>
+        </actionGroup>
+        <!-- Go to default attribute set edit page -->
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <!-- Assert created attribute in a group -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <!-- Unassign attribute from group -->
+        <actionGroup ref="UnassignAttributeFromGroup" stepKey="UnassignAttributeFromGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <!-- Assert attribute in unassigned section -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+        <!-- Save attribute set -->
+        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <!-- Go to create new product page -->
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <!-- Assert attribute not present in product creation -->
+        <dontSeeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
+        <!-- Assert removed attribute not presence in storefront product additional information -->
+        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="checkAttributeNotInMoreInformationTab" stepKey="checkAttributeNotInMoreInformationTab">
+            <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
+        </actionGroup>
+    </test>
+</tests>

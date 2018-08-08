@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductOptionValueDropdown1" type="product_option_value">
+        <data key="title">OptionValueDropDown1</data>
+        <data key="sort_order">1</data>
+        <data key="price">0.01</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueDropdown2" type="product_option_value">
+        <data key="title">OptionValueDropDown2</data>
+        <data key="sort_order">2</data>
+        <data key="price">0.01</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons1" type="product_option_value">
+        <data key="title">OptionValueRadioButtons1</data>
+        <data key="sort_order">1</data>
+        <data key="price">99.99</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons2" type="product_option_value">
+        <data key="title">OptionValueRadioButtons2</data>
+        <data key="sort_order">2</data>
+        <data key="price">99.99</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueCheckbox" type="product_option_value">
+        <data key="title">OptionValueCheckbox</data>
+        <data key="sort_order">1</data>
+        <data key="price">123</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueMultiSelect1" type="product_option_value">
+        <data key="title">OptionValueMultiSelect1</data>
+        <data key="sort_order">1</data>
+        <data key="price">1</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueMultiSelect2" type="product_option_value">
+        <data key="title">OptionValueMultiSelect2</data>
+        <data key="sort_order">2</data>
+        <data key="price">2</data>
+        <data key="price_type">fixed</data>
+    </entity>
+</entities>
