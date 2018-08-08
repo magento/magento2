@@ -18,7 +18,7 @@
 //  _____________________________________________
 
 .currency-addon {
-    border: 1px solid #adadad;
+    border: 1px solid rgb(173,173,173);
     position: relative;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
@@ -52,27 +52,27 @@
     }
 
     label.error {
+        left: 0;
         position: absolute;
         top: 33px;
-        left: 0;
     }
 
     .currency-symbol {
+        -webkit-flex-basis: auto;
+        -webkit-flex-grow: 0;
+        -webkit-flex-shrink: 0;
         border: solid @currency-addon-symbol__border-color;
         border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 0;
         height: @currency-addon-symbol__height;
         order: 0;
         padding: 7px 0 0 @indent__xs;
         position: static;
         transition: @smooth__border-color;
-        -webkit-flex-basis: auto;
-        flex-basis: auto;
-        -webkit-flex-grow: 0;
-        flex-grow: 0;
-        -webkit-flex-shrink: 0;
-        flex-shrink: 0;
         z-index: 1;
     }
 

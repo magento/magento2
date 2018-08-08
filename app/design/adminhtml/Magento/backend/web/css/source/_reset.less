@@ -11,8 +11,8 @@ html {
     //  Prevent iOS text size adjust after orientation change, without disabling user zoom.
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
     box-sizing: border-box;
+    text-size-adjust: 100%;
 }
 
 * {
@@ -106,7 +106,7 @@ abbr {
     }
 }
 
-//  Address style set to 'bolder' in Firefox 4+, Safari, and Chrome.
+//  Address style set to 'bolder' in Firefox 4 and later, Safari, and Chrome.
 b,
 strong {
     font-weight: bold;
@@ -205,9 +205,9 @@ input,
 optgroup,
 select,
 textarea {
-    color: inherit; // Correct color not being inherited. Known issue: affects color of disabled elements.
+    color: inherit; // Correct color not being inherited. Known issue affects color of disabled elements.
     font: inherit; // Correct font properties not being inherited.
-    margin: 0; // Address margins set differently in Firefox 4+, Safari, and Chrome.
+    margin: 0; // Address margins set differently in Firefox 4 and later, Safari, and Chrome.
 }
 
 //  Address 'overflow' set to 'hidden' in IE 8/9/10/11.
@@ -243,7 +243,7 @@ html input[disabled] {
     cursor: default;
 }
 
-//  Remove inner padding and border in Firefox 4+.
+//  Remove inner padding and border in Firefox 4 and later.
 button,
 input {
     &::-moz-focus-inner {
@@ -252,7 +252,7 @@ input {
     }
 }
 
-//  Address Firefox 4+ setting 'line-height' on 'input' using '!important' in the UA stylesheet.
+//  Address Firefox 4 and later setting 'line-height' on 'input' using '!important' in the UA stylesheet.
 input {
     line-height: normal;
 }

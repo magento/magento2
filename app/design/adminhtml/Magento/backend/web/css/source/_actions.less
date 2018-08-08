@@ -23,8 +23,15 @@
 }
 
 .abs-action-pattern {
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+
     border: @button__border-size @button__border-style;
-    border-radius: 0; // ToDo UI: Delete with admin scope
+    border-radius: 0; // ToDo UI Delete with admin scope
     display: inline-block;
     font-family: @button__font-family;
     font-size: @button__font-size;
@@ -33,13 +40,6 @@
     padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
     text-align: center;
     vertical-align: baseline;
-
-    &[disabled],
-    &.disabled {
-        cursor: default;
-        opacity: @disabled__opacity;
-        pointer-events: none;
-    }
 }
 
 .abs-action-l {
@@ -401,7 +401,7 @@ button {
     left: 0;
     list-style: none;
     margin: 2px 0 0; // Action box-shadow + 1px indent
-    min-width: 0; // ToDo UI: Should be deleted with old styles
+    min-width: 0; // ToDo UI Should be deleted with old styles
     padding: 0;
     position: absolute;
     right: 0;
@@ -412,7 +412,7 @@ button {
     }
 
     > li {
-        border: none; // ToDo UI: Should be deleted with old styles
+        border: none; // ToDo UI Should be deleted with old styles
         display: block;
         padding: 0;
         transition: background-color .1s linear;
