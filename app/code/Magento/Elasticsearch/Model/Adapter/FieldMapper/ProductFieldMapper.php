@@ -42,7 +42,9 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $attributeCode
+     * @param array $context
+     * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -78,7 +80,8 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $context
+     * @return array
      */
     public function getAllAttributesTypes($context = [])
     {

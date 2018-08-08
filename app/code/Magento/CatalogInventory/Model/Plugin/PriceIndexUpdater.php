@@ -55,7 +55,7 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
-     * @param $result
+     * @param mixed $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -67,7 +67,7 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
-     * @param $result
+     * @param mixed $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

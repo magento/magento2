@@ -69,7 +69,9 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $attributeCode
+     * @param array $context
+     * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -105,7 +107,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $context
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAllAttributesTypes($context = [])

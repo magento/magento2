@@ -15,11 +15,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     private $carrier;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class);
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipAcceptUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
@@ -35,6 +41,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipConfirmUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());

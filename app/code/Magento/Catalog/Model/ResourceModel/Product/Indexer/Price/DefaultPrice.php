@@ -862,6 +862,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
     }
 
+    /**
+     * @param string $tableAlias
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
     {
         return $this->getConnection()->getCheckSql(
