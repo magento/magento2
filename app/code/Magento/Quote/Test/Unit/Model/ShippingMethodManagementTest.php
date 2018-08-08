@@ -95,7 +95,6 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteAddressResource;
 
-
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
