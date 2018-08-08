@@ -38,6 +38,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -64,6 +67,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             );
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
@@ -110,6 +116,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetStateLabelByStateAndStatus()
     {
         $statuses = [

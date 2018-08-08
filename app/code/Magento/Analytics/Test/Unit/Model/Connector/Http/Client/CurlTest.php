@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\ResponseFactory;
 
 /**
  * A unit test for testing of the CURL HTTP client.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CurlTest extends \PHPUnit\Framework\TestCase
 {
