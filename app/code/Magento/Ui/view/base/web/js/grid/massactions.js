@@ -176,10 +176,13 @@ define([
          */
         _confirm: function (action, callback) {
             var confirmData = action.confirm;
+            var data = this.getSelections();
+            var total = data.total ? data.total : 0;
+            var confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
 
             confirm({
                 title: confirmData.title,
-                content: confirmData.message,
+                content: confirmMessage,
                 actions: {
                     confirm: callback
                 }
