@@ -173,7 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
                             ['id' => $this->getUrlRewrite()->getId()]
                         )
                     )
-                    . ')',
+                    . ', {data: {}})',
                 'class' => 'scalable delete',
                 'level' => -1
             ]
