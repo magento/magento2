@@ -34,5 +34,5 @@ interface ConverterInterface
     /**
      * @return string
      */
-    public function getContentMediaType(): string ;
+    public function getContentMediaType(): string;
 }
