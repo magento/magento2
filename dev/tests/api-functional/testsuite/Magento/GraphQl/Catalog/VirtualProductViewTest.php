@@ -36,7 +36,6 @@ class VirtualProductViewTest extends GraphQlAbstract
            name
            sku
            type_id
-           tax_class_id
            updated_at
            ... on PhysicalProductInterface {
              weight
@@ -96,7 +95,6 @@ QUERY;
            name
            sku
            type_id
-           tax_class_id
            updated_at
            ... on PhysicalProductInterface {
              weight
@@ -130,7 +128,6 @@ QUERY;
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'tax_class_id', 'expected_value' => $product->getTaxClassId()],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()]
         ];

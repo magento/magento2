@@ -50,6 +50,11 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_className, $this->_factory->createAttribute($this->_className, $this->_arguments));
     }
 
+    /**
+     * @param $className
+     * @param $arguments
+     * @return mixed
+     */
     public function getModelInstance($className, $arguments)
     {
         $this->assertInternalType('array', $arguments);

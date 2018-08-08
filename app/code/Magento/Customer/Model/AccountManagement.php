@@ -624,6 +624,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $this->getAuthentication()->unlock($customer->getId());
         $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
         $this->customerRepository->save($customer);
@@ -873,6 +874,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
         }
     }
 

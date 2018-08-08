@@ -679,7 +679,7 @@ QUERY;
   products(
         filter:
         {
-            category_ids:{eq:"{$queryCategoryId}"}
+            category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
             

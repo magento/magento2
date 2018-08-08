@@ -709,7 +709,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
+     * Temporary moved those $this->getRequest()->getParam('blabla') from the code across this block
      * to getBlala() methods to be later set from controller with setters
      */
 

@@ -112,7 +112,7 @@
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('State/Province')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
             </div>
         </div>
         <div class="field zip required">

@@ -235,7 +235,7 @@ define([
             controlLabelId: '',
 
             // text for more button
-            moreButtonText: 'More',
+            moreButtonText: $t('More'),
 
             // Callback url for media
             mediaCallback: '',
@@ -1214,8 +1214,20 @@ define([
          */
         _EmulateSelected: function (selectedAttributes) {
             $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
-                this.element.find('.' + this.options.classes.attributeClass +
-                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]'),
+                    parentInput = elem.parent();
+
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
             }, this));
         },
 

@@ -133,8 +133,8 @@
                 <item name="vault_capture" xsi:type="string">BraintreeVaultCaptureCommand</item>
                 <item name="void" xsi:type="string">BraintreeVoidCommand</item>
                 <item name="refund" xsi:type="string">BraintreeRefundCommand</item>
-                <item name="cancel" xsi:type="string">BraintreeVoidCommand</item>
-                <item name="deny_payment" xsi:type="string">BraintreeVoidCommand</item>
+                <item name="cancel" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
+                <item name="deny_payment" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -150,7 +150,7 @@
                 <item name="vault_capture" xsi:type="string">BraintreeVaultCaptureCommand</item>
                 <item name="void" xsi:type="string">BraintreeVoidCommand</item>
                 <item name="refund" xsi:type="string">BraintreeRefundCommand</item>
-                <item name="cancel" xsi:type="string">BraintreeVoidCommand</item>
+                <item name="cancel" xsi:type="string">Magento\Braintree\Gateway\CancelCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -505,6 +505,14 @@
         </arguments>
     </virtualType>
     <!-- END Void Command -->
+    <!-- Cancel Command -->
+    <virtualType name="Magento\Braintree\Gateway\CancelCommand" type="BraintreeVoidCommand">
+        <arguments>
+            <argument name="handler" xsi:type="object">Magento\Braintree\Gateway\Response\CancelDetailsHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\CancelResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Cancel Command -->
 
     <!-- Refund Command -->
     <virtualType name="BraintreeRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">

@@ -189,6 +189,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="stockedProductsFilterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
+    </type>
+    <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
+        <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
+    </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Match">
         <arguments>
             <argument name="preprocessorContainer" xsi:type="array">
