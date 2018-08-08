@@ -110,6 +110,7 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllAttributesTypes($context = [])
     {

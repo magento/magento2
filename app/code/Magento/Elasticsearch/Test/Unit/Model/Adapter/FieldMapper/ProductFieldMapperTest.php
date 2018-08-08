@@ -182,7 +182,9 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider attributeProvider
      * @param string $attributeCode
-     *
+     * @param string $inputType
+     * @param array $searchAttributes
+     * @param array $expected
      * @return void
      */
     public function testGetAllAttributesTypes($attributeCode, $inputType, $searchAttributes, $expected)
