@@ -21,6 +21,7 @@ define([
             this.loadBaseUrl    = false;
             this.customerId     = data.customer_id ? data.customer_id : false;
             this.storeId        = data.store_id ? data.store_id : false;
+            this.quoteId        = data['quote_id'] ? data['quote_id'] : false;
             this.currencyId     = false;
             this.currencySymbol = data.currency_symbol ? data.currency_symbol : '';
             this.addresses      = data.addresses ? data.addresses : $H({});
