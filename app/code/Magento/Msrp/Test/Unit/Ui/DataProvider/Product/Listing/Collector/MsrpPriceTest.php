@@ -101,7 +101,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface::class
         )
             ->setMethods(['setMsrp'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])

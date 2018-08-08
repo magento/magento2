@@ -68,10 +68,12 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)

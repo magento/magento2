@@ -104,7 +104,9 @@ class CurlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array $data
      * @return void
+     * @throws \Zend_Http_Exception
      * @dataProvider getTestData
      */
     public function testRequestSuccess(array $data)
@@ -145,7 +147,9 @@ class CurlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array $data
      * @return void
+     * @throws \Zend_Http_Exception
      * @dataProvider getTestData
      */
     public function testRequestError(array $data)

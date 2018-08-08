@@ -50,14 +50,16 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
             ->setMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 

@@ -25,6 +25,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -37,6 +40,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testConverterContainsHeader()
     {
         $this->assertEquals(
@@ -69,6 +75,9 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     *  return void
+     */
     public function testConvertData()
     {
         $this->serializerMock->expects($this->once())

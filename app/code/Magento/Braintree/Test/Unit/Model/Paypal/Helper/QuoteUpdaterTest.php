@@ -300,7 +300,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->setMethods(['setShippingAssignments'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quoteMock->expects(self::any())
             ->method('getExtensionAttributes')
