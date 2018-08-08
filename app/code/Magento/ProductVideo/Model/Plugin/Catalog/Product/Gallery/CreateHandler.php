@@ -60,7 +60,6 @@ class CreateHandler extends AbstractHandler
         if (!empty($mediaCollection)) {
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
-            $this->saveAdditionalStoreData($newVideoCollection);
 
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection, $product->getStoreId());
@@ -263,10 +262,10 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
-     * @param $item
+     * @param array $item
      * @return bool
      */
-    private function isVideoItem($item): bool
+    private function isVideoItem(array $item): bool
     {
         return !empty($item['media_type'])
             && empty($item['removed'])
@@ -274,10 +273,10 @@ class CreateHandler extends AbstractHandler
     }
 
     /**
-     * @param $item
+     * @param array $item
      * @return bool
      */
-    private function isNewVideo($item): bool
+    private function isNewVideo(array $item): bool
     {
         return !isset($item['video_url_default'], $item['video_title_default'])
             || empty($item['video_url_default'])
