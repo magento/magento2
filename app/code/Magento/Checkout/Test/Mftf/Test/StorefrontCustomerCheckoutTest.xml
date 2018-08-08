@@ -60,6 +60,7 @@
 
         <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersIfPresent"/>
         <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
 
@@ -175,7 +176,6 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2" />
 
         <click stepKey="changeShippingAddress" selector="{{CheckoutShippingMethodsSection.shipHereButton}}"/>
-        <waitForElementVisible stepKey="waitForShippingMethodLoaderVisible" selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30"/>
         <waitForElementNotVisible stepKey="waitForShippingMethodLoaderNotVisible" selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30"/>
         <click stepKey="selectFirstShippingMethod2" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="waitForShippingMethodSelect2" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
