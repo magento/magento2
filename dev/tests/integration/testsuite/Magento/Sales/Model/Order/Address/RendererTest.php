@@ -46,7 +46,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order_fixture_store.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testFormat()
