@@ -38,10 +38,10 @@ class ResponseResolver
     public function getResult(\Zend_Http_Response $response)
     {
         $result = false;
-        preg_match('#(?:Content-Type:\s*)(\w\S+)#i', $this->converter->getContentTypeHeader(), $contentType);
-        $converterContentType = $contentType[1];
+        $converterMediaType = $this->converter->getContentMediaType();
 
-        if ($response->getBody() && is_int(strripos($response->getHeader('Content-Type'), $converterContentType))) {
+        /** Content-Type header may not only contain media-type declaration */
+        if ($response->getBody() && is_int(strripos($response->getHeader('Content-Type'), $converterMediaType))) {
             $responseBody = $this->converter->fromBody($response->getBody());
         } else {
             $responseBody = [];

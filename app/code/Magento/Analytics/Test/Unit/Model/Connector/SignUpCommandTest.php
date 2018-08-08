@@ -163,7 +163,6 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
-            'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
             'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];

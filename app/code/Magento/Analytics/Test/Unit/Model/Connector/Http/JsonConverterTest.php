@@ -39,7 +39,10 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testConverterContainsHeader()
     {
-        $this->assertEquals(JsonConverter::CONTENT_TYPE_HEADER, $this->converter->getContentTypeHeader());
+        $this->assertEquals(
+            'Content-Type: ' . JsonConverter::CONTENT_MEDIA_TYPE,
+            $this->converter->getContentTypeHeader()
+        );
     }
 
     /**

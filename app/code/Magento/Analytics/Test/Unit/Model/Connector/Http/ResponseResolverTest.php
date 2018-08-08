@@ -73,8 +73,8 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
         $expectedBody = ['test' => 'testValue'];
         $response = new \Zend_Http_Response(201, ['Content-Type' => 'application/json'], json_encode($expectedBody));
         $this->converterMock
-            ->method('getContentTypeHeader')
-            ->willReturn('Content-Type: application/json');
+            ->method('getContentMediaType')
+            ->willReturn('application/json');
 
         $this->successResponseHandlerMock
             ->expects($this->once())
@@ -99,8 +99,8 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
         $expectedBody = 'testString';
         $response = new \Zend_Http_Response(201, ['Content-Type' => 'plain/text'], $expectedBody);
         $this->converterMock
-            ->method('getContentTypeHeader')
-            ->willReturn('Content-Type: application/json');
+            ->method('getContentMediaType')
+            ->willReturn('application/json');
         $this->converterMock
             ->expects($this->never())
             ->method('fromBody');
