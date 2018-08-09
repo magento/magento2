@@ -482,7 +482,7 @@
 
         .options-label + .item-options-container,
         .item-options-container + .item-options-container {
-            &:before {
+            &[data-th]:before {
                 content: attr(data-th) ':';
                 display: block;
                 font-weight: @font-weight__bold;
