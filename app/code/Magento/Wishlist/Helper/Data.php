@@ -7,6 +7,9 @@ namespace Magento\Wishlist\Helper;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\App\PageCache\FormKey as PageCacheFormKey;
 
 /**
  * Wishlist Data Helper
@@ -119,7 +122,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+		FormKey $fromKey,
+		CookieMetadataFactory $cookieMetadata,
+		PageCacheFormKey $pageCacheForm
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -129,6 +135,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
+		$this->fromKey = $fromKey;
+		$this->cookieMetadata = $cookieMetadata;
+		$this->pageCacheForm = $pageCacheForm;
         parent::__construct($context);
     }
 
@@ -629,5 +638,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $product->getUrlModel()->getUrl($product, $additional);
+    }
+
+	/**
+     * Refresh and set new form_key in session and cookie
+     *
+     * @return $this
+     */
+    public function refreshFormKey()
+    {
+        $beforeWishlistRequest = $this->_customerSession->getBeforeWishlistRequest();
+
+        if ($beforeWishlistRequest !== null) {
+
+            //form_key is already empty
+            $formKey = $this->fromKey->getFormKey();
+
+            $cookieMetadata = $this->cookieMetadata->createPublicCookieMetadata();
+            $cookieMetadata->setDomain($this->configInterface->getCookieDomain());
+			$cookieMetadata->setPath($this->configInterface->getCookiePath());
+            $cookieMetadata->setDuration($this->configInterface->getCookieLifetime());
+
+            $this->pageCacheForm->set($formKey,$cookieMetadata);
+
+            $beforeWishlistRequest['form_key'] = $formKey;
+            $this->_customerSession->setBeforeWishlistRequest($beforeWishlistRequest);
+            $this->_customerSession->setBeforeRequestParams($beforeWishlistRequest);
+            $this->_customerSession->setBeforeModuleName('wishlist');
+            $this->_customerSession->setBeforeControllerName('index');
+            $this->_customerSession->setBeforeAction('add');
+        }
+
+        return $this;
     }
 }
