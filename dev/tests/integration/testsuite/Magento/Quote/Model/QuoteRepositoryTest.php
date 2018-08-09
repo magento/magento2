@@ -44,6 +44,9 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $filterBuilder;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = BootstrapHelper::getObjectManager();

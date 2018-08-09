@@ -18,6 +18,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

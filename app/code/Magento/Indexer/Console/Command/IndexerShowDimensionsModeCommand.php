@@ -63,7 +63,6 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
         parent::configure();
     }
 
-
     /**
      * {@inheritdoc}
      * @param InputInterface $input
