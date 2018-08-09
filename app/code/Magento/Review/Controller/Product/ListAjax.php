@@ -18,7 +18,7 @@ class ListAjax extends ProductController
      */
     public function execute()
     {
-       if (!$this->initProduct()) {
+        if (!$this->initProduct()) {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             return $resultForward->forward('noroute');
