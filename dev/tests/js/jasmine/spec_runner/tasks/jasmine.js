@@ -60,7 +60,7 @@ function init(config) {
                 },
                 vendor: requireJs,
                 junit: {
-                    path: "var/log/js-unit/",
+                    path: "var/log/js-unit/" + themeName + "/",
                     consolidate: true
                 },
 
