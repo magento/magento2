@@ -28,7 +28,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $configMock;
 
     /**
-     * Se Up
+     * Set Up
      *
      * @return void
      */
