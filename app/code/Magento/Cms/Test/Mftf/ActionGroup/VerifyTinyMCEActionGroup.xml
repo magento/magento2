@@ -8,8 +8,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifyTinyMCEActionGroup">
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" time="30" />
-        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4" />
         <seeElement selector="{{TinyMCESection.Style}}" stepKey="assertInfo2"/>
         <seeElement selector="{{TinyMCESection.Bold}}" stepKey="assertInfo3"/>
         <seeElement selector="{{TinyMCESection.Italic}}" stepKey="assertInfo4"/>
