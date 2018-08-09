@@ -20,12 +20,12 @@ class Page
     /**
      * @var FilterEmulate
      */
-    protected $widgetFilter;
+    private $widgetFilter;
 
     /**
      * @var PageRepositoryInterface
      */
-    protected $pageRepository;
+    private $pageRepository;
 
     /**
      * @param PageRepositoryInterface $pageRepository
