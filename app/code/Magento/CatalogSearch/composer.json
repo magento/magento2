@@ -9,6 +9,7 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-indexer": "100.2.*",
         "magento/module-catalog-inventory": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",

@@ -101,11 +101,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertTrue(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $fileName)
-            )
-        );
+        $this->assertFileExists($this->fullDirectoryPath . $fileName);
     }
 
     /**
