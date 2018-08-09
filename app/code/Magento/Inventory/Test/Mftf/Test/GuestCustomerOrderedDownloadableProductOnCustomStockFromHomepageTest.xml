@@ -12,7 +12,7 @@
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
-            <title value="Create an Order with a Downloadable Product via the Storefront as Guest"/>
+            <title value="Create an Order with a Downloadable Product assigned to Custom Stock via the Storefront as Guest 2"/>
             <description value="You should be able to create an Order with a Downloadable Product from the Storefront as Guest."/>
             <testCaseId value="1300"/>
             <severity value="CRITICAL"/>

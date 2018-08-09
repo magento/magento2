@@ -12,7 +12,7 @@
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Save and Load Admin Grid Views"/>
-            <title value="Save and Load Admin Grid Views"/>
+            <title value="Save and Load Admin Source Grid Views"/>
             <description value="You should be able to Save and Load a Grid View for the Sources Grid."/>
             <testCaseId value="915"/>
             <severity value="CRITICAL"/>
