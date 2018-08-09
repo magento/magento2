@@ -55,6 +55,10 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param array $storeConfig
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getStoreMock(array $storeConfig)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -88,6 +92,9 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
         return $storeMock;
     }
 
+    /**
+     * @return \Magento\Store\Model\Data\StoreConfig
+     */
     protected function createStoreConfigDataObject()
     {
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactoryMock */

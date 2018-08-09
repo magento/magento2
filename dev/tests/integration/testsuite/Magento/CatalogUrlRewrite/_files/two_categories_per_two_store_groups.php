@@ -65,6 +65,3 @@ $storeGroup = $objectManager->create(\Magento\Store\Model\Group::class)
     ->save();
 
 $store->setGroupId($storeGroup->getId())->save();
-
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();

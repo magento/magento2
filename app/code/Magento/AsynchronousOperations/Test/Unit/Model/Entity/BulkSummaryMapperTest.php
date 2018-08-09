@@ -95,6 +95,9 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->entityToDatabase($entityType, $data));
     }
 
+    /**
+     * @return array
+     */
     public function entityToDatabaseDataProvider()
     {
         return [

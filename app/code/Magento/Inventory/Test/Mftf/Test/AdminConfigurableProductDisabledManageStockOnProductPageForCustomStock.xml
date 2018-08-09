@@ -102,7 +102,7 @@
         <click selector="{{AdminGridRow.checkboxByValue(_defaultSource.name)}}" stepKey="selectDefaultSource"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
 
-        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource('0')}}" userInput="100" stepKey="fillQuantityForDefaultSource"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
 
