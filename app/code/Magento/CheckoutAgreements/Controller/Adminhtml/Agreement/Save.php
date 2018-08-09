@@ -6,10 +6,36 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
+use Magento\CheckoutAgreements\Model\AgreementFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpPostActionInterface
+class Save extends Agreement implements HttpPostActionInterface
 {
+    /**
+     * @var AgreementFactory
+     */
+    private $agreementFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param AgreementFactory $agreementFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        AgreementFactory $agreementFactory = null
+    ) {
+        $this->agreementFactory = $agreementFactory ?:
+                ObjectManager::getInstance()->get(AgreementFactory::class);
+        parent::__construct($context, $coreRegistry);
+    }
     /**
      * @return void
      */
@@ -17,11 +43,11 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement im
     {
         $postData = $this->getRequest()->getPostValue();
         if ($postData) {
-            $model = $this->_objectManager->get(\Magento\CheckoutAgreements\Model\Agreement::class);
+            $model = $this->agreementFactory->create();
             $model->setData($postData);
 
             try {
-                $validationResult = $model->validateData(new \Magento\Framework\DataObject($postData));
+                $validationResult = $model->validateData(new DataObject($postData));
                 if ($validationResult !== true) {
                     foreach ($validationResult as $message) {
                         $this->messageManager->addError($message);
@@ -32,13 +58,13 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement im
                     $this->_redirect('checkout/*/');
                     return;
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));
             }
 
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setAgreementData($postData);
+            $this->_session->setAgreementData($postData);
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }
