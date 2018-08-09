@@ -513,7 +513,6 @@ class SessionManager implements SessionManagerInterface
         }
 
         if ($this->isSessionExists()) {
-
             // Regenerate the session
             session_regenerate_id();
             $newSessionId = session_id();
