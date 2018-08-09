@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Block\Account;
 
@@ -21,7 +22,7 @@ class Navigation extends Links
      * {@inheritdoc}
      * @since 100.2.0
      */
-    public function getLinks()
+    public function getLinks(): array
     {
         $links = $this->_layout->getChildBlocks($this->getNameInLayout());
         $sortableLink = [];
@@ -44,12 +45,8 @@ class Navigation extends Links
      * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink)
+    private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink): int
     {
-        if ($firstLink->getSortOrder() == $secondLink->getSortOrder()) {
-            return 0;
-        }
-
-         return ($firstLink->getSortOrder() < $secondLink->getSortOrder()) ? 1 : -1;
+        return $firstLink->getSortOrder() <=> $secondLink->getSortOrder();
     }
 }
