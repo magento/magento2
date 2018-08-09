@@ -22,7 +22,7 @@ class Navigation extends Links
      * {@inheritdoc}
      * @since 100.2.0
      */
-    public function getLinks(): array
+    public function getLinks()
     {
         $links = $this->_layout->getChildBlocks($this->getNameInLayout());
         $sortableLink = [];
