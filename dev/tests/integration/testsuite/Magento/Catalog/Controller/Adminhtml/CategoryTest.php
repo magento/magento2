@@ -332,6 +332,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         ];
     }
 
+    /**
+     * Test validation.
+     */
     public function testSaveActionCategoryWithDangerRequest()
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);

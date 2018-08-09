@@ -101,6 +101,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
     }
 
+    /**
+     * Test ACL configuration for action working.
+     */
     public function testAclHasAccess()
     {
         if ($this->uri === null) {
@@ -114,6 +117,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
     }
 
+    /**
+     * Test ACL actually denying access.
+     */
     public function testAclNoAccess()
     {
         if ($this->resource === null) {
