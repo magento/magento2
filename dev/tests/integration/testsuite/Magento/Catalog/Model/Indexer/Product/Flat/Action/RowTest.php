@@ -61,12 +61,13 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
             $this->_processor->getIndexer()->isScheduled(),
             'Indexer is in scheduled mode when turned to update on save mode'
         );
-        $this->_processor->reindexAll();
 
         $this->_product->load(1);
         $this->_product->setName('Updated Product');
         $this->_product->save();
 
+        $this->_processor->reindexAll();
+        
         $category = $categoryFactory->create()->load(9);
         $layer = $listProduct->getLayer();
         $layer->setCurrentCategory($category);

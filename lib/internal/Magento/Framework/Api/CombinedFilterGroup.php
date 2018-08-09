@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\AbstractSimpleObject;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
