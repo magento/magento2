@@ -11,6 +11,7 @@
     <test name="VerifyChildCategoriesShouldNotIncludeInMenuTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Create categories"/>
             <title value="Customer should not see categories that are not included in the menu"/>
             <description value="Customer should not see categories that are not included in the menu"/>
             <severity value="CRITICAL"/>

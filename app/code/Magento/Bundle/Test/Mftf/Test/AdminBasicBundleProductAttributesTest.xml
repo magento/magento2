@@ -93,7 +93,7 @@
 
         <!--Create second attribute set for edit-->
         <actionGroup ref="CreateDefaultAttributeSet" stepKey="createSecondAttributeSet">
-            <argument name="label" value="{{ProductAttributeFrontendLabel.label}}2"/>
+            <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
         </actionGroup>
 
         <!--Filter catalog-->
@@ -112,8 +112,8 @@
 
         <!--Apply Attribute Set-->
         <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}2" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(ProductAttributeFrontendLabelTwo.label)}}" stepKey="selectAttrSet"/>
 
         <!--Product name and SKU-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="fillProductName"/>
@@ -153,7 +153,7 @@
         <seeElement selector="{{AdminProductFormBundleSection.enableDisableToggleOn}}" stepKey="seeToggleIsOn2"/>
 
         <!--Attribute Set-->
-        <seeOptionIsSelected selector="{{AdminProductFormSection.attributeSet}}" userInput="{{ProductAttributeFrontendLabel.label}}2" stepKey="seeAttributeSet2"/>
+        <seeOptionIsSelected selector="{{AdminProductFormSection.attributeSet}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="seeAttributeSet2"/>
 
         <!--Product name and SKU-->
         <seeInField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="seeProductName2"/>

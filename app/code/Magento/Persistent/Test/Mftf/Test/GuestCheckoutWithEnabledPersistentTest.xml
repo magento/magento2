@@ -11,6 +11,7 @@
     <test name="GuestCheckoutWithEnabledPersistentTest">
         <annotations>
             <features value="Persistent"/>
+            <stories value="Guest checkout"/>
             <title value="Guest Checkout with Enabled Persistent"/>
             <description value="Checkout data must be restored after page checkout reload."/>
             <severity value="CRITICAL"/>

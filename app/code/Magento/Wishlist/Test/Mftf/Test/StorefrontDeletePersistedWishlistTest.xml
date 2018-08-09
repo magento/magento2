@@ -14,8 +14,11 @@
             <title value="Customer should be able to delete a persistent wishlist"/>
             <description value="Customer should be able to delete a persistent wishlist"/>
             <group value="wishlist"/>
-            <!-- MQE-1145 -->
             <group value="skip"/>
+            <skip>
+                <issueId value="MQE-1145"/>
+            </skip>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>

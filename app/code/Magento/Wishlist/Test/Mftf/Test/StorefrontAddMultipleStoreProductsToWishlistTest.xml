@@ -10,9 +10,11 @@
     <test name="StorefrontAddMultipleStoreProductsToWishlistTest">
         <annotations>
             <features value="Wishlist"/>
+            <stories value="Adding to wishlist"/>
             <title value="Customer should be able to add products to wishlist from different stores"/>
             <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
             <group value="wishlist"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData entity="customStoreGroup" stepKey="storeGroup"/>

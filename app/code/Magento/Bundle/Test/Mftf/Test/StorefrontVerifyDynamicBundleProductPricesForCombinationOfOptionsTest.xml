@@ -11,6 +11,7 @@
     <test name="StorefrontVerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
         <annotations>
             <features value="Bundle"/>
+            <stories value="View bundle products"/>
             <title value="Verify dynamic bundle product prices for combination of options"/>
             <description value="Verify prices for various configurations of Dynamic Bundle product"/>
             <severity value="CRITICAL"/>
