@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\CreditCard;
+namespace Magento\Braintree\Test\Unit\Model\InstantPurchase;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider;
