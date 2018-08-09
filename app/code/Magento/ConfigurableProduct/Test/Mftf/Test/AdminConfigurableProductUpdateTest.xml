@@ -16,6 +16,7 @@
             <description value="admin should be able to bulk update attributes of configurable products"/>
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -78,6 +79,7 @@
             <description value="Admin should be able to remove a product configuration"/>
             <testCaseId value="MC-63"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
@@ -170,6 +172,7 @@
             <description value="Admin should be able to disable a product configuration"/>
             <testCaseId value="MC-119"/>
             <group value="ConfigurableProduct"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>

@@ -10,10 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSimpleProductUiValidationTest">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Edit products"/>
             <title value="UI elements on the simple product edit screen should be organized as expected"/>
             <description value="Admin should be able to use simple product UI in expected manner"/>
             <testCaseId value="MAGETWO-92835"/>
             <group value="Catalog"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>
