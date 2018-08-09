@@ -23,6 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SecureTokenTest extends TestCase
 {
