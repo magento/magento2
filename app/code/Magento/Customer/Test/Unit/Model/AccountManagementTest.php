@@ -318,7 +318,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($defaultStoreId);
         $website = $this->getMockBuilder(\Magento\Store\Model\Website::class)->disableOriginalConstructor()->getMock();
-        $website->expects($this->once())
+        $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
         $website->expects($this->once())
@@ -354,7 +354,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerEmail)
             ->willReturn($customer);
         $this->share
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('isWebsiteScope')
             ->willReturn(true);
         $this->storeManager
@@ -545,6 +545,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $storeName = 'store_name';
+        $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
@@ -556,6 +557,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerMock->expects($this->atLeastOnce())
             ->method('getStoreId')
             ->willReturn($storeId);
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
         $customerMock->expects($this->once())
             ->method('setCreatedIn')
             ->with($storeName)
@@ -567,6 +571,19 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setAddresses')
             ->with(null)
             ->willReturnSelf();
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $website = $this->getMockBuilder(\Magento\Store\Model\Website::class)->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
 
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
@@ -576,7 +593,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($storeName);
 
-        $this->storeManager->expects($this->exactly(2))
+        $this->storeManager->expects($this->exactly(1))
             ->method('getStore')
             ->with($storeId)
             ->willReturn($storeMock);
@@ -1720,7 +1737,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerMock->expects($this->exactly(3))
             ->method('getStoreId')
             ->willReturn(null);
-        $customerMock->expects($this->exactly(2))
+        $customerMock->expects($this->exactly(3))
             ->method('getWebsiteId')
             ->willReturn(null);
         $customerMock->expects($this->once())
@@ -1752,6 +1769,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->accountManagement->createAccountWithPasswordHash($customerMock, $hash);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreateAccountWithPasswordHashWithCustomerAddresses()
     {
         $websiteId = 1;
@@ -1846,6 +1866,19 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->atLeastOnce())
             ->method('getStore')
             ->willReturn($store);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $website = $this->getMockBuilder(\Magento\Store\Model\Website::class)->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
 
         $this->assertSame($customer, $this->accountManagement->createAccountWithPasswordHash($customer, $hash));
     }
@@ -1975,5 +2008,40 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->logger->expects($this->once())->method('error')->with($exception);
 
         $this->accountManagement->createAccount($customer);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithStoreNotInWebsite()
+    {
+        $storeId = 1;
+        $websiteId = 1;
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(null);
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customerMock->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $website = $this->getMockBuilder(\Magento\Store\Model\Website::class)->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([2, 3]);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->accountManagement->createAccountWithPasswordHash($customerMock, $hash);
     }
 }
