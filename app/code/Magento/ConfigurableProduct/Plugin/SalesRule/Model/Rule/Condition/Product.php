@@ -24,7 +24,6 @@ class Product
         );
     }
 
-
     /**
      * @param \Magento\SalesRule\Model\Rule\Condition\Product $subject
      * @param \Magento\Framework\Model\AbstractModel          $model
