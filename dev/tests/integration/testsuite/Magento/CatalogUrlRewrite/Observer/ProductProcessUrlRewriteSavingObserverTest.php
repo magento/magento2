@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation disabled
  */
 class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {

@@ -20,6 +20,7 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoDbIsolation disabled
  */
 class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -104,7 +105,6 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testSaveWithNotExistingCustomerAddress()
