@@ -161,7 +161,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$childItem]);
         $item->expects($this->once())
             ->method('setProduct')
-            ->with($simpleProductMock);
+            ->with($this->identicalTo($simpleProductMock));
 
         $this->validator->setAttribute('special_price');
 
