@@ -13,6 +13,9 @@ use Zend\Http\Request;
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * testPostAction
+     */
     public function testPostAction()
     {
         $params = [
@@ -36,8 +39,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider dataInvalidPostAction
-     * @param $params
-     * @param $expectedMessage
+     * @param array $params
+     * @param string $expectedMessage
      */
     public function testInvalidPostAction($params, $expectedMessage)
     {
@@ -52,6 +55,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public static function dataInvalidPostAction()
     {
         return [

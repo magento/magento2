@@ -65,6 +65,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
      */
     private $mailMock;
 
+    /**
+     * test setup
+     */
     protected function setUp()
     {
         $this->mailMock = $this->getMockBuilder(MailInterface::class)->getMockForAbstractClass();
@@ -120,6 +123,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testExecuteEmptyPost
+     */
     public function testExecuteEmptyPost()
     {
         $this->stubRequestPostData([]);
@@ -159,6 +165,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * testExecuteValidPost
+     */
     public function testExecuteValidPost()
     {
         $post = ['name' => 'Name', 'comment' => 'Comment', 'email' => 'valid@mail.com', 'hideit' => null];

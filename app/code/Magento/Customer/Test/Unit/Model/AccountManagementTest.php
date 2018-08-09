@@ -789,6 +789,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->accountManagement->createAccount($customer, $password);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testCreateAccountInputExceptionExtraLongPassword()
     {
         $password = '257*chars*************************************************************************************'
@@ -1146,11 +1149,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $email
-     * @param $templateIdentifier
-     * @param $sender
-     * @param $storeId
-     * @param $customerName
+     * @param string $email
+     * @param int $templateIdentifier
+     * @param string $sender
+     * @param int $storeId
+     * @param string $customerName
      */
     protected function prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName)
     {
@@ -1185,6 +1188,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('sendMessage');
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testInitiatePasswordResetEmailReminder()
     {
         $customerId = 1;
@@ -1208,6 +1214,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testInitiatePasswordResetEmailReset()
     {
         $storeId = 1;
@@ -1230,6 +1239,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testInitiatePasswordResetNoTemplate()
     {
         $storeId = 1;
