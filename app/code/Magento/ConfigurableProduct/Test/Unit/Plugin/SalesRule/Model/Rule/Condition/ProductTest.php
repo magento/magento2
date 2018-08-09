@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition;
+namespace Magento\ConfigurableProduct\Test\Unit\Plugin\SalesRule\Model\Rule\Condition;
 
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -27,6 +27,7 @@ use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
