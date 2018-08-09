@@ -43,8 +43,8 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     private $dimensionProviders;
 
     /**
-     * @param ObjectManagerFactory    $objectManagerFactory
-     * @param ScopeConfigInterface    $configReader
+     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ScopeConfigInterface $configReader
      * @param ModeSwitcherInterface[] $dimensionSwitchers
      */
     public function __construct(
@@ -70,6 +70,9 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
 
     /**
      * {@inheritdoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -185,7 +188,7 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
      *
      * @param string $inputKey
      * @param string $inputIndexer
-     * @param array  $acceptedValues
+     * @param array $acceptedValues
      * @return string[]
      */
     private function validateArgument(string $inputKey, string $inputIndexer, array $acceptedValues): array

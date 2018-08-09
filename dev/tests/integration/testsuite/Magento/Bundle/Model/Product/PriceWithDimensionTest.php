@@ -20,6 +20,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -27,6 +30,9 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Get tier price
+     */
     public function testGetTierPrice()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */

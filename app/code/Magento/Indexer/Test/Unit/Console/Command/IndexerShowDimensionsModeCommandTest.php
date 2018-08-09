@@ -74,8 +74,8 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Tests method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @param $command
-     * @param $consoleOutput
+     * @param string $command
+     * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      */
     public function testExecuteWithAttributes($command, $consoleOutput)

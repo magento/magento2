@@ -370,8 +370,8 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
 
     /**
      * Fixed bundle product with required option, custom option and without any discounts
-     * @param $selectionsPriceType
-     * @param $customOptionsPriceType
+     * @param string $selectionsPriceType
+     * @param string $customOptionsPriceType
      * @return array
      */
     private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)

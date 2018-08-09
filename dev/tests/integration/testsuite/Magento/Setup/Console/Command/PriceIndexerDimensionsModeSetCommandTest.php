@@ -63,8 +63,8 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      *
-     * @param $previousMode
-     * @param $currentMode
+     * @param string $previousMode
+     * @param string $currentMode
      * @dataProvider modesDataProvider
      */
     public function testSwitchMode($previousMode, $currentMode)
@@ -89,6 +89,10 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         );
     }
 
+    /**
+     * Modes data provider
+     * @return array
+     */
     public function modesDataProvider()
     {
         return [

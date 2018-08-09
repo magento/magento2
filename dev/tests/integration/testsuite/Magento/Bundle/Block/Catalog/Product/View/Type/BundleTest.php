@@ -74,6 +74,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
     }
 
+    /**
+     * Tear Down
+     */
     protected function tearDown()
     {
         $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('product');

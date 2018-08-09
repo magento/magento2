@@ -33,12 +33,18 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
+    /**
+     * Get price
+     */
     public function testGetPrice()
     {
         $this->assertEmpty($this->_model->getPrice());
@@ -46,6 +52,9 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10.0, $this->_model->getPrice());
     }
 
+    /**
+     * Get price model
+     */
     public function testGetPriceModel()
     {
         $default = $this->_model->getPriceModel();
@@ -77,6 +86,9 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('<span class="price">$0.00</span>', $this->_model->getFormatedPrice());
     }
 
+    /**
+     * Set get final price
+     */
     public function testSetGetFinalPrice()
     {
         $this->assertEquals(0, $this->_model->getFinalPrice());

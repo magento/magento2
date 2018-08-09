@@ -37,6 +37,9 @@ class SpecialPriceIndexerWithDimensionTest extends \PHPUnit\Framework\TestCase
      */
     private $indexerProcessor;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

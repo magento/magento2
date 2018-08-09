@@ -35,6 +35,9 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
      */
     private $productCollectionFactory;
 
+    /**
+     * set up
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();

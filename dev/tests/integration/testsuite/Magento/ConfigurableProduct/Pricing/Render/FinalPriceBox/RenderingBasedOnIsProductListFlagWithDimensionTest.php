@@ -44,6 +44,9 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      */
     private $finalPriceBox;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

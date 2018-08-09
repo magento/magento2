@@ -58,7 +58,7 @@ class Index extends AbstractDb
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableResolver|null $tableResolver
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      */

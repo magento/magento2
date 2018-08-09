@@ -58,6 +58,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $observer;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         /** @var \Magento\Framework\ObjectManagerInterface objectManager */
@@ -159,7 +162,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
      * @param \Magento\Quote\Model\Quote $quote
-     * @param $productId
+     * @param int $productId
      * @return \Magento\Quote\Model\Quote\Item
      */
     private function _getQuoteItemIdByProductId($quote, $productId)
