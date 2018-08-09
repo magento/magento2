@@ -17,6 +17,7 @@
             <testCaseId value="1477"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="single_mode"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -86,7 +87,7 @@
         <waitForAjaxLoad stepKey="waitForImageLoader"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1051" stepKey="fillWrongQuantity"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="wrongAddToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" time="30" stepKey="waitForProductAddFailed"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1050" stepKey="fillCorrectQuantity"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="correctAddToCart"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
