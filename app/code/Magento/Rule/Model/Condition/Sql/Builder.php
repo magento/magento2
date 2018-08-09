@@ -184,8 +184,8 @@ class Builder
 
     /**
      * @param Combine $combine
-     * @param string  $value
-     * @param bool    $isDefaultStoreUsed
+     * @param string $value
+     * @param bool $isDefaultStoreUsed
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @throws \Magento\Framework\Exception\LocalizedException
