@@ -87,7 +87,7 @@
         }
     ],
     "require-dev": {
-        "magento/magento2-functional-testing-framework": "dev-develop",
+        "magento/magento2-functional-testing-framework": "dev-MQE-1181",
         "friendsofphp/php-cs-fixer": "~2.12.0",
         "lusitanian/oauth": "~0.8.10",
         "pdepend/pdepend": "2.5.2",

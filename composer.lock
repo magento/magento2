@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "144b16cfcd074bac2b151d14b9a61c0d",
+    "content-hash": "33d00be920e1a33f354757d8956be27c",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6183,11 +6183,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-develop",
+            "version": "dev-MQE-1181",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "228291162439cb6fba11733114c9b2993a040df0"
+                "reference": "7a77f17db79ff5101a6fc431ec0615b323510002"
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.2.6",
@@ -6256,7 +6256,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-08-06T18:28:29+00:00"
+            "time": "2018-08-09T15:55:57+00:00"
         },
         {
             "name": "moontoast/math",
