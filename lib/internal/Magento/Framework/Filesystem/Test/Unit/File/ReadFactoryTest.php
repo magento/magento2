@@ -7,8 +7,6 @@ namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use \Magento\Framework\Filesystem\File\ReadFactory;
 
-use Magento\Framework\Filesystem\DriverPool;
-
 /**
  * Class ReadFactoryTest
  */

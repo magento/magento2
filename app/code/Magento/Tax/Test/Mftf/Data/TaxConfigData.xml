@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="TaxConfig" type="tax_config_state">
       <!-- Calculation settings -->
       <requiredEntity type="algorithm">TaxCalculationMethodBasedOn</requiredEntity>
@@ -109,6 +109,27 @@
     </entity>
     <entity name="DisplayZeroTaxSubtotalSales" type="zero_taxSales">
         <data key="value">1</data>
+    </entity>
+    <entity name="Tax_Config_CA" type="tax_config_state">
+        <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_CA</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+        <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+    </entity>
+
+    <entity name="Tax_Config_NY" type="tax_config_state">
+        <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_NY</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+        <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
     </entity>
 <!-- Set default settings -->
     <entity name="DefaultTaxConfig" type="tax_config_default">

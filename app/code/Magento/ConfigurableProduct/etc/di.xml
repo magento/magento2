@@ -224,4 +224,11 @@
     <type name="Magento\SalesRule\Model\Rule\Condition\Product">
         <plugin name="apply_rule_on_configurable_children" type="Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product" />
     </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
