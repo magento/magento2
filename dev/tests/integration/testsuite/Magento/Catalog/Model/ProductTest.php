@@ -35,6 +35,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * Class dependencies initialization
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -45,6 +50,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return void
+     */
     public static function tearDownAfterClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -66,6 +75,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testCanAffectOptions()
     {
         $this->assertFalse($this->_model->canAffectOptions());
@@ -105,6 +117,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $crud->testCrud();
     }
 
+    /**
+     * @return void
+     */
     public function testCleanCache()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -125,6 +140,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testAddImageToMediaGallery()
     {
         // Model accepts only files in tmp media path, we need to copy fixture file there
@@ -332,6 +350,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($model->getIsVirtual());
     }
 
+    /**
+     * @return void
+     */
     public function testToArray()
     {
         $this->assertEquals([], $this->_model->toArray());
@@ -339,6 +360,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
     }
 
+    /**
+     * @return void
+     */
     public function testFromArray()
     {
         $this->_model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
@@ -410,6 +434,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testProcessBuyRequest()
     {
         $request = new \Magento\Framework\DataObject();
@@ -418,6 +445,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('errors', $result->getData());
     }
 
+    /**
+     * @return void
+     */
     public function testValidate()
     {
         $this->_model->setTypeId(

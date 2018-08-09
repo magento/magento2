@@ -18,6 +18,11 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * Class dependencies initialization
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
@@ -68,12 +73,12 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $title
-     * @param $type
-     * @param $priceType
-     * @param $product
-     * @param $messages
-     * @param $result
+     * @param string $title
+     * @param string $type
+     * @param string $priceType
+     * @param \Magento\Framework\DataObject $product
+     * @param array $messages
+     * @param bool $result
      * @dataProvider isValidTitleDataProvider
      */
     public function testIsValidTitle($title, $type, $priceType, $product, $messages, $result)
@@ -103,7 +108,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $product
+     * @param \Magento\Framework\DataObject $product
      * @dataProvider isValidFailDataProvider
      */
     public function testIsValidFail($product)

@@ -18,6 +18,11 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * Class dependencies initialization
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
@@ -54,6 +59,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Zend_Validate_Exception
+     * @return void
+     */
     public function testIsValidSuccess()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -67,6 +76,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->validator->getMessages());
     }
 
+    /**
+     * @throws \Zend_Validate_Exception
+     * @return void
+     */
     public function testIsValidWithNegativeMaxCharacters()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));

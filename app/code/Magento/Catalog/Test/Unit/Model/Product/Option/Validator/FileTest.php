@@ -18,6 +18,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * Class dependencies initialization
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
@@ -54,6 +59,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Zend_Validate_Exception
+     * @return void
+     */
     public function testIsValidSuccess()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -68,6 +77,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->validator->isValid($this->valueMock));
     }
 
+    /**
+     * @throws \Zend_Validate_Exception
+     * @return void
+     */
     public function testIsValidWithNegativeImageSize()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -85,6 +98,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @throws \Zend_Validate_Exception
+     * @return void
+     */
     public function testIsValidWithNegativeImageSizeY()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
