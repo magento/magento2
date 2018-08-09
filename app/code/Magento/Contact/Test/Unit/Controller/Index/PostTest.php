@@ -133,6 +133,8 @@ class PostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array $postData
+     * @param bool $exceptionExpected
      * @dataProvider postDataProvider
      */
     public function testExecutePostValidation($postData, $exceptionExpected)

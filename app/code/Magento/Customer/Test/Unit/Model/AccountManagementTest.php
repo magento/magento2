@@ -1521,6 +1521,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->accountManagement->changePassword($email, $currentPassword, $newPassword));
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testResetPassword()
     {
         $customerEmail = 'customer@example.com';
