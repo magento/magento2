@@ -30,6 +30,9 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $validateFactoryMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
