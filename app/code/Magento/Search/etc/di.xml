@@ -82,7 +82,4 @@
             <argument name="dataStorage" xsi:type="object">Magento\Search\Model\SearchEngine\Config\Data</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\Menu\Builder">
-        <plugin name="SearchTermMenuBuilder" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
-    </type>
 </config>
