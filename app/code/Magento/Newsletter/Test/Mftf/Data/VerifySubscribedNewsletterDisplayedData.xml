@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+
+    <!-- For this Test, all data is the same. -->
+    <entity name="AdminTestData" type="data">
+        <data key="testData" unique="suffix">store2</data>
+    </entity>
+
+    <entity name="CreateUserData" type="user">
+        <data key="firstName" unique="suffix">John</data>
+        <data key="lastName">Smith</data>
+        <data key="password">Admin@123</data>
+    </entity>
+
+</entities>

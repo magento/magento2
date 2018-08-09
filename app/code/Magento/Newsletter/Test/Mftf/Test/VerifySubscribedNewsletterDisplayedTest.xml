@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="VerifySubscribedNewsletterDisplayedTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="MAGETWO-91701: Newsletter subscription is not correctly updated when user is registered on 2 stores"/>
+            <group value="Newsletter"/>
+            <title value="Newsletter subscription when user is registered on 2 stores"/>
+            <description value="Newsletter subscription when user is registered on 2 stores"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93836"/>
+        </annotations>
+
+        <before>
+            <!--Log in to Magento as admin.-->
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <!--Go to Stores.-->
+            <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
+            <!--Create Website.-->
+            <actionGroup ref="AdminCreateWebsite" stepKey="adminCreateWebsite"/>
+            <!--Create Store.-->
+            <actionGroup ref="AdminCreateNewStore" stepKey="adminCreateNewStore"/>
+            <!--Create Store View.-->
+            <actionGroup ref="AdminCreateStoreView" stepKey="adminCreateStoreView"/>
+            <!--Go to Stores -> Configuration -> Web.-->
+            <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
+            <actionGroup ref="SelectYesInAddStoreCodeToUrlsField" stepKey="selectYesInAddStoreCodeToUrlsField"/>
+        </before>
+
+        <!--Go to store front (default) and click Create an Account.-->
+        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="navigateToCustomers"/>
+        <actionGroup ref="StorefrontCreateNewAccount" stepKey="createNewAccount"/>
+
+        <!--Sign Out-->
+        <actionGroup ref="StorefrontSignOut" stepKey="storefrontSignOut"/>
+
+        <!--Change 'default' to 'url_name' in url-->
+        <amOnPage url="{{AdminTestData.testData}}" stepKey="goToCreatedWebPage"/>
+        <waitForPageLoad stepKey="waitForCreatedWebPageLoaded"/>
+
+        <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked"/>
+        <dontSee stepKey="verifySubscribedNewsletters" userInput="You aren't subscribed to our newsletter displayed"/>
+
+        <after>
+            <!--Delete created data and set Default Configuration-->
+            <amOnPage url="admin" stepKey="goToAdminPage"/>
+            <waitForPageLoad stepKey="waitForAdminPageLoaded"/>
+            <actionGroup ref="AdminDeleteCreatedCustomer" stepKey="adminDeleteCustomer"/>
+            <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
+            <actionGroup ref="AdminDeleteWebsite" stepKey="adminDeleteWebsite"/>
+            <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
+            <actionGroup ref="AdminSetDefaultConfig" stepKey="adminSetDefaultConfig"/>
+        </after>
+
+    </test>
+</tests>
+
