@@ -9,6 +9,9 @@ use Magento\Framework\App\Request\Http;
 
 class CancelTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @inheritDoc
+     */
     public function setUp()
     {
         $this->resource = 'Magento_Sales::cancel';

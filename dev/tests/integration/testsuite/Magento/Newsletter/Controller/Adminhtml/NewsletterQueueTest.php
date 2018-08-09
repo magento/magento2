@@ -17,6 +17,9 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
      */
     protected $_model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -25,6 +28,9 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         /**

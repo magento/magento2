@@ -32,12 +32,20 @@ class MassAssignGroupTest extends AbstractBackendController
      */
     protected $customerRepository;
 
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         /**

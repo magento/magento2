@@ -8,9 +8,9 @@ namespace Magento\TestFramework\TestCase;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
- * A parent class for backend controllers - contains directives for admin user creation and authentication
+ * A parent class for backend controllers - contains directives for admin user creation and authentication.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @SuppressWarnings(PHPMD.numberOfChildren)
  */
 abstract class AbstractBackendController extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -43,6 +43,11 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      */
     protected $httpMethod;
 
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -69,6 +74,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->_auth->getAuthStorage()->destroy(['send_expire_cookie' => false]);

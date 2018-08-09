@@ -28,7 +28,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(

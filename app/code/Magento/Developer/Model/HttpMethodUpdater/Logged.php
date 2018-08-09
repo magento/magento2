@@ -24,9 +24,7 @@ class Logged
     private $methods;
 
     /**
-     * Logged constructor.
-     *
-     * @param string   $actionClass
+     * @param string $actionClass
      * @param string[] $methods
      */
     public function __construct(string $actionClass, array $methods)

@@ -33,12 +33,20 @@ class MassDeleteTest extends AbstractBackendController
      */
     private $baseControllerUrl = 'http://localhost/index.php/backend/customer/index/index';
 
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         /**

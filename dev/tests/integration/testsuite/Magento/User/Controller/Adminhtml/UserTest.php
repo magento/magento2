@@ -153,7 +153,10 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * Verify password change properly updates fields when the request is valid
+     * Verify password change properly updates fields when the request is valid.
+     *
+     * @param array $postData
+     * @param bool $isPasswordCorrect
      *
      * @magentoDbIsolation enabled
      * @dataProvider saveActionPasswordChangeDataProvider

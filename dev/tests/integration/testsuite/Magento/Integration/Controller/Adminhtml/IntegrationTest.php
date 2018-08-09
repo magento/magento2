@@ -21,6 +21,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     /** @var \Magento\Integration\Model\Integration  */
     private $_integration;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -30,6 +33,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->_integration = $integration->load('Fixture Integration', 'name');
     }
 
+    /**
+     * Test view page.
+     */
     public function testIndexAction()
     {
         $this->dispatch('backend/admin/integration/index');
@@ -45,6 +51,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         );
     }
 
+    /**
+     * Test creation form.
+     */
     public function testNewAction()
     {
         $this->dispatch('backend/admin/integration/new');
@@ -62,6 +71,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         );
     }
 
+    /**
+     * Test update form.
+     */
     public function testEditAction()
     {
         $integrationId = $this->_integration->getId();
@@ -89,6 +101,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         );
     }
 
+    /**
+     * Test saving.
+     */
     public function testSaveActionUpdateIntegration()
     {
         $integrationId = $this->_integration->getId();
@@ -113,6 +128,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->assertRedirect($this->stringContains('backend/admin/integration/index/'));
     }
 
+    /**
+     * Test saving.
+     */
     public function testSaveActionNewIntegration()
     {
         $url = 'http://magento.ll/endpoint_url';

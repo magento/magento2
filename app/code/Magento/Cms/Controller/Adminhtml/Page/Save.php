@@ -128,8 +128,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     /**
      * Process result redirect
      *
-     * @param \Magento\Cms\Api\Data\PageInterface  $model
-     * @param \Magento\Backend\Model\View\Result\Redirect  $resultRedirect
+     * @param \Magento\Cms\Api\Data\PageInterface $model
+     * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
      * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws LocalizedException

@@ -140,7 +140,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      * Receive entity(customer|customer_address) data from request
      *
      * @param array $data
-     * @param null $isCustomerData
+     * @param mixed $isCustomerData
      * @return array
      */
     protected function getData(array $data, $isCustomerData = null)

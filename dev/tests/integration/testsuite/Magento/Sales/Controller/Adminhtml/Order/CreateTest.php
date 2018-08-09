@@ -23,6 +23,11 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     protected $productRepository;
 
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -30,6 +35,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
+    /**
+     * Test LoadBlock being dispatched.
+     */
     public function testLoadBlockAction()
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -62,6 +70,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * @param string $block Block name.
+     * @param string $expected Contains HTML.
+     *
      * @dataProvider loadBlockActionsDataProvider
      */
     public function testLoadBlockActions($block, $expected)
@@ -74,6 +85,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertContains($expected, $html);
     }
 
+    /**
+     * @return array
+     */
     public function loadBlockActionsDataProvider()
     {
         return [
@@ -222,6 +236,11 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertContains(sprintf('"productId":"%s"', $product->getEntityId()), $body);
     }
 
+    /**
+     * Test not allowing to save.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testDeniedSaveAction()
     {
         $this->_objectManager->configure(

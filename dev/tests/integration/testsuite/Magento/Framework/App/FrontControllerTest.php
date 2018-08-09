@@ -67,6 +67,9 @@ class FrontControllerTest extends TestCase
         return $this->fakeRequestValidator;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->_objectManager = Bootstrap::getObjectManager();
@@ -76,6 +79,9 @@ class FrontControllerTest extends TestCase
         );
     }
 
+    /**
+     * Test dispatching an empty action.
+     */
     public function testDispatch()
     {
         if (!Bootstrap::canTestHeaders()) {
@@ -93,6 +99,9 @@ class FrontControllerTest extends TestCase
         );
     }
 
+    /**
+     * Test request validator invalidating given request.
+     */
     public function testInvalidRequest()
     {
         if (!Bootstrap::canTestHeaders()) {

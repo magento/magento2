@@ -23,6 +23,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $productRepository;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -33,6 +36,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->productRepository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
     }
 
+    /**
+     * Test adding product to compare list.
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
@@ -59,6 +67,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
+    /**
+     * Test comparing a product.
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testIndexActionAddProducts()
     {
         $this->_requireVisitorWithNoProducts();
@@ -70,6 +83,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
+    /**
+     * Test removing a product from compare list.
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testRemoveAction()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -87,6 +105,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$restProduct->getEntityId()]);
     }
 
+    /**
+     * Test removing a product from compare list of a registered customer.
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testRemoveActionWithSession()
     {
         $this->_requireCustomerWithTwoProducts();
@@ -105,6 +128,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$secondProduct->getEntityId()]);
     }
 
+    /**
+     * Test getting a list of compared product.
+     */
     public function testIndexActionDisplay()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -131,6 +157,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('$987.65', $responseBody);
     }
 
+    /**
+     * Test clearing a list of compared products.
+     */
     public function testClearAction()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -149,6 +178,8 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test escaping a session message.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
      */
     public function testRemoveActionProductNameXss()
@@ -166,6 +197,12 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function _prepareCompareListWithProductNameXss()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -188,6 +225,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     protected function _requireVisitorWithNoProducts()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -207,6 +249,12 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([]);
     }
 
+    /**
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function _requireVisitorWithTwoProducts()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -239,6 +287,12 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$firstProductEntityId, $secondProductEntityId]);
     }
 
+    /**
+     * Preparing a compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function _requireCustomerWithTwoProducts()
     {
         $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

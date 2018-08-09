@@ -14,6 +14,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * Test Configuration page existing.
+     */
     public function testEditAction()
     {
         $this->dispatch('backend/admin/system_config/edit');
@@ -21,6 +24,8 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
+     * Test redirect after changing base URL.
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
@@ -63,7 +68,9 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     }
 
     /**
-     * Reset test framework default base url
+     * Reset test framework default base url.
+     *
+     * @param string $defaultHost
      */
     protected function resetBaseUrl($defaultHost)
     {

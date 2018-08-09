@@ -127,6 +127,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
     }
 
+    /**
+     * Test SuggestCategories finds any categories.
+     */
     public function testSuggestCategoriesActionDefaultCategoryFound()
     {
         $this->getRequest()->setParam('label_part', 'Default');
@@ -137,6 +140,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
     }
 
+    /**
+     * Test SuggestCategories properly processes search by label.
+     */
     public function testSuggestCategoriesActionNoSuggestions()
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));

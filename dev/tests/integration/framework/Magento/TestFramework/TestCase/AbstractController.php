@@ -71,6 +71,9 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->_request = null;

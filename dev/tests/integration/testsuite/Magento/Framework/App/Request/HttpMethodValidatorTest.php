@@ -45,6 +45,9 @@ class HttpMethodValidatorTest extends TestCase
         $this->map = $objectManager->get(HttpMethodMap::class);
     }
 
+    /**
+     * @return array
+     */
     private function getMap(): array
     {
         $map = $this->map->getMap();
@@ -62,6 +65,11 @@ class HttpMethodValidatorTest extends TestCase
         return $sorted;
     }
 
+    /**
+     * Test positive case.
+     *
+     * @throws InvalidRequestException
+     */
     public function testAllowed()
     {
         $map = $this->getMap();
@@ -75,6 +83,8 @@ class HttpMethodValidatorTest extends TestCase
     }
 
     /**
+     * Test negative case.
+     *
      * @expectedException \Magento\Framework\App\Request\InvalidRequestException
      */
     public function testNotAllowedMethod()

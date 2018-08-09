@@ -12,6 +12,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * Test calling save with invalid product's ID.
+     */
     public function testSaveActionWithDangerRequest()
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -25,6 +28,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     }
 
     /**
+     * Test saving existing product and specifying that we want redirect to new product form.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testSaveActionAndNew()
@@ -42,6 +47,9 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     }
 
     /**
+     * Test saving existing product and specifying that
+     * we want redirect to new product form with saved product's data applied.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testSaveActionAndDuplicate()
@@ -69,6 +77,9 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         );
     }
 
+    /**
+     * Testing Add Product button showing.
+     */
     public function testIndexAction()
     {
         $this->dispatch('backend/catalog/product');
@@ -109,6 +120,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     }
 
     /**
+     * Testing existing product edit page.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testEditAction()

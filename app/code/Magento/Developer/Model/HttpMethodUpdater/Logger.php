@@ -37,6 +37,13 @@ class Logger
         $this->repo = $repository;
     }
 
+    /**
+     * Log Method Used before executing an action.
+     *
+     * @param ActionInterface $action
+     *
+     * @return null
+     */
     public function beforeExecute(ActionInterface $action)
     {
         if ($this->request instanceof HttpRequest) {

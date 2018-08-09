@@ -26,6 +26,9 @@ class LogRepositoryTest extends TestCase
         $this->repo = Bootstrap::getObjectManager()->get(LogRepository::class);
     }
 
+    /**
+     * Test adding a log.
+     */
     public function testLog()
     {
         $class = 'ActionClass';
@@ -40,6 +43,9 @@ class LogRepositoryTest extends TestCase
         $this->assertEquals($method, $found[0]->getMethods()[0]);
     }
 
+    /**
+     * Test filtering existing logs.
+     */
     public function testFindLogged()
     {
         $c1 = 'ActionClass';

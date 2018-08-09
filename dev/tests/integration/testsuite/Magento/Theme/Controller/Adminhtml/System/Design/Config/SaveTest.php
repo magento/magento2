@@ -30,6 +30,9 @@ class SaveTest extends AbstractBackendController
      */
     protected $uri = 'backend/theme/design_config/save';
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -109,6 +112,9 @@ class SaveTest extends AbstractBackendController
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function testAclHasAccess()
     {
         $this->getRequest()->setParams(

@@ -126,11 +126,17 @@ class UpdaterTest extends TestCase
         $this->clean($index);
     }
 
+    /**
+     * Example file #1.
+     */
     public function testFile1()
     {
         $this->tryFile(1, ['POST']);
     }
 
+    /**
+     * Example file #2.
+     */
     public function testFile2()
     {
         $this->tryFile(2, ['POST', 'PATCH']);

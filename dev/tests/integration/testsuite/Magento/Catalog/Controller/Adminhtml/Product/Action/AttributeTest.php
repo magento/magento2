@@ -93,6 +93,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
+     * @param array $attributes Request parameter.
+     *
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
      *
      * @dataProvider validateActionDataProvider

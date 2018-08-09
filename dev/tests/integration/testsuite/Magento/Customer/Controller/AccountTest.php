@@ -56,6 +56,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Green str, 67', $body);
     }
 
+    /**
+     * Test sign up form displaying.
+     */
     public function testCreateAction()
     {
         $this->dispatch('customer/account/create');

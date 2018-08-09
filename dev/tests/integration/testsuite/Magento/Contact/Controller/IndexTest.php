@@ -13,6 +13,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * Test contacting.
+     */
     public function testPostAction()
     {
         $params = [
@@ -34,9 +37,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test validation.
+     *
+     * @param array $params For Request.
+     * @param string $expectedMessage Expected response.
+     *
      * @dataProvider dataInvalidPostAction
-     * @param $params
-     * @param $expectedMessage
      */
     public function testInvalidPostAction($params, $expectedMessage)
     {
@@ -50,6 +56,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public static function dataInvalidPostAction()
     {
         return [

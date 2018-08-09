@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 
 class HttpMethodMapTest extends TestCase
 {
+    /**
+     * Test filtering of interface names.
+     */
     public function testFilter()
     {
         $map = new HttpMethodMap(
@@ -25,6 +28,8 @@ class HttpMethodMapTest extends TestCase
     }
 
     /**
+     * Test validation of interface names.
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testExisting()
@@ -33,6 +38,8 @@ class HttpMethodMapTest extends TestCase
     }
 
     /**
+     * Test validation of method names.
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testMethod()
