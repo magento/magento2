@@ -39,7 +39,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(5, $options);
+        $this->assertCount(6, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
