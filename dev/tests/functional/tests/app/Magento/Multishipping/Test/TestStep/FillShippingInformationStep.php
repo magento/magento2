@@ -58,7 +58,8 @@ class FillShippingInformationStep implements TestStepInterface
     public function run()
     {
         $shippingMethods = [];
-        for ($i = 0; $i < count($this->customer->getAddress()); $i++) {
+        $addressCount = count($this->customer->getAddress());
+        for ($i = 0; $i < $addressCount; $i++) {
             $shippingMethods[] = $this->shippingMethod;
         }
         $this->shippingInformation->getShippingBlock()->selectShippingMethod($shippingMethods);
