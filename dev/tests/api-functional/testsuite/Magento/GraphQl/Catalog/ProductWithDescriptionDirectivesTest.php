@@ -58,6 +58,8 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['description']);
+        self::assertNotContains('{{block id', $response['products']['items'][0]['description']);
         self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['short_description']);
+        self::assertNotContains('{{block id', $response['products']['items'][0]['short_description']);
     }
 }
