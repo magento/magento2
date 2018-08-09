@@ -90,8 +90,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $productMock->expects($this->any())
-        ->method('loadAllAttributes')
-        ->willReturn($attributeLoaderInterfaceMock);
+            ->method('loadAllAttributes')
+            ->willReturn($attributeLoaderInterfaceMock);
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -194,5 +194,36 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         return $productMock;
+    }
+
+    public function testChildIsNotUsedForValidation()
+    {
+        $simpleProductMock = $this->createProductMock();
+        $simpleProductMock
+            ->expects($this->any())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_SIMPLE);
+        $simpleProductMock
+            ->expects($this->any())
+            ->method('hasData')
+            ->with($this->equalTo('special_price'))
+            ->willReturn(true);
+
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setProduct', 'getProduct'])
+            ->getMockForAbstractClass();
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($simpleProductMock);
+
+        $item->expects($this->once())
+            ->method('setProduct')
+            ->with($this->identicalTo($simpleProductMock));
+
+        $this->validator->setAttribute('special_price');
+
+        $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 }
