@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter\FieldMapper;
+declare(strict_types=1);
+
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
@@ -104,7 +106,7 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->mapper = $objectManager->getObject(
-            \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper::class,
+            \Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'storeManager' => $this->storeManager,
@@ -229,17 +231,17 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
     public function attributeCodeProvider()
     {
         return [
-            ['id', 'id', 'text'],
-            ['status', 'status', 'text'],
-            ['status', 'status_value', 'text', ['type'=>'default']],
-            ['price', 'price_0_1', 'text', ['type'=>'default']],
-            ['position', 'position_category_1', 'text', ['type'=>'default']],
-            ['price', 'price_2_3', 'text', ['type'=>'default', 'customerGroupId'=>'2', 'websiteId'=>'3']],
-            ['position', 'position_category_3', 'text', ['type'=>'default', 'categoryId'=>'3']],
-            ['color', 'color_value', 'text', ['type'=>'text']],
-            ['description', 'sort_description', 'text', ['type'=>'some']],
-            ['*', '_all', 'text', ['type'=>'text']],
-            ['description', 'description_value', 'text', ['type'=>'text']],
+            ['id', 'id', 'string'],
+            ['status', 'status', 'string'],
+            ['status', 'status_value', 'string', ['type'=>'default']],
+            ['price', 'price_0_1', 'string', ['type'=>'default']],
+            ['position', 'position_category_1', 'string', ['type'=>'default']],
+            ['price', 'price_2_3', 'string', ['type'=>'default', 'customerGroupId'=>'2', 'websiteId'=>'3']],
+            ['position', 'position_category_3', 'string', ['type'=>'default', 'categoryId'=>'3']],
+            ['color', 'color_value', 'string', ['type'=>'text']],
+            ['description', 'sort_description', 'string', ['type'=>'some']],
+            ['*', '_all', 'string', ['type'=>'text']],
+            ['description', 'description_value', 'string', ['type'=>'text']],
         ];
     }
 
@@ -251,43 +253,43 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'category_ids',
-                'select',
+                'text',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
-                ['category_ids' => ['type' => 'keyword'], 'category_ids_value' => ['type' => 'text']]
+                ['category_ids' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
-                ['attr_code' => ['type' => 'integer']]
+                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
-                ['attr_code' => ['type' => 'integer']]
+                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => true, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
                 ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => '1', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
                 ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => true],
                 ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
-                'text',
+                'string',
                 ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '1', 'advSearch' => '0'],
                 ['attr_code' => ['type' => 'integer']]
             ],

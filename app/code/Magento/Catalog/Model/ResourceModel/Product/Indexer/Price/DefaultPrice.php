@@ -547,7 +547,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
-    private function modifyPriceIndex(IndexTableStructure $finalPriceTable)
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable) : void
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
