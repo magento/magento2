@@ -174,7 +174,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $collection->addAttributeToSelect($attribute->getAttributeCode(), 'inner');
                 break;
             default:
-                $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
+                $alias = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode();
 
                 $connection = $this->_productResource->getConnection();
                 $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
