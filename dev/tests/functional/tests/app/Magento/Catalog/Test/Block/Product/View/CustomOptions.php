@@ -231,9 +231,9 @@ class CustomOptions extends Form
         return [
             'options' => [
                 [
-                    'price' => floatval($price),
-                    'max_characters' => $maxCharacters,
-                ],
+                    'price' => (float)$price,
+                    'max_characters' => $maxCharacters
+                ]
             ]
         ];
     }
@@ -262,11 +262,11 @@ class CustomOptions extends Form
         return [
             'options' => [
                 [
-                    'price' => floatval($price),
+                    'price' => (float)$price,
                     'file_extension' => $this->getOptionNotice($option, 1),
                     'image_size_x' => preg_replace('/[^0-9]/', '', $this->getOptionNotice($option, 2)),
-                    'image_size_y' => preg_replace('/[^0-9]/', '', $this->getOptionNotice($option, 3)),
-                ],
+                    'image_size_y' => preg_replace('/[^0-9]/', '', $this->getOptionNotice($option, 3))
+                ]
             ]
         ];
     }
@@ -344,8 +344,8 @@ class CustomOptions extends Form
         return [
             'options' => [
                 [
-                    'price' => floatval($price),
-                ],
+                    'price' => (float)$price
+                ]
             ]
         ];
     }
