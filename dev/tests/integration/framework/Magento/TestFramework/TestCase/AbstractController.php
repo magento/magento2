@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
@@ -216,8 +217,15 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
-
-        $messages = $this->getMessages($messageType, $messageManagerClass);
+        /** @var MessageInterface[] $messageObjects */
+        $messageObjects = $this->getMessages($messageType, $messageManagerClass);
+        /** @var string[] $messages */
+        $messages = array_map(
+            function (MessageInterface $message) {
+                return $message->toString();
+            },
+            $messageObjects
+        );
 
         $this->assertThat(
             $messages,

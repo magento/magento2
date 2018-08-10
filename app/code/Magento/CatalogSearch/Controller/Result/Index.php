@@ -6,15 +6,19 @@
  */
 namespace Magento\CatalogSearch\Controller\Result;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
 
-class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+/**
+ * Catalog search. Requires accessibility by POST because store-switching may occur on this page.
+ */
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Catalog session
