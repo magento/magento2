@@ -230,9 +230,9 @@ class UrlRewriteHandler
      *
      * @param MergeDataProvider $mergeDataProvider
      * @param Category $category
-     * @param Product $product
      * @param int $storeId
      * @param $saveRewriteHistory
+     * @return void
      */
     private function generateChangedProductUrls(
         MergeDataProvider $mergeDataProvider,
