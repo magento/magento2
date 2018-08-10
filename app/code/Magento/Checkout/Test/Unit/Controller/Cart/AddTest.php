@@ -35,6 +35,11 @@ class AddTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
+     * @var \Magento\Checkout\Controller\Cart\Add | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartAdd;
+
+    /**
      * Init mocks for tests.
      *
      * @return void
@@ -52,7 +57,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->add = $this->objectManagerHelper->getObject(
+        $this->cartAdd = $this->objectManagerHelper->getObject(
             \Magento\Checkout\Controller\Cart\Add::class,
             [
                 '_formKeyValidator' => $this->formKeyValidator,
@@ -79,6 +84,6 @@ class AddTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects($this->once())->method('addErrorMessage');
         $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($redirect);
         $redirect->expects($this->once())->method('setPath')->with($path)->willReturnSelf();
-        $this->assertEquals($redirect, $this->add->execute());
+        $this->assertEquals($redirect, $this->cartAdd->execute());
     }
 }
