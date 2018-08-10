@@ -18,6 +18,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -26,6 +29,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests that config returns valid config array in it
+     *
+     * @return void
      */
     public function testGetConfig()
     {
@@ -35,6 +40,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests that config returns right urls going to the published library path
+     *
+     * @return void
      */
     public function testGetConfigCssUrls()
     {
@@ -53,6 +60,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test enabled module is able to modify WYSIWYG config
+     *
      * @return void
      *
      * @magentoConfigFixture default/cms/wysiwyg/editor testAdapter
