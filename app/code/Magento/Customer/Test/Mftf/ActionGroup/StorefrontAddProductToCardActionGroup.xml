@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+    <!--Go To Products page-->
+    <actionGroup name="GoToProductPage">
+        <click selector="{{GoToProductPageSection.catalog}}" stepKey="clickOnCatalog" />
+        <waitForPageLoad stepKey="waitForPage"/>
+        <click selector="{{GoToProductPageSection.product}}" stepKey="clickToSelectProductsItem" />
+        <waitForPageLoad stepKey="waitForPageProducts"/>
+    </actionGroup>
+
+    <!--Create Simple product-->
+    <actionGroup name="AdminCreateSimpleProduct">
+        <click selector="{{GoToProductPageSection.add}}" stepKey="clickToAddProduct"/>
+        <waitForPageLoad stepKey="WaitForProductPageIsLoaded"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProductOne.name}}" stepKey="setNameForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{SimpleProductOne.sku}}" stepKey="setSKUForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProductOne.price}}" stepKey="setPriceForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProductOne.quantity}}"  stepKey="setQuantityForProduct"/>
+        <click selector="{{AdminProductFormSection.searchOptimization}}" stepKey="clickOnSearchEngineOptimization"/>
+        <fillField selector="{{AdminProductFormSection.urlKey}}" userInput="{{SimpleProductOne.urlKey}}" stepKey="setSearchUrlForProduct"/>
+        <click selector="{{AdminProductFormSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
+    <actionGroup name="FindAndAddProductToCardActionGroup">
+        <click selector="{{StorefrontAddProductToCartSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <click selector="{{StorefrontAddProductToCartSection.showCard}}" stepKey="clickToOpenCard"/>
+        <waitForPageLoad stepKey="WaitForFormOpened" time="3"/>
+        <click selector="{{StorefrontAddProductToCartSection.proceed}}" stepKey="clickToProceedToCheckout"/>
+        <waitForPageLoad time="5" stepKey="waitForTheFormIsOpened"/>
+        <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
+    </actionGroup>
+
+    <actionGroup name="DeleteCreatedProduct">
+        <fillField stepKey="searchToKeyword" selector="{{DeleteCreatedProduct.searchToKeyword}}" userInput="{{SimpleProductOne.name}}"/>
+        <click stepKey="clickSearchButton" selector="{{DeleteCreatedProduct.searchButton}}"/>
+        <wait stepKey="waitForFiltering" time="2"/>
+        <click selector="{{DeleteCreatedProduct.createdProductID}}" stepKey="selectCreatedProduct"/>
+        <wait stepKey="waitSelectCreatedProduct" time="2"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.actionSelectBox}}" stepKey="waitToSelectActionVisible" time="50"/>
+        <click stepKey="clickToSelectAction"  selector="{{DeleteCreatedProduct.actionSelectBox}}"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.deleteButton}}" stepKey="waitForDeleteButtonAppeared" time="2"/>
+        <click selector="{{DeleteCreatedProduct.deleteButton}}" stepKey="clickToDeleteProduct"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.okButton}}" stepKey="waitForOkButtonAppeared" time="2"/>
+        <click selector="{{DeleteCreatedProduct.okButton}}" stepKey="clickToConfirm"/>
+        <wait stepKey="waitForRecordIsDeleted" time="2"/>
+        <see userInput="A total of 1 record(s) have been deleted." stepKey="productDeletedSuccessfully"/>
+        <click stepKey="clickClearAllFilterButton" selector="{{DeleteCreatedProduct.clearAll}}"/>
+        <!-- We need this wait to make sure that Active filters is clear (waitForElementNotVisible tag doesn't wait until clearing filters)-->
+        <wait stepKey="waitToClearAllFilters" time="2"/>
+    </actionGroup>
+
+</actionGroups>

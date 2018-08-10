@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AddingProductWithExpiredSessionTest">
+        <annotations>
+            <title value="Adding a product to cart from category page with an expired session"/>
+            <features value="Module/ Catalog"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93289"/>
+            <stories value="MAGETWO-66666: Adding a product to cart from category page with an expired session does not allow product to be added"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="GoToProductPage" stepKey="goToProductPage"/>
+            <actionGroup ref="AdminCreateSimpleProduct" stepKey="adminCreateSimpleProduct"/>
+        </before>
+
+         <!--Navigate to a category page -->
+        <amOnPage url="/{{SimpleProductOne.name}}.html" stepKey="GoToProductPage"/>
+
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Remove PHPSESSID and form_key to replicate an expired session-->
+        <executeJS function="var delete_cookie = function(name) {
+                            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 UTC; path=/;';};
+                            delete_cookie('PHPSESSID');
+                            delete_cookie('form_key');" stepKey="removeCookies" after="waitForPageLoad"/>
+
+        <!-- "Add to Cart" any product-->
+        <actionGroup ref="FindAndAddProductToCardActionGroup" stepKey="addProductToCard"/>
+
+        <after>
+            <!--Delete created product-->
+            <amOnPage url="/admin" stepKey="GoToDashboard"/>
+            <actionGroup ref="GoToProductPage" stepKey="againGoToProductPage"/>
+            <actionGroup ref="DeleteCreatedProduct" stepKey="deleteCreatedProduct"/>
+        </after>
+
+    </test>
+</tests>
