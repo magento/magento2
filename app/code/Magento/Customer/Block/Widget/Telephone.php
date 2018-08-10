@@ -69,7 +69,7 @@ class Telephone extends AbstractWidget
         parent::_construct();
 
         // default template location
-        $this->setTemplate('widget/telephone.phtml');
+        $this->setTemplate('Magento_Customer::widget/telephone.phtml');
     }
 
     /**
