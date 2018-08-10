@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
  * Service is responsible for handling failed payment transactions.
  *
  * It depends on Stores > Configuration > Sales > Checkout > Payment Failed Emails configuration.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentFailuresService implements PaymentFailuresInterface
 {
@@ -78,7 +80,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
         $this->transportBuilder = $transportBuilder;
         $this->localeDate = $localeDate;
         $this->cartRepository = $cartRepository;
-        $this->logger = $logger ?: ObjectManager::getInstance()->create(LoggerInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
