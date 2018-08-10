@@ -23,7 +23,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     protected $productRepository;
 
     /**
-     * @return void
+     * Test setup
      */
     protected function setUp()
     {
@@ -36,7 +36,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testAddAction()
     {
@@ -54,7 +54,12 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['You added product Simple Product 1 Name to the comparison list.']),
+            $this->equalTo(
+                [
+                    'You added product Simple Product 1 Name to the '.
+                    '<a href="http://localhost/index.php/catalog/product_compare/">comparison list</a>.'
+                ]
+            ),
             MessageInterface::TYPE_SUCCESS
         );
 
@@ -64,7 +69,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testIndexActionAddProducts()
     {
@@ -78,7 +83,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveAction()
     {
@@ -97,7 +102,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveActionWithSession()
     {
@@ -117,7 +122,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * testIndexActionDisplay
      */
     public function testIndexActionDisplay()
     {
@@ -146,7 +151,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * testClearAction
      */
     public function testClearAction()
     {
@@ -182,7 +187,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareCompareListWithProductNameXss()
     {
@@ -207,7 +212,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * _requireVisitorWithNoProducts
      */
     protected function _requireVisitorWithNoProducts()
     {
@@ -229,7 +234,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _requireVisitorWithTwoProducts()
     {
@@ -264,7 +269,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _requireCustomerWithTwoProducts()
     {
