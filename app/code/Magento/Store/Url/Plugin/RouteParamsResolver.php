@@ -57,9 +57,8 @@ class RouteParamsResolver
      * @return \Magento\Framework\Url\RouteParamsResolver
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSetRouteParams(
+    public function beforeSetRouteParams(
         \Magento\Framework\Url\RouteParamsResolver $subject,
-        \Closure $proceed,
         array $data,
         $unsetOldParams = true
     ) {
@@ -86,6 +85,6 @@ class RouteParamsResolver
         }
         unset($data['_scope_to_url']);
 
-        return $proceed($data, $unsetOldParams);
+        return [$data, $unsetOldParams];
     }
 }
