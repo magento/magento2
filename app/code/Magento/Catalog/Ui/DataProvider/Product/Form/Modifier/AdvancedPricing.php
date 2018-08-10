@@ -432,7 +432,8 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'disabled' => false,
+                        'disabled' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/disabled', $this->meta),
                         'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),

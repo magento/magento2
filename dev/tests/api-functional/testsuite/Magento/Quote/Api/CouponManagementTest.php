@@ -313,7 +313,7 @@ class CouponManagementTest extends WebapiAbstract
         $salesRuleId = $this->objectManager->get(\Magento\Framework\Registry::class)
             ->registry('Magento/Checkout/_file/discount_10percent');
         $salesRule->load($salesRuleId);
-        $couponCode = $salesRule->getPrimaryCoupon()->getCode() ;
+        $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/'

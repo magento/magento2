@@ -100,7 +100,7 @@ class Configurable implements DimensionalIndexerInterface
      *
      * @throws \Exception
      */
-    public function executeByDimension(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 

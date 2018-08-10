@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductChildSearchTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to search configurable product by attributes of child products"/>
+            <description value="Guest customer should be able to search configurable product by attributes of child products"/>
+                <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-75997"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create the configurable product and add it to the category -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            
+            <!-- Create an attribute with two options to be used in the second child product -->
+            <createData entity="ProductAttributeMultiselectTwoOptions" stepKey="createConfigProductAttributeMultiSelect"/>
+            <createData entity="ProductAttributeOption3" stepKey="createConfigProductAttributeOption1Multiselect">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+            <createData entity="ProductAttributeOption4" stepKey="createConfigProductAttributeOption2Multiselect">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the second attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet2">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </createData>
+
+            <!-- Get the first option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the first option of the second attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+            </getData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleOneHidden" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttributeMultiSelect"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!-- Fill Short Description for first simple product -->
+            <updateData entity="ApiSimpleProductUpdateDescription" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProduct1Description" />
+
+            <!-- Fill Short Description for first simple product -->
+            <updateData entity="ApiSimpleProductUpdateName" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProduct1Name"/>
+
+            <!-- Create an attribute with two options to be used in the first child product (in the UI) -->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createConfigProductAttributeSelect"/>
+            <createData entity="ProductAttributeOption5" stepKey="createConfigProductAttributeSelectOption1">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+            <createData entity="ProductAttributeOption6" stepKey="createConfigProductAttributeSelectOption2">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet3">
+                <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
+            <!-- Go to the product page for the first product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGrid"/>
+            <waitForPageLoad stepKey="waitForProductGridLoad"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="searchForSimpleProduct">
+                <argument name="product" value="$$createConfigChildProduct1$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <!-- Edit the attribute for the first simple product -->
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="editSelectAttribute"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+
+            <!-- Go to the product page for the second product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGrid2"/>
+            <waitForPageLoad stepKey="waitForProductGridLoad2"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="searchForSimpleProduct2">
+                <argument name="product" value="$$createConfigChildProduct2$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit2"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+            <!-- Edit the attribute for the first second product -->
+            <selectOption selector="{{AdminModifyAttributesSection.dropDownAttributeByName($$createConfigProductAttributeMultiSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="editSelectAttribute2"/>
+            <scrollToTopOfPage stepKey="scrollToTop2"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess2"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="AdminResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigProductAttributeMultiSelect" stepKey="deleteConfigProductAttributeMultiSelect"/>
+            <deleteData createDataKey="createConfigProductAttributeSelect" stepKey="deleteConfigProductAttributeSelect"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+        </after>
+
+        <!-- Quick search the storefront for the first attribute option -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$" stepKey="searchStorefront1"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct1"/>
+
+        <!-- Quick search the storefront for the second attribute option -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption2Multiselect.option[store_labels][0][label]$$" stepKey="searchStorefront2"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct2"/>
+
+        <!-- Quick search the storefront for the first product description -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.custom_attributes[short_description]$$'" stepKey="searchStorefront3"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct3"/>
+
+        <!-- Quick search the storefront for the first product name -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.name$$'" stepKey="searchStorefront4"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearch4"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName('$$createConfigProduct.name$$')}}" stepKey="seeProduct4"/>
+    </test>
+</tests>

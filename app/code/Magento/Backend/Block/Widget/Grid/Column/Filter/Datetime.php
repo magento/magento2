@@ -26,7 +26,6 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($index) {
             if ($data = $this->getData('value', 'orig_' . $index)) {
-                // date('Y-m-d', strtotime($data));
                 return $data;
             }
             return null;
@@ -154,7 +153,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if (is_string($value)) {
                 return $this->escapeHtml($value);
             }
-            
+
             return $value;
         }
 
