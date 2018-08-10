@@ -57,7 +57,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
             ->method('send')
             ->willThrowException(new \Magento\Framework\Exception\MailException(__('test message')));
         $this->messageManagerMock->expects($this->once())
-            ->method('addWarning');
+            ->method('addWarningMessage');
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
