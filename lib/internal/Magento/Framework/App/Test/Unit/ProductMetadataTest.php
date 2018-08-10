@@ -45,6 +45,9 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedVersion, $productVersion);
     }
 
+    /**
+     * @return array
+     */
     public function testGetVersionGitInstallationDataProvider()
     {
         return [

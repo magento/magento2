@@ -1146,6 +1146,10 @@ class Payment extends Info implements OrderPaymentInterface
         return $builder->build($type);
     }
 
+    /**
+     * @param $transaction
+     * @param $message
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();

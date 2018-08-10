@@ -233,6 +233,9 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->elementMock, $this->this->prepareElementHtml($this->elementMock));
     }
 
+    /**
+     * @return array
+     */
     public function prepareElementHtmlDataProvider()
     {
         return [

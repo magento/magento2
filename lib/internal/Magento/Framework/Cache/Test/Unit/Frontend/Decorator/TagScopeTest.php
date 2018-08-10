@@ -128,6 +128,9 @@ class TagScopeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function cleanModeMatchingAnyTagDataProvider()
     {
         return [

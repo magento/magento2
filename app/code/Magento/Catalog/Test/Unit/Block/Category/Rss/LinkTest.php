@@ -72,6 +72,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isAllowed, $this->link->isRssAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isRssAllowedDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
+    /**
+     * @return array
+     */
     public function isTopCategoryDataProvider()
     {
         return [

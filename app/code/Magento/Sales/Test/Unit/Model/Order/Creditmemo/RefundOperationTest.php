@@ -364,6 +364,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param $amounts
+     */
     private function setBaseAmounts($amounts)
     {
         foreach ($amounts as $amountName => $summands) {
@@ -403,6 +406,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$item1, $item2, $item3]);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getCreditmemoItemMock()
     {
         return $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoItemInterface::class)

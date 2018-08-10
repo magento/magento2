@@ -88,6 +88,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->has());
     }
 
+    /**
+     * @param $aclData
+     */
     protected function initAcl($aclData)
     {
         $this->cacheConfig->expects($this->once())

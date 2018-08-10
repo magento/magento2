@@ -144,6 +144,10 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->indexerMock));
     }
 
+    /**
+     * @param bool $returnValue
+     * @return \Closure
+     */
     protected function mockPluginProceed($returnValue = false)
     {
         return function () use ($returnValue) {

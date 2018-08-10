@@ -148,6 +148,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataForAdditionalData()
     {
         $additionalData = [
@@ -200,6 +203,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->swatchHelperObject->assembleAdditionalDataEavAttribute($this->attributeMock);
     }
 
+    /**
+     * @return array
+     */
     public function dataForAssembleEavAttribute()
     {
         $additionalData = [
@@ -245,6 +251,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataForVariationWithSwatchImage()
     {
         return [
@@ -304,6 +313,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataForVariationWithImage()
     {
         return [
@@ -410,6 +422,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataForMediaGallery()
     {
         return [
@@ -447,6 +462,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($returnFromProvideMethod);
     }
 
+    /**
+     * @param array $attributes
+     * @param array $imageTypes
+     */
     protected function getUsedProducts(array $attributes, array $imageTypes)
     {
         $this->productMock
@@ -540,6 +559,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $zendDbSelectMock->method('where')->willReturn($zendDbSelectMock);
     }
 
+    /**
+     * @return array
+     */
     public function dataForCreateSwatchProduct()
     {
         $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
@@ -576,6 +598,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function dataForCreateSwatchProductByFallback()
     {
         $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
@@ -626,6 +651,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function dataForGettingSwatchAsArray()
     {
         return [
@@ -818,6 +846,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataIsVisualSwatch()
     {
         return [
@@ -859,6 +890,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataForIsVisualSwatchType()
     {
         $additionalData = [
@@ -916,6 +950,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataForIsTextSwatchType()
     {
         $additionalData = [
@@ -965,6 +1002,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataIsTextSwatch()
     {
         return [
@@ -999,6 +1039,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataIsSwatchAttribute()
     {
         return [

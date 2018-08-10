@@ -58,7 +58,7 @@ class UrlRewrite extends AbstractSimpleObject
 
     /**
      * @param int $urlRewriteId
-     * @return int
+     * @return $this
      */
     public function setUrlRewriteId($urlRewriteId)
     {

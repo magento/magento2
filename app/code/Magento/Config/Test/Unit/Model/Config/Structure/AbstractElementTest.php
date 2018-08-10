@@ -127,6 +127,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
@@ -156,6 +159,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [

@@ -90,6 +90,9 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($uris, $this->model->getUris());
     }
 
+    /**
+     * @return array
+     */
     public function getUrisDataProvider()
     {
         return [

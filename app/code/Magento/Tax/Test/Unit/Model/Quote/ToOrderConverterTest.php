@@ -60,6 +60,9 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder('\Magento\Sales\Api\Data\OrderExtensionInterface')
@@ -178,6 +181,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
      * Data provider for testAfterConvert and testAfterConvertNullExtensionAttribute
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function afterConvertDataProvider()
     {

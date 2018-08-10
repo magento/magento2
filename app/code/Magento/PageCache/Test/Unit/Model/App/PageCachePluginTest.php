@@ -57,6 +57,9 @@ class PageCachePluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data, $this->plugin->afterLoad($this->subjectMock, $initResult));
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

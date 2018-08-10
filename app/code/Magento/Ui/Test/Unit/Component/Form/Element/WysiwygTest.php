@@ -62,6 +62,9 @@ class WysiwygTest extends AbstractElementTest
             ->method('getElementHtml');
     }
 
+    /**
+     * @return \Magento\Ui\Component\Form\Element\AbstractElement|object
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(Wysiwyg::class, [

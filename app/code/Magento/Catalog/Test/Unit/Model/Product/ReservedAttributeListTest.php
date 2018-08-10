@@ -39,6 +39,9 @@ class ReservedAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->isReservedAttribute($attribute));
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

@@ -63,6 +63,9 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://127.0.0.1/magento/pub/static/', $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetBaseUrlInactiveDataProvider()
     {
         return [

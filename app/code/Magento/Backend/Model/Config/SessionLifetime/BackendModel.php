@@ -19,6 +19,10 @@ class BackendModel extends Value
     /** Minimum admin session lifetime */
     const MIN_LIFETIME = 60;
 
+    /**
+     * @return Value
+     * @throws LocalizedException
+     */
     public function beforeSave()
     {
         $value = (int) $this->getValue();

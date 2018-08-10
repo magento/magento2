@@ -20,6 +20,12 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         $this->model = new Registry();
     }
 
+    /**
+     * @param $roleId
+     * @param $parentRoleId
+     * @return array
+     * @throws \Zend_Acl_Role_Registry_Exception
+     */
     protected function initRoles($roleId, $parentRoleId)
     {
         $parentRole = $this->getMock('Zend_Acl_Role_Interface');

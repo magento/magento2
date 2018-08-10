@@ -394,6 +394,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Model;
 
+/**
+ * @param $param
+ * @return int|string
+ */
 function ini_get($param)
 {
     if ($param === 'xdebug.max_nesting_level') {

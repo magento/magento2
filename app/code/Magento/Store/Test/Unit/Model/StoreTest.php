@@ -98,6 +98,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $model->load($key);
     }
 
+    /**
+     * @return array
+     */
     public function loadDataProvider()
     {
         return [
@@ -258,6 +261,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedBaseUrl, $model->getBaseUrl($type, $secure));
     }
 
+    /**
+     * @return array
+     */
     public function getBaseUrlDataProvider()
     {
         return [
@@ -563,6 +569,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function isCurrentlySecureDataProvider()
     {
         return [

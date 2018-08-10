@@ -75,6 +75,9 @@ class AclRetrieverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return AclRetriever
+     */
     protected function createAclRetriever()
     {
         $this->roleMock = $this->getMock(

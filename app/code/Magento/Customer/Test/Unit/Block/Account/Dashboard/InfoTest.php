@@ -215,6 +215,9 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
+    /**
+     * @return array
+     */
     public function isNewsletterEnabledProvider()
     {
         return [[true, true], [false, false]];

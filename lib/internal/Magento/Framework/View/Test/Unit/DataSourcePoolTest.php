@@ -46,6 +46,10 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
         $this->dataSourcePool->add('DataSourcePoolTestBlock', 'NotExistingBlockClass');
     }
 
+    /**
+     * @param $blockClass
+     * @return mixed
+     */
     protected function createBlock($blockClass)
     {
         $block = $this->getMock('Magento\Framework\View\Element\BlockInterface');

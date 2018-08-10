@@ -123,6 +123,9 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->downloadablePlugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 
+    /**
+     * @return array
+     */
     public function afterInitializeWithEmptyDataDataProvider()
     {
         return [

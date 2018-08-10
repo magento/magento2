@@ -157,6 +157,10 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param $billingAddress
+     * @param bool $isVirtual
+     */
     public function stepAddressFormat($billingAddress, $isVirtual = false)
     {
         $this->orderMock->expects($this->any())
@@ -183,6 +187,9 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         $this->stepSend($this->never(), $this->once());
     }
 
+    /**
+     * @param $identityMockClassName
+     */
     public function stepIdentityContainerInit($identityMockClassName)
     {
         $this->identityContainerMock = $this->getMock(
@@ -197,6 +204,10 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->storeMock));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+     */
     protected function stepSend(
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects,
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects

@@ -8,6 +8,7 @@
 
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -2549,7 +2550,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $useConfigFields = array();
         foreach ($rowData as $key => $value) {
-            $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
+            $useConfigName = $key === StockItemInterface::ENABLE_QTY_INCREMENTS
+                ? StockItemInterface::USE_CONFIG_ENABLE_QTY_INC
+                : self::INVENTORY_USE_CONFIG_PREFIX . $key;
+
             if (isset($this->defaultStockData[$key])
                 && isset($this->defaultStockData[$useConfigName])
                 && !empty($value)

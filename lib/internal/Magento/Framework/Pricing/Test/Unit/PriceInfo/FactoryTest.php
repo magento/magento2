@@ -92,6 +92,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory($this->types, $this->objectManagerMock);
     }
 
+    /**
+     * @return array
+     */
     public function createPriceInfoDataProvider()
     {
         return [

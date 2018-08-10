@@ -127,6 +127,9 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
         $object->get();
     }
 
+    /**
+     * @return array
+     */
     public function keyCollisionDataProvider()
     {
         return [

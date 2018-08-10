@@ -27,7 +27,6 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $ruleCustomerFactory;
 
-
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -193,6 +192,9 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->execute($observer));
     }
 
+    /**
+     * @return array
+     */
     public function salesOrderAfterPlaceDataProvider()
     {
         return [

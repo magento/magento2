@@ -33,6 +33,9 @@ class TotalTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->model, $result);
     }
 
+    /**
+     * @return array
+     */
     public function setTotalAmountDataProvider()
     {
         return [
@@ -64,6 +67,9 @@ class TotalTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->model, $result);
     }
 
+    /**
+     * @return array
+     */
     public function setBaseTotalAmountDataProvider()
     {
         return [
@@ -95,6 +101,9 @@ class TotalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($updatedAmount, $this->model->getTotalAmount($code));
     }
 
+    /**
+     * @return array
+     */
     public function addTotalAmountDataProvider()
     {
         return [
@@ -126,6 +135,9 @@ class TotalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($updatedAmount, $this->model->getBaseTotalAmount($code));
     }
 
+    /**
+     * @return array
+     */
     public function addBaseTotalAmountDataProvider()
     {
         return [

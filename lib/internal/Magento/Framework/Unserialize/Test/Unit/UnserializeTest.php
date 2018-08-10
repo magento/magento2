@@ -36,6 +36,9 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->unserialize->unserialize($serialized));
     }
 
+    /**
+     * @return array
+     */
     public function serializedObjectDataProvider()
     {
         return [

@@ -96,6 +96,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->attributesCompare($attribute, $attribute2));
     }
 
+    /**
+     * @return array
+     */
     public function attributeCompareProvider()
     {
         return [

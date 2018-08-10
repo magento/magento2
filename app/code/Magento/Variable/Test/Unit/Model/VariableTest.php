@@ -99,6 +99,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         $variable = [
@@ -111,6 +114,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateMissingInfoDataProvider()
     {
         return [

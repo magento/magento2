@@ -23,6 +23,9 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $this->createInstance($data);
     }
 
+    /**
+     * @param array $data
+     */
     protected function createInstance(array $data = [])
     {
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false, false);

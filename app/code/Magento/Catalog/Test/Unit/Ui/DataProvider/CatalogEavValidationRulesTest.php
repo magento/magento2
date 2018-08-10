@@ -53,6 +53,9 @@ class CatalogEavValidationRulesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->catalogEavValidationRules->build($attribute, $eavConfig));
     }
 
+    /**
+     * @return array
+     */
     public function buildDataProvider()
     {
         $data['required'] = true;

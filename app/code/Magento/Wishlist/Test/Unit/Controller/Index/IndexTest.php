@@ -120,6 +120,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultFactoryMock);
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Index
+     */
     public function getController()
     {
         $this->prepareContext();

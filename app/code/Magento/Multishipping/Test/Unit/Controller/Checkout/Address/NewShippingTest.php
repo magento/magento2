@@ -160,6 +160,9 @@ class NewShippingTest extends \PHPUnit_Framework_TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

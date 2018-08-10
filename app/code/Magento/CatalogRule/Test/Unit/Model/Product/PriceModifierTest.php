@@ -62,6 +62,9 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
     }
 
+    /**
+     * @return array
+     */
     public function modifyPriceDataProvider()
     {
         return ['resulted_price_exists' => [150, 150], 'resulted_price_not_exists' => [null, 100]];

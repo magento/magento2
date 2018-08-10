@@ -93,6 +93,9 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function collectTotalsShippingData()
     {
         return [

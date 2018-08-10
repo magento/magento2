@@ -74,6 +74,9 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
         $this->model->handleCompilerEnvironment();
     }
 
+    /**
+     * @return array
+     */
     public function commandNameDataProvider()
     {
         return [

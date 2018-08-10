@@ -34,6 +34,9 @@ class RandomWordSelectorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getTestData()
     {
         return [

@@ -5,20 +5,22 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Magento\Framework\App\RequestInterface;
+
 /**
- * Library for working with client ip address
+ * Library for working with client ip address.
  */
 class RemoteAddress
 {
     /**
-     * Request object
+     * Request object.
      *
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * Remote address cache
+     * Remote address cache.
      *
      * @var string
      */
@@ -30,46 +32,114 @@ class RemoteAddress
     protected $alternativeHeaders;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $httpRequest
-     * @param array $alternativeHeaders
+     * @var string[]|null
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $httpRequest, array $alternativeHeaders = [])
-    {
+    private $trustedProxies;
+
+    /**
+     * @param RequestInterface $httpRequest
+     * @param array $alternativeHeaders
+     * @param string[]|null $trustedProxies
+     */
+    public function __construct(
+        RequestInterface $httpRequest,
+        array $alternativeHeaders = [],
+        array $trustedProxies = null
+    ) {
         $this->request = $httpRequest;
         $this->alternativeHeaders = $alternativeHeaders;
+        $this->trustedProxies = $trustedProxies;
     }
 
     /**
-     * Retrieve Client Remote Address
+     * Read address based on settings.
+     *
+     * @return string|null
+     */
+    private function readAddress()
+    {
+        $remoteAddress = null;
+        foreach ($this->alternativeHeaders as $var) {
+            if ($this->request->getServer($var, false)) {
+                $remoteAddress = $this->request->getServer($var);
+                break;
+            }
+        }
+
+        if (!$remoteAddress) {
+            $remoteAddress = $this->request->getServer('REMOTE_ADDR');
+        }
+
+        return $remoteAddress;
+    }
+
+    /**
+     * Filter addresses by trusted proxies list.
+     *
+     * @param string $remoteAddress
+     * @return string|null
+     */
+    private function filterAddress($remoteAddress)
+    {
+        if (strpos($remoteAddress, ',') !== false) {
+            $ipList = explode(',', $remoteAddress);
+        } else {
+            $ipList = [$remoteAddress];
+        }
+        $ipList = array_filter(
+            $ipList,
+            function ($ip) {
+                return filter_var(trim($ip), FILTER_VALIDATE_IP);
+            }
+        );
+        if ($this->trustedProxies !== null) {
+            $ipList = array_filter(
+                $ipList,
+                function ($ip) {
+                    return !in_array(trim($ip), $this->trustedProxies, true);
+                }
+            );
+            $remoteAddress = trim(array_pop($ipList));
+        } else {
+            $remoteAddress = trim(reset($ipList));
+        }
+
+        return $remoteAddress ?: null;
+    }
+
+    /**
+     * Retrieve Client Remote Address.
+     * If alternative headers are used and said headers allow multiple IPs
+     * it is suggested that trusted proxies is also used
+     * for more accurate IP recognition.
      *
      * @param bool $ipToLong converting IP to long format
+     *
      * @return string IPv4|long
      */
     public function getRemoteAddress($ipToLong = false)
     {
-        if ($this->remoteAddress === null) {
-            foreach ($this->alternativeHeaders as $var) {
-                if ($this->request->getServer($var, false)) {
-                    $this->remoteAddress = $this->request->getServer($var);
-                    break;
-                }
-            }
-
-            if (!$this->remoteAddress) {
-                $this->remoteAddress = $this->request->getServer('REMOTE_ADDR');
-            }
-        }
-
-        if (!$this->remoteAddress) {
-            return false;
+        if ($this->remoteAddress !== null) {
+            return $this->remoteAddress;
         }
         
-        if (strpos($this->remoteAddress, ',') !== false) {
-            $ipList = explode(',', $this->remoteAddress);
-            $this->remoteAddress = trim(reset($ipList));
-        }
+        $remoteAddress = $this->readAddress();
+        if (!$remoteAddress) {
+            $this->remoteAddress = false;
 
-        return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+            return false;
+        }
+        $remoteAddress = $this->filterAddress($remoteAddress);
+
+        if (!$remoteAddress) {
+            $this->remoteAddress = false;
+
+            return false;
+        } else {
+            $this->remoteAddress = $remoteAddress;
+
+            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+        }
     }
 
     /**

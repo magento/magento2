@@ -132,6 +132,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->model->getActions();
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupProdConditionMock()
     {
         $prodConditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Product\Combine::class)
@@ -152,6 +155,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         return $prodConditionMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupConditionMock()
     {
         $conditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Combine::class)

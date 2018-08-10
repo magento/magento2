@@ -60,6 +60,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigByPathDataProvider()
     {
         return [

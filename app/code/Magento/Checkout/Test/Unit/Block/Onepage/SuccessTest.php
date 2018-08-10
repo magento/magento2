@@ -103,6 +103,9 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->block->getIsOrderVisible());
     }
 
+    /**
+     * @return array
+     */
     public function invisibleStatusesProvider()
     {
         return [

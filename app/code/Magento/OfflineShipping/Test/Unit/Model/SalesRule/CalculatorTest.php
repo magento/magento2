@@ -23,6 +23,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return bool
+     */
     public function testProcessFreeShipping()
     {
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')

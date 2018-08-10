@@ -43,6 +43,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $controller->beforeDispatch($subject, $request);
     }
 
+    /**
+     * @return array
+     */
     public function dataRequest()
     {
         return [

@@ -273,6 +273,9 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
         $this->model->toModel($dataModel);
     }
 
+    /**
+     * @return array
+     */
     public function expectedDatesProvider()
     {
         return [

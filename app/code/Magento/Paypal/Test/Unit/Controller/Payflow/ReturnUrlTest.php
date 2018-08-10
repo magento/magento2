@@ -419,6 +419,10 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
         $payflowadvancedReturnUrl->execute();
     }
 
+    /**
+     * @param $orderId
+     * @param $state
+     */
     private function initOrderMock($orderId, $state)
     {
         $this->orderFactory
@@ -466,6 +470,10 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->block));
     }
 
+    /**
+     * @param $orderId
+     * @param $restoreQuote
+     */
     private function initcheckoutSession($orderId, $restoreQuote)
     {
         $this->checkoutSession

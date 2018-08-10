@@ -97,6 +97,10 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param array $optionsData
+     * @return array
+     */
     protected function setupOptions(array $optionsData)
     {
         $options = [];
@@ -125,6 +129,10 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         return $options;
     }
 
+    /**
+     * @param $optionsData
+     * @return array
+     */
     protected function setupSingleValueOptions($optionsData)
     {
         $options = [];

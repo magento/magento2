@@ -132,6 +132,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderAroundDispatch()
     {
         return [

@@ -79,6 +79,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function requiredParamsProvider()
     {
         return [['id'], ['title'], ['resource']];
@@ -102,6 +105,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function invalidParamsProvider()
     {
         return [

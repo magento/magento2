@@ -70,6 +70,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $output);
     }
 
+    /**
+     * @return array
+     */
     public function afterGenerateXmlDataProvider()
     {
         return [
@@ -108,6 +111,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($output, $html);
     }
 
+    /**
+     * @return array
+     */
     public function afterGetOutputDataProvider()
     {
         $tags = 'identity1,identity2';

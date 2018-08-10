@@ -53,6 +53,7 @@ class VariablesTest extends \PHPUnit_Framework_TestCase
             ['value' => 'general/store_information/city', 'label' => __('City')],
             ['value' => 'general/store_information/street_line1', 'label' => __('Street Address 1')],
             ['value' => 'general/store_information/street_line2', 'label' => __('Street Address 2')],
+            ['value' => 'general/store_information/merchant_vat_number', 'label' => __('VAT Number')],
         ];
     }
 

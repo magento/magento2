@@ -88,6 +88,9 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->additonalBlock->isInProductionMode());
     }
 
+    /**
+     * @return array
+     */
     public function isInProductionModeDataProvider()
     {
         return [

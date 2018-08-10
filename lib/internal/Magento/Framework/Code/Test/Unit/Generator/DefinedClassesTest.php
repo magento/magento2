@@ -8,6 +8,10 @@
 namespace Magento\Framework\Code\Generator {
     use Magento\Framework\Code\Test\Unit\Generator\DefinedClassesTest;
 
+    /**
+     * @param $className
+     * @return bool
+     */
     function class_exists($className)
     {
         return DefinedClassesTest::$definedClassesTestActive

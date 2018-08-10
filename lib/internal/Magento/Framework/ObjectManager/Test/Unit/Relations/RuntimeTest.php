@@ -30,6 +30,9 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parents, $this->model->getParents($type));
     }
 
+    /**
+     * @return array
+     */
     public function getParentsDataProvider()
     {
         return [

@@ -31,6 +31,9 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, Security::compareStrings($expected, $actual));
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

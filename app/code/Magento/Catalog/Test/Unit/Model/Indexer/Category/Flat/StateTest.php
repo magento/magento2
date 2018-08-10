@@ -103,6 +103,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isAvailable());
     }
 
+    /**
+     * @return array
+     */
     public function isAvailableDataProvider()
     {
         return [

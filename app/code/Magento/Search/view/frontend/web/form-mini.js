@@ -89,7 +89,9 @@ define([
                 }, this), 250);
             }, this));
 
-            this.element.trigger('blur');
+            if (this.element.get(0) === document.activeElement) {
+                this.setActiveState(true);
+            }
 
             this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
@@ -207,6 +209,7 @@ define([
                     break;
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
+                    e.preventDefault();
                     break;
                 case $.ui.keyCode.DOWN:
                     if (this.responseList.indexList) {

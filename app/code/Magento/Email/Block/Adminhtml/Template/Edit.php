@@ -41,7 +41,7 @@ class Edit extends Widget implements ContainerInterface
      *
      * @var string
      */
-    protected $_template = 'template/edit.phtml';
+    protected $_template = 'Magento_Email::template/edit.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface

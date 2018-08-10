@@ -43,6 +43,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(null, $this->model->getChildren($item));
     }
 
+    /**
+     * @return array
+     */
     public function getChildrenEmptyItemsDataProvider()
     {
         return [
@@ -82,6 +85,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([2 => $this->orderItem], $this->model->getChildren($item));
     }
 
+    /**
+     * @return array
+     */
     public function getChildrenDataProvider()
     {
         return [
@@ -101,6 +107,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
@@ -129,6 +138,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
@@ -150,6 +162,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isChildCalculated());
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithoutItemDataProvider()
     {
         return [
@@ -178,6 +193,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->isChildCalculated($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithItemDataProvider()
     {
         return [
@@ -197,6 +215,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->getSelectionAttributes($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function getSelectionAttributesDataProvider()
     {
         return [
@@ -218,6 +239,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function canShowPriceInfoDataProvider()
     {
         return [

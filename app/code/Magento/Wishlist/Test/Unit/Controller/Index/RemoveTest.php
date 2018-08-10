@@ -139,6 +139,9 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultFactoryMock);
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Remove
+     */
     public function getController()
     {
         $this->prepareContext();

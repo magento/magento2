@@ -384,6 +384,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->validateNewOptionData($optionMock);
     }
 
+    /**
+     * @return array
+     */
     public function validateOptionDataProvider()
     {
         return [

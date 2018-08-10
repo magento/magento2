@@ -108,6 +108,10 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validate(true);
     }
 
+    /**
+     * @param $exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function validate($exception)
     {
         $attrTable = 'someAttributeTable';
