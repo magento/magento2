@@ -432,8 +432,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         $authorizationTransaction = $payment->getAuthorizationTransaction();
-        $authorizationPeriod = abs(intval($this->getConfigData('authorization_honor_period')));
-        $maxAuthorizationNumber = abs(intval($this->getConfigData('child_authorization_number')));
+        $authorizationPeriod = abs((int)$this->getConfigData('authorization_honor_period'));
+        $maxAuthorizationNumber = abs((int)$this->getConfigData('child_authorization_number'));
         $order = $payment->getOrder();
         $isAuthorizationCreated = false;
 
@@ -750,7 +750,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 return false;
             }
 
-            $orderValidPeriod = abs(intval($this->getConfigData('order_valid_period')));
+            $orderValidPeriod = abs((int)$this->getConfigData('order_valid_period'));
 
             $dateCompass = new \DateTime($orderTransaction->getCreatedAt());
             $dateCompass->modify('+' . $orderValidPeriod . ' days');
@@ -805,7 +805,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected function _isTransactionExpired(Transaction $transaction, $period)
     {
-        $period = intval($period);
+        $period = (int)$period;
         if (0 == $period) {
             return true;
         }

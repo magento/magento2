@@ -578,11 +578,11 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Paypal note: The value for quantity must be a positive integer. Null, zero, or negative numbers are not allowed.
      *
      * @param float|string|int $value
-     * @return string
+     * @return int
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 
     /**

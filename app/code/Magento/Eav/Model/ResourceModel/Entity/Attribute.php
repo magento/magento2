@@ -118,7 +118,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function _getMaxSortOrder(AbstractModel $object)
     {
-        if (intval($object->getAttributeGroupId()) > 0) {
+        if ((int)$object->getAttributeGroupId() > 0) {
             $connection = $this->getConnection();
             $bind = [
                 ':attribute_set_id' => $object->getAttributeSetId(),

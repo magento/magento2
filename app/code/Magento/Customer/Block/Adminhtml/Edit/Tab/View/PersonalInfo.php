@@ -461,7 +461,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             'customer/online_customers/online_minutes_interval',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return (int)$configValue > 0 ? (int)$configValue : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**
