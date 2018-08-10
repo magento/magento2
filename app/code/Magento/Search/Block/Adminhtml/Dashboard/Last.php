@@ -63,6 +63,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareCollection()
     {
@@ -86,6 +87,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
@@ -118,7 +120,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

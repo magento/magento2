@@ -456,7 +456,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
         $specialToExpr = "{$specialTo} IS NULL OR {$specialToDate} >= {$currentDate}";
         $specialPriceExpr = $connection->getCheckSql(
-            "{$specialPrice} IS NOT NULL AND {$specialFromExpr} AND {$specialToExpr}",
+            "{$specialPrice} IS NOT NULL AND ({$specialFromExpr}) AND ({$specialToExpr})",
             $specialPrice,
             $maxUnsignedBigint
         );
@@ -547,7 +547,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param IndexTableStructure $finalPriceTable
      * @return void
      */
-    private function modifyPriceIndex(IndexTableStructure $finalPriceTable)
+    private function modifyPriceIndex(IndexTableStructure $finalPriceTable) : void
     {
         foreach ($this->priceModifiers as $priceModifier) {
             $priceModifier->modifyPrice($finalPriceTable);
@@ -862,6 +862,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
     }
 
+    /**
+     * @param string $tableAlias
+     * @param \Zend_Db_Expr $priceExpression
+     * @return \Zend_Db_Expr
+     */
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression)
     {
         return $this->getConnection()->getCheckSql(
