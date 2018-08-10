@@ -21,8 +21,6 @@
         <before>
             <!-- Log in to Dashboard page -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <!-- This actionGroup should be deleted and Test will pass after fixing the bug.-->
-            <actionGroup ref="DeleteCreatedAttributeIfExist" stepKey="deleteCreatedAttributeIfExist"/>
         </before>
 
 
