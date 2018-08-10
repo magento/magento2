@@ -54,9 +54,10 @@ class Ftp
     {
         $this->checkConnected();
         $dir = explode("/", $path);
+        $dirCount = count($dir);
         $path = "";
         $ret = true;
-        for ($i = 0; $i < count($dir); $i++) {
+        for ($i = 0; $i < $dirCount; $i++) {
             $path .= "/" . $dir[$i];
             if (!@ftp_chdir($this->_conn, $path)) {
                 @ftp_chdir($this->_conn, "/");

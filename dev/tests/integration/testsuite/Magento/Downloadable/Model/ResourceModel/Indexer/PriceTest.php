@@ -52,6 +52,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 11, 'price' => 8.20],
             ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 21, 'price' => 7.55],
         ];
+        $tierDataCount = count($tierData);
         $product->setData('tier_price', $tierData);
         $product->setData('special_price', $specialPrice);
         $this->productRepository->save($product);
@@ -69,9 +70,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $resultTiers = $product->getTierPrices();
         $this->assertTrue(is_array($resultTiers), 'Tiers not found');
-        $this->assertEquals(count($tierData), count($resultTiers), 'Incorrect number of result tiers');
+        $this->assertEquals($tierDataCount, count($resultTiers), 'Incorrect number of result tiers');
 
-        for ($i = 0; $i < count($tierData); $i++) {
+        for ($i = 0; $i < $tierDataCount; $i++) {
             $this->assertEquals($tierData[$i]['price_qty'], $resultTiers[$i]->getQty(), 'Wrong tier price quantity');
             $this->assertEquals($tierData[$i]['price'], $resultTiers[$i]->getValue(), 'Wrong tier price value');
         }

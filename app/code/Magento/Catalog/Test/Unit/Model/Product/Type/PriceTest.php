@@ -186,6 +186,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $tp2->setQty(22);
         $tp2->setExtensionAttributes($tierPriceExtensionMock);
         $tps = [$tp1, $tp2];
+        $tpsCount = sizeof($tps);
 
         // force the product to have null tier prices
         $this->product->setData($this::KEY_TIER_PRICE, null);
@@ -200,7 +201,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($tpArray));
         $this->assertEquals(sizeof($tps), sizeof($tpArray));
 
-        for ($i = 0; $i < sizeof($tps); $i++) {
+        for ($i = 0; $i < $tpsCount; $i++) {
             $tpData = $tpArray[$i];
             $this->assertEquals($expectedWebsiteId, $tpData['website_id'], 'Website Id does not match');
             $this->assertEquals($tps[$i]->getValue(), $tpData['price'], 'Price/Value does not match');
@@ -231,7 +232,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());
         }
 
-        for ($i = 0; $i < sizeof($tps); $i++) {
+        for ($i = 0; $i < $tpsCount; $i++) {
             $this->assertEquals(
                 $tps[$i]->getValue(),
                 $tpRests[$i]->getValue(),

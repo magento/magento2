@@ -66,8 +66,9 @@ class ConstantUsageSniffTest extends \PHPUnit\Framework\TestCase
     {
         $lineNumber = 1;
         $tokens = token_get_all($fileContent);
+        $tokensCount = count($tokens);
         $snifferTokens = [];
-        for ($i = 0; $i < count($tokens); $i++) {
+        for ($i = 0; $i < $tokensCount; $i++) {
             $content = is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
             $snifferTokens[$i]['line'] = $lineNumber;
             $snifferTokens[$i]['content'] = $content;

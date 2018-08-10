@@ -58,8 +58,9 @@ class ShortEchoSyntaxSniffTest extends \PHPUnit\Framework\TestCase
     private function tokenizeString($fileContent)
     {
         $tokens = token_get_all($fileContent);
+        $tokensCount = count($tokens);
         $snifferTokens = [];
-        for ($i = 0; $i < count($tokens); $i++) {
+        for ($i = 0; $i < $tokensCount; $i++) {
             $code = is_array($tokens[$i]) ? $tokens[$i][0] : $tokens[$i];
             $content = is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
             $snifferTokens[$i]['code'] = $code;
