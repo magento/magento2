@@ -13,7 +13,7 @@
              module="Magento_Backend"
              sortOrder="15"
              parent="Magento_Backend::stores"
-             resource="Magento_InventoryAdminUi::inventory"/>
+             resource="Magento_InventoryApi::inventory"/>
         <add id="Magento_InventoryAdminUi::source"
              title="Sources"
              translate="title"
