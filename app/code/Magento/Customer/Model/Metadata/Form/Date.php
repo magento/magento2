@@ -99,9 +99,6 @@ class Date extends AbstractData
      */
     public function compactValue($value)
     {
-        if (is_bool($value) || $value === null) {
-            $value = '';
-        }
         return $value;
     }
 
