@@ -39,7 +39,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(5, $options);
+        $this->assertCount(6, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -60,6 +60,10 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
         $this->assertEquals('page-cache-redis-compress-data', $options[4]->getName());
+
+        $this->assertArrayHasKey(5, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
+        $this->assertEquals('page-cache-redis-password', $options[5]->getName());
     }
 
     public function testCreateConfigWithRedis()
@@ -75,7 +79,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'server'=> '',
                             'port' => '',
                             'database' => '',
-                            'compress_data' => ''
+                            'compress_data' => '',
+                            'password' => ''
                         ]
                     ]
                 ]
@@ -98,7 +103,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'server' => 'foo.bar',
                             'port' => '9000',
                             'database' => '6',
-                            'compress_data' => '1'
+                            'compress_data' => '1',
+                            'password' => ''
                         ]
                     ]
                 ]
