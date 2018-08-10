@@ -22,6 +22,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $productRepository;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -32,6 +35,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->productRepository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
     }
 
+    /**
+     * @return void
+     */
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
@@ -57,6 +63,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
+    /**
+     * @return void
+     */
     public function testIndexActionAddProducts()
     {
         $this->_requireVisitorWithNoProducts();
@@ -68,6 +77,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
+    /**
+     * @return void
+     */
     public function testRemoveAction()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -84,6 +96,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$restProduct->getEntityId()]);
     }
 
+    /**
+     * @return void
+     */
     public function testRemoveActionWithSession()
     {
         $this->_requireCustomerWithTwoProducts();
@@ -101,6 +116,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$secondProduct->getEntityId()]);
     }
 
+    /**
+     * @return void
+     */
     public function testIndexActionDisplay()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -127,6 +145,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('$987.65', $responseBody);
     }
 
+    /**
+     * @return void
+     */
     public function testClearAction()
     {
         $this->_requireVisitorWithTwoProducts();
@@ -160,6 +181,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareCompareListWithProductNameXss()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -182,6 +206,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return void
+     */
     protected function _requireVisitorWithNoProducts()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -201,6 +228,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([]);
     }
 
+    /**
+     * @return void
+     */
     protected function _requireVisitorWithTwoProducts()
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
@@ -233,6 +263,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([$firstProductEntityId, $secondProductEntityId]);
     }
 
+    /**
+     * @return void
+     */
     protected function _requireCustomerWithTwoProducts()
     {
         $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

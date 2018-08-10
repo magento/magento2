@@ -63,6 +63,9 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
     /** @var StoreSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $storeSwitcher;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
@@ -98,6 +101,9 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecute()
     {
         $storeToSwitchToCode = 'sv2';

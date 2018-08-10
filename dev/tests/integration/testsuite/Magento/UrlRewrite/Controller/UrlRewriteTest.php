@@ -42,6 +42,9 @@ class UrlRewriteTest extends AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public function requestDataProvider()
     {
         return [

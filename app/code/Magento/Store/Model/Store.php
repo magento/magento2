@@ -1379,7 +1379,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
+     * @return $this
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes

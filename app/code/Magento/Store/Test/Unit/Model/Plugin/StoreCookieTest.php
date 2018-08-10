@@ -110,6 +110,9 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeDispatchNoSuchEntity()
     {
         $storeCode = 'store';
@@ -129,6 +132,9 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeDispatchStoreIsInactive()
     {
         $storeCode = 'store';
@@ -148,6 +154,9 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeDispatchInvalidArgument()
     {
         $storeCode = 'store';
@@ -167,6 +176,9 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeDispatchNoStoreCookie()
     {
         $storeCode = null;
@@ -185,6 +197,9 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
+    /**
+     * @return void
+     */
     public function testBeforeDispatchWithStoreRequestParam()
     {
         $storeCode = 'store';

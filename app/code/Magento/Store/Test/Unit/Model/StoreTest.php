@@ -43,6 +43,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $urlModifierMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -105,6 +108,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSetWebsite()
     {
         $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup']);
@@ -115,6 +121,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $model->getWebsiteId());
     }
 
+    /**
+     * @return void
+     */
     public function testGetWebsite()
     {
         $websiteId = 2;
@@ -138,6 +147,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($website, $model->getWebsite());
     }
 
+    /**
+     * @return void
+     */
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
         $websiteRepository = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
@@ -156,6 +168,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($model->getWebsite());
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroup()
     {
         $groupId = 2;
@@ -179,6 +194,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($group, $model->getGroup());
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroupIfGroupIsNotExist()
     {
         $groupRepository = $this->getMockBuilder(\Magento\Store\Api\GroupRepositoryInterface::class)
@@ -197,6 +215,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($model->getGroup());
     }
 
+    /**
+     * @return void
+     */
     public function testGetUrl()
     {
         $params = ['_scope_to_url' => true];
@@ -325,6 +346,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetBaseUrlEntryPoint()
     {
         $expectedPath = 'web/unsecure/base_link_url';
@@ -526,6 +550,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetAllowedCurrencies()
     {
         $currencyPath = 'cur/ren/cy/path';
@@ -651,11 +678,17 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
 
+    /**
+     * @return void
+     */
     public function testGetScopeType()
     {
         $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
     }
 
+    /**
+     * @return void
+     */
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
