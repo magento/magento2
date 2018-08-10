@@ -14,9 +14,6 @@
             <argument name="wysiwygConfigPostProcessor" xsi:type="array">
                 <item name="mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
             </argument>
-            <argument name="wysiwygConfigPostProcessor" xsi:type="array">
-                <item name="default" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
-            </argument>
             <argument name="variablePluginConfigProvider" xsi:type="array">
                 <item name="testAdapter" xsi:type="string">Magento\Variable\Model\Variable\ConfigProvider</item>
             </argument>

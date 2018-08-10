@@ -61,7 +61,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     }
 
     /**
-     * Modify height and content_css in the config
+     * Remove the special character from the toolbar configuration
      *
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
