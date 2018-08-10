@@ -29,6 +29,9 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
      */
     private $shipmentModel;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $helperManager = new ObjectManager($this);
@@ -40,12 +43,23 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    /**
+     * Test to Returns increment id
+     *
+     * @return void
+     */
     public function testGetIncrementId()
     {
         $this->shipmentModel->setIncrementId('test_increment_id');
         $this->assertEquals('test_increment_id', $this->shipmentModel->getIncrementId());
     }
 
+    /**
+     * Test to Retrieves comments collection
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
     public function testGetCommentsCollection()
     {
         $shipmentId = 1;
@@ -78,6 +92,12 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($this->commentCollection, $actual);
     }
 
+    /**
+     * Test to Returns comments
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
     public function testGetComments()
     {
         $shipmentId = 1;

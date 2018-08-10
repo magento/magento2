@@ -79,9 +79,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     {
         $order = $this->getOrder('100000001');
 
-        /** @var ShipmentInterface $shipment */
-        $shipment = $this->objectManager->create(ShipmentInterface::class);
-
         /** @var ShipmentTrackInterface $track */
         $track = $this->objectManager->create(ShipmentTrackInterface::class);
         $track->setNumber('Test Number')
