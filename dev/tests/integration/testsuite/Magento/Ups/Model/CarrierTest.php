@@ -5,6 +5,9 @@
  */
 namespace Magento\Ups\Model;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -14,7 +17,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->carrier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->carrier = Bootstrap::getObjectManager()->create(
             \Magento\Ups\Model\Carrier::class
         );
     }
@@ -50,5 +53,29 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
             $this->carrier->getShipConfirmUrl()
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
+     * @magentoConfigFixture current_store carriers/ups/free_method GND
+     */
+    public function testCollectFreeRates()
+    {
+        $rateRequest = Bootstrap::getObjectManager()->get(RateRequestFactory::class)->create();
+        $rateRequest->setDestCountryId('US');
+        $rateRequest->setDestRegionId('CA');
+        $rateRequest->setDestPostcode('90001');
+        $rateRequest->setPackageQty(1);
+        $rateRequest->setPackageWeight(1);
+        $rateRequest->setFreeMethodWeight(0);
+        $rateRequest->setLimitCarrier($this->carrier::CODE);
+        $rateRequest->setFreeShipping(true);
+
+        $rateResult = $this->carrier->collectRates($rateRequest);
+        $result = $rateResult->asArray();
+        $methods = $result[$this->carrier::CODE]['methods'];
+        $this->assertEquals(0, $methods['GND']['price']);
+        $this->assertNotEquals(0, $methods['1DA']['price']);
     }
 }
