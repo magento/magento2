@@ -260,8 +260,11 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     {
         $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
         $reportFile = self::$reportDir . '/phpcs_report.txt';
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
+        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : []);
         $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
