@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+    <!--Go To Stores/All Stores-->
+    <actionGroup name="GoToAllStores">
+        <click stepKey="clickStoreItem" selector="{{Dashboard.storesItem}}"/>
+        <waitForElementVisible selector="{{Dashboard.storesAllStoresItem}}" stepKey="waitForAllStoresItemBecomeAvailable"/>
+        <click stepKey="clickAllStoreItem" selector="{{Dashboard.storesAllStoresItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageLoaded"/>
+    </actionGroup>
+
+    <!--Create new website-->
+    <actionGroup name="AdminCreateWebsite">
+        <!--Fill required fields-->
+        <click selector="{{AdminNewWebsiteSection.addWebSite}}" stepKey="clickOnCreateWebsiteButton"/>
+        <waitForPageLoad stepKey="waitFormToBeOpened"/>
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{AdminTestData.testData}}" stepKey="enterWebsiteName" />
+        <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{AdminTestData.testData}}" stepKey="enterWebsiteCode" />
+        <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
+        <see userInput="You saved the website." stepKey="seeSavedMessage" />
+    </actionGroup>
+
+    <!--Create new store-->
+    <actionGroup name="AdminCreateNewStore">
+        <!--Fill required fields-->
+        <click selector="{{AdminNewStoreGroupSection.create}}" stepKey="clickOnCreateStore"/>
+        <waitForPageLoad stepKey="waitFormToBeOpened"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{AdminTestData.testData}}" stepKey="selectWebsite" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{AdminTestData.testData}}" stepKey="enterStoreGroupName" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{AdminTestData.testData}}" stepKey="enterStoreGroupCode" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory" />
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage" />
+    </actionGroup>
+
+    <!--Create store view-->
+    <actionGroup name="AdminCreateStoreView">
+        <!--Fill required fields-->
+        <click selector="{{AdminNewStoreSection.create}}" stepKey="clickOnCreateStoreView"/>
+        <waitForPageLoad stepKey="waitFormToBeOpened"/>
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{AdminTestData.testData}}" stepKey="selectStore" />
+        <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{AdminTestData.testData}}" stepKey="enterStoreViewName" />
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{AdminTestData.testData}}" stepKey="enterStoreViewCode" />
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
+        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+    </actionGroup>
+
+    <!--Go to Stores -> Configuration -> Web.-->
+    <actionGroup name="GoToStoresConfigurationWeb">
+        <click stepKey="againClickStoreItem" selector="{{Dashboard.storesItem}}"/>
+        <waitForElementVisible selector="{{Dashboard.storesConfigurationItem}}" stepKey="waitForAllStoreItemExtends"/>
+        <click stepKey="clickConfigurationItem" selector="{{Dashboard.storesConfigurationItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresConfigurationPageLoaded"/>
+        <click stepKey="clickWebItem" selector="{{AdminStoresConfigurationSection.webItem}}"/>
+        <waitForPageLoad stepKey="waitForStoresConfigurationWebPageLoaded"/>
+    </actionGroup>
+
+    <!--Select Yes in Add Store Code to Urls field.-->
+    <actionGroup name="SelectYesInAddStoreCodeToUrlsField">
+        <click stepKey="clickOpenUrlOptions" selector="{{AdminStoresConfigurationSection.openUrlOptions}}"/>
+        <click stepKey="clickUseSystemValueCheckbox" selector="{{AdminStoresConfigurationSection.useSystemValueCheckbox}}"/>
+        <selectOption selector="{{AdminStoresConfigurationSection.addStoreCodeToUrlsDropDown}}" userInput="Yes" stepKey="setAddStoreCodeToUrlsYes" />
+        <click stepKey="clickSaveConfigButton" selector="{{AdminStoresConfigurationSection.saveConfigButton}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <see stepKey="seeSavedConfigurationMessage" userInput="You saved the configuration."/>
+    </actionGroup>
+
+    <!--Create an Account. Check Sign Up for Newsletter checkbox -->
+    <actionGroup name="StorefrontCreateNewAccount">
+        <fillField selector="{{StorefrontCustomerCreateFormSection.firstNameField}}" userInput="{{CreateUserData.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.lastNameField}}" userInput="{{CreateUserData.lastName}}" stepKey="enterLastName" />
+        <click selector="{{StorefrontCustomerCreateFormSection.signUpForNewsletter}}" stepKey="selectSignUpForNewsletterCheckbox"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.emailField}}" userInput="{{CreateUserData.firstName}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CreateUserData.password}}" stepKey="enterPassword" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CreateUserData.password}}" stepKey="confirmPassword" />
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
+    </actionGroup>
+
+    <!-- Sign out -->
+    <actionGroup name="StorefrontSignOut">
+        <click stepKey="clickCustomerNameItem" selector="{{CustomerMyAccountPage.customerName}}"/>
+        <click stepKey="clickSignOutButton" selector="{{CustomerMyAccountPage.customerSignOut}}"/>
+        <waitForPageLoad stepKey="waitForSignOut"/>
+    </actionGroup>
+
+    <!--Create an Account. Uncheck Sign Up for Newsletter checkbox -->
+    <actionGroup name="StorefrontCreateNewAccountNewsletterUnchecked">
+        <click stepKey="clickCreateNewAccountButton" selector="{{CustomerMyAccountPage.createNewAccount}}"/>
+        <waitForPageLoad stepKey="waitForCreateNewAccountPageLoaded"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.firstNameField}}" userInput="{{CreateUserData.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.lastNameField}}" userInput="{{CreateUserData.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.emailField}}" userInput="{{CreateUserData.firstName}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.passwordField}}" userInput="{{CreateUserData.password}}" stepKey="enterPassword" />
+        <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CreateUserData.password}}" stepKey="confirmPassword" />
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
+        <see userInput="Thank you for registering with" stepKey="seeValidRegistrationMessage"/>
+    </actionGroup>
+
+    <!--Delete created Website -->
+    <actionGroup name="AdminDeleteWebsite">
+        <fillField stepKey="fillSearchWebsiteField" selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{AdminTestData.testData}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <see stepKey="verifyThatCorrectWebsiteFound" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" userInput="{{AdminTestData.testData}}"/>
+        <click stepKey="clickEditExistingStoreRow" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <click stepKey="clickDeleteWebsiteButtonOnEditWebsitePage" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
+        <selectOption stepKey="setCreateDbBackupToNo" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" userInput="No"/>
+        <click stepKey="clickDeleteWebsiteButton" selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}"/>
+        <waitForElementVisible stepKey="waitForStoreGridToReload" selector="{{AdminStoresGridSection.websiteFilterTextField}}"/>
+        <see stepKey="seeSavedMessage" userInput="You deleted the website."/>
+    </actionGroup>
+
+    <!--Set Default config -->
+    <actionGroup name="AdminSetDefaultConfig">
+        <selectOption selector="{{AdminStoresConfigurationSection.addStoreCodeToUrlsDropDown}}" userInput="No" stepKey="setAddStoreCodeToUrlsNo" />
+        <click stepKey="disableUseSystemValueCheckbox" selector="{{AdminStoresConfigurationSection.useSystemValueCheckbox}}"/>
+        <click stepKey="clickDefaultConfigSaveButton" selector="{{AdminStoresConfigurationSection.saveConfigButton}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <see stepKey="saveDefaultConfig" userInput="You saved the configuration."/>
+        <click stepKey="clickOpenUrlOptions" selector="{{AdminStoresConfigurationSection.openUrlOptions}}"/>
+    </actionGroup>
+
+    <!--Delete created Customer -->
+    <actionGroup name="AdminDeleteCreatedCustomer">
+        <click stepKey="clickCustomerItem" selector="{{Dashboard.customer}}"/>
+        <wait stepKey="WaitForCustomerViewOpened" time="2"/>
+        <click stepKey="clickCustomerAllCustomerItem" selector="{{Dashboard.customerAllCustomer}}"/>
+        <waitForPageLoad stepKey="WaitForCustomerPageIsLoaded"/>
+        <fillField stepKey="searchToKeyword" selector="{{AdminCustomerAccountInformationSection.searchToKeyword}}" userInput="{{CreateUserData.firstName}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminCustomerAccountInformationSection.searchButton}}"/>
+        <waitForElementVisible stepKey="waitForFiltering" selector="{{AdminCustomerAccountInformationSection.selectCustomer}}"/>
+        <click selector="{{AdminCustomerAccountInformationSection.selectCustomer}}" stepKey="ClickOnCustomer"/>
+        <click selector="{{AdminCustomerAccountInformationSection.actions}}" stepKey="ClickOnActions"/>
+        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.delete}}" stepKey="waitForDeleteButtonAppeared"/>
+        <click selector="{{AdminCustomerAccountInformationSection.delete}}" stepKey="ClickOnDelete"/>
+        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.confirm}}" stepKey="waitForConfirmButtonAppeared"/>
+        <click selector="{{AdminCustomerAccountInformationSection.confirm}}" stepKey="ClickToConfirm"/>
+        <waitForPageLoad stepKey="waitClickToConfirmButton"/>
+        <see stepKey="seeRecordsWereDeletedMessage" userInput="A total of 2 record(s) were deleted."/>
+        <click stepKey="clickClearAllFilterButton" selector="{{AdminCustomerAccountInformationSection.clearAll}}"/>
+        <!-- We need this wait to make sure that Active filters is clear (waitForElementNotVisible tag doesn't wait until clearing filters)-->
+        <wait stepKey="waitToClearAllFilters" time="2"/>
+    </actionGroup>
+
+</actionGroups>
