@@ -264,7 +264,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : []);
+        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
         $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
