@@ -34,13 +34,18 @@ class AddTest extends \PHPUnit\Framework\TestCase
      */
     private $messageManager;
 
+    /**
+     * Init mocks for tests.
+     *
+     * @return void
+     */
     public function setUp()
     {
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()->getMock();
         $this->resultRedirectFactory =
             $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
-            ->disableOriginalConstructor()->getMock();
+                ->disableOriginalConstructor()->getMock();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()->getmock();
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
