@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\ShipmentDocumentFactory;
 
-use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor as AttributesProcessor;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsExtensionInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
+use Magento\Sales\Api\Data\ShipmentExtensionInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
@@ -53,24 +53,25 @@ class ExtensionAttributesProcessor
         if (null === $arguments) {
             return;
         }
-
-        $shipmentExtensionAttributes = $shipment->getExtensionAttributes();
-        if (null === $shipmentExtensionAttributes) {
-            $shipmentExtensionAttributes = $this->shipmentExtensionFactory->create();
+        $shipmentExtensionAttributes = [];
+        if (null !== $shipment->getExtensionAttributes()) {
+            $shipmentExtensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray(
+                $shipment->getExtensionAttributes(),
+                ShipmentExtensionInterface::class
+            );
+        }
+        $argumentsExtensionAttributes = [];
+        if (null !== $arguments->getExtensionAttributes()) {
+            $argumentsExtensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray(
+                $arguments->getExtensionAttributes(),
+                ShipmentCreationArgumentsExtensionInterface::class
+            );
         }
 
-        $attributes = $arguments->getExtensionAttributes();
-        $extensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray(
-            $attributes,
-            ShipmentCreationArgumentsExtensionInterface::class
-        );
+        $mergedExtensionAttributes = $this->shipmentExtensionFactory->create([
+            'data' => array_merge($shipmentExtensionAttributes, $argumentsExtensionAttributes)
+        ]);
 
-        foreach ($extensionAttributes as $code => $value) {
-            $setMethod = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($code);
-
-            if (method_exists($shipmentExtensionAttributes, $setMethod)) {
-                $shipmentExtensionAttributes->$setMethod($value);
-            }
-        }
+        $shipment->setExtensionAttributes($mergedExtensionAttributes);
     }
 }

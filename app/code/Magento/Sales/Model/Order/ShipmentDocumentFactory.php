@@ -42,7 +42,7 @@ class ShipmentDocumentFactory
     private $hydratorPool;
 
     /**
-     * @var ExtensionAttributesProcessor|null
+     * @var ExtensionAttributesProcessor
      */
     private $extensionAttributesProcessor;
 
@@ -68,8 +68,6 @@ class ShipmentDocumentFactory
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
      * @param OrderInterface $order
      * @param ShipmentItemCreationInterface[] $items
      * @param ShipmentTrackCreationInterface[] $tracks
