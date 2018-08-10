@@ -6187,7 +6187,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "a75cc902b101f7540c52dee413b42404d8b6edc4"
+                "reference": "57882535a697c3cb9f259a396ad6f5bf04d5f15a"
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.2.6",
@@ -6256,7 +6256,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-08-10T14:36:01+00:00"
+            "time": "2018-08-10T16:53:07+00:00"
         },
         {
             "name": "moontoast/math",
