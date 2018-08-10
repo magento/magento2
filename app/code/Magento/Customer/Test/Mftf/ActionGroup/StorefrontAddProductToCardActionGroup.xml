@@ -55,6 +55,9 @@
         <click selector="{{DeleteCreatedProduct.okButton}}" stepKey="clickToConfirm"/>
         <wait stepKey="waitForRecordIsDeleted" time="2"/>
         <see userInput="A total of 1 record(s) have been deleted." stepKey="productDeletedSuccessfully"/>
+        <click stepKey="clickClearAllFilterButton" selector="{{DeleteCreatedProduct.clearAll}}"/>
+        <!-- We need this wait to make sure that Active filters is clear (waitForElementNotVisible tag doesn't wait until clearing filters)-->
+        <wait stepKey="waitToClearAllFilters" time="2"/>
     </actionGroup>
 
 </actionGroups>
