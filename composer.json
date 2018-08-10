@@ -80,14 +80,8 @@
         "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-view": "~2.10.0"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:magento/magento2-functional-testing-framework.git"
-        }
-    ],
     "require-dev": {
-        "magento/magento2-functional-testing-framework": "dev-MQE-1181",
+        "magento/magento2-functional-testing-framework": "2.3.4",
         "friendsofphp/php-cs-fixer": "~2.12.0",
         "lusitanian/oauth": "~0.8.10",
         "pdepend/pdepend": "2.5.2",

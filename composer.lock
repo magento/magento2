@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33d00be920e1a33f354757d8956be27c",
+    "content-hash": "2dd0a131df2b0f816b7dea047b3c136e",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6183,11 +6183,17 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-MQE-1181",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "2353428fedf1d0883d17df1679cdc83295c8157d"
+                "url": "https://github.com/magento/magento2-functional-testing-framework.git",
+                "reference": "ac56e5a6520dd580658034ae53d3724985c2a901"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ac56e5a6520dd580658034ae53d3724985c2a901",
+                "reference": "ac56e5a6520dd580658034ae53d3724985c2a901",
+                "shasum": ""
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.2.6",
@@ -6233,19 +6239,7 @@
                     "MFTF\\": "dev/tests/functional/MFTF"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\unit\\": "dev/tests/unit"
-                }
-            },
-            "scripts": {
-                "tests": [
-                    "bin/phpunit-checks"
-                ],
-                "static": [
-                    "bin/static-checks"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "AGPL-3.0"
             ],
@@ -6256,7 +6250,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-08-10T17:19:41+00:00"
+            "time": "2018-08-10T20:16:42+00:00"
         },
         {
             "name": "moontoast/math",
@@ -8879,7 +8873,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/magento2-functional-testing-framework": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
