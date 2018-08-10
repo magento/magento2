@@ -19,7 +19,7 @@
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
-        
+
         <before>
             <createData entity="_minimalSource" stepKey="createSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>

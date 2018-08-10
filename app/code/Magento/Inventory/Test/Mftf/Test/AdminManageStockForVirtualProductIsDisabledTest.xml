@@ -28,7 +28,7 @@
             <createData entity="FullSource1" stepKey="createSource1"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
-            <createData entity="VirtualProduct" stepKey="simpleVirtualProduct1">
+            <createData entity="VirtualMsiProduct" stepKey="simpleVirtualMsiProduct1">
                 <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
 
@@ -41,11 +41,11 @@
 
             <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
                 <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-                <argument name="filter_value" value="$$simpleVirtualProduct1.product[sku]$$"/>
+                <argument name="filter_value" value="$$simpleVirtualMsiProduct1.product[sku]$$"/>
             </actionGroup>
 
             <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection1"/>
-            <fillField userInput="{{VirtualProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey1"/>
+            <fillField userInput="{{VirtualMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillProductUrlKey1"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
             <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
 
@@ -69,20 +69,20 @@
 
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$simpleCategory1$$"/>
-            <argument name="product" value="VirtualProduct"/>
+            <argument name="product" value="VirtualMsiProduct"/>
         </actionGroup>
         <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
-            <argument name="product" value="VirtualProduct"/>
+            <argument name="product" value="VirtualMsiProduct"/>
         </actionGroup>
 
         <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
             <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="filter_value" value="$$simpleVirtualProduct1.product[sku]$$"/>
+            <argument name="filter_value" value="$$simpleVirtualMsiProduct1.product[sku]$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct2">
             <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="filter_value" value="$$simpleVirtualProduct1.product[sku]$$"/>
+            <argument name="filter_value" value="$$simpleVirtualMsiProduct1.product[sku]$$"/>
         </actionGroup>
 
         <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="select"/>
