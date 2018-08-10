@@ -61,6 +61,9 @@ class UnholdTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -108,6 +111,9 @@ class UnholdTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testExecuteNotPost
+     */
     public function testExecuteNotPost()
     {
         $this->validatorMock->expects($this->once())

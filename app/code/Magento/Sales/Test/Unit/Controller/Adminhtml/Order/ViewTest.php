@@ -98,6 +98,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderRepositoryMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
@@ -262,6 +265,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * initOrder
+     */
     protected function initOrder()
     {
         $orderIdParam = 111;
@@ -289,6 +295,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             );
     }
 
+    /**
+     * initOrderFail
+     */
     protected function initOrderFail()
     {
         $this->messageManagerMock->expects($this->once())
@@ -300,6 +309,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->with('', \Magento\Sales\Controller\Adminhtml\Order::FLAG_NO_DISPATCH, true);
     }
 
+    /**
+     * initAction
+     */
     protected function initAction()
     {
         $this->resultPageFactoryMock->expects($this->once())
@@ -318,6 +330,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
     }
 
+    /**
+     * prepareRedirect
+     */
     protected function prepareRedirect()
     {
         $this->resultRedirectFactoryMock->expects($this->once())

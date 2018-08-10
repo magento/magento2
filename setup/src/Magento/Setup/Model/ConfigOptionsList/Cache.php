@@ -117,7 +117,7 @@ class Cache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -141,7 +141,7 @@ class Cache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

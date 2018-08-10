@@ -87,6 +87,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -152,6 +155,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testEmail
+     */
     public function testEmail()
     {
         $orderId = 10000031;
@@ -185,6 +191,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
     }
 
+    /**
+     * testEmailNoOrderId
+     */
     public function testEmailNoOrderId()
     {
         $this->request->expects($this->once())

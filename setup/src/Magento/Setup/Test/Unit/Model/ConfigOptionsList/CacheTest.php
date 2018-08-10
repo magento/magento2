@@ -28,6 +28,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * Tests setup
+     */
     protected function setUp()
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
@@ -36,6 +39,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->configOptionsList = new CacheConfigOptionsList($this->validatorMock);
     }
 
+    /**
+     * testGetOptions
+     */
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
@@ -62,6 +68,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('cache-backend-redis-password', $options[4]->getName());
     }
 
+    /**
+     * testCreateConfigCacheRedis
+     */
     public function testCreateConfigCacheRedis()
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
@@ -87,6 +96,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testCreateConfigWithRedisConfig
+     */
     public function testCreateConfigWithRedisConfig()
     {
         $expectedConfigData = [
@@ -116,6 +128,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * testValidateWithValidInput
+     */
     public function testValidateWithValidInput()
     {
         $options = [
@@ -132,6 +147,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($errors);
     }
 
+    /**
+     * testValidateWithInvalidInput
+     */
     public function testValidateWithInvalidInput()
     {
         $invalidCacheOption = 'clay-tablet';

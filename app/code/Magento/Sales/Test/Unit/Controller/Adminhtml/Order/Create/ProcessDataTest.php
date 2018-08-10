@@ -63,6 +63,9 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultForwardFactory;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);

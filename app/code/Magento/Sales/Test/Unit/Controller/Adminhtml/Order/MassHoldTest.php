@@ -90,6 +90,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderManagementMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -166,6 +169,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteOneOrderPutOnHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -211,6 +217,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
         $this->massAction->execute();
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteNoOrdersPutOnHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)

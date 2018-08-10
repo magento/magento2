@@ -51,6 +51,9 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
      */
     protected $loggerMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
@@ -112,6 +115,9 @@ class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testExecuteUpdateAction
+     */
     public function testExecuteUpdateAction()
     {
         $orderId = 30;

@@ -40,6 +40,9 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
      */
     private $filterMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -80,6 +83,9 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
             );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecute()
     {
         $exception = new \Exception();

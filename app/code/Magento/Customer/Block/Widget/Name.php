@@ -201,7 +201,7 @@ class Name extends AbstractWidget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getAttribute($attributeCode)
     {

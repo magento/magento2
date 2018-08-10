@@ -68,7 +68,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 
     /**
      * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-     * @param $isNew
+     * @param bool $isNew
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     private function getRedirect(\Magento\Backend\Model\View\Result\Redirect $resultRedirect, $isNew)

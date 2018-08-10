@@ -69,7 +69,7 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \LogicException
      */
     public function query(RequestInterface $request)

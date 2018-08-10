@@ -90,6 +90,9 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
      */
     private $orderManagementMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -164,6 +167,9 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteOneOrdersReleasedFromHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -211,6 +217,9 @@ class MassUnholdTest extends \PHPUnit\Framework\TestCase
         $this->massAction->execute();
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteNoReleasedOrderFromHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)

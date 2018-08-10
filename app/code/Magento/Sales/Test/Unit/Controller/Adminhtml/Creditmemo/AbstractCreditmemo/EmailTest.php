@@ -73,6 +73,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultRedirectMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -131,6 +134,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testEmail
+     */
     public function testEmail()
     {
         $cmId = 10000031;
@@ -160,6 +166,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
     }
 
+    /**
+     * testEmailNoCreditmemoId
+     */
     public function testEmailNoCreditmemoId()
     {
         $this->request->expects($this->once())

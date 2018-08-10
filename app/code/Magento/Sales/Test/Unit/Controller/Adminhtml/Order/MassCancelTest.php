@@ -90,6 +90,9 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
      */
     private $orderManagementMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
