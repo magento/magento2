@@ -45,6 +45,9 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
         $this->assertContains($value, $html);
     }
 
+    /**
+     * @return array
+     */
     public function getElementHtmlDataProvider()
     {
         return [

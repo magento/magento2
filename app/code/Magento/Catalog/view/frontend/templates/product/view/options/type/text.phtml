@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Text */ ?>
 <?php
 $_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
@@ -17,7 +18,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 } ?><?= /* @escapeNotVerified */ $class ?>">
     <label class="label" for="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
-        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
     </label>
 
     <div class="control">

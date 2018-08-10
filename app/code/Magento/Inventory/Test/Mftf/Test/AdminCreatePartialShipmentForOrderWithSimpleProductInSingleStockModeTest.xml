@@ -17,6 +17,7 @@
             <testCaseId value="1145"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="single_mode"/>
         </annotations>
 
         <before>
@@ -52,34 +53,34 @@
         <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
         <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(SimpleProduct.name)}}"
                stepKey="openProductPage"/>
-        <waitForAjaxLoad stepKey="waitForImageLoader"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30"
-                               stepKey="waitForProductAdded"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <!-- Place Order -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}"
                           dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true"
                           stepKey="exposeMiniCart"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="checkMoneyOrderPayment"/>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Source Selection -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageToCreateShipmentLoaded"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
                    stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSearchApplied"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForShipmentPageLoaded"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="3" stepKey="ship3Items"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
@@ -93,7 +94,7 @@
 
         <!-- Verify Shipment is present in "Shipments" tab of Order -->
         <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab"/>
-        <waitForLoadingMaskToDisappear stepKey="waitToSeeShipmentCreated"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
         <seeElement selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" stepKey="seeShipmentInGrid"/>
 
         <!-- Verify Source Quantities and Salable Quantity are Correct-->

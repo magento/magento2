@@ -167,6 +167,9 @@ class StockTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->stock->addInStockFilterToCollection($collectionMock));
     }
 
+    /**
+     * @return array
+     */
     public function filterProvider()
     {
         $configMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
