@@ -33,11 +33,10 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Backend\App\Action\Context                             $context
+     * @param \Magento\Framework\Registry                                     $registry
      * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface             $synGroupRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

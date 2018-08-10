@@ -102,9 +102,10 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Private helper to create a synonym group, throw exception on merge conflict
      *
      * @param SynonymGroupInterface $synonymGroup
-     * @param bool $errorOnMergeConflict
+     * @param bool                  $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -141,8 +142,9 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Perform synonyms merge
      *
      * @param SynonymGroupInterface $synonymGroupToMerge
-     * @param array $matchingGroupIds
+     * @param array                 $matchingGroupIds
      * @return array
+     * @throws \Exception
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
@@ -176,11 +178,12 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     /**
      * Private helper to update a synonym group, throw exception on merge conflict
      *
-     * @param SynonymGroup $oldSynonymGroup
+     * @param SynonymGroup          $oldSynonymGroup
      * @param SynonymGroupInterface $newSynonymGroup
-     * @param bool $errorOnMergeConflict
+     * @param bool                  $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function update(
         SynonymGroup $oldSynonymGroup,
