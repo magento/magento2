@@ -217,20 +217,21 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
-        /** @var MessageInterface[] $messageObjects */
-        $messageObjects = $this->getMessages($messageType, $messageManagerClass);
+        /** @var MessageInterface[]|string[] $messageObjects */
+        $messages = $this->getMessages($messageType, $messageManagerClass);
         /** @var string[] $messages */
-        $messages = array_map(
-            function (MessageInterface $message) {
-                return $message->toString();
+        $messagesFiltered = array_map(
+            function ($message) {
+                /** @var MessageInterface|string $message */
+                return ($message instanceof MessageInterface) ? $message->toString() : $message;
             },
             $messageObjects
         );
 
         $this->assertThat(
-            $messages,
+            $messagesFiltered,
             $constraint,
-            'Session messages do not meet expectations ' . var_export($messages, true)
+            'Session messages do not meet expectations ' . var_export($messagesFiltered, true)
         );
     }
 

@@ -6,10 +6,14 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+/**
+ * Advanced search form. Should be accessible by POST for store-switching.
+ */
+class Index extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
