@@ -20,6 +20,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
