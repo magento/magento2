@@ -120,7 +120,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $extendedData = $data;
                 $extendedData['can_save_custom_options'] = $canSaveCustomOptions;
                 $this->copyToStores($extendedData, $productId);
-
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
@@ -142,19 +141,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 );
 
                 if ($redirectBack === 'duplicate') {
+                    $product->unsetData('quantity_and_stock_status');
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addExceptionMessage($e);
-                $data = $this->persistMediaData($product, $data);
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
-                $data = $this->persistMediaData($product, $data);
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
