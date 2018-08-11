@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -35,7 +37,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
-     * @var \Magento\Checkout\Controller\Cart\Add | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Controller\Cart\Add|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cartAdd;
 
