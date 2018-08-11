@@ -191,3 +191,4 @@ Currency,Currency
 "Transaction can not be voided if status of a PayPal partial settlement child transaction is settlement_pending.","Transaction can not be voided if status of a PayPal partial settlement child transaction is settlement_pending."
 "Too many concurrent attempts to refund this transaction. Try again later.","Too many concurrent attempts to refund this transaction. Try again later."
 "Too many concurrent attempts to void this transaction. Try again later.","Too many concurrent attempts to void this transaction. Try again later."
+"Braintree Settlement","Braintree Settlement"
