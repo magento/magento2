@@ -22,13 +22,18 @@ define([
          */
         getShippingMethodTitle: function () {
             var shippingMethod;
+            var shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
                 return '';
             }
             shippingMethod = quote.shippingMethod();
 
-            return shippingMethod ? shippingMethod['carrier_title'] + ' - ' + shippingMethod['method_title'] : '';
+            if (typeof(shippingMethod['method_title']) != 'undefined') {
+                shippingMethodTitle = ' - ' + shippingMethod['method_title'];
+            }
+
+            return shippingMethod ? shippingMethod['carrier_title'] + shippingMethodTitle : '';
         },
 
         /**
