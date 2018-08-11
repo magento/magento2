@@ -49,7 +49,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
         $reviewsCount = $this->_ratingFactory->create()->getTotalReviews($entityId, true);
         if ($reviewsCount == 0) {
             #return __('Be the first to review this product');
-            $this->setTemplate('empty.phtml');
+            $this->setTemplate('Magento_Review::empty.phtml');
             return parent::_toHtml();
         }
 
