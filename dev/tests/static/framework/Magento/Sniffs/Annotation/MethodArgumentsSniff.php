@@ -123,8 +123,9 @@ class MethodArgumentsSniff implements Sniff
      */
     private function getMethodParameters(array $paramDefinitions) : array
     {
+        $paramDefinitionsCount = count($paramDefinitions;
         $paramName = [];
-        for ($i = 0; $i < count($paramDefinitions); $i++) {
+        for ($i = 0; $i < $paramDefinitionsCount; $i++) {
             if (isset($paramDefinitions[$i]['paramName'])) {
                 $paramName[] = $paramDefinitions[$i]['paramName'];
             }
@@ -369,9 +370,10 @@ class MethodArgumentsSniff implements Sniff
     ) : void {
         $argumentsCount = count($methodArguments);
         $parametersCount = count($paramPointers);
+        $definitionsCount = count($paramDefinitions);
         if ($argumentsCount <= $parametersCount && $argumentsCount > 0) {
             $duplicateParameters = [];
-            for ($i = 0; $i < sizeof($paramDefinitions); $i++) {
+            for ($i = 0; $i < $definitionsCount; $i++) {
                 if (isset($paramDefinitions[$i]['paramName'])) {
                     $parameterContent = $paramDefinitions[$i]['paramName'];
                     for ($j = $i + 1; $j < count($paramDefinitions); $j++) {

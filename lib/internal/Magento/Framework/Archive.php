@@ -95,9 +95,10 @@ class Archive
     public function pack($source, $destination = 'packed.tgz', $skipRoot = false)
     {
         $archivers = $this->_getArchivers($destination);
+        $archiversCount = count($archivers);
         $interimSource = '';
-        for ($i = 0; $i < count($archivers); $i++) {
-            if ($i == count($archivers) - 1) {
+        for ($i = 0; $i < $archiversCount; $i++) {
+            if ($i == $archiversCount - 1) {
                 $packed = $destination;
             } else {
                 $packed = dirname($destination) . '/~tmp-' . microtime(true) . $archivers[$i] . '.' . $archivers[$i];
@@ -126,7 +127,8 @@ class Archive
     {
         $archivers = $this->_getArchivers($source);
         $interimSource = '';
-        for ($i = count($archivers) - 1; $i >= 0; $i--) {
+        $archiversCount = count($archivers);
+        for ($i = $archiversCount - 1; $i >= 0; $i--) {
             if ($tillTar && $archivers[$i] == self::TAPE_ARCHIVER) {
                 break;
             }
