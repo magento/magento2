@@ -5,46 +5,56 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Eav\Api\Data\AttributeGroupExtensionInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Model\Entity\Attribute\Group as AttributeGroup;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group as AttributeGroupResourceModel;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Filter\Translit;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 
 /**
  * @api
  * @method int getSortOrder()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
+ * @method AttributeGroup setSortOrder(int $value)
  * @method int getDefaultId()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setDefaultId(int $value)
+ * @method AttributeGroup setDefaultId(int $value)
  * @method string getAttributeGroupCode()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeGroupCode(string $value)
+ * @method AttributeGroup setAttributeGroupCode(string $value)
  * @method string getTabGroupCode()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
+ * @method AttributeGroup setTabGroupCode(string $value)
  * @since 100.0.2
  */
-class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Eav\Api\Data\AttributeGroupInterface
+class Group extends AbstractExtensibleModel implements AttributeGroupInterface
 {
     /**
-     * @var \Magento\Framework\Filter\Translit
+     * @var Translit
      */
     private $translitFilter;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Filter\Translit $translitFilter
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Translit $translitFilter
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Filter\Translit $translitFilter,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Translit $translitFilter,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -67,7 +77,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class);
+        $this->_init(AttributeGroupResourceModel::class);
     }
 
     /**
@@ -99,23 +109,21 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function beforeSave()
     {
-        if (!$this->getAttributeGroupCode()) {
-            $groupName = $this->getAttributeGroupName();
-            if ($groupName) {
-                $attributeGroupCode = trim(
-                    preg_replace(
-                        '/[^a-z0-9]+/',
-                        '-',
-                        $this->translitFilter->filter(strtolower($groupName))
-                    ),
-                    '-'
-                );
-                if (empty($attributeGroupCode)) {
-                    // in the following code md5 is not used for security purposes
-                    $attributeGroupCode = md5($groupName);
-                }
-                $this->setAttributeGroupCode($attributeGroupCode);
+        $groupName = $this->getAttributeGroupName();
+        if ($groupName) {
+            $attributeGroupCode = trim(
+                preg_replace(
+                    '/[^a-z0-9]+/',
+                    '-',
+                    $this->translitFilter->filter(strtolower($groupName))
+                ),
+                '-'
+            );
+            if (empty($attributeGroupCode)) {
+                // in the following code md5 is not used for security purposes
+                $attributeGroupCode = md5($groupName);
             }
+            $this->setAttributeGroupCode($attributeGroupCode);
         }
         return parent::beforeSave();
     }
@@ -172,7 +180,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
+     * @return AttributeGroupExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -182,11 +190,11 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+     * @param AttributeGroupExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+        AttributeGroupExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
