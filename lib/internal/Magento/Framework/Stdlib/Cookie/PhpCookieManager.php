@@ -29,7 +29,7 @@ class PhpCookieManager implements CookieManagerInterface
      * RFC 2109 - Page 15
      * http://www.ietf.org/rfc/rfc6265.txt
      */
-    const MAX_NUM_COOKIES = 50;
+    const MAX_NUM_COOKIES = 180;
     const MAX_COOKIE_SIZE = 4096;
     const EXPIRE_NOW_TIME = 1;
     const EXPIRE_AT_END_OF_SESSION_TIME = 0;
