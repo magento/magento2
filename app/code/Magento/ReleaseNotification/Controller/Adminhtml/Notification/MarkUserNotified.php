@@ -85,6 +85,9 @@ class MarkUserNotified extends Action
         return $resultJson->setData($responseContent);
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return parent::_isAllowed();

@@ -63,7 +63,7 @@ class SwatchAttributeType
      */
     public function isSwatchAttribute(AttributeInterface $productAttribute)
     {
-        return ($this->isTextSwatch($productAttribute) || $this->isVisualSwatch($productAttribute));
+        return $this->isTextSwatch($productAttribute) || $this->isVisualSwatch($productAttribute);
     }
 
     /**

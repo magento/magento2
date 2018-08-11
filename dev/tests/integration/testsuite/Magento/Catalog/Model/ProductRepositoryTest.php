@@ -12,6 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Provide tests for ProductRepository model.
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,6 +31,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -36,6 +44,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->get(ProductRepositoryInterface::class);
         $this->productResource = Bootstrap::getObjectManager()
             ->get(ProductResource::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
     }
 
     /**
@@ -121,5 +131,71 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         self::assertSame('1.1200', $product->getPrice());
         self::assertSame('1.2300', $product->getWeight());
         self::assertSame('simple', $product->getTypeId());
+    }
+
+    /**
+     * Tests product repository update should use provided store code.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductUpdate()
+    {
+        $sku = 'simple';
+        $nameUpdated = 'updated';
+        $product = $this->productRepository->get($sku, false, 0);
+        $product->setName($nameUpdated);
+        $this->productRepository->save($product);
+        $product = $this->productRepository->get($sku, false, 0);
+        self::assertEquals(
+            $nameUpdated,
+            $product->getName()
+        );
+    }
+
+    /**
+     * Check a case when product should be retrieved with different SKU variations.
+     *
+     * @param string $sku
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+    public function testGetProduct(string $sku)
+    {
+        $expectedSku = 'simple';
+        $product = $this->productRepository->get($sku);
+
+        self::assertNotEmpty($product);
+        self::assertEquals($expectedSku, $product->getSku());
+    }
+
+    /**
+     * Get list of SKU variations for the same product.
+     *
+     * @return array
+     */
+    public function skuDataProvider(): array
+    {
+        return [
+            ['sku' => 'simple'],
+            ['sku' => 'Simple'],
+            ['sku' => 'simple ']
+        ];
+    }
+
+    /**
+     * Checks filtering by store_id.
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @return void
+     */
+    public function testFilterByStoreId()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('store_id', '1', 'eq')
+            ->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+
+        $this->assertGreaterThanOrEqual(1, $count);
     }
 }

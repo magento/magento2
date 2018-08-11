@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -17,6 +19,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -529,6 +533,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests Customizable Options price values including negative value.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
@@ -538,12 +544,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $options = $this->_model->getOptions();
         $this->assertNotEmpty($options);
         $expectedValue = [
-            '3-1-select' => 3000.00,
+            '3-1-select' => -3000.00,
             '3-2-select' => 5000.00,
             '4-1-radio' => 600.234,
             '4-2-radio' => 40000.00
         ];
         foreach ($options as $option) {
+            if (!$option->getValues()) {
+                continue;
+            }
             foreach ($option->getValues() as $value) {
                 $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
             }
@@ -585,5 +594,46 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $this->assertEquals(false, $stockItem->getIsInStock());
+    }
+
+    /**
+     * Check stock status changing if backorders functionality enabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @dataProvider productWithBackordersDataProvider
+     * @param int $qty
+     * @param int $stockStatus
+     * @param bool $expectedStockStatus
+     */
+    public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus)
+    {
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'backorders' => 1,
+            'qty' => $qty,
+            'is_in_stock' => $stockStatus
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+
+        $this->assertEquals($expectedStockStatus, $stockItem->getIsInStock());
+    }
+
+    /**
+     * DataProvider for the testSaveWithBackordersEnabled()
+     * @return array
+     */
+    public function productWithBackordersDataProvider(): array
+    {
+        return [
+            [0, 0, false],
+            [0, 1, true],
+            [-1, 0, false],
+            [-1, 1, true],
+            [1, 1, true],
+        ];
     }
 }

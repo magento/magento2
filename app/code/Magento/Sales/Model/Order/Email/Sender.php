@@ -84,6 +84,8 @@ abstract class Sender
             $sender->sendCopyTo();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
+
+            return false;
         }
 
         return true;

@@ -11,8 +11,11 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection as Attrib
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
 
 /**
+ * Tests \Magento\Eav\Model\Entity\Attribute\Source\Table.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TableTest extends \PHPUnit\Framework\TestCase
@@ -58,6 +61,11 @@ class TableTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeOptionCollectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     */
+    private $escaper;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -99,11 +107,16 @@ class TableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
             [
                 'attrOptionCollectionFactory' => $this->collectionFactory,
-                'attrOptionFactory' => $this->attrOptionFactory
+                'attrOptionFactory' => $this->attrOptionFactory,
+                'escaper' => $this->escaper,
             ]
         );
         $this->model->setAttribute($this->abstractAttributeMock);
@@ -194,6 +207,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
     }
 
+    /**
+     * @return array
+     */
     public function specificOptionsProvider()
     {
         return [
@@ -204,7 +220,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getOptionTextProvider
-     * @param array $optionsIds
+     * @param array|string $optionsIds
      * @param array|string $value
      * @param array $options
      * @param array|string $expectedResult
@@ -245,21 +261,41 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactory->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
+        $this->escaper
+            ->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->assertEquals($expectedResult, $this->model->getOptionText($value));
     }
 
+    /**
+     * @return array
+     */
     public function getOptionTextProvider()
     {
         return [
             [
                 ['1', '2'],
                 '1,2',
-                [['label' => 'test label 1', 'value' => '1'], ['label' => 'test label 2', 'value' => '1']],
+                [
+                    ['label' => 'test label 1', 'value' => '1'],
+                    ['label' => 'test label 2', 'value' => '1'],
+                ],
                 ['test label 1', 'test label 2'],
             ],
-            ['1', '1', [['label' => 'test label', 'value' => '1']], 'test label'],
-            ['5', '5', [['label' => 'test label', 'value' => '5']], 'test label']
+            [
+                '1',
+                '1',
+                [['label' => 'test label', 'value' => '1']],
+                'test label',
+            ],
+            [
+                '5',
+                '5',
+                [['label' => 'test label', 'value' => '5']],
+                'test label',
+            ],
         ];
     }
 

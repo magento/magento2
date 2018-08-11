@@ -195,6 +195,9 @@ class ValidateTest extends AttributeTest
         $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
     }
 
+    /**
+     * @return array
+     */
     public function provideUniqueData()
     {
         return [
@@ -246,6 +249,20 @@ class ValidateTest extends AttributeTest
                         "option_0" => "",
                         "option_1" => "1",
                         "option_2" => "",
+                    ]
+                ], false
+            ],
+            'empty and deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [1, 0],
+                        "option_1" => [2, 0],
+                        "option_2" => ["", ""],
+                    ],
+                    'delete' => [
+                        "option_0" => "",
+                        "option_1" => "",
+                        "option_2" => "1",
                     ]
                 ], false
             ],
@@ -321,7 +338,34 @@ class ValidateTest extends AttributeTest
                 (object) [
                     'error' => false,
                 ]
-            ]
+            ],
+            'empty admin scope options and deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '1',
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ],
+            ],
+            'empty admin scope options and not deleted' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                    'delete' => [
+                        'option_0' => '0',
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'The value of Admin scope can\'t be empty.',
+                ],
+            ],
         ];
     }
 }

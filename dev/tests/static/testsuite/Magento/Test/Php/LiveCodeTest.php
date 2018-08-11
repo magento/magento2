@@ -201,11 +201,14 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
     public function testCodeStyle()
     {
+        $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
+            ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
+
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $this->assertEquals(
             0,
-            $result = $codeSniffer->run($this->getFullWhitelist()),
+            $result = $codeSniffer->run($whiteList),
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
         );
     }

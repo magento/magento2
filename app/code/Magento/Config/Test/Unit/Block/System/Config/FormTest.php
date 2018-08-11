@@ -224,6 +224,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_formMock, $object->getForm());
     }
 
+    /**
+     * @return array
+     */
     public function initFormDataProvider()
     {
         return [
@@ -337,6 +340,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $object->initForm();
     }
 
+    /**
+     * @return array
+     */
     public function initGroupDataProvider()
     {
         return [

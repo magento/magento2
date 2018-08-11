@@ -82,6 +82,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
+
         return $this;
     }
 
@@ -164,6 +165,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
             []
@@ -179,6 +181,16 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
             []
+        )->join(
+            ['sw' => $this->getTable('store_website')],
+            "cs.website_id = sw.website_id",
+            []
+        )->joinLeft(
+            ['cpw' => $this->getTable('catalog_product_website')],
+            "i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id",
+            []
+        )->where(
+            'cpw.product_id IS NOT NULL'
         )->group(
             ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
         )->columns(

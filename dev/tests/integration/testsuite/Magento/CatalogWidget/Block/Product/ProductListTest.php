@@ -38,6 +38,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
      * 4. Set at least 2 options of multiselect attribute to match products for the product list widget
      * 5. Load collection for product list widget and make sure that number of loaded products is correct
      *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
     public function testCreateCollection()
@@ -75,6 +76,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
     /**
      * Test product list widget can process condition with multiple product sku.
      *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testCreateCollectionWithMultipleSkuCondition()
@@ -83,6 +85,38 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
             '|Condition||Product`,`attribute`:`sku`,`operator`:`==`,`value`:`simple1, simple2`^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->performAssertions(2);
+    }
+
+    /**
+     * Test product list widget can process condition with dropdown type of attribute which has Store Scope
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_dropdown_attribute.php
+     */
+    public function testCreateCollectionWithDropdownAttributeStoreScope()
+    {
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        );
+        $attribute->load('dropdown_attribute', 'attribute_code');
+        $dropdownAttributeOptionIds = [];
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getValue()) {
+                $dropdownAttributeOptionIds[] = $option->getValue();
+            }
+        }
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,' .
+            '`aggregator`:`any`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[0] . '`^],`1--2`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[1] . '`^]^]';
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->performAssertions(2);
+        $attribute->setUsedInProductListing(0);
+        $attribute->save();
         $this->performAssertions(2);
     }
 

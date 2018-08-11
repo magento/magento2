@@ -184,8 +184,7 @@ class BundleSelectionPrice extends AbstractPrice
     {
         if ($this->bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
             return parent::getProduct();
-        } else {
-            return $this->bundleProduct;
         }
+        return $this->bundleProduct;
     }
 }

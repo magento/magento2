@@ -21,7 +21,10 @@ define([
             visible:        true,
             error:          false,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**

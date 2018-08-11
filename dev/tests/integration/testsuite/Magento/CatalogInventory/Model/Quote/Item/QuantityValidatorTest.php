@@ -83,7 +83,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptions()
@@ -108,7 +108,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testQuoteWithOptionsWithErrors()
@@ -130,8 +130,29 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);
         $this->optionInitializer->expects($this->any())->method('initialize')->willReturn($resultMock);
         $resultMock->expects($this->any())->method('getHasError')->willReturn(true);
+        $this->setMockStockStateResultToQuoteItemOptions($quoteItem, $resultMock);
         $this->observer->execute($this->observerMock);
         $this->assertCount(2, $quoteItem->getErrorInfos(), 'Expected 2 errors in QuoteItem');
+    }
+
+    /**
+     * Set mock of Stock State Result to Quote Item Options.
+     *
+     *
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
+     * @param \PHPUnit_Framework_MockObject_MockObject $resultMock
+     */
+    private function setMockStockStateResultToQuoteItemOptions($quoteItem, $resultMock)
+    {
+        if ($options = $quoteItem->getQtyOptions()) {
+            foreach ($options as $option) {
+                $option->setStockStateResult($resultMock);
+            }
+
+            return;
+        }
+
+        $this->fail('Test failed since Quote Item does not have Qty options.');
     }
 
     /**

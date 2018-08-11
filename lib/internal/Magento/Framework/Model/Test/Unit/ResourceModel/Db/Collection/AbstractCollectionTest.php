@@ -7,7 +7,6 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -95,6 +94,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
+    /**
+     * @return object
+     */
     protected function getUut()
     {
         return $this->objectManagerHelper->getObject(
@@ -220,6 +222,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
+    /**
+     * @return array
+     */
     public function getSelectDataProvider()
     {
         $columnMock = $this->createPartialMock(\Zend_Db_Expr::class, ['__toString']);
@@ -246,6 +251,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->uut->wereFieldsToSelectChanged());
     }
 
+    /**
+     * @return array
+     */
     public function addFieldToSelectDataProvider()
     {
         return [
@@ -265,6 +273,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->uut->addExpressionFieldToSelect($alias, $expression, $fields) instanceof Uut);
     }
 
+    /**
+     * @return array
+     */
     public function addExpressionFieldToSelectDataProvider()
     {
         return [
@@ -289,6 +300,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedWereFieldsToSelectChanged, $this->uut->wereFieldsToSelectChanged());
     }
 
+    /**
+     * @return array
+     */
     public function removeFieldFromSelectDataProvider()
     {
         return [
@@ -376,6 +390,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->uut->getJoinedTables());
     }
 
+    /**
+     * @return array
+     */
     public function joinDataProvider()
     {
         return [

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Mview\Config;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mview\View\SubscriptionInterface;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface

@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Client;
 
-use Magento\Framework\HTTP\ZendClient;
+use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 
 /**
  * Class RequestBuilder
@@ -50,13 +50,16 @@ class RequestBuilder
      *
      * @param string $url
      * @param string $method
-     * @param array  $params
+     * @param array $params
+     * @param int|null $storeId
      * @return array
+     * @throws ApiCallException
+     * @throws \Zend_Http_Client_Exception
      */
-    public function doRequest($url, $method, array $params = [])
+    public function doRequest($url, $method, array $params = [], $storeId = null)
     {
-        $client = $this->clientCreator->create($url, $method, $params);
-        $response = $this->requestSender->send($client);
+        $client = $this->clientCreator->create($url, $method, $params, $storeId);
+        $response = $this->requestSender->send($client, $storeId);
         $result = $this->responseHandler->handle($response);
 
         return $result;

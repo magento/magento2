@@ -122,7 +122,7 @@ class PreventExpressCheckoutObserverTest extends \PHPUnit\Framework\TestCase
         $this->_event->setControllerAction(null);
         $this->_model->execute($this->_observer);
 
-        $this->_event->setControllerAction(new \StdClass());
+        $this->_event->setControllerAction(new \stdClass());
         $this->_model->execute($this->_observer);
 
         $expectedActionName = 'realAction';

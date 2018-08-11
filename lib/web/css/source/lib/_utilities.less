@@ -260,9 +260,8 @@
     @_line-height: normal
 ) {
     .lib-font-size(@_font-size);
-    font-size: @_font-size;
+    .lib-line-height(@_line-height);
     letter-spacing: normal;
-    line-height: @_line-height;
 }
 
 //
@@ -332,18 +331,6 @@
     @_module
 ) when not (@_module = false) and not (@_module = '') and (@urls-resolved = true) {
     @url: "@{baseDir}@{_module}/@{_path}";
-}
-
-//
-//  Url existing check
-//  ---------------------------------------------
-
-.lib-url-check(@_path) {
-    @lib-url-check-output: @_path;
-}
-
-.lib-url-check(@_path) when not (@_path = false) {
-    @lib-url-check-output: url(@_path);
 }
 
 //

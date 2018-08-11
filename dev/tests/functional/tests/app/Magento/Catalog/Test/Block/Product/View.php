@@ -405,8 +405,10 @@ class View extends AbstractConfigureBlock
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        $this->getMiniCartBlock()->waitInit();
         $this->getMiniCartBlock()->openMiniCart();
         $this->getMiniCartBlock()->clickBraintreePaypalButton();
+
         return $currentWindow;
     }
 
@@ -680,6 +682,7 @@ class View extends AbstractConfigureBlock
      */
     public function isVideoVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->_rootElement->find($this->videoContainer)->isVisible();
     }
 

@@ -19,7 +19,6 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Setup\FilePermissions;
@@ -174,11 +173,6 @@ class Installer
     private $objectManagerProvider;
 
     /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var SetupConfigModel
      */
     private $setupConfigModel;
@@ -239,7 +233,6 @@ class Installer
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param Context $context
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
      * @param DbValidator $dbValidator
@@ -264,7 +257,6 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         ObjectManagerProvider $objectManagerProvider,
-        Context $context,
         SetupConfigModel $setupConfigModel,
         CleanupFiles $cleanupFiles,
         DbValidator $dbValidator,
@@ -287,7 +279,6 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
         $this->dbValidator = $dbValidator;
@@ -764,16 +755,24 @@ class Installer
      * Installs DB schema
      *
      * @return void
+     * @throws \Exception
      */
     public function installSchema()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -784,12 +783,19 @@ class Installer
      */
     public function installDataFixtures()
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -836,7 +842,7 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
-        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
+        $resource = $this->objectManagerProvider->get()->create(\Magento\Framework\Module\ModuleResource::class);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -968,7 +974,7 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -1012,7 +1018,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();
     }

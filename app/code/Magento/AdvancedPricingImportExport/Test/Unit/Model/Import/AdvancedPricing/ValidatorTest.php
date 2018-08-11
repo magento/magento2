@@ -77,6 +77,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validator->init(null);
     }
 
+    /**
+     * @return array
+     */
     public function isValidDataProvider()
     {
         return [

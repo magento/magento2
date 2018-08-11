@@ -8,10 +8,13 @@
 
 ?>
 <div class="block block-dashboard-orders">
-<?php $_orders = $block->getOrders(); ?>
+<?php
+    $_orders = $block->getOrders();
+    $count = count($_orders);
+?>
     <div class="block-title order">
         <strong><?= /* @escapeNotVerified */ __('Recent Orders') ?></strong>
-        <?php if (sizeof($_orders->getItems()) > 0): ?>
+        <?php if ($count > 0): ?>
             <a class="action view" href="<?= /* @escapeNotVerified */ $block->getUrl('sales/order/history') ?>">
                 <span><?= /* @escapeNotVerified */ __('View All') ?></span>
             </a>
@@ -19,7 +22,7 @@
     </div>
     <div class="block-content">
     <?= $block->getChildHtml() ?>
-    <?php if (sizeof($_orders->getItems()) > 0): ?>
+    <?php if ($count > 0): ?>
         <div class="table-wrapper orders-recent">
             <table class="data table table-order-items recent" id="my-orders-table">
                 <caption class="table-caption"><?= /* @escapeNotVerified */ __('Recent Orders') ?></caption>

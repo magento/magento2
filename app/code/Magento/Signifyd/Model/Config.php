@@ -34,13 +34,15 @@ class Config
      * If this config option set to false no Signifyd integration should be available
      * (only possibility to configure Signifyd setting in admin)
      *
+     * @param int|null $storeId
      * @return bool
      */
-    public function isActive()
+    public function isActive($storeId = null)
     {
         $enabled = $this->scopeConfig->isSetFlag(
             'fraud_protection/signifyd/active',
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
         return $enabled;
     }
@@ -51,13 +53,15 @@ class Config
      * @see https://www.signifyd.com/docs/api/#/introduction/authentication
      * @see https://app.signifyd.com/settings
      *
+     * @param int|null $storeId
      * @return string
      */
-    public function getApiKey()
+    public function getApiKey($storeId = null)
     {
         $apiKey = $this->scopeConfig->getValue(
             'fraud_protection/signifyd/api_key',
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
         return $apiKey;
     }
@@ -66,13 +70,15 @@ class Config
      * Base URL to Signifyd REST API.
      * Usually equals to https://api.signifyd.com/v2 and should not be changed
      *
+     * @param int|null $storeId
      * @return string
      */
-    public function getApiUrl()
+    public function getApiUrl($storeId = null)
     {
         $apiUrl = $this->scopeConfig->getValue(
             'fraud_protection/signifyd/api_url',
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
         return $apiUrl;
     }
@@ -80,13 +86,15 @@ class Config
     /**
      * If is "true" extra information about interaction with Signifyd API are written to debug.log file
      *
+     * @param int|null $storeId
      * @return bool
      */
-    public function isDebugModeEnabled()
+    public function isDebugModeEnabled($storeId = null)
     {
         $debugModeEnabled = $this->scopeConfig->isSetFlag(
             'fraud_protection/signifyd/debug',
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
         return $debugModeEnabled;
     }

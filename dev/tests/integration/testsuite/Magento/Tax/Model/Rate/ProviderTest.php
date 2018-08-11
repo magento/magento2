@@ -15,10 +15,24 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
  * Class ProviderTest provides coverage
  * of Tax Rate model options provider.
  */
-class ProviderTest extends \PHPUnit\Framework\TestCase
+class ProviderTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
     /**
      * Test of requesting tax rates by search criteria.
+     * @magentoDbIsolation disabled
      */
     public function testToOptionArray()
     {
@@ -56,5 +70,13 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             $provider->toOptionArray($searchCriteria),
             'Tax rate options are invalid.'
         );
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

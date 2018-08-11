@@ -106,6 +106,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+        if (version_compare($context->getVersion(), '2.0.10', '<')) {
+            $this->expandRemoteIpField($installer);
+        }
     }
 
     /**
@@ -139,6 +142,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $installer->getTable('sales_invoice_grid', self::$connectionName),
             $installer->getIdxName('sales_invoice_grid', ['base_grand_total'], '', self::$connectionName),
             ['base_grand_total']
+        );
+    }
+
+    /**
+     * @param SchemaSetupInterface $installer
+     * @return void
+     */
+    private function expandRemoteIpField(SchemaSetupInterface $installer)
+    {
+        $connection = $installer->getConnection(self::$connectionName);
+        $connection->modifyColumn(
+            $installer->getTable('sales_order', self::$connectionName),
+            'remote_ip',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 45
+            ]
         );
     }
 }

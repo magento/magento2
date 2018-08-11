@@ -62,4 +62,22 @@
             <argument name="messageMapping" xsi:type="object">Magento\Payment\Gateway\ErrorMapper\NullMappingData</argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\Payment\Model\Method\VirtualDebug" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/payment.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Payment\Model\Method\VirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Magento\Payment\Model\Method\VirtualDebug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="logger" xsi:type="object">Magento\Payment\Model\Method\VirtualLogger</argument>
+        </arguments>
+    </type>
 </config>

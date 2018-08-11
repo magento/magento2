@@ -71,6 +71,7 @@
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation6" summary="Change price on scope level for child product" ticketId="MAGETWO-60325">
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="data" xsi:type="array">
                     <item name="price" xsi:type="string">0.07</item>

@@ -160,4 +160,53 @@ class CheckUserEditObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observer->execute(new \Magento\Framework\Event\Observer(['controller_action' => $controller]));
     }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithCustomerIdNull()
+    {
+        $customerId = null;
+        $captchaValue = 'some-value';
+
+        $captcha = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $captcha->expects($this->once())
+            ->method('isRequired')
+            ->willReturn(true);
+        $captcha->expects($this->once())
+            ->method('isCorrect')
+            ->with($captchaValue)
+            ->willReturn(false);
+
+        $this->helperMock->expects($this->once())
+            ->method('getCaptcha')
+            ->with(\Magento\Captcha\Observer\CheckUserEditObserver::FORM_ID)
+            ->willReturn($captcha);
+
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $request->expects($this->any())
+            ->method('getPost')
+            ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
+            ->willReturn([\Magento\Captcha\Observer\CheckUserEditObserver::FORM_ID => $captchaValue]);
+
+        $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
+        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
+
+        $this->captchaStringResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($request, \Magento\Captcha\Observer\CheckUserEditObserver::FORM_ID)
+            ->willReturn($captchaValue);
+
+        $customerDataMock = $this->createMock(\Magento\Customer\Model\Data\Customer::class);
+
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->customerSessionMock->expects($this->atLeastOnce())
+            ->method('getCustomer')
+            ->willReturn($customerDataMock);
+
+        $this->observer->execute(new \Magento\Framework\Event\Observer(['controller_action' => $controller]));
+    }
 }
