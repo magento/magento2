@@ -59,9 +59,11 @@ class CleanExpiredQuotes
             $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
             $quotes->addFieldToFilter('is_active', 0);
 
-            foreach ($this->getExpireQuotesAdditionalFilterFields() as $field => $condition) {
-                $quotes->addFieldToFilter($field, $condition);
-            }
+            foreach ($this->getExpireQuotesAdditionalFilterFields() as $rules) {
+                foreach ($rules as $field => $condition) {
+                    $quotes->addFieldToFilter($field, $condition);
+                }
+             }
 
             $quotes->walk('delete');
         }
@@ -85,6 +87,6 @@ class CleanExpiredQuotes
      */
     public function setExpireQuotesAdditionalFilterFields(array $fields)
     {
-        $this->expireQuotesFilterFields = $fields;
+        $this->expireQuotesFilterFields[] = $fields;
     }
 }
