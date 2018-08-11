@@ -256,6 +256,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test code quality using phpcs
+     */
     public function testCodeStyle()
     {
         $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
@@ -273,6 +276,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test code quality using phpmd
+     */
     public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
@@ -301,6 +307,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test code quality using phpcpd
+     */
     public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
