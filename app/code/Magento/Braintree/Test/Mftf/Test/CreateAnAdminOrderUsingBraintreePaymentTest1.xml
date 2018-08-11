@@ -42,7 +42,7 @@
 
         <!--Create New User With Specific Role-->
         <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
-        <actionGroup ref="AdminCreateUser" stepKey="AdminCreateNewUser"/>
+        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
 
         <!--SignOut-->
         <actionGroup ref="SignOut" stepKey="signOutFromAdmin"/>
