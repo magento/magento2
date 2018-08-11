@@ -778,6 +778,13 @@ define([
             },
             $.mage.__('Please enter a valid date.')
         ],
+        'validate-date-range': [
+            function (value, params, additionalParams) {
+                var from_date = jQuery( "input[name*='" + params + "']" ).val();
+                return moment.utc(value).unix() >= moment.utc(from_date).unix();
+            },
+            $.mage.__('Make sure the To Date is later than or the same as the From Date.')
+        ],
         'validate-identifier': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(value);
