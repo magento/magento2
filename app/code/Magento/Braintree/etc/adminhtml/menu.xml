@@ -7,6 +7,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Braintree::settlement_report" title="Braintree Settlement" translate="title" module="Magento_Braintree" sortOrder="80" parent="Magento_Reports::report_salesroot" action="braintree/report" resource="Magento_Braintree::settlement_report"/>
+        <add
+                id="Magento_Braintree::settlement_report"
+                title="Braintree Settlement"
+                translate="title"
+                module="Magento_Braintree"
+                sortOrder="80"
+                parent="Magento_Reports::report_salesroot"
+                action="braintree/report"
+                resource="Magento_Braintree::settlement_report"/>
     </menu>
 </config>
