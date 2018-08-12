@@ -17,11 +17,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     const KEEP_TRANSPARENCY = true;
 
     /**
-     * Mime Type for png images
-     */
-    const PNG_MIME_TYPE = 'image/png';
-
-    /**
      * Required extensions
      *
      * @var array
@@ -81,7 +76,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
             $this->_keepTransparency = self::KEEP_TRANSPARENCY;
             if ($this->_imageHandler) {
-                $this->_fillBackgroundColor($this->_imageHandler);
+                $isAlpha = $this->checkAlpha($this->_fileName);
+                if ($isAlpha) {
+                    $this->_fillBackgroundColor($this->_imageHandler);
+                }
             }
         }
     }
