@@ -16,6 +16,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
+use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 
 /**
  * Shipping method read service
@@ -64,6 +65,11 @@ class ShippingMethodManagement implements
     private $addressFactory;
 
     /**
+     * @var QuoteAddressResource
+     */
+    private $quoteAddressResource;
+
+    /**
      * Constructor
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -71,13 +77,15 @@ class ShippingMethodManagement implements
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
      * @param AddressInterfaceFactory|null $addressFactory
+     * @param QuoteAddressResource|null $quoteAddressResource
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         Cart\ShippingMethodConverter $converter,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
-        AddressInterfaceFactory $addressFactory = null
+        AddressInterfaceFactory $addressFactory = null,
+        QuoteAddressResource $quoteAddressResource = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
@@ -85,6 +93,8 @@ class ShippingMethodManagement implements
         $this->totalsCollector = $totalsCollector;
         $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()
             ->get(AddressInterfaceFactory::class);
+        $this->quoteAddressResource = $quoteAddressResource ?: ObjectManager::getInstance()
+            ->get(QuoteAddressResource::class);
     }
 
     /**
@@ -172,6 +182,8 @@ class ShippingMethodManagement implements
      * @return void
      * @throws InputException The shipping method is not valid for an empty cart.
      * @throws NoSuchEntityException CThe Cart includes virtual product(s) only, so a shipping address is not used.
+     * @throws StateException The billing or shipping address is not set.
+     * @throws \Exception
      */
     public function apply($cartId, $carrierCode, $methodCode)
     {
@@ -189,7 +201,9 @@ class ShippingMethodManagement implements
         }
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            return;
+            // Remove empty quote address
+            $this->quoteAddressResource->delete($shippingAddress);
+            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
     }
