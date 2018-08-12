@@ -8,6 +8,7 @@ namespace Magento\Multishipping\Controller;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\StateException;
 
 /**
  * Multishipping checkout controller
@@ -150,7 +151,14 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
             return parent::dispatch($request);
         }
 
-        $quote = $this->_getCheckout()->getQuote();
+        try {
+            $checkout = $this->_getCheckout();
+        } catch (StateException $e) {
+            $this->getResponse()->setRedirect($this->_getHelper()->getMSNewShippingUrl());
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            return parent::dispatch($request);
+        }
+        $quote = $checkout->getQuote();
         if (!$quote->hasItems() || $quote->getHasError() || $quote->isVirtual()) {
             $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
