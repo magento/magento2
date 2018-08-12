@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Block\Media;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Image\Adapter\ConfigInterface;
 
 /**
@@ -32,6 +34,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
+     * @var Json
+     */
+    private $jsonEncoder;
+
+    /**
      * @var ConfigInterface
      */
     private $imageConfig;
@@ -39,19 +46,22 @@ class Uploader extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
-     * @param ConfigInterface $imageConfig
      * @param array $data
+     * @param Json $jsonEncoder
+     * @param ConfigInterface $imageConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        ConfigInterface $imageConfig,
-        array $data = []
+        array $data = [],
+        Json $jsonEncoder = null,
+        ConfigInterface $imageConfig = null
     ) {
-        parent::__construct($context, $data);
-
         $this->_fileSizeService = $fileSize;
-        $this->imageConfig = $imageConfig;
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+
+        parent::__construct($context, $data);
     }
 
     /**
@@ -140,7 +150,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     public function getConfigJson()
     {
-        return $this->_coreData->jsonEncode($this->getConfig()->getData());
+        return $this->jsonEncoder->encode($this->getConfig()->getData());
     }
 
     /**

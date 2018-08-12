@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCartPriceRulesFormSection">
+        <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="modalAcceptButton" type="button" selector="button.action-accept" timeout="30"/>
+
+        <!-- Rule Information (the main form on the page) -->
+        <element name="ruleName" type="input" selector="input[name='name']"/>
+        <element name="websites" type="multiselect" selector="select[name='website_ids']"/>
+        <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
+
+        <!-- Actions sub-form -->
+        <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
+        <element name="apply" type="select" selector="select[name='simple_action']"/>
+        <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
+        <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
+        <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+    </section>
+</sections>
