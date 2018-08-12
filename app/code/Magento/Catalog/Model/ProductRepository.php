@@ -472,8 +472,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
-        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $images = $product->getMediaGallery('images');
+        if ($images) {
+            $images = $this->determineImageRoles($product, $images);
+        }
+
+        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
+
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
@@ -672,6 +677,32 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Ascertain image roles, if they are not set against the gallery entries
+     *
+     * @param ProductInterface $product
+     * @param array $images
+     * @return array
+     */
+    private function determineImageRoles(ProductInterface $product, array $images)
+    {
+        $imagesWithRoles = [];
+        foreach ($images as $image) {
+            if (!isset($image['types'])) {
+                $image['types'] = [];
+                if (isset($image['file'])) {
+                    foreach (array_keys($product->getMediaAttributes()) as $attribute) {
+                        if ($image['file'] == $product->getData($attribute)) {
+                            $image['types'][] = $attribute;
+                        }
+                    }
+                }
+            }
+            $imagesWithRoles[] = $image;
+        }
+        return $imagesWithRoles;
     }
 
     /**
