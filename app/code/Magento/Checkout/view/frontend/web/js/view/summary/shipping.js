@@ -29,7 +29,7 @@ define([
             }
             shippingMethod = quote.shippingMethod();
 
-            if (typeof(shippingMethod['method_title']) != 'undefined') {
+            if (typeof(shippingMethod['method_title']) !== 'undefined') {
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
