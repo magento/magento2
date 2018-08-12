@@ -94,7 +94,7 @@
     </type>
     <type name="Magento\Framework\App\Area">
         <arguments>
-            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+            <argument name="translator" xsi:type="object">Magento\Framework\TranslateInterface</argument>
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>

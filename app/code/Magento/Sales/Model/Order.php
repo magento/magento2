@@ -993,8 +993,24 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
+     * @deprecated
+     * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
+    {
+        return $this->addCommentToStatusHistory($comment, $status, false);
+    }
+    
+    /**
+     * Add a comment to order status history
+     * Different or default status may be specified
+     *
+     * @param string $comment
+     * @param bool|string $status
+     * @param bool $isVisibleOnFront
+     * @return OrderStatusHistoryInterface
+     */
+    public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
         if (false === $status) {
             $status = $this->getStatus();
@@ -1009,6 +1025,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $comment
         )->setEntityName(
             $this->entityType
+        )->setIsVisibleOnFront(
+            $isVisibleOnFront
         );
         $this->addStatusHistory($history);
         return $history;
@@ -1752,7 +1770,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return $this->getInvoiceCollection()->count();
+        return boolval($this->getInvoiceCollection()->count());
     }
 
     /**
@@ -1762,7 +1780,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return $this->getShipmentsCollection()->count();
+        return boolval($this->getShipmentsCollection()->count());
     }
 
     /**
@@ -1772,7 +1790,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return $this->getCreditmemosCollection()->count();
+        return boolval($this->getCreditmemosCollection()->count());
     }
 
     /**

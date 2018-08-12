@@ -84,7 +84,7 @@ final class ConfigProvider implements ConfigProviderInterface
                 self::CODE => [
                     'isActive' => $this->config->isActive($storeId),
                     'clientToken' => $this->getClientToken(),
-                    'ccTypesMapper' => $this->config->getCctypesMapper(),
+                    'ccTypesMapper' => $this->config->getCcTypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig($storeId),
                     'availableCardTypes' => $this->config->getAvailableCardTypes($storeId),

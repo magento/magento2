@@ -89,7 +89,7 @@ Magento is thankful for any contribution that can improve our code base, documen
 
 <h2>Reporting security issues</h2>
 
-To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
+To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account <a href="https://bugcrowd.com/magento">there</a> to submit and follow-up your issue. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
 
 Stay up-to-date on the latest vulnerabilities and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
 

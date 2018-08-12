@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2018 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -117,6 +117,7 @@ class Config
         'description' => null,
         'keywords' => null,
         'robots' => null,
+        'title' => null,
     ];
 
     /**
@@ -173,7 +174,7 @@ class Config
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            str_replace('_', '-', $this->localeResolver->getLocale())
+            strstr($this->localeResolver->getLocale(), '_', true)
         );
     }
 
