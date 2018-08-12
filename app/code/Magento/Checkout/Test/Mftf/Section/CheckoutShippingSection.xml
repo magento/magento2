@@ -31,5 +31,6 @@
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
+        <element name="stateInput" type="input" selector="input[name=region]"/>
     </section>
 </sections>

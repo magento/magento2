@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
 
 class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\Model\Session
      */
     protected $sessionManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Captcha\Helper\Data
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $jsonFactoryMock;
 
@@ -38,12 +39,12 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Controller\Ajax\Login
      */
     protected $loginControllerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Serialize\Serializer\Json
      */
     protected $serializerMock;
 
@@ -57,6 +58,9 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->sessionManagerMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['setUsername']);
@@ -72,8 +76,12 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 
         $this->loginControllerMock->expects($this->any())->method('getRequest')
             ->will($this->returnValue($this->requestMock));
-        $this->captchaHelperMock->expects($this->once())->method('getCaptcha')
-            ->with('user_login')->will($this->returnValue($this->captchaMock));
+
+        $this->captchaHelperMock
+            ->expects($this->exactly(1))
+            ->method('getCaptcha')
+            ->will($this->returnValue($this->captchaMock));
+
         $this->formIds = ['user_login'];
         $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
@@ -86,6 +94,9 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test aroundExecute.
+     */
     public function testAroundExecute()
     {
         $username = 'name';
@@ -103,14 +114,24 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->captchaMock->expects($this->once())->method('logAttempt')->with($username);
         $this->captchaMock->expects($this->once())->method('isCorrect')->with($captchaString)
             ->will($this->returnValue(true));
-        $this->serializerMock->expects(($this->once()))->method('unserialize')->will($this->returnValue($requestData));
+        $this->serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($requestData));
 
         $closure = function () {
             return 'result';
         };
+
+        $this->captchaHelperMock
+            ->expects($this->exactly(1))
+            ->method('getCaptcha')
+            ->with('user_login')
+            ->will($this->returnValue($this->captchaMock));
+
         $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
+    /**
+     * Test aroundExecuteIncorrectCaptcha.
+     */
     public function testAroundExecuteIncorrectCaptcha()
     {
         $username = 'name';
@@ -128,18 +149,21 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->captchaMock->expects($this->once())->method('logAttempt')->with($username);
         $this->captchaMock->expects($this->once())->method('isCorrect')
             ->with($captchaString)->will($this->returnValue(false));
-        $this->serializerMock->expects(($this->once()))->method('unserialize')->will($this->returnValue($requestData));
+        $this->serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($requestData));
 
         $this->sessionManagerMock->expects($this->once())->method('setUsername')->with($username);
         $this->jsonFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->resultJsonMock));
 
-        $this->resultJsonMock->expects($this->once())->method('setData')
-            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])->will($this->returnValue('response'));
+        $this->resultJsonMock
+            ->expects($this->once())
+            ->method('setData')
+            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])
+            ->will($this->returnSelf());
 
         $closure = function () {
         };
-        $this->assertEquals('response', $this->model->aroundExecute($this->loginControllerMock, $closure));
+        $this->assertEquals($this->resultJsonMock, $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
@@ -151,7 +175,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock->expects($this->once())->method('getContent')
             ->will($this->returnValue(json_encode($requestContent)));
-        $this->serializerMock->expects(($this->once()))->method('unserialize')
+        $this->serializerMock->expects($this->once())->method('unserialize')
             ->will($this->returnValue($requestContent));
 
         $this->captchaMock->expects($this->once())->method('isRequired')->with($username)
@@ -168,7 +192,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function aroundExecuteCaptchaIsNotRequired()
+    public function aroundExecuteCaptchaIsNotRequired(): array
     {
         return [
             [
@@ -176,8 +200,31 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
                 'requestData' => ['username' => 'name', 'captcha_string' => 'string'],
             ],
             [
+                'username' => 'name',
+                'requestData' =>
+                    [
+                        'username' => 'name',
+                        'captcha_string' => 'string',
+                        'captcha_form_id' => $this->formIds[0]
+                    ],
+            ],
+            [
                 'username' => null,
-                'requestData' => ['captcha_string' => 'string'],
+                'requestData' =>
+                    [
+                        'username' => null,
+                        'captcha_string' => 'string',
+                        'captcha_form_id' => $this->formIds[0]
+                    ],
+            ],
+            [
+                'username' => 'name',
+                'requestData' =>
+                    [
+                        'username' => 'name',
+                        'captcha_string' => 'string',
+                        'captcha_form_id' => null
+                    ],
             ],
         ];
     }
