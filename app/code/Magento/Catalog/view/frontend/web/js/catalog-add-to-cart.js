@@ -7,8 +7,9 @@ define([
     'jquery',
     'mage/translate',
     'underscore',
+    'Magento_Catalog/js/product/view/product-ids-resolver',
     'jquery/ui'
-], function ($, $t, _) {
+], function ($, $t, _, idsResolver) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -83,26 +84,11 @@ define([
         },
 
         /**
-         * Extract product Id from form data.
-         *
-         * @param {jQuery} $form - jQuery form
-         * @return {String}
-         * @private
-         */
-        _getProductId: function ($form) {
-            var product = _.findWhere($form.serializeArray(), {
-                name: 'product'
-            });
-
-            return _.isUndefined(product) ? '' : product.value;
-        },
-
-        /**
          * @param {jQuery} form
          */
         ajaxSubmit: function (form) {
             var self = this,
-                productId = this._getProductId(form),
+                productIds = idsResolver(form),
                 formData = new FormData(form[0]);
 
             $(self.options.minicartSelector).trigger('contentLoading');
@@ -130,7 +116,7 @@ define([
 
                     $(document).trigger('ajax:addToCart', {
                         'sku': form.data().productSku,
-                        'productId': productId,
+                        'productIds': productIds,
                         'form': form,
                         'response': res
                     });

@@ -254,7 +254,7 @@ define([
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:removeFromCart', {
-                    productId: productData['product_id']
+                    productIds: [productData['product_id']]
                 });
             }
         },
