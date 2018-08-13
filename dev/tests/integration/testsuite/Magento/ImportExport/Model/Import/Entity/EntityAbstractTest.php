@@ -20,6 +20,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test for method _saveValidatedBunches()
+     *
+     * @return void
      */
     public function testSaveValidatedBunches() : void
     {
