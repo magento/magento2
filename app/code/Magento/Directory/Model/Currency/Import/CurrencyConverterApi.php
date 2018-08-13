@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
 namespace Magento\Directory\Model\Currency\Import;
 
 class CurrencyConverterApi extends AbstractImport
@@ -6,14 +12,14 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra';
+    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
 
     /**
      * Http Client Factory
      *
      * @var \Magento\Framework\HTTP\ZendClientFactory
      */
-    protected $httpClientFactory;
+    private $httpClientFactory;
 
     /**
      * Core scope config
@@ -68,7 +74,7 @@ class CurrencyConverterApi extends AbstractImport
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
-        foreach($currenciesTo as $to) {
+        foreach ($currenciesTo as $to) {
             set_time_limit(0);
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
