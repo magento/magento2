@@ -9,6 +9,7 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductCategoryList;
 
 /**
@@ -77,17 +78,22 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadAttributeOptions()
     {
         $productAttributes = $this->_productResource->loadAllAttributes()->getAttributesByCode();
+        $productAttributes = array_filter(
+            $productAttributes,
+            function ($attribute) {
+                return $attribute->getFrontendLabel() &&
+                    $attribute->getFrontendInput() !== 'text' &&
+                    $attribute->getAttributeCode() !== ProductInterface::STATUS;
+            }
+        );
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            if (!$attribute->getFrontendLabel() || $attribute->getFrontendInput() == 'text') {
-                continue;
-            }
             $attributes[$attribute->getAttributeCode()] = $attribute->getFrontendLabel();
         }
 
@@ -100,7 +106,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -224,7 +230,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMappedSqlField()
     {
@@ -243,7 +249,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function collectValidatedAttributes($productCollection)
     {
