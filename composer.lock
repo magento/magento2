@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57ae7ad75c4d8d50eb40e4ffe0fd2740",
+    "content-hash": "585e786f80e92e9aeeacdbb0721d9577",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -884,6 +884,13 @@
                 "reference": "68522e5768edc8e829d1f64b620a3de3753f1141",
                 "shasum": ""
             },
+            "archive": {
+                "exclude": [
+                    "/demos",
+                    "/documentation",
+                    "/tests"
+                ]
+            },
             "require": {
                 "php": ">=5.2.11"
             },
@@ -902,7 +909,6 @@
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
@@ -912,10 +918,14 @@
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "ZF1",
-                "framework"
+                "framework",
+                "zf1"
             ],
-            "time": "2018-04-06T18:49:03+00:00"
+            "support": {
+                "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/master",
+                "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
+            },
+            "time": "2018-04-06T17:12:22+00:00"
         },
         {
             "name": "monolog/monolog",
