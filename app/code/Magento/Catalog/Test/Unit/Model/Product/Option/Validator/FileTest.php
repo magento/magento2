@@ -19,9 +19,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $valueMock;
 
     /**
-     * Class dependencies initialization
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -60,7 +58,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Zend_Validate_Exception
      * @return void
      */
     public function testIsValidSuccess()
@@ -78,7 +75,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Zend_Validate_Exception
      * @return void
      */
     public function testIsValidWithNegativeImageSize()
@@ -99,7 +95,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Zend_Validate_Exception
      * @return void
      */
     public function testIsValidWithNegativeImageSizeY()

@@ -36,9 +36,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * Class dependencies initialization
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {

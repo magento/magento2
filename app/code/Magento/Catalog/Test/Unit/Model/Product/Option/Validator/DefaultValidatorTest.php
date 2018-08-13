@@ -19,9 +19,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     protected $valueMock;
 
     /**
-     * Class dependencies initialization
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {

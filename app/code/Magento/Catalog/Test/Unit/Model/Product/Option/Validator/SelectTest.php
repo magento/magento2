@@ -19,9 +19,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $valueMock;
 
     /**
-     * Class dependencies initialization
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -106,7 +104,6 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Zend_Validate_Exception
      * @return void
      */
     public function testIsValidateWithInvalidOptionValues()
@@ -128,7 +125,6 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Zend_Validate_Exception
      * @return void
      */
     public function testIsValidateWithEmptyValues()
