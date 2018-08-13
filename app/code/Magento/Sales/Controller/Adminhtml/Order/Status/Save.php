@@ -11,8 +11,9 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Sales\Model\Order\Status;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Sales\Controller\Adminhtml\Order\Status as StatusAction
 
-class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpPostActionInterface
+class Save extends StatusAction implements HttpPostActionInterface
 {
     /**
      * Save status form processing
@@ -21,90 +22,68 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status implements H
      */
     public function execute()
     {
-        $requestData = $this->gatherRequestData();
-        if (!$requestData) {
-            return $this->redirect('sales/*/');
-        }
-
-        $this->_getSession()->setFormData($requestData);
-        $statusCode = $requestData['status'];
-        $isNew = $requestData['is_new'];
-        $modelData = $requestData;
-        unset($modelData['is_new']);
-        if (!$isNew) {
-            unset($modelData['status']);
-        }
-
-        /** @var Status $status */
-        $status = $this->_objectManager->create(Status::class);
-        $status->load($statusCode);
-        // check if status exist
-        if ($isNew && $status->getStatus()) {
-            $this->messageManager->addErrorMessage(
-                __('We found another order status with the same order status code.')
-            );
-
-            return $this->redirect('sales/*/new');
-        }
-
-        try {
-            $status->setData($modelData)->setStatus($statusCode);
-            $status->save();
-            $this->messageManager->addSuccessMessage(__('You saved the order status.'));
-
-            return $this->redirect('sales/*/');
-        } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(
-                $e,
-                __('We can\'t add the order status right now.')
-            );
-        }
-        if ($isNew) {
-            return $this->redirect('sales/*/new');
-        } else {
-            return $this->redirect('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
-        }
-    }
-
-    /**
-     * @return array|null
-     */
-    private function gatherRequestData(): ?array
-    {
         $data = $this->getRequest()->getPostValue();
-        $isNew = $data['is_new'] = $this->getRequest()->getParam('is_new');
+        $isNew = $this->getRequest()->getParam('is_new');
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $data['status'] = $this->getRequest()->getParam('status');
+            $statusCode = $this->getRequest()->getParam('status');
+
             //filter tags in labels/status
             /** @var $filterManager FilterManager */
             $filterManager = $this->_objectManager->get(FilterManager::class);
             if ($isNew) {
-                $data['status'] = $filterManager->stripTags($data['status']);
+                $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
             }
             $data['label'] = $filterManager->stripTags($data['label']);
             if (!isset($data['store_labels'])) {
                 $data['store_labels'] = [];
             }
+
             foreach ($data['store_labels'] as &$label) {
                 $label = $filterManager->stripTags($label);
             }
 
-            return $data;
-        }
+            $status = $this->_objectManager->create(Status::class)->load($statusCode);
+            // check if status exist
+            if ($isNew && $status->getStatus()) {
+                $this->messageManager
+                    ->addErrorMessage(__('We found another order status with the same order status code.'));
+                $this->_getSession()->setFormData($data);
+                return $resultRedirect->setPath('sales/*/new');
+            }
 
-        return null;
+            $status->setData($data)->setStatus($statusCode);
+
+            try {
+                $status->save();
+                $this->messageManager->addSuccessMessage(__('You saved the order status.'));
+                return $resultRedirect->setPath('sales/*/');
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('We can\'t add the order status right now.')
+                );
+            }
+            $this->_getSession()->setFormData($data);
+            return $this->getRedirect($resultRedirect, $isNew);
+        }
+        return $resultRedirect->setPath('sales/*/');
     }
 
     /**
-     * @param string $path
-     * @param array $params
-     *
+     * @param Redirect $resultRedirect
+     * @param bool $isNew
      * @return Redirect
      */
-    private function redirect(string $path, array $params = []): Redirect
+    private function getRedirect(Redirect $resultRedirect, $isNew)
     {
-        return $this->resultRedirectFactory->create()->setPath($path, $params);
+        if ($isNew) {
+            return $resultRedirect->setPath('sales/*/new');
+        } else {
+            return $resultRedirect->setPath('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
+        }
     }
 }
