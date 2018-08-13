@@ -11,7 +11,7 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Sales\Model\Order\Status;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Sales\Controller\Adminhtml\Order\Status as StatusAction
+use Magento\Sales\Controller\Adminhtml\Order\Status as StatusAction;
 
 class Save extends StatusAction implements HttpPostActionInterface
 {

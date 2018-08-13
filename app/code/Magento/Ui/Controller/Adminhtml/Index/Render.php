@@ -14,6 +14,11 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Render a component.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Render extends AbstractAction
 {
     /**
