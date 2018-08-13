@@ -225,7 +225,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
                 /** @var MessageInterface|string $message */
                 return ($message instanceof MessageInterface) ? $message->toString() : $message;
             },
-            $messageObjects
+            $messages
         );
 
         $this->assertThat(

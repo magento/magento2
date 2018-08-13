@@ -24,6 +24,9 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected $registryMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
@@ -38,6 +41,9 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test empty response without a present rule.
+     */
     public function testGetButtonDataWithoutRule()
     {
         $this->assertEquals([], $this->model->getButtonData());

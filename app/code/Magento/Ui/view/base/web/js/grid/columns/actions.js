@@ -269,7 +269,10 @@ define([
          */
         defaultCallback: function (actionIndex, recordId, action) {
             if (action.post) {
-                dataPost().postData({action: action.href, data: {}});
+                dataPost().postData({
+                    action: action.href,
+                    data: {}
+                });
             } else {
                 window.location.href = action.href;
             }
