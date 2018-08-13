@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {

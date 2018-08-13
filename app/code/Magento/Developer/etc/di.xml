@@ -107,7 +107,6 @@
                 <item name="dev_profiler_disable" xsi:type="object">Magento\Developer\Console\Command\ProfilerDisableCommand</item>
                 <item name="dev_profiler_enable" xsi:type="object">Magento\Developer\Console\Command\ProfilerEnableCommand</item>
                 <item name="dev_generate_patch" xsi:type="object">Magento\Developer\Console\Command\GeneratePatchCommand</item>
-                <item name="dev_apply_http_methods" xsi:type="object">Magento\Developer\Console\Command\ApplyHttpMethodsCommand</item>
             </argument>
         </arguments>
     </type>
@@ -240,12 +239,5 @@
                 <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
             </argument>
         </arguments>
-    </type>
-
-    <type name="Magento\Framework\App\ActionInterface">
-        <plugin name="HttpMethodLogger"
-                type="Magento\Developer\Model\HttpMethodUpdater\Logger"
-                sortOrder="1"
-                disabled="true" />
     </type>
 </config>
