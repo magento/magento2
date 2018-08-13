@@ -30,9 +30,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * Class dependencies initialization
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -102,8 +100,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMinPrice(): void
     {
-        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
+        $product = $this->productRepository->get('simple');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addIdFilter($product->getId());
         $collection->addPriceData();
@@ -117,7 +114,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      */
-    public function testGetMinPriceForComposite()
+    public function testGetMinPriceForComposite(): void
     {
         $confProduct = $this->productRepository->get('configurable');
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
