@@ -130,7 +130,6 @@
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
-        <!--<waitForPageLoad stepKey="waitForStoreViewSwitched"/>-->
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
 
@@ -179,7 +178,6 @@
         <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP1"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP1"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP1"/>
-        <!--<click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP1"/>-->
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct1IsEnabled"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild1"/>
 
@@ -199,7 +197,6 @@
         <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP2"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP2"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP2"/>
-        <!--<click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP2"/>-->
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct2IsEnabled"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild2"/>
 
