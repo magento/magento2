@@ -129,7 +129,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         return [
             'serialized_options' => '[]',
-            'form_key' => $this->formKey->getFormKey(),
             'frontend_label' => [
                 0 => 'asdasd',
                 1 => '',
@@ -194,6 +193,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     ) : void {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($attributeData);
+        $this->getRequest()->setPostValue('form_key', $this->formKey->getFormKey());
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(
             \Magento\Eav\Model\Entity::class
