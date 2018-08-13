@@ -248,8 +248,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-297"/>
             <group value="Tax"/>
-            <group value="skip"/>
-            <!-- skipped due to MAGETWO-90539 -->
+            <skip>
+                <issueId value="MAGETWO-90539"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -356,8 +357,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-298"/>
             <group value="Tax"/>
-            <group value="skip"/>
-            <!-- Skipped due to MAGETWO-90539 -->
+            <skip>
+                <issueId value="MAGETWO-90539"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
