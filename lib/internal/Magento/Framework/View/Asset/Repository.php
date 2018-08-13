@@ -25,6 +25,7 @@ class Repository
     const FILE_ID_SEPARATOR = '::';
 
     /**
+     * @deprecated
      * @var \Magento\Framework\UrlInterface
      */
     private $baseUrl;
@@ -86,15 +87,28 @@ class Repository
     private $themeProvider;
 
     /**
-     * @param \Magento\Framework\UrlInterface $baseUrl
-     * @param \Magento\Framework\View\DesignInterface $design
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Framework\UrlInterfaceFactory
+     */
+    private $baseUrlFactory;
+
+    /**
+     * Repository constructor.
+     * @param UrlInterface                                       $baseUrl
+     * @param \Magento\Framework\View\DesignInterface            $design
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param FileFactory $fileFactory
-     * @param File\FallbackContextFactory $fallbackContextFactory
-     * @param File\ContextFactory $contextFactory
-     * @param RemoteFactory $remoteFactory
+     * @param \Magento\Framework\View\Asset\Source               $assetSource
+     * @param \Magento\Framework\App\Request\Http                $request
+     * @param FileFactory                                        $fileFactory
+     * @param File\FallbackContextFactory                        $fallbackContextFactory
+     * @param File\ContextFactory                                $contextFactory
+     * @param RemoteFactory                                      $remoteFactory
+     * @param \Magento\Store\Model\StoreManagerInterface         $storeManager
+     * @param \Magento\Framework\UrlInterfaceFactory|null        $baseUrlFactory
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
@@ -105,7 +119,9 @@ class Repository
         FileFactory $fileFactory,
         File\FallbackContextFactory $fallbackContextFactory,
         File\ContextFactory $contextFactory,
-        RemoteFactory $remoteFactory
+        RemoteFactory $remoteFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        \Magento\Framework\UrlInterfaceFactory $baseUrlFactory = null
     ) {
         $this->baseUrl = $baseUrl;
         $this->design = $design;
@@ -116,6 +132,10 @@ class Repository
         $this->fallbackContextFactory = $fallbackContextFactory;
         $this->contextFactory = $contextFactory;
         $this->remoteFactory = $remoteFactory;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->baseUrlFactory = $baseUrlFactory ?: ObjectManager::getInstance()
+            ->create(\Magento\Framework\UrlInterfaceFactory::class);
     }
 
     /**
@@ -194,8 +214,10 @@ class Repository
      * Create a file asset that's subject of fallback system
      *
      * @param string $fileId
-     * @param array $params
+     * @param array  $params
      * @return File
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function createAsset($fileId, array $params = [])
     {
@@ -236,6 +258,7 @@ class Repository
      * Get current context for static view files
      *
      * @return \Magento\Framework\View\Asset\File\FallbackContext
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStaticViewFileContext()
     {
@@ -263,14 +286,17 @@ class Repository
      * @param string $themePath
      * @param string $locale
      * @return \Magento\Framework\View\Asset\File\FallbackContext
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getFallbackContext($urlType, $isSecure, $area, $themePath, $locale)
     {
-        $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
+        $secureKey   = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
-        $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
+        $storeId     = $this->storeManager->getStore()->getId();
+        $id          = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $storeId, $locale]);
+
         if (!isset($this->fallbackContext[$id])) {
-            $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
+            $url = $this->baseUrlFactory->create()->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
             $this->fallbackContext[$id] = $this->fallbackContextFactory->create(
                 [
                     'baseUrl' => $url,
@@ -280,15 +306,17 @@ class Repository
                 ]
             );
         }
+
         return $this->fallbackContext[$id];
     }
 
     /**
      * Create a file asset similar to an existing local asset by using its context
      *
-     * @param string $fileId
+     * @param string         $fileId
      * @param LocalInterface $similarTo
      * @return File
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createSimilar($fileId, LocalInterface $similarTo)
     {
@@ -363,9 +391,10 @@ class Repository
     /**
      * Create a file asset with path relative to specified local asset
      *
-     * @param string $fileId
+     * @param string         $fileId
      * @param LocalInterface $relativeTo
      * @return File
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createRelated($fileId, LocalInterface $relativeTo)
     {
@@ -395,6 +424,8 @@ class Repository
      *
      * @param string $fileId
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUrl($fileId)
     {
@@ -408,8 +439,10 @@ class Repository
      * To omit parameters and have them automatically determined from application state, use getUrl()
      *
      * @param string $fileId
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @see getUrl()
      */
     public function getUrlWithParams($fileId, array $params)
