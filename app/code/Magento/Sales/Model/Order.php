@@ -4380,13 +4380,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     
     /**
      * Get date format value for relative string
-     * 
+     *
      * @param string $format
      * @return int|null
      */
     protected function getDateFormatValue($format)
     {
-        if(empty($this->_dateFormatValues)){
+        if (empty($this->_dateFormatValues)) {
             $this->setDateFormatValues();
         }
         return array_key_exists($format, $this->_dateFormatValues) ? $this->_dateFormatValues[$format] : null;
@@ -4395,7 +4395,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Map Date formats with its relative values
      */
-    protected function setDateFormatValues(){
+    protected function setDateFormatValues()
+    {
         $this->_dateFormatValues = [
             'full' => \IntlDateFormatter::FULL,
             'short' => \IntlDateFormatter::SHORT,
