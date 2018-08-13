@@ -54,7 +54,7 @@ class Url extends \Magento\Framework\DataObject
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param UrlFactory            $urlFactory
@@ -62,8 +62,8 @@ class Url extends \Magento\Framework\DataObject
      * @param FilterManager         $filter
      * @param SidResolverInterface  $sidResolver
      * @param UrlFinderInterface    $urlFinder
-     * @param ScopeConfigInterface  $scopeConfig
      * @param array                 $data
+     * @param ScopeConfigInterface  $scopeConfig
      */
     public function __construct(
         UrlFactory $urlFactory,
@@ -71,8 +71,8 @@ class Url extends \Magento\Framework\DataObject
         FilterManager $filter,
         SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
-        ScopeConfigInterface $scopeConfig,
-        array $data = []
+        array $data = [],
+        ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($data);
         $this->urlFactory = $urlFactory;
@@ -80,7 +80,8 @@ class Url extends \Magento\Framework\DataObject
         $this->filter = $filter;
         $this->sidResolver = $sidResolver;
         $this->urlFinder = $urlFinder;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
