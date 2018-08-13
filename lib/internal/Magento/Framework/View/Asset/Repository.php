@@ -293,11 +293,11 @@ class Repository
         $secureKey   = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
         $storeId     = $this->storeManager->getStore()->getId();
-        $id          = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $storeId, $locale]);
+        $cacheId     = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $storeId, $locale]);
 
-        if (!isset($this->fallbackContext[$id])) {
+        if (!isset($this->fallbackContext[$cacheId])) {
             $url = $this->baseUrlFactory->create()->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
-            $this->fallbackContext[$id] = $this->fallbackContextFactory->create(
+            $this->fallbackContext[$cacheId] = $this->fallbackContextFactory->create(
                 [
                     'baseUrl' => $url,
                     'areaType' => $area,
@@ -307,7 +307,7 @@ class Repository
             );
         }
 
-        return $this->fallbackContext[$id];
+        return $this->fallbackContext[$cacheId];
     }
 
     /**
