@@ -141,5 +141,6 @@ class CurrencyConverterApi extends AbstractImport
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
+        return 1;
     }
 }

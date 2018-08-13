@@ -173,7 +173,7 @@ class LogoutAllTest extends \PHPUnit\Framework\TestCase
             ->method('logoutOtherUserSessions')
             ->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessageptionMessage')
+            ->method('addExceptionMessage')
             ->with(new \Exception(), $phrase);
         $this->controller->execute();
     }
