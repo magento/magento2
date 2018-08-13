@@ -1561,7 +1561,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                if ($urlKey = $this->getUrlKey($rowData))
+                    $rowData[self::URL_KEY] = $urlKey;
 
                 $rowSku = $rowData[self::COL_SKU];
 
