@@ -75,7 +75,6 @@
         <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
 
         <!-- Verify that category page shows the original prices -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage2"/>
