@@ -5,6 +5,9 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
