@@ -863,7 +863,7 @@ define([
                 this.update = true;
 
                 if (~~this.currentPage() === this.pages()) {
-                    lastRecordIndex = (this.startIndex + this.getChildItems().length - 1);
+                    lastRecordIndex = this.startIndex + this.getChildItems().length - 1;
                     lastRecord =
                         _.findWhere(this.elems(), {
                             index: lastRecordIndex
