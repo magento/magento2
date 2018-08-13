@@ -68,6 +68,8 @@ class ShipmentDocumentFactory
     }
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param OrderInterface $order
      * @param ShipmentItemCreationInterface[] $items
      * @param ShipmentTrackCreationInterface[] $tracks
@@ -97,7 +99,9 @@ class ShipmentDocumentFactory
             $shipmentItems
         );
 
-        $this->extensionAttributesProcessor->execute($shipment, $arguments);
+        if (null !== $arguments) {
+            $this->extensionAttributesProcessor->execute($shipment, $arguments);
+        }
 
         foreach ($tracks as $track) {
             $hydrator = $this->hydratorPool->getHydrator(

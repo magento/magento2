@@ -48,11 +48,8 @@ class ExtensionAttributesProcessor
      */
     public function execute(
         ShipmentInterface $shipment,
-        ShipmentCreationArgumentsInterface $arguments = null
+        ShipmentCreationArgumentsInterface $arguments
     ): void {
-        if (null === $arguments) {
-            return;
-        }
         $shipmentExtensionAttributes = [];
         if (null !== $shipment->getExtensionAttributes()) {
             $shipmentExtensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray(
