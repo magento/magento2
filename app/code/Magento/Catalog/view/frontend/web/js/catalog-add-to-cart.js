@@ -163,7 +163,7 @@ define([
 
                 /** @inheritdoc */
                 complete: function (res) {
-                    if (res.state() == 'rejected') {
+                    if (res.state() === 'rejected') {
                         location.reload();
                     }
                 }
