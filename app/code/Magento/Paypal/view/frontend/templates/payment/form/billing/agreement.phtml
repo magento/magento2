@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,17 +10,17 @@
  */
 $code = $block->escapeHtml($block->getMethodCode());
 ?>
-<div class="field items required" id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
-    <label for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id" class="label">
-        <span><?php echo $block->escapeHtml(__('Billing Agreement')); ?></span>
+<div class="field items required" id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
+    <label for="<?= /* @noEscape */ $code ?>_ba_agreement_id" class="label">
+        <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
     </label>
     <div class="control">
-        <select id="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id"
-                name="payment[<?php echo $block->escapeHtml($block->getTransportName()); ?>]" class="select">
-            <option value=""><?php echo $block->escapeHtml(__('-- Please Select Billing Agreement--')); ?></option>
+        <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
+                name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]" class="select">
+            <option value=""><?= $block->escapeHtml(__('-- Please Select Billing Agreement--')) ?></option>
             <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
-                <option value="<?php echo $block->escapeHtml($id); ?>">
-                    <?php echo $block->escapeHtml($referenceId); ?>
+                <option value="<?= $block->escapeHtml($id) ?>">
+                    <?= $block->escapeHtml($referenceId) ?>
                 </option>
             <?php endforeach; ?>
         </select>

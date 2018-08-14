@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
@@ -18,6 +18,7 @@ class ReturnUrl extends Payflow
     protected $allowedOrderStates = [
         Order::STATE_PROCESSING,
         Order::STATE_COMPLETE,
+        Order::STATE_PAYMENT_REVIEW
     ];
 
     /**
@@ -49,7 +50,7 @@ class ReturnUrl extends Payflow
                     $redirectBlock->setData('goto_success_page', true);
                 } else {
                     if ($this->checkPaymentMethod($order)) {
-                        $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                        $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
                         $redirectBlock->setData('goto_section', $gotoSection);
                         $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
                     } else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Component;
@@ -23,11 +23,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LANGUAGE = 'language';
     /**#@- */
 
-    /**
-     * All paths
-     *
-     * @var array
-     */
+    /**#@- */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
@@ -72,7 +68,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     public function getPath($type, $componentName)
     {
         self::validateType($type);
-        return isset(self::$paths[$type][$componentName]) ? self::$paths[$type][$componentName] : null;
+        return self::$paths[$type][$componentName] ?? null;
     }
 
     /**

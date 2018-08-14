@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Model;
@@ -10,7 +10,7 @@ use \Magento\Shipping\Model\Shipping;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test identification number of product
@@ -41,21 +41,15 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->carrier = $this->getMock(\Magento\Shipping\Model\Carrier\AbstractCarrier::class, [], [], '', false);
+        $this->carrier = $this->createMock(\Magento\Shipping\Model\Carrier\AbstractCarrier::class);
         $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(function ($key) {
             $configData = [
                 'max_package_weight' => 10,
             ];
             return isset($configData[$key]) ? $configData[$key] : 0;
         }));
-        $this->stockRegistry = $this->getMock(
-            \Magento\CatalogInventory\Model\StockRegistry::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stockItemData = $this->getMock(\Magento\CatalogInventory\Model\Stock\Item::class, [], [], '', false);
+        $this->stockRegistry = $this->createMock(\Magento\CatalogInventory\Model\StockRegistry::class);
+        $this->stockItemData = $this->createMock(\Magento\CatalogInventory\Model\Stock\Item::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipping = $objectManagerHelper->getObject(
@@ -77,7 +71,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 'getQty', 'getIsQtyDecimal', 'getProductType', 'getProduct', 'getWeight', '__wakeup', 'getStore',
             ])
             ->getMock();
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $item->expects($this->any())->method('getQty')->will($this->returnValue(1));
         $item->expects($this->any())->method('getWeight')->will($this->returnValue(10));
@@ -86,7 +80,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE));
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));

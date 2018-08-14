@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
@@ -14,7 +14,7 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CaptureTest extends \PHPUnit_Framework_TestCase
+class CaptureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -85,33 +85,27 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(

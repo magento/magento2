@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 
@@ -59,6 +60,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -67,11 +69,19 @@ abstract class AbstractGroupPrice extends Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
-        parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
+        parent::__construct(
+            $currencyFactory,
+            $storeManager,
+            $catalogData,
+            $config,
+            $localeFormat,
+            $scopeOverriddenValue
+        );
     }
 
     /**
@@ -81,7 +91,7 @@ abstract class AbstractGroupPrice extends Price
      */
     protected function _getWebsiteCurrencyRates()
     {
-        if (is_null($this->_rates)) {
+        if ($this->_rates === null) {
             $this->_rates = [];
             $baseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
@@ -350,7 +360,7 @@ abstract class AbstractGroupPrice extends Price
     {
         /** @var array $priceItem */
         foreach ($data as $key => $priceItem) {
-            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
+            if (array_key_exists('price', $priceItem)) {
                 $data[$key]['website_price'] = $priceItem['price'];
             }
             if ($priceItem['all_groups']) {
@@ -365,118 +375,10 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave($object)
     {
-        $websiteId = $this->_storeManager->getStore($object->getStoreId())->getWebsiteId();
-        $isGlobal = $this->getAttribute()->isScopeGlobal() || $websiteId == 0;
-
-        $priceRows = $object->getData($this->getAttribute()->getName());
-        if (null === $priceRows) {
-            return $this;
-        }
-
-        $priceRows = array_filter((array)$priceRows);
-
-        $old = [];
-        $new = [];
-
-        // prepare original data for compare
-        $origPrices = $object->getOrigData($this->getAttribute()->getName());
-        if (!is_array($origPrices)) {
-            $origPrices = [];
-        }
-        foreach ($origPrices as $data) {
-            if ($data['website_id'] > 0 || $data['website_id'] == '0' && $isGlobal) {
-                $key = implode(
-                    '-',
-                    array_merge(
-                        [$data['website_id'], $data['cust_group']],
-                        $this->_getAdditionalUniqueFields($data)
-                    )
-                );
-                $old[$key] = $data;
-            }
-        }
-
-        // prepare data for save
-        foreach ($priceRows as $data) {
-            $hasEmptyData = false;
-            foreach ($this->_getAdditionalUniqueFields($data) as $field) {
-                if (empty($field)) {
-                    $hasEmptyData = true;
-                    break;
-                }
-            }
-
-            if ($hasEmptyData || !isset($data['cust_group']) || !empty($data['delete'])) {
-                continue;
-            }
-            if ($this->getAttribute()->isScopeGlobal() && $data['website_id'] > 0) {
-                continue;
-            }
-            if (!$isGlobal && (int)$data['website_id'] == 0) {
-                continue;
-            }
-
-            $key = implode(
-                '-',
-                array_merge([$data['website_id'], $data['cust_group']], $this->_getAdditionalUniqueFields($data))
-            );
-
-            $useForAllGroups = $data['cust_group'] == $this->_groupManagement->getAllCustomersGroup()->getId();
-            $customerGroupId = !$useForAllGroups ? $data['cust_group'] : 0;
-            $new[$key] = array_merge(
-                $this->getAdditionalFields($data),
-                [
-                    'website_id' => $data['website_id'],
-                    'all_groups' => $useForAllGroups ? 1 : 0,
-                    'customer_group_id' => $customerGroupId,
-                    'value' => isset($data['price']) ? $data['price'] : null,
-                ],
-                $this->_getAdditionalUniqueFields($data)
-            );
-        }
-
-        $delete = array_diff_key($old, $new);
-        $insert = array_diff_key($new, $old);
-        $update = array_intersect_key($new, $old);
-
-        $isChanged = false;
-        $productId = $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField());
-
-        if (!empty($delete)) {
-            foreach ($delete as $data) {
-                $this->_getResource()->deletePriceData($productId, null, $data['price_id']);
-                $isChanged = true;
-            }
-        }
-
-        if (!empty($insert)) {
-            foreach ($insert as $data) {
-                $price = new \Magento\Framework\DataObject($data);
-                $price->setData(
-                    $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField(),
-                    $productId
-                );
-                $this->_getResource()->savePriceData($price);
-
-                $isChanged = true;
-            }
-        }
-
-        if (!empty($update)) {
-            $isChanged = $this->updateValues($update, $old);
-        }
-
-        if ($isChanged) {
-            $valueChangedKey = $this->getAttribute()->getName() . '_changed';
-            $object->setData($valueChangedKey, 1);
-        }
-
         return $this;
     }
 

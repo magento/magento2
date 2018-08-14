@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Sales\AdminOrder\Product\Quote\Plugin;
@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class InitializerTest extends \PHPUnit_Framework_TestCase
+class InitializerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

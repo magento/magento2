@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFacto
 /**
  * Tests Magento\Downloadable\Test\Unit\Block\Sales\Order\Item\Renderer\Downloadable
  */
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Block\Sales\Order\Item\Renderer\Downloadable

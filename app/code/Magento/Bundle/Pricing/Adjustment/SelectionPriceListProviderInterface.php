@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Provide list of bundle selection prices
+ * @api
+ * @since 100.2.0
  */
 interface SelectionPriceListProviderInterface
 {
@@ -18,6 +20,7 @@ interface SelectionPriceListProviderInterface
      * @param boolean $searchMin
      * @param boolean $useRegularPrice
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @since 100.2.0
      */
     public function getPriceList(Product $bundleProduct, $searchMin, $useRegularPrice);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,7 @@ class IndexTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Inte
         $this->_verifyLoadAndRenderLayout();
         // renderLayout
         $this->_controller = $this->_createIntegrationController('Index');
-        $this->_controller->execute();
+        $result = $this->_controller->execute();
+        $this->assertNull($result);
     }
 }

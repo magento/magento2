@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Observer;
@@ -14,7 +14,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
 
-class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
+class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecuteNoActiveCode()
     {
@@ -45,7 +45,7 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $paymentModel = $this->getMock(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
@@ -88,7 +88,7 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
                 PaymentInterface::KEY_ADDITIONAL_DATA => []
             ]
         );
-        $paymentModel = $this->getMock(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::never())
             ->method('setAdditionalInformation');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,8 +177,7 @@ class AssertCategoryPage extends AbstractConstraint
             }
         }
 
-        if (
-            isset($categoryData['landing_page'])
+        if (isset($categoryData['landing_page'])
             && isset($categoryData['display_mode'])
             && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
         ) {
@@ -261,7 +260,7 @@ class AssertCategoryPage extends AbstractConstraint
             $errorMessage[] = 'Wrong page URL.'
                 . "\nExpected: " . $categoryUrl
                 . "\nActual: " . $this->browser->getUrl();
-        };
+        }
 
         if (isset($categoryData['meta_title'])) {
             $actual = $this->browser->getTitle();
@@ -269,7 +268,7 @@ class AssertCategoryPage extends AbstractConstraint
                 $errorMessage[] = 'Wrong page title.'
                     . "\nExpected: " . $categoryData['meta_title']
                     . "\nActual: " . $actual;
-            };
+            }
         }
 
         return $errorMessage;

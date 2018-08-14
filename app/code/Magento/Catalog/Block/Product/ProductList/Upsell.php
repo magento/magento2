@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,9 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Catalog product upsell items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -134,6 +136,13 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function getItemCollection()
     {
+        /**
+         * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
+         * @see https://github.com/magento/magento2/issues/5897
+         */
+        if ($this->_itemCollection === null) {
+            $this->_prepareData();
+        }
         return $this->_itemCollection;
     }
 
@@ -142,7 +151,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = $this->getItemCollection()->getItems();
         }
         return $this->_items;

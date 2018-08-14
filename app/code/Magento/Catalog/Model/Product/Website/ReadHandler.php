@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Website;
@@ -11,7 +11,9 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 class ReadHandler implements ExtensionInterface
 {
-    /** @var  ProductWebsiteLink */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Website\Link
+     */
     private $productWebsiteLink;
 
     /**

@@ -1,20 +1,31 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Import entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
+
+    /**
+     * HTTP scheme
+     * used to compare against the filename and select the proper DriverPool adapter
+     * @var string
+     */
+    private $httpScheme = 'http://';
+
     /**
      * Temp directory.
      *
@@ -86,6 +97,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected $_coreFileStorage;
 
     /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryResolver
+     */
+    private $directoryResolver;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -93,6 +109,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
      * @param null $filePath
+     * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -102,7 +119,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
-        $filePath = null
+        $filePath = null,
+        \Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
     ) {
         if ($filePath !== null) {
             $this->_setUploadFile($filePath);
@@ -113,6 +131,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+        $this->directoryResolver = $directoryResolver
+            ?: ObjectManager::getInstance()->get(\Magento\Framework\App\Filesystem\DirectoryResolver::class);
     }
 
     /**
@@ -145,7 +165,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
-            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+
+            if ($matches[0] === $this->httpScheme) {
+                $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            } else {
+                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
+            }
+
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
@@ -157,6 +183,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_setUploadFile($filePath);
         $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);
+        unset($result['path']);
         $result['name'] = self::getCorrectFileName($result['name']);
         return $result;
     }
@@ -216,6 +243,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (!$this->checkAllowedExtension($fileExtension)) {
+            $this->_directory->delete($filePath);
             throw new \Exception('Disallowed file type.');
         }
         //run validate callbacks
@@ -261,7 +289,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     public function setTmpDir($path)
     {
-        if (is_string($path) && $this->_directory->isReadable($path)) {
+        if (is_string($path)
+            && $this->_directory->isReadable($path)
+            && $this->directoryResolver->validatePath($this->_directory->getAbsolutePath($path), DirectoryList::ROOT)
+        ) {
             $this->_tmpDir = $path;
             return true;
         }

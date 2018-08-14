@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
@@ -55,10 +55,10 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->_reloadQuote();
-            $this->messageManager->addException($e, $e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
         $asJson = $request->getParam('json');

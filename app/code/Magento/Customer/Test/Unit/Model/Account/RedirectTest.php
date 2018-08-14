@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Redirect
@@ -125,6 +125,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $this->urlDecoder = $this->getMockForAbstractClass(\Magento\Framework\Url\DecoderInterface::class);
 
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+            ->setMethods(['DashboardUrl', 'getAccountUrl', 'getLoginUrl', 'getLogoutUrl', 'getDashboardUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -241,7 +242,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('getLogoutUrl')
             ->willReturn($logoutUrl);
         $this->customerUrl->expects($this->any())
-            ->method('DashboardUrl')
+            ->method('getDashboardUrl')
             ->willReturn($dashboardUrl);
 
         $this->scopeConfig->expects($this->any())

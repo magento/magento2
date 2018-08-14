@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Setup\Model\ModuleUninstaller;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
+class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
@@ -49,27 +49,21 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->moduleRegistryUninstaller = $this->getMock(
-            \Magento\Setup\Model\ModuleRegistryUninstaller::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->moduleRegistryUninstaller = $this->createMock(\Magento\Setup\Model\ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
         );
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
 
-        $this->remove = $this->getMock(\Magento\Framework\Composer\Remove::class, [], [], '', false);
-        $this->collector = $this->getMock(\Magento\Setup\Model\UninstallCollector::class, [], [], '', false);
+        $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);
+        $this->collector = $this->createMock(\Magento\Setup\Model\UninstallCollector::class);
 
-        $this->setup = $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false);
-        $setupFactory = $this->getMock(\Magento\Setup\Module\SetupFactory::class, [], [], '', false);
+        $this->setup = $this->createMock(\Magento\Setup\Module\Setup::class);
+        $setupFactory = $this->createMock(\Magento\Setup\Module\SetupFactory::class);
         $setupFactory->expects($this->any())->method('create')->willReturn($this->setup);
 
         $this->uninstaller = new ModuleUninstaller(
@@ -80,7 +74,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             $this->moduleRegistryUninstaller
         );
 
-        $this->output = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
+        $this->output = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
     }
 
     public function testUninstallRemoveData()
@@ -94,7 +88,7 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
             ->method('collectUninstall')
             ->willReturn(['moduleA' => $uninstall, 'moduleB' => $uninstall]);
 
-        $resource = $this->getMock(\Magento\Framework\Module\ModuleResource::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\Module\ModuleResource::class);
         $resource->expects($this->atLeastOnce())->method('getDbVersion')->willReturn('1.0');
 
         $this->output->expects($this->atLeastOnce())->method('writeln');
@@ -110,8 +104,8 @@ class ModuleUninstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $this->output->expects($this->once())->method('writeln');
-        $packageInfoFactory = $this->getMock(\Magento\Framework\Module\PackageInfoFactory::class, [], [], '', false);
-        $packageInfo = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
+        $packageInfoFactory = $this->createMock(\Magento\Framework\Module\PackageInfoFactory::class);
+        $packageInfo = $this->createMock(\Magento\Framework\Module\PackageInfo::class);
         $packageInfo->expects($this->atLeastOnce())->method('getPackageName');
         $packageInfoFactory->expects($this->once())->method('create')->willReturn($packageInfo);
         $this->objectManager->expects($this->once())

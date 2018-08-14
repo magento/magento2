@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Writer;
 
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -26,20 +26,8 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     {
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/test.csv';
 
-        $this->_phraseFirstMock = $this->getMock(
-            \Magento\Setup\Module\I18n\Dictionary\Phrase::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_phraseSecondMock = $this->getMock(
-            \Magento\Setup\Module\I18n\Dictionary\Phrase::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $this->_phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
     }
 
     protected function tearDown()

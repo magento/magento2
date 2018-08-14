@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -10,13 +10,16 @@ use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Sales order history block
+ *
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'order/history.phtml';
+    protected $_template = 'Magento_Sales::order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
@@ -33,7 +36,9 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
-    /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
     protected $orders;
 
     /**
@@ -73,7 +78,7 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @return CollectionFactoryInterface
      *
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getOrderCollectionFactory()
     {

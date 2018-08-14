@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Constraint;
@@ -21,7 +21,7 @@ class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
     /**
      * Expected success message
      */
-    const SUCCESS_MESSAGE = 'We received your order!';
+    const SUCCESS_MESSAGE = 'Thank you for your purchase!';
 
     /**
      * Assert that success message is correct.

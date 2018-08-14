@@ -2,7 +2,7 @@
 /**
  * Initial configuration data container. Provides interface for reading initial config values
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -72,9 +72,9 @@ class Initial
         list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
 
         if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT == $scopeType) {
-            return isset($this->_data[$scopeType]) ? $this->_data[$scopeType] : [];
+            return $this->_data[$scopeType] ?? [];
         } elseif ($scopeCode) {
-            return isset($this->_data[$scopeType][$scopeCode]) ? $this->_data[$scopeType][$scopeCode] : [];
+            return $this->_data[$scopeType][$scopeCode] ?? [];
         }
         return [];
     }

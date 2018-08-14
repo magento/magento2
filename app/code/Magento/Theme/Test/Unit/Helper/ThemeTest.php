@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\Theme\Test\Unit\Helper;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getCssAssetsDataProvider
@@ -20,14 +20,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
-        $assetRepo = $this->getMock(
-            \Magento\Framework\View\Asset\Repository::class, ['createAsset'], [], '', false
-        );
+        $assetRepo = $this->createPartialMock(\Magento\Framework\View\Asset\Repository::class, ['createAsset']);
         $assetRepo->expects($this->any())
             ->method('createAsset')
             ->will($this->returnArgument(0));
         $helper = new \Magento\Theme\Helper\Theme(
-            $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\App\Helper\Context::class),
             $layoutMergeFactory,
             $assetRepo
         );
@@ -129,9 +127,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
-        $processorFactory = $this->getMock(
-            \Magento\Framework\View\Layout\ProcessorFactory::class, ['create'], [], '', false
-        );
+        $processorFactory = $this->createPartialMock(\Magento\Framework\View\Layout\ProcessorFactory::class, ['create']);
         $processorFactory->expects($this->any())
             ->method('create')
             ->with(['theme' => $theme])

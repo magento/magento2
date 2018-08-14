@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class AddressesTest extends \PHPUnit_Framework_TestCase
+class AddressesTest extends \PHPUnit\Framework\TestCase
 {
     const FIXTURE_CUSTOMER_ID = 1;
 

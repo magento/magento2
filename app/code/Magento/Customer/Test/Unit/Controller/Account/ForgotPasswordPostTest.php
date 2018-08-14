@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
@@ -20,7 +20,7 @@ use Magento\Framework\Message\ManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
+class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ForgotPasswordPost

@@ -1,11 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\File;
-
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * File upload class
@@ -13,7 +11,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  * ATTENTION! This class must be used like abstract class and must added
  * validation by protected file extension list to extended class
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Uploader
 {
@@ -118,6 +116,11 @@ class Uploader
      */
     protected $_validateCallbacks = [];
 
+    /**
+     * @var \Magento\Framework\File\Mime
+     */
+    private $fileMime;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -154,10 +157,13 @@ class Uploader
      * Init upload
      *
      * @param string|array $fileId
+     * @param null|\Magento\Framework\File\Mime $fileMime
      * @throws \Exception
      */
-    public function __construct($fileId)
-    {
+    public function __construct(
+        $fileId,
+        Mime $fileMime = null
+    ) {
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -165,6 +171,7 @@ class Uploader
         } else {
             $this->_fileExists = true;
         }
+        $this->fileMime = $fileMime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Mime::class);
     }
 
     /**
@@ -201,7 +208,7 @@ class Uploader
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispretionPath($fileName);
+            $this->_dispretionPath = self::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
             $this->_createDestinationFolder($destinationFile);
         }
@@ -261,7 +268,7 @@ class Uploader
      * @param string $file
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.8
      */
     protected function chmod($file)
     {
@@ -511,7 +518,7 @@ class Uploader
      */
     private function _getMimeType()
     {
-        return $this->_file['type'];
+        return $this->fileMime->getMimeType($this->_file['tmp_name']);
     }
 
     /**
@@ -610,8 +617,20 @@ class Uploader
      *
      * @param string $fileName
      * @return string
+     * @deprecated
      */
     public static function getDispretionPath($fileName)
+    {
+        return self::getDispersionPath($fileName);
+    }
+
+    /**
+     * Get dispertion path
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public static function getDispersionPath($fileName)
     {
         $char = 0;
         $dispertionPath = '';

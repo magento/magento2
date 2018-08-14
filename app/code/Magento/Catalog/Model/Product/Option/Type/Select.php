@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -222,7 +222,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargableOptionPrice(
+                    $result += $this->_getChargeableOptionPrice(
                         $_result->getPrice(),
                         $_result->getPriceType() == 'percent',
                         $basePrice
@@ -237,7 +237,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargableOptionPrice(
+                $result = $this->_getChargeableOptionPrice(
                     $_result->getPrice(),
                     $_result->getPriceType() == 'percent',
                     $basePrice
@@ -302,8 +302,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected function _isSingleSelection()
     {
         $single = [
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
         ];
         return in_array($this->getOption()->getType(), $single);
     }

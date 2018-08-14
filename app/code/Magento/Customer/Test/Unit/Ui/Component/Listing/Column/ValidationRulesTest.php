@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
-class ValidationRulesTest extends \PHPUnit_Framework_TestCase
+class ValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ValidationRules */
     protected $validationRules;

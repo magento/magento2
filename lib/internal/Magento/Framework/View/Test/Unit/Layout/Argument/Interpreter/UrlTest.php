@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\Url;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -26,14 +26,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_urlResolver = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->_interpreter = $this->getMock(
-            \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_urlResolver = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);
         $this->_model = new Url($this->_urlResolver, $this->_interpreter);
     }
 

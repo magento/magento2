@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,9 @@ return [
     ],
     'md5' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'App/Utility/Files.php'],
+        ],
     ],
     'srand' => [
         'replacement' => '',

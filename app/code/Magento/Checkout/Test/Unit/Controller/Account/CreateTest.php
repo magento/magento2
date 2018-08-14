@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Controller\Account;
@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\Controller\Account;
 /**
  * Shopping cart edit tests
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -43,31 +43,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->checkoutSession = $this->getMock(
-            \Magento\Checkout\Model\Session::class,
-            ['getLastOrderId'],
-            [],
-            '',
-            false
-        );
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->orderCustomerService = $this->getMock(
-            \Magento\Sales\Api\OrderCustomerManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->messageManager = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->checkoutSession = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['getLastOrderId']);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->orderCustomerService = $this->createMock(\Magento\Sales\Api\OrderCustomerManagementInterface::class);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $contextMock = $this->getMock(
-            \Magento\Framework\App\Action\Context::class,
-            ['getObjectManager'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $contextMock = $this->createPartialMock(\Magento\Framework\App\Action\Context::class, ['getObjectManager']);
         $contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
         $this->action = $objectManagerHelper->getObject(
@@ -84,12 +66,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteAddsSessionMessageIfCustomerIsLoggedIn()
     {
-        $jsonFactoryMock = $this->getMock(\Magento\Framework\Controller\Result\JsonFactory::class, [], [], '', false);
+        $jsonFactoryMock = $this->createMock(\Magento\Framework\Controller\Result\JsonFactory::class);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->willReturn($jsonFactoryMock);
-        $jsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $jsonFactoryMock->expects($this->once())->method('create')->willReturn($jsonMock);
 
         $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
@@ -107,17 +89,17 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $jsonFactoryMock = $this->getMock(\Magento\Framework\Controller\Result\JsonFactory::class, [], [], '', false);
+        $jsonFactoryMock = $this->createMock(\Magento\Framework\Controller\Result\JsonFactory::class);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->willReturn($jsonFactoryMock);
-        $jsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $jsonFactoryMock->expects($this->once())->method('create')->willReturn($jsonMock);
 
         $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
         $this->checkoutSession->expects($this->once())->method('getLastOrderId')->will($this->returnValue(100));
-        $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->orderCustomerService->expects($this->once())->method('create')->with(100)->will(
             $this->returnValue($customer)
         );

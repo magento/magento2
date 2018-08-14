@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" ticketId="MAGETWO-36824">
-        <variation name="CreateCurrencyRateTestVariation3">
+        <variation name="CreateCurrencyRateTestVariation4">
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
             <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
             <data name="currencyRate/data/rate" xsi:type="number">2.000</data>

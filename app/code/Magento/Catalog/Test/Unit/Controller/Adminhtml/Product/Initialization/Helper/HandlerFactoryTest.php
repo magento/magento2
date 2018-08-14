@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
 
 use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory;
 
-class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class HandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var HandlerFactory
@@ -21,13 +21,13 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new HandlerFactory($this->_objectManagerMock);
     }
 
     public function testCreateWithInvalidType()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\InvalidArgumentException',
             \Magento\Framework\DataObject::class . ' does not implement ' .
             \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class

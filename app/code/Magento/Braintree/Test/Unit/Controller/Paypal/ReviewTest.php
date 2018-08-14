@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
@@ -27,7 +27,7 @@ use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReviewTest extends \PHPUnit_Framework_TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuoteUpdater|\PHPUnit_Framework_MockObject_MockObject

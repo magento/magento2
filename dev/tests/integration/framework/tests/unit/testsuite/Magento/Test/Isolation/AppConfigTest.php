@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ namespace Magento\Test\Isolation;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\ObjectManager;
 
-class AppConfigTest extends \PHPUnit_Framework_TestCase
+class AppConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Isolation\WorkingDirectory
@@ -31,7 +31,7 @@ class AppConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testStartTestEndTest()
     {
-        $test = $this->getMockBuilder(\PHPUnit_Framework_TestCase::class)
+        $test = $this->getMockBuilder(\PHPUnit\Framework\TestCase::class)
             ->disableOriginalConstructor()
             ->getMock();
         $modelReflection = new \ReflectionClass($this->model);

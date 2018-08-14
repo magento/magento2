@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -14,9 +14,11 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 /**
  * Core Email Template Filter Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -148,8 +150,14 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @var \Pelago\Emogrifier
+     * @deprecated 100.2.0
      */
     protected $emogrifier;
+
+    /**
+     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
+     */
+    private $cssInliner;
 
     /**
      * @var \Magento\Email\Model\Source\Variables
@@ -181,6 +189,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param array $variables
+     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -198,7 +207,8 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
         \Magento\Email\Model\Source\Variables $configVariables,
-        $variables = []
+        $variables = [],
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -212,6 +222,8 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
+        $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
         $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }
@@ -309,7 +321,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return Css\Processor
      */
     private function getCssProcessor()
@@ -321,7 +333,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
      */
@@ -973,14 +985,14 @@ class Filter extends \Magento\Framework\Filter\Template
                     );
                 }
 
-                $emogrifier = $this->emogrifier;
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
+                $this->cssInliner->setHtml($html);
+
+                $this->cssInliner->setCss($cssToInline);
 
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
+                $this->cssInliner->disableStyleBlocksParsing();
 
-                $processedHtml = $emogrifier->emogrify();
+                $processedHtml = $this->cssInliner->process();
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
@@ -1018,7 +1030,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

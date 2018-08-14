@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Catalog inventory module observer
@@ -59,22 +61,48 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
+        /** @var OrderInterface|null $order */
+        $order = $observer->getEvent()->getOrder();
 
         // Maybe we've already processed this quote in some event during order placement
         // e.g. call in event 'sales_model_service_quote_submit_before' and later in 'checkout_submit_all_after'
         if ($quote->getInventoryProcessed()) {
             return $this;
         }
-        $items = $this->productQty->getProductQty($quote->getAllItems());
 
+        $items = $this->productQty->getProductQty($quote->getAllItems());
         /**
          * Remember items
+         *
+         * @var StockItemInterface[] $itemsForReindex
          */
         $itemsForReindex = $this->stockManagement->registerProductsSale(
             $items,
             $quote->getStore()->getWebsiteId()
         );
         $this->itemsForReindex->setItems($itemsForReindex);
+
+        if ($order) {
+            //Marking items as backordered if order is placed.
+            /** @var StockItemInterface[] $stockItems */
+            $stockItems = [];
+            foreach ($itemsForReindex as $stockItem) {
+                $stockItems[$stockItem->getProductId()] = $stockItem;
+            }
+            foreach ($order->getItems() as $orderItem) {
+                if (!empty($stockItems[$orderItem->getProductId()])) {
+                    $stock = $stockItems[$orderItem->getProductId()];
+                    //Found stock of ordered item,
+                    //checking if the item was backordered.
+                    if (($qty = $stock->getQty()) < 0) {
+                        $orderItem->setQtyBackordered(
+                            $orderItem->getQtyOrdered() > (-$qty)
+                                ? (-$qty) : $orderItem->getQtyOrdered()
+                        );
+                    }
+                }
+            }
+        }
 
         $quote->setInventoryProcessed(true);
         return $this;

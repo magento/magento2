@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
@@ -17,13 +17,19 @@ class FileManager
      */
     const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
     private $assetRepo;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
     private $directoryList;
 
-    /** @var \Magento\Framework\Filesystem\Driver\File */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
     private $driverFile;
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller;
@@ -21,7 +21,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Session::class,
             [$logger]

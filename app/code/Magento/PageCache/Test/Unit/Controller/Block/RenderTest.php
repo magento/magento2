@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,10 @@
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
-class RenderTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -66,12 +69,17 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
             \Magento\PageCache\Controller\Block\Render::class,
-            ['context' => $contextMock, 'translateInline' => $this->translateInline]
+            [
+                'context' => $contextMock,
+                'translateInline' => $this->translateInline,
+                'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+            ]
         );
     }
 
@@ -107,22 +115,10 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
-        $blockInstance1 = $this->getMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance1 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
 
-        $blockInstance2 = $this->getMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance2 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
@@ -151,7 +147,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(json_encode($handles)));
+            ->will($this->returnValue(base64_encode(json_encode($handles))));
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
         $this->layoutMock->expects($this->at(0))

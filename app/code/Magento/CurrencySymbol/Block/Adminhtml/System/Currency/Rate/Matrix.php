@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Matrix extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'system/currency/rate/matrix.phtml';
+    protected $_template = 'Magento_CurrencySymbol::system/currency/rate/matrix.phtml';
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui;
@@ -14,8 +14,9 @@ use Magento\Vault\Model\CustomerTokenManagement;
 /**
  * Class ConfigProvider
  * @api
+ * @since 100.1.0
  */
-final class TokensConfigProvider implements ConfigProviderInterface
+class TokensConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string
@@ -63,6 +64,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
      * Retrieve assoc array of checkout configuration
      *
      * @return array
+     * @since 100.1.0
      */
     public function getConfig()
     {
@@ -138,7 +140,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
     /**
      * Get instance of vault payment list instance
      * @return PaymentMethodListInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getVaultPaymentList()
     {

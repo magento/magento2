@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @inheritdoc
      */
     protected $document = Document::class;
+
+    /**
+     * @inheritdoc
+     */
+    protected $_map = ['fields' => ['entity_id' => 'main_table.entity_id']];
 
     /**
      * Initialize dependencies.

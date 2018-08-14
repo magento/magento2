@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -83,8 +83,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
         // @codingStandardsIgnoreStart
         $reportLayoutUpdate = '<!--
     <referenceContainer name="right">
-        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.viewed</argument></action>
-        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.compared</argument></action>
+        <referenceBlock name="catalog.compare.sidebar" remove="true" />
     </referenceContainer>-->';
         // @codingStandardsIgnoreEnd
 

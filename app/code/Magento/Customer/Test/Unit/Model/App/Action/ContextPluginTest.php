@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Customer\Model\Context;
 /**
  * Class ContextPluginTest
  */
-class ContextPluginTest extends \PHPUnit_Framework_TestCase
+class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\App\Action\ContextPlugin
@@ -43,22 +43,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->customerSessionMock = $this->getMock(
-            \Magento\Customer\Model\Session::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->httpContextMock = $this->getMock(
-            \Magento\Framework\App\Http\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->subjectMock = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->subjectMock = $this->createMock(\Magento\Framework\App\Action\Action::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->plugin = new \Magento\Customer\Model\App\Action\ContextPlugin(
             $this->customerSessionMock,
             $this->httpContextMock

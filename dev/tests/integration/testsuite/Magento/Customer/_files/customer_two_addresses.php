@@ -2,7 +2,7 @@
 /**
  * Customer address fixture with entity_id = 2, this fixture also creates address with entity_id = 1
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 

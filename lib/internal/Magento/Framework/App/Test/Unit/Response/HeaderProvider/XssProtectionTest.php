@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class XssProtectionTest extends \PHPUnit_Framework_TestCase
+class XssProtectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider userAgentDataProvider

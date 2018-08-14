@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class AssertVoidInCommentsHistory extends AbstractConstraint
     const VOIDED_AMOUNT = 'Voided authorization. Amount: $';
 
     /**
-     * Assert that comment about voided amount exist in Comments History section on order page in Admin.
+     * Assert that comment about voided amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -38,9 +38,13 @@ class AssertVoidInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
+
         \PHPUnit_Framework_Assert::assertContains(
             self::VOIDED_AMOUNT . $prices['grandTotal'],
-            $salesOrderView->getOrderHistoryBlock()->getVoidedAmount(),
+            $latestComment['comment'],
             'Incorrect voided amount value for the order #' . $orderId
         );
     }

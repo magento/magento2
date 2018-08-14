@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -15,7 +15,7 @@ use Magento\Customer\Model\AttributeMetadataConverter;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Customer\Test\Unit\Model
  */
-class AttributeMetadatConverterTest extends \PHPUnit_Framework_TestCase
+class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -112,8 +112,8 @@ class AttributeMetadatConverterTest extends \PHPUnit_Framework_TestCase
         $optionDataObjectForSimpleValue2 = $this->getMockBuilder(\Magento\Customer\Model\Data\Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $optionObject1 = $this->getMock(\Magento\Customer\Api\Data\OptionInterface::class);
-        $optionObject2 = $this->getMock(\Magento\Customer\Api\Data\OptionInterface::class);
+        $optionObject1 = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
+        $optionObject2 = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
         $this->optionFactory->expects($this->exactly(4))
             ->method('create')
             ->will(
@@ -151,8 +151,8 @@ class AttributeMetadatConverterTest extends \PHPUnit_Framework_TestCase
                 [$optionObject1, ['1'], \Magento\Customer\Api\Data\OptionInterface::class],
                 [$optionObject2, ['2'], \Magento\Customer\Api\Data\OptionInterface::class]
             );
-        $validationRule1 = $this->getMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
-        $validationRule2 = $this->getMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
+        $validationRule1 = $this->createMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
+        $validationRule2 = $this->createMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
         $this->validationRuleFactory->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($validationRule1, $validationRule2));
@@ -170,10 +170,16 @@ class AttributeMetadatConverterTest extends \PHPUnit_Framework_TestCase
             ->method('setName')
             ->with('two')
             ->willReturnSelf();
+
+        $mockMethods = ['setAttributeCode', 'setFrontendInput'];
         $attributeMetaData = $this->getMockBuilder(\Magento\Customer\Model\Data\AttributeMetadata::class)
+            ->setMethods($mockMethods)
             ->disableOriginalConstructor()
-            ->enableProxyingToOriginalMethods()
             ->getMock();
+        foreach ($mockMethods as $method) {
+            $attributeMetaData->expects($this->once())->method($method)->willReturnSelf();
+        }
+
         $this->attribute->expects($this->once())
             ->method('getValidateRules')
             ->willReturn($validatedRules);

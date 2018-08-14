@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
@@ -21,7 +21,7 @@ use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
+class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_NONCE = '3ede7045-2aea-463e-9754-cd658ffeeb48';
 

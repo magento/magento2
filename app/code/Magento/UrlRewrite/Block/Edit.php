@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -118,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
             'reset',
             [
                 'label' => __('Reset'),
-                'onclick' => '$(\'edit_form\').reset()',
+                'onclick' => 'location.reload();',
                 'class' => 'scalable',
                 'level' => -1
             ]

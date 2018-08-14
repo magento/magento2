@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test SendFriend
  *
  */
-class SendFriendTest extends \PHPUnit_Framework_TestCase
+class SendFriendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SendFriend\Model\SendFriend
@@ -35,7 +35,7 @@ class SendFriendTest extends \PHPUnit_Framework_TestCase
         $this->sendfriendDataMock = $this->getMockBuilder(\Magento\SendFriend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
 
         $this->model = $objectManager->getObject(
             \Magento\SendFriend\Model\SendFriend::class,

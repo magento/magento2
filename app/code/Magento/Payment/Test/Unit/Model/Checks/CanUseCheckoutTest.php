@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 
 use \Magento\Payment\Model\Checks\CanUseCheckout;
 
-class CanUseCheckoutTest extends \PHPUnit_Framework_TestCase
+class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CanUseCheckout

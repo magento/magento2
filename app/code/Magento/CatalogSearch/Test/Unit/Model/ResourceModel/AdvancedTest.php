@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AdvancedTest extends PHPUnit_Framework_TestCase
+class AdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced

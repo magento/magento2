@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
 use \Magento\Framework\Convert\DataObject;
 
-class ObjectTest extends \PHPUnit_Framework_TestCase
+class ObjectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Convert\DataObject
@@ -21,14 +21,14 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $mockFirst = $this->getMock(\Magento\Framework\DataObject::class, ['getId', 'getCode'], []);
+        $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
         $mockFirst->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
         $mockFirst->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('code1'));
-        $mockSecond = $this->getMock(\Magento\Framework\DataObject::class, ['getId', 'getCode'], []);
+        $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
         $mockSecond->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(2));
@@ -53,14 +53,14 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionHash()
     {
-        $mockFirst = $this->getMock(\Magento\Framework\DataObject::class, ['getSome', 'getId'], []);
+        $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
         $mockFirst->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(3));
         $mockFirst->expects($this->once())
             ->method('getSome')
             ->will($this->returnValue('code3'));
-        $mockSecond = $this->getMock(\Magento\Framework\DataObject::class, ['getSome', 'getId'], []);
+        $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
         $mockSecond->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(4));
@@ -87,8 +87,8 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $object = new \stdClass();
         $object->a = [[1]];
-        $mockFirst = $this->getMock(\Magento\Framework\DataObject::class, ['getData']);
-        $mockSecond = $this->getMock(\Magento\Framework\DataObject::class, ['getData']);
+        $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
 
         $mockFirst->expects($this->any())
             ->method('getData')

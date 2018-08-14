@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -17,17 +18,20 @@ class AssertInvoiceStatusInOrdersGrid extends AbstractConstraint
     /**
      * Assert invoice status on order page in Admin.
      *
+     * @param OrderIndex $salesOrder
      * @param SalesOrderView $salesOrderView
      * @param string $invoiceStatus
      * @param string $orderId
      * @return void
      */
     public function processAssert(
+        OrderIndex $salesOrder,
         SalesOrderView $salesOrderView,
         $invoiceStatus,
         $orderId
     ) {
-        $salesOrderView->open(['order_id' => $orderId]);
+        $salesOrder->open();
+        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $salesOrderView->getOrderForm()->openTab('invoices');
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $grid */
         $grid = $salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();

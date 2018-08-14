@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Section;
@@ -22,7 +22,7 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Identifier
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $sectionIdentifier;
 
@@ -64,6 +64,8 @@ class Load extends \Magento\Framework\App\Action\Action
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setHeader('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store', true);
+        $resultJson->setHeader('Pragma', 'no-cache', true);
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;

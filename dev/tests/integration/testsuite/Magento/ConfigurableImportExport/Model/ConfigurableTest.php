@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model;
@@ -21,6 +21,15 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
             ],
+            'configurable-product-12345' => [
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable_12345.php'
+                ],
+                [
+                    '12345',
+                ],
+                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
+            ],
         ];
     }
 
@@ -30,10 +39,10 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $prooductType */
-        $prooductType = $expectedProduct->getTypeInstance();
-        $expectedAssociatedProducts = $prooductType->getUsedProductCollection($expectedProduct);
-        $actualAssociatedProducts = iterator_to_array($prooductType->getUsedProductCollection($actualProduct));
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType */
+        $productType = $expectedProduct->getTypeInstance();
+        $expectedAssociatedProducts = $productType->getUsedProductCollection($expectedProduct);
+        $actualAssociatedProducts = iterator_to_array($productType->getUsedProductCollection($actualProduct));
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
@@ -93,20 +102,5 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $data[$key][2] = array_merge($value[2], ['_cache_instance_product_set_attributes']);
         }
         return $data;
-    }
-
-    /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     *
-     * @param array $fixtures
-     * @param string[] $skus
-     * @param string[] $skippedAttributes
-     * @dataProvider importReplaceDataProvider
-     */
-    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
-    {
-        parent::testImportReplace($fixtures, $skus, $skippedAttributes);
     }
 }

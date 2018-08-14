@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @deprecated
+ * @deprecated 100.2.0
  * Customer password attribute backend
  */
 class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
@@ -63,7 +63,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @param \Magento\Framework\DataObject $object
      * @return bool
      */

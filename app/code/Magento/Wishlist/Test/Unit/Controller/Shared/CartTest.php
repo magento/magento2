@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
@@ -28,7 +28,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  SharedCart |\PHPUnit_Framework_MockObject_MockObject */
     protected $model;

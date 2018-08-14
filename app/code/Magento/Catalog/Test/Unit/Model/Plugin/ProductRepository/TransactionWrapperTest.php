@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Plugin\ProductRepository;
 
-class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
+class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper
@@ -46,9 +46,9 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class, [], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock = $this->productMock;
         $this->closureMock = function () use ($productMock) {
             return $productMock;

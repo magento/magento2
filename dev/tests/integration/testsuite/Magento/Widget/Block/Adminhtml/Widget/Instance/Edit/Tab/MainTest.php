@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
@@ -8,7 +8,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class MainTest extends \PHPUnit_Framework_TestCase
+class MainTest extends \PHPUnit\Framework\TestCase
 {
     public function testPackageThemeElement()
     {

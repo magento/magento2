@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Response;
 
 use \Magento\Framework\App\Response\Http;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Http
@@ -42,6 +42,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
+    /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $sessionConfigMock;
+
+    /** @var int */
+    private $cookieLifeTime = 3600;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -51,14 +57,19 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )->disableOriginalConstructor()->getMock();
-        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(
-            \Magento\Framework\App\Http\Context::class)->disableOriginalConstructor()
+            \Magento\Framework\App\Http\Context::class
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\App\Response\Http::class,
@@ -67,7 +78,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'sessionConfig' => $this->sessionConfigMock
             ]
         );
         $this->model->headersSentThrowsException = false;
@@ -78,17 +90,17 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->model);
         /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testSendVary()
     {
-        $data = ['some-vary-key' => 'some-vary-value'];
         $expectedCookieName = Http::COOKIE_VARY_STRING;
-        $expectedCookieValue = sha1(serialize($data));
+        $expectedCookieValue = 'SHA1 Serialized String';
         $sensitiveCookieMetadataMock = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class)
+            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $sensitiveCookieMetadataMock->expects($this->once())
@@ -100,9 +112,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('getVaryString')
             ->will($this->returnValue($expectedCookieValue));
 
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieLifetime')
+            ->willReturn($this->cookieLifeTime);
+
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnValue($sensitiveCookieMetadataMock));
+            ->with([CookieMetadata::KEY_DURATION => $this->cookieLifeTime])
+            ->willReturn($sensitiveCookieMetadataMock);
 
         $this->cookieManagerMock->expects($this->once())
             ->method('setSensitiveCookie')
@@ -113,7 +130,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testSendVaryEmptyDataDeleteCookie()
     {
         $expectedCookieName = Http::COOKIE_VARY_STRING;
-        $cookieMetadataMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class);
+        $cookieMetadataMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class);
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
@@ -177,7 +194,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPublicHeadersWithoutTtl()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Time to live is a mandatory parameter for set public headers'
         );
@@ -215,7 +232,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPrivateHeadersWithoutTtl()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Time to live is a mandatory parameter for set private headers'
         );
@@ -283,7 +300,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testWakeUpWith()
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
+        $objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Stdlib\CookieManagerInterface::class)

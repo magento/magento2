@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\Action;
 /**
  * Class CompareTest
  */
-class CompareTest extends \PHPUnit_Framework_TestCase
+class CompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
@@ -52,28 +52,24 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->urlBuilder = $this->getMock(\Magento\Framework\Url::class, ['getUrl'], [], '', false);
-        $this->request = $this->getMock(
+        $this->urlBuilder = $this->createPartialMock(\Magento\Framework\Url::class, ['getUrl']);
+        $this->request = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getServer', 'isSecure'],
-            [],
-            '',
-            false
+            ['getServer', 'isSecure']
         );
         /** @var \Magento\Framework\App\Helper\Context $context */
-        $this->context = $this->getMock(
+        $this->context = $this->createPartialMock(
             \Magento\Framework\App\Helper\Context::class,
-            ['getUrlBuilder', 'getRequest', 'getUrlEncoder'],
-            [],
-            '',
-            false
+            ['getUrlBuilder', 'getRequest', 'getUrlEncoder']
         );
         $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)->getMock();
         $this->urlEncoder->expects($this->any())
             ->method('encode')
-            ->willReturnCallback(function ($url) {
-                return strtr(base64_encode($url), '+/=', '-_,');
-            });
+            ->willReturnCallback(
+                function ($url) {
+                    return strtr(base64_encode($url), '+/=', '-_,');
+                }
+            );
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($this->urlBuilder));
@@ -83,19 +79,13 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getUrlEncoder')
             ->will($this->returnValue($this->urlEncoder));
-        $this->postDataHelper = $this->getMock(
+        $this->postDataHelper = $this->createPartialMock(
             \Magento\Framework\Data\Helper\PostHelper::class,
-            ['getPostData'],
-            [],
-            '',
-            false
+            ['getPostData']
         );
-        $this->catalogSessionMock = $this->getMock(
+        $this->catalogSessionMock = $this->createPartialMock(
             \Magento\Catalog\Model\Session::class,
-            ['getBeforeCompareUrl'],
-            [],
-            '',
-            false
+            ['getBeforeCompareUrl']
         );
 
         $this->compareHelper = $objectManager->getObject(
@@ -131,7 +121,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         /** @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup'], [], '', false);
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($productId));
@@ -189,7 +179,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             '_secure' => $isRequestSecure
         ];
 
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->catalogSessionMock->expects($this->once())->method('getBeforeCompareUrl')->willReturn($beforeCompareUrl);
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->urlEncoder->expects($this->once())->method('encode')->with($beforeCompareUrl)

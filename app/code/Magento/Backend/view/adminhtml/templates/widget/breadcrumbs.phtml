@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,12 @@
     <li>
         <?php if (empty($_link['url'])): ?>
             <?php if ($_index != $_size-1): ?>
-                <span><?php echo $block->escapeHtml($_link['label']) ?></span>
+                <span><?= $block->escapeHtml($_link['label']) ?></span>
             <?php else: ?>
-                <strong><?php echo $block->escapeHtml($_link['label']) ?></strong>
+                <strong><?= $block->escapeHtml($_link['label']) ?></strong>
             <?php endif; ?>
         <?php else: ?>
-            <a href="<?php /* @escapeNotVerified */ echo $_link['url'] ?>" title="<?php echo $block->escapeHtml($_link['title']) ?>"><?php echo $block->escapeHtml($_link['label']) ?></a>
+            <a href="<?= /* @escapeNotVerified */ $_link['url'] ?>" title="<?= $block->escapeHtml($_link['title']) ?>"><?= $block->escapeHtml($_link['label']) ?></a>
         <?php endif; ?>
         <?php if ($_index != $_size-1): ?>
             &raquo;

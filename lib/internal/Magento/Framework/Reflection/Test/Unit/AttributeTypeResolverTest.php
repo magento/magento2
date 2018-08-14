@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 
 use \Magento\Framework\Reflection\AttributeTypeResolver;
 
-class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
+class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeTypeResolver
@@ -30,8 +30,8 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->typeProcessor = $this->getMock(\Magento\Framework\Reflection\TypeProcessor::class, [], [], '', false);
-        $this->configMock = $this->getMock(\Magento\Framework\Api\ExtensionAttribute\Config::class, [], [], '', false);
+        $this->typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
+        $this->configMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\Config::class);
         $this->model = new AttributeTypeResolver($this->typeProcessor, $this->configMock);
     }
 

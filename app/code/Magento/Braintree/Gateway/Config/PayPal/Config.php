@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Config\PayPal;
@@ -35,6 +35,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     private $icon = [];
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CcConfig $ccConfig
+     * @param null $methodCode
+     * @param string $pathPattern
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CcConfig $ccConfig,
@@ -52,7 +60,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isActive()
     {
-        return (bool) $this->getValue(self::KEY_ACTIVE);
+        return (bool)$this->getValue(self::KEY_ACTIVE);
     }
 
     /**
@@ -60,7 +68,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isDisplayShoppingCart()
     {
-        return (bool) $this->getValue(self::KEY_DISPLAY_ON_SHOPPING_CART);
+        return (bool)$this->getValue(self::KEY_DISPLAY_ON_SHOPPING_CART);
     }
 
     /**
@@ -70,7 +78,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isAllowToEditShippingAddress()
     {
-        return (bool) $this->getValue(self::KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS);
+        return (bool)$this->getValue(self::KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS);
     }
 
     /**
@@ -109,7 +117,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isSkipOrderReview()
     {
-        return (bool) $this->getValue('skip_order_review');
+        return (bool)$this->getValue('skip_order_review');
     }
 
     /**

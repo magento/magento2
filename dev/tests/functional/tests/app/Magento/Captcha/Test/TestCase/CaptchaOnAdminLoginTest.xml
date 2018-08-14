@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Captcha\Test\TestCase\CaptchaOnAdminLoginTest" summary="Check CAPTCHA on Admin Login Page" ticketId="MAGETWO-43639">
+        <variation name="CaptchaOnAdminLoginTestVariation1">
+            <data name="customAdmin/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="customAdmin/data/captcha" xsi:type="string">111</data>
+            <data name="pageTitle" xsi:type="string">Dashboard</data>
+            <data name="configData" xsi:type="string">captcha_backend_login</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
+        </variation>
+    </testCase>
+</config>

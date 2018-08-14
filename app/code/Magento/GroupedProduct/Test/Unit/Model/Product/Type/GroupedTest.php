@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
@@ -10,7 +10,7 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GroupedProduct\Model\Product\Type\Grouped
@@ -37,36 +37,27 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectHelper;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $fileStorageDbMock = $this->getMock(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $coreRegistry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $productFactoryMock = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false);
-        $this->catalogProductLink = $this->getMock(
-            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productStatusMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $fileStorageDbMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $productFactoryMock = $this->createMock(\Magento\Catalog\Model\ProductFactory::class);
+        $this->catalogProductLink = $this->createMock(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::class);
+        $this->productStatusMock = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Source\Status::class);
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['serialize'])
+            ->getMockForAbstractClass();
+
         $this->_model = $this->objectHelper->getObject(
             \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [
@@ -77,7 +68,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productFactory' => $productFactoryMock,
                 'catalogProductLink' => $this->catalogProductLink,
-                'catalogProductStatus' => $this->productStatusMock
+                'catalogProductStatus' => $this->productStatusMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -208,13 +200,12 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \Magento\GroupedProduct\Model\Product\Type\Grouped $model */
-        $model = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            ['getAssociatedProducts'],
-            $args
-        );
+        $model = $this->getMockBuilder(\Magento\GroupedProduct\Model\Product\Type\Grouped::class)
+            ->setMethods(['getAssociatedProducts'])
+            ->setConstructorArgs($args)
+            ->getMock();
 
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $model->expects(
             $this->once()
         )->method(
@@ -247,7 +238,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssociatedProductCollection()
     {
-        $link = $this->getMock(\Magento\Catalog\Model\Product\Link::class, [], [], '', false);
+        $link = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Link::class,
+            ['setLinkTypeId', 'getProductCollection']
+        );
         $this->product->expects($this->once())->method('getLinkInstance')->will($this->returnValue($link));
         $link->expects(
             $this->any()
@@ -256,12 +250,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->with(
             \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
-        $collection = $this->getMock(
+        $collection = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
-            ['setFlag', 'setIsStrongMode', 'setProduct'],
-            [],
-            '',
-            false
+            ['setFlag', 'setIsStrongMode', 'setProduct']
         );
         $link->expects($this->once())->method('getProductCollection')->will($this->returnValue($collection));
         $collection->expects($this->any())->method('setFlag')->will($this->returnValue($collection));
@@ -276,7 +267,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessBuyRequest($superGroup, $result)
     {
-        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, ['getSuperGroup'], [], '', false);
+        $buyRequest = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
         $buyRequest->expects($this->any())->method('getSuperGroup')->will($this->returnValue($superGroup));
 
         $this->assertEquals($result, $this->_model->processBuyRequest($this->product, $buyRequest));
@@ -309,16 +300,12 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedEmpty()
     {
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $buyRequest = new \Magento\Framework\DataObject();
         $expectedMsg = "Please specify the quantity of product(s).";
 
-        $productCollection = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $productCollection = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
         );
         $productCollection
             ->expects($this->atLeastOnce())
@@ -352,15 +339,18 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             ->method('addAttributeToFilter')
             ->willReturnSelf();
         $items = [
-            $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false),
-            $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false)
+            $this->createMock(\Magento\Catalog\Model\Product::class),
+            $this->createMock(\Magento\Catalog\Model\Product::class)
         ];
         $productCollection
             ->expects($this->atLeastOnce())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($items));
 
-        $link = $this->getMock(\Magento\Catalog\Model\Product\Link::class, [], [], '', false);
+        $link = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Link::class,
+            ['setLinkTypeId', 'getProductCollection']
+        );
         $link
             ->expects($this->any())
             ->method('setLinkTypeId');
@@ -429,6 +419,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->will($this->returnValue($associatedProducts));
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
 
         $this->assertEquals(
             [0 => $this->product],
@@ -438,16 +431,13 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedWithProductsStrictFalseStringResult()
     {
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
-        $typeMock = $this->getMock(
+        $typeMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            ['_prepareProduct', 'deleteTypeSpecificData'],
-            [],
-            '',
-            false
+            ['_prepareProduct', 'deleteTypeSpecificData']
         );
         $associatedPrepareResult = "";
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
@@ -476,16 +466,13 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
     {
         $expectedMsg = "Cannot process the item.";
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
-        $typeMock = $this->getMock(
+        $typeMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            ['_prepareProduct', 'deleteTypeSpecificData'],
-            [],
-            '',
-            false
+            ['_prepareProduct', 'deleteTypeSpecificData']
         );
         $associatedPrepareResult = [];
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
@@ -513,25 +500,19 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedWithProductsStrictFalse()
     {
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
-        $typeMock = $this->getMock(
+        $typeMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            ['_prepareProduct', 'deleteTypeSpecificData'],
-            [],
-            '',
-            false
+            ['_prepareProduct', 'deleteTypeSpecificData']
         );
         $associatedPrepareResult = [
-            $this->getMock(
-                \Magento\Catalog\Model\Product::class,
-                [],
-                [],
-                'resultProduct',
-                false
-            )
+            $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->setMockClassName('resultProduct')
+                ->disableOriginalConstructor()
+                ->getMock()
         ];
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
 
@@ -539,6 +520,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
 
         $cached = true;
         $this->product
@@ -558,30 +543,28 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedWithProductsStrictTrue()
     {
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedId = 9384;
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
-        $typeMock = $this->getMock(
+        $typeMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
-            ['_prepareProduct', 'deleteTypeSpecificData'],
-            [],
-            '',
-            false
+            ['_prepareProduct', 'deleteTypeSpecificData']
         );
-        $associatedPrepareResult = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [],
-            [],
-            'resultProduct',
-            false
-        );
+        $associatedPrepareResult = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMockClassName('resultProduct')
+            ->disableOriginalConstructor()
+            ->getMock();
         $typeMock->expects($this->once())->method('_prepareProduct')->willReturn([$associatedPrepareResult]);
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
 
         $cached = true;
         $this->product
@@ -608,7 +591,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $expectedMsg = "Please specify the quantity of product(s).";
         $associatedId = 9384;
-        $associatedProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $associatedProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
         $buyRequest = new \Magento\Framework\DataObject();
@@ -628,7 +611,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testFlushAssociatedProductsCache()
     {
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['unsData'], [], '', false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['unsData']);
         $productMock->expects($this->once())
             ->method('unsData')
             ->with('_cache_instance_associated_products')

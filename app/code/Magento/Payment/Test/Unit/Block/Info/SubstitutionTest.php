@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Payment\Test\Unit\Block\Info;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubstitutionTest extends \PHPUnit_Framework_TestCase
+class SubstitutionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -28,6 +28,9 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -133,7 +136,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
         $infoMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodMock));
         $this->block->setInfo($infoMock);
 
-        $fakeBlock = new \StdClass();
+        $fakeBlock = new \stdClass();
         $this->layout->expects(
             $this->any()
         )->method(

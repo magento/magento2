@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
@@ -11,7 +11,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\Api\Filter;
 
-class AttributeSetEntityTypeCodeFilterTest extends \PHPUnit_Framework_TestCase
+class AttributeSetEntityTypeCodeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeSetEntityTypeCodeFilter

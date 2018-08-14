@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ScopeInterface;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -73,6 +73,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));
     }
 
+    /**
+     * @return array
+     */
     public function getValueDataProvider()
     {
         return [

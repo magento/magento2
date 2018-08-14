@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Checkout with PayPal from Shopping Cart.
@@ -22,13 +23,20 @@ class InContextCheckoutWithPaypalFromShoppingCartStep implements TestStepInterfa
     protected $checkoutCart;
 
     /**
-     * @constructor
+     * @var CmsIndex
+     */
+    private $cmsIndex;
+
+    /**
      * @param CheckoutCart $checkoutCart
+     * @param CmsIndex $cmsIndex
      */
     public function __construct(
-        CheckoutCart $checkoutCart
+        CheckoutCart $checkoutCart,
+        CmsIndex $cmsIndex
     ) {
         $this->checkoutCart = $checkoutCart;
+        $this->cmsIndex = $cmsIndex;
     }
 
     /**
@@ -39,6 +47,8 @@ class InContextCheckoutWithPaypalFromShoppingCartStep implements TestStepInterfa
     public function run()
     {
         $this->checkoutCart->open();
+        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->checkoutCart->getCartBlock()->inContextPaypalCheckout();
     }
 }

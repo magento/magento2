@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\DB\Select;
-use \Magento\Framework\Search\Adapter\Mysql\Mapper;
-
+use Magento\Framework\Search\Adapter\Mysql\Mapper;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\ResourceConnection;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -20,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     const INDEX_NAME = 'test_index_fulltext';
     const REQUEST_LIMIT = 120321;
@@ -98,7 +96,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQuery', 'getIndex', 'getSize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->any())
             ->method('getIndex')
             ->will($this->returnValue(self::INDEX_NAME));
 
@@ -526,9 +524,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('limit')
             ->with($isInternal ? self::REQUEST_LIMIT : 10000000000)
             ->willReturnSelf();
-        $select->expects($isInternal ? $this->once() : $this->never())
+        $select->expects($isInternal ? $this->exactly(2) : $this->never())
             ->method('order')
-            ->with('relevance DESC')
+            ->with(
+                $this->logicalOr(
+                    'relevance DESC',
+                    'entity_id DESC'
+                )
+            )
             ->willReturnSelf();
         $select->expects($isGrouped ? $this->once() : $this->never())
             ->method('group')
@@ -536,5 +539,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         return $select;
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unsupported relevance calculation method used.
+     */
+    public function testUnsupportedRelevanceCalculationMethod()
+    {
+        $helper = new ObjectManager($this);
+        $helper->getObject(
+            \Magento\Framework\Search\Adapter\Mysql\Mapper::class,
+            [
+                'indexProviders' => [],
+                'relevanceCalculationMethod' => 'UNSUPPORTED'
+            ]
+        );
     }
 }

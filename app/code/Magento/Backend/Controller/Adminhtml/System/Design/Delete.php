@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
@@ -19,11 +19,11 @@ class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
 
             try {
                 $design->delete();
-                $this->messageManager->addSuccess(__('You deleted the design change.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the design change.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __("You can't delete the design change."));
+                $this->messageManager->addExceptionMessage($e, __("You can't delete the design change."));
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

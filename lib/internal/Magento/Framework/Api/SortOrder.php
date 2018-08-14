@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ use Magento\Framework\Phrase;
 
 /**
  * Data object for sort order.
+ *
+ * @api
+ * @since 100.0.2
  */
 class SortOrder extends AbstractSimpleObject
 {
@@ -30,8 +33,10 @@ class SortOrder extends AbstractSimpleObject
         if (null !== $this->getDirection()) {
             $this->validateDirection($this->getDirection());
         }
+        if ($this->getField() !== null) {
+            $this->validateField($this->getField());
+        }
     }
-
 
     /**
      * Get sorting field.
@@ -51,6 +56,8 @@ class SortOrder extends AbstractSimpleObject
      */
     public function setField($field)
     {
+        $this->validateField($field);
+
         return $this->setData(SortOrder::FIELD, $field);
     }
 
@@ -78,7 +85,7 @@ class SortOrder extends AbstractSimpleObject
 
     /**
      * Validate direction argument ASC or DESC
-     * 
+     *
      * @param mixed $direction
      * @return null
      * @throws InputException
@@ -127,5 +134,24 @@ class SortOrder extends AbstractSimpleObject
     private function normalizeDirectionInput($direction)
     {
         return strtoupper($direction);
+    }
+
+    /**
+     * Check if given value can be used as sorting field.
+     *
+     * @param string $field
+     * @return void
+     * @throws InputException
+     */
+    private function validateField(string $field)
+    {
+        if (preg_match('/[^a-z0-9\_]/i', $field)) {
+            throw new InputException(
+                new Phrase(
+                    'Sort order field %1 contains restricted symbols',
+                    [$field]
+                )
+            );
+        }
     }
 }

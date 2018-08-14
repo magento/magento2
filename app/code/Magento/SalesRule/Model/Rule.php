@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -12,8 +12,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
- * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
+ * @api
  * @method string getName()
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -64,6 +63,7 @@ use Magento\Quote\Model\Quote\Address;
  * @method int getRuleId()
  * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -190,6 +190,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -208,7 +209,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -225,7 +227,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 
@@ -518,7 +521,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;
@@ -537,6 +540,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getFromDate()
     {
@@ -545,6 +549,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getToDate()
     {
@@ -607,6 +612,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -616,6 +622,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getActionsFieldSetId($formName = '')
     {

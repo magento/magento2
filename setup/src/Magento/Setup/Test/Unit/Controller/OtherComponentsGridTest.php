@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Setup\Controller\OtherComponentsGrid;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Composer\InfoCommand;
 
-class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
+class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
@@ -31,21 +31,10 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInformation = $this->getMock(
-            \Magento\Framework\Composer\ComposerInformation::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->infoCommand = $this->getMock(\Magento\Composer\InfoCommand::class, [], [], '', false);
-        $magentoComposerApplicationFactory = $this->getMock(
-            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->infoCommand = $this->createMock(\Magento\Composer\InfoCommand::class);
+        $magentoComposerApplicationFactory =
+            $this->createMock(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $magentoComposerApplicationFactory->expects($this->once())
             ->method('createInfoCommand')
             ->willReturn($this->infoCommand);

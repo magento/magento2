@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreventExpressCheckoutObserverTest extends \PHPUnit_Framework_TestCase
+class PreventExpressCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\PreventExpressCheckoutObserver
@@ -122,7 +122,7 @@ class PreventExpressCheckoutObserverTest extends \PHPUnit_Framework_TestCase
         $this->_event->setControllerAction(null);
         $this->_model->execute($this->_observer);
 
-        $this->_event->setControllerAction(new \StdClass());
+        $this->_event->setControllerAction(new \stdClass());
         $this->_model->execute($this->_observer);
 
         $expectedActionName = 'realAction';

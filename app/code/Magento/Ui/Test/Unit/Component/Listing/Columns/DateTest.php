@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class DateTest
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TIME = '2000-04-12 16:34:12';
 
@@ -53,7 +53,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
 
         $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()

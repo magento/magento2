@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * String translation model
  *
- * @method \Magento\Translation\Model\ResourceModel\StringUtils _getResource()
- * @method \Magento\Translation\Model\ResourceModel\StringUtils getResource()
  * @method int getStoreId()
  * @method \Magento\Translation\Model\StringUtils setStoreId(int $value)
  * @method string getTranslate()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class MassCancelTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassCancelTest extends \PHPUnit_Framework_TestCase
+class MassCancelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\MassCancel
@@ -88,25 +88,13 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
 
-        $resultRedirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $resultRedirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
 
         $this->orderCollectionMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Collection::class)
             ->disableOriginalConstructor()
@@ -118,16 +106,10 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->sessionMock = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set'], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->resultRedirectMock = $this->getMock(
-            \Magento\Backend\Model\View\Result\Redirect::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlagMock = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set']);
+        $this->helperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirectMock = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
         $redirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
@@ -155,7 +137,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
-        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->orderCollectionMock)

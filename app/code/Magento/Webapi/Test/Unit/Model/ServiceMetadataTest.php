@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model;
@@ -13,7 +13,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
-class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
+class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ServiceMetadata
@@ -49,11 +49,11 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMock(Config::class, [], [], '', false);
-        $this->cacheMock = $this->getMock(Webapi::class, [], [], '', false);
-        $this->classReflectorMock = $this->getMock(ClassReflector::class, [], [], '', false);
-        $this->typeProcessorMock = $this->getMock(TypeProcessor::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->cacheMock = $this->createMock(Webapi::class);
+        $this->classReflectorMock = $this->createMock(ClassReflector::class);
+        $this->typeProcessorMock = $this->createMock(TypeProcessor::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->serviceMetadata = $objectManager->getObject(
             ServiceMetadata::class,

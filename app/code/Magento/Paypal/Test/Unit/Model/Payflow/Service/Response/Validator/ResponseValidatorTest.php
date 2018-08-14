@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
@@ -16,7 +16,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
  *
  * Test for class \Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator
  */
-class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
+class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseValidator

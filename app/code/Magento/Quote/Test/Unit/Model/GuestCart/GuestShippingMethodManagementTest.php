@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\GuestCart\GuestShippingMethodManagement;
 
-class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
+class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GuestShippingMethodManagement
@@ -56,7 +56,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->shippingMethodManagementMock =
-            $this->getMock(\Magento\Quote\Model\ShippingMethodManagement::class, [], [], '', false);
+            $this->createMock(\Magento\Quote\Model\ShippingMethodManagement::class);
 
         $guestCartTestHelper = new GuestCartTestHelper($this);
         list($this->quoteIdMaskFactoryMock, $this->quoteIdMask) = $guestCartTestHelper->mockQuoteIdMask(

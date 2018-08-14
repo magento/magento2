@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Report\ConditionAppliers;
@@ -10,7 +10,9 @@ namespace Magento\Braintree\Model\Report\ConditionAppliers;
  */
 class AppliersPool
 {
-    /** @var ApplierInterface[] */
+    /**
+     * @var \Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface[]
+     */
     private $appliersPool = [];
 
     /**

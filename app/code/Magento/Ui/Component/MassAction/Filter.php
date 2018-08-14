@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\MassAction;
@@ -14,9 +14,8 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
- * Class Filter
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Filter
 {
@@ -99,13 +98,12 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
+
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $this->getFilterIds()]
+        );
+
         return $collection;
     }
 
@@ -217,10 +215,21 @@ class Filter
      */
     private function getFilterIds()
     {
+        $idsArray = [];
         $this->applySelectionOnTargetProvider();
-        if ($this->getDataProvider()->getSearchResult()) {
-            return $this->getDataProvider()->getSearchResult()->getAllIds();
+        if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
+            // Use collection's getAllIds for optimization purposes.
+            $idsArray = $this->getDataProvider()->getAllIds();
+        } else {
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
+            // Use compatible search api getItems when searchResult is not a collection.
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
+            }
         }
-        return [];
+        return  $idsArray;
     }
 }

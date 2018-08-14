@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,16 +9,16 @@
 ?>
 <div class="message message-notice">
     <div class="message-inner">
-        <div class="message-content"><?php /* @escapeNotVerified */ echo __('Changing address information will not recalculate shipping, tax or other order amount.') ?></div>
+        <div class="message-content"><?= /* @escapeNotVerified */ __('Changing address information will not recalculate shipping, tax or other order amount.') ?></div>
     </div>
 </div>
 
 <fieldset class="fieldset admin__fieldset-wrapper">
     <legend class="legend admin__legend">
-        <span><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
+        <span><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
     </legend>
     <br>
     <div class="form-inline" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>
-        <?php echo $block->getForm()->toHtml() ?>
+        <?= $block->getForm()->toHtml() ?>
     </div>
 </fieldset>

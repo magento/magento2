@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
@@ -10,13 +10,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
- *
- * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
  */
-class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
+class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
@@ -88,7 +87,8 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators

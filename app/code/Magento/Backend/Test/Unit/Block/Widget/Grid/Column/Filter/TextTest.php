@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Text*/
     protected $block;
@@ -31,8 +31,8 @@ class TextTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
-        $this->helper = $this->getMock(\Magento\Framework\DB\Helper::class, [], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
+        $this->helper = $this->createMock(\Magento\Framework\DB\Helper::class);
 
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
 

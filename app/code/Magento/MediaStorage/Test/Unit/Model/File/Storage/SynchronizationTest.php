@@ -1,30 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-class SynchronizationTest extends \PHPUnit_Framework_TestCase
+class SynchronizationTest extends \PHPUnit\Framework\TestCase
 {
     public function testSynchronize()
     {
         $content = 'content';
         $relativeFileName = 'config.xml';
 
-        $storageFactoryMock = $this->getMock(
+        $storageFactoryMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class,
-            ['create', '_wakeup'],
-            [],
-            '',
-            false
+            ['create', '_wakeup']
         );
-        $storageMock = $this->getMock(
+        $storageMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\Database::class,
-            ['getContent', 'getId', 'loadByFilename', '__wakeup'],
-            [],
-            '',
-            false
+            ['getContent', 'getId', 'loadByFilename', '__wakeup']
         );
         $storageFactoryMock->expects($this->once())->method('create')->will($this->returnValue($storageMock));
 
@@ -32,12 +26,9 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $storageMock->expects($this->once())->method('getId')->will($this->returnValue(true));
         $storageMock->expects($this->once())->method('loadByFilename');
 
-        $file = $this->getMock(
+        $file = $this->createPartialMock(
             \Magento\Framework\Filesystem\File\Write::class,
-            ['lock', 'write', 'unlock', 'close'],
-            [],
-            '',
-            false
+            ['lock', 'write', 'unlock', 'close']
         );
         $file->expects($this->once())->method('lock');
         $file->expects($this->once())->method('write')->with($content);

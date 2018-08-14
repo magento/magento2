@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -8,7 +8,7 @@ namespace Magento\Framework;
 /**
  * Universal data container with array access implementation
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class DataObject implements \ArrayAccess
@@ -115,7 +115,6 @@ class DataObject implements \ArrayAccess
      * @param string|int $index
      * @return mixed
      */
-
     public function getData($key = '', $index = null)
     {
         if ('' === $key) {
@@ -326,19 +325,21 @@ class DataObject implements \ArrayAccess
      * Convert object data to JSON
      *
      * @param array $keys array of required keys
-     * @return string
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function toJson(array $keys = [])
     {
         $data = $this->toArray($keys);
-        return \Zend_Json::encode($data);
+        return \Magento\Framework\Serialize\JsonConverter::convert($data);
     }
 
     /**
      * The "__" style wrapper for toJson
      *
-     * @param  array $keys
-     * @return string
+     * @param array $keys
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function convertToJson(array $keys = [])
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Grid;
@@ -178,7 +178,7 @@ class Module
     private function addGeneralInfo(array $items)
     {
         foreach ($items as &$item) {
-            $item['moduleName'] = $item['moduleName'] ?: $this->packageInfo->getModuleName($item['name']);
+            $item['moduleName'] = $item['moduleName'] ?? $this->packageInfo->getModuleName($item['name']);
             $item['enable'] = $this->moduleList->has($item['moduleName']);
             $vendorSource = $item['name'] == self::UNKNOWN_PACKAGE_NAME ? $item['moduleName'] : $item['name'];
             $item['vendor'] = ucfirst(current(preg_split('%[/_]%', $vendorSource)));

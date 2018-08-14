@@ -1,13 +1,21 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Payment\Test\Repository\CreditCard">
         <dataset name="visa_default">
+            <field name="cc_number" xsi:type="string">4111111111111111</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_default_admin">
+            <field name="cc_type" xsi:type="string">Visa</field>
             <field name="cc_number" xsi:type="string">4111111111111111</field>
             <field name="cc_exp_month" xsi:type="string">01 - January</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
@@ -30,6 +38,28 @@
 
         <dataset name="visa_direct">
             <field name="cc_number" xsi:type="string">4617747819866651</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_empty">
+            <field name="cc_type" xsi:type="string" />
+            <field name="cc_number" xsi:type="string" />
+            <field name="cc_exp_month" xsi:type="string" />
+            <field name="cc_exp_year" xsi:type="string" />
+            <field name="cc_cid" xsi:type="string" />
+        </dataset>
+
+        <dataset name="visa_cvv_mismatch">
+            <field name="cc_number" xsi:type="string">4111111111111111</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">306</field>
+        </dataset>
+
+        <dataset name="mastercard_default">
+            <field name="cc_number" xsi:type="string">5555555555554444</field>
             <field name="cc_exp_month" xsi:type="string">01 - January</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
             <field name="cc_cid" xsi:type="string">123</field>

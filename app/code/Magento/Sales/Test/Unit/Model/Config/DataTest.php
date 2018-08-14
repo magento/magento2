@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMockBuilder(
             \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testGet()

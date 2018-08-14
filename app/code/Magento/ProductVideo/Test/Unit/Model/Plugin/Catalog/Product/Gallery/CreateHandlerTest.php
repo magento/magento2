@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 /**
  * Unit test for plugin for catalog product gallery Create handler.
  */
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Subject of testing.
@@ -39,39 +39,17 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->attribute = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn('media_gallery');
 
-        $this->resourceModel = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Gallery::class);
 
-        $this->mediaGalleryCreateHandler = $this->getMock(
-            \Magento\Catalog\Model\Product\Gallery\CreateHandler::class,
-            [],
-            [],
-            '',
-            false
+        $this->mediaGalleryCreateHandler = $this->createMock(
+            \Magento\Catalog\Model\Product\Gallery\CreateHandler::class
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -133,8 +111,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'video_metadata' => 'meta two',
                     'role' => '',
                     'additional_store_data' => [
-                        0 =>
-                            [
+                        0 => [
                                 'store_id' => '0',
                                 'video_provider' => null,
                                 'video_url' => 'https://www.youtube.com/watch?v=ab123456',

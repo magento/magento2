@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Customer\Block\Widget\Gender;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class GenderTest extends \PHPUnit_Framework_TestCase
+class GenderTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used in the unit tests */
     const CUSTOMER_ENTITY_TYPE = 'customer';
@@ -51,11 +51,11 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $this->customerRepository = $this
             ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
 
         $this->block = new \Magento\Customer\Block\Widget\Gender(
-            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
-            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
+            $this->createMock(\Magento\Customer\Helper\Address::class),
             $this->customerMetadata,
             $this->customerRepository,
             $this->customerSession

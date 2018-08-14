@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
-class ExportTest extends \PHPUnit_Framework_TestCase
+class ExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class CustomergroupTest extends \PHPUnit_Framework_TestCase
+class CustomergroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup

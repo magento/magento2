@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\View\Deployment;
@@ -11,7 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\View\Deployment\Version\Storage\File;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
-class VersionTest extends \PHPUnit_Framework_TestCase
+class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var File

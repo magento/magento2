@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Cookie\Model\Config\Backend\Path
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 use Magento\Framework\Session\Config\Validator\CookiePathValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookiePathValidator */
     private $validatorMock;

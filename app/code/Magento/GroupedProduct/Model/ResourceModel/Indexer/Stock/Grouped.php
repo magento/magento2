@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,44 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
+/**
+ * Stock indexer for grouped product.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     */
+    private $activeTableSwitcher;
+
+    /**
+     * Grouped constructor.
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
+    }
+
     /**
      * Get the select object for get stock status by grouped product ids
      *
@@ -25,7 +59,10 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $connection = $this->getConnection();
-        $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
+            : $this->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $select->reset(

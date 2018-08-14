@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\PluginList;
@@ -268,7 +268,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             $this->_inheritPlugins($type);
         }
         $key = $type . '_' . lcfirst($method) . '_' . $code;
-        return isset($this->_processed[$key]) ? $this->_processed[$key] : null;
+        return $this->_processed[$key] ?? null;
     }
 
     /**
@@ -389,7 +389,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

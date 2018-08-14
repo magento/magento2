@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Entity\Product\Attribute\Group\AttributeMapper;
@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Entity\Product\Attribute\G
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin

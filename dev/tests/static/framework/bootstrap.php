@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,8 +19,10 @@ setCustomErrorHandler();
 $componentRegistrar = new ComponentRegistrar();
 $dirSearch = new DirSearch($componentRegistrar, new ReadFactory(new DriverPool()));
 $themePackageList = new ThemePackageList($componentRegistrar, new ThemePackageFactory());
+$serializer = new \Magento\Framework\Serialize\Serializer\Json();
+$regexIteratorFactory = new Magento\Framework\App\Utility\RegexIteratorFactory();
 \Magento\Framework\App\Utility\Files::setInstance(
-    new Files($componentRegistrar, $dirSearch, $themePackageList)
+    new Files($componentRegistrar, $dirSearch, $themePackageList, $serializer, $regexIteratorFactory)
 );
 
 /**
@@ -51,7 +53,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

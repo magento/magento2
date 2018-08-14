@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component;
@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class ListingTest
  */
-class ListingTest extends \PHPUnit_Framework_TestCase
+class ListingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,10 +38,6 @@ class ListingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
     }
 
     /**
@@ -51,6 +47,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         /** @var Listing $listing */
         $listing = $this->objectManager->getObject(
             \Magento\Ui\Component\Listing::class,
@@ -70,6 +67,10 @@ class ListingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $buttons = [
             'button1' => 'button1',
             'button2' => 'button2'

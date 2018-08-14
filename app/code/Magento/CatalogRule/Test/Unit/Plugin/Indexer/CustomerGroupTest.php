@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Rule processor mock
@@ -33,20 +33,10 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ruleProductProcessor = $this->getMock(
-            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $this->ruleProductProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class
         );
-        $this->subject = $this->getMock(
-            \Magento\Customer\Model\Group::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->subject = $this->createMock(\Magento\Customer\Model\Group::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\CatalogRule\Plugin\Indexer\CustomerGroup::class,

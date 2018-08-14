@@ -2,12 +2,12 @@
 /**
  * Integration test for Magento\Framework\ValidatorFactory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
-class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
+class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;

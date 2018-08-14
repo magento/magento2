@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Category;
@@ -11,7 +11,7 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
-class FileInfoTest extends \PHPUnit_Framework_TestCase
+class FileInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject

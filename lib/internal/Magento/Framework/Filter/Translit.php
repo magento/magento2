@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -409,7 +409,7 @@ class Translit implements \Zend_Filter_Interface
         $convertConfig = $config->getValue('url/convert', 'default');
         if ($convertConfig) {
             foreach ($convertConfig as $configValue) {
-                $this->convertTable[strval($configValue['from'])] = strval($configValue['to']);
+                $this->convertTable[(string)$configValue['from']] = (string)$configValue['to'];
             }
         }
     }

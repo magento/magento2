@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

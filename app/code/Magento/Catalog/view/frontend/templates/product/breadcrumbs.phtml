@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var \Magento\Theme\Block\Html\Breadcrumbs $block */
+/** @var \Magento\Catalog\ViewModel\Product\Breadcrumbs $viewModel */
+$viewModel = $block->getData('viewModel');
+?>
+<div class="breadcrumbs" data-mage-init='<?= /* @escapeNotVerified */ $viewModel->getJsonConfiguration() ?>'></div>

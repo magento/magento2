@@ -7,3 +7,8 @@
 \Magento\Framework\DB\Adapter\DeadlockException
 \Magento\Framework\DB\Adapter\LockWaitException
 \Magento\Framework\DB\Adapter\DuplicateException
+\Magento\Framework\DB\DataConverter\DataConversionException
+\Magento\Framework\DB\FieldDataConversionException
+\Magento\Signifyd\Model\SignifydGateway\GatewayException
+\Magento\Signifyd\Model\SignifydGateway\ApiCallException
+\Magento\Catalog\Model\Product\Image\NotLoadInfoImageException

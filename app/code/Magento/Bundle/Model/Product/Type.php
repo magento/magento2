@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,15 +8,21 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 
 /**
  * Bundle Type Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -43,7 +49,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -147,6 +153,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_stockState;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var SelectionCollectionFilterApplier
+     */
+    private $selectionCollectionFilterApplier;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -168,6 +184,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param MetadataPool|null $metadataPool
+     * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -192,7 +211,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        Json $serializer = null,
+        MetadataPool $metadataPool = null,
+        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -206,6 +228,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
+
+        $this->metadataPool = $metadataPool
+            ?: ObjectManager::getInstance()->get(MetadataPool::class);
+
+        $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
+            ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
+
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -215,7 +244,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $filesystem,
             $coreRegistry,
             $logger,
-            $productRepository
+            $productRepository,
+            $serializer
         );
     }
 
@@ -277,7 +307,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             if ($product->hasCustomOptions()) {
                 $customOption = $product->getCustomOption('bundle_selection_ids');
-                $selectionIds = unserialize($customOption->getValue());
+                $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
                     foreach ($selections->getItems() as $selection) {
@@ -305,7 +335,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             if ($product->hasCustomOptions()) {
                 $customOption = $product->getCustomOption('bundle_selection_ids');
-                $selectionIds = unserialize($customOption->getValue());
+                $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 $selections = $this->getSelectionsByIds($selectionIds, $product);
                 foreach ($selections->getItems() as $selection) {
                     $qtyOption = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
@@ -331,7 +361,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if ($product->hasCustomOptions()) {
             $customOption = $product->getCustomOption('bundle_selection_ids');
-            $selectionIds = unserialize($customOption->getValue());
+            $selectionIds = $this->serializer->unserialize($customOption->getValue());
             $selections = $this->getSelectionsByIds($selectionIds, $product);
             $virtualCount = 0;
             foreach ($selections->getItems() as $selection) {
@@ -340,7 +370,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
 
-            return $virtualCount == count($selections);
+            return $virtualCount === count($selections);
         }
 
         return false;
@@ -452,7 +482,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getSelectionsCollection($optionIds, $product)
     {
         $storeId = $product->getStoreId();
-        $selectionsCollection = $this->_bundleCollection->create()
+
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
+        /** @var Selections $selectionsCollection */
+        $selectionsCollection = $this->_bundleCollection->create();
+        $selectionsCollection
             ->addAttributeToSelect($this->_config->getProductAttributes())
             ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
             ->setFlag('product_children', true)
@@ -461,6 +498,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->setStoreId($storeId)
             ->addFilterByRequiredOptions()
             ->setOptionIdsFilter($optionIds);
+
+        $this->selectionCollectionFilterApplier->apply(
+            $selectionsCollection,
+            'parent_product_id',
+            $product->getData($metadata->getLinkField())
+        );
 
         if (!$this->_catalogData->isPriceGlobal() && $storeId) {
             $websiteId = $this->_storeManager->getStore($storeId)
@@ -493,12 +536,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         foreach ($selections as $selection) {
             if ($selection->getProductId() == $optionProduct->getId()) {
-                foreach ($options as &$option) {
-                    if ($option->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
+                foreach ($options as $quoteItemOption) {
+                    if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $option->setValue(intval($option->getValue()));
+                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
                         } else {
-                            $option->setValue($value);
+                            $quoteItemOption->setValue($value);
                         }
                     }
                 }
@@ -539,15 +582,27 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $isSalable = false;
-        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+        foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
+            /** @var Selections $selectionsCollection */
             $selectionsCollection = $this->_bundleCollection->create();
             $selectionsCollection->addAttributeToSelect('status');
             $selectionsCollection->addQuantityFilter();
+            $selectionsCollection->setFlag('product_children', true);
             $selectionsCollection->addFilterByRequiredOptions();
             $selectionsCollection->setOptionIdsFilter([$option->getId()]);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $selectionsCollection,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             foreach ($selectionsCollection as $selection) {
                 if ($selection->isSalable()) {
@@ -636,7 +691,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $options
                     );
 
-                    $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
+                    $optionsCollection->appendSelections($selections, true, $_appendAllSelections);
 
                     $selections = $selections->getItems();
                 } else {
@@ -653,7 +708,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ->getOptionsIds($product);
                 $selectionCollection = $product->getTypeInstance()
                     ->getSelectionsCollection($optionIds, $product);
-                $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
+                $options = $optionCollection->appendSelections($selectionCollection, true, $_appendAllSelections);
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
@@ -696,8 +751,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $this->checkIsResult($_result);
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
-                        ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
-                        ->addCustomOption('bundle_selection_attributes', serialize($attributes));
+                        ->addCustomOption(
+                            'bundle_option_ids',
+                            $this->serializer->serialize(array_map('intval', $optionIds))
+                        )
+                        ->addCustomOption(
+                            'bundle_selection_attributes',
+                            $this->serializer->serialize($attributes)
+                        );
 
                     if ($isStrictProcessMode) {
                         $_result[0]->setCartQty($qty);
@@ -714,8 +775,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($result as $item) {
                     $item->addCustomOption('bundle_identity', $uniqueKey);
                 }
-                $product->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)));
-                $product->addCustomOption('bundle_selection_ids', serialize($selectionIds));
+                $product->addCustomOption(
+                    'bundle_option_ids',
+                    $this->serializer->serialize(
+                        array_map('intval', $optionIds)
+                    )
+                );
+                $product->addCustomOption('bundle_selection_ids', $this->serializer->serialize($selectionIds));
 
                 return $result;
             }
@@ -784,13 +850,18 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         sort($selectionIds);
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $usedSelections = $product->getData($this->_keyUsedSelections);
         $usedSelectionsIds = $product->getData($this->_keyUsedSelectionsIds);
 
         if (!$usedSelections || $usedSelectionsIds !== $selectionIds) {
             $storeId = $product->getStoreId();
-            $usedSelections = $this->_bundleCollection
-                ->create()
+            /** @var Selections $usedSelections */
+            $usedSelections = $this->_bundleCollection->create();
+            $usedSelections
                 ->addAttributeToSelect('*')
                 ->setFlag('product_children', true)
                 ->addStoreFilter($this->getStoreFilter($product))
@@ -798,6 +869,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setPositionOrder()
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $usedSelections,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
@@ -825,7 +902,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedOptions = $product->getData($this->_keyUsedOptions);
         $usedOptionsIds = $product->getData($this->_keyUsedOptionsIds);
 
-        if (!$usedOptions || serialize($usedOptionsIds) != serialize($optionIds)) {
+        if (
+            !$usedOptions
+            || $this->serializer->serialize($usedOptionsIds) != $this->serializer->serialize($optionIds)
+        ) {
             $usedOptions = $this->_bundleOption
                 ->create()
                 ->getResourceCollection()
@@ -857,10 +937,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if ($product->hasCustomOptions()) {
             $customOption = $product->getCustomOption('bundle_option_ids');
-            $optionIds = unserialize($customOption->getValue());
+            $optionIds = $this->serializer->unserialize($customOption->getValue());
             $options = $this->getOptionsByIds($optionIds, $product);
             $customOption = $product->getCustomOption('bundle_selection_ids');
-            $selectionIds = unserialize($customOption->getValue());
+            $selectionIds = $this->serializer->unserialize($customOption->getValue());
             $selections = $this->getSelectionsByIds($selectionIds, $product);
             foreach ($selections->getItems() as $selection) {
                 if ($selection->isSalable()) {
@@ -935,9 +1015,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
         if ($aPosition == $bPosition) {
             return 0;
-        } else {
-            return $aPosition < $bPosition ? -1 : 1;
         }
+        return $aPosition < $bPosition ? -1 : 1;
     }
 
     /**
@@ -953,7 +1032,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->getAllIds();
         $collection = $this->getSelectionsCollection($optionIds, $product);
 
-        if (count($collection) > 0 || $product->getOptions()) {
+        if ($collection->getSize() > 0 || $product->getOptions()) {
             return true;
         }
 
@@ -1009,9 +1088,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $productOptionIds = $this->getOptionsIds($product);
         $productSelections = $this->getSelectionsCollection($productOptionIds, $product);
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
-        $selectionIds = unserialize($selectionIds->getValue());
+        $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject(unserialize($buyRequest->getValue()));
+        $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {

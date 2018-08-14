@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\View;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\View\Design;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
@@ -56,13 +56,11 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->flyweightThemeFactory = $this->getMock(
-            \Magento\Framework\View\Design\Theme\FlyweightFactory::class, [], [], '', false
-        );
+        $this->flyweightThemeFactory = $this->createMock(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
         $this->config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->themeFactory = $this->getMock(\Magento\Theme\Model\ThemeFactory::class, ['create'], [], '', false);
+        $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->state = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->state = $this->createMock(\Magento\Framework\App\State::class);
         $themes = [Design::DEFAULT_AREA => $this->defaultTheme];
         $this->model = new Design(
             $this->storeManager,

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use \Magento\Framework\Data\Argument\Interpreter\Constant;
 
-class ConstantTest extends \PHPUnit_Framework_TestCase
+class ConstantTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Constant

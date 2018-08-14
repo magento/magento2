@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -15,7 +15,7 @@ use Magento\Braintree\Model\Report\FilterMapper;
  *
  * Test for class \Magento\Braintree\Model\Report\FilterMapper
  */
-class FilterMapperTest extends \PHPUnit_Framework_TestCase
+class FilterMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject

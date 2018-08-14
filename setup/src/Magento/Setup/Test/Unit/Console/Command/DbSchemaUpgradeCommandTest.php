@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ class DbSchemaUpgradeCommandTest extends DbDataUpgradeCommandTest
     public function testExecute()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
-        $installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
+        $installer = $this->createMock(\Magento\Setup\Model\Installer::class);
         $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($installer));
         $installer->expects($this->once())->method('installSchema');
 

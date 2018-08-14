@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 /** Test Magento\Customer\Model\Metadata\Form\Multiline */
-abstract class AbstractFormTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractFormTestCase extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $localeMock;
@@ -27,6 +27,6 @@ abstract class AbstractFormTestCase extends \PHPUnit_Framework_TestCase
         $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
-        $this->attributeMetadataMock = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $this->attributeMetadataMock = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
     }
 }

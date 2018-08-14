@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
 
 use Magento\Framework\View\Design\Fallback\RulePool;
 
-class StaticFileTest extends \PHPUnit_Framework_TestCase
+class StaticFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class StaticFileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resolver = $this->getMock(
+        $this->resolver = $this->createMock(
             \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
         );
         $this->object = new StaticFile($this->resolver);

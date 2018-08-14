@@ -2,12 +2,12 @@
 /**
  * Test for \Magento\Paypal\Block\Payment\Form\Billing\Agreement
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Payment\Form\Billing;
 
-class AgreementTest extends \PHPUnit_Framework_TestCase
+class AgreementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
     protected $_block;

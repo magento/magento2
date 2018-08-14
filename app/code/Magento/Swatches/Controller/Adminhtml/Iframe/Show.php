@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Controller\Adminhtml\Iframe;
@@ -89,6 +89,7 @@ class Show extends \Magento\Backend\App\Action
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $config = $this->config;
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
+            unset($result['path']);
 
             $this->_eventManager->dispatch(
                 'swatch_gallery_upload_image_after',
@@ -96,7 +97,6 @@ class Show extends \Magento\Backend\App\Action
             );
 
             unset($result['tmp_name']);
-            unset($result['path']);
 
             $result['url'] = $this->config->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';

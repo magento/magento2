@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Config\Integration;
@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\Config\Integration;
 /**
  * Converter of api.xml content into array format.
  *
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {

@@ -1,25 +1,31 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-class ExceptionsTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Serialize\Serializer\Json;
+
+class ExceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Design\Backend\Exceptions
      */
-    protected $_model = null;
+    private $exceptions = null;
+
+    /** @var Json */
+    private $serializer;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->exceptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Theme\Model\Design\Backend\Exceptions::class
         );
-        $this->_model->setScope('default');
-        $this->_model->setScopeId(0);
-        $this->_model->setPath('design/theme/ua_regexp');
+        $this->exceptions->setScope('default');
+        $this->exceptions->setScopeId(0);
+        $this->exceptions->setPath('design/theme/ua_regexp');
+        $this->serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Json::class);
     }
 
     /**
@@ -33,10 +39,10 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             '2' => ['search' => '/Firefox/', 'value' => 'Magento/blank'],
         ];
 
-        $this->_model->setValue($value);
-        $this->_model->save();
+        $this->exceptions->setValue($value);
+        $this->exceptions->save();
 
-        $processedValue = unserialize($this->_model->getValue());
+        $processedValue = $this->serializer->unserialize($this->exceptions->getValue());
         $this->assertEquals(count($processedValue), 2, 'Number of saved values is wrong');
 
         $entry = $processedValue['1'];
@@ -56,10 +62,10 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
             '3' => ['search' => '/Firefox/', 'value' => 'Magento/blank'],
         ];
 
-        $this->_model->setValue($value);
-        $this->_model->save();
+        $this->exceptions->setValue($value);
+        $this->exceptions->save();
 
-        $processedValue = unserialize($this->_model->getValue());
+        $processedValue = $this->serializer->unserialize($this->exceptions->getValue());
         $emptyIsSkipped = isset($processedValue['1']) && !isset($processedValue['2']) && isset($processedValue['3']);
         $this->assertTrue($emptyIsSkipped);
     }
@@ -72,10 +78,10 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveException($designException, $regexp)
     {
-        $this->_model->setValue(['1' => $designException]);
-        $this->_model->save();
+        $this->exceptions->setValue(['1' => $designException]);
+        $this->exceptions->save();
 
-        $processedValue = unserialize($this->_model->getValue());
+        $processedValue = $this->serializer->unserialize($this->exceptions->getValue());
         $this->assertEquals($processedValue['1']['regexp'], $regexp);
     }
 
@@ -105,8 +111,8 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWrongException($value)
     {
-        $this->_model->setValue($value);
-        $this->_model->save();
+        $this->exceptions->setValue($value);
+        $this->exceptions->save();
     }
 
     /**

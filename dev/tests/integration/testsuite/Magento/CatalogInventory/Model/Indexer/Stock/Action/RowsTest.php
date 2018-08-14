@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Class RowsTest
  */
-class RowsTest extends \PHPUnit_Framework_TestCase
+class RowsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -59,6 +59,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ProductRepository::class
         );
+
         $product = $productRepository->get('simple');
 
         $stockItem = $stockRegistry->getStockItem($product->getId(), 1);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Marketplace\Test\Unit\Helper;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class CacheTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject

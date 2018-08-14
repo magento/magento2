@@ -1,75 +1,38 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesSequence\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\SalesSequence\Model\Builder;
-use Magento\SalesSequence\Model\Config as SequenceConfig;
-use Magento\SalesSequence\Model\EntityPool;
 
 /**
- * Class InstallData
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @codeCoverageIgnore
+ * Recurring data upgrade for SalesSequence module.
  */
 class InstallData implements InstallDataInterface
 {
     /**
-     * Sales setup factory
-     *
-     * @var EntityPool
+     * @var SequenceCreator
      */
-    private $entityPool;
+    private $sequenceCreator;
 
     /**
-     * @var Builder
-     */
-    private $sequenceBuilder;
-
-    /**
-     * @var SequenceConfig
-     */
-    private $sequenceConfig;
-
-    /**
-     * @param EntityPool $entityPool
-     * @param Builder $sequenceBuilder
-     * @param SequenceConfig $sequenceConfig
+     * @param SequenceCreator $sequenceCreator
      */
     public function __construct(
-        EntityPool $entityPool,
-        Builder $sequenceBuilder,
-        SequenceConfig $sequenceConfig
+        SequenceCreator $sequenceCreator
     ) {
-        $this->entityPool = $entityPool;
-        $this->sequenceBuilder = $sequenceBuilder;
-        $this->sequenceConfig = $sequenceConfig;
+        $this->sequenceCreator = $sequenceCreator;
     }
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $defaultStoreIds = [0, 1];
-        foreach ($defaultStoreIds as $storeId) {
-            foreach ($this->entityPool->getEntities() as $entityType) {
-                $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
-                    ->setSuffix($this->sequenceConfig->get('suffix'))
-                    ->setStartValue($this->sequenceConfig->get('startValue'))
-                    ->setStoreId($storeId)
-                    ->setStep($this->sequenceConfig->get('step'))
-                    ->setWarningValue($this->sequenceConfig->get('warningValue'))
-                    ->setMaxValue($this->sequenceConfig->get('maxValue'))
-                    ->setEntityType($entityType)->create();
-            }
-        }
+        $this->sequenceCreator->create();
     }
 }

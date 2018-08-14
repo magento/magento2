@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,8 +28,8 @@ class AssertServiceContentDisplay extends AbstractConstraint
             /**
              * Selector for operation
              */
-            $operationSelector = 'li[id$="%s%s"]';
-            $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
+            $operationSelector = '#operations-%s-%s%s';
+            $operationSelector = sprintf($operationSelector, $serviceName, $serviceName, $endpoint);
             \PHPUnit_Framework_Assert::assertTrue(
                 $swaggerPage->isElementVisible($operationSelector),
                 'REST API service endpoints on swagger page.'

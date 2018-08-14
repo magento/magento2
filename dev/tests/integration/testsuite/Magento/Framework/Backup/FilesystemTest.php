@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Backup;
 use \Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\App\Filesystem\DirectoryList;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

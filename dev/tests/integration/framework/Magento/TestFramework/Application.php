@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
@@ -435,10 +435,11 @@ class Application
     /**
      * Install an application
      *
+     * @param bool $cleanup
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function install()
+    public function install($cleanup)
     {
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
@@ -453,8 +454,9 @@ class Application
         $installParams = $this->getInstallCliParams();
 
         // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
+        // do not restore from the database if the cleanup option is set to ensure we have a clean DB to test on
         $db = $this->getDbInstance();
-        if ($db->isDbDumpExists()) {
+        if ($db->isDbDumpExists() && !$cleanup) {
             $db->restoreFromDbDump();
         }
 
@@ -483,7 +485,7 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists()) {
+        if (!$db->isDbDumpExists() || $cleanup) {
             $this->getDbInstance()->storeDbDump();
         }
     }
@@ -598,6 +600,7 @@ class Application
      *
      * @param string $areaCode
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadArea($areaCode)
     {
@@ -614,7 +617,13 @@ class Application
             )
         );
         $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class);
-        if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
+        $areasForPartialLoading = [
+            \Magento\Framework\App\Area::AREA_GLOBAL,
+            \Magento\Framework\App\Area::AREA_WEBAPI_REST,
+            \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
+            \Magento\Framework\App\Area::AREA_CRONTAB,
+        ];
+        if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($areaCode);
@@ -630,12 +639,14 @@ class Application
     {
         $path = DirectoryList::PATH;
         $var = "{$this->installDir}/var";
+        $generated = "{$this->installDir}/generated";
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
             DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
-            DirectoryList::GENERATION => [$path => "{$var}/generation"],
+            DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],
+            DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
@@ -19,6 +19,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
     {
+        $integrationName = $this->escaper->escapeHtml($integrationName);
         $msg = $isReauthorize ? __(
             "Integration '%1' has been sent for re-authorization.",
             $integrationName

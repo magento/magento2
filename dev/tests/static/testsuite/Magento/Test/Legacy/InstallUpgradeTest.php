@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Tests to find obsolete install/upgrade schema/data scripts
  */
-class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
+class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
 {
     public function testForOldInstallUpgradeScripts()
     {

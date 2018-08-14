@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -17,12 +17,19 @@ class OrderRegistrar implements \Magento\Sales\Model\Order\Shipment\OrderRegistr
      */
     public function register(OrderInterface $order, ShipmentInterface $shipment)
     {
-        /** @var  \Magento\Sales\Api\Data\ShipmentItemInterface|\Magento\Sales\Model\Order\Shipment\Item $item */
+        $totalQty = 0;
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
         foreach ($shipment->getItems() as $item) {
             if ($item->getQty() > 0) {
                 $item->register();
+
+                if (!$item->getOrderItem()->isDummy(true)) {
+                    $totalQty += $item->getQty();
+                }
             }
         }
+        $shipment->setTotalQty($totalQty);
+
         return $order;
     }
 }

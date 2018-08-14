@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\View\Asset\Image;
@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * Class ContextTest
  */
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context

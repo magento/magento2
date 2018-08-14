@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
 
-class GiftmessageTest extends \PHPUnit_Framework_TestCase
+class GiftmessageTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSaveButtonHtml()
     {
@@ -13,12 +13,9 @@ class GiftmessageTest extends \PHPUnit_Framework_TestCase
         $expectedHtml = 'some_value';
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage */
-        $block = $this->getMock(
+        $block = $this->createPartialMock(
             \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage::class,
-            ['getChildBlock', 'getChildHtml'],
-            [],
-            '',
-            false
+            ['getChildBlock', 'getChildHtml']
         );
         $block->setEntity(new \Magento\Framework\DataObject());
         $block->expects($this->once())->method('getChildBlock')->with('save_button')->will($this->returnValue($item));

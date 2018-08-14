@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Api;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockRegistryTest extends \PHPUnit_Framework_TestCase
+class StockRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -65,18 +65,12 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getIdBySku'],
-            [],
-            '',
-            false
-        );
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['__wakeup', 'getIdBySku']);
         $this->product->expects($this->any())
             ->method('getIdBySku')
             ->willReturn($this->productId);
         //getIdBySku
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->product));

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,13 @@ var config = {
             priceOptions:           'Magento_Catalog/js/price-options',
             priceUtils:             'Magento_Catalog/js/price-utils',
             catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
+        }
+    },
+    config: {
+        mixins: {
+            'Magento_Theme/js/view/breadcrumbs': {
+                'Magento_Catalog/js/product/breadcrumbs': true
+            }
         }
     }
 };

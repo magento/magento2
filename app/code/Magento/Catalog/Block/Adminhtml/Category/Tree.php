@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,16 +18,18 @@ use Magento\Store\Model\Store;
 /**
  * Class Tree
  *
+ * @api
  * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/category/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/tree.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -226,7 +228,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getLoadTreeUrl($expanded = null)
     {
         $params = ['_current' => true, 'id' => null, 'store' => null];
-        if (is_null($expanded) && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
+        if ($expanded === null && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
             $params['expand_all'] = true;
         }
         return $this->getUrl('*/*/categoriesJson', $params);
@@ -323,7 +325,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

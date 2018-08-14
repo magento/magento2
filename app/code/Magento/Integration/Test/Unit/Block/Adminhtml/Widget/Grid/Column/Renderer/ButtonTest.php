@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -30,9 +30,9 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->contextMock = $this->getMock(\Magento\Backend\Block\Context::class, ['getEscaper'], [], '', false);
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
         $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

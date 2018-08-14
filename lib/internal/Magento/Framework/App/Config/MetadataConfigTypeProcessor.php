@@ -2,17 +2,19 @@
 /**
  * Configuration metadata processor
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 
 class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**
-     * @var \Magento\Framework\App\Config\Data\ProcessorFactory
+     * @var ProcessorFactory
      */
     protected $_processorFactory;
 
@@ -22,15 +24,37 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     protected $_metadata = [];
 
     /**
-     * @param \Magento\Framework\App\Config\Data\ProcessorFactory $processorFactory
+     * Source of configurations
+     *
+     * @var ConfigSourceInterface
+     */
+    private $configSource;
+
+    /**
+     * The resolver for configuration paths
+     *
+     * @var ConfigPathResolver
+     */
+    private $configPathResolver;
+
+    /**
+     * @param ProcessorFactory $processorFactory
      * @param Initial $initialConfig
+     * @param ConfigSourceInterface $configSource Source of configurations
+     * @param ConfigPathResolver $configPathResolver The resolver for configuration paths
      */
     public function __construct(
-        \Magento\Framework\App\Config\Data\ProcessorFactory $processorFactory,
-        Initial $initialConfig
+        ProcessorFactory $processorFactory,
+        Initial $initialConfig,
+        ConfigSourceInterface $configSource = null,
+        ConfigPathResolver $configPathResolver = null
     ) {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();
+        $this->configSource = $configSource
+            ?: ObjectManager::getInstance()->get(ConfigSourceInterface::class);
+        $this->configPathResolver = $configPathResolver
+            ?: ObjectManager::getInstance()->get(ConfigPathResolver::class);
     }
 
     /**
@@ -75,14 +99,25 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     }
 
     /**
-     * Process data by sections: stores, default, websites and by scope codes
+     * Process data by sections: stores, default, websites and by scope codes.
      *
-     * @param array $data
-     * @return array
+     * Doesn't processes configuration values that present in $_ENV variables.
+     *
+     * @param array $data An array of scope configuration
+     * @param string $scope The configuration scope
+     * @param string|null $scopeCode The configuration scope code
+     * @return array An array of processed configuration
      */
-    private function processScopeData(array $data)
-    {
+    private function processScopeData(
+        array $data,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null
+    ) {
         foreach ($this->_metadata as $path => $metadata) {
+            $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
+            if (!empty($this->configSource->get($configPath))) {
+                continue;
+            }
             /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
             $processor = $this->_processorFactory->get($metadata['backendModel']);
             $value = $processor->processValue($this->_getValue($data, $path));
@@ -95,7 +130,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     /**
      * Process config data
      *
-     * @param array $data
+     * @param array $rawData An array of configuration
      * @return array
      */
     public function process(array $rawData)
@@ -106,7 +141,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
                 $processedData[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $this->processScopeData($scopeData);
             } else {
                 foreach ($scopeData as $scopeCode => $data) {
-                    $processedData[$scope][$scopeCode] = $this->processScopeData($data);
+                    $processedData[$scope][$scopeCode] = $this->processScopeData($data, $scope, $scopeCode);
                 }
             }
         }

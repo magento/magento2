@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV Entity attribute model
  *
+ * @api
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -24,6 +26,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Attribute code max length
      */
     const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+
+    /**
+     * Attribute code min length.
+     */
+    const ATTRIBUTE_CODE_MIN_LENGTH = 1;
 
     /**
      * Cache tag
@@ -36,11 +43,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute';
-
-    /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
 
     /**
      * Parameter name in event
@@ -275,12 +277,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = $this->_localeDate->getDateFormat(
-                    \IntlDateFormatter::SHORT
-                );
                 try {
-                    $defaultValue = $this->dateTimeFormatter->formatObject(new \DateTime($defaultValue), $format);
-                    $this->setDefaultValue($defaultValue);
+                    $locale = $this->_localeResolver->getLocale();
+                    $defaultValue = $this->_localeDate->date($defaultValue, $locale, false, false);
+                    $this->setDefaultValue($defaultValue->format(DateTime::DATETIME_PHP_FORMAT));
                 } catch (\Exception $e) {
                     throw new LocalizedException(__('Invalid default date'));
                 }
@@ -304,30 +304,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
-        $this->getAttributeCache()->clear();
         return parent::afterSave();
     }
 
     /**
      * @return $this
+     * @since 100.0.7
      */
     public function afterDelete()
     {
-        $this->getAttributeCache()->clear();
         return parent::afterDelete();
-    }
-
-    /**
-     * Attribute cache
-     *
-     * @return AttributeCache
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
-        }
-        return $this->attributeCache;
     }
 
     /**
@@ -495,6 +481,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -507,6 +494,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __wakeup()
     {

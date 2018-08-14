@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ require([
     "mage/adminhtml/form"
 ], function(jQuery){
 
-    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>, 'disable');
+    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', <?= /* @escapeNotVerified */ $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>, 'disable');
     updater.disableRegionValidation();
 
     (function ($) {

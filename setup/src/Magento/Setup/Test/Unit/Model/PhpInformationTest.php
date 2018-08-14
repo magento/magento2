@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Setup\Model\PhpInformation;
 /**
  * Tests Magento\Setup\Model\PhpInformation
  */
-class PhpInformationTest extends \PHPUnit_Framework_TestCase
+class PhpInformationTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRequiredMinimumXDebugNestedLevel()
     {

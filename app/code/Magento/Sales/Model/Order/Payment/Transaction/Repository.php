@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,11 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Api\OrderPaymentRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\EntityStorage;
 use Magento\Sales\Model\EntityStorageFactory;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionResource;
 
 /**
@@ -61,7 +58,9 @@ class Repository implements TransactionRepositoryInterface
      */
     private $entityStorage;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -190,7 +189,7 @@ class Repository implements TransactionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var TransactionResource\Collection $collection */
         $collection = $this->searchResultFactory->create();
@@ -234,7 +233,7 @@ class Repository implements TransactionRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

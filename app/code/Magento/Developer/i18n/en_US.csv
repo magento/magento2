@@ -1,4 +1,5 @@
 "Format for IDE '%1' is not supported","Format for IDE '%1' is not supported"
+"Client side compilation doesn't work in production mode","Client side compilation doesn't work in production mode"
 "Client side less compilation","Client side less compilation"
 "Server side less compilation","Server side less compilation"
 "Frontend Development Workflow","Frontend Development Workflow"
@@ -7,3 +8,5 @@
 "Developer Client Restrictions","Developer Client Restrictions"
 "Allowed IPs (comma separated)","Allowed IPs (comma separated)"
 "Leave empty for access from any location.","Leave empty for access from any location."
+"Log to File","Log to File"
+"Not available in production mode.","Not available in production mode."

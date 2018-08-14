@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -213,6 +213,28 @@
             <field name="telephone" xsi:type="string">444-44-444-44</field>
         </dataset>
 
+        <dataset name="empty_UK_address_without_email">
+            <field name="firstname" xsi:type="string"/>
+            <field name="lastname" xsi:type="string"/>
+            <field name="company" xsi:type="string"/>
+            <field name="city" xsi:type="string"/>
+            <field name="street" xsi:type="string"/>
+            <field name="postcode" xsi:type="string"/>
+            <field name="country_id" xsi:type="string"/>
+            <field name="region" xsi:type="string"/>
+            <field name="telephone" xsi:type="string"/>
+        </dataset>
+
+        <dataset name="UK_address_without_email_first_name_last_name">
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">London</field>
+            <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
+            <field name="postcode" xsi:type="string">SE1 7RW</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region" xsi:type="string">London</field>
+            <field name="telephone" xsi:type="string">444-44-444-44</field>
+        </dataset>
+
         <dataset name="UK_address_with_VAT">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
@@ -231,6 +253,19 @@
         <dataset name="DE_address">
             <field name="firstname" xsi:type="string">Jan</field>
             <field name="lastname" xsi:type="string">Jansen</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Berlin</field>
+            <field name="street" xsi:type="string">Augsburger Strabe 41</field>
+            <field name="postcode" xsi:type="string">10789</field>
+            <field name="country_id" xsi:type="string">Germany</field>
+            <field name="region" xsi:type="string">Berlin</field>
+            <field name="region_id" xsi:type="string">82</field>
+            <field name="telephone" xsi:type="string">333-33-333-33</field>
+        </dataset>
+
+        <dataset name="DE_address_default">
+            <field name="firstname" xsi:type="string">Jan</field>
+            <field name="lastname" xsi:type="string">Jansen</field>
             <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">Berlin</field>
@@ -238,7 +273,10 @@
             <field name="postcode" xsi:type="string">10789</field>
             <field name="country_id" xsi:type="string">Germany</field>
             <field name="region" xsi:type="string">Berlin</field>
+            <field name="region_id" xsi:type="string">82</field>
             <field name="telephone" xsi:type="string">333-33-333-33</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
 
         <dataset name="DE_address_Frankfurt">
@@ -250,6 +288,7 @@
             <field name="postcode" xsi:type="string">10789</field>
             <field name="country_id" xsi:type="string">Germany</field>
             <field name="region" xsi:type="string">Hessen</field>
+            <field name="region_id" xsi:type="string">86</field>
             <field name="telephone" xsi:type="string">333-33-333-33</field>
         </dataset>
 
@@ -284,6 +323,42 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">UK_address_default_billing, US_address_default_shipping</item>
             </field>
+        </dataset>
+
+        <dataset name="AVS_street_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">24285 Elm</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+        </dataset>
+
+        <dataset name="AVS_street_does_not_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">49354 Main</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+        </dataset>
+
+        <dataset name="AVS_zip_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">49 Main</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">00382</field>
         </dataset>
     </repository>
 </config>

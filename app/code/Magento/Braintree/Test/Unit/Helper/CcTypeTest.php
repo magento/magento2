@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Helper;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class CcTypeTest
  */
-class CcTypeTest extends \PHPUnit_Framework_TestCase
+class CcTypeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

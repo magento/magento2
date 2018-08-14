@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Observer;
@@ -12,7 +12,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\PageCache\Observer\RegisterFormKeyFromCookie;
 
-class RegisterFormKeyFromCookieTest extends \PHPUnit_Framework_TestCase
+class RegisterFormKeyFromCookieTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RegisterFormKeyFromCookie */
     protected $observer;
@@ -66,11 +66,11 @@ class RegisterFormKeyFromCookieTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionConfig = $this->getMock(
+        $this->sessionConfig = $this->createMock(
             \Magento\Framework\Session\Config\ConfigInterface::class
         );
 
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->observer = new RegisterFormKeyFromCookie(
             $this->cookieFormKey,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -118,6 +118,13 @@ class MetadataProvider
         foreach ($this->getColumns($component) as $column) {
             $row[] = $column->getData('config/label');
         }
+
+        array_walk($row, function (&$header) {
+            if (mb_strpos($header, 'ID') === 0) {
+                $header = '"' . $header . '"';
+            }
+        });
+
         return $row;
     }
 

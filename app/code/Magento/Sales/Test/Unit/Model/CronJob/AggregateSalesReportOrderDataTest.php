@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\CronJob;
@@ -10,7 +10,7 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportOrderData;
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportOrderDataTest
  */
-class AggregateSalesReportOrderDataTest extends \PHPUnit_Framework_TestCase
+class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject

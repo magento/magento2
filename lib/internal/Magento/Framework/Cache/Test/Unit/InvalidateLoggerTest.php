@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit;
 
-class InvalidateLoggerTest extends \PHPUnit_Framework_TestCase
+class InvalidateLoggerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Request\Http */
     protected $requestMock;
@@ -31,8 +31,8 @@ class InvalidateLoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->invalidateLogger = new \Magento\Framework\Cache\InvalidateLogger(
             $this->requestMock,
             $this->loggerMock

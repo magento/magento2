@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Paypal\Test\TestCase\CreateOnlineCreditMemoPayflowLinkTest" summary="Create online credit memo for order placed with PayPal Payflow Link">
+        <variation name="CreateOnlineCreditMemoPayflowLinkVariation1" summary="Create Refund for Order Paid with PayPal Payflow Link" ticketId="MAGETWO-13061">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflow_link</data>
+            <data name="configData" xsi:type="string">payflowlink</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="status" xsi:type="string">Closed</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">226.50</item>
+                </item>
+            </data>
+            <data name="transactions/authorization" xsi:type="array">
+                <item name="transactionType" xsi:type="string">Authorization</item>
+                <item name="statusIsClosed" xsi:type="string">Yes</item>
+            </data>
+            <data name="transactions/refund" xsi:type="array">
+                <item name="transactionType" xsi:type="string">Refund</item>
+                <item name="statusIsClosed" xsi:type="string">Yes</item>
+            </data>
+            <data name="transactions/capture" xsi:type="array">
+                <item name="transactionType" xsi:type="string">Capture</item>
+                <item name="statusIsClosed" xsi:type="string">Yes</item>
+            </data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+        </variation>
+    </testCase>
+</config>

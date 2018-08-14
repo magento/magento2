@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Bundle selection price factory
+ * @api
+ * @since 100.0.2
  */
 class BundleSelectionFactory
 {
@@ -52,7 +54,7 @@ class BundleSelectionFactory
     ) {
         $arguments['bundleProduct'] = $bundleProduct;
         $arguments['saleableItem'] = $selection;
-        $arguments['quantity'] = $quantity ? floatval($quantity) : 1.;
+        $arguments['quantity'] = $quantity ? (float)$quantity : 1.;
 
         return $this->objectManager->create(self::SELECTION_CLASS_DEFAULT, $arguments);
     }

@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceView;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 
 /**
  * Create credit memo for order placed using online payment methods.
  */
 class CreateOnlineCreditMemoStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -47,13 +51,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     private $order;
 
     /**
-     * Credit memo data.
-     *
-     * @var array|null
-     */
-    private $refundData;
-
-    /**
      * Order invoice view page.
      *
      * @var OrderInvoiceView
@@ -61,28 +58,34 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     private $orderInvoiceView;
 
     /**
-     * @construct
+     * Checkout Cart fixture.
+     *
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInjectable $order
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param array|null refundData [optional]
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
         OrderInvoiceView $orderInvoiceView,
-        OrderCreditMemoNew $orderCreditMemoNew,
-        $refundData = null
+        OrderCreditMemoNew $orderCreditMemoNew
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->order = $order;
-        $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->refundData = $refundData;
         $this->orderInvoiceView = $orderInvoiceView;
+        $this->orderCreditMemoNew = $orderCreditMemoNew;
     }
 
     /**
@@ -94,19 +97,22 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $invoicesGrid */
-        $invoicesGrid = $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
-        $this->salesOrderView->getOrderForm()->openTab('invoices');
-        $invoicesGrid->viewInvoice();
-        $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
-        if (!empty($this->refundData)) {
-            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $this->refundData,
-                $this->order->getEntityId()['products']
-            );
-            $this->orderCreditMemoNew->getFormBlock()->updateQty();
+        $refundsData = $this->order->getRefund();
+        foreach ($refundsData as $refundData) {
+            /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $invoicesGrid */
+            $invoicesGrid = $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
+            $this->salesOrderView->getOrderForm()->openTab('invoices');
+            $invoicesGrid->viewInvoice();
+            $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
+
+            $items = $this->cart->getItems();
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
+            if ($this->compare($items, $refundData)) {
+                $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            }
+
+            $this->orderCreditMemoNew->getFormBlock()->submit();
         }
-        $this->orderCreditMemoNew->getFormBlock()->submit();
 
         return ['ids' => ['creditMemoIds' => $this->getCreditMemoIds()]];
     }

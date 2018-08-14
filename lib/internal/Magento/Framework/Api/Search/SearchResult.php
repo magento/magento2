@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Search;
@@ -84,19 +84,5 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
     public function setTotalCount($totalCount)
     {
         return $this->setData(self::TOTAL_COUNT, $totalCount);
-    }
-
-    /**
-     * Retrieve ids of all items
-     *
-     * @return array
-     */
-    public function getAllIds()
-    {
-        $ids = [];
-        foreach ($this->getItems() as $item) {
-            $ids[] = $item->getId();
-        }
-        return $ids;
     }
 }

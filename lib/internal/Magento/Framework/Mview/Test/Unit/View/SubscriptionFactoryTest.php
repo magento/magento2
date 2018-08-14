@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\Framework\Mview\Test\Unit\View;
 
 use \Magento\Framework\Mview\View\SubscriptionFactory;
 
-class SubscriptionFactoryTest extends \PHPUnit_Framework_TestCase
+class SubscriptionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\View\SubscriptionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class SubscriptionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new SubscriptionFactory($this->objectManagerMock);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\View;
@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface

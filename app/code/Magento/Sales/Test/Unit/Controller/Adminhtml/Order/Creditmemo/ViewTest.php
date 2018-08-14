@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View
@@ -123,7 +123,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -134,6 +134,19 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -231,7 +244,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testExecuteDataProvider
+     * @dataProvider executeDataProvider
      */
     public function testExecute($invoice)
     {
@@ -279,7 +292,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testExecuteDataProvider()
+    public function executeDataProvider()
     {
         return [
             [false],

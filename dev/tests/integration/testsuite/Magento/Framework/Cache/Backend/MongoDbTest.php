@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Backend;
 
-class MongoDbTest extends \PHPUnit_Framework_TestCase
+class MongoDbTest extends \PHPUnit\Framework\TestCase
 {
     protected $_connectionString;
 
@@ -139,10 +139,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $extraLifeTime
-     * @param \PHPUnit_Framework_Constraint $constraint
+     * @param \PHPUnit\Framework\Constraint\Constraint $constraint
      * @dataProvider touchDataProvider
      */
-    public function testTouch($extraLifeTime, \PHPUnit_Framework_Constraint $constraint)
+    public function testTouch($extraLifeTime, \PHPUnit\Framework\Constraint\Constraint $constraint)
     {
         $cacheId = 'test';
         $this->_model->save('test data', $cacheId, [], 2);

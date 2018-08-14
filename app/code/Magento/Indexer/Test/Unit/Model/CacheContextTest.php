@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Indexer\Test\Unit\Model;
 
-class CacheContextTest extends \PHPUnit_Framework_TestCase
+class CacheContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\CacheContext

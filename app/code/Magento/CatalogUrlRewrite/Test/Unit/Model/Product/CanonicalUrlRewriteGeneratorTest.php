@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CanonicalUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;

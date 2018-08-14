@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab */
 ?>
-<div class="fieldset-wrapper admin__collapsible-block-wrapper" data-tab="<?= /* @noEscape */ $block->getTabId()?>"
+<div class="fieldset-wrapper admin__collapsible-block-wrapper" data-tab="<?= /* @noEscape */ $block->getTabId() ?>"
      id="<?= /* @noEscape */ $block->getTabId() ?>-wrapper" data-mage-init='{"collapsible":{
                     "active": <?= /* @noEscape */ $block->isTabOpened() ? 'true' : 'false' ?>,
                     "openedState": "_show",
@@ -19,10 +19,10 @@
     >
     <div class="fieldset-wrapper-title" data-role="title">
         <strong class="admin__collapsible-title" data-role="trigger" >
-            <span><?= /* @noEscape */ $block->getTitle()?></span>
+            <span><?= /* @noEscape */ $block->getTitle() ?></span>
         </strong>
     </div>
-    <div class="fieldset-wrapper-content" data-role="content" id="<?= /* @noEscape */ $block->getTabId()?>-content">
-        <?= /* @noEscape */ $block->getContent()?>
+    <div class="fieldset-wrapper-content" data-role="content" id="<?= /* @noEscape */ $block->getTabId() ?>-content">
+        <?= /* @noEscape */ $block->getContent() ?>
     </div>
 </div>

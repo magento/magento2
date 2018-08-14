@@ -1,7 +1,7 @@
 <?php
 /**
  * @author      Magento Core Team <core@magentocommerce.com>
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
@@ -40,6 +40,17 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
      */
     public function add($attributeCode, $option)
     {
+        /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $currentOptions */
+        $currentOptions = $this->getItems($attributeCode);
+        if (is_array($currentOptions)) {
+            array_walk($currentOptions, function (&$attributeOption) {
+                /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $attributeOption */
+                    $attributeOption = $attributeOption->getLabel();
+            });
+            if (in_array($option->getLabel(), $currentOptions)) {
+                return false;
+            }
+        }
         return $this->eavOptionManagement->add(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,

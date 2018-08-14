@@ -1,7 +1,7 @@
 <?php
 /**
  * Mail Transport
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail;
@@ -40,5 +40,13 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMessage()
+    {
+        return $this->_message;
     }
 }

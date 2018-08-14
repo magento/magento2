@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
     <body>
         <referenceBlock name="product_tabs">
             <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts" name="catalog.product.edit.tab.grouped.container" template="Magento_GroupedProduct::product/grouped/grouped.phtml">
-                <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts" name="catalog.product.edit.tab.super.list" as="list" template="product/grouped/list.phtml"/>
+                <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts" name="catalog.product.edit.tab.super.list" as="list" template="Magento_GroupedProduct::product/grouped/list.phtml"/>
                 <block class="Magento\Framework\View\Element\Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
             </block>
             <action method="addTab">

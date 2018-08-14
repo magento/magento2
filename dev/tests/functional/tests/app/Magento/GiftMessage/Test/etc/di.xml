@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
   <type name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems">
     <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
+      <argument name="severity" xsi:type="string">S2</argument>
     </arguments>
   </type>
   <type name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder">
     <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
+      <argument name="severity" xsi:type="string">S2</argument>
     </arguments>
   </type>
   <type name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInBackendOrder">
     <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
+      <argument name="severity" xsi:type="string">S2</argument>
     </arguments>
   </type>
 </config>

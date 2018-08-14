@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
@@ -20,40 +20,33 @@ class AttributeSet
     /**
      * @var SetFactory
      */
-    private $setFactory;
+    private $attributeSetFactory;
 
     /**
      * @var Processor
      */
-    protected $_indexerEavProcessor;
+    private $_indexerEavProcessor;
 
     /**
      * @var AttributeSet\IndexableAttributeFilter
      */
-    protected $_attributeFilter;
+    private $_attributeFilter;
 
     /**
+     * Constructor
+     *
      * @param Processor $indexerEavProcessor
      * @param AttributeSet\IndexableAttributeFilter $filter
+     * @param SetFactory $attributeSetFactory
      */
-    public function __construct(Processor $indexerEavProcessor, AttributeSet\IndexableAttributeFilter $filter)
-    {
+    public function __construct(
+        Processor $indexerEavProcessor,
+        AttributeSet\IndexableAttributeFilter $filter,
+        SetFactory $attributeSetFactory
+    ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_attributeFilter = $filter;
-    }
-
-    /**
-     * Return attribute set factory
-     *
-     * @return SetFactory
-     * @deprecated
-     */
-    private function getAttributeSetFactory()
-    {
-        if ($this->setFactory === null) {
-            $this->setFactory = ObjectManager::getInstance()->get(SetFactory::class);
-        }
-        return $this->setFactory;
+        $this->attributeSetFactory = $attributeSetFactory;
     }
 
     /**
@@ -68,7 +61,7 @@ class AttributeSet
         $this->requiresReindex = false;
         if ($subject->getId()) {
             /** @var EavAttributeSet $originalSet */
-            $originalSet = $this->getAttributeSetFactory()->create();
+            $originalSet = $this->attributeSetFactory->create();
             $originalSet->initFromSkeleton($subject->getId());
             $originalAttributeCodes = array_flip($this->_attributeFilter->filter($originalSet));
             $subjectAttributeCodes  = array_flip($this->_attributeFilter->filter($subject));

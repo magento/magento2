@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -10,7 +10,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
  * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
-class EavTest extends \PHPUnit_Framework_TestCase
+class EavTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -39,7 +39,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
             "gallery" => "image"
         ];
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->locatorMock = $this->getMock(\Magento\Catalog\Model\Locator\LocatorInterface::class, [], [], "", false);
+        $this->locatorMock = $this->createMock(\Magento\Catalog\Model\Locator\LocatorInterface::class);
         $store = $this->objectManager->get(\Magento\Store\Api\Data\StoreInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->eavModifier = $this->objectManager->create(
@@ -60,7 +60,6 @@ class EavTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
-        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
@@ -70,10 +69,9 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    
+
     public function testModifyMetaNewProduct()
     {
-        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->setAttributeSetId(4);
@@ -118,9 +116,9 @@ class EavTest extends \PHPUnit_Framework_TestCase
             }
             if ($item instanceof \Magento\Framework\Phrase) {
                 $item = (string)$item;
-            } else if (is_array($item)) {
+            } elseif (is_array($item)) {
                 $this->prepareDataForComparison($item, $expectedData[$key]);
-            } else if ($key === 'price_id' || $key === 'sortOrder') {
+            } elseif ($key === 'price_id' || $key === 'sortOrder') {
                 $data[$key] = '__placeholder__';
             }
         }

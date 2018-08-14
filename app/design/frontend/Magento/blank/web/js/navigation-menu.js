@@ -1,16 +1,18 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint jquery:true*/
-
+/**
+ * @deprecated
+ * @see lib/web/mage/menu.js
+ */
 define([
-    "jquery",
-    "matchMedia",
-    "mage/template",
-    "mage/dropdowns",
-    "mage/terms"
-],function($, mediaCheck, mageTemplate) {
+    'jquery',
+    'matchMedia',
+    'mage/template',
+    'mage/dropdowns',
+    'mage/terms'
+], function ($, mediaCheck, mageTemplate) {
     'use strict';
 
     $.widget('mage.navigationMenu', {
@@ -34,7 +36,8 @@ define([
                 '</script>'
         },
 
-        _create: function() {
+        /** @inheritdoc */
+        _create: function () {
             this.itemsContainer = $(this.options.itemsContainer, this.element);
             this.topLevel = $(this.options.topLevel, this.element);
             this.topLevelSubmenu = $(this.options.topLevelSubmenu, this.topLevel);
@@ -42,41 +45,58 @@ define([
             this._bind();
         },
 
-        _init: function() {
+        /**
+         * @private
+         */
+        _init: function () {
             if (this.options.collapsable) {
-                setTimeout($.proxy(function() {
+                setTimeout($.proxy(function () {
                     this._checkToCollapseOrExpand();
                 }, this), 100);
             }
         },
 
-        _bind: function() {
+        /**
+         * @private
+         */
+        _bind: function () {
             this._on({
-                'mouseenter > ul > li.level0': function(e) {
+                /**
+                 * @param {jQuery.Event} e
+                 */
+                'mouseenter > ul > li.level0': function (e) {
                     if (!this.entered) { // fix IE bug with 'mouseenter' event
                         this.timeoutId && clearTimeout(this.timeoutId);
-                        this.timeoutId = setTimeout($.proxy(function() {
+                        this.timeoutId = setTimeout($.proxy(function () {
                             this._openSubmenu(e);
                         }, this), this.options.hoverInTimeout);
                         this.entered = true;
                     }
                 },
-                'mouseleave > ul > li.level0': function(e) {
+
+                /**
+                 * @param {jQuery.Event} e
+                 */
+                'mouseleave > ul > li.level0': function (e) {
                     this.entered = null;
 
                     this.timeoutId && clearTimeout(this.timeoutId);
-                    this.timeoutId = setTimeout($.proxy(function() {
+                    this.timeoutId = setTimeout($.proxy(function () {
                         this._closeSubmenu(e.currentTarget);
                     }, this), this.options.hoverOutTimeout);
                 },
-                'click': function(e) {
+
+                /**
+                 * @param {jQuert.Event} e
+                 */
+                'click': function (e) {
                     e.stopPropagation();
                 }
             });
 
             $(document)
-                .on('click.hideMenu', $.proxy(function(e) {
-                    var isOpened = this.topLevel.filter(function() {
+                .on('click.hideMenu', $.proxy(function () {
+                    var isOpened = this.topLevel.filter(function () {
                         return $(this).data('opened');
                     });
 
@@ -86,9 +106,9 @@ define([
                 }, this));
 
             $(window)
-                .on('resize', $.proxy(function() {
+                .on('resize', $.proxy(function () {
                     this.timeoutOnResize && clearTimeout(this.timeoutOnResize);
-                    this.timeoutOnResize = setTimeout($.proxy(function() {
+                    this.timeoutOnResize = setTimeout($.proxy(function () {
                         if (this.options.collapsable) {
                             if ($(this.options.expandedTopLevel, this.element).length) {
                                 this._expandMenu();
@@ -99,14 +119,18 @@ define([
                 }, this));
         },
 
-        _openSubmenu: function(e) {
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
+        _openSubmenu: function (e) {
             var menuItem = e.currentTarget;
 
             if (!$(menuItem).data('opened')) {
                 this._closeSubmenu(menuItem, true, true);
 
                 $(this.options.topLevelSubmenu, menuItem)
-                    .slideDown(this.options.submenuAnimationSpeed, $.proxy(function() {
+                    .slideDown(this.options.submenuAnimationSpeed, $.proxy(function () {
                         $(menuItem).addClass(this.options.topLevelHoverClass);
                         $(menuItem).data('opened', true);
                     }, this));
@@ -118,12 +142,18 @@ define([
             }
         },
 
-        _closeSubmenu: function(menuItem, excludeCurrent, fast) {
+        /**
+         * @param {*} menuItem
+         * @param {*} excludeCurrent
+         * @param {*} fast
+         * @private
+         */
+        _closeSubmenu: function (menuItem, excludeCurrent, fast) {
             var topLevel = $(this.options.topLevel, this.element),
                 activeSubmenu = $(this.options.topLevelSubmenu, menuItem || null);
 
             $(this.options.topLevelSubmenu, topLevel)
-                .filter(function() {
+                .filter(function () {
                     return excludeCurrent ? $(this).not(activeSubmenu) : true;
                 })
                 .slideUp(fast ? 0 : this.options.submenuAnimationSpeed);
@@ -133,17 +163,22 @@ define([
                 .data('opened', false);
         },
 
-        _checkToCollapseOrExpand: function() {
-            if ($("html").hasClass("lt-640") || $("html").hasClass("w-640")) {
+        /**
+         * @private
+         */
+        _checkToCollapseOrExpand: function () {
+            var navWidth, totalWidth, startCollapseIndex;
+
+            if ($('html').hasClass('lt-640') || $('html').hasClass('w-640')) {
                 return;
             }
 
-            var navWidth = this.itemsContainer.width(),
-                totalWidth = 0,
-                startCollapseIndex = 0;
+            navWidth = this.itemsContainer.width();
+            totalWidth = 0;
+            startCollapseIndex = 0;
 
-            $.each($(this.options.topLevel, this.element), function(index, item) {
-                totalWidth = totalWidth + $(item).outerWidth(true);
+            $.each($(this.options.topLevel, this.element), function (index, item) {
+                totalWidth += $(item).outerWidth(true);
 
                 if (totalWidth > navWidth && !startCollapseIndex) {
                     startCollapseIndex = index - 2;
@@ -153,8 +188,12 @@ define([
             this[startCollapseIndex ? '_collapseMenu' : '_expandMenu'](startCollapseIndex);
         },
 
-        _collapseMenu: function(startCollapseIndex) {
-            this.elemsToCollapse = this.topLevel.filter(function(index) {
+        /**
+         * @param {*} startCollapseIndex
+         * @private
+         */
+        _collapseMenu: function (startCollapseIndex) {
+            this.elemsToCollapse = this.topLevel.filter(function (index) {
                 return index > startCollapseIndex;
             });
             this.elemsToCollapseClone = $('<div></div>').append(this.elemsToCollapse.clone()).html();
@@ -162,7 +201,9 @@ define([
             this.collapsableDropdown = $(
                 mageTemplate(
                     this.options.collapsableDropdownTemplate,
-                    {elems: this.elemsToCollapseClone}
+                    {
+                        elems: this.elemsToCollapseClone
+                    }
                 )
             );
 
@@ -170,12 +211,18 @@ define([
             this.elemsToCollapse.detach();
         },
 
-        _expandMenu: function() {
+        /**
+         * @private
+         */
+        _expandMenu: function () {
             this.elemsToCollapse && this.elemsToCollapse.appendTo(this.itemsContainer);
             this.collapsableDropdown && this.collapsableDropdown.remove();
         },
 
-        _destroy: function() {
+        /**
+         * @private
+         */
+        _destroy: function () {
             this._expandMenu();
         }
     });
@@ -190,12 +237,18 @@ define([
             submenuContiniumEffect: false
         },
 
-        _init: function() {
+        /**
+         * @private
+         */
+        _init: function () {
             this._super();
             this._applySubmenuStyles();
         },
 
-        _applySubmenuStyles: function() {
+        /**
+         * @private
+         */
+        _applySubmenuStyles: function () {
             $(this.options.topLevelSubmenu, $(this.options.topLevel, this.element))
                 .removeAttr('style');
 
@@ -207,10 +260,14 @@ define([
                 });
         },
 
-        _openSubmenu: function(e) {
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
+        _openSubmenu: function (e) {
             var menuItem = e.currentTarget,
                 submenu = $(this.options.topLevelSubmenu, menuItem),
-                openedItems = $(this.options.topLevel, this.element).filter(function() {
+                openedItems = $(this.options.topLevel, this.element).filter(function () {
                     return $(this).data('opened');
                 });
 
@@ -218,7 +275,7 @@ define([
                 this.heightToAnimate = $(this.options.itemsContainer, submenu).outerHeight(true);
 
                 if (openedItems.length) {
-                    this._closeSubmenu(menuItem, true, this.heightToAnimate, $.proxy(function() {
+                    this._closeSubmenu(menuItem, true, this.heightToAnimate, $.proxy(function () {
                         submenu.css({
                             height: 'auto'
                         });
@@ -228,7 +285,7 @@ define([
                 } else {
                     submenu.animate({
                         height: this.heightToAnimate
-                    }, this.options.submenuAnimationSpeed, $.proxy(function() {
+                    }, this.options.submenuAnimationSpeed, $.proxy(function () {
                         $(menuItem)
                             .addClass(this.options.topLevelHoverClass);
                     }, this));
@@ -241,9 +298,16 @@ define([
             }
         },
 
-        _closeSubmenu: function(menuItem, excludeCurrent, heightToAnimate, callback, e) {
+        /**
+         * @param {*} menuItem
+         * @param {*} excludeCurrent
+         * @param {*} heightToAnimate
+         * @param {Function} callback
+         * @private
+         */
+        _closeSubmenu: function (menuItem, excludeCurrent, heightToAnimate, callback) {
             var topLevel = $(this.options.topLevel, this.itemsContainer),
-                expandedTopLevel = e && $(e.target).closest(this.options.expandedTopLevel);
+                prevOpenedItem, prevOpenedSubmenu;
 
             if (!excludeCurrent) {
                 $(this.options.topLevelSubmenu, $(this.options.parentLevel, this.element))
@@ -255,14 +319,14 @@ define([
                     .data('opened', false)
                     .removeClass(this.options.topLevelHoverClass);
             } else {
-                var prevOpenedItem = topLevel.filter(function() {
-                        return $(this).data('opened');
-                    }),
-                    prevOpenedSubmenu = $(this.options.topLevelSubmenu, prevOpenedItem);
+                prevOpenedItem = topLevel.filter(function () {
+                    return $(this).data('opened');
+                });
+                prevOpenedSubmenu = $(this.options.topLevelSubmenu, prevOpenedItem);
 
                 prevOpenedSubmenu.animate({
                     height: heightToAnimate
-                }, this.options.submenuAnimationSpeed, 'linear', function() {
+                }, this.options.submenuAnimationSpeed, 'linear', function () {
                     $(this).css({
                         height: 0
                     });
@@ -275,7 +339,10 @@ define([
             }
         },
 
-        _collapseMenu: function() {
+        /**
+         * @private
+         */
+        _collapseMenu: function () {
             this._superApply(arguments);
             this._applySubmenuStyles();
         }
@@ -318,7 +385,10 @@ define([
                 '</script>'
         },
 
-        _init: function() {
+        /**
+         * @private
+         */
+        _init: function () {
             this._super();
 
             this.mainContainer = $(this.options.mainContainer);
@@ -328,25 +398,31 @@ define([
             if (this.options.responsive) {
                 mediaCheck({
                     media: '(min-width: 768px)',
-                    entry: $.proxy(function() {
+                    entry: $.proxy(function () {
                         this._toggleDesktopMode();
                     }, this),
-                    exit: $.proxy(function() {
+                    exit: $.proxy(function () {
                         this._toggleMobileMode();
                     }, this)
                 });
             }
         },
 
-        _bind: function() {
+        /**
+         * @private
+         */
+        _bind: function () {
             this._super();
             this._bindDocumentEvents();
         },
 
-        _bindDocumentEvents: function() {
+        /**
+         * @private
+         */
+        _bindDocumentEvents: function () {
             if (!this.eventsBound) {
                 $(document)
-                    .on('click.toggleMenu', '.action.toggle.nav', $.proxy(function(e) {
+                    .on('click.toggleMenu', '.action.toggle.nav', $.proxy(function (e) {
                         if ($(this.element).data('opened')) {
                             this._hideMenu();
                         } else {
@@ -356,21 +432,21 @@ define([
                         this.mobileNav.scrollTop(0);
                         this._fixedBackLink();
                     }, this))
-                    .on('click.hideMenu', this.options.pageWrapper, $.proxy(function() {
+                    .on('click.hideMenu', this.options.pageWrapper, $.proxy(function () {
                         if ($(this.element).data('opened')) {
                             this._hideMenu();
                             this.mobileNav.scrollTop(0);
                             this._fixedBackLink();
                         }
                     }, this))
-                    .on('click.showSubmenu', this.options.titleWithSubmenu, $.proxy(function(e) {
+                    .on('click.showSubmenu', this.options.titleWithSubmenu, $.proxy(function (e) {
                         this._showSubmenu(e);
 
                         e.preventDefault();
                         this.mobileNav.scrollTop(0);
                         this._fixedBackLink();
                     }, this))
-                    .on('click.hideSubmenu', '.action.back', $.proxy(function(e) {
+                    .on('click.hideSubmenu', '.action.back', $.proxy(function (e) {
                         this._hideSubmenu(e);
                         this.mobileNav.scrollTop(0);
                         this._fixedBackLink();
@@ -380,54 +456,73 @@ define([
             }
         },
 
-        _showMenu: function() {
+        /**
+         * @private
+         */
+        _showMenu: function () {
             $(this.element).data('opened', true);
-            this.mainContainer.add( "html" ).addClass(this.options.openedMenuClass);
+            this.mainContainer.add('html').addClass(this.options.openedMenuClass);
         },
 
-        _hideMenu: function() {
+        /**
+         * @private
+         */
+        _hideMenu: function () {
             $(this.element).data('opened', false);
-            this.mainContainer.add( "html" ).removeClass(this.options.openedMenuClass);
+            this.mainContainer.add('html').removeClass(this.options.openedMenuClass);
         },
 
-        _showSubmenu: function(e) {
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
+        _showSubmenu: function (e) {
+            var submenu;
+
             $(e.currentTarget).addClass('action back');
-            var submenu = $(e.currentTarget).siblings('.submenu');
+            submenu = $(e.currentTarget).siblings('.submenu');
 
             submenu.addClass('opened');
         },
 
-        _hideSubmenu: function(e) {
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
+        _hideSubmenu: function (e) {
             var submenuSelector = '.submenu',
                 submenu = $(e.currentTarget).next(submenuSelector);
+
             $(e.currentTarget).removeClass('action back');
             submenu.removeClass('opened');
         },
 
-        _renderSubmenuActions: function() {
+        /**
+         * @private
+         */
+        _renderSubmenuActions: function () {
             $.each(
                 $(this.options.itemWithSubmenu),
-                $.proxy(
-                    function(index, item) {
-                        var actions = $(
-                            mageTemplate(
-                                this.options.submenuActionsTemplate,
-                                {
-                                    category: $('> a > span', item).text(),
-                                    categoryURL: $('> a', item).attr('href')
-                                }
-                            )
-                            ),
-                            submenu = $('> .submenu', item),
-                            items = $('> ul', submenu);
-                            items.prepend(actions);
-                    },
-                    this
-                )
+                $.proxy(function (index, item) {
+                    var actions = $(mageTemplate(
+                            this.options.submenuActionsTemplate,
+                            {
+                                category: $('> a > span', item).text(),
+                                categoryURL: $('> a', item).attr('href')
+                            }
+                        )),
+                        submenu = $('> .submenu', item),
+                        items = $('> ul', submenu);
+
+                    items.prepend(actions);
+                }, this)
             );
         },
 
-        _toggleMobileMode: function() {
+        /**
+         * @private
+         */
+        _toggleMobileMode: function () {
             this._expandMenu();
 
             $(this.options.topLevelSubmenu, $(this.options.topLevel, this.element))
@@ -439,17 +534,18 @@ define([
             this.mobileNav.find('> ul').addClass('nav');
             this._insertExtraItems();
             this._wrapItemsInSections();
-            this.mobileNav.scroll($.proxy(
-                function() {
-                    this._fixedBackLink();
-                }, this
-            ));
+            this.mobileNav.scroll($.proxy(function () {
+                this._fixedBackLink();
+            }, this));
 
             this._renderSubmenuActions();
             this._bindDocumentEvents();
         },
 
-        _toggleDesktopMode: function() {
+        /**
+         * @private
+         */
+        _toggleDesktopMode: function () {
             this.mobileNav && this.mobileNav.remove();
             this.toggleAction.detach();
             $(this.element).insertAfter(this.options.origNavPlaceholder);
@@ -465,9 +561,14 @@ define([
             this._applySubmenuStyles();
         },
 
-        _insertExtraItems: function() {
+        /**
+         * @private
+         */
+        _insertExtraItems: function () {
+            var settings, footerSettings, account;
+
             if ($('.header.panel .switcher').length) {
-                var settings = $('.header.panel .switcher')
+                settings = $('.header.panel .switcher')
                     .clone()
                     .addClass('settings');
 
@@ -475,16 +576,15 @@ define([
             }
 
             if ($('.footer .switcher').length) {
-                var footerSettings = $('.footer .switcher')
+                footerSettings = $('.footer .switcher')
                     .clone()
                     .addClass('settings');
 
                 this.mobileNav.prepend(footerSettings);
             }
 
-
             if ($('.header.panel .header.links li').length) {
-                var account = $('.header.panel > .header.links')
+                account = $('.header.panel > .header.links')
                     .clone()
                     .addClass('account');
 
@@ -492,7 +592,10 @@ define([
             }
         },
 
-        _wrapItemsInSections: function() {
+        /**
+         * @private
+         */
+        _wrapItemsInSections: function () {
             var account = $('> .account', this.mobileNav),
                 settings = $('> .settings', this.mobileNav),
                 nav = $('> .nav', this.mobileNav),
@@ -502,50 +605,62 @@ define([
             this.mobileNav.append(navigationSectionsWrapper);
 
             if (nav.length) {
-                navigationItemWrapper = $(mageTemplate(this.options.navigationItemWrapperTemplate, {title: 'Menu'}));
+                navigationItemWrapper = $(mageTemplate(this.options.navigationItemWrapperTemplate, {
+                    title: 'Menu'
+                }));
                 navigationSectionsWrapper.append(navigationItemWrapper);
                 navigationItemWrapper.eq(1).append(nav);
             }
 
             if (account.length) {
-                navigationItemWrapper = $(mageTemplate(this.options.navigationItemWrapperTemplate, {title: 'Account'}));
+                navigationItemWrapper = $(mageTemplate(this.options.navigationItemWrapperTemplate, {
+                    title: 'Account'
+                }));
                 navigationSectionsWrapper.append(navigationItemWrapper);
                 navigationItemWrapper.eq(1).append(account);
             }
 
             if (settings.length) {
                 navigationItemWrapper = $(
-                    mageTemplate(this.options.navigationItemWrapperTemplate, {title: 'Settings'})
+                    mageTemplate(this.options.navigationItemWrapperTemplate, {
+                        title: 'Settings'
+                    })
                 );
                 navigationSectionsWrapper.append(navigationItemWrapper);
                 navigationItemWrapper.eq(1).append(settings);
             }
 
-            navigationSectionsWrapper.addClass("navigation-tabs-" + navigationSectionsWrapper.find('[data-section="title"]').length);
+            navigationSectionsWrapper.addClass(
+                'navigation-tabs-' + navigationSectionsWrapper.find('[data-section="title"]').length
+            );
             navigationSectionsWrapper.terms();
         },
 
-        _fixedBackLink: function() {
-            var linksBack = this.mobileNav.find('.submenu .action.back');
-            var linkBack = this.mobileNav.find('.submenu.opened > ul > .action.back').last();
+        /**
+         * @private
+         */
+        _fixedBackLink: function () {
+            var linksBack = this.mobileNav.find('.submenu .action.back'),
+                linkBack = this.mobileNav.find('.submenu.opened > ul > .action.back').last(),
+                subMenu, navOffset, linkBackHeight;
 
             linksBack.removeClass('fixed');
 
-            if(linkBack.length) {
-                var subMenu = linkBack.parent(),
-                    navOffset = this.mobileNav.find('.nav').position().top,
-                    linkBackHeight = linkBack.height();
+            if (linkBack.length) {
+                subMenu = linkBack.parent();
+                navOffset = this.mobileNav.find('.nav').position().top;
+                linkBackHeight = linkBack.height();
 
                 if (navOffset <= 0) {
                     linkBack.addClass('fixed');
                     subMenu.css({
                         paddingTop: linkBackHeight
-                    })
+                    });
                 } else {
                     linkBack.removeClass('fixed');
                     subMenu.css({
                         paddingTop: 0
-                    })
+                    });
                 }
             }
         }

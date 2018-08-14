@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,7 +10,7 @@
         <section id="sendfriend" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Email to a Friend</label>
             <tab>catalog</tab>
-            <resource>Magento_Backend::sendfriend</resource>
+            <resource>Magento_Config::sendfriend</resource>
             <group id="email" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Email Templates</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

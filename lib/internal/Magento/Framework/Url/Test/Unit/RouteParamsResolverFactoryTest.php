@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RouteParamsResolverFactoryTest extends \PHPUnit_Framework_TestCase
+class RouteParamsResolverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Url\RouteParamsResolverFactory */
     protected $object;
@@ -17,7 +17,7 @@ class RouteParamsResolverFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -28,7 +28,7 @@ class RouteParamsResolverFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $producedInstance = $this->getMock(\Magento\Framework\Url\RouteParamsResolverInterface::class);
+        $producedInstance = $this->createMock(\Magento\Framework\Url\RouteParamsResolverInterface::class);
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Url\RouteParamsResolverInterface::class)

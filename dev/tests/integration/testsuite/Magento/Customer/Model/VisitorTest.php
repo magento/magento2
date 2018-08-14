@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class VisitorTest extends \PHPUnit_Framework_TestCase
+/**
+ * @magentoAppIsolation enabled
+ */
+class VisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea frontend

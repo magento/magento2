@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Multishipping\Block\Checkout\State;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State
@@ -27,7 +27,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->mShippingStateMock =
-            $this->getMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping\State::class, [], [], '', false);
+            $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping\State::class);
         $this->model = $objectManager->getObject(
             \Magento\Multishipping\Block\Checkout\State::class,
             [

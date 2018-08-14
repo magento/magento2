@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
 
-class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
@@ -28,7 +28,6 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->giftMessageOrderItemRepository = $this->objectManager->create(
             \Magento\GiftMessage\Model\OrderItemRepository::class
         );
-
     }
 
     protected function tearDown()

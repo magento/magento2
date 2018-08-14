@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Cart;
@@ -34,7 +34,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+    protected $braintreePaypalCheckoutButton = 'button[id^="braintree-paypal-mini-cart"]';
 
     /**
      * Locator value for "Proceed to Checkout" button.
@@ -49,6 +49,11 @@ class Sidebar extends Block
      * @var string
      */
     protected $productCounter = './/*[@class="counter-number"]';
+
+    /**
+     * @var string
+     */
+    protected $visibleProductCounter = './/*[@class="items-total"]';
 
     /**
      * Empty minicart message
@@ -93,7 +98,7 @@ class Sidebar extends Block
     protected $counterNumberWrapper = '.minicart-wrapper';
 
     /**
-     * Loading masc.
+     * Loading mask.
      *
      * @var string
      */
@@ -119,8 +124,16 @@ class Sidebar extends Block
      */
     public function clickBraintreePaypalButton()
     {
-        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+        // Button can be enabled/disabled few times.
+        sleep(2);
+
+        $windowsCount = count($this->browser->getWindowHandles());
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton)
             ->click();
+        $browser = $this->browser;
+        $this->browser->waitUntil(function () use ($browser, $windowsCount) {
+            return count($browser->getWindowHandles()) === ($windowsCount + 1) ? true: null;
+        });
     }
 
     /**
@@ -151,7 +164,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get empty minicart message
+     * Get empty minicart message.
      *
      * @return string
      */
@@ -162,13 +175,33 @@ class Sidebar extends Block
     }
 
     /**
-     * Is minicart items quantity block visible
+     * Is minicart items quantity block visible.
      *
      * @return bool
      */
     public function isItemsQtyVisible()
     {
         return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Get qty of items in minicart.
+     *
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return (int)$this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Returns message with count of visible items
+     *
+     * @return string
+     */
+    public function getVisibleItemsCounter()
+    {
+        return $this->_rootElement->find($this->visibleProductCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

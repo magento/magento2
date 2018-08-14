@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\Request
@@ -25,7 +25,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $path = '..PathInfo';
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
         $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_requestMock);
     }

@@ -2,12 +2,12 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Factory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Profiler\Driver\Factory
@@ -83,7 +83,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUndefinedClass()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Cannot create profiler driver, class "Magento_Framework_Profiler_Driver_Test_Baz" doesn\'t exist.'
         );

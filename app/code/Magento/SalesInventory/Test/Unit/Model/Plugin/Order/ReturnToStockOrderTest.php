@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
@@ -20,7 +20,7 @@ use Magento\Sales\Api\RefundOrderInterface;
 /**
  * Class ReturnToStockOrderTest
  */
-class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
+class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ReturnToStockOrder */
     private $returnTOStock;
@@ -90,7 +90,7 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
         $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

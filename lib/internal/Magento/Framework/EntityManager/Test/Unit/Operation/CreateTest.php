@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\EntityManager\Test\Unit\Operation;
@@ -13,9 +13,10 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\Create;
 use Magento\Framework\EntityManager\Operation\Create\CreateMain;
+use Magento\Framework\EntityManager\Sequence\SequenceApplier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
@@ -33,6 +34,11 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     private $createMain;
 
     /**
+     * @var SequenceApplier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sequenceApplier;
+
+    /**
      * @var Create
      */
     private $create;
@@ -48,11 +54,15 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->createMain = $this->getMockBuilder(CreateMain::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->create = (new ObjectManager($this))->getObject(Create::class, [
+        $this->sequenceApplier = $this->getMockBuilder(SequenceApplier::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerHelper = new ObjectManager($this);
+        $this->create = $objectManagerHelper->getObject(Create::class, [
             'metadataPool' => $this->metadataPool,
             'resourceConnection' => $this->resourceConnection,
             'createMain' => $this->createMain,
+            'sequenceApplier' => $this->sequenceApplier,
         ]);
     }
 
@@ -61,10 +71,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
-        $metadata = $this->getMock(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

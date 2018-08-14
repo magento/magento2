@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -99,7 +99,7 @@ class RateQuery
             }
         } else {
             $bind[':condition_name'] = $this->request->getConditionName();
-            $bind[':condition_value'] = $this->request->getData($this->request->getConditionName());
+            $bind[':condition_value'] = round($this->request->getData($this->request->getConditionName()), 4);
         }
 
         return $bind;

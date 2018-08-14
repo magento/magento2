@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test \Magento\Customer\Block\Widget\Name
  * @magentoAppArea frontend
  */
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Name */
     protected $_block;

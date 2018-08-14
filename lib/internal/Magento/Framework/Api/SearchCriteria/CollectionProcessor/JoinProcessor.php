@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor;
-
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -23,7 +22,9 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private $fieldMapping;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     private $appliedFields = [];
 
     /**
@@ -120,6 +121,6 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private function getFieldMapping($field)
     {
-        return isset($this->fieldMapping[$field]) ? $this->fieldMapping[$field] : $field;
+        return $this->fieldMapping[$field] ?? $field;
     }
 }

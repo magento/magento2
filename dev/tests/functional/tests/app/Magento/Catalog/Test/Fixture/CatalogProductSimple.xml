@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -29,8 +29,8 @@
         <field name="country_of_manufacture" is_required="0" />
         <field name="created_at" is_required="1" />
         <field name="custom_design" is_required="0" />
-        <field name="custom_design_from" is_required="0" />
-        <field name="custom_design_to" is_required="0" />
+        <field name="custom_design_from" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="custom_design_to" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="custom_layout_update" is_required="0" />
         <field name="description" is_required="0" group="content" />
         <field name="gallery" is_required="0" />
@@ -47,6 +47,8 @@
         <field name="msrp" is_required="0" />
         <field name="msrp_display_actual_price_type" is_required="0" />
         <field name="name" is_required="1" group="product-details" />
+        <field name="use_default_name" group="product-details" />
+        <field name="use_default_price" group="product-details" />
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
@@ -67,9 +69,11 @@
         <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
+        <field name="use_default_url_key" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
+        <field name="additional_attributes" is_required="0" group="product-details" />
         <field name="id" group="null" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
@@ -77,8 +81,8 @@
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
-        <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
-        <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_from_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_to_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="stock_data" group="advanced-inventory" />
         <field name="checkout_data" group="null" repository="Magento\Catalog\Test\Repository\CatalogProductSimple\CheckoutData" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
@@ -87,5 +91,6 @@
         <field name="product_has_weight" group="product-details" />
         <field name="attributes" />
         <field name="fpt" is_required="0" group="product-details" repository="Magento\Catalog\Test\Repository\Product\Fpt" />
+        <field name="website_data" is_required="0" repository="Magento\Catalog\Test\Repository\CatalogProductSimple\WebsiteData" />
     </fixture>
 </config>

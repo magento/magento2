@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ $firstSubscriberId = $subscriber->getId();
 
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Newsletter\Model\Subscriber::class);
-$subscriber->setStoreId($otherStore)
+$subscriber->setStoreId($currentStore)
     // Intentionally setting ID to 0 instead of 2 to test fallback mechanism in Subscriber model
     ->setCustomerId(0)
     ->setSubscriberEmail('customer_two@example.com')

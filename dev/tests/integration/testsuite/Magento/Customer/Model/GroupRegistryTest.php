@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,9 @@ namespace Magento\Customer\Model;
 
 /**
  * Test for \Magento\Customer\Model\GroupRegistry
+ * @magentoAppIsolation enabled
  */
-class GroupRegistryTest extends \PHPUnit_Framework_TestCase
+class GroupRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The group code from the fixture data.

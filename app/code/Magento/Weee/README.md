@@ -21,5 +21,6 @@ Magento installation with existing products with FPT:
 * Remove all FPT attributes from attribute sets
 * Delete all FPT attributes
 * Remove module directory from the code base
-* New Magento installation:
+
+New Magento installation:
 * Can be removed without additional actions

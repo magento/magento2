@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Create category */
@@ -79,8 +79,6 @@ $productModel->setTypeId(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setWebsiteIds(
     [1]
-)->setCateroryIds(
-    []
 )->setStockData(
     ['qty' => 100, 'is_in_stock' => 1]
 )->setCanSaveCustomOptions(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -10,7 +10,10 @@ use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {
@@ -55,7 +58,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             $result .= $this->getColumn()->getEditOnly() ? ''
                 : '<span class="admin__grid-control-value">' . $this->_getValue($row) . '</span>';
 
-            return $result . $this->_getInputValueElement($row) . '</div>' ;
+            return $result . $this->_getInputValueElement($row) . '</div>';
         }
         return $this->_getValue($row);
     }

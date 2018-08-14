@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel;
 
-abstract class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
@@ -9,7 +9,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer;
 
-class BlockRendererTest extends \PHPUnit_Framework_TestCase
+class BlockRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockRenderer
@@ -35,7 +35,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
             'apostles_cnt' => 28,
@@ -77,7 +77,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderNoTemplate()
     {
         /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'who' => 'Brian',
             'is' => 'a Very Naughty Boy'
@@ -87,7 +87,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn($messageData);
 
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Template should be provided for the renderer.'
         );

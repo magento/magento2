@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Install;
+use Magento\Setup\Controller\Install;
 use Magento\Setup\Model\RequestDataConverter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallTest extends \PHPUnit_Framework_TestCase
+class InstallTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\WebLogger
@@ -51,14 +51,14 @@ class InstallTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->webLogger = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
-        $installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
-        $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
+        $this->webLogger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
+        $installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
+        $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
         $this->progressFactory =
-            $this->getMock(\Magento\Setup\Model\Installer\ProgressFactory::class, [], [], '', false);
-        $this->sampleDataState = $this->getMock(\Magento\Framework\Setup\SampleData\State::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->requestDataConverter = $this->getMock(RequestDataConverter::class, [], [], '', false);
+            $this->createMock(\Magento\Setup\Model\Installer\ProgressFactory::class);
+        $this->sampleDataState = $this->createMock(\Magento\Framework\Setup\SampleData\State::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->requestDataConverter = $this->createMock(RequestDataConverter::class);
 
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
@@ -107,12 +107,13 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('messages', $variables);
         $this->assertFalse($variables['success']);
     }
+
     public function testStartActionInstallException()
     {
         $this->webLogger->expects($this->once())->method('clear');
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installer->expects($this->once())->method('install')
-            ->willThrowException($this->getMock('\Exception'));
+            ->willThrowException($this->createMock('\Exception'));
         $jsonModel = $this->controller->startAction();
         $this->assertNull($jsonModel->getVariable('isSampleDataError'));
     }
@@ -138,7 +139,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $consoleMessages = ['key1' => 'log message 1', 'key2' => 'log message 2'];
 
         $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
-        $progress = $this->getMock(\Magento\Setup\Model\Installer\Progress::class, [], [], '', false);
+        $progress = $this->createMock(\Magento\Setup\Model\Installer\Progress::class);
         $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)
             ->willReturn($progress);
         $progress->expects($this->once())->method('getRatio')->willReturn($numValue);
@@ -174,7 +175,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $numValue = 42;
         $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
-        $progress = $this->getMock(\Magento\Setup\Model\Installer\Progress::class, [], [], '', false);
+        $progress = $this->createMock(\Magento\Setup\Model\Installer\Progress::class);
         $progress->expects($this->once())->method('getRatio')->willReturn($numValue);
         $this->progressFactory->expects($this->once())->method('createFromLog')->willReturn($progress);
         $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
@@ -203,11 +204,11 @@ class InstallTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatch()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);

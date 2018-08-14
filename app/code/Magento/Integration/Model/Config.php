@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -13,7 +13,7 @@ use Magento\Integration\Model\Cache\Type;
  * Integration Config Model.
  *
  * This is a parent class for storing information about Integrations.
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Config
 {

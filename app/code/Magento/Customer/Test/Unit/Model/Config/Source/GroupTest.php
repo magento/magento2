@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Source;
@@ -12,7 +12,7 @@ use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInte
 use Magento\Framework\Convert\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GroupSourceLoggedInOnlyInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -36,8 +36,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->groupServiceMock = $this->getMock(GroupManagementInterface::class);
-        $this->converterMock = $this->getMock(DataObject::class, [], [], '', false);
+        $this->groupServiceMock = $this->createMock(GroupManagementInterface::class);
+        $this->converterMock = $this->createMock(DataObject::class);
         $this->groupSource = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)
             ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(

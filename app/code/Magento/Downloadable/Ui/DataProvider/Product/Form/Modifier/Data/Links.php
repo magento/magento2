@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data;
@@ -97,7 +97,7 @@ class Links
      */
     public function isProductLinksCanBePurchasedSeparately()
     {
-        return (bool) $this->locator->getProduct()->getData('links_purchased_separately');
+        return (bool)$this->locator->getProduct()->getData('links_purchased_separately');
     }
 
     /**

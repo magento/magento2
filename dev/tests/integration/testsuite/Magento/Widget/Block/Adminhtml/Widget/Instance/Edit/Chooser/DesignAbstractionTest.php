@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -8,7 +8,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 /**
  * @magentoAppArea adminhtml
  */
-class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
+class DesignAbstractionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction|
@@ -24,13 +24,9 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
         $layoutUtility = new \Magento\Framework\View\Utility\Layout($this);
         $appState = $objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Layout\Processor::class,
-            ['isPageLayoutDesignAbstraction'],
-            [],
-            '',
-            false
-        );
+        $processorMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
+            ->setMethods(['isPageLayoutDesignAbstraction'])
+            ->getMockForAbstractClass();
         $processorMock->expects($this->exactly(2))->method('isPageLayoutDesignAbstraction')->will(
             $this->returnCallback(
                 function ($abstraction) {
@@ -38,13 +34,8 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
-        $processorFactoryMock = $this->getMock(
-            \Magento\Framework\View\Layout\ProcessorFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $processorFactoryMock =
+            $this->createPartialMock(\Magento\Framework\View\Layout\ProcessorFactory::class, ['create']);
         $processorFactoryMock->expects($this->exactly(2))->method('create')->will(
             $this->returnCallback(
                 function ($data) use ($processorMock, $layoutUtility) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,9 @@ namespace Magento\Bundle\Model\Product;
 
 /**
  * Abstract class for testing bundle prices
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
+abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
 {
     /** Fixed price type for product custom option */
     const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
@@ -23,10 +24,24 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepository;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    protected $productCollectionFactory;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productCollectionFactory =
+            $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class);
+
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            true,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -58,7 +73,6 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
                 );
             }
         }
-
         $this->productRepository->save($bundleProduct);
     }
 

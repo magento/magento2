@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Webapi\Model\Config;
 use Magento\Webapi\Model\Config\Reader;
 use Magento\Webapi\Model\Cache\Type\Webapi;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -36,9 +36,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->webapiCacheMock = $this->getMock(\Magento\Webapi\Model\Cache\Type\Webapi::class, [], [], '', false);
-        $this->configReaderMock = $this->getMock(\Magento\Webapi\Model\Config\Reader::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->webapiCacheMock = $this->createMock(\Magento\Webapi\Model\Cache\Type\Webapi::class);
+        $this->configReaderMock = $this->createMock(\Magento\Webapi\Model\Config\Reader::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,

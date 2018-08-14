@@ -2,14 +2,14 @@
 /**
  * Test Rest response controller.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
 use Magento\Framework\Phrase;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response */
     protected $responseRest;
@@ -35,7 +35,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
         $this->errorProcessorMock = $this->getMockBuilder(\Magento\Framework\Webapi\ErrorProcessor::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         /** Init SUP. */
         $this->responseRest = new \Magento\Framework\Webapi\Rest\Response(
@@ -212,6 +212,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $hasException = $this->responseRest->hasExceptionOfType('Exception');
         $this->assertTrue($hasException);
     }
+
     public function testHasExceptionOfTypeIfExceptionsIsEmpty()
     {
         $this->responseRest->setException(new \Exception());

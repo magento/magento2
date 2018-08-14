@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
@@ -9,7 +9,7 @@ use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function testSetActive()
     {
-        $link = $this->getMock(\Magento\Framework\View\Element\Html\Link::class, [], [], '', false);
+        $link = $this->createMock(\Magento\Framework\View\Element\Html\Link::class);
         $link
             ->expects($this->at(1))
             ->method('__call')

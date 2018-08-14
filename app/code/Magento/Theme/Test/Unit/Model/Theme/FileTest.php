@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
@@ -9,7 +9,7 @@ use Magento\Framework\View\Design\Theme\Customization\FileServiceFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Theme\Model\Theme\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var File
@@ -204,6 +204,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->model->setContent($content);
         $this->assertEquals($content, $this->model->getContent());
     }
+
     public function testGetFileInfo()
     {
         $fileId = 123;

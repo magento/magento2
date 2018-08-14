@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Term extends Template
 {
     /**
@@ -91,8 +95,8 @@ class Term extends Template
                     continue;
                 }
                 $term->setRatio(($term->getPopularity() - $this->_minPopularity) / $range);
-                $temp[$term->getName()] = $term;
-                $termKeys[] = $term->getName();
+                $temp[$term->getData('query_text')] = $term;
+                $termKeys[] = $term->getData('query_text');
             }
             natcasesort($termKeys);
 
@@ -124,7 +128,7 @@ class Term extends Template
          * url encoding will be done in Url.php http_build_query
          * so no need to explicitly called urlencode for the text
          */
-        $url->setQueryParam('q', $obj->getName());
+        $url->setQueryParam('q', $obj->getData('query_text'));
         return $url->getUrl('catalogsearch/result');
     }
 

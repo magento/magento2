@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -264,7 +264,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getEnableQtyIncrements($store = null)
     {
-        return (bool) $this->scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_ENABLE_QTY_INCREMENTS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

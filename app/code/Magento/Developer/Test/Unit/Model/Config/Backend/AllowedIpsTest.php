@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Backend;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AllowedIpsTest
  */
-class AllowedIpsTest extends \PHPUnit_Framework_TestCase
+class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Developer\Model\Config\Backend\AllowedIps

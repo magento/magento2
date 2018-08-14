@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\ResourceModel\Attribute\Backend\Weee;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax
@@ -29,10 +29,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
-        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -41,7 +41,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn('table_name');
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->model = new \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax(
@@ -53,7 +53,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     public function testInsertProductData()
     {
         $productId = 100;
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['getId'], [], '', false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId']);
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
 
         $this->connectionMock->expects($this->once())

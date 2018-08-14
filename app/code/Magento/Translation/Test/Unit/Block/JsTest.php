@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Block;
 
 use Magento\Translation\Block\Js;
 
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Js

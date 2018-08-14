@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class ReadTest
  * Test for Magento\Framework\Filesystem\Directory\Read class
  */
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test instance of Read

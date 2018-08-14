@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo\Relation;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo\Relation;
 /**
  * Class RefundTest
  */
-class RefundTest extends \PHPUnit_Framework_TestCase
+class RefundTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund

@@ -2,7 +2,7 @@
 /**
  * Catalog Configurable Product Attribute Collection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
@@ -16,12 +16,16 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-    /** @var ConfigurableResource */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     */
     private $configurableResource;
 
     /**
@@ -196,7 +200,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Add Associated Product Filters (From Product Type Instance)
      *
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.1
      */
     public function _addAssociatedProductFilters()
     {
@@ -313,6 +317,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
+     * @since 100.0.6
      */
     public function __sleep()
     {
@@ -331,6 +336,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @inheritdoc
+     * @since 100.0.6
      */
     public function __wakeup()
     {
@@ -346,7 +352,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get MetadataPool instance
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -360,7 +366,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get Configurable Resource
      *
-     * @deprecated
+     * @deprecated 100.1.1
      * @return ConfigurableResource
      */
     private function getConfigurableResource()

@@ -2,14 +2,14 @@
 /**
  * Test for \Magento\Integration\Model\IntegrationService
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 
-class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
+class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 {
     const VALUE_INTEGRATION_ID = 1;
 

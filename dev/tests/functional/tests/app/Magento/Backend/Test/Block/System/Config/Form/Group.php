@@ -2,7 +2,7 @@
 /**
  * Store configuration group.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -125,9 +125,25 @@ class Group extends Form
      */
     public function isFieldVisible($tabName, $groupName, $fieldName)
     {
-        $this->_rootElement->find(
+        return $this->_rootElement->find(
             sprintf($this->field, $tabName, $groupName, $fieldName),
             Locator::SELECTOR_CSS
         )->isVisible();
+    }
+
+    /**
+     * Check if a field is disabled in a given group.
+     *
+     * @param string $tabName
+     * @param string $groupName
+     * @param string $fieldName
+     * @return bool
+     */
+    public function isFieldDisabled($tabName, $groupName, $fieldName)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->field, $tabName, $groupName, $fieldName),
+            Locator::SELECTOR_CSS
+        )->isDisabled();
     }
 }

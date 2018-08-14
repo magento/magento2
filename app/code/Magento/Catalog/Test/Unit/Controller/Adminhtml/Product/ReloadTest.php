@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
@@ -22,7 +22,7 @@ use Magento\Ui\Component\Wrapper\UiComponent;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReloadTest extends \PHPUnit_Framework_TestCase
+class ReloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reload

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Observer;
@@ -31,7 +31,6 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
         $this->_scopeConfig = $scopeConfig;
     }
 
-
     /**
      * Check is allowed guest checkout if quote contain downloadable product(s)
      *
@@ -42,8 +41,6 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     {
         $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
-
-        $result->setIsAllowed(true);
 
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,

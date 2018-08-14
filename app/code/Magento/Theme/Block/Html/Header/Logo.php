@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Theme\Block\Html\Header;
 
 /**
  * Logo page header block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Logo extends \Magento\Framework\View\Element\Template
 {
@@ -16,7 +19,7 @@ class Logo extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'html/header/logo.phtml';
+    protected $_template = 'Magento_Theme::html/header/logo.phtml';
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database

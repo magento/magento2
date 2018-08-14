@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** @var \Magento\Framework\Registry $registry */
@@ -20,3 +20,8 @@ if ($website->getId()) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+/* Refresh stores memory cache */
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    \Magento\Store\Model\StoreManagerInterface::class
+)->reinitStores();

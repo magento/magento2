@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,11 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Catalog entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
@@ -173,7 +177,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _saveAttributeValue($object, $attribute, $value)
     {
         $connection = $this->getConnection();
-        $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
         /**
@@ -182,15 +189,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * In this case we clear all not default values
          */
         $entityIdField = $this->getLinkField();
-        if ($this->_storeManager->hasSingleStore()) {
-            $storeId = $this->getDefaultStoreId();
+        $conditions = [
+            'attribute_id = ?' => $attribute->getAttributeId(),
+            "{$entityIdField} = ?" => $object->getData($entityIdField),
+            'store_id <> ?' => $storeId
+        ];
+        if ($hasSingleStore
+            && !$object->isObjectNew()
+            && $this->isAttributePresentForNonDefaultStore($attribute, $conditions)
+        ) {
             $connection->delete(
                 $table,
-                [
-                    'attribute_id = ?' => $attribute->getAttributeId(),
-                    "{$entityIdField} = ?" => $object->getData($entityIdField),
-                    'store_id <> ?' => $storeId
-                ]
+                $conditions
             );
         }
 
@@ -227,6 +237,27 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Check if attribute present for non default Store View.
+     * Prevent "delete" query locking in a case when nothing to delete
+     *
+     * @param AbstractAttribute $attribute
+     * @param array $conditions
+     *
+     * @return boolean
+     */
+    private function isAttributePresentForNonDefaultStore($attribute, $conditions)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($attribute->getBackend()->getTable());
+        foreach ($conditions as $condition => $conditionValue) {
+            $select->where($condition, $conditionValue);
+        }
+        $select->limit(1);
+
+        return !empty($connection->fetchRow($select));
     }
 
     /**
@@ -563,11 +594,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             }
         }
 
-        if (sizeof($attributesData) == 1) {
-            $_data = each($attributesData);
-            $attributesData = $_data[1];
+        if (is_array($attributesData) && sizeof($attributesData) == 1) {
+            $attributesData = array_shift($attributesData);
         }
 
-        return $attributesData ? $attributesData : false;
+        return $attributesData === false ? false : $attributesData;
     }
 }

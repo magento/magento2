@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
@@ -63,7 +63,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * Get proper SOAP client instance that is initialized with with WSDL corresponding to requested service interface.
+     * Get proper SOAP client instance that is initialized with WSDL corresponding to requested service interface.
      *
      * @param string $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode

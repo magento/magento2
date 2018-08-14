@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@
     <div class="toolbar">
         <?php if (!$block->isSingleStoreMode()) :?>
         <div class="store-switcher">
-            <?php echo $block->getChildHtml('store_switcher') ?>
+            <?= $block->getChildHtml('store_switcher') ?>
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php echo $block->escapeHtmlAttr(__('Preview')) ?>" width="100%"></iframe>
-    <?php echo $block->getChildHtml('preview_form'); ?>
+    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?= $block->escapeHtmlAttr(__('Preview')) ?>" width="100%"></iframe>
+    <?= $block->getChildHtml('preview_form') ?>
 </div>
 
 <script>

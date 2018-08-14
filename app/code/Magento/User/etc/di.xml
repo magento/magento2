@@ -1,16 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\User\Model\ResourceModel\User">
-        <arguments>
-            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\Role">
         <plugin name="updateRoleUsersAcl" type="Magento\User\Model\Plugin\AuthorizationRole" sortOrder="20"/>
     </type>

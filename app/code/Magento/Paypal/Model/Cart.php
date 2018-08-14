@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -177,7 +177,7 @@ class Cart extends \Magento\Payment\Model\Cart
     ) {
         $dataContainer = $salesEntity->getTaxContainer();
         $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
-        $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+        $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmount());
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * Import entity of grouped product type
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
@@ -99,7 +99,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     }
                     $scope = $this->_entityModel->getRowScope($rowData);
                     if (Product::SCOPE_DEFAULT == $scope) {
-                        $productData = $newSku[$rowData[Product::COL_SKU]];
+                        $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
                     } else {
                         $colAttrSet = Product::COL_ATTR_SET;
                         $rowData[$colAttrSet] = $productData['attr_set_code'];

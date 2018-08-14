@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit;
 
 use \Magento\Framework\View\TemplateEngineFactory;
 
-class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
+class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_objectManagerMock;
@@ -20,7 +20,7 @@ class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = new TemplateEngineFactory(
             $this->_objectManagerMock,
             ['test' => \Fixture\Module\Model\TemplateEngine::class]
@@ -29,7 +29,7 @@ class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateKnownEngine()
     {
-        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
+        $engine = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

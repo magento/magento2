@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit\App;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\ResourceConnection\ConfigInterface;
 
-class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
+class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection
@@ -64,7 +64,7 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
     public function testGetConnectionByName()
     {
         $this->deploymentConfigMock->expects(self::once())->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS  . '/default')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/default')
             ->willReturn(['config']);
         $this->connectionFactoryMock->expects(self::once())->method('create')
             ->with(['config'])
@@ -92,6 +92,5 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects(self::once())->method('getConnectionName')->with('default');
 
         $this->unit->closeConnection('default');
-
     }
 }

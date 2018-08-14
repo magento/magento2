@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -39,7 +39,7 @@ class StateResolver implements OrderStateResolverInterface
     {
         /** @var $order Order|OrderInterface */
         $forceCreditmemo = in_array(self::FORCED_CREDITMEMO, $arguments);
-        if (floatval($order->getTotalRefunded()) || !$order->getTotalRefunded() && $forceCreditmemo) {
+        if ((float)$order->getTotalRefunded() || !$order->getTotalRefunded() && $forceCreditmemo) {
             return true;
         }
         return false;

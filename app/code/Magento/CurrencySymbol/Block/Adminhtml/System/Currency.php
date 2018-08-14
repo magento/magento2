@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,16 @@
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Currency extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'system/currency/rates.phtml';
+    protected $_template = 'Magento_CurrencySymbol::system/currency/rates.phtml';
 
     /**
      * Prepare layout

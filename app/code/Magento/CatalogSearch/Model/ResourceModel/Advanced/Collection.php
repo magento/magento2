@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -21,6 +21,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -184,7 +186,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $searchResult = $this->searchResultFactory->create()->setItems([]);
             } catch (NonExistingRequestNameException $e) {
                 $this->_logger->error($e->getMessage());
-                throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+                throw new LocalizedException(
+                    __('Sorry, something went wrong. You can find out more in the error log.')
+                );
             }
             $temporaryStorage = $this->temporaryStorageFactory->create();
             $table = $temporaryStorage->storeApiDocuments($searchResult->getItems());

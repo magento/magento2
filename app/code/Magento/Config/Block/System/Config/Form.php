@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\Data\ProcessorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 
 /**
  * System config form block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -88,7 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configStructure;
 
     /**
-     *Form fieldset factory
+     * Form fieldset factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
      */
@@ -110,6 +116,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var DeploymentConfig
      */
     private $appConfig;
+
+    /**
+     * Checks visibility status of form elements on Stores > Settings > Configuration page in Admin Panel
+     * by their paths in the system.xml structure.
+     *
+     * @var ElementVisibilityInterface
+     */
+    private $elementVisibility;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -145,7 +159,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return SettingChecker
      */
     private function getSettingChecker()
@@ -331,29 +345,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldPrefix = '',
         $labelPrefix = ''
     ) {
-        $inherit = true;
-        $data = $this->getAppConfigDataValue($path);
-        if ($data === null) {
-            if (array_key_exists($path, $this->_configData)) {
-                $data = $this->_configData[$path];
-                $inherit = false;
+        $inherit = !array_key_exists($path, $this->_configData);
+        $data = $this->getFieldData($field, $path);
 
-                if ($field->hasBackendModel()) {
-                    $backendModel = $field->getBackendModel();
-                    $backendModel->setPath($path)
-                        ->setValue($data)
-                        ->setWebsite($this->getWebsiteCode())
-                        ->setStore($this->getStoreCode())
-                        ->afterLoad();
-                    $data = $backendModel->getValue();
-                }
-
-            } elseif ($field->getConfigPath() !== null) {
-                $data = $this->getConfigValue($field->getConfigPath());
-            } else {
-                $data = $this->getConfigValue($path);
-            }
-        }
         $fieldRendererClass = $field->getFrontendModel();
         if ($fieldRendererClass) {
             $fieldRenderer = $this->_layout->getBlockSingleton($fieldRendererClass);
@@ -373,9 +367,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getScopeCode());
-        $canUseDefault = $this->canUseDefaultValue($field->showInDefault());
-        $canUseWebsite = $this->canUseWebsiteValue($field->showInWebsite());
+        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
+            ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -392,8 +385,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope' => $this->getScope(),
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
-                'can_use_default_value' => $canUseDefault,
-                'can_use_website_value' => $canUseWebsite,
+                'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
                 'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore()),
                 'disabled' => $isReadOnly,
                 'is_disable_inheritance' => $isReadOnly
@@ -411,6 +404,71 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $formField->setValues($field->getOptions());
         }
         $formField->setRenderer($fieldRenderer);
+    }
+
+    /**
+     * Get data of field by path
+     *
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param string $path
+     * @return mixed|null|string
+     */
+    private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    {
+        $data = $this->getAppConfigDataValue($path);
+
+        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+            $path,
+            $this->getScope(),
+            $this->getStringScopeCode()
+        );
+
+        if ($placeholderValue) {
+            $data = $placeholderValue;
+        }
+
+        if ($data === null) {
+            $path = $field->getConfigPath() !== null ? $field->getConfigPath() : $path;
+            $data = $this->getConfigValue($path);
+            if ($field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                // Backend models which implement ProcessorInterface are processed by ScopeConfigInterface
+                if (!$backendModel instanceof ProcessorInterface) {
+                    $backendModel->setPath($path)
+                        ->setValue($data)
+                        ->setWebsite($this->getWebsiteCode())
+                        ->setStore($this->getStoreCode())
+                        ->afterLoad();
+                    $data = $backendModel->getValue();
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retrieve Scope string code
+     *
+     * @return string
+     */
+    private function getStringScopeCode()
+    {
+        $scopeCode = $this->getData('scope_string_code');
+
+        if (null === $scopeCode) {
+            if ($this->getStoreCode()) {
+                $scopeCode = $this->_storeManager->getStore($this->getStoreCode())->getCode();
+            } elseif ($this->getWebsiteCode()) {
+                $scopeCode = $this->_storeManager->getWebsite($this->getWebsiteCode())->getCode();
+            } else {
+                $scopeCode = '';
+            }
+
+            $this->setData('scope_string_code', $scopeCode);
+        }
+
+        return $scopeCode;
     }
 
     /**
@@ -542,6 +600,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return bool
+     * @since 100.1.0
      */
     public function isCanRestoreToDefault($fieldValue)
     {
@@ -650,7 +709,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
+     * Temporary moved those $this->getRequest()->getParam('blabla') from the code across this block
      * to getBlala() methods to be later set from controller with setters
      */
 
@@ -727,7 +786,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve Deployment Configuration object.
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @return DeploymentConfig
      */
     private function getAppConfig()
@@ -748,14 +807,31 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $appConfig = $this->getAppConfig()->get(System::CONFIG_TYPE);
         $scope = $this->getScope();
-        $scopeId = $this->getScopeId();
-        if ($scope === 'default') {
-            $data = isset($appConfig[$scope][$path]) ? $appConfig[$scope][$path] : null;
+        $scopeCode = $this->getStringScopeCode();
+
+        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $data = new DataObject(isset($appConfig[$scope]) ? $appConfig[$scope] : []);
         } else {
-            $data = isset($appConfig[$scope][$scopeId][$path])
-                ? $appConfig[$scope][$scopeId][$path]
-                : null;
+            $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
         }
-        return $data;
+        return $data->getData($path);
+    }
+
+    /**
+     * Gets instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 100.2.0
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }

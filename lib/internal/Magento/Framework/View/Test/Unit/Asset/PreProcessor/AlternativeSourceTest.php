@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
@@ -25,7 +25,7 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
+class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
 {
     const AREA = 'test-area';
 

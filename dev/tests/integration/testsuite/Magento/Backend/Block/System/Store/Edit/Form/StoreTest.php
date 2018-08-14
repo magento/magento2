@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Edit\Form;
@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\System\Store\Edit\Form\Store

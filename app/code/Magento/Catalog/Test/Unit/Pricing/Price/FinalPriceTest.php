@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Pricing\Price;
 /**
  * Final Price test
  */
-class FinalPriceTest extends \PHPUnit_Framework_TestCase
+class FinalPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Pricing\Price\FinalPrice
@@ -45,29 +45,13 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->saleableMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->priceInfoMock = $this->basePriceMock = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class,
-            [],
-            [],
-            '',
-            false
+        $this->saleableMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->priceInfoMock = $this->basePriceMock = $this->createMock(
+            \Magento\Framework\Pricing\PriceInfo\Base::class
         );
-        $this->basePriceMock = $this->getMock(
-            \Magento\Catalog\Pricing\Price\BasePrice::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->basePriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\BasePrice::class);
 
-        $this->calculatorMock = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
         $this->saleableMock->expects($this->once())
             ->method('getPriceInfo')
@@ -76,7 +60,7 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->with($this->equalTo(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE))
             ->will($this->returnValue($this->basePriceMock));
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->model = new \Magento\Catalog\Pricing\Price\FinalPrice(
             $this->saleableMock,

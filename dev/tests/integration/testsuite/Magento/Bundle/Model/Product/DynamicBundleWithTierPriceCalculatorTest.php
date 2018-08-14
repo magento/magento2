@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
 class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
@@ -28,6 +27,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -43,12 +44,20 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -68,7 +77,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 10
                     'minimalPrice' => 5,
                     // 0.5 * 10
-                    'maximalPrice' => 5
+                    'maximalPrice' => 5,
                 ]
             ],
 
@@ -81,7 +90,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
                     // 0.5 * 2 * 10
-                    'maximalPrice' => 10
+                    'maximalPrice' => 10,
                 ]
             ],
 
@@ -94,7 +103,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    'maximalPrice' => 35,
                 ]
             ],
 
@@ -107,7 +116,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    'maximalPrice' => 35,
                 ]
             ],
 
@@ -120,7 +129,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    'maximalPrice' => 30,
+
                 ]
             ],
 
@@ -133,7 +143,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
                 ]
             ],
 
@@ -146,7 +156,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
                 ]
             ],
 
@@ -159,7 +169,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
                 ]
             ],
 
@@ -172,7 +182,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,
                     // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    'maximalPrice' => 30,
                 ]
             ],
         ];
@@ -201,7 +211,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -239,7 +250,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -281,7 +293,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -323,7 +336,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -365,7 +379,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -422,7 +437,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -479,7 +495,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -536,7 +553,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -578,7 +596,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         $tierPriceSimpleProductData = [

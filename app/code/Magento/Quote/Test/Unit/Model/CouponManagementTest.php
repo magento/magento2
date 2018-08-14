@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,9 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\CouponManagement;
+use Magento\Quote\Model\CouponManagement;
 
-class CouponManagementTest extends \PHPUnit_Framework_TestCase
+class CouponManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CouponManagement
@@ -40,32 +40,22 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->quoteMock = $this->getMock(
-            \Magento\Quote\Model\Quote::class,
-            [
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
                 'getItemsCount',
                 'setCouponCode',
                 'collectTotals',
                 'save',
                 'getShippingAddress',
                 'getCouponCode',
+                'getStoreId',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->quoteAddressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [
+            ]);
+        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
                 'setCollectShippingRates',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false);
+            ]);
         $this->couponManagement = new CouponManagement(
             $this->quoteRepositoryMock
         );
@@ -76,14 +66,13 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getCouponCode', '__wakeup'], [], '', false);
+        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCouponCode', '__wakeup']);
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
-
 
         $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }
@@ -112,6 +101,9 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
@@ -139,6 +131,9 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
@@ -157,6 +152,9 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 33;
         $couponCode = '153a-ABC';
+
+        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));

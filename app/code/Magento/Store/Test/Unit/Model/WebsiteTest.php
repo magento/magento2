@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Website
@@ -45,12 +45,9 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testIsCanDelete()
     {
-        $websiteCollection = $this->getMock(
+        $websiteCollection = $this->createPartialMock(
             \Magento\Store\Model\ResourceModel\Website\Collection::class,
-            ['getSize'],
-            [],
-            '',
-            false
+            ['getSize']
         );
         $websiteCollection->expects($this->any())->method('getSize')->will($this->returnValue(2));
 

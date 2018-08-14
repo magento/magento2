@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
@@ -81,8 +81,8 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
-        $feedPrice = 395;
-        $feedSubtotal = $feedPrice + 170;
+        $feedPrice = 375;
+        $feedSubtotal = $feedPrice + 190;
         foreach ($prices as $priceData) {
             if (isset($priceData['label'])) {
                 // draw Price label

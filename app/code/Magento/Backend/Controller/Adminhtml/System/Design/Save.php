@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
@@ -50,9 +50,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             try {
                 $design->save();
                 $this->_eventManager->dispatch('theme_save_after');
-                $this->messageManager->addSuccess(__('You saved the design change.'));
+                $this->messageManager->addSuccessMessage(__('You saved the design change.'));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setDesignData($data);
                 return $resultRedirect->setPath('adminhtml/*/', ['id' => $design->getId()]);
             }

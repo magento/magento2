@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
+use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\Calculator;
@@ -44,7 +44,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
-     * @deprecated
+     * @deprecated 100.1.1
      */
     protected $resourceRuleFactory;
 
@@ -89,7 +89,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     {
         if (null === $this->value) {
             if ($this->product->hasData(self::PRICE_CODE)) {
-                $this->value = floatval($this->product->getData(self::PRICE_CODE)) ?: false;
+                $this->value = (float)$this->product->getData(self::PRICE_CODE) ?: false;
             } else {
                 $this->value = $this->getRuleResource()
                     ->getRulePrice(
@@ -98,10 +98,10 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                         $this->customerSession->getCustomerGroupId(),
                         $this->product->getId()
                     );
-                $this->value = $this->value ? floatval($this->value) : false;
-                if ($this->value) {
-                    $this->value = $this->priceCurrency->convertAndRound($this->value);
-                }
+                $this->value = $this->value ? (float)$this->value : false;
+            }
+            if ($this->value) {
+                $this->value = $this->priceCurrency->convertAndRound($this->value);
             }
         }
 
@@ -110,7 +110,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
 
     /**
      * @return Rule
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getRuleResource()
     {

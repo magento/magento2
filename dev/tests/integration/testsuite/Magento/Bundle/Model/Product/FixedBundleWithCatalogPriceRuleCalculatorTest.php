@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_catalog_rule.php
  * @magentoAppArea frontend
  */
 class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
@@ -19,6 +18,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_catalog_rule.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {

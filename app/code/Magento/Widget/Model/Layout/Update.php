@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Layout;
@@ -18,7 +18,6 @@ namespace Magento\Widget\Model\Layout;
  * @method \Magento\Widget\Model\Layout\Update setStoreId() setStoreId(int $storeId)
  * @method \Magento\Widget\Model\Layout\Update setThemeId() setThemeId(int $themeId)
  * @method \Magento\Widget\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
- * @method \Magento\Widget\Model\ResourceModel\Layout\Update\Collection getCollection()
  */
 class Update extends \Magento\Framework\Model\AbstractModel
 {

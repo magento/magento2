@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@ use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Class AbstractCarrier
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
@@ -120,7 +123,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Retrieve information from carrier configuration
      *
      * @param   string $field
-     * @return  void|false|string
+     * @return  false|string
      */
     public function getConfigData($field)
     {
@@ -327,9 +330,22 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         return $this;
+    }
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this->processAdditionalValidation($request);
     }
 
     /**
@@ -392,6 +408,9 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected function _updateFreeMethodQuote($request)
     {
+        if (!$request->getFreeShipping()) {
+            return;
+        }
         if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
             return;
         }
@@ -457,7 +476,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     public function getFinalPriceWithHandlingFee($cost)
     {
-        $handlingFee = $this->getConfigData('handling_fee');
+        $handlingFee = (float)$this->getConfigData('handling_fee');
         $handlingType = $this->getConfigData('handling_type');
         if (!$handlingType) {
             $handlingType = self::HANDLING_TYPE_FIXED;
@@ -639,6 +658,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param string $data
      * @return string
+     * @since 100.1.0
      */
     protected function filterDebugData($data)
     {
@@ -646,7 +666,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             $xml = new \SimpleXMLElement($data);
             $this->filterXmlData($xml);
             $data = $xml->asXML();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
         return $data;
     }
 
@@ -661,7 +682,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         foreach ($xml->children() as $child) {
             if ($child->count()) {
                 $this->filterXmlData($child);
-            } else if (in_array((string) $child->getName(), $this->_debugReplacePrivateDataKeys)) {
+            } elseif (in_array((string) $child->getName(), $this->_debugReplacePrivateDataKeys)) {
                 $child[0] = self::DEBUG_KEYS_MASK;
             }
         }

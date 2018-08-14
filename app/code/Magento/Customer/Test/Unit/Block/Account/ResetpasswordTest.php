@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
@@ -10,7 +10,7 @@ use Magento\Customer\Model\AccountManagement;
 /**
  * Test class for \Magento\Customer\Block\Account\Resetpassword
  */
-class ResetpasswordTest extends \PHPUnit_Framework_TestCase
+class ResetpasswordTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -28,22 +28,10 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->scopeConfigMock =  $this->getMock(
-            \Magento\Framework\App\Config::class,
-            ['getValue'],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfigMock =  $this->createPartialMock(\Magento\Framework\App\Config::class, ['getValue']);
 
         /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);

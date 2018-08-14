@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Processor;
@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model\Config\Processor;
 /**
  * Class PlaceholderTest
  */
-class PlaceholderTest extends \PHPUnit_Framework_TestCase
+class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Config\Processor\Placeholder
@@ -22,13 +22,7 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configPlaceholderMock = $this->getMock(
-            \Magento\Store\Model\Config\Placeholder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configPlaceholderMock = $this->createMock(\Magento\Store\Model\Config\Placeholder::class);
 
         $this->configPlaceholderMock->expects(
             $this->any()
