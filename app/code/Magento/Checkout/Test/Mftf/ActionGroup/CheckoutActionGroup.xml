@@ -93,13 +93,13 @@
             <argument name="customerAddressVar"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationFirstName"/>
-        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationLastName"/>
-        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationStreet"/>
-        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationCity"/>
-        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationState"/>
-        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationPostcode"/>
-        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationTelephone"/>
+        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationFirstName"/>
+        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationTelephone"/>
     </actionGroup>
 
     <!-- Check shipping method in checkout -->
@@ -108,7 +108,7 @@
             <argument name="shippingMethod"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInfomation}}" stepKey="assertshippingMethodInfomation"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
     </actionGroup>
 
     <!-- Checkout select Check/Money Order payment -->

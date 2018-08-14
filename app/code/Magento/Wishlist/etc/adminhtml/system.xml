@@ -22,12 +22,12 @@
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="number_limit" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="number_limit" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Max Emails Allowed to be Sent</label>
                     <comment>10 by default. Max - 10000</comment>
                     <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
                 </field>
-                <field id="text_limit" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="text_limit" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Email Text Length Limit</label>
                     <comment>255 by default</comment>
                     <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
