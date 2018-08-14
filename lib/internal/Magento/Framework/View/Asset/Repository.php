@@ -25,7 +25,6 @@ class Repository
     const FILE_ID_SEPARATOR = '::';
 
     /**
-     * @deprecated
      * @var \Magento\Framework\UrlInterface
      */
     private $baseUrl;
@@ -120,8 +119,7 @@ class Repository
         File\FallbackContextFactory $fallbackContextFactory,
         File\ContextFactory $contextFactory,
         RemoteFactory $remoteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        \Magento\Framework\UrlInterfaceFactory $baseUrlFactory = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->baseUrl = $baseUrl;
         $this->design = $design;
@@ -134,8 +132,6 @@ class Repository
         $this->remoteFactory = $remoteFactory;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->baseUrlFactory = $baseUrlFactory ?: ObjectManager::getInstance()
-            ->create(\Magento\Framework\UrlInterfaceFactory::class);
     }
 
     /**
@@ -292,11 +288,18 @@ class Repository
     {
         $secureKey   = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
-        $storeId     = $this->storeManager->getStore()->getId();
-        $cacheId     = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $storeId, $locale]);
+        $cacheId     = implode('|', [
+            $baseDirType,
+            $urlType,
+            $secureKey,
+            $area,
+            $themePath,
+            $this->getStoreId(),
+            $locale
+        ]);
 
         if (!isset($this->fallbackContext[$cacheId])) {
-            $url = $this->baseUrlFactory->create()->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
+            $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
             $this->fallbackContext[$cacheId] = $this->fallbackContextFactory->create(
                 [
                     'baseUrl' => $url,
@@ -308,6 +311,19 @@ class Repository
         }
 
         return $this->fallbackContext[$cacheId];
+    }
+    
+    /**
+     * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getStoreId()
+    {
+        if (!$this->storeManager->getStore()) {
+            return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        }
+        
+        return $this->storeManager->getStore()->getId();
     }
 
     /**
