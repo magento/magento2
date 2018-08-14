@@ -5,8 +5,6 @@
  */
 namespace Magento\Multishipping\Controller;
 
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\StateException;
 
@@ -17,28 +15,6 @@ use Magento\Framework\Exception\StateException;
 abstract class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
 {
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param AccountManagementInterface $accountManagement
-     */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement
-    ) {
-        parent::__construct(
-            $context,
-            $customerSession,
-            $customerRepository,
-            $accountManagement
-        );
-    }
-
     /**
      * Retrieve checkout model
      *
