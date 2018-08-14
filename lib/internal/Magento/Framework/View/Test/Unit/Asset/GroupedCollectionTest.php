@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
+class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\GroupedCollection
@@ -19,14 +19,7 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factory = $this->getMock(
-            \Magento\Framework\View\Asset\PropertyGroupFactory::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $factory = $this->createMock(\Magento\Framework\View\Asset\PropertyGroupFactory::class);
         $factory->expects(
             $this->any()
         )->method(

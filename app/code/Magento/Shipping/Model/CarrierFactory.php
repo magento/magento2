@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model;
@@ -106,7 +106,8 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         ) ? $this->create(
             $carrierCode,
             $storeId

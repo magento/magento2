@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Helper;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Helper;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Helper\View */
     protected $_helper;
@@ -18,7 +18,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_customerMetadataService = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->_customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->_helper = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Helper\View::class,
             ['customerMetadataService' => $this->_customerMetadataService]
@@ -41,10 +41,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $isMiddleNameAllowed = false,
         $isSuffixAllowed = false
     ) {
-        $visibleAttribute = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $visibleAttribute = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $visibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(true));
 
-        $invisibleAttribute = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $invisibleAttribute = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $invisibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
 
         $this->_customerMetadataService->expects(

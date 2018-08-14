@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\FileList;
 
 use \Magento\Framework\Css\PreProcessor\File\FileList\Collator;
 
-class CollatorTest extends \PHPUnit_Framework_TestCase
+class CollatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collator

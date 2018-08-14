@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class ViewTest
  * @package Magento\Customer\Block\Adminhtml\Edit\Tab
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View
@@ -20,7 +20,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $registry = $this->getMock(\Magento\Framework\Registry::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $objectManagerHelper->getObject(

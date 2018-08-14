@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AlternativeTest extends \PHPUnit_Framework_TestCase
+class AlternativeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
@@ -31,19 +31,13 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directory = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
-        $readFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class, [], [], '', false);
+        $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $readFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->directory));
-        $this->rule = $this->getMock(
-            \Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $rulePool = $this->getMock(\Magento\Framework\View\Design\Fallback\RulePool::class, [], [], '', false);
+        $this->rule = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
+        $rulePool = $this->createMock(\Magento\Framework\View\Design\Fallback\RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
@@ -58,11 +52,11 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException(array $alternativeExtensions)
     {
-        $this->setExpectedException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
+        $this->expectException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
             . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
 
-        $readFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class, [], [], '', false);
-        $rulePool = $this->getMock(\Magento\Framework\View\Design\Fallback\RulePool::class, [], [], '', false);
+        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $rulePool = $this->createMock(\Magento\Framework\View\Design\Fallback\RulePool::class);
         new Alternative($readFactory, $rulePool, $alternativeExtensions);
     }
 

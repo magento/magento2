@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -54,7 +54,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+::[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -65,7 +65,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+" />
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+" />
             <xs:minLength value="4" />
         </xs:restriction>
     </xs:simpleType>
@@ -76,7 +76,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z0-9]+" />
             <xs:minLength value="2" />
         </xs:restriction>
     </xs:simpleType>

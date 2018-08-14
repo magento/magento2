@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 /* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
 ?>
 <script type="text/x-magento-template" id="group-product-template">
@@ -46,7 +47,7 @@
 </script>
 <div class="grid-container no-display">
     <table class="admin__control-table" data-role="grouped-product-grid"
-        data-products="<?php echo $block->escapeHtml(
+        data-products="<?= $block->escapeHtml(
             $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAssociatedProducts())
         ); ?>">
         <thead>
@@ -55,16 +56,16 @@
                     <span></span>
                 </th>
                 <th data-column="name" class="no-link col-name">
-                    <span><?php /* @escapeNotVerified */ echo __('Name') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Name') ?></span>
                 </th>
                 <th data-column="sku" class="no-link col-sku">
-                    <span><?php /* @escapeNotVerified */ echo __('SKU') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('SKU') ?></span>
                 </th>
                 <th data-column="price" class="no-link col-price">
-                    <span><?php /* @escapeNotVerified */ echo __('Price') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Price') ?></span>
                     </th>
                 <th data-column="qty" class="no-link col-qty">
-                    <span><?php /* @escapeNotVerified */ echo __('Default Qty') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Default Qty') ?></span>
                 </th>
                 <th data-column="actions" class="last no-link col-actions">
                     <span></span>

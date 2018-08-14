@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Setup;
@@ -69,6 +69,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'Log of token request authentication failures.'
             );
             $setup->getConnection()->createTable($table);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.1', '<')) {
+            $connection = $setup->getConnection();
+
+            $connection->addIndex(
+                $setup->getTable('oauth_nonce'),
+                $setup->getIdxName('oauth_nonce', ['timestamp']),
+                ['timestamp']
+            );
         }
 
         $setup->endSetup();

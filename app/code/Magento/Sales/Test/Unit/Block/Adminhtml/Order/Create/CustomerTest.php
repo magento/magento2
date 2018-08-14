@@ -1,22 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetButtonsHtml()
     {
-        $contextMock = $this->getMock(
-            \Magento\Backend\Block\Template\Context::class,
-            ['getAuthorization'],
-            [],
-            '',
-            false
-        );
-        $authorizationMock = $this->getMock(\Magento\Framework\AuthorizationInterface::class, [], [], '', false);
+        $contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getAuthorization']);
+        $authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
         $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
         $arguments = ['context' => $contextMock];
 

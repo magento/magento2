@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
@@ -67,6 +67,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $this->setCollection($collection);
         parent::_prepareCollection();
+        if ($this->_isExport) {
+            $collection->setPageSize(null);
+        }
         $this->getCollection()->resolveCustomerNames();
         return $this;
     }

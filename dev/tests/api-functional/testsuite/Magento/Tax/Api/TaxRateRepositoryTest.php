@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -138,6 +138,44 @@ class TaxRateRepositoryTest extends WebapiAbstract
         }
     }
 
+    public function testCreateTaxRateWithoutValue()
+    {
+        $data = [
+            'tax_rate' => [
+                'tax_country_id' => 'US',
+                'tax_region_id' => 12,
+                'tax_postcode' => '*',
+                'code' => 'US-CA-*-Rate 1',
+            ],
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, $data);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                'SOAP-ERROR: Encoding: object has no \'rate\' property',
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals('%fieldName is a required field.', $errorObj['message']);
+            $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
+        }
+    }
+
     public function testCreateTaxRate()
     {
         $data = [
@@ -204,6 +242,41 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
         $this->assertEquals($taxRateId, $taxRate->load($taxRateId)->getId(), 'Tax rate was not created in  DB.');
         $this->assertEquals('17-25', $taxRate->getTaxPostcode(), 'Zip range is not saved in DB.');
+        $taxRate->delete();
+    }
+
+    public function testCreateTaxRateWithZeroValue()
+    {
+        $data = [
+            'tax_rate' => [
+                'tax_country_id' => 'US',
+                'tax_region_id' => 12,
+                'tax_postcode' => '*',
+                'code' => 'Test Tax Rate ' . microtime(),
+                'rate' => '0.0',
+            ],
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $result = $this->_webApiCall($serviceInfo, $data);
+        $this->assertArrayHasKey('id', $result);
+        $taxRateId = $result['id'];
+        /** Ensure that tax rate was actually created in DB */
+        /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
+        $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
+        $taxModel = $taxRate->load($taxRateId);
+        $this->assertEquals($taxRateId, $taxModel->getId(), 'Tax rate was not created in DB.');
+        $this->assertEquals(0, $taxModel->getRate(), 'Tax rate value is wrong.');
         $taxRate->delete();
     }
 

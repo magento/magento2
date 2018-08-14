@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_special_price.php
  * @magentoAppArea frontend
  */
 class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
@@ -19,6 +18,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_special_price.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -34,12 +35,20 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -51,7 +60,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     {
         return [
             '
-                #1 Testing price for fixed bundle product 
+                #1 Testing price for fixed bundle product
                 with special price and without any sub items and options
             ' => [
                 'strategy' => $this->getBundleConfiguration1(),
@@ -60,12 +69,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 55,
 
                     // 110 * 0.5
-                    'maximalPrice' => 55
+                    'maximalPrice' => 55,
                 ]
             ],
 
             '
-                #2 Testing price for fixed bundle product 
+                #2 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration2(
@@ -77,12 +86,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 165,
 
                     // 0.5 * (110 + 1 * 20) + 100
-                    'maximalPrice' => 165
+                    'maximalPrice' => 165,
                 ]
             ],
 
             '
-                #3 Testing price for fixed bundle product 
+                #3 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration2(
@@ -94,12 +103,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 121,
 
                     // 0.5 * (110 + 110 * 0.2 + 110 * 1)
-                    'maximalPrice' => 121
+                    'maximalPrice' => 121,
                 ]
             ],
 
             '
-                #4 Testing price for fixed bundle product 
+                #4 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration2(
@@ -111,12 +120,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
 
                     // 0.5 * (110 + 1 * 20 + 110 * 1)
-                    'maximalPrice' => 120
+                    'maximalPrice' => 120,
                 ]
             ],
 
             '
-                #5 Testing price for fixed bundle product 
+                #5 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration2(
@@ -128,12 +137,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 166,
 
                     // 0.5 * (110 + 110 * 0.2) + 100
-                    'maximalPrice' => 166
+                    'maximalPrice' => 166,
                 ]
             ],
 
             '
-                #6 Testing price for fixed bundle product 
+                #6 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -145,12 +154,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 155,
 
                     // 0.5 * (110 + 2 * 20) + 100
-                    'maximalPrice' => 175
+                    'maximalPrice' => 175,
                 ]
             ],
 
             '
-                #7 Testing price for fixed bundle product 
+                #7 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -162,12 +171,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 110,
 
                     // 0.5 * (110 + 2 * 110 * 0.2 + 1 * 110)
-                    'maximalPrice' => 132
+                    'maximalPrice' => 132,
                 ]
             ],
 
             '
-                #8 Testing price for fixed bundle product 
+                #8 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -179,12 +188,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 110,
 
                     // 0.5 * (110 + 2 * 20 + 1 * 110)
-                    'maximalPrice' => 130
+                    'maximalPrice' => 130,
                 ]
             ],
 
             '
-                #9 Testing price for fixed bundle product 
+                #9 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -196,12 +205,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 155,
 
                     // 0.5 * (110 + 2 * 0.2 * 110) + 100
-                    'maximalPrice' => 177
+                    'maximalPrice' => 177,
                 ]
             ],
 
             '
-                #10 Testing price for fixed bundle product 
+                #10 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration4(
@@ -213,12 +222,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 170,
 
                     // 0.5 * (110 + 3 * 10 + 1 * 40) + 100
-                    'maximalPrice' => 190
+                    'maximalPrice' => 190,
                 ]
             ],
 
             '
-                #11 Testing price for fixed bundle product 
+                #11 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration4(
@@ -230,12 +239,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 126.5,
 
                     // 0.5 * (110 + 3 * 110 * 0.1 + 1 * 110 * 0.4 + 110 * 1)
-                    'maximalPrice' => 148.5
+                    'maximalPrice' => 148.5,
                 ]
             ],
 
             '
-                #12 Testing price for fixed bundle product 
+                #12 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration4(
@@ -247,12 +256,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 125,
 
                     // 0.5 * (110 + 3 * 10 + 1 * 40 + 1 * 110)
-                    'maximalPrice' => 145
+                    'maximalPrice' => 145,
                 ]
             ],
 
             '
-                #13 Testing price for fixed bundle product 
+                #13 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration4(
@@ -264,12 +273,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 171.5,
 
                     // 0.5 * (110 + 3 * 110 * 0.1 + 1 * 110 * 0.4) + 100
-                    'maximalPrice' => 193.5
+                    'maximalPrice' => 193.5,
                 ]
             ],
 
             '
-                #14 Testing price for fixed bundle product 
+                #14 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration5(
@@ -281,12 +290,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 175,
 
                     // 0.5 * (110 + 1 * 40 + 3 * 15) + 100
-                    'maximalPrice' => 197.5
+                    'maximalPrice' => 197.5,
                 ]
             ],
 
             '
-                #15 Testing price for fixed bundle product 
+                #15 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration5(
@@ -298,12 +307,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 132,
 
                     // 0.5 * (110 + 1 * 110 * 0.4 + 3 * 110 * 0.15 + 110 * 1)
-                    'maximalPrice' => 156.75
+                    'maximalPrice' => 156.75,
                 ]
             ],
 
             '
-                #16 Testing price for fixed bundle product 
+                #16 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration5(
@@ -315,12 +324,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 130,
 
                     // 0.5 * (110 + 1 * 40 + 3 * 15 + 1 * 110)
-                    'maximalPrice' => 152.5
+                    'maximalPrice' => 152.5,
                 ]
             ],
 
             '
-                #17 Testing price for fixed bundle product 
+                #17 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration5(
@@ -332,12 +341,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 177,
 
                     // 0.5 * (110 + 1 * 110 * 0.4 + 3 * 110 * 0.15) + 100
-                    'maximalPrice' => 201.75
+                    'maximalPrice' => 201.75,
                 ]
             ],
 
             '
-                #18 Testing price for fixed bundle product 
+                #18 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration6(
@@ -349,12 +358,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 175,
 
                     // 0.5 * (110 + 3 * 15) + 100
-                    'maximalPrice' => 177.5
+                    'maximalPrice' => 177.5,
                 ]
             ],
 
             '
-                #19 Testing price for fixed bundle product 
+                #19 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration6(
@@ -366,12 +375,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 132,
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110)
-                    'maximalPrice' => 134.75
+                    'maximalPrice' => 134.75,
                 ]
             ],
 
             '
-                #20 Testing price for fixed bundle product 
+                #20 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration6(
@@ -383,12 +392,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 130,
 
                     // 0.5 * (110 + 3 * 15 + 110 * 1)
-                    'maximalPrice' => 132.5
+                    'maximalPrice' => 132.5,
                 ]
             ],
 
             '
-                #21 Testing price for fixed bundle product 
+                #21 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration6(
@@ -400,12 +409,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 177,
 
                     // 0.5 * (110 + 3 * 110 * 0.15) + 100
-                    'maximalPrice' => 179.75
+                    'maximalPrice' => 179.75,
                 ]
             ],
 
             '
-                #22 Testing price for fixed bundle product 
+                #22 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getBundleConfiguration7(
@@ -417,12 +426,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 185,
 
                     // 0.5 * (110 + 3 * 15 + 1 * 20 + 3 * 10) + 100
-                    'maximalPrice' => 202.5
+                    'maximalPrice' => 202.5,
                 ]
             ],
 
             '
-                #23 Testing price for fixed bundle product 
+                #23 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
                 'strategy' => $this->getBundleConfiguration7(
@@ -434,7 +443,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 143,
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110 * 0.2 + 3 * 110 * 0.1 + 110 * 1)
-                    'maximalPrice' => 162.25
+                    'maximalPrice' => 162.25,
                 ]
             ],
 
@@ -451,7 +460,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 140,
 
                     // 0.5 * (110 + 3 * 15 + 1 * 20 + 3 * 10 + 1 * 110)
-                    'maximalPrice' => 157.5
+                    'maximalPrice' => 157.5,
                 ]
             ],
 
@@ -468,7 +477,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 188,
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110 * 0.2 + 3 * 110 * 0.1) + 100
-                    'maximalPrice' => 207.25
+                    'maximalPrice' => 207.25,
                 ]
             ],
         ];

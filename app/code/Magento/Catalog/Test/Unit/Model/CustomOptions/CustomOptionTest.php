@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
 
-class CustomOptionTest extends \PHPUnit_Framework_TestCase
+class CustomOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomOption

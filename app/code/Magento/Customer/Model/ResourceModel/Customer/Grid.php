@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Customer;
@@ -11,11 +11,13 @@ use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Customer\Model\Customer;
 
 /**
- * @deprecated
+ * @deprecated 100.1.0
  */
 class Grid
 {
-    /** @var Resource */
+    /**
+     * @var resource
+     */
     protected $resource;
 
     /**
@@ -23,7 +25,9 @@ class Grid
      */
     protected $indexerRegistry;
 
-    /** @var FlatScopeResolver  */
+    /**
+     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
+     */
     protected $flatScopeResolver;
 
     /**
@@ -46,7 +50,7 @@ class Grid
      *
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function syncCustomerGrid()
     {
@@ -62,7 +66,7 @@ class Grid
      *
      * @return array
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getCustomerIdsForReindex()
     {

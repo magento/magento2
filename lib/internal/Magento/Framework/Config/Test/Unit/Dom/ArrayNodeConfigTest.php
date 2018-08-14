@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use \Magento\Framework\Config\Dom\ArrayNodeConfig;
 
-class ArrayNodeConfigTest extends \PHPUnit_Framework_TestCase
+class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ArrayNodeConfig
@@ -21,7 +21,7 @@ class ArrayNodeConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->nodePathMatcher = $this->getMock(\Magento\Framework\Config\Dom\NodePathMatcher::class);
+        $this->nodePathMatcher = $this->createMock(\Magento\Framework\Config\Dom\NodePathMatcher::class);
         $this->object = new ArrayNodeConfig(
             $this->nodePathMatcher,
             ['/root/assoc/one' => 'name', '/root/assoc/two' => 'id', '/root/assoc/three' => 'key'],

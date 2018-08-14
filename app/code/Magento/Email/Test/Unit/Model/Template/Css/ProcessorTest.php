@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Css;
@@ -9,7 +9,7 @@ use Magento\Email\Model\Template\Css\Processor;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Processor

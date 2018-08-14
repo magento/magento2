@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Test class for \Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid
@@ -22,10 +23,10 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
      */
     public function testGridContent()
     {
-        /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
+        /** @var LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
         /** @var Grid $grid */
-        $grid = $layout->createBlock(\Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid::class);
+        $grid = $layout->createBlock(Grid::class);
         $grid->getRequest()->setParams(['filter' => base64_encode(urlencode('email=customer@example.com'))]);
         $result = $grid->getPreparedCollection();
 
@@ -34,5 +35,18 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
         $quote = $result->getFirstItem();
         $this->assertEquals('customer@example.com', $quote->getCustomerEmail());
         $this->assertEquals(10.00, $quote->getSubtotal());
+    }
+
+    /**
+     * @return void
+     */
+    public function testPageSizeIsSetToNullWhenExportCsvFile()
+    {
+        /** @var LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
+        /** @var Grid $grid */
+        $grid = $layout->createBlock(Grid::class);
+        $grid->getCsvFile();
+        $this->assertNull($grid->getCollection()->getPageSize());
     }
 }

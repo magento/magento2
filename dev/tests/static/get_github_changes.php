@@ -5,7 +5,7 @@
  *
  * @category   dev
  * @package    build
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -176,7 +176,6 @@ function validateInput(array $options, array $requiredOptions)
     return true;
 }
 
-
 class GitRepo
 {
     /**
@@ -303,12 +302,17 @@ class GitRepo
      */
     protected function filterChangedFiles(array $changes, $remoteAlias, $remoteBranch)
     {
+        $countScannedFiles = 0;
         $changedFilesMasks = [
             'M' => "M\t",
             'A' => "A\t"
         ];
         $filteredChanges = [];
         foreach ($changes as $fileName) {
+            $countScannedFiles++;
+            if (($countScannedFiles % 5000) == 0) {
+                echo $countScannedFiles . " files scanned so far\n";
+            }
             foreach ($changedFilesMasks as $mask) {
                 if (strpos($fileName, $mask) === 0) {
                     $fileName = str_replace($mask, '', $fileName);
@@ -328,6 +332,8 @@ class GitRepo
                 }
             }
         }
+        echo $countScannedFiles . " files scanned\n";
+
         return $filteredChanges;
     }
 

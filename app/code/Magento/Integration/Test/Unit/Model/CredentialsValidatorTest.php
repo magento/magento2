@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model;
 /**
  * Unit test for \Magento\Integration\Model\CredentialsValidator
  */
-class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
+class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\CredentialsValidator
@@ -49,6 +49,7 @@ class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
         $username = 'my_username';
         $password = 'my_password';
 
-        $this->credentialsValidator->validate($username, $password);
+        $result = $this->credentialsValidator->validate($username, $password);
+        $this->assertNull($result);
     }
 }

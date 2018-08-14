@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,13 +13,8 @@ namespace Magento\Weee\Test\Unit\Model\Attribute\Backend\Weee;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Weee\Model\Attribute\Backend\Weee\Tax
-     */
-    protected $model;
-        
     /**
      * @var ObjectManager
      */
@@ -28,12 +23,14 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager->getObject(\Magento\Weee\Model\Attribute\Backend\Weee\Tax::class);
     }
 
     public function testGetBackendModelName()
     {
-        $this->assertEquals(\Magento\Weee\Model\Attribute\Backend\Weee\Tax::class, $this->model->getBackendModelName());
+        $this->assertEquals(
+            \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
+            \Magento\Weee\Model\Attribute\Backend\Weee\Tax::getBackendModelName()
+        );
     }
 
     /**
@@ -85,7 +82,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($taxes));
 
         // Exception caught
-        $this->setExpectedException('Exception', $expected);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($expected);
         $modelMock->validate($productMock);
     }
 
@@ -143,7 +141,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $model->afterLoad($productMock);
+        $result = $model->afterLoad($productMock);
+        $this->assertNotNull($result);
     }
 
     /**
@@ -270,5 +269,32 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         );
 
         $model->getTable();
+    }
+
+    /**
+     * Test method GetEntityIdField.
+     *
+     * @return void
+     */
+    public function testGetEntityIdField()
+    {
+        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
+            ->setMethods(['getEntityIdField', 'getIdFieldName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $attributeTaxMock
+            ->expects($this->once())
+            ->method('getIdFieldName')
+            ->willReturn(null);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
+            [
+                'attributeTax' => $attributeTaxMock,
+            ]
+        );
+
+        $model->getEntityIdField();
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -32,6 +32,19 @@
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+        </variation>
+        <variation name="CreateCurrencyRateTestVariation3" summary="Create currency rate if is not base currency" ticketId="MAGETWO-45310">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
+            <data name="currencyRate/data/rate" xsi:type="number">0.5</data>
+            <data name="currencySymbol/dataset" xsi:type="string">currency_symbols_uah</data>
+            <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="shippingAmount" xsi:type="string">₴2.50</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="config/dataset" xsi:type="string">config_allowed_currency_usd_and_uah</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertShippingPriceWithCustomCurrency" />
         </variation>
     </testCase>
 </config>

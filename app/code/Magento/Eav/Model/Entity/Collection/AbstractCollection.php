@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Collection;
@@ -12,9 +12,12 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - collection abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -800,7 +803,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     {
         $tableAlias = null;
         if (is_array($table)) {
-            list($tableAlias, $tableName) = each($table);
+            list($tableAlias, $tableName) = [key($table), current($table)];
         } else {
             $tableName = $table;
         }
@@ -917,6 +920,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         foreach ($this->_items as $item) {
             $item->setOrigData();
             $this->beforeAddLoadedItem($item);
+            $item->setDataChanges(false);
         }
         \Magento\Framework\Profiler::stop('set_orig_data');
 
@@ -1110,7 +1114,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(true, true, $query);
+            $this->printLogQuery(false, true, $query);
             throw $e;
         }
 
@@ -1419,6 +1423,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
+     * @since 100.1.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {

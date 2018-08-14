@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\User\Test\Fixture\User;
  */
 class AssertUserRoleRestrictedAccess extends AbstractConstraint
 {
-    const DENIED_ACCESS = 'Access denied';
+    const DENIED_ACCESS = 'Sorry, you need permissions to view this content.';
 
     /**
      * Asserts that user has only related permissions.

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\ProductLink;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,9 +13,9 @@ use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Repository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
@@ -77,13 +76,15 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     protected $productLinkExtensionFactory;
 
     /**
-     * Repository constructor.
+     * Constructor
      *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param CollectionProvider $entityCollectionProvider
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory|null $productLinkExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -91,13 +92,19 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
+        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $entityCollectionProvider;
         $this->linkInitializer = $linkInitializer;
         $this->linkManagement = $linkManagement;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->productLinkFactory = $productLinkFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
+        $this->productLinkExtensionFactory = $productLinkExtensionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductLinkExtensionFactory::class);
     }
 
     /**
@@ -149,7 +156,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
             $collection = $this->entityCollectionProvider->getCollection($product, $linkTypeName);
             foreach ($collection as $item) {
                 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-                $productLink = $this->getProductLinkFactory()->create();
+                $productLink = $this->productLinkFactory->create();
                 $productLink->setSku($product->getSku())
                     ->setLinkType($linkTypeName)
                     ->setLinkedProductSku($item['sku'])
@@ -158,7 +165,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 if (isset($item['custom_attributes'])) {
                     $productLinkExtension = $productLink->getExtensionAttributes();
                     if ($productLinkExtension === null) {
-                        $productLinkExtension = $this->getProductLinkExtensionFactory()->create();
+                        $productLinkExtension = $this->productLinkExtensionFactory()->create();
                     }
                     foreach ($item['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
@@ -256,30 +263,6 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
         }
         return $this->linkTypeProvider;
-    }
-
-    /**
-     * @return ProductLinkInterfaceFactory
-     */
-    private function getProductLinkFactory()
-    {
-        if (null === $this->productLinkFactory) {
-            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
-        }
-        return $this->productLinkFactory;
-    }
-
-    /**
-     * @return ProductLinkExtensionFactory
-     */
-    private function getProductLinkExtensionFactory()
-    {
-        if (null === $this->productLinkExtensionFactory) {
-            $this->productLinkExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductLinkExtensionFactory::class);
-        }
-        return $this->productLinkExtensionFactory;
     }
 
     /**

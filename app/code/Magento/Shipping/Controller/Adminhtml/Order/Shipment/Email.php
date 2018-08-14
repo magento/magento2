@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -57,7 +57,9 @@ class Email extends \Magento\Backend\App\Action
                 $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
                     ->notify($shipment);
                 $shipment->save();
-                $this->messageManager->addSuccess(__('You sent the shipment.'));
+                $this->messageManager->addSuccess(
+                    __('An email confirming the order is underway has been sent to the customer.')
+                );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

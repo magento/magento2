@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-analytics",
+    "description": "N/A",
+    "require": {
+        "php": "~7.0.13|~7.1.0",
+        "magento/module-backend": "100.2.*",
+        "magento/module-config": "101.0.*",
+        "magento/module-integration": "100.2.*",
+        "magento/module-store": "100.2.*",
+        "magento/framework": "101.0.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.2",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Analytics\\": ""
+        }
+    }
+}

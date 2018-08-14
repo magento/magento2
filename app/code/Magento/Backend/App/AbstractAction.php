@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
@@ -8,8 +8,10 @@ namespace Magento\Backend\App;
 /**
  * Generic backend controller
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 {
@@ -215,6 +217,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             $this->_view->loadLayout(['default', 'adminhtml_denied'], true, true, false);
             $this->_view->renderLayout();
             $this->_request->setDispatched(true);
+
             return $this->_response;
         }
 
@@ -223,6 +226,11 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         $this->_processLocaleSettings();
+
+        // Need to preload isFirstPageAfterLogin (see https://github.com/magento/magento2/issues/15510)
+        if ($this->_auth->isLoggedIn()) {
+            $this->_auth->getAuthStorage()->isFirstPageAfterLogin();
+        }
 
         return parent::dispatch($request);
     }

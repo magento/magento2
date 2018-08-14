@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,20 +52,21 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initRowBaseCalculator()
     {
-        $taxClassService = $this->getMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
-        $this->rowBaseCalculator = $this->getMock(
-            \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
-            ['deltaRound'],
-            [
-                'taxClassService' => $taxClassService,
-                'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
-                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
-                'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
-                'calculationTool' => $this->mockCalculationTool,
-                'config' => $this->mockConfig,
-                'storeId' => self::STORE_ID,
-                'addressRateRequest' => $this->addressRateRequest
-            ]
-        );
+        $taxClassService = $this->createMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
+        $this->rowBaseCalculator = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RowBaseCalculator::class)
+            ->setMethods(['deltaRound'])
+            ->setConstructorArgs(
+                [
+                    'taxClassService' => $taxClassService,
+                    'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
+                    'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
+                    'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
+                    'calculationTool' => $this->mockCalculationTool,
+                    'config' => $this->mockConfig,
+                    'storeId' => self::STORE_ID,
+                    'addressRateRequest' => $this->addressRateRequest
+                ]
+            )
+            ->getMock();
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -91,10 +91,6 @@ main.controller('navigationController',
 
         $scope.endsWith = function(str, suffix) {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
-        };
-
-        $scope.goToStart = function() {
-            $scope.goToAction($state.current.type);
         };
 
         $scope.goToBackup = function() {

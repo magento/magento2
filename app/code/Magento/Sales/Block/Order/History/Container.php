@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order\History;
 
 /**
  * Sales order history extra container block
+ *
+ * @api
+ * @since 100.1.1
  */
 class Container extends \Magento\Framework\View\Element\Template
 {
@@ -20,6 +23,7 @@ class Container extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return $this
+     * @since 100.1.1
      */
     public function setOrder(\Magento\Sales\Api\Data\OrderInterface $order)
     {
@@ -44,6 +48,7 @@ class Container extends \Magento\Framework\View\Element\Template
      * @param bool $useCache
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.1
      */
     public function getChildHtml($alias = '', $useCache = false)
     {

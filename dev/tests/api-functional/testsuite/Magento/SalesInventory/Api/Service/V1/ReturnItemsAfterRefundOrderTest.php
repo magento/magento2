@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Api\Service\V1;
@@ -73,7 +73,6 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
                 $qtyAfterRefund,
                 'Failed asserting qty of returned items incorrect.'
             );
-
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was created');
         }

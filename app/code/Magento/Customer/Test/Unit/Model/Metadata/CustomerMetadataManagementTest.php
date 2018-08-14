@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
@@ -9,7 +9,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\CustomerMetadataManagement;
 
-class CustomerMetadataManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerMetadataManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerMetadataManagement */
     protected $model;

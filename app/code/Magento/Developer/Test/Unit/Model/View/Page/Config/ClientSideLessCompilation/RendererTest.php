@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Developer\Test\Unit\Model\View\Page\Config\ClientSideLessCompi
 
 use Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | Renderer */
     private $model;
@@ -43,11 +43,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             \Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer::class,
             $overriddenMocks
         );
-        $this->model = $this->getMock(
-            \Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer::class,
-            ['renderAssetGroup'],
-            $mocks
-        );
+        $this->model = $this->getMockBuilder(
+            \Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer::class
+        )
+            ->setMethods(['renderAssetGroup'])
+            ->setConstructorArgs($mocks)
+            ->getMock();
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\ResourceModel;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\SaveHandler
@@ -24,8 +24,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class, [], [], '', false);
-        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->subject = new \Magento\CatalogRule\Model\ResourceModel\SaveHandler(
             $this->resourceMock,
             $this->metadataMock
@@ -46,12 +46,9 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customerGroupIds
         ];
 
-        $metadataMock = $this->getMock(
+        $metadataMock = $this->createPartialMock(
             \Magento\Framework\EntityManager\EntityMetadata::class,
-            ['getLinkField'],
-            [],
-            '',
-            false
+            ['getLinkField']
         );
         $this->metadataMock->expects($this->once())
             ->method('getMetadata')

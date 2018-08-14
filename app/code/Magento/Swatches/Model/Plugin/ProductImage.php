@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
@@ -39,7 +39,7 @@ class ProductImage
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Request\Http $request
      */
-    public function __construct (
+    public function __construct(
         \Magento\Swatches\Helper\Data $swatchesHelperData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Request\Http $request
@@ -69,7 +69,7 @@ class ProductImage
             && ($location == self::CATEGORY_PAGE_GRID_LOCATION || $location == self::CATEGORY_PAGE_LIST_LOCATION)) {
             $request = $this->request->getParams();
             if (is_array($request)) {
-                $filterArray = $this->getFilterArray($request);
+                $filterArray = $this->getFilterArray($request, $product);
                 if (!empty($filterArray)) {
                     $product = $this->loadSimpleVariation($product, $filterArray);
                 }
@@ -99,16 +99,18 @@ class ProductImage
      * Get filters from request
      *
      * @param array $request
+     * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
-    protected function getFilterArray(array $request)
+    private function getFilterArray(array $request, \Magento\Catalog\Model\Product $product)
     {
         $filterArray = [];
-        $attributeCodes = $this->eavConfig->getEntityAttributeCodes(\Magento\Catalog\Model\Product::ENTITY);
+        $attributes = $this->eavConfig->getEntityAttributes(\Magento\Catalog\Model\Product::ENTITY, $product);
+
         foreach ($request as $code => $value) {
-            if (in_array($code, $attributeCodes)) {
-                $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $code);
-                if ($attribute->getId() && $this->canReplaceImageWithSwatch($attribute)) {
+            if (isset($attributes[$code])) {
+                $attribute = $attributes[$code];
+                if ($this->canReplaceImageWithSwatch($attribute)) {
                     $filterArray[$code] = $value;
                 }
             }

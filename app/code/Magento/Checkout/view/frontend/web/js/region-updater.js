@@ -1,9 +1,8 @@
 /**
- * @category    frontend Checkout region-updater
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true expr:true*/
+
 define([
     'jquery',
     'mage/template',
@@ -187,8 +186,10 @@ define([
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
                     requiredLabel.removeClass('required');
 
-                    if (!this.options.optionalRegionAllowed) {
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionList.attr('disabled', 'disabled');
+                    } else {
+                        regionList.removeAttr('disabled');
                     }
                 }
 
@@ -196,18 +197,20 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');
                 } else {
-                    if (!this.options.optionalRegionAllowed) {
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionInput.attr('disabled', 'disabled');
                     }
                     requiredLabel.removeClass('required');
                     regionInput.removeClass('required-entry');
                 }
 
-                regionList.removeClass('required-entry').hide();
+                regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
                 regionInput.show();
                 label.attr('for', regionInput.attr('id'));
             }
@@ -233,7 +236,7 @@ define([
             var self = this;
 
             this.options.isRegionRequired = false;
-            $.each(this.options.regionJson.config.regions_required, function (index, elem) {
+            $.each(this.options.regionJson.config['regions_required'], function (index, elem) {
                 if (elem === country) {
                     self.options.isRegionRequired = true;
                 }

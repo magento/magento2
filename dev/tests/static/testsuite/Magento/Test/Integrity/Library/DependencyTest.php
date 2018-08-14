@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Library;
@@ -17,7 +17,7 @@ use Zend\Code\Reflection\FileReflection;
  * Test check if Magento library components contain incorrect dependencies to application layer
  *
  */
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Collect errors

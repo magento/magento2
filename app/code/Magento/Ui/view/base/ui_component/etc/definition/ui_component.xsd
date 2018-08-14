@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_settings.xsd"/>
+
+    <xs:attributeGroup name="ui_element_attributes">
+        <xs:attribute ref="name" use="optional" />
+        <xs:attribute ref="template" use="optional"/>
+        <xs:attribute ref="component" use="optional" />
+        <xs:attribute ref="class" use="optional"/>
+        <xs:attribute ref="provider" use="optional"/>
+        <xs:attribute ref="sortOrder" use="optional"/>
+        <xs:attribute ref="displayArea" use="optional"/>
+        <xs:attribute ref="extends" use="optional"/>
+    </xs:attributeGroup>
+</xs:schema>

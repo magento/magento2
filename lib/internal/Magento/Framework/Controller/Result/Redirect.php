@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,20 +9,25 @@ namespace Magento\Framework\Controller\Result;
 use Magento\Framework\App;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * In many cases controller actions may result in a redirect
  * so this is a result object that implements all necessary properties of a HTTP redirect
+ *
+ * @api
  */
 class Redirect extends AbstractResult
 {
+
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var RedirectInterface
      */
     protected $redirect;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
@@ -35,11 +40,11 @@ class Redirect extends AbstractResult
      * Constructor
      *
      * @param App\Response\RedirectInterface $redirect
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         App\Response\RedirectInterface $redirect,
-        \Magento\Framework\UrlInterface $urlBuilder
+        UrlInterface $urlBuilder
     ) {
         $this->redirect = $redirect;
         $this->urlBuilder = $urlBuilder;
@@ -68,6 +73,7 @@ class Redirect extends AbstractResult
     }
 
     /**
+     * URL Setter
      * @param string $url
      * @return $this
      */
@@ -95,7 +101,11 @@ class Redirect extends AbstractResult
      */
     protected function render(HttpResponseInterface $response)
     {
-        $response->setRedirect($this->url);
+        if (empty($this->httpResponseCode)) {
+            $response->setRedirect($this->url);
+        } else {
+            $response->setRedirect($this->url, $this->httpResponseCode);
+        }
         return $this;
     }
 }

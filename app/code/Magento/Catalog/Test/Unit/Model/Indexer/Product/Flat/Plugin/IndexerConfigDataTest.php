@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Catalog\Model\Indexer\Product\Flat\State as ProductFlatIndexerState;
 use Magento\Indexer\Model\Config\Data as ConfigData;
 
-class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
+class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexerConfigDataPlugin

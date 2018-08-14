@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,6 +58,6 @@ class Website
      */
     private function prepareUrl($websiteCode)
     {
-        return $_ENV['app_frontend_url'] . Website::URL . '?website_code=' . urlencode($websiteCode);
+        return $_ENV['app_frontend_url'] . self::URL . '?website_code=' . urlencode($websiteCode);
     }
 }

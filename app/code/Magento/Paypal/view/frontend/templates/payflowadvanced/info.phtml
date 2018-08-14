@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,9 @@
  * @var \Magento\Paypal\Block\Payflow\Advanced\Form $block
  */
 ?>
-<fieldset id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>" style="display:none"
+<fieldset id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" style="display:none"
           class="fieldset payflowadvanced items redirect">
     <div>
-        <?php echo $block->escapeHtml(__('You will be required to enter your payment details after you place an order.')); ?>
+        <?= $block->escapeHtml(__('You will be required to enter your payment details after you place an order.')) ?>
     </div>
 </fieldset>

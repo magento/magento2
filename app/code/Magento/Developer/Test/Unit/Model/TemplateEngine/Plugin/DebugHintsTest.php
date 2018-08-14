@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Plugin;
@@ -9,7 +9,7 @@ use Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory;
 use Magento\Developer\Model\TemplateEngine\Plugin\DebugHints;
 use Magento\Store\Model\ScopeInterface;
 
-class DebugHintsTest extends \PHPUnit_Framework_TestCase
+class DebugHintsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -68,7 +68,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
         $this->setupConfigFixture($debugHintsPath, true, $showBlockHints);
 
-        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
+        $engine = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
 
         $debugHintsDecorator = $this->getMockBuilder(
             \Magento\Developer\Model\TemplateEngine\Decorator\DebugHints::class
@@ -127,7 +127,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
         $this->setupConfigFixture($debugHintsPath, $showTemplateHints, true);
 
-        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
+        $engine = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
 
         $subjectMock = $this->getMockBuilder(\Magento\Framework\View\TemplateEngineFactory::class)
             ->disableOriginalConstructor()
@@ -170,7 +170,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     protected function setupConfigFixture($debugHintsPath, $showTemplateHints, $showBlockHints)
     {
         $storeCode = 'default';
-        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn($storeCode);

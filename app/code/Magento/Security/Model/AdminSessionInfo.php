@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -13,6 +13,9 @@ namespace Magento\Security\Model;
  * @method int getStatus()
  * @method string getUpdatedAt()
  * @method string getCreatedAt()
+ *
+ * @api
+ * @since 100.1.0
  */
 class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 {
@@ -42,11 +45,13 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 
     /**
      * All other open sessions were terminated
+     * @since 100.1.0
      */
     protected $isOtherSessionsTerminated = false;
 
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
@@ -84,6 +89,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -94,6 +100,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check if a status is logged in
      *
      * @return bool
+     * @since 100.1.0
      */
     public function isLoggedInStatus()
     {
@@ -117,6 +124,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check whether the session is expired
      *
      * @return bool
+     * @since 100.1.0
      */
     public function isSessionExpired()
     {
@@ -134,6 +142,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Get formatted IP
      *
      * @return string
+     * @since 100.1.0
      */
     public function getFormattedIp()
     {
@@ -144,6 +153,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Check if other sessions terminated
      *
      * @return bool
+     * @since 100.1.0
      */
     public function isOtherSessionsTerminated()
     {
@@ -154,7 +164,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * Setter for isOtherSessionsTerminated
      *
      * @param bool $isOtherSessionsTerminated
-     * @return this
+     * @return $this
+     * @since 100.1.0
      */
     public function setIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {

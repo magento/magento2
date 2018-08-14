@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Config;
@@ -10,8 +10,10 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Configuration class for ordered items
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 abstract class Ordered extends \Magento\Framework\App\Config\Base
 {
@@ -165,13 +167,8 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
                     if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
                         return 0;
                     }
-                    if ($a['sort_order'] > $b['sort_order']) {
-                        return 1;
-                    } elseif ($a['sort_order'] < $b['sort_order']) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+
+                    return $a['sort_order'] <=> $b['sort_order'];
                 }
             );
         }

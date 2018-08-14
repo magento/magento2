@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
+class UpdateEntityRowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\UpdateEntityRow

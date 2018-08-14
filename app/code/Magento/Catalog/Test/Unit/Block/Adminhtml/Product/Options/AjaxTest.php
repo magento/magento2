@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AjaxTest extends \PHPUnit_Framework_TestCase
+class AjaxTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax */
     protected $block;
@@ -31,15 +31,18 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->setMethods(['getEventManager', 'getScopeConfig', 'getLayout', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encoderInterface = $this->getMock(\Magento\Framework\Json\EncoderInterface::class);
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
+        $this->encoderInterface = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }

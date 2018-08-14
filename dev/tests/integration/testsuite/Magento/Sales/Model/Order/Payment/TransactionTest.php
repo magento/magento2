@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment;
@@ -11,7 +11,7 @@ namespace Magento\Sales\Model\Order\Payment;
  * @see \Magento\Sales\Model\Order\Payment\Transaction
  * @magentoDataFixture Magento/Sales/_files/transactions.php
  */
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     public function testLoadByTxnId()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\TaxClass;
@@ -11,7 +11,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\TaxClass\Key;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Repository

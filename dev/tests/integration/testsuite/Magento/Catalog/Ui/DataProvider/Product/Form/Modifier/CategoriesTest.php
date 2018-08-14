@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
@@ -14,7 +15,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CategoriesTest extends \PHPUnit_Framework_TestCase
+class CategoriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Categories
@@ -29,6 +30,8 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
         $store = $objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('admin');
         $registry->register('current_store', $store);
+        $product = $objectManager->create(Product::class);
+        $registry->register('current_product', $product);
         $this->object = $objectManager->create(Categories::class);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,20 @@ $taxAmount = $block->getTotal()->getValue();
 ?>
 <?php if (($taxAmount == 0 && $this->helper('Magento\Tax\Helper\Data')->displayZeroTax()) || ($taxAmount > 0)): ?>
 <?php global $taxIter; $taxIter++; ?>
+<?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
+<tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
+    onclick="expandDetails(this, '.summary-details-<?= /* @escapeNotVerified */ $taxIter ?>')"
+<?php endif; ?>
+    class="<?= /* @escapeNotVerified */ $class ?> row-totals">
+    <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
+            <div class="summary-collapse"><?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?></div>
+        <?php else: ?>
+            <?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?>
+        <?php endif;?>
+    </td>
+    <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-amount"><?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValue()) ?></td>
+</tr>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
         <?php $isTop = 1; ?>
         <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
@@ -22,17 +36,17 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php $isFirst = 1; ?>
 
                 <?php foreach ($rates as $rate): ?>
-                <tr class="summary-details-<?php /* @escapeNotVerified */ echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                    <td class="admin__total-mark" style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-                        <?php echo $block->escapeHtml($rate['title']); ?>
+                <tr class="summary-details-<?= /* @escapeNotVerified */ $taxIter ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
+                    <td class="admin__total-mark" style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+                        <?= $block->escapeHtml($rate['title']) ?>
                         <?php if (!is_null($rate['percent'])): ?>
-                            (<?php echo (float)$rate['percent']; ?>%)
+                            (<?= (float)$rate['percent'] ?>%)
                         <?php endif; ?>
                         <br />
                     </td>
                     <?php if ($isFirst): ?>
-                        <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?php echo count($rates); ?>">
-                            <?php /* @escapeNotVerified */ echo $block->formatPrice($amount); ?>
+                        <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?= count($rates) ?>">
+                            <?= /* @escapeNotVerified */ $block->formatPrice($amount) ?>
                         </td>
                     <?php endif; ?>
                 </tr>
@@ -41,16 +55,5 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php endforeach; ?>
         <?php endforeach; ?>
 <?php endif;?>
-<?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
-<tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?> onclick="expandDetails(this, '.summary-details-<?php /* @escapeNotVerified */ echo $taxIter;?>')"<?php endif; ?> class="<?php /* @escapeNotVerified */ echo $class;?> row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <div class="summary-collapse"><?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?></div>
-        <?php else: ?>
-            <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
-        <?php endif;?>
-    </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount"><?php /* @escapeNotVerified */ echo $block->formatPrice($block->getTotal()->getValue()) ?></td>
-</tr>
 <?php endif;?>
 

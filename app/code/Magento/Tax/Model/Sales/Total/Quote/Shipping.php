@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
@@ -39,16 +39,23 @@ class Shipping extends CommonTaxCollector
         $quoteDetails = $this->prepareQuoteDetails($shippingAssignment, [$shippingDataObject]);
         $taxDetails = $this->taxCalculationService
             ->calculateTax($quoteDetails, $storeId);
+        $taxDetailsItems = $taxDetails->getItems()[self::ITEM_CODE_SHIPPING];
 
         $baseQuoteDetails = $this->prepareQuoteDetails($shippingAssignment, [$baseShippingDataObject]);
         $baseTaxDetails = $this->taxCalculationService
             ->calculateTax($baseQuoteDetails, $storeId);
+        $baseTaxDetailsItems = $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING];
+
+        $quote->getShippingAddress()
+            ->setShippingAmount($taxDetailsItems->getRowTotal());
+        $quote->getShippingAddress()
+            ->setBaseShippingAmount($baseTaxDetailsItems->getRowTotal());
 
         $this->processShippingTaxInfo(
             $shippingAssignment,
             $total,
-            $taxDetails->getItems()[self::ITEM_CODE_SHIPPING],
-            $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING]
+            $taxDetailsItems,
+            $baseTaxDetailsItems
         );
 
         return $this;
@@ -58,6 +65,8 @@ class Shipping extends CommonTaxCollector
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

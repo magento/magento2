@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RateRepositoryTest extends \PHPUnit_Framework_TestCase
+class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
@@ -81,6 +81,38 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'tax_country_id' => 'US',
             'tax_region_id' => '8',
             'rate' => '8.25',
+            'code' => 'US-CA-*-Rate' . rand(),
+            'zip_is_range' => true,
+            'zip_from' => 78765,
+            'zip_to' => 78780,
+        ];
+        // Tax rate data object created
+        $taxRate = $this->taxRateFactory->create();
+        $this->dataObjectHelper->populateWithArray($taxRate, $taxData, \Magento\Tax\Api\Data\TaxRateInterface::class);
+        //Tax rate service call
+        $taxRateServiceData = $this->rateRepository->save($taxRate);
+
+        //Assertions
+        $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRateInterface::class, $taxRateServiceData);
+        $this->assertEquals($taxData['tax_country_id'], $taxRateServiceData->getTaxCountryId());
+        $this->assertEquals($taxData['tax_region_id'], $taxRateServiceData->getTaxRegionId());
+        $this->assertEquals($taxData['rate'], $taxRateServiceData->getRate());
+        $this->assertEquals($taxData['code'], $taxRateServiceData->getCode());
+        $this->assertEquals($taxData['zip_from'], $taxRateServiceData->getZipFrom());
+        $this->assertEquals($taxData['zip_to'], $taxRateServiceData->getZipTo());
+        $this->assertEquals('78765-78780', $taxRateServiceData->getTaxPostcode());
+        $this->assertNotNull($taxRateServiceData->getId());
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveWithZeroValue()
+    {
+        $taxData = [
+            'tax_country_id' => 'US',
+            'tax_region_id' => '8',
+            'rate' => '0',
             'code' => 'US-CA-*-Rate' . rand(),
             'zip_is_range' => true,
             'zip_from' => 78765,
@@ -525,7 +557,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @param \Magento\Framework\Api\Filter[] $filters
      * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param $expectedRateCodes
@@ -597,7 +628,17 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 ['US - 42 - 7.5', 'US - 12 - 7.5'],
-            ]
+            ],
+            'like_region_name' => [
+                [
+                    $filterBuilder->setField(Rate::KEY_REGION_NAME)
+                        ->setValue('%NM%')
+                        ->setConditionType('like')
+                        ->create(),
+                ],
+                null,
+                ['US - 42 - 7.5', 'US - 42 - 22'],
+            ],
         ];
     }
 }

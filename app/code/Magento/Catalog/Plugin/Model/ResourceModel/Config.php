@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Plugin\Model\ResourceModel;
@@ -17,10 +17,12 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**#@-*/
     protected $cache;
 
-    /** @var bool|null */
+    /**
+     * @var bool|null
+     */
     protected $isCacheEnabled = null;
 
     /**

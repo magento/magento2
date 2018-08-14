@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Simplexml\Test\Unit;
 
-use \Magento\Framework\Simplexml\Config;
+use Magento\Framework\Simplexml\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -72,121 +72,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testLoadWrongFile()
     {
         $this->assertFalse($this->config->loadFile('wrong_file'));
-    }
-
-    public function testSetCacheChecksum()
-    {
-        $this->config->setCacheChecksum(null);
-        $this->assertNull($this->config->getCacheChecksum());
-        $this->config->setCacheChecksum(false);
-        $this->assertFalse($this->config->getCacheChecksum());
-        $this->config->setCacheChecksum(0);
-        $this->assertFalse($this->config->getCacheChecksum());
-        $this->config->setCacheChecksum('CacheChecksum');
-        $this->assertSame('415a5472d4f94b71ff80fd1c8e9eca7f', $this->config->getCacheChecksum());
-    }
-
-    public function testUpdateCacheChecksum()
-    {
-        $this->config->setCacheChecksum('CacheChecksum');
-        $this->config->updateCacheChecksum(false);
-        $this->assertFalse($this->config->getCacheChecksum());
-
-        $this->config->setCacheChecksum('CacheChecksum');
-        $this->config->updateCacheChecksum(0);
-        $this->assertFalse($this->config->getCacheChecksum());
-
-        $this->config->setCacheChecksum('CacheChecksum');
-        $this->config->updateCacheChecksum('UpdateCacheChecksum');
-        $this->assertSame('894eb161d8e1e48f825d05fdac61afae', $this->config->getCacheChecksum());
-
-        $this->config->setCacheChecksum(false);
-        $this->config->updateCacheChecksum('UpdateCacheChecksum');
-        $this->assertFalse($this->config->getCacheChecksum());
-    }
-
-    public function testValidateCacheChecksum()
-    {
-        $this->config->setCacheChecksum(false);
-        $this->assertFalse($this->config->validateCacheChecksum());
-
-        $this->config->setCacheChecksum(null);
-        $this->assertTrue($this->config->validateCacheChecksum());
-
-        $this->config->setCacheId('cacheId');
-        $this->config->setCacheChecksum('CacheChecksum');
-        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['load']);
-        $cache->expects($this->once())->method('load')->with('cacheId__CHECKSUM')
-            ->will($this->returnValue('415a5472d4f94b71ff80fd1c8e9eca7f'));
-        $this->config->setCache($cache);
-        $this->assertTrue($this->config->validateCacheChecksum());
-    }
-
-    public function testLoadCache()
-    {
-        $this->config->setCacheChecksum(false);
-        $this->assertFalse($this->config->loadCache());
-
-        $this->config->setCacheId('cacheId');
-        $this->config->setCacheChecksum('CacheChecksum');
-        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['load']);
-        $this->config->setCache($cache);
-
-        $cache->expects($this->at(0))->method('load')->with('cacheId__CHECKSUM')
-            ->will($this->returnValue('415a5472d4f94b71ff80fd1c8e9eca7f'));
-        $cache->expects($this->at(1))->method('load')->with('cacheId')
-            ->will($this->returnValue(''));
-        $this->config->setCache($cache);
-        $cache->expects($this->at(2))->method('load')->with('cacheId__CHECKSUM')
-            ->will($this->returnValue('415a5472d4f94b71ff80fd1c8e9eca7f'));
-        $cache->expects($this->at(3))->method('load')->with('cacheId')
-            ->will($this->returnValue('<?xml version="1.0"?><config><node>1</node></config>'));
-
-        $this->assertFalse($this->config->loadCache());
-        $this->assertTrue($this->config->loadCache());
-    }
-
-    public function testSaveCache()
-    {
-        $xml = '<config><node>1</node></config>';
-
-        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['save']);
-        $cache->expects($this->at(0))->method('save')
-            ->with(null, 'cacheId__CHECKSUM', ['cacheTags'], 10)
-            ->will($this->returnValue(true));
-        $cache->expects($this->at(1))->method('save')
-            ->with($xml, 'cacheId', ['cacheTags'], 10)
-            ->will($this->returnValue(true));
-        $cache->expects($this->exactly(2))->method('save');
-
-        $this->config->loadString($xml);
-        $this->config->setCache($cache);
-        $this->config->setCacheChecksum(null);
-        $this->config->setCacheTags(['cacheTags']);
-        $this->config->setCacheId('cacheId');
-        $this->config->setCacheLifetime(10);
-
-        $this->config->saveCache();
-        $this->config->saveCache();
-        $this->config->setCacheSaved(false);
-        $this->config->setCacheChecksum(false);
-        $this->config->saveCache();
-    }
-
-    public function testRemoveCache()
-    {
-        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['remove']);
-        $cache->expects($this->at(0))->method('remove')
-            ->with('cacheId')
-            ->will($this->returnValue(true));
-        $cache->expects($this->at(1))->method('remove')
-            ->with('cacheId__CHECKSUM')
-            ->will($this->returnValue(true));
-        $cache->expects($this->exactly(2))->method('remove');
-
-        $this->config->setCache($cache);
-        $this->config->setCacheId('cacheId');
-        $this->config->removeCache();
     }
 
     public function testSetNode()

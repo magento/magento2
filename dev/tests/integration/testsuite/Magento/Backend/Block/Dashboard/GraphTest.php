@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Dashboard;
 /**
  * @magentoAppArea adminhtml
  */
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Dashboard\Graph

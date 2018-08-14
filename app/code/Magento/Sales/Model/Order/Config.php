@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
 /**
  * Order configuration model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Config
 {
@@ -119,8 +122,14 @@ class Config
      */
     public function getStatusLabel($code)
     {
-        $code = $this->maskStatusForArea($this->state->getAreaCode(), $code);
+        $area = $this->state->getAreaCode();
+        $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
+
+        if ($area == 'adminhtml') {
+            return $status->getLabel();
+        }
+
         return $status->getStoreLabel();
     }
 
@@ -192,7 +201,7 @@ class Config
      */
     public function getStateStatuses($state, $addLabels = true)
     {
-        $key = md5(serialize([$state, $addLabels]));
+        $key = sha1(json_encode([$state, $addLabels]));
         if (isset($this->stateStatuses[$key])) {
             return $this->stateStatuses[$key];
         }
@@ -208,7 +217,7 @@ class Config
                 foreach ($collection as $item) {
                     $status = $item->getData('status');
                     if ($addLabels) {
-                        $statuses[$status] = $item->getStoreLabel();
+                        $statuses[$status] = $this->getStatusLabel($status);
                     } else {
                         $statuses[] = $status;
                     }
@@ -249,6 +258,10 @@ class Config
     protected function _getStatuses($visibility)
     {
         if ($this->statuses == null) {
+            $this->statuses = [
+                true => [],
+                false => [],
+            ];
             foreach ($this->_getCollection() as $item) {
                 $visible = (bool) $item->getData('visible_on_front');
                 $this->statuses[$visible][] = $item->getData('status');
@@ -263,6 +276,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
+     * @since 100.2.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

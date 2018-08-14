@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,7 @@
     <action name="customer/account/logout"/>
     <action name="customer/account/loginPost"/>
     <action name="customer/account/createPost"/>
+    <action name="customer/account/editPost"/>
     <action name="customer/ajax/login">
         <section name="checkout-data"/>
         <section name="cart"/>

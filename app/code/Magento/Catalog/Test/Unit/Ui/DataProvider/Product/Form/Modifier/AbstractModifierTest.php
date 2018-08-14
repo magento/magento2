@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Class AbstractDataProviderTest
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModifierInterface
@@ -56,13 +56,15 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods([
                 'getId',
+                'getTypeId',
                 'getStoreId',
                 'getResource',
                 'getData',
                 'getAttributes',
                 'getStore',
                 'getAttributeDefaultValue',
-                'getExistsStoreValueFlag'
+                'getExistsStoreValueFlag',
+                'isLockedAttribute'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['load', 'getId', 'getConfig'])
@@ -79,9 +81,6 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(2);
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
-            ->willReturnArgument(1);
-        $this->arrayManagerMock->expects($this->any())
-            ->method('merge')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('remove')

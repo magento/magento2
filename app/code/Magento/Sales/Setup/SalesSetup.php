@@ -1,23 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
- * Setup Model of Sales Module
- * @codeCoverageIgnore
+ * Sales module setup class
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codeCoverageIgnore
  */
-class SalesSetup extends \Magento\Eav\Setup\EavSetup
+class SalesSetup extends EavSetup
 {
     /**
      * This should be set explicitly
@@ -55,6 +57,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     private static $connectionName = 'sales';
 
     /**
+     * Constructor
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -111,9 +115,10 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _flatTableExist($table)
     {
-        $tablesList = $this->getSetup()->getConnection(self::$connectionName)->listTables();
+        $tablesList = $this->getConnection()
+            ->listTables();
         return in_array(
-            strtoupper($this->getSetup()->getTable($table, self::$connectionName)),
+            strtoupper($this->getTable($table)),
             array_map('strtoupper', $tablesList)
         );
     }
@@ -152,15 +157,14 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
-        $tableInfo = $this->getSetup()
-            ->getConnection(self::$connectionName)
-            ->describeTable($this->getSetup()->getTable($table, self::$connectionName));
+        $tableInfo = $this->getConnection()
+            ->describeTable($this->getTable($table));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-        $this->getSetup()->getConnection(self::$connectionName)->addColumn(
-            $this->getSetup()->getTable($table, self::$connectionName),
+        $this->getConnection()->addColumn(
+            $this->getTable($table),
             $attribute,
             $columnDefinition
         );
@@ -180,8 +184,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         if (in_array($entityTypeId, $this->_flatEntitiesGrid) && !empty($attr['grid'])) {
             $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-            $this->getSetup()->getConnection(self::$connectionName)->addColumn(
-                $this->getSetup()->getTable($table . '_grid', self::$connectionName),
+            $this->getConnection()->addColumn(
+                $this->getTable($table . '_grid'),
                 $attribute,
                 $columnDefinition
             );
@@ -296,5 +300,75 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     public function getEncryptor()
     {
         return $this->encryptor;
+    }
+
+    /**
+     * Get sales connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->getSetup()->getConnection(self::$connectionName);
+    }
+
+    /**
+     * Get table name
+     *
+     * @param string $table
+     * @return string
+     */
+    public function getTable($table)
+    {
+        return $this->getSetup()->getTable($table, self::$connectionName);
+    }
+
+    /**
+     * Update entity types
+     *
+     * @return void
+     */
+    public function updateEntityTypes()
+    {
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
     }
 }

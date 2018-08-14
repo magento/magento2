@@ -1,0 +1,206 @@
+namespace Magento\Framework\ObjectManager\Code\Generator;
+
+/**
+ * Repository class for @see \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+ *
+ * @deprecated 2.2.0
+ * @see \Magento\Framework\ObjectManager\Code\Generator\Repository
+ */
+class TSampleRepository implements TSampleRepositoryInterface
+{
+    /**
+     * tSampleInterfacePersistor
+     *
+     * @var \Magento\Framework\ObjectManager\Code\Generator\TSampleInterfacePersistor
+     */
+    protected $tSampleInterfacePersistor = null;
+
+    /**
+     * Collection Factory
+     *
+     * @var \Magento\Framework\ObjectManager\Code\Generator\TSampleSearchResultInterfaceFactory
+     */
+    protected $tSampleInterfaceSearchResultFactory = null;
+
+    /**
+     * \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface[]
+     *
+     * @var array
+     */
+    protected $registry = array(
+        
+    );
+
+    /**
+     * Extension attributes join processor.
+     *
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor = null;
+
+    /**
+     * Search Criteria Collection processor.
+     *
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor = null;
+
+    /**
+     * Repository constructor
+     *
+     * @param \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $tSampleInterfacePersistor
+     * @param \Magento\Framework\ObjectManager\Code\Generator\TSampleSearchResultInterfaceFactory $tSampleInterfaceSearchResultFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     */
+    public function __construct(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterfacePersistor $tSampleInterfacePersistor, \Magento\Framework\ObjectManager\Code\Generator\TSampleSearchResultInterfaceFactory $tSampleInterfaceSearchResultFactory, \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor)
+    {
+        $this->tSampleInterfacePersistor = $tSampleInterfacePersistor;
+        $this->tSampleInterfaceSearchResultFactory = $tSampleInterfaceSearchResultFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+    }
+
+    /**
+     * load entity
+     *
+     * @param int $id
+     * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @deprecated
+     */
+    public function get(int $id) : \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+    {
+        if (!$id) {
+            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('ID required'));
+        }
+        if (!isset($this->registry[$id])) {
+            $entity = $this->tSampleInterfacePersistor->loadEntity($id);
+            if (!$entity->getId()) {
+                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                    new \Magento\Framework\Phrase('Requested entity doesn\'t exist')
+                );
+            }
+            $this->registry[$id] = $entity;
+        }
+        return $this->registry[$id];
+    }
+
+    /**
+     * Register entity to create
+     *
+     * @param array $data
+     * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+     * @deprecated
+     */
+    public function create(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity)
+    {
+        return $this->tSampleInterfacePersistor->registerNew($entity);
+    }
+
+    /**
+     * Register entity to create
+     *
+     * @param array $data
+     * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleRepository
+     * @deprecated
+     */
+    public function createFromArray(array $data)
+    {
+        return $this->tSampleInterfacePersistor->registerFromArray($data);
+    }
+
+    /**
+     * Find entities by criteria
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface[]
+     * @deprecated
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->tSampleInterfaceSearchResultFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection);
+        $this->getCollectionProcessor()->process($searchCriteria, $collection);
+        return $collection;
+    }
+
+    /**
+     * Register entity to delete
+     *
+     * @param \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity
+     * @deprecated
+     */
+    public function remove(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity)
+    {
+        $this->tSampleInterfacePersistor->registerDeleted($entity);
+    }
+
+    /**
+     * Register entity to delete
+     *
+     * @param \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity
+     * @return bool
+     * @deprecated
+     */
+    public function delete(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity) : bool
+    {
+        $this->tSampleInterfacePersistor->registerDeleted($entity);
+        return $this->tSampleInterfacePersistor->doPersistEntity($entity);
+    }
+
+    /**
+     * Delete entity by Id
+     *
+     * @param int $id
+     * @return bool
+     * @deprecated
+     */
+    public function deleteById($id)
+    {
+        $entity = $this->get($id);
+        $this->tSampleInterfacePersistor->registerDeleted($entity);
+        return $this->tSampleInterfacePersistor->doPersistEntity($entity);
+    }
+
+    /**
+     * Perform persist operations
+     *
+     * @deprecated
+     */
+    public function flush()
+    {
+        $ids = $this->tSampleInterfacePersistor->doPersist();
+        foreach ($ids as $id) {
+        unset($this->registry[$id]);
+        }
+    }
+
+    /**
+     * Perform persist operations for one entity
+     *
+     * @param \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity
+     * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+     * @deprecated
+     */
+    public function save(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity) : \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+    {
+        $this->tSampleInterfacePersistor->doPersistEntity($entity);
+        return $entity;
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
+    }
+}

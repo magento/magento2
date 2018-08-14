@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -9,6 +9,9 @@ use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractElement
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {
@@ -41,7 +44,7 @@ abstract class AbstractElement extends AbstractComponent implements ElementInter
      */
     public function isReadonly()
     {
-        return (bool) $this->getData('readonly');
+        return (bool)$this->getData('readonly');
     }
 
     /**

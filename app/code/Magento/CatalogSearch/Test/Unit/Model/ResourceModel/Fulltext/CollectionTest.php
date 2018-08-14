@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
-use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
+use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends BaseCollectionTest
+class CollectionTest extends BaseCollection
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -77,10 +77,13 @@ class CollectionTest extends BaseCollectionTest
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
-        $productLimitationMock = $this->getMock(
+        $productLimitationMock = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
@@ -102,7 +105,7 @@ class CollectionTest extends BaseCollectionTest
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
                 'temporaryStorageFactory' => $temporaryStorageFactory,
-                'productLimitationFactory' => $productLimitationFactoryMock
+                'productLimitationFactory' => $productLimitationFactoryMock,
             ]
         );
 
@@ -128,7 +131,7 @@ class CollectionTest extends BaseCollectionTest
      */
     public function testGetFacetedDataWithException()
     {
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())
             ->method('setRequestName')
@@ -139,7 +142,7 @@ class CollectionTest extends BaseCollectionTest
 
     public function testGetFacetedDataWithEmptyAggregations()
     {
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())
             ->method('setRequestName')
@@ -199,10 +202,16 @@ class CollectionTest extends BaseCollectionTest
      */
     protected function getFilterBuilder()
     {
-        $filterBuilder = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
+        $filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         return $filterBuilder;
     }
 
+    /**
+     * @param MockObject $filterBuilder
+     * @param array $filters
+     *
+     * @return MockObject
+     */
     protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters)
     {
         $i = 1;
@@ -219,6 +228,9 @@ class CollectionTest extends BaseCollectionTest
         return $filterBuilder;
     }
 
+    /**
+     * @return MockObject
+     */
     protected function createFilter()
     {
         $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)

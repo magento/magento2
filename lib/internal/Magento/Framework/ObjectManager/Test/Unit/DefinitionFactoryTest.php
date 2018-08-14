@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit;
@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\Interception\DefinitionInterface as InterceptionDefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
-class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
+class DefinitionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var File|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +25,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemDriverMock = $this->getMock(File::class);
+        $this->filesystemDriverMock = $this->createMock(File::class);
         $this->definitionFactory = new DefinitionFactory(
             $this->filesystemDriverMock,
             'generation dir'

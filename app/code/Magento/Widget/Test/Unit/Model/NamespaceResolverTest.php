@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model;
 
-class NamespaceResolverTest extends \PHPUnit_Framework_TestCase
+class NamespaceResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\NamespaceResolver

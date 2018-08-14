@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -105,7 +105,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
     public function getHandlers($method)
     {
         $method = strtolower($method);
-        return isset($this->_handlers[$method]) ? $this->_handlers[$method] : [];
+        return $this->_handlers[$method] ?? [];
     }
 
     /**
@@ -151,7 +151,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
                 $attributeHtml = nl2br($attributeHtml);
             }
         }
-        if ($attribute->getIsHtmlAllowedOnFront() && $attribute->getIsWysiwygEnabled()) {
+        if ($attribute->getIsHtmlAllowedOnFront() || $attribute->getIsWysiwygEnabled()) {
             if ($this->_catalogData->isUrlDirectivesParsingAllowed()) {
                 $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
             }

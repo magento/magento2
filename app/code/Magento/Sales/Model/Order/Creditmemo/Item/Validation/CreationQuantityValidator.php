@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Item\Validation;
@@ -31,7 +31,7 @@ class CreationQuantityValidator implements ValidatorInterface
     /**
      * ItemCreationQuantityValidator constructor.
      * @param OrderItemRepositoryInterface $orderItemRepository
-     * @param object $context
+     * @param mixed $context
      */
     public function __construct(OrderItemRepositoryInterface $orderItemRepository, $context = null)
     {

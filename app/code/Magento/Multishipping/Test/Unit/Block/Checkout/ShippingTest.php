@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Multishipping\Block\Checkout\Shipping;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Shipping
@@ -42,18 +42,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->multiShippingMock =
-            $this->getMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class, [], [], '', false);
+            $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
         $this->priceCurrencyMock =
-            $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false);
-        $this->taxHelperMock = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
         $this->model = $objectManager->getObject(
             \Magento\Multishipping\Block\Checkout\Shipping::class,
             [
@@ -67,7 +61,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddresses()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())
             ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
@@ -76,13 +70,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddressShippingMethod()
     {
-        $addressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getShippingMethod', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getShippingMethod', '__wakeup']);
         $addressMock->expects($this->once())
             ->method('getShippingMethod')->will($this->returnValue('expected shipping method'));
         $this->assertEquals('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
@@ -90,13 +78,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingRates()
     {
-        $addressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getGroupedAllShippingRates', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getGroupedAllShippingRates', '__wakeup']);
 
         $addressMock->expects($this->once())
             ->method('getGroupedAllShippingRates')->will($this->returnValue(['expected array']));
@@ -128,15 +110,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingPrice()
     {
-        $addressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getQuote', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getQuote', '__wakeup']);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $price = 100;
         $flag = true;
         $shippingPrice = 11.11;

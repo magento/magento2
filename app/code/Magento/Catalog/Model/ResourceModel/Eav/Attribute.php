@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,8 +15,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Catalog attribute model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
@@ -30,9 +29,11 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
-    \Magento\Catalog\Api\Data\ProductAttributeInterface, \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
+    \Magento\Catalog\Api\Data\ProductAttributeInterface,
+    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
     const MODULE_NAME = 'Magento_Catalog';
 
@@ -238,11 +239,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     protected function _isEnabledInFlat()
     {
-        return $this->getData('backend_type') == 'static'
+        return $this->_getData('backend_type') == 'static'
         || $this->_productFlatIndexerHelper->isAddFilterableAttributes()
-        && $this->getData('is_filterable') > 0
-        || $this->getData('used_in_product_listing') == 1
-        || $this->getData('used_for_sort_by') == 1;
+        && $this->_getData('is_filterable') > 0
+        || $this->_getData('used_in_product_listing') == 1
+        || $this->_getData('used_for_sort_by') == 1;
     }
 
     /**
@@ -340,7 +341,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         if ($dataObject) {
             return $dataObject->getStoreId();
         }
-        return $this->getData('store_id');
+        return $this->_getData('store_id');
     }
 
     /**
@@ -365,7 +366,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getSourceModel()
     {
-        $model = $this->getData('source_model');
+        $model = $this->_getData('source_model');
         if (empty($model)) {
             if ($this->getBackendType() == 'int' && $this->getFrontendInput() == 'select') {
                 return $this->_getDefaultSourceModel();
@@ -416,6 +417,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         // exclude price attribute
         if ($this->getAttributeCode() == 'price') {
             return false;
+        }
+        if ($this->getAttributeCode() == 'visibility') {
+            return true;
         }
 
         if (!$this->getIsFilterableInSearch() && !$this->getIsVisibleInAdvancedSearch() && !$this->getIsFilterable()) {
@@ -492,7 +496,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsWysiwygEnabled()
     {
-        return $this->getData(self::IS_WYSIWYG_ENABLED);
+        return $this->_getData(self::IS_WYSIWYG_ENABLED);
     }
 
     /**
@@ -500,7 +504,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsHtmlAllowedOnFront()
     {
-        return $this->getData(self::IS_HTML_ALLOWED_ON_FRONT);
+        return $this->_getData(self::IS_HTML_ALLOWED_ON_FRONT);
     }
 
     /**
@@ -508,7 +512,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getUsedForSortBy()
     {
-        return $this->getData(self::USED_FOR_SORT_BY);
+        return $this->_getData(self::USED_FOR_SORT_BY);
     }
 
     /**
@@ -516,7 +520,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsFilterable()
     {
-        return $this->getData(self::IS_FILTERABLE);
+        return $this->_getData(self::IS_FILTERABLE);
     }
 
     /**
@@ -524,7 +528,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsFilterableInSearch()
     {
-        return $this->getData(self::IS_FILTERABLE_IN_SEARCH);
+        return $this->_getData(self::IS_FILTERABLE_IN_SEARCH);
     }
 
     /**
@@ -532,7 +536,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsUsedInGrid()
     {
-        return (bool)$this->getData(self::IS_USED_IN_GRID);
+        return (bool)$this->_getData(self::IS_USED_IN_GRID);
     }
 
     /**
@@ -540,7 +544,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsVisibleInGrid()
     {
-        return (bool)$this->getData(self::IS_VISIBLE_IN_GRID);
+        return (bool)$this->_getData(self::IS_VISIBLE_IN_GRID);
     }
 
     /**
@@ -548,7 +552,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsFilterableInGrid()
     {
-        return (bool)$this->getData(self::IS_FILTERABLE_IN_GRID);
+        return (bool)$this->_getData(self::IS_FILTERABLE_IN_GRID);
     }
 
     /**
@@ -556,7 +560,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getPosition()
     {
-        return $this->getData(self::POSITION);
+        return $this->_getData(self::POSITION);
     }
 
     /**
@@ -564,7 +568,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsSearchable()
     {
-        return $this->getData(self::IS_SEARCHABLE);
+        return $this->_getData(self::IS_SEARCHABLE);
     }
 
     /**
@@ -572,7 +576,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsVisibleInAdvancedSearch()
     {
-        return $this->getData(self::IS_VISIBLE_IN_ADVANCED_SEARCH);
+        return $this->_getData(self::IS_VISIBLE_IN_ADVANCED_SEARCH);
     }
 
     /**
@@ -580,7 +584,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsComparable()
     {
-        return $this->getData(self::IS_COMPARABLE);
+        return $this->_getData(self::IS_COMPARABLE);
     }
 
     /**
@@ -588,7 +592,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsUsedForPromoRules()
     {
-        return $this->getData(self::IS_USED_FOR_PROMO_RULES);
+        return $this->_getData(self::IS_USED_FOR_PROMO_RULES);
     }
 
     /**
@@ -596,7 +600,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsVisibleOnFront()
     {
-        return $this->getData(self::IS_VISIBLE_ON_FRONT);
+        return $this->_getData(self::IS_VISIBLE_ON_FRONT);
     }
 
     /**
@@ -604,7 +608,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getUsedInProductListing()
     {
-        return $this->getData(self::USED_IN_PRODUCT_LISTING);
+        return $this->_getData(self::USED_IN_PRODUCT_LISTING);
     }
 
     /**
@@ -612,8 +616,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsVisible()
     {
-        return $this->getData(self::IS_VISIBLE);
+        return $this->_getData(self::IS_VISIBLE);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -818,6 +823,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __sleep()
     {
@@ -830,6 +836,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __wakeup()
     {
@@ -841,5 +848,35 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         );
         $this->_productFlatIndexerHelper = $objectManager->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->attrLockValidator = $objectManager->get(LockValidatorInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+        return $this;
     }
 }

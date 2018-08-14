@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Setup;
 
+use Magento\Catalog\Helper\DefaultCategory;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\DB\Ddl\Table;
-use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore
@@ -23,7 +23,7 @@ class InstallSchema implements InstallSchemaInterface
     private $defaultCategory;
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @return DefaultCategory
      */
     private function getDefaultCategory()
@@ -270,7 +270,13 @@ class InstallSchema implements InstallSchemaInterface
          */
         $connection->insertForce(
             $installer->getTable('store_group'),
-            ['group_id' => 0, 'website_id' => 0, 'name' => 'Default', 'root_category_id' => 0, 'default_store_id' => 0]
+            [
+                'group_id' => 0,
+                'website_id' => 0,
+                'name' => 'Default',
+                'root_category_id' => 0,
+                'default_store_id' => 0
+            ]
         );
         $connection->insertForce(
             $installer->getTable('store_group'),
@@ -312,6 +318,5 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $installer->endSetup();
-
     }
 }

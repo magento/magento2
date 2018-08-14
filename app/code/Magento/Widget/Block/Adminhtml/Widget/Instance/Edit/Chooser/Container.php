@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -24,9 +24,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
     const PAGE_LAYOUT_3COLUMNS = '3columns';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\View\Layout\ProcessorFactory
-     */
+    /**#@-*/
     protected $_layoutProcessorFactory;
 
     /**

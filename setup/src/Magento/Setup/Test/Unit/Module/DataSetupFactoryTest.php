@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module;
 
 use Magento\Setup\Module\DataSetupFactory;
 
-class DataSetupFactoryTest extends \PHPUnit_Framework_TestCase
+class DataSetupFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\Module\Setup\Context::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $context = $this->createMock(\Magento\Framework\Module\Setup\Context::class);
         $context->expects($this->once())->method('getEventManager');
         $context->expects($this->once())->method('getLogger');
         $context->expects($this->once())->method('getMigrationFactory');
@@ -29,7 +29,7 @@ class DataSetupFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Framework\Module\Setup\Context::class)
             ->willReturn($context);
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $factory = new DataSetupFactory($objectManagerProvider);
         $this->assertInstanceOf(\Magento\Setup\Module\DataSetup::class, $factory->create());

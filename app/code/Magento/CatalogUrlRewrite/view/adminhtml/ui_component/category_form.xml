@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="search_engine_optimization">
         <container name="url_key_group">
-            <field name="url_key_create_redirect">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Create Permanent Redirect for old URL</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="sortOrder" xsi:type="number">15</item>
-                        <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
-                        <item name="valueMap" xsi:type="array">
-                            <item name="false" xsi:type="number">0</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="url_key_create_redirect" component="Magento_Catalog/js/components/url-key-handle-changes" sortOrder="15" formElement="checkbox">
+                <settings>
+                    <dataType>boolean</dataType>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <description translate="true">Create Permanent Redirect for old URL</description>
+                            <valueMap>
+                                <map name="false" xsi:type="number">0</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
             </field>
         </container>
     </fieldset>

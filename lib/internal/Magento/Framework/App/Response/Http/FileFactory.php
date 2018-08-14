@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response\Http;
@@ -59,6 +59,7 @@ class FileFactory
         $dir = $this->_filesystem->getDirectoryWrite($baseDir);
         $isFile = false;
         $file = null;
+        $fileContent = $this->getFileContent($content);
         if (is_array($content)) {
             if (!isset($content['type']) || !isset($content['value'])) {
                 throw new \InvalidArgumentException("Invalid arguments. Keys 'type' and 'value' are required.");
@@ -76,7 +77,7 @@ class FileFactory
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', $contentType, true)
-            ->setHeader('Content-Length', $contentLength === null ? strlen($content) : $contentLength, true)
+            ->setHeader('Content-Length', $contentLength === null ? strlen($fileContent) : $contentLength, true)
             ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
             ->setHeader('Last-Modified', date('r'), true);
 
@@ -88,7 +89,8 @@ class FileFactory
                     echo $stream->read(1024);
                 }
             } else {
-                $dir->writeFile($fileName, $content);
+                $dir->writeFile($fileName, $fileContent);
+                $file = $fileName;
                 $stream = $dir->openFile($fileName, 'r');
                 while (!$stream->eof()) {
                     echo $stream->read(1024);
@@ -99,19 +101,22 @@ class FileFactory
             if (!empty($content['rm'])) {
                 $dir->delete($file);
             }
-            $this->callExit();
         }
         return $this->_response;
     }
 
     /**
-     * Call exit
+     * Returns file content for writing.
      *
-     * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @param string|array $content
+     * @return string|array
      */
-    protected function callExit()
+    private function getFileContent($content)
     {
-        exit(0);
+        if (isset($content['type']) && $content['type'] === 'string') {
+            return $content['value'];
+        }
+
+        return $content;
     }
 }

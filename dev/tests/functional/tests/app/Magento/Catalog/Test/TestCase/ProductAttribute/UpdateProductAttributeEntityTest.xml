@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -65,6 +65,23 @@
             <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\PageCache\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
+        </variation>
+        <variation name="UpdateProductAttributeEntityTestVariation4" summary="Create product attribute of type Dropdown and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
+            <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
+            <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
+            <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
+        </variation>
+        <variation name="UpdateProductAttributeEntityTestVariation5" summary="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_multiple_select</data>
+            <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
+            <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchAttributeIsAbsent" />
         </variation>
     </testCase>
 </config>

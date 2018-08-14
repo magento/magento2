@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\Pricing\PriceInfo\Base;
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Base
  */
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Price\Collection
@@ -30,14 +30,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceCollection = $this->getMock(\Magento\Framework\Pricing\Price\Collection::class, [], [], '', false);
-        $this->adjustmentCollection = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->priceCollection = $this->createMock(\Magento\Framework\Pricing\Price\Collection::class);
+        $this->adjustmentCollection = $this->createMock(\Magento\Framework\Pricing\Adjustment\Collection::class);
         $this->model = new Base($this->priceCollection, $this->adjustmentCollection);
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
@@ -122,11 +122,21 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             if (!$this->_checkoutSession->getNoCartRedirect(true)) {
                 if (!$this->cart->getQuote()->getHasError()) {
-                    $message = __(
-                        'You added %1 to your shopping cart.',
-                        $product->getName()
-                    );
-                    $this->messageManager->addSuccessMessage($message);
+                    if ($this->shouldRedirectToCart()) {
+                        $message = __(
+                            'You added %1 to your shopping cart.',
+                            $product->getName()
+                        );
+                        $this->messageManager->addSuccessMessage($message);
+                    } else {
+                        $this->messageManager->addComplexSuccessMessage(
+                            'addCartSuccessMessage',
+                            [
+                                'product_name' => $product->getName(),
+                                'cart_url' => $this->getCartUrl(),
+                            ]
+                        );
+                    }
                 }
                 return $this->goBack(null, $product);
             }
@@ -147,12 +157,10 @@ class Add extends \Magento\Checkout\Controller\Cart
             $url = $this->_checkoutSession->getRedirectUrl(true);
 
             if (!$url) {
-                $cartUrl = $this->_objectManager->get(\Magento\Checkout\Helper\Cart::class)->getCartUrl();
-                $url = $this->_redirect->getRedirectUrl($cartUrl);
+                $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
 
             return $this->goBack($url);
-
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
@@ -187,6 +195,25 @@ class Add extends \Magento\Checkout\Controller\Cart
 
         $this->getResponse()->representJson(
             $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getCartUrl()
+    {
+        return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
+    }
+
+    /**
+     * @return bool
+     */
+    private function shouldRedirectToCart()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

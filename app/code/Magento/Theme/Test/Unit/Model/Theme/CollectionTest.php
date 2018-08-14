@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection
@@ -54,20 +55,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themePackageList = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->readDirFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->themePackageList = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
+        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->directory));
@@ -93,11 +82,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $themeConfig = $this->getMockBuilder(
             \Magento\Framework\Config\Theme::class
         )->disableOriginalConstructor()->getMock();
-        $theme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)->disableOriginalConstructor()->getMock();
+        $theme = $this->getMockBuilder(Theme::class)->disableOriginalConstructor()->getMock();
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
-        $themePackage = $this->getMock(\Magento\Framework\View\Design\Theme\ThemePackage::class, [], [], '', false);
+        $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
         $themePackage->expects($this->any())
             ->method('getArea')
             ->will($this->returnValue('frontend'));
@@ -124,7 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($themeConfig);
         $this->entityFactory->expects($this->any())
             ->method('create')
-            ->with(\Magento\Theme\Model\Theme::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
         $themeConfig->expects($this->once())
             ->method('getMedia')

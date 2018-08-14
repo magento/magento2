@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Class FileIterator
+ * @api
  */
 class FileIterator implements \Iterator, \Countable
 {
@@ -97,7 +98,7 @@ class FileIterator implements \Iterator, \Countable
      */
     public function valid()
     {
-        return (bool) $this->key();
+        return (bool)$this->key();
     }
 
     /**

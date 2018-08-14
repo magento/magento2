@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model\ResourceModel;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo testing
  */
-class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
+class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo */
     protected $model;
@@ -32,29 +32,11 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->dateTimeMock = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
 
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
-        $this->dbAdapterMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dbAdapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             \Magento\Security\Model\ResourceModel\AdminSessionInfo::class,

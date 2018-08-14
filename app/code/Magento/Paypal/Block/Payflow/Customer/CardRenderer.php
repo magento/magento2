@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Payflow\Customer;
@@ -10,6 +10,10 @@ use Magento\Paypal\Model\Config;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 
+/**
+ * @api
+ * @since 100.1.0
+ */
 class CardRenderer extends AbstractCardRenderer
 {
     /**
@@ -17,6 +21,7 @@ class CardRenderer extends AbstractCardRenderer
      *
      * @param PaymentTokenInterface $token
      * @return boolean
+     * @since 100.1.0
      */
     public function canRender(PaymentTokenInterface $token)
     {
@@ -25,6 +30,7 @@ class CardRenderer extends AbstractCardRenderer
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getNumberLast4Digits()
     {
@@ -33,6 +39,7 @@ class CardRenderer extends AbstractCardRenderer
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getExpDate()
     {
@@ -41,6 +48,7 @@ class CardRenderer extends AbstractCardRenderer
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getIconUrl()
     {
@@ -49,6 +57,7 @@ class CardRenderer extends AbstractCardRenderer
 
     /**
      * @return int
+     * @since 100.1.0
      */
     public function getIconHeight()
     {
@@ -57,6 +66,7 @@ class CardRenderer extends AbstractCardRenderer
 
     /**
      * @return int
+     * @since 100.1.0
      */
     public function getIconWidth()
     {

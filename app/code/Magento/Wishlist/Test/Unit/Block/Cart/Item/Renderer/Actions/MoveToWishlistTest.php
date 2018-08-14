@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -9,7 +9,7 @@ use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Wishlist\Helper\Data;
 
-class MoveToWishlistTest extends \PHPUnit_Framework_TestCase
+class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MoveToWishlist

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
 ?>
 <div class="nested">
-    <a class="action advanced" href="<?php /* @escapeNotVerified */ echo $helper->getAdvancedSearchUrl(); ?>" data-action="advanced-search">
-        <?php /* @escapeNotVerified */ echo __('Advanced Search'); ?>
+    <a class="action advanced" href="<?= /* @escapeNotVerified */ $helper->getAdvancedSearchUrl() ?>" data-action="advanced-search">
+        <?= /* @escapeNotVerified */ __('Advanced Search') ?>
     </a>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -76,7 +76,8 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
-        for ($i = 1; $i <= count($this->products); $i++) {
+        $productsCount = count($this->products);
+        for ($i = 1; $i <= $productsCount; $i++) {
             $this->catalogProductCompare->getCompareProductsBlock()->removeProduct();
         }
     }

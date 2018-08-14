@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\UninstallDependencyCheck;
 
-class UninstallDependencyCheckTest extends \PHPUnit_Framework_TestCase
+class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UninstallDependencyCheck
@@ -37,28 +37,11 @@ class UninstallDependencyCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
-        $this->packageDependencyChecker = $this->getMock(
-            \Magento\Framework\Composer\DependencyChecker::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->themeDependencyChecker = $this->getMock(
-            \Magento\Theme\Model\Theme\ThemeDependencyChecker::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->themeDependencyCheckerFactory = $this->getMock(
-            \Magento\Setup\Model\ThemeDependencyCheckerFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->packageDependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
+        $this->themeDependencyChecker = $this->createMock(\Magento\Theme\Model\Theme\ThemeDependencyChecker::class);
+        $this->themeDependencyCheckerFactory =
+            $this->createMock(\Magento\Setup\Model\ThemeDependencyCheckerFactory::class);
         $this->themeDependencyCheckerFactory->expects($this->any())->method('create')
             ->willReturn($this->themeDependencyChecker);
         $this->uninstallDependencyCheck = new UninstallDependencyCheck(

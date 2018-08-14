@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,9 @@
 <?php if (count($block->getCollection()->getItems()) > 0): ?>
     <div class="searches-results">
         <?php foreach ($block->getCollection()->getItems() as $item): ?>
-        <span><?php /* @escapeNotVerified */ echo $item->getQueryText() ?></span><br />
+        <span><?= /* @escapeNotVerified */ $item->getQueryText() ?></span><br />
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <div class="empty-text"><?php /* @escapeNotVerified */ echo __('There are no search keywords.') ?></div>
+    <div class="empty-text"><?= /* @escapeNotVerified */ __('There are no search keywords.') ?></div>
 <?php endif; ?>

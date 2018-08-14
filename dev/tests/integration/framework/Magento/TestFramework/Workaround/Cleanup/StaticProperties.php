@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
  */
 namespace Magento\TestFramework\Workaround\Cleanup;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class StaticProperties
 {
@@ -109,7 +109,7 @@ class StaticProperties
     /**
      * @var \ReflectionClass[]
      */
-    static protected $classes = [];
+    protected static $classes = [];
 
     /**
      * @param string $class
@@ -186,7 +186,6 @@ class StaticProperties
                     self::$backupStaticVariables[$className][$staticProperty->getName()] = $value;
                 }
             }
-
         }
     }
 
@@ -204,9 +203,9 @@ class StaticProperties
     /**
      * Handler for 'endTestSuite' event
      *
-     * @param \PHPUnit_Framework_TestSuite $suite
+     * @param \PHPUnit\Framework\TestSuite $suite
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         $clearStatics = false;
         foreach ($suite->tests() as $test) {

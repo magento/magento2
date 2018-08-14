@@ -1,16 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Report\Settlement;
 
-/*
- * Model for report rows
- */
 /**
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row getResource()
+ * Model for report rows
  * @method int getReportId()
  * @method Row setReportId(int $value)
  * @method string getTransactionId()

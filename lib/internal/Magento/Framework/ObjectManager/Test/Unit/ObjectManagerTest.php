@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit;
@@ -17,7 +17,7 @@ require __DIR__ . '/_files/Aggregate/AggregateParent.php';
 require __DIR__ . '/_files/Aggregate/Child.php';
 require __DIR__ . '/_files/Aggregate/WithOptional.php';
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager
@@ -400,7 +400,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $this->_object->get(\Magento\Test\Di\Child::class),
-            $this->_object->get(\Magento\Test\Di\Child::class)
+            $this->_object->get('\\' . \Magento\Test\Di\Child::class)
         );
     }
 }

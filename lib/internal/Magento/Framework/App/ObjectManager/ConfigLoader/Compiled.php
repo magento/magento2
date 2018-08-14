@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
@@ -21,11 +21,6 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * {inheritdoc}
      */
     public function load($area)
@@ -33,7 +28,8 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = $this->getSerializer()->unserialize(\file_get_contents(self::getFilePath($area)));
+        $diConfiguration = include(self::getFilePath($area));
+        $this->configCache[$area] = $diConfiguration;
         return $this->configCache[$area];
     }
 
@@ -45,21 +41,7 @@ class Compiled implements ConfigLoaderInterface
      */
     public static function getFilePath($area)
     {
-        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
-        return BP . '/' . $diPath . '/' . $area . '.ser';
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = new Serialize();
-        }
-        return $this->serializer;
+        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_METADATA][DirectoryList::PATH];
+        return BP . '/' . $diPath . '/' . $area . '.php';
     }
 }

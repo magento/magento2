@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
@@ -10,8 +10,9 @@ namespace Magento\Catalog\Block\Product;
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoAppArea frontend
+ * @magentoDbIsolation disabled
  */
-class ListTest extends \PHPUnit_Framework_TestCase
+class ListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ListProduct
@@ -55,6 +56,10 @@ class ListTest extends \PHPUnit_Framework_TestCase
         $parent = $this->_getLayout()->createBlock(\Magento\Catalog\Block\Product\ListProduct::class, 'parent');
 
         /* Prepare toolbar block */
+        $this->_getLayout()
+            ->createBlock(\Magento\Catalog\Block\Product\ProductList\Toolbar::class, 'product_list_toolbar');
+        $parent->setToolbarBlockName('product_list_toolbar');
+
         $toolbar = $parent->getToolbarBlock();
         $this->assertInstanceOf(\Magento\Catalog\Block\Product\ProductList\Toolbar::class, $toolbar, 'Default Toolbar');
 

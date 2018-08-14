@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Logger;
 
 use \Magento\Framework\DB\Logger\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     const DEBUG_FILE = 'debug.file.log';
 
@@ -34,7 +34,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('openFile')
             ->with(self::DEBUG_FILE, 'a')
             ->will($this->returnValue($this->stream));
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->dir));
@@ -107,7 +107,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testLogStatsWithResult()
     {
-        $result = $this->getMock(\Zend_Db_Statement_Pdo::class, [], [], '', false);
+        $result = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $result->expects($this->once())
             ->method('rowCount')
             ->will($this->returnValue(10));

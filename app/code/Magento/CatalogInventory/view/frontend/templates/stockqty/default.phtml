@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 ?>
 <?php if ($block->isMsgVisible()): ?>
-    <div class="availability only" title="<?php /* @escapeNotVerified */ echo __('Only %1 left', ($block->getStockQtyLeft())) ?>">
-        <?php /* @escapeNotVerified */ echo __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
+    <div class="availability only" title="<?= /* @escapeNotVerified */ __('Only %1 left', ($block->getStockQtyLeft())) ?>">
+        <?= /* @escapeNotVerified */ __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
     </div>
 <?php endif ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Block\Header;
@@ -9,7 +9,7 @@ namespace Magento\Persistent\Test\Unit\Block\Header;
  * Class AdditionalTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
@@ -93,9 +93,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            [
+        $this->contextMock = $this->createPartialMock(\Magento\Framework\View\Element\Template\Context::class, [
                 'getEventManager',
                 'getScopeConfig',
                 'getCacheState',
@@ -105,24 +103,11 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
                 'getSession',
                 'getEscaper',
                 'getUrlBuilder'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->customerViewHelperMock = $this->getMock(
-            \Magento\Customer\Helper\View::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->persistentSessionHelperMock = $this->getMock(
+            ]);
+        $this->customerViewHelperMock = $this->createMock(\Magento\Customer\Helper\View::class);
+        $this->persistentSessionHelperMock = $this->createPartialMock(
             \Magento\Persistent\Helper\Session::class,
-            ['getSession'],
-            [],
-            '',
-            false
+            ['getSession']
         );
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
@@ -297,13 +282,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sessionId);
 
         // call protected _toHtml method
-        $sessionMock = $this->getMock(
-            \Magento\Persistent\Model\Session::class,
-            ['getCustomerId'],
-            [],
-            '',
-            false
-        );
+        $sessionMock = $this->createPartialMock(\Magento\Persistent\Model\Session::class, ['getCustomerId']);
 
         $this->persistentSessionHelperMock->expects($this->atLeastOnce())
             ->method('getSession')

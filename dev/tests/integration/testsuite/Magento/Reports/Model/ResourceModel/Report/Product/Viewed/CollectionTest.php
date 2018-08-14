@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
@@ -8,7 +8,7 @@ namespace Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 /**
  * @magentoAppArea adminhtml
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Report\Product\Viewed\Collection

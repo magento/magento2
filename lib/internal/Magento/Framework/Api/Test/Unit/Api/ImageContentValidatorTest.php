@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Api\Test\Unit\Api;
 
 /**
  * Unit test class for \Magento\Framework\Api\ImageContentValidator
  */
-class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ImageContentValidator

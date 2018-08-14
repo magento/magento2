@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Logger\Handler;
@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * Class Debug
+ * Enable/disable debug logging based on the store config setting
  */
 class Debug extends \Magento\Framework\Logger\Handler\Debug
 {
@@ -60,7 +60,6 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
         if ($this->deploymentConfig->isAvailable()) {
             return
                 parent::isHandling($record)
-                && $this->state->getMode() !== State::MODE_PRODUCTION
                 && $this->scopeConfig->getValue('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE);
         }
 

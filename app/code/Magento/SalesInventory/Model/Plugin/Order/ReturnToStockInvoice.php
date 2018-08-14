@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Model\Plugin\Order;
@@ -81,10 +81,6 @@ class ReturnToStockInvoice
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
-        if ($this->stockConfiguration->isAutoReturnEnabled()) {
-            return $resultEntityId;
-        }
-
         $invoice = $this->invoiceRepository->get($invoiceId);
         $order = $this->orderRepository->get($invoice->getOrderId());
 
@@ -95,10 +91,11 @@ class ReturnToStockInvoice
         ) {
             $returnToStockItems = $arguments->getExtensionAttributes()->getReturnToStockItems();
         }
-
-        $creditmemo = $this->creditmemoRepository->get($resultEntityId);
-        $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
-
+        $isAutoReturn = $this->stockConfiguration->isAutoReturnEnabled();
+        if ($isAutoReturn || !empty($returnToStockItems)) {
+            $creditmemo = $this->creditmemoRepository->get($resultEntityId);
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems, $isAutoReturn);
+        }
         return $resultEntityId;
     }
 }

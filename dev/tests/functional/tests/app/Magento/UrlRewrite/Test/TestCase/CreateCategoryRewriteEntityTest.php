@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,7 +68,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
         $this->urlRewriteIndex = $urlRewriteIndex;
         $category = $fixtureFactory->createByCode(
             'category',
-            ['dataset' => 'default_subcategory']
+            ['dataset' => 'default_subcategory_with_single_quote_in_name']
         );
         $category->persist();
         return ['category' => $category];
@@ -87,6 +87,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->open();
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
+
         $this->urlRewriteEdit->getTreeBlock()->selectCategory($category);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();

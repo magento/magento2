@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -674,7 +674,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Attriute Set ID'
+                'Attribute Set ID'
             )
             ->addColumn(
                 'parent_id',
@@ -2022,18 +2022,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_product_entity_media_gallery',
-                    'entity_id',
-                    'catalog_product_entity',
-                    'entity_id'
-                ),
-                'entity_id',
-                $installer->getTable('catalog_product_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
             ->setComment(
                 'Catalog Product Media Gallery Attribute Backend Table'
             );
@@ -2088,6 +2076,13 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Is Disabled'
+            )
+            ->addIndex(
+                $installer->getIdxName(
+                    'catalog_product_entity_media_gallery_value',
+                    ['entity_id', 'value_id', 'store_id']
+                ),
+                ['entity_id', 'value_id', 'store_id']
             )
             ->addIndex(
                 $installer->getIdxName('catalog_product_entity_media_gallery_value', ['store_id']),
@@ -4272,7 +4267,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()
             ->createTable($table);
 
-         $installer->endSetup();
-
+        $installer->endSetup();
     }
 }

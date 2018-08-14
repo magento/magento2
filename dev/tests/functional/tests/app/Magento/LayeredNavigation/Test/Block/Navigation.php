@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\LayeredNavigation\Test\Block;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
@@ -35,6 +36,15 @@ class Navigation extends Block
      */
     protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
+    // @codingStandardsIgnoreStart
+    /**
+     * Locator value for corresponding filtered attribute option content.
+     *
+     * @var string
+     */
+    protected $optionContent = './/div[@class="filter-options-title" and contains(text(),"")]/following-sibling::div//a[contains(text(), \'SIZE\')]';
+    // @codingStandardsIgnoreEnd
+
     /**
      * Locator value for correspondent "Filter" link.
      *
@@ -48,6 +58,20 @@ class Navigation extends Block
      * @var string
      */
     protected $expandFilterButton = '[data]';
+
+    /**
+     * Locator for category name.
+     *
+     * @var string
+     */
+    private $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
+
+    /**
+     * Locator for element with product quantity.
+     *
+     * @var string
+     */
+    private $productQty = '/following-sibling::span[contains(text(), "%s")]';
 
     /**
      * Remove all applied filters.
@@ -78,7 +102,33 @@ class Navigation extends Block
     }
 
     /**
-     * Apply Layerd Navigation filter.
+     * Get all available filters.
+     *
+     * @param string $attributeLabel
+     * @return array
+     */
+    public function getFilterContents($attributeLabel)
+    {
+        $data = [];
+
+        if (trim($attributeLabel) === '') {
+            return $data;
+        }
+
+        $link = sprintf($this->filterLink, $attributeLabel);
+        $this->openFilterContainer($attributeLabel, $link);
+
+        $optionContents = $this->_rootElement->getElements($link, Locator::SELECTOR_XPATH);
+
+        foreach ($optionContents as $optionContent) {
+            $data[] = trim(strtoupper($optionContent->getText()));
+        }
+
+        return $data;
+    }
+
+    /**
+     * Apply Layered Navigation filter.
      *
      * @param string $filter
      * @param string $linkPattern
@@ -87,13 +137,8 @@ class Navigation extends Block
      */
     public function applyFilter($filter, $linkPattern)
     {
-        $expandFilterButton = sprintf($this->optionTitle, $filter);
         $links = sprintf($this->filterLink, $filter);
-
-        $this->waitForElementVisible($this->loadedNarrowByList);
-        if (!$this->_rootElement->find($links, Locator::SELECTOR_XPATH)->isVisible()) {
-            $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
-        }
+        $this->openFilterContainer($filter, $links);
 
         $links = $this->_rootElement->getElements($links, Locator::SELECTOR_XPATH);
         foreach ($links as $link) {
@@ -103,5 +148,35 @@ class Navigation extends Block
             }
         }
         throw new \Exception("Can't find {$filter} filter link by pattern: {$linkPattern}");
+    }
+
+    /**
+     * Check that category with product quantity can be displayed on layered navigation.
+     *
+     * @param Category $category
+     * @param int $qty
+     * @return bool
+     */
+    public function isCategoryVisible(Category $category, $qty)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
+    }
+
+    /**
+     * @param string $filter
+     * @param string $link
+     * @return void
+     */
+    private function openFilterContainer($filter, $link)
+    {
+        $expandFilterButton = sprintf($this->optionTitle, $filter);
+
+        $this->waitForElementVisible($this->loadedNarrowByList);
+        if (!$this->_rootElement->find($link, Locator::SELECTOR_XPATH)->isVisible()) {
+            $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
+        }
     }
 }

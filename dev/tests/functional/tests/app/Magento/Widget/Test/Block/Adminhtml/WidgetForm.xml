@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,5 +30,17 @@
         <products_count />
         <cache_lifetime />
         <page_size />
+        <show_attributes>
+            <selector>
+                .control [name="parameters[show_attributes][]"]
+            </selector>
+            <input>multiselect</input>
+        </show_attributes>
+        <show_buttons>
+            <selector>
+                .control [name="parameters[show_buttons][]"]
+            </selector>
+            <input>multiselect</input>
+        </show_buttons>
     </fields>
 </mapping>

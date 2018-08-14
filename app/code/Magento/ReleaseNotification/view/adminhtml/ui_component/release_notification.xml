@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">release_notification.release_notification_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Release Notification</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="releaseContentVersion" xsi:type="string">2.2.4</item>
+    </argument>
+    <settings>
+        <namespace>release_notification</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>release_notification.release_notification_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="release_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="logAction" xsi:type="url" path="releaseNotification/notification/markUserNotified"/>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\DataProvider" name="release_notification_data_source"/>
+    </dataSource>
+    <modal name="release_notification_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <state>true</state>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">What&#8217;s new with Magento 2.2.4</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>Magento 2.2.4 provides powerful new tools to help reduce cart abandonment and simplify store operations:</p>
+                        <br />
+                        <div class="trusted-payments-highlight">
+                        <h3>Trusted Payment Options</h3>
+                        <p>Online or on the go, your shoppers can easily purchase in a familiar, trusted way with Amazon Pay.</p>
+                        </div>
+                        <div class="flexible-payments-highlight">
+                        <h3>Flexible Payment Terms</h3>
+                        <p>Increase sales by providing shoppers with the flexibility to pay now, later, or in installments using Klarna&#8217;s integrated payment option.</p>
+                        </div>
+                        <div class="tax-automation-highlight">
+                        <h3>Sales and Use Tax Automation</h3>
+                        <p>Merchants can now automatically perform instant and accurate sales tax calculations on shopping cart items with Vertex Cloud.</p>
+                        </div>
+                        <p>To learn more, see the <a href="http://devdocs.magento.com/guides/v2.2/release-notes/bk-release-notes.html" target="_blank">Release Notes</a> and the <a href="http://docs.magento.com/m2/ce/user_guide/getting-started.html" target="_blank">Magento User Guide</a>.</p>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="trusted_payments_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">trusted-payments-modal</option>
+                <option name="title" xsi:type="string" translate="true">Trusted Payment Options</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/amazon-pay.html" target="_blank">Amazon Pay</a>, we make it simple for the hundreds of millions of Amazon customers worldwide to easily log in and purchase from your store using information already stored their Amazon account. With easy setup in Magento 2.2.4, Amazon Pay provides your customers with a trusted and familiar checkout experience. In just a few taps, they can complete a transaction without ever leaving your site.</p>
+                        <ul>
+                        <li><span>Your customers use one familiar login to identify themselves and transact anywhere Amazon Pay is offered.</span></li>
+                        <li><span>Checkout experience is covered by the Amazon A-to-z Guarantee at no additional cost.</span></li>
+                        <li><span>Built on years of Amazon eCommerce innovation, and trusted by merchants and buyers alike.</span></li>
+                        <li><span>Available across platforms and devices, in the home and on the go.</span></li>
+                        </ul>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="flexible_payments_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">flexible-payments-modal</option>
+                <option name="title" xsi:type="string" translate="true">Flexible Payment Terms</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>With <a href="http://docs.magento.com/m2/ce/user_guide/payment/klarna.html" target="_blank">Klarna</a>, reduce purchase stress and improve your shopping experience with several retail finance and direct-payment options that are easily integrated into your existing buying journey. Shoppers can choose to pay now by online payment or direct debit, pay later by invoice, or pay in installments.</p>
+                        <ul>
+                        <li><span>Customers never leave your site, and enjoy a smoother shopping experience.</span></li>
+                        <li><span>Easy application process with the ability to pay over time increases average order value and conversion rates.</span></li>
+                        <li><span>Assumes all credit and fraud risk, and ensures you are paid for ordered goods.</span></li>
+                        <li><span>Ready for all devices, and enables shoppers to use their Klarna account at any Klarna merchant with just a few clicks.</span></li>
+                        <li><span>Fast and easy setup, right from the Magento Admin.</span></li>
+                        </ul>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = trusted_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+    <modal name="tax_automation_modal" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">tax-automation-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sales and Use Tax Automation</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">false</option>
+            </options>
+        </settings>
+        <fieldset name="release_notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="release_notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p><a href="http://docs.magento.com/m2/ce/user_guide/tax/vertex.html" target="_blank">Vertex Cloud</a> combines sophisticated software with an exceptional team of tax experts to help Magento merchants simplify the sales tax process, and comply with ever-changing tax laws. Merchants can easily access and configure Vertex Cloud from the Magento Admin to meet complex tax challenges.</p>
+                        <ul>
+                        <li><span>Seamless integration with award-winning support for simple-to-complex tax needs.</span></li>
+                        <li><span>Automatically comply with the latest tax rules for each product and every jurisdiction.</span></li>
+                        <li><span>Perform tax calculations and generate signature-ready PDF returns in one solution.</span></li>
+                        <li><span>No penalty to merchants for tax estimates from abandoned carts.</span></li>
+                        <li><span>Flexible deployment options fit the needs of your organization in the cloud, or on premises.</span></li>
+                        </ul>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="release_notification_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="release_notification_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = flexible_payments_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="release_notification_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = tax_automation_modal</item>
+                                    <item name="actionName" xsi:type="string">closeReleaseNotes</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title>Done</title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+</form>

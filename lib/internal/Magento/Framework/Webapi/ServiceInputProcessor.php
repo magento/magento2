@@ -2,45 +2,56 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
-use Zend\Code\Reflection\ClassReflection;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Exception as WebapiException;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
     const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $typeProcessor;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $objectManager;
 
-    /** @var AttributeValueFactory */
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
     protected $attributeValueFactory;
 
-    /** @var  CustomAttributeTypeLocatorInterface */
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     */
     protected $customAttributeTypeLocator;
 
-    /** @var  MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMap;
 
     /**
@@ -76,7 +87,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return \Magento\Framework\Reflection\NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -145,6 +156,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
+        // convert to string directly to avoid situations when $className is object
+        // which implements __toString method like \ReflectionObject
+        $className = (string) $className;
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -258,9 +272,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
-        } else if (!$customAttributeCode) {
+        } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );
@@ -301,6 +315,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     public function convertValue($data, $type)
     {
+        if ($data === '') {
+            return $data;
+        }
+
         $isArrayType = $this->typeProcessor->isArrayType($type);
         if ($isArrayType && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
@@ -311,13 +329,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             /** Complex type or array of complex types */
             if ($isArrayType) {
                 // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
-                }
+                $result = $this->getResultForArrayType($data, $type);
             } else {
                 $result = $this->_createFromArray($type, $data);
             }
@@ -370,5 +382,24 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * @param mixed $data
+     * @param string $type
+     *
+     * @return array|null
+     */
+    private function getResultForArrayType($data, $type)
+    {
+        $result = is_array($data) ? [] : null;
+        $itemType = $this->typeProcessor->getArrayItemType($type);
+        if (is_array($data)) {
+            foreach ($data as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
+            }
+        }
+
+        return $result;
     }
 }

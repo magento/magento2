@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Summary;
 
-use \Magento\Review\Model\ResourceModel\Review\Summary\Collection;
+use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Collection
@@ -50,40 +50,31 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fetchStrategyMock = $this->getMock(
+        $this->fetchStrategyMock = $this->createPartialMock(
             \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
-            ['fetchAll'],
-            [],
-            '',
-            false
+            ['fetchAll']
         );
-        $this->entityFactoryMock = $this->getMock(
+        $this->entityFactoryMock = $this->createPartialMock(
             \Magento\Framework\Data\Collection\EntityFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->connectionMock = $this->getMock(
+        $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'query'],
-            [],
-            '',
-            false
+            ['select', 'query']
         );
         $selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectMock = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            ['from'],
-            ['adapter' => $this->connectionMock, 'selectRenderer' => $selectRenderer]
-        );
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->setMethods(['from'])
+            ->setConstructorArgs(['adapter' => $this->connectionMock, 'selectRenderer' => $selectRenderer])
+            ->getMock();
+
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
@@ -113,7 +104,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFetchItem()
     {
         $data = [1 => 'test'];
-        $statementMock = $this->getMock(\Zend_Db_Statement_Pdo::class, ['fetch'], [], '', false);
+        $statementMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
         $statementMock->expects($this->once())
             ->method('fetch')
             ->will($this->returnValue($data));
@@ -123,7 +114,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, $this->anything())
             ->will($this->returnValue($statementMock));
 
-        $objectMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, ['setData'], [], '', false);
+        $objectMock = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ['setData']);
         $objectMock->expects($this->once())
             ->method('setData')
             ->with($data);
@@ -145,7 +136,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, [])
             ->will($this->returnValue([$data]));
 
-        $objectMock = $this->getMock(\Magento\Framework\DataObject::class, ['addData'], []);
+        $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['addData']);
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
-use Magento\Directory\Helper\Data;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form\Element\DataType\Number;
 use Magento\Ui\Component\Form\Element\DataType\Price;
@@ -23,62 +24,74 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class AdvancedPricing extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var ModuleManager
+     * @since 101.0.0
      */
     protected $moduleManager;
 
     /**
      * @var GroupManagementInterface
+     * @since 101.0.0
      */
     protected $groupManagement;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 101.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 101.0.0
      */
     protected $groupRepository;
 
     /**
      * @var Data
+     * @since 101.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @var string
+     * @since 101.0.0
      */
     protected $scopeName;
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $meta = [];
 
@@ -127,6 +140,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -145,6 +159,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -158,6 +173,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @param string $fieldCode
      * @return $this
+     * @since 101.0.0
      */
     protected function preparePriceFields($fieldCode)
     {
@@ -296,6 +312,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve default value for website
      *
      * @return int
+     * @since 101.0.0
      */
     public function getDefaultWebsite()
     {
@@ -407,6 +424,7 @@ class AdvancedPricing extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'dynamicRows',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-tier-price',
                         'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
                         'recordTemplate' => 'record',
@@ -414,7 +432,8 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'disabled' => false,
+                        'disabled' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/disabled', $this->meta),
                         'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
@@ -482,7 +501,8 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-digits' => false,
+                                            'validate-number' => true,
                                         ],
                                     ],
                                 ],
@@ -604,7 +624,7 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
-            'onCancel' => 'actionDone',
+            'onCancel' => 'closeModal',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [

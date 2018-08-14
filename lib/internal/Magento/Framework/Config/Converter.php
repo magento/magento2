@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
@@ -103,7 +103,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
         }
         if (!count($result)) {
-            $result = $node->nodeValue;
+            $result = (strtolower($node->nodeValue) !== 'true' && strtolower($node->nodeValue) !== 'false')
+                ? $node->nodeValue
+                : filter_var($node->nodeValue, FILTER_VALIDATE_BOOLEAN);
         }
         return $result;
     }

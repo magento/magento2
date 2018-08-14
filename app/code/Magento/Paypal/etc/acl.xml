@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -31,6 +31,11 @@
                                 <resource id="Magento_Paypal::billing_agreement_actions_view" title="View" translate="title" sortOrder="5" />
                                 <resource id="Magento_Paypal::actions_manage" title="Manage" translate="title" sortOrder="10" />
                                 <resource id="Magento_Paypal::use" title="Place Order Using Billing Agreements" translate="title" sortOrder="15" />
+                            </resource>
+                        </resource>
+                        <resource id="Magento_Sales::sales_order"  title="Orders" translate="title" sortOrder="10">
+                            <resource id="Magento_Sales::actions" title="Actions" translate="title" sortOrder="10">
+                                <resource id="Magento_Paypal::authorization" title="Payment Amount Authorization" translate="title" sortOrder="160" />
                             </resource>
                         </resource>
                     </resource>

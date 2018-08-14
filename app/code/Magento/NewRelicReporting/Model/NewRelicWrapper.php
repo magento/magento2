@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model;
@@ -14,7 +14,7 @@ class NewRelicWrapper
 {
     /**
      * Wrapper for 'newrelic_add_custom_parameter' function
-     * 
+     *
      * @param string $param
      * @param string|int $value
      * @return bool
@@ -29,8 +29,34 @@ class NewRelicWrapper
     }
 
     /**
-     * Checks whether newrelic-php5 agent is installed 
-     * 
+     * Wrapper for 'newrelic_notice_error' function
+     *
+     * @param  Exception $exception
+     * @return void
+     */
+    public function reportError($exception)
+    {
+        if (extension_loaded('newrelic')) {
+            newrelic_notice_error($exception->getMessage(), $exception);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_set_appname'
+     *
+     * @param string $appName
+     * @return void
+     */
+    public function setAppName(string $appName)
+    {
+        if (extension_loaded('newrelic')) {
+            newrelic_set_appname($appName);
+        }
+    }
+
+    /**
+     * Checks whether newrelic-php5 agent is installed
+     *
      * @return bool
      */
     public function isExtensionInstalled()

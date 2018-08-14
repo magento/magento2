@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Config\Test\Unit\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class UrnResolverTest extends \PHPUnit_Framework_TestCase
+class UrnResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrnResolver

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TabTest extends \PHPUnit_Framework_TestCase
+class TabTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Tab
@@ -21,13 +21,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Element\Iterator\Field::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_iteratorMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Iterator\Field::class);
 
         $this->_model = (new ObjectManager($this))->getObject(
             \Magento\Config\Model\Config\Structure\Element\Tab::class,

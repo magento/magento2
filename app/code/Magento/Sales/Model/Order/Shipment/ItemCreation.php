@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -43,6 +43,7 @@ class ItemCreation implements ShipmentItemCreationInterface
     public function setOrderItemId($orderItemId)
     {
         $this->orderItemId = $orderItemId;
+        return $this;
     }
 
     /**
@@ -59,6 +60,7 @@ class ItemCreation implements ShipmentItemCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+        return $this;
     }
 
     /**
@@ -83,5 +85,6 @@ class ItemCreation implements ShipmentItemCreationInterface
         $this->extensionAttributes = $extensionAttributes;
         return $this;
     }
+
     //@codeCoverageIgnoreEnd
 }

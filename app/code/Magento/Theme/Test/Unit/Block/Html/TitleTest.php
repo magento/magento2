@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Html;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TitleTest extends \PHPUnit_Framework_TestCase
+class TitleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -35,8 +35,8 @@ class TitleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->pageConfigMock = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
-        $this->pageTitleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $this->pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $this->pageTitleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
 
         $context = $this->objectManagerHelper->getObject(
             \Magento\Framework\View\Element\Template\Context::class,

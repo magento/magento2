@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Swatches\Test\TestCase\AddConfigurableProductWithSwatchToShoppingCartTest" summary="Create text swatch attribute" ticketId="MAGETWO-47017">
+        <variation name="AddConfigurableProductWithSwatchToShoppingCartTest1" summary="Add configurable product to cart with text swatch options only" ticketId="MAGETWO-59958">
+            <data name="product/dataset" xsi:type="string">product_with_text_swatch</data>
+            <constraint name="Magento\Swatches\Test\Constraint\AssertProductPriceWithSelectedSwatchOnCategoryPage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
+        </variation>
+        <variation name="AddConfigurableProductWithSwatchToShoppingCartTest2" summary="Add configurable product to cart with mixed option types" ticketId="MAGETWO-59979">
+            <data name="issue" xsi:type="string">MAGETWO-90369</data>
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="product/dataset" xsi:type="string">product_with_text_swatch_and_size</data>
+            <constraint name="Magento\Swatches\Test\Constraint\AssertSelectedSwatchOptionsOnProductPage" />
+        </variation>
+    </testCase>
+</config>

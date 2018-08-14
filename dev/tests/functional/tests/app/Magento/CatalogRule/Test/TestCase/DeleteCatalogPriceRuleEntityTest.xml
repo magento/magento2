@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\DeleteCatalogPriceRuleEntityTest" summary="Delete Catalog Price Rule" ticketId="MAGETWO-25211">
-        <variation name="CatalogRule_Delete_AdminOnly_ProductSimple" summary="Assert that Catalog Price Rule is not applied for simple product">
+        <variation name="CatalogRule_Delete_AdminOnly_ProductSimple" summary="Assert that Catalog Price Rule is not applied for simple product" ticketId="MAGETWO-20431">
             <data name="catalogPriceRule/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_for_salesrule_1</data>
-            <data name="productPrice/0/regular" xsi:type="string">100</data>
+            <data name="customer/dataset" xsi:type="string">customer_US</data>
+            <data name="productPrice/0/regular" xsi:type="number">100</data>
+            <data name="cartPrice/sub_total" xsi:type="number">100</data>
+            <data name="cartPrice/grand_total" xsi:type="number">105</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
         </variation>
     </testCase>
 </config>

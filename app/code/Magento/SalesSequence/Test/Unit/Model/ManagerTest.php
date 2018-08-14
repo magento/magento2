@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 /**
  * Class ManagerTest
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -55,34 +55,16 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->resourceSequenceMeta = $this->getMock(
+        $this->resourceSequenceMeta = $this->createPartialMock(
             \Magento\SalesSequence\Model\ResourceModel\Meta::class,
-            ['loadByEntityTypeAndStore'],
-            [],
-            '',
-            false
+            ['loadByEntityTypeAndStore']
         );
-        $this->sequenceFactory = $this->getMock(
+        $this->sequenceFactory = $this->createPartialMock(
             \Magento\SalesSequence\Model\SequenceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->meta = $this->getMock(
-            \Magento\SalesSequence\Model\Meta::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->store = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['getId'],
-            [],
-            '',
-            false
-        );
+        $this->meta = $this->createMock(\Magento\SalesSequence\Model\Meta::class);
+        $this->store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $this->sequenceManager = $helper->getObject(
             \Magento\SalesSequence\Model\Manager::class,
             [

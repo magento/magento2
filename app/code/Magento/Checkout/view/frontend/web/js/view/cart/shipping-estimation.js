@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -46,6 +46,12 @@ define(
 
                     checkoutDataResolver.resolveEstimationAddress();
                     address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
+
+                    if (!address && quote.isVirtual()) {
+                        address = addressConverter.formAddressDataToQuoteAddress(
+                            checkoutData.getSelectedBillingAddress()
+                        );
+                    }
 
                     if (address) {
                         estimatedAddress = address.isEditable() ?

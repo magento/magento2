@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
@@ -10,6 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Reviews list block
+ *
+ * @api
+ * @since 100.0.2
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -118,7 +121,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get review link
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function getReviewLink()
     {
@@ -130,6 +133,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      *
      * @param \Magento\Review\Model\Review $review
      * @return string
+     * @since 100.2.0
      */
     public function getReviewUrl($review)
     {
@@ -140,7 +144,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get product link
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function getProductLink()
     {
@@ -150,12 +154,13 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Get product URL
      *
-     * @param \Magento\Review\Model\Review $review
+     * @param \Magento\Catalog\Model\Product $product
      * @return string
+     * @since 100.2.0
      */
-    public function getProductUrl($review)
+    public function getProductUrl($product)
     {
-        return $this->getUrl('catalog/product/view', ['id' => $review->getEntityPkValue()]);
+        return $product->getProductUrl();
     }
 
     /**

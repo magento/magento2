@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,9 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Integration test for \Magento\Customer\Model\ResourceModel\GroupRepository
+ * @magentoAppIsolation enabled
  */
-class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** The group id of the "NOT LOGGED IN" group */
     const NOT_LOGGED_IN_GROUP_ID = 0;

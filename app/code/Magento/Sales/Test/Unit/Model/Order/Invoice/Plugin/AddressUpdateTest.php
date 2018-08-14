@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Plugin;
 
-class AddressUpdateTest extends \PHPUnit_Framework_TestCase
+class AddressUpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate
@@ -25,8 +25,8 @@ class AddressUpdateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->gripPoolMock = $this->getMock(\Magento\Sales\Model\ResourceModel\GridPool::class, [], [], '', false);
-        $this->attributeMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Attribute::class, [], [], '', false);
+        $this->gripPoolMock = $this->createMock(\Magento\Sales\Model\ResourceModel\GridPool::class);
+        $this->attributeMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Attribute::class);
         $this->model = new \Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate(
             $this->gripPoolMock,
             $this->attributeMock
@@ -39,28 +39,19 @@ class AddressUpdateTest extends \PHPUnit_Framework_TestCase
         $shippingId = 200;
         $orderId = 50;
 
-        $orderMock = $this->getMock(
+        $orderMock = $this->createPartialMock(
             \Magento\Sales\Model\Order::class,
-            ['hasInvoices', 'getBillingAddress', 'getShippingAddress', 'getInvoiceCollection', 'getId'],
-            [],
-            '',
-            false
+            ['hasInvoices', 'getBillingAddress', 'getShippingAddress', 'getInvoiceCollection', 'getId']
         );
 
-        $shippingMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
+        $shippingMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
         $shippingMock->expects($this->once())->method('getId')->willReturn($shippingId);
 
-        $billingMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
+        $billingMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
         $billingMock->expects($this->once())->method('getId')->willReturn($billingId);
 
-        $invoiceCollectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $invoiceMock = $this->getMock(\Magento\Sales\Model\Order\Invoice::class, [], [], '', false);
+        $invoiceCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Collection::class);
+        $invoiceMock = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
         $invoiceCollectionMock->expects($this->once())->method('getItems')->willReturn([$invoiceMock]);
 
         $orderMock->expects($this->once())->method('hasInvoices')->willReturn(true);
@@ -82,8 +73,8 @@ class AddressUpdateTest extends \PHPUnit_Framework_TestCase
         $this->gripPoolMock->expects($this->once())->method('refreshByOrderId')->with($orderId)->willReturnSelf();
 
         $this->model->afterProcess(
-            $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class, [], [], '', false),
-            $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class, [], [], '', false),
+            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class),
+            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class),
             $orderMock
         );
     }

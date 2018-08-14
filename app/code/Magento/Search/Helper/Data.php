@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Helper;
@@ -16,6 +16,8 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search helper
+ * @api
+ * @since 100.0.2
  */
 class Data extends AbstractHelper
 {
@@ -37,16 +39,19 @@ class Data extends AbstractHelper
      * Core store config
      *
      * @var ScopeConfigInterface
+     * @since 100.1.0
      */
     protected $scopeConfig;
 
     /**
      * @var Escaper
+     * @since 100.1.0
      */
     protected $escaper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 100.1.0
      */
     protected $storeManager;
 
@@ -119,7 +124,7 @@ class Data extends AbstractHelper
     {
         return $this->_getUrl(
             'search/ajax/suggest',
-            ['_secure' => $this->storeManager->getStore()->isCurrentlySecure()]
+            ['_secure' => $this->_getRequest()->isSecure()]
         );
     }
 

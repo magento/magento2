@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Setup\Model\ConfigModel;
 
-class ConfigModelTest extends \PHPUnit_Framework_TestCase
+class ConfigModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
@@ -48,12 +48,12 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->collector = $this->getMock(\Magento\Setup\Model\ConfigOptionsListCollector::class, [], [], '', false);
-        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->configOptionsList = $this->getMock(\Magento\Backend\Setup\ConfigOptionsList::class, [], [], '', false);
-        $this->configData = $this->getMock(\Magento\Framework\Config\Data\ConfigData::class, [], [], '', false);
-        $this->filePermissions = $this->getMock(\Magento\Framework\Setup\FilePermissions::class, [], [], '', false);
+        $this->collector = $this->createMock(\Magento\Setup\Model\ConfigOptionsListCollector::class);
+        $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->configOptionsList = $this->createMock(\Magento\Backend\Setup\ConfigOptionsList::class);
+        $this->configData = $this->createMock(\Magento\Framework\Config\Data\ConfigData::class);
+        $this->filePermissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
 
         $this->deploymentConfig->expects($this->any())->method('get');
 
@@ -67,7 +67,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $option = $this->getMock(\Magento\Framework\Setup\Option\TextConfigOption::class, [], [], '', false);
+        $option = $this->createMock(\Magento\Framework\Setup\Option\TextConfigOption::class);
         $option->expects($this->exactly(3))->method('getName')->willReturn('Fake');
         $optionsSet = [
             $option,

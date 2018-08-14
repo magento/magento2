@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ var catalogWysiwygEditor = {
                 url: editorUrl,
                 data: {
                     element_id: elementId + '_editor',
-                    store_id: '<?php /* @escapeNotVerified */ echo $block->getStoreId() ?>'
+                    store_id: '<?= /* @escapeNotVerified */ $block->getStoreId() ?>'
                 },
                 showLoader: true,
                 dataType: 'html',
@@ -45,7 +45,7 @@ var catalogWysiwygEditor = {
             this.modal.html(jQuery(data).html());
         } else {
             this.modal = jQuery(data).modal({
-                title: '<?php /* @escapeNotVerified */ echo __('WYSIWYG Editor'); ?>',
+                title: '<?= /* @escapeNotVerified */ __('WYSIWYG Editor') ?>',
                 modalClass: 'magento',
                 type: 'slide',
                 firedElementId: elementId,
@@ -69,17 +69,21 @@ var catalogWysiwygEditor = {
         $(elementId + '_editor').value = $(elementId).value;
     },
     okDialogWindow : function(dialogWindow) {
-        if (dialogWindow.options.firedElementId) {
-            wysiwygObj = eval('wysiwyg'+dialogWindow.options.firedElementId+'_editor');
+        var $firedElement = jQuery('#' + dialogWindow.options.firedElementId),
+            $editorElement = jQuery('#' + dialogWindow.options.firedElementId + '_editor'),
+            firedElementId = $firedElement.attr('id'),
+            wysiwygObj = window['wysiwyg' + firedElementId + '_editor'];
+
+        if ($firedElement.length) {
             wysiwygObj.turnOff();
             if (tinyMCE.get(wysiwygObj.id)) {
-                $(dialogWindow.options.firedElementId).value = tinyMCE.get(wysiwygObj.id).getContent();
+                $firedElement.val(tinyMCE.get(wysiwygObj.id).getContent()).change();
             } else {
-                if ($(dialogWindow.options.firedElementId+'_editor')) {
-                    $(dialogWindow.options.firedElementId).value = $(dialogWindow.options.firedElementId+'_editor').value;
-                }
+                $firedElement.val($editorElement.val()).change();
             }
-            tinyMCE.editors[dialogWindow.options.firedElementId].load();
+            if (tinyMCE.get(firedElementId)) {
+                tinyMCE.get(firedElementId).load();
+            }
             if (typeof varienGlobalEvents != undefined) {
                 varienGlobalEvents.fireEvent('tinymceChange');
             }

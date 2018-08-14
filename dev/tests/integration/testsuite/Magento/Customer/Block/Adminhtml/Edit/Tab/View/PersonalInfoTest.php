@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -14,7 +14,7 @@ use Magento\Customer\Controller\RegistryConstants;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
-class PersonalInfoTest extends \PHPUnit_Framework_TestCase
+class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context */
     private $_context;
@@ -99,8 +99,16 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $expectedCustomerData = $this->_loadCustomer()->__toArray();
-        $actualCustomerData = $this->_block->getCustomer()->__toArray();
+        $expectedCustomer = $this->_loadCustomer();
+        $expectedCustomerData = $this->_dataObjectProcessor->buildOutputDataArray(
+            $expectedCustomer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $actualCustomer = $this->_block->getCustomer();
+        $actualCustomerData = $this->_dataObjectProcessor->buildOutputDataArray(
+            $actualCustomer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         foreach ($expectedCustomerData as $property => $value) {
             $expectedValue = is_numeric($value) ? intval($value) : $value;
             $actualValue = isset($actualCustomerData[$property]) ? $actualCustomerData[$property] : null;
@@ -228,9 +236,9 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_loadCustomer();
         $html = $this->_block->getBillingAddressHtml();
-        $this->assertContains('John Smith<br/>', $html);
+        $this->assertContains('John Smith<br />', $html);
         $this->assertContains('Green str, 67<br />', $html);
-        $this->assertContains('CityM,  Alabama, 75477<br/>', $html);
+        $this->assertContains('CityM,  Alabama, 75477<br />', $html);
     }
 
     public function testGetBillingAddressHtmlNoDefaultAddress()

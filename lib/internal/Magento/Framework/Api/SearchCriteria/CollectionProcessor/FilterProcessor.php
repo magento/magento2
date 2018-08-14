@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor;
@@ -75,7 +75,7 @@ class FilterProcessor implements CollectionProcessorInterface
                 $conditions[] = [$condition => $filter->getValue()];
             }
         }
-        
+
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }
@@ -114,6 +114,6 @@ class FilterProcessor implements CollectionProcessorInterface
      */
     private function getFieldMapping($field)
     {
-        return isset($this->fieldMapping[$field]) ? $this->fieldMapping[$field] : $field;
+        return $this->fieldMapping[$field] ?? $field;
     }
 }

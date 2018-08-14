@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -10,7 +10,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
  *
  * @magentoDataFixture Magento/Catalog/_files/products_crosssell.php
  */
-class CrosssellTest extends \PHPUnit_Framework_TestCase
+class CrosssellTest extends \PHPUnit\Framework\TestCase
 {
     public function testAll()
     {

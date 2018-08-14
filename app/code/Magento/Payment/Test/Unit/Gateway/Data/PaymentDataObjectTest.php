@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data;
@@ -12,7 +12,7 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Class PaymentDataObjectTest
  */
-class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
+class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PaymentDataObject */
     protected $model;
@@ -40,11 +40,11 @@ class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrder()
     {
-        $this->assertSame($this->orderMock, $this->model->getOrder()) ;
+        $this->assertSame($this->orderMock, $this->model->getOrder());
     }
 
     public function testGetPayment()
     {
-        $this->assertSame($this->paymentMock, $this->model->getPayment()) ;
+        $this->assertSame($this->paymentMock, $this->model->getPayment());
     }
 }

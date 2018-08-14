@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,18 +21,18 @@
                     $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="data item title"
-                     aria-labeledby="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>-title"
-                     data-role="collapsible" id="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>">
+                     aria-labeledby="tab-label-<?= /* @escapeNotVerified */ $alias ?>-title"
+                     data-role="collapsible" id="tab-label-<?= /* @escapeNotVerified */ $alias ?>">
                     <a class="data switch"
                        tabindex="-1"
                        data-toggle="switch"
-                       href="#<?php /* @escapeNotVerified */ echo $alias; ?>"
-                       id="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>-title">
-                        <?php /* @escapeNotVerified */ echo $label; ?>
+                       href="#<?= /* @escapeNotVerified */ $alias ?>"
+                       id="tab-label-<?= /* @escapeNotVerified */ $alias ?>-title">
+                        <?= /* @escapeNotVerified */ $label ?>
                     </a>
                 </div>
-                <div class="data item content" id="<?php /* @escapeNotVerified */ echo $alias; ?>" data-role="content">
-                    <?php /* @escapeNotVerified */ echo $html; ?>
+                <div class="data item content" id="<?= /* @escapeNotVerified */ $alias ?>" data-role="content">
+                    <?= /* @escapeNotVerified */ $html ?>
                 </div>
             <?php endforeach;?>
         </div>

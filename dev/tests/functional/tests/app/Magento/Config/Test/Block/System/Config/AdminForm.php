@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Block\System\Config;
@@ -20,5 +20,15 @@ class AdminForm extends Form
     public function adminAccountSharingAvailability()
     {
         return $this->_rootElement->find($this->adminAccountSharingField, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Check if form is empty.
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isVisible() && $this->_rootElement->getText() == '';
     }
 }

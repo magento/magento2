@@ -1,13 +1,12 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -35,12 +34,9 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
 
     protected function setUp()
     {
-        $this->productBuilder = $this->getMock(
+        $this->productBuilder = $this->createPartialMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
-            ['build'],
-            [],
-            '',
-            false
+            ['build']
         );
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();

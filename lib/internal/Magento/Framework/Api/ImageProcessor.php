@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -172,7 +172,7 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+        return $this->mimeTypeExtensionMap[$mimeType] ?? '';
     }
 
     /**

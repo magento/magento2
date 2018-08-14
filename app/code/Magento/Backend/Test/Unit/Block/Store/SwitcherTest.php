@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Unit\Block\Store;
 
-class SwitcherTest extends \PHPUnit_Framework_TestCase
+class SwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Store\Switcher
@@ -17,7 +17,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
             \Magento\Backend\Block\Template\Context::class,
@@ -34,7 +34,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWebsites()
     {
-        $websiteMock =  $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
+        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
         $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
         $this->assertEquals($websites, $this->switcherBlock->getWebsites());
@@ -42,7 +42,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWebsitesIfSetWebsiteIds()
     {
-        $websiteMock =  $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
+        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
         $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
 

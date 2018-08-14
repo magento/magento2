@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\Service;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderServiceTest extends \PHPUnit_Framework_TestCase
+class OrderServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Service\OrderService
@@ -163,7 +163,28 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('cancel')
             ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(true);
         $this->assertTrue($this->orderService->cancel(123));
+    }
+
+    /**
+     * test for Order::cancel() fail case
+     */
+    public function testCancelFailed()
+    {
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with(123)
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->never())
+            ->method('cancel')
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(false);
+        $this->assertFalse($this->orderService->cancel(123));
     }
 
     public function testGetCommentsList()

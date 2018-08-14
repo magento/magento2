@@ -1,0 +1,42 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+namespace: Magento\FunctionalTestingFramework
+modules:
+    enabled:
+        - \Magento\FunctionalTestingFramework\Module\MagentoWebDriver
+        - \Magento\FunctionalTestingFramework\Helper\Acceptance
+        - \Magento\FunctionalTestingFramework\Helper\MagentoFakerData
+        - \Magento\FunctionalTestingFramework\Module\MagentoRestDriver:
+            url: "%MAGENTO_BASE_URL%/rest/default/V1/"
+            username: "%MAGENTO_ADMIN_USERNAME%"
+            password: "%MAGENTO_ADMIN_PASSWORD%"
+            depends: PhpBrowser
+            part: Json
+        - \Magento\FunctionalTestingFramework\Module\MagentoSequence
+        - \Magento\FunctionalTestingFramework\Module\MagentoAssert
+        - Asserts
+    config:
+        \Magento\FunctionalTestingFramework\Module\MagentoWebDriver:
+            url: "%MAGENTO_BASE_URL%"
+            backend_name: "%MAGENTO_BACKEND_NAME%"
+            browser: 'chrome'
+            window_size: maximize
+            username: "%MAGENTO_ADMIN_USERNAME%"
+            password: "%MAGENTO_ADMIN_PASSWORD%"
+            pageload_timeout: 30
+            host: %SELENIUM_HOST%
+            port: %SELENIUM_PORT%
+            protocol: %SELENIUM_PROTOCOL%
+            path: %SELENIUM_PATH%
+            capabilities:
+              chromeOptions:
+                args: ["--start-maximized", "--disable-extensions", "--enable-automation"]
+

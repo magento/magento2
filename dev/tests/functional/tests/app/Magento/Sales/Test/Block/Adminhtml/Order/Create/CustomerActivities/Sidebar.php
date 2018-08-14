@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ abstract class Sidebar extends Block
     protected $addToOrderProductName = './/tr/td[.="%s"]';
 
     /**
-     * Add productz to order.
+     * Add products to order.
      *
      * @param array $products
      * @return void

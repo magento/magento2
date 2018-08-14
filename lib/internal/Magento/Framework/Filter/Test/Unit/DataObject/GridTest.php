@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,17 +10,11 @@ use \Magento\Framework\Filter\DataObject\Grid;
 
 use Magento\Framework\DataObject;
 
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {
-        $entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
         $entityFactoryMock
             ->expects($this->any())
             ->method('create')
@@ -41,7 +35,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Zend_Filter_Interface $filterMock */
         /** This filter should be applied to all fields values */
-        $filterMock = $this->getMock(\Zend_Filter_Interface::class, [], [], '', false);
+        $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(4))->method('filter')->will(
             $this->returnCallback(
                 function ($input) {
@@ -53,7 +47,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Zend_Filter_Interface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
-        $fieldFilterMock = $this->getMock(\Zend_Filter_Interface::class, [], [], '', false);
+        $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
         $fieldFilterMock->expects($this->exactly(2))->method('filter')->will(
             $this->returnCallback(
                 function ($input) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeRepositoryInterface
@@ -63,7 +63,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $searchCriteriaBuilder->create();
 
-        $searchResult = $this->repository->getList('order', $searchCriteria);
+        $searchResult = $this->repository->getList('test', $searchCriteria);
 
         $this->assertEquals(3, $searchResult->getTotalCount());
 

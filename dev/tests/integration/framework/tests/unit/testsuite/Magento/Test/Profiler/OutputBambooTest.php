@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Profiler;
@@ -9,7 +9,7 @@ namespace Magento\Test\Profiler;
  * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
  */
 require_once __DIR__ . '/OutputBambooTestFilter.php';
-class OutputBambooTest extends \PHPUnit_Framework_TestCase
+class OutputBambooTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Profiler\OutputBamboo

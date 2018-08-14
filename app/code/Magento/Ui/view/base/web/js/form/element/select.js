@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -44,9 +48,9 @@ define([
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
+            } else {
+                return node;
             }
-
-            return node;
         });
 
         return {
@@ -273,6 +277,7 @@ define([
         },
 
         /**
+         * Get option from indexedOptions list.
          *
          * @param {Number} value
          * @returns {Object} Chainable

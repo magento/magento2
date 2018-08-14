@@ -1,15 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer entity import
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Customer extends AbstractCustomer
 {
@@ -264,11 +270,27 @@ class Customer extends AbstractCustomer
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                $this->customerFields
+                $this->getCustomerEntityFieldsToUpdate($entitiesToUpdate)
             );
         }
 
         return $this;
+    }
+
+    /**
+     * Filter the entity that are being updated so we only change fields found in the importer file
+     *
+     * @param array $entitiesToUpdate
+     * @return array
+     */
+    private function getCustomerEntityFieldsToUpdate(array $entitiesToUpdate): array
+    {
+        $firstCustomer = reset($entitiesToUpdate);
+        $columnsToUpdate = array_keys($firstCustomer);
+        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
+            return in_array($field, $columnsToUpdate);
+        });
+        return $customerFieldsToUpdate;
     }
 
     /**
@@ -324,6 +346,43 @@ class Customer extends AbstractCustomer
     }
 
     /**
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
+     *
+     * @param array $rows Each row must contain data from columns email
+     * and website code.
+     *
+     * @return void
+     */
+    public function prepareCustomerData($rows)
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Prepare customer data for update
      *
      * @param array $rowData
@@ -333,6 +392,7 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
+        $multiSeparator = $this->getMultipleValueSeparator();
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
@@ -355,26 +415,22 @@ class Customer extends AbstractCustomer
             $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
         }
 
-        $entityRow = [
-            'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
-            'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
-            'created_at' => $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'entity_id' => $entityId,
-        ];
-
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
             $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
-
+        $entityRow = ['entity_id' => $entityId];
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             $attributeParameters = $this->_attributes[$attributeCode];
-            if ('select' == $attributeParameters['type']) {
-                $value = isset($attributeParameters['options'][strtolower($value)])
-                    ? $attributeParameters['options'][strtolower($value)]
-                    : 0;
+            if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
+                $value = $this->getSelectAttrIdByValue($attributeParameters, $value);
+            } elseif ('multiselect' == $attributeParameters['type']) {
+                $ids = [];
+                foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
+                    $ids[] = $this->getSelectAttrIdByValue($attributeParameters, $subValue);
+                }
+                $value = implode(',', $ids);
             } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
                 $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
@@ -402,12 +458,21 @@ class Customer extends AbstractCustomer
 
         if ($newCustomer) {
             // create
+            $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
+            $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
+                ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
             // edit
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            if (!empty($rowData[self::COLUMN_STORE])) {
+                $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            }
             $entitiesToUpdate[] = $entityRow;
         }
 
@@ -428,6 +493,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $this->prepareCustomerData($bunch);
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];
@@ -530,7 +596,15 @@ class Customer extends AbstractCustomer
                     continue;
                 }
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                    $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                    $this->isAttributeValid(
+                        $attributeCode,
+                        $attributeParams,
+                        $rowData,
+                        $rowNumber,
+                        isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+                            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                    );
                 } elseif ($attributeParams['is_required'] && !$this->_getCustomerId($email, $website)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                 }
@@ -569,11 +643,11 @@ class Customer extends AbstractCustomer
      */
     public function getValidColumnNames()
     {
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->customerFields
+            )
         );
-
-        return $this->validColumnNames;
     }
 }

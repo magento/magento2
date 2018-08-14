@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Helper\Backend;
@@ -8,7 +8,7 @@ namespace Magento\Authorizenet\Test\Unit\Helper\Backend;
 /**
  * Class DataTest
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorizenet\Helper\Backend\Data
@@ -34,15 +34,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->urlBuilderMock = $this->getMock(\Magento\Backend\Model\Url::class, ['getUrl'], [], '', false);
+        $this->urlBuilderMock = $this->createPartialMock(\Magento\Backend\Model\Url::class, ['getUrl']);
 
-        $contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $contextMock->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
 
-        $this->orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->orderFactoryMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
         $this->dataHelper = $helper->getObject(
             \Magento\Authorizenet\Helper\Backend\Data::class,
@@ -67,12 +67,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuccessOrderUrl()
     {
-        $orderMock = $this->getMock(
+        $orderMock = $this->createPartialMock(
             \Magento\Sales\Model\Order::class,
-            ['loadByIncrementId', 'getId', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByIncrementId', 'getId', '__wakeup']
         );
         $orderMock->expects($this->once())
             ->method('loadByIncrementId')

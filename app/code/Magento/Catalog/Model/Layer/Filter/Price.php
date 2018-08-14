@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\Layer\Filter;
 /**
  * Layer price filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
@@ -59,7 +58,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     private $algorithmFactory;
 
-    /** @var DataProvider\Price */
+    /**
+     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
+     */
     private $dataProvider;
 
     /**
@@ -149,7 +150,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     public function getCustomerGroupId()
     {
         $customerGroupId = $this->_getData('customer_group_id');
-        if (is_null($customerGroupId)) {
+        if ($customerGroupId === null) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
 
@@ -175,7 +176,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     public function getCurrencyRate()
     {
         $rate = $this->_getData('currency_rate');
-        if (is_null($rate)) {
+        if ($rate === null) {
             $rate = $this->_storeManager->getStore($this->getStoreId())
                 ->getCurrentCurrencyRate();
         }

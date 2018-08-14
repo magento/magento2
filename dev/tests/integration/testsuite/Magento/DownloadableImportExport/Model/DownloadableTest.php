@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Model;
@@ -77,6 +77,23 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      * @todo remove after MAGETWO-38240 resolved
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    {
+        $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
     {
         $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
     }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class TypeSelectorConcatenation
@@ -16,7 +16,7 @@ use PHP_CodeSniffer_Sniff;
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#formatting-1
  *
  */
-class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
+class TypeSelectorConcatenationSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -44,14 +44,14 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
         if (0 === strpos($tokens[$stackPtr + 1]['content'], '-')
             && in_array($tokens[$stackPtr - 1]['content'], $this->symbolsBeforeConcat)
         ) {
-            $phpcsFile->addError('Concatenation is used', $stackPtr);
+            $phpcsFile->addError('Concatenation is used', $stackPtr, 'ConcatenationUsage');
         }
     }
 }

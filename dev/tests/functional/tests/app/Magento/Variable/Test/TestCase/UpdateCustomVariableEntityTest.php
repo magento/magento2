@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -119,9 +119,12 @@ class UpdateCustomVariableEntityTest extends Injectable
             $storeIndex->getStoreGrid()->searchAndOpen(['store_title' => $this->store->getName()]);
             $storeNew = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreNew::class);
             $storeNew->getFormPageActions()->delete();
+
+            /** @var \Magento\Backend\Test\Page\Adminhtml\StoreDelete $storeDelete */
             $storeDelete = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreDelete::class);
             $storeDelete->getStoreForm()->fillForm(['create_backup' => 'No']);
             $storeDelete->getFormPageActions()->delete();
+            $storeDelete->getModalBlock()->acceptAlert();
         }
         $this->store = null;
     }

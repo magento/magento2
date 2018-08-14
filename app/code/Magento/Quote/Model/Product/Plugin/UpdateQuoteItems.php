@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Product\Plugin;
@@ -34,7 +34,8 @@ class UpdateQuoteItems
         \Magento\Framework\Model\AbstractModel $product
     ) {
         $originalPrice = $product->getOrigData('price');
-        if (!empty($originalPrice) && ($originalPrice != $product->getPrice())) {
+        $tierPriceChanged = $product->getData('tier_price_changed');
+        if ((!empty($originalPrice) && ($originalPrice != $product->getPrice())) || $tierPriceChanged) {
             $this->resource->markQuotesRecollect($product->getId());
         }
         return $result;

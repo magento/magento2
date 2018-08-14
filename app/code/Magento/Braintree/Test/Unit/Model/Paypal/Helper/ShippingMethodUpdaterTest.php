@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
@@ -16,7 +16,7 @@ use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
  *
  * @see \Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater
  */
-class ShippingMethodUpdaterTest extends \PHPUnit_Framework_TestCase
+class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_SHIPPING_METHOD = 'test-shipping-method';
 
@@ -146,7 +146,7 @@ class ShippingMethodUpdaterTest extends \PHPUnit_Framework_TestCase
     {
         if (!isset($this->billingAddressMock)) {
             $this->billingAddressMock = $this->getMockBuilder(Address::class)
-                ->setMethods(['setShouldIgnoreValidation', 'getEmail'])
+                ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();
         }

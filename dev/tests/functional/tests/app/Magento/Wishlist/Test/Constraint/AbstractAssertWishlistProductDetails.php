@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,11 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
 {
+    /**
+     * @inheritdoc
+     */
+    protected $skippedFields = ['sku'];
+
     /**
      * Assert product details.
      *

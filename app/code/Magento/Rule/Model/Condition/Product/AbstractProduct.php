@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\Condition\Product;
+
+use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract Rule product condition data model
  *
- * @author Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Rule\Model\Condition\Product;
-
-/**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -80,6 +82,11 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_localeFormat;
 
     /**
+     * @var ProductCategoryList
+     */
+    private $productCategoryList;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
@@ -88,7 +95,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param ProductCategoryList|null $categoryList
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -99,7 +109,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = []
+        array $data = [],
+        ProductCategoryList $categoryList = null
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
@@ -108,6 +119,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
         $this->_localeFormat = $localeFormat;
+        $this->productCategoryList = $categoryList ?: ObjectManager::getInstance()->get(ProductCategoryList::class);
         parent::__construct($context, $data);
     }
 
@@ -125,6 +137,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
              */
             $this->_defaultOperatorInputByType['category'] = ['==', '!=', '{}', '!{}', '()', '!()'];
             $this->_arrayInputTypes[] = 'category';
+            $this->_defaultOperatorInputByType['sku'] = ['==', '!=', '{}', '!{}', '()', '!()'];
         }
         return $this->_defaultOperatorInputByType;
     }
@@ -229,7 +242,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 } else {
                     $addEmptyOption = true;
                 }
-                $selectOptions = $attributeObject->getSource()->getAllOptions($addEmptyOption);
+                $selectOptions = $this->removeTagsFromLabel(
+                    $attributeObject->getSource()->getAllOptions($addEmptyOption)
+                );
             }
         }
 
@@ -367,6 +382,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         }
         if ($this->getAttributeObject()->getAttributeCode() == 'category_ids') {
             return 'category';
+        }
+        if ($this->getAttributeObject()->getAttributeCode() == 'sku') {
+            return 'sku';
         }
         switch ($this->getAttributeObject()->getFrontendInput()) {
             case 'select':
@@ -520,7 +538,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            $productId = (int)$model->getEntityId();
+            return $this->validateAttribute($this->productCategoryList->getCategoryIds($productId));
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
                 return false;
@@ -591,7 +610,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                     $this->getValueParsed()
                 )->__toString()
             );
+        } elseif ($this->getAttribute() === 'sku') {
+            $value = $this->getData('value');
+            $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+            $this->setValueParsed($value);
         }
+
         return parent::getBindArgumentValue();
     }
 
@@ -689,7 +713,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getOperatorForValidate()
     {
         $operator = $this->getOperator();
-        if ($this->getInputType() == 'category') {
+        if (in_array($this->getInputType(), ['category', 'sku'])) {
             if ($operator == '==') {
                 $operator = '{}';
             } elseif ($operator == '!=') {
@@ -720,5 +744,22 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attribute = $this->getAttributeObject();
 
         return 'at_' . $attribute->getAttributeCode();
+    }
+
+    /**
+     * Remove html tags from attribute labels.
+     *
+     * @param array $selectOptions
+     * @return array
+     */
+    private function removeTagsFromLabel(array $selectOptions)
+    {
+        foreach ($selectOptions as &$option) {
+            if (isset($option['label'])) {
+                $option['label'] = strip_tags($option['label']);
+            }
+        }
+
+        return $selectOptions;
     }
 }

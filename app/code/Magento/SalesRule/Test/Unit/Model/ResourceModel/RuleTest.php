@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -119,13 +119,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = $this->getMock(
-            \Magento\Framework\DataObject::class,
-            ['getData'],
-            [],
-            '',
-            false
-        );
+        $associatedEntitiesMap = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
         $associatedEntitiesMap->expects($this->once())
             ->method('getData')
             ->willReturn(
@@ -185,5 +179,63 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
+    }
+
+    /**
+     * Check that can parse JSON string correctly.
+     *
+     * @param string $testString
+     * @param array $expects
+     * @dataProvider dataProviderForProductAttributes
+     */
+    public function testGetProductAttributes($testString, $expects)
+    {
+        $result = $this->model->getProductAttributes($testString);
+        $this->assertEquals($expects, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForProductAttributes()
+    {
+        return [
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                [
+                    'some_attribute',
+                ]
+            ],
+            [
+                json_encode([
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute',
+                    ],
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute2',
+                    ],
+                ]),
+                [
+                    'some_attribute',
+                    'some_attribute2',
+                ]
+            ],
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                []
+            ],
+            [
+                json_encode([]),
+                []
+            ],
+        ];
     }
 }

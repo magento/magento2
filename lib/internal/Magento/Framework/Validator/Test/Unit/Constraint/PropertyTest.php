@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit\Constraint;
 /**
  * Test case for \Magento\Framework\Validator\Constraint\Property
  */
-class PropertyTest extends \PHPUnit_Framework_TestCase
+class PropertyTest extends \PHPUnit\Framework\TestCase
 {
     const PROPERTY_NAME = 'test';
 
@@ -19,7 +19,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_validatorMock;
 
@@ -28,7 +28,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_validatorMock = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $this->_constraint = new \Magento\Framework\Validator\Constraint\Property(
             $this->_validatorMock,
             self::PROPERTY_NAME

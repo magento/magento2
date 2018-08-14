@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/* @var $block \Magento\Customer\Block\CustomerScopeData */
+?>
+<script type="text/x-magento-init">
+<?php
+    /* @noEscape */
+    echo \Magento\Framework\Serialize\JsonConverter::convert([
+        '*' => ['Magento_Customer/js/invalidation-processor' => [
+            'invalidationRules' => [
+                'website-rule' => [
+                    'Magento_Customer/js/invalidation-rules/website-rule' => [
+                        'scopeConfig' => [
+                            'websiteId' => $block->getWebsiteId(),
+                        ]
+                    ]
+                ]
+            ]
+        ]],
+    ]);
+    ?>
+</script>

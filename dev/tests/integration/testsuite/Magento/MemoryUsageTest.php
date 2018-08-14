@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento;
 
-class MemoryUsageTest extends \PHPUnit_Framework_TestCase
+class MemoryUsageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Number of application reinitialization iterations to be conducted by tests

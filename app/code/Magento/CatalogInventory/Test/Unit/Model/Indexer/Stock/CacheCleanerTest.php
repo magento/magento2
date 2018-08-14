@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
 
-class CacheCleanerTest extends \PHPUnit_Framework_TestCase
+class CacheCleanerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CacheCleaner
@@ -73,7 +73,7 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
                 'stockConfiguration' => $this->stockConfigurationMock,
                 'cacheContext' => $this->cacheContextMock,
-                'eventManager' => $this->eventManagerMock,
+                'eventManager' => $this->eventManagerMock
             ]
         );
     }

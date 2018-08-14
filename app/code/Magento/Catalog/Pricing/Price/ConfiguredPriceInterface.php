@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,11 @@ interface ConfiguredPriceInterface
      * Price type configured
      */
     const CONFIGURED_PRICE_CODE = 'configured_price';
+
+    /**
+     * Regular price type configured
+     */
+    const CONFIGURED_REGULAR_PRICE_CODE = 'configured_regular_price';
 
     /**
      * @param ItemInterface $item

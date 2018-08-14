@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class AuthTest
  */
-class AuthTest extends \PHPUnit_Framework_TestCase
+class AuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth
@@ -34,15 +34,13 @@ class AuthTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->_credentialStorage = $this->getMock(\Magento\Backend\Model\Auth\Credential\StorageInterface::class);
-        $this->_modelFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\ModelFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_credentialStorage = $this->getMockBuilder(
+            \Magento\Backend\Model\Auth\Credential\StorageInterface::class
+        )
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+        $this->_modelFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\ModelFactory::class);
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Backend\Model\Auth::class,

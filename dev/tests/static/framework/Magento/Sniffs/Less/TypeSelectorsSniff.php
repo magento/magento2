@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class TypeSelectorsSniff
@@ -21,7 +21,7 @@ use PHP_CodeSniffer_Sniff;
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selectors-naming
  *
  */
-class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
+class TypeSelectorsSniff implements Sniff
 {
     /**
      * Tags that are not allowed as type selector
@@ -66,7 +66,7 @@ class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 

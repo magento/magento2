@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Category;
 
-class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
+class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -49,13 +49,7 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\Block\Template\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
 
         $this->requestMock = $this->getMockBuilder(
             \Magento\Framework\App\RequestInterface::class)
@@ -105,7 +99,6 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 23;
         $saveUrl = 'save URL';
         $params = ['_current' => false, '_query' => false, 'store' => $storeId];
-
 
         $this->requestMock->expects($this->once())->method('getParam')->with('store')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())

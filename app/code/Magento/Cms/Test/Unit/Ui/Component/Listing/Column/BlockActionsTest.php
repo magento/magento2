@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class
  */
-class BlockActionsTest extends \PHPUnit_Framework_TestCase
+class BlockActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockActions
@@ -37,16 +37,16 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->getMock(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::once())
+        $context->expects(static::never())
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->getMock(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
                     ]
                 ],

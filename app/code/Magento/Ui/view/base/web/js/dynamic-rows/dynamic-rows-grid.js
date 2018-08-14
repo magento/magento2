@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     './dynamic-rows'
@@ -106,9 +109,8 @@ define([
          * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
-            this._super();
-
             this.updateInsertData(recordId);
+            this._super();
         },
 
         /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,6 @@ class AfterEntitySave implements ObserverInterface
     {
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
-            if (method_exists($entity->getResource(), 'loadAllAttributes')) {
-                $entity->getResource()->loadAllAttributes();
-            }
             $entity->getResource()->afterSave($entity);
             $entity->afterSave();
             $entity->getResource()->addCommitCallback([$entity, 'afterCommitCallback']);

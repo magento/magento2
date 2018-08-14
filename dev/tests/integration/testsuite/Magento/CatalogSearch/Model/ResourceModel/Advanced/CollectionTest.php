@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection.
  * @magentoDbIsolation disabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection

@@ -1,21 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Engine implements EngineInterface
 {
+    /**
+     * @deprecated
+     * @see EngineInterface::FIELD_PREFIX
+     */
     const ATTRIBUTE_PREFIX = 'attr_';
 
     /**
      * Scope identifier
+     *
+     * @deprecated
+     * @see EngineInterface::SCOPE_IDENTIFIER
      */
     const SCOPE_FIELD_NAME = 'scope';
 
@@ -66,6 +71,13 @@ class Engine implements EngineInterface
     }
 
     /**
+     * Is attribute filterable as term cache
+     *
+     * @var array
+     */
+    private $termFilterableAttributeAttributeCache = [];
+
+    /**
      * Is Attribute Filterable as Term
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
@@ -73,10 +85,16 @@ class Engine implements EngineInterface
      */
     private function isTermFilterableAttribute($attribute)
     {
-        return ($attribute->getIsVisibleInAdvancedSearch()
-            || $attribute->getIsFilterable()
-            || $attribute->getIsFilterableInSearch())
-        && in_array($attribute->getFrontendInput(), ['select', 'multiselect']);
+        $attributeId = $attribute->getAttributeId();
+        if (!isset($this->termFilterableAttributeAttributeCache[$attributeId])) {
+            $this->termFilterableAttributeAttributeCache[$attributeId] =
+                in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+                && ($attribute->getIsVisibleInAdvancedSearch()
+                    || $attribute->getIsFilterable()
+                    || $attribute->getIsFilterableInSearch());
+        }
+
+        return $this->termFilterableAttributeAttributeCache[$attributeId];
     }
 
     /**
@@ -102,7 +120,7 @@ class Engine implements EngineInterface
      *
      * @param array $index
      * @param string $separator
-     * @return string
+     * @return array
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {

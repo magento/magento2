@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model\SearchEngine\Config;
@@ -9,6 +9,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides search engine configuration
+ * @api
+ * @since 100.1.0
  */
 class Data extends \Magento\Framework\Config\Data
 {

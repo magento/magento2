@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,6 +23,7 @@ class Version extends Block
      */
     public function getVersion()
     {
-        return $this->_rootElement->find($this->backendVersion, Locator::SELECTOR_CLASS_NAME)->getText();
+        $currVer = $this->_rootElement->find($this->backendVersion, Locator::SELECTOR_CLASS_NAME)->getText();
+        return str_replace('Magento ver.', '', $currVer);
     }
 }

@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 
-
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 
-class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
+class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  GeneratorResolver */
     private $resolver;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Class FlatTableBuilderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
+class FlatTableBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit_Framework_MockObject_MockObject

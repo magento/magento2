@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -52,12 +52,12 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         if (($productId && !$product->getEntityId())) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('This product doesn\'t exist.'));
+            $this->messageManager->addErrorMessage(__('This product doesn\'t exist.'));
             return $resultRedirect->setPath('catalog/*/');
-        } else if ($productId === 0) {
+        } elseif ($productId === 0) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('Invalid product id. Should be numeric value greater than 0'));
+            $this->messageManager->addErrorMessage(__('Invalid product id. Should be numeric value greater than 0'));
             return $resultRedirect->setPath('catalog/*/');
         }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,10 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 use Magento\Backend\Block\Widget;
 use Magento\Framework\App\TemplateTypesInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Edit extends Widget
 {
     /**
@@ -65,12 +69,6 @@ class Edit extends Widget
      */
     protected function _prepareLayout()
     {
-        // Load Wysiwyg on demand and Prepare layout
-//        $block = $this->getLayout()->getBlock('head');
-//        if ($this->_wysiwygConfig->isEnabled() && $block) {
-//            $block->setCanLoadTinyMce(true);
-//        }
-
         $this->getToolbar()->addChild(
             'back_button',
             \Magento\Backend\Block\Widget\Button::class,
@@ -214,7 +212,7 @@ class Edit extends Widget
     }
 
     /**
-     * Return return template name for JS
+     * Return template name for JS
      *
      * @return string
      */

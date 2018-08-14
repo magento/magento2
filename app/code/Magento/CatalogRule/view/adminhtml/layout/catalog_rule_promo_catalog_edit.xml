@@ -1,27 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <referenceBlock name="catalog_rule_form">
-                <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions" name="promo_catalog_edit_tab_conditions">
-                    <arguments>
-                        <argument name="config" xsi:type="array">
-                            <item name="label" xsi:type="string" translate="true">Conditions</item>
-                            <item name="collapsible" xsi:type="boolean">true</item>
-                            <item name="opened" xsi:type="boolean">false</item>
-                            <item name="sortOrder" xsi:type="number">20</item>
-                            <item name="canShow" xsi:type="boolean">true</item>
-                            <item name="componentType" xsi:type="string">fieldset</item>
-                        </argument>
-                    </arguments>
-                </block>
-            </referenceBlock>
             <uiComponent name="catalog_rule_form"/>
         </referenceContainer>
     </body>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,11 +12,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Web API Config Model.
+ * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
- * This is a parent class for storing information about service configuration.
+ * @api
+ * @since 100.0.2
  */
-class Config
+class Config implements ConfigInterface
 {
     const CACHE_ID = 'webapi_config';
 
@@ -65,9 +66,7 @@ class Config
     }
 
     /**
-     * Return services loaded from cache if enabled or from files merged previously
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getServices()
     {

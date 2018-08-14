@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -11,6 +11,7 @@
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="qty" xsi:type="string">2</data>
+            <data name="toUpdate" xsi:type="boolean">false</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
@@ -61,6 +62,15 @@
             <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="qty" xsi:type="string">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
+        </variation>
+
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation9">
+            <data name="products/0" xsi:type="string">bundleProduct::default_with_one_simple_product_and_custom_option</data>
+            <data name="qty" xsi:type="string">1</data>
+            <data name="toConfigure" xsi:type="boolean">true</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProceedToCheckoutButton" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
     </testCase>

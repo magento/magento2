@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria\CollectionProcessor;
@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class FilterProcessorTest extends \PHPUnit_Framework_TestCase
+class FilterProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return model
@@ -156,6 +156,7 @@ class FilterProcessorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \stdClass|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
         $customFilterMock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['apply'])
             ->getMock();
 
         $customFilterField = 'customFilterField';

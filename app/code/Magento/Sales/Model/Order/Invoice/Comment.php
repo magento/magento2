@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Invoice;
@@ -9,10 +9,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
-/**
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment getResource()
- */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
     /**
@@ -218,5 +214,6 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

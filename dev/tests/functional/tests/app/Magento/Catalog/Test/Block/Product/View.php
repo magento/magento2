@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
  * Product view block on the product page.
@@ -43,6 +43,13 @@ class View extends AbstractConfigureBlock
     protected $addToCart = '.tocart';
 
     /**
+     * Locator for "Update Cart" button.
+     *
+     * @var string
+     */
+    protected $updateCart = '#product-updatecart-button';
+
+    /**
      * Quantity input id.
      *
      * @var string
@@ -68,7 +75,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+    protected $inContextPaypalCheckout = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
      * Product name element.
@@ -209,12 +216,57 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * @var string
+     */
+    private $productVideo = '.product-video';
+
+    /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
+     *
+     * @param FixtureInterface|null $product
      *
      * @return Price
      */
-    public function getPriceBlock()
+    public function getPriceBlock(FixtureInterface $product = null)
     {
+        $typeId = null;
+
+        if ($product) {
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        }
+
+        if ($this->hasRender($typeId)) {
+            return $this->callRender($typeId, 'getPriceBlock');
+        }
+
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
@@ -270,13 +322,23 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click link.
+     * Click "Add to Cart" button.
      *
      * @return void
      */
     public function clickAddToCart()
     {
-        $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->addToCart)->click();
+    }
+
+    /**
+     * Click "Update Cart" button.
+     *
+     * @return void
+     */
+    public function clickUpdateCart()
+    {
+        $this->_rootElement->find($this->updateCart)->click();
     }
 
     /**
@@ -337,14 +399,16 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     * 
+     *
      * @return string
      */
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
+        $this->getMiniCartBlock()->waitInit();
         $this->getMiniCartBlock()->openMiniCart();
         $this->getMiniCartBlock()->clickBraintreePaypalButton();
+
         return $currentWindow;
     }
 
@@ -518,7 +582,10 @@ class View extends AbstractConfigureBlock
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->ajaxLoading);
+        try {
+            $this->waitForElementNotVisible($this->ajaxLoading);
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -615,6 +682,19 @@ class View extends AbstractConfigureBlock
      */
     public function isVideoVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->_rootElement->find($this->videoContainer)->isVisible();
+    }
+
+    /**
+     * Check definite video data is presented on product page
+     *
+     * @param string $videoData
+     * @return bool
+     */
+    public function checkVideoDataPresence($videoData)
+    {
+        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
+        return $this->_rootElement->find($dataVideoSelector)->isPresent();
     }
 }

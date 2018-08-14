@@ -1,18 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * View configuration files handler
  */
 namespace Magento\Framework\Config;
 
 /**
- * Class View
+ * View configuration files handler
  *
- * @property DesignResolverInterface $_fileResolver
+ * @api
  */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -75,7 +71,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getVars($module)
     {
         $this->initData();
-        return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
+        return $this->data['vars'][$module] ?? [];
     }
 
     /**
@@ -114,7 +110,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaEntities($module, $mediaType)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
+        return $this->data['media'][$module][$mediaType] ?? [];
     }
 
     /**
@@ -128,19 +124,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType][$mediaId])
-            ? $this->data['media'][$module][$mediaType][$mediaId]
-            : [];
-    }
-
-    /**
-     * Return copy of DOM
-     *
-     * @return \Magento\Framework\Config\Dom
-     */
-    public function getDomConfigCopy()
-    {
-        return clone $this->_getDomConfigModel();
+        return $this->data['media'][$module][$mediaType][$mediaId] ?? [];
     }
 
     /**
@@ -152,7 +136,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     {
         $idAttributes = [
             '/view/vars' => 'module',
-            '/view/vars/var' => 'name',
+            '/view/vars/(var/)*var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
         foreach ($this->xpath as $attribute) {
@@ -177,7 +161,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedFiles()
     {
         $items = $this->getItems();
-        return isset($items['file']) ? $items['file'] : [];
+        return $items['file'] ?? [];
     }
 
     /**
@@ -188,7 +172,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedDir()
     {
         $items = $this->getItems();
-        return isset($items['directory']) ? $items['directory'] : [];
+        return $items['directory'] ?? [];
     }
 
     /**
@@ -199,7 +183,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected function getItems()
     {
         $this->initData();
-        return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+        return $this->data['exclude'] ?? [];
     }
 
     /**
@@ -216,6 +200,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function read($scope = null)
     {

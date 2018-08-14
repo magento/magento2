@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Account;
@@ -8,6 +8,10 @@ namespace Magento\Checkout\Controller\Account;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @deprecated
+ * @see DelegateCreate
+ */
 class Create extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -153,7 +153,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
-                        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+                        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }

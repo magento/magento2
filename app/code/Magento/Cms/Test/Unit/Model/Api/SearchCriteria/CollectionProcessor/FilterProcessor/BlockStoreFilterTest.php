@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
 
 use Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\BlockStoreFilter;
 
-class BlockStoreFilterTest extends \PHPUnit_Framework_TestCase
+class BlockStoreFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockStoreFilter

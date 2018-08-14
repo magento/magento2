@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class SpecialTest
  * @package Magento\Catalog\Model\Rss\Product
  */
-class SpecialTest extends \PHPUnit_Framework_TestCase
+class SpecialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Rss\Product\Special
@@ -40,10 +40,10 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->special = $this->objectManagerHelper->getObject(
@@ -58,7 +58,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
     public function testGetProductsCollection()
     {
         $storeId = 1;
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->will(
             $this->returnValue($store)
         );
@@ -67,7 +67,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection =
-            $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [], [], '', false);
+            $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->product->expects($this->once())->method('getResourceCollection')->will(
             $this->returnValue($productCollection)
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Rss;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @package Magento\Sales\Model\Rss
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewOrderTest extends \PHPUnit_Framework_TestCase
+class NewOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Rss\NewOrder
@@ -83,13 +83,13 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
-        $this->urlBuiler = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->timezoneInterface = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->scopeConfigInterface = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->urlBuiler = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->timezoneInterface = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->rssUrlBuilderInterface = $this->getMockBuilder(\Magento\Framework\App\Rss\UrlBuilderInterface::class)
             ->setMethods(['getUrl'])
             ->disableOriginalConstructor()->getMock();
@@ -145,13 +145,7 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
 
         $this->eventManager->expects($this->once())->method('dispatch')->will($this->returnSelf());
 
-        $block = $this->getMock(
-            \Magento\Sales\Block\Adminhtml\Order\Details::class,
-            ['setOrder', 'toHtml'],
-            [],
-            '',
-            false
-        );
+        $block = $this->createPartialMock(\Magento\Sales\Block\Adminhtml\Order\Details::class, ['setOrder', 'toHtml']);
         $block->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
         $block->expects($this->once())->method('toHtml')->will($this->returnValue('Order Description'));
 

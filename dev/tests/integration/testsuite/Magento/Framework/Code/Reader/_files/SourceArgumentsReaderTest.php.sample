@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Some\Testing\Name\Space;
 
 use Imported\Name\Space\One as FirstImport;
 use Imported\Name\Space\Object;
-use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest ;
+use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest;
 
 class AnotherSimpleClass
 {

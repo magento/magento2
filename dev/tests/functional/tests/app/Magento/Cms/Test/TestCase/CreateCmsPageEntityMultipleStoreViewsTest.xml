@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityMultipleStoreViewsTest" summary="Page cache for different CMS pages on multiple store views" ticketId="MAGETWO-52467">
+        <variation name="CreateCmsPageEntityMultipleStoreViewsTestVariation1">
+            <data name="cmsPages/0/is_active" xsi:type="string">Yes</data>
+            <data name="cmsPages/0/title" xsi:type="string">NewCmsPage</data>
+            <data name="cmsPages/0/store_id/dataset" xsi:type="string">default</data>
+            <data name="cmsPages/0/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="cmsPages/0/content/widget/dataset" xsi:type="string">default</data>
+            <data name="cmsPages/0/page_layout" xsi:type="string">1 column</data>
+            <data name="cmsPages/0/identifier" xsi:type="string">identifier_%isolation%</data>
+            <data name="cmsPages/1/is_active" xsi:type="string">Yes</data>
+            <data name="cmsPages/1/title" xsi:type="string">NewCmsPage</data>
+            <data name="cmsPages/1/store_id/dataset" xsi:type="string">custom</data>
+            <data name="cmsPages/1/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="cmsPages/1/content/widget/dataset" xsi:type="string">compared_products_grid</data>
+            <data name="cmsPages/1/page_layout" xsi:type="string">1 column</data>
+            <data name="cmsPages/1/identifier" xsi:type="string">identifier_%isolation%</data>
+            <data name="cmsPages/2/is_active" xsi:type="string">Yes</data>
+            <data name="cmsPages/2/title" xsi:type="string">NewCmsPage</data>
+            <data name="cmsPages/2/store_id/dataset" xsi:type="string">custom</data>
+            <data name="cmsPages/2/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="cmsPages/2/content/widget/dataset" xsi:type="string">new_products_grid</data>
+            <data name="cmsPages/2/page_layout" xsi:type="string">1 column</data>
+            <data name="cmsPages/2/identifier" xsi:type="string">identifier_%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesOnFrontendMultipleStoreViews" />
+        </variation>
+    </testCase>
+</config>

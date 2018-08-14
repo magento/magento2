@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,12 +15,17 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $repository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
 
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -72,13 +77,17 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManagerMock = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create', 'get']
+        );
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
         $this->sourceMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Source::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -102,6 +111,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $repositoryMapMock = $this->createPartialMock(\Magento\Framework\View\Asset\File::class, ['getMap']);
+        $repositoryMapMock->method('getMap')->willReturn([]);
+        $this->objectManagerMock->method('get')
+            ->with(\Magento\Framework\View\Asset\RepositoryMap::class)
+            ->willReturn($repositoryMapMock);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->repository = (new ObjectManager($this))->getObject(Repository::class, [
             'baseUrl' => $this->urlMock,
@@ -185,8 +201,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => '',
                     'themePath' => 'Default',
-                    'localeCode' => '',
-                    'isSecure' => '',
+                    'localeCode' => ''
                 ]
             )
             ->willReturn($fallbackContextMock);
@@ -220,7 +235,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStaticViewFileContext()
     {
-        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
+        $themeMock = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -251,8 +266,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => 'area',
                     'themePath' => '',
-                    'localeCode' => 'locale',
-                    'isSecure' => '',
+                    'localeCode' => 'locale'
                 ]
             )
             ->willReturn($fallbackContextMock);
@@ -377,7 +391,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
+        $themeMock = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')

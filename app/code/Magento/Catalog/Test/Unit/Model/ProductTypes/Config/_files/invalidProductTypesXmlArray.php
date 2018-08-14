@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -23,7 +23,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name" modelInstance="123" /></config>',
         [
             "Element 'type', attribute 'modelInstance': [facet 'pattern'] The value '123' is not accepted by the" .
-            " pattern '[a-zA-Z_\\\\\\\\]+'.\nLine: 1\n",
+            " pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
             "Element 'type', attribute 'modelInstance': '123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -57,7 +57,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><priceModel instance="123123" /></type></config>',
         [
             "Element 'priceModel', attribute 'instance': [facet 'pattern'] The value '123123' is not accepted " .
-            "by the pattern '[a-zA-Z_\\\\\\\\]+'.\nLine: 1\n",
+            "by the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
             "Element 'priceModel', attribute 'instance': '123123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -66,7 +66,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><indexerModel instance="123" /></type></config>',
         [
             "Element 'indexerModel', attribute 'instance': [facet 'pattern'] The value '123' is not accepted by " .
-            "the pattern '[a-zA-Z_\\\\\\\\]+'.\nLine: 1\n",
+            "the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
             "Element 'indexerModel', attribute 'instance': '123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -83,7 +83,7 @@ return [
         '<?xml version="1.0"?><config><type name="some_name"><stockIndexerModel instance="1234"/></type></config>',
         [
             "Element 'stockIndexerModel', attribute 'instance': [facet 'pattern'] The value '1234' is not " .
-            "accepted by the pattern '[a-zA-Z_\\\\\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
             "Element 'stockIndexerModel', attribute 'instance': '1234' is not a valid value of the atomic " .
             "type 'modelName'.\nLine: 1\n"
         ],

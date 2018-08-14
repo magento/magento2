@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Block\Info;
@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * CheckmoTest contains list of test for block methods testing
  */
-class CheckmoTest extends \PHPUnit_Framework_TestCase
+class CheckmoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Info|MockObject

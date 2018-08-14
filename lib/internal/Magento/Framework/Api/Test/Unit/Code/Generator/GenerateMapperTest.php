@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 /**
  * Class MapperTest
  */
-class GenerateMapperTest extends \PHPUnit_Framework_TestCase
+class GenerateMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -20,13 +20,7 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->ioObjectMock = $this->getMock(
-            \Magento\Framework\Code\Generator\Io::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }
 
     /**
@@ -35,19 +29,18 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         require_once __DIR__ . '/Sample.php';
-        $model = $this->getMock(
-            \Magento\Framework\Api\Code\Generator\Mapper::class,
-            [
-                '_validateData'
-            ],
-            [\Magento\Framework\Api\Code\Generator\Sample::class,
-                null,
-                $this->ioObjectMock,
-                null,
-                null,
-                $this->getMock(\Magento\Framework\Filesystem\FileResolver::class)
-            ]
-        );
+        $model = $this->getMockBuilder(\Magento\Framework\Api\Code\Generator\Mapper::class)
+            ->setMethods(['_validateData'])
+            ->setConstructorArgs(
+                [\Magento\Framework\Api\Code\Generator\Sample::class,
+                    null,
+                    $this->ioObjectMock,
+                    null,
+                    null,
+                    $this->createMock(\Magento\Framework\Filesystem\FileResolver::class)
+                ]
+            )
+            ->getMock();
         $sampleMapperCode = file_get_contents(__DIR__ . '/_files/SampleMapper.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')

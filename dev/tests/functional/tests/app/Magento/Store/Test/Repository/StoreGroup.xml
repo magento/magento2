@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,7 @@
                 <item name="dataset" xsi:type="string">main_website</item>
             </field>
             <field name="name" xsi:type="string">Main Website Store</field>
+            <field name="code" xsi:type="string">main_website_store</field>
             <field name="root_category_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
@@ -23,6 +24,7 @@
                 <item name="dataset" xsi:type="string">main_website</item>
             </field>
             <field name="name" xsi:type="string">store_name_%isolation%</field>
+            <field name="code" xsi:type="string">store_code_%isolation%</field>
             <field name="root_category_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
@@ -33,8 +35,31 @@
                 <item name="dataset" xsi:type="string">custom_website</item>
             </field>
             <field name="name" xsi:type="string">store_name_%isolation%</field>
+            <field name="code" xsi:type="string">store_code_%isolation%</field>
             <field name="root_category_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+
+        <dataset name="store_group_new_1">
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">website_new_1</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_Group_%isolation%</field>
+            <field name="code" xsi:type="string">new_store_code_group_%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+
+        <dataset name="store_group_new_2">
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">website_new_2</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_Group_2_%isolation%</field>
+            <field name="code" xsi:type="string">new_store_code_group_2_%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">root_category</item>
             </field>
         </dataset>
     </repository>

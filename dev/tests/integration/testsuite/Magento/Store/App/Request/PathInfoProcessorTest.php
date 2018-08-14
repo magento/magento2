@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Request;
@@ -9,7 +9,7 @@ use \Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Store\Model\ScopeInterface;
 use \Magento\Store\Model\Store;
 
-class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
+class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\App\Request\PathInfoProcessor

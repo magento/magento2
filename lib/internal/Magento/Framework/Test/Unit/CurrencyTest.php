@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -10,14 +10,14 @@ use Magento\Framework\Currency;
 /**
  * Test for Magento\Framework\Currency
  */
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $frontendCache = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class, [], [], '', false, false);
-        $lowLevelFrontend = $this->getMock(\Zend_Cache_Core::class, [], [], '', false, false);
+        $frontendCache = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $lowLevelFrontend = $this->createMock(\Zend_Cache_Core::class);
         /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject $appCache */
-        $appCache = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false, false);
+        $appCache = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
         $appCache->expects($this->once())
             ->method('getFrontend')

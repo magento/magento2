@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
 use Magento\SalesRule\Model\RegistryConstants;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DeleteButtonTest extends \PHPUnit_Framework_TestCase
+class DeleteButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\DeleteButton
@@ -27,9 +27,9 @@ class DeleteButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $contextMock = $this->getMock(\Magento\Backend\Block\Widget\Context::class, [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 

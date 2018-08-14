@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Observer;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class AddDirtyRulesNoticeTest
  */
-class AddDirtyRulesNoticeTest extends \PHPUnit_Framework_TestCase
+class AddDirtyRulesNoticeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Observer\AddDirtyRulesNotice
@@ -49,7 +49,7 @@ class AddDirtyRulesNoticeTest extends \PHPUnit_Framework_TestCase
         $eventObserverMock->expects($this->at(0))->method('getData')->with('dirty_rules')->willReturn($flagMock);
         $flagMock->expects($this->once())->method('getState')->willReturn(1);
         $eventObserverMock->expects($this->at(1))->method('getData')->with('message')->willReturn($message);
-        $this->messageManagerMock->expects($this->once())->method('addNotice')->with($message);
+        $this->messageManagerMock->expects($this->once())->method('addNoticeMessage')->with($message);
         $this->observer->execute($eventObserverMock);
     }
 }

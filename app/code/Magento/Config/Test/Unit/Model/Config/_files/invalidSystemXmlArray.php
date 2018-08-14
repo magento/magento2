@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -63,7 +63,7 @@ return [
             "Element 'config_path': [facet 'minLength'] The value has a length of '2'; this underruns " .
             "the allowed minimum length of '5'.\nLine: 1\n",
             "Element 'config_path': [facet 'pattern'] The value 'co' is not " .
-            "accepted by the pattern '[a-zA-Z0-9_\\\\\\\\]+/[a-zA-Z0-9_\\\\\\\\]+/[a-zA-Z0-9_\\\\\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+'.\nLine: 1\n",
             "Element 'config_path': 'co' is " . "not a valid value of the atomic type 'typeConfigPath'.\nLine: 1\n"
         ],
     ],
@@ -76,7 +76,7 @@ return [
             "Element 'if_module_enabled': [facet 'minLength'] The value has a length of '3'; this underruns the " .
             "allowed minimum length of '5'.\nLine: 1\n",
             "Element 'if_module_enabled': [facet 'pattern'] The value 'Som' is not " .
-            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}[_\\\\\\\\][A-Z]+[A-Z0-9a-z]{1,}'.\nLine: 1\n",
+            "accepted by the pattern '[A-Z]+[a-zA-Z0-9]{1,}[_\\\\][A-Z]+[A-Z0-9a-z]{1,}'.\nLine: 1\n",
             "Element 'if_module_enabled': 'Som' " . "is not a valid value of the atomic type 'typeModule'.\nLine: 1\n"
         ],
     ],

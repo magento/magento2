@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductDeleted;
 /**
  * Class ReportProductDeletedTest
  */
-class ReportProductDeletedTest extends \PHPUnit_Framework_TestCase
+class ReportProductDeletedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportProductDeleted

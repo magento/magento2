@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model\Item;
@@ -12,6 +12,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 /**
  * Item option model
  * @method int getProductId()
+ *
+ * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface

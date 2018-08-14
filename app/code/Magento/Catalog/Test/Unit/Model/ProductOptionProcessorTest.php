@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
+class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductOptionProcessor
@@ -46,7 +46,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods([
-                'getOptions',
+                'getOptions', 'addData',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -190,6 +190,8 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey($expected, $result);
             $this->assertTrue(is_array($result));
             $this->assertSame($this->customOption, $result['custom_options'][0]);
+        } else {
+            $this->assertEmpty($result);
         }
     }
 

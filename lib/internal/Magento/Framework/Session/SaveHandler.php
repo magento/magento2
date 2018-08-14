@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -133,7 +133,7 @@ class SaveHandler implements SaveHandlerInterface
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated
+     * @deprecated 100.0.8
      */
     private function getConfig()
     {

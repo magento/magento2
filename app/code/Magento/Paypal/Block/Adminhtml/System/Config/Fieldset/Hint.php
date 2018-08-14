@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
@@ -17,7 +17,7 @@ class Hint extends Template implements RendererInterface
 {
     /**
      * @var string
-     * @deprecated
+     * @deprecated 100.1.2
      */
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 

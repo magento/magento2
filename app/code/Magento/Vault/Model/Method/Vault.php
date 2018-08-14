@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
@@ -27,8 +27,11 @@ use Magento\Vault\Model\VaultPaymentInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.1.0
  */
-final class Vault implements VaultPaymentInterface
+class Vault implements VaultPaymentInterface
 {
     /**
      * @deprecated
@@ -165,6 +168,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getCode()
     {
@@ -173,6 +177,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getFormBlockType()
     {
@@ -181,6 +186,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getTitle()
     {
@@ -189,6 +195,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function setStore($storeId)
     {
@@ -197,6 +204,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getStore()
     {
@@ -205,6 +213,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canOrder()
     {
@@ -213,6 +222,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canAuthorize()
     {
@@ -222,6 +232,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canCapture()
     {
@@ -231,6 +242,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canCapturePartial()
     {
@@ -239,6 +251,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canCaptureOnce()
     {
@@ -247,6 +260,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canRefund()
     {
@@ -255,6 +269,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canRefundPartialPerInvoice()
     {
@@ -263,6 +278,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canVoid()
     {
@@ -271,6 +287,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canUseInternal()
     {
@@ -284,6 +301,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canUseCheckout()
     {
@@ -292,6 +310,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canEdit()
     {
@@ -300,6 +319,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canFetchTransactionInfo()
     {
@@ -308,6 +328,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
@@ -316,6 +337,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function isGateway()
     {
@@ -324,6 +346,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function isOffline()
     {
@@ -332,6 +355,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function isInitializeNeeded()
     {
@@ -340,6 +364,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canUseForCountry($country)
     {
@@ -348,6 +373,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -356,6 +382,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getInfoBlockType()
     {
@@ -364,6 +391,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getInfoInstance()
     {
@@ -372,6 +400,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -380,6 +409,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function validate()
     {
@@ -388,6 +418,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -396,6 +427,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -425,6 +457,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -497,6 +530,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -505,6 +539,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -513,6 +548,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -521,6 +557,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function canReviewPayment()
     {
@@ -529,6 +566,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -537,6 +575,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -545,6 +584,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -553,6 +593,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
@@ -579,6 +620,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -588,6 +630,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function isActive($storeId = null)
     {
@@ -597,6 +640,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -605,6 +649,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getConfigPaymentAction()
     {
@@ -613,6 +658,7 @@ final class Vault implements VaultPaymentInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getProviderCode()
     {

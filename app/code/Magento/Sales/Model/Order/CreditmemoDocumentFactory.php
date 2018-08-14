@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
  * Class CreditmemoDocumentFactory
  *
  * @api
+ * @since 100.1.3
  */
 class CreditmemoDocumentFactory
 {
@@ -99,7 +100,6 @@ class CreditmemoDocumentFactory
             ->setIsCustomerNotified($appendComment);
         $creditmemo->setComments([$comment]);
         return $creditmemo;
-
     }
 
     /**
@@ -110,6 +110,7 @@ class CreditmemoDocumentFactory
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 100.1.3
      */
     public function createFromOrder(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -133,6 +134,7 @@ class CreditmemoDocumentFactory
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 100.1.3
      */
     public function createFromInvoice(
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,

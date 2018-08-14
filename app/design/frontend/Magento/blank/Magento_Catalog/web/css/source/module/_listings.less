@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -31,15 +31,15 @@
         &-items {
             &:extend(.abs-reset-list all);
         }
-        
+
         &-item {
             vertical-align: top;
-            
+
             .products-grid & {
                 display: inline-block;
                 width: 100%/2;
             }
-            
+
             &:extend(.abs-add-box-sizing all);
 
             &-name {
@@ -56,7 +56,7 @@
             &-info {
                 max-width: 100%;
                 width: 152px;
-                
+
                 .page-products & {
                     width: 240px;
                 }
@@ -64,30 +64,34 @@
 
             &-actions {
                 display: none;
-                
+
                 .actions-secondary {
+                    > button.action {
+                        .lib-button-reset();
+                    }
+
                     > .action {
                         &:extend(.abs-actions-addto-gridlist all);
                         &:before {
                             margin: 0;
                         }
-                        
+
                         span {
                             &:extend(.abs-visually-hidden all);
                         }
                     }
                 }
             }
-            
+
             &-description {
                 margin: @indent__m 0;
             }
-            
+
             .product-reviews-summary {
                 .rating-summary {
                     margin: 0 4px 0 0;
                 }
-                
+
                 .reviews-actions {
                     font-size: @font-size__s;
                     margin-top: 5px;
@@ -97,13 +101,13 @@
 
             .price-box {
                 margin: @indent__s 0 @indent__m;
-                
+
                 .price {
                     .lib-font-size(14);
                     font-weight: @font-weight__bold;
                     white-space: nowrap;
                 }
-                
+
                 .price-label {
                     font-size: @font-size__s;
 
@@ -119,11 +123,11 @@
                     .lib-font-size(14);
                     font-weight: @font-weight__bold;
                 }
-                
+
                 .price-wrapper {
                     display: inline-block;
                 }
-                
+
                 .price-including-tax + .price-excluding-tax {
                     display: block;
                 }
@@ -139,6 +143,12 @@
                 }
             }
 
+            .regular-price {
+                .price-label {
+                    display: none;
+                }
+            }
+
             .minimal-price {
                 .price-container {
                     display: block;
@@ -147,12 +157,12 @@
 
             .minimal-price-link {
                 margin-top: 5px;
-                
+
                 .price-label {
                     .lib-css(color, @link__color);
                     .lib-font-size(14);
                 }
-                
+
                 .price {
                     font-weight: @font-weight__regular;
                 }
@@ -187,12 +197,12 @@
             &-items {
                 margin-left: -@indent__base;
             }
-            
+
             &-item {
                 padding-left: @indent__base;
             }
         }
-        
+
     }
 
     .price-container {
@@ -218,11 +228,11 @@
             &:before {
                 content: '('attr(data-label) ': ';
             }
-            
+
             &:after {
                 content: ')';
             }
-            
+
             + .price-excluding-tax {
                 &:before {
                     content: attr(data-label) ': ';
@@ -240,21 +250,21 @@
                 &-info {
                     display: table-row;
                 }
-                
+
                 &-photo {
                     display: table-cell;
                     padding: 0 @indent__l @indent__l 0;
                     vertical-align: top;
                     width: 1%;
                 }
-                
+
                 &-details {
                     display: table-cell;
                     vertical-align: top;
                 }
             }
         }
-        
+
         .product-image-wrapper {
             &:extend(.abs-reset-image-wrapper all);
         }
@@ -301,7 +311,7 @@
                         white-space: normal;
                     }
                 }
-                
+
                 .actions-primary {
                     display: table-cell;
                 }
@@ -383,7 +393,7 @@
             .product-items {
                 margin: 0;
             }
-            
+
             .product-item {
                 margin-left: calc(~'(100% - 4 * 23.233%) / 3');
                 padding: 0;

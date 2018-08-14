@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Product;
@@ -12,7 +12,7 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductActionIndexerPlugin

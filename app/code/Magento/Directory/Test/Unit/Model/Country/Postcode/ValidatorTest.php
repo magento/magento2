@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -19,13 +19,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->postcodesConfigMock = $this->getMock(
-            \Magento\Directory\Model\Country\Postcode\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->postcodesConfigMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config::class);
         $postCodes = [
             'US' => [
                 'pattern_1' => ['pattern' => '^[0-9]{5}\-[0-9]{4}$'],

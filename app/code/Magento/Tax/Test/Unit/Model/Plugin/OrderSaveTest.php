@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Plugin;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OrderSaveTest extends \PHPUnit_Framework_TestCase
+class OrderSaveTest extends \PHPUnit\Framework\TestCase
 {
     const ORDERID = 123;
     const ITEMID = 151;
@@ -63,6 +63,9 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderMock()
     {
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -80,6 +83,9 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         return $orderMock;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionInterface::class)
@@ -95,10 +101,12 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         return $orderExtensionAttributeMock;
     }
 
+    /**
+     * @param $expectedTaxes
+     */
     protected function verifyOrderTaxes($expectedTaxes)
     {
         $index = 0;
-        $orderTaxes = [];
         foreach ($expectedTaxes as $orderTaxId => $orderTaxData) {
             $orderTaxMock = $this->getMockBuilder(\Magento\Tax\Model\Sales\Order\Tax::class)
                 ->disableOriginalConstructor()
@@ -122,15 +130,16 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             $this->orderTaxFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($orderTaxMock);
-            $orderTaxes[] = $orderTaxMock;
             $index++;
         }
     }
 
+    /**
+     * @param $expectedItemTaxes
+     */
     public function verifyItemTaxes($expectedItemTaxes)
     {
         $index = 0;
-        $itemTaxes = [];
         foreach ($expectedItemTaxes as $itemTax) {
             $itemTaxMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Tax\Item::class)
                 ->disableOriginalConstructor()
@@ -150,7 +159,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             $this->taxItemFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($itemTaxMock);
-            $itemTaxes[] = $itemTaxMock;
             $index++;
         }
     }

@@ -2,7 +2,7 @@
 /**
  * Rule for searching php file dependency
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
@@ -89,7 +89,7 @@ class PhpRule implements RuleInterface
         }
 
         $pattern = '~\b(?<class>(?<module>(' . implode(
-            '_|',
+            '[_\\\\]|',
             Files::init()->getNamespaces()
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
@@ -195,14 +195,13 @@ class PhpRule implements RuleInterface
             : null;
         if ($subject === $dependency) {
             return true;
-        } else if ($subject) {
+        } elseif ($subject) {
             $subjectModule = substr($subject, 0, strpos($subject, '\\', 9)); // (strlen('Magento\\') + 1) === 9
             return strpos($dependency, $subjectModule) === 0;
         } else {
             return false;
         }
     }
-
 
     /**
      * Check get URL method

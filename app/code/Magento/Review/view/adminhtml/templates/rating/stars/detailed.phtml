@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,14 +12,14 @@
         <?php foreach ($block->getRating() as $_rating): ?>
         <?php if ($_rating->getPercent()): ?>
             <div class="ratings">
-               <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>
+               <?= $block->escapeHtml($_rating->getRatingCode()) ?>
                 <div class="rating-box">
-                    <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                    <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getPercent()) ?>%;"></div>
                 </div>
             </div>
         <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <?php echo $block->escapeHtml(__("Rating isn't Available")) ?>
+    <?= $block->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\CopyConstructor;
 
-class UpSellTest extends \PHPUnit_Framework_TestCase
+class UpSellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\CopyConstructor\UpSell
@@ -36,22 +36,16 @@ class UpSellTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\Catalog\Model\Product\CopyConstructor\UpSell();
 
-        $this->_productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->_productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->_duplicateMock = $this->getMock(
+        $this->_duplicateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setUpSellLinkData', '__wakeup'],
-            [],
-            '',
-            false
+            ['setUpSellLinkData', '__wakeup']
         );
 
-        $this->_linkMock = $this->getMock(
+        $this->_linkMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Link::class,
-            ['__wakeup', 'getAttributes', 'getUpSellLinkCollection', 'useUpSellLinks'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getAttributes', 'getUpSellLinkCollection', 'useUpSellLinks']
         );
 
         $this->_productMock->expects(
@@ -74,12 +68,9 @@ class UpSellTest extends \PHPUnit_Framework_TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
-        $productLinkMock = $this->getMock(
+        $productLinkMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link::class,
-            ['__wakeup', 'getLinkedProductId', 'toArray'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getLinkedProductId', 'toArray']
         );
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));

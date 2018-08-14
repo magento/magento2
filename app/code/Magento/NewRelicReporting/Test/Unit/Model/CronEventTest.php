@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model;
@@ -11,7 +11,7 @@ use \Magento\Framework\HTTP\ZendClient;
 /**
  * Class CronEventTest
  */
-class CronEventTest extends \PHPUnit_Framework_TestCase
+class CronEventTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\NewRelicReporting\Model\CronEvent
@@ -212,7 +212,7 @@ class CronEventTest extends \PHPUnit_Framework_TestCase
             ->method('getNewRelicAccountId')
             ->willReturn($accId);
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
 
         $this->model->sendRequest();
     }

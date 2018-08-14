@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -11,6 +11,7 @@ use Magento\Framework\Data\Tree\Node\Collection as NodeCollection;
 /**
  * Data tree
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tree
@@ -22,17 +23,13 @@ class Tree
      */
     protected $_nodes;
 
-    /**
-     * Enter description here...
-     *
-     */
     public function __construct()
     {
         $this->_nodes = new NodeCollection($this);
     }
 
     /**
-     * Enter description here...
+     * Get Tree.
      *
      * @return \Magento\Framework\Data\Tree
      */
@@ -42,7 +39,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Load Tree.
      *
      * @param Node $parentNode
      * @return void
@@ -53,7 +50,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Load Node by Node id.
      *
      * @param int|string $nodeId
      * @return void
@@ -176,7 +173,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Get Nodes.
      *
      * @return NodeCollection
      */
@@ -186,9 +183,9 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Get Node by id.
      *
-     * @param Node $nodeId
+     * @param string|int $nodeId
      * @return Node
      */
     public function getNodeById($nodeId)
