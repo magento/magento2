@@ -41,10 +41,13 @@
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
     </actionGroup>
 
-    <actionGroup name="DeleteCreatedProduct">
-        <fillField stepKey="searchToKeyword" selector="{{DeleteCreatedProduct.searchToKeyword}}" userInput="{{SimpleProductOne.name}}"/>
-        <click stepKey="clickSearchButton" selector="{{DeleteCreatedProduct.searchButton}}"/>
-        <wait stepKey="waitForFiltering" time="2"/>
+    <actionGroup name="DeleteCreatedProductActionGroup">
+        <conditionalClick selector="{{DeleteCreatedProduct.clearAll}}" dependentSelector="{{DeleteCreatedProduct.clearAll}}" visible="1" stepKey="clickClearAllIfThereIsAnyValue"/>
+        <click stepKey="clickFilterButton" selector="{{DeleteCreatedProduct.filterButton}}"/>
+        <waitForElementVisible selector="{{DeleteCreatedProduct.filterSKUField}}" stepKey="waitForFilterDataLoaded"/>
+        <fillField stepKey="searchProductUsingSKUField" selector="{{DeleteCreatedProduct.filterSKUField}}" userInput="{{SimpleProductOne.sku}}"/>
+        <click stepKey="clickFiltersApplyButton" selector="{{DeleteCreatedProduct.filtersApplyButton}}"/>
+        <waitForElementNotVisible selector="{{DeleteCreatedProduct.filterSKUField}}" stepKey="waitForFilterBecomeNotVisible"/>
         <click selector="{{DeleteCreatedProduct.createdProductID}}" stepKey="selectCreatedProduct"/>
         <wait stepKey="waitSelectCreatedProduct" time="2"/>
         <waitForElementVisible selector="{{DeleteCreatedProduct.actionSelectBox}}" stepKey="waitToSelectActionVisible" time="50"/>
