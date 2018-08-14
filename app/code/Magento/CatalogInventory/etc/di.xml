@@ -37,6 +37,16 @@
     </type>
     <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
         <arguments>
+            <argument name="filter" xsi:type="object">Magento\CatalogInventory\Model\FilterCustomAttribute</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\CatalogInventory\Model\FilterCustomAttribute</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\FilterCustomAttribute">
+        <arguments>
             <argument name="blackList" xsi:type="array">
                 <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
             </argument>

@@ -8,20 +8,22 @@
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
+use Magento\CatalogInventory\Model\FilterCustomAttribute as Filter;
 
 class FilterCustomAttribute
 {
     /**
-     * @var array
+     * @var Filter
      */
-    private $blackList;
+    private $filter;
 
     /**
-     * @param array $blackList
+     * @param Filter $filter
+     * @internal param Filter $customAttribute
      */
-    public function __construct(array $blackList = [])
+    public function __construct(Filter $filter)
     {
-        $this->blackList = $blackList;
+        $this->filter = $filter;
     }
 
     /**
@@ -35,11 +37,6 @@ class FilterCustomAttribute
      */
     public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes): array
     {
-        foreach ($attributes as $key => $attribute) {
-            if (in_array($attribute->getAttributeCode(), $this->blackList)) {
-                unset($attributes[$key]);
-            }
-        }
-        return $attributes;
+        return $this->filter->execute($attributes);
     }
 }

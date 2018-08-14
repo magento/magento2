@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\CatalogInventory\Model\FilterCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -347,6 +348,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
+    /**
+     * @var FilterCustomAttribute|null
+     */
+    private $filterCustomAttribute;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -385,6 +390,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      * @param \Magento\Eav\Model\Config|null $config
+     * @param FilterCustomAttribute|null $filterCustomAttribute
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -424,7 +430,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
-        \Magento\Eav\Model\Config $config = null
+        \Magento\Eav\Model\Config $config = null,
+        FilterCustomAttribute $filterCustomAttribute = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -464,6 +471,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $data
         );
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->filterCustomAttribute = $filterCustomAttribute
+            ?? ObjectManager::getInstance()->get(FilterCustomAttribute::class);
     }
 
     /**
@@ -501,10 +510,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 self::ENTITY,
                 $this
             ));
-            //TODO: HOT FIX for failed tests. If tests are green, need to encapsulate CatalogInventory/etc/di.xml
-            // "blackList" into object and use this object in Plugin and self::getCustomAttributesCodes for filter
-            $key = array_search('quantity_and_stock_status', $this->customAttributesCodes, true);
-            unset($this->customAttributesCodes[$key]);
+
+            $this->filterCustomAttribute->execute($this->customAttributesCodes);
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
         }
 
