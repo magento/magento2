@@ -40,15 +40,15 @@
             .items {
                 padding: 6px 0;
                 text-align: left;
-                > .item:last-child {
-                    span {
-                        display: inline;
-                    }
-                }
-
                 > .item {
                     span {
                         display: block;
+                    }
+
+                    &:last-child {
+                        span {
+                            display: inline;
+                        }
                     }
                 }
             }
@@ -368,12 +368,6 @@
                         display: block;
                     }
 
-                    .item:last-child {
-                        span {
-                            display: inline;
-                        }
-                    }
-
                     .item {
                         margin: 3px 0 0;
 
@@ -398,6 +392,12 @@
 
                         span {
                             display: block;
+                        }
+
+                        &:last-child {
+                            span {
+                                display: inline;
+                            }
                         }
                     }
                 }
