@@ -514,18 +514,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
-        $images = $product->getMediaGallery('images');
-        if ($images) {
-            $images = $this->determineImageRoles($product, $images);
-        }
+        $images = (array)$product->getMediaGallery('images');
+        $images = $this->determineImageRoles($product, $images);
 
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
 
-        if ($images) {
-            foreach ($images as $image) {
-                if (!isset($image['removed']) && !empty($image['types'])) {
-                    $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
-                }
+        foreach ($images as $image) {
+            if (!isset($image['removed']) && !empty($image['types'])) {
+                $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }
 
@@ -770,7 +766,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param array $images
      * @return array
      */
-    private function determineImageRoles(ProductInterface $product, array $images)
+    private function determineImageRoles(ProductInterface $product, array $images) : array
     {
         $imagesWithRoles = [];
         foreach ($images as $image) {
