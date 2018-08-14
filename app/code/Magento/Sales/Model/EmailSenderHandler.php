@@ -68,6 +68,9 @@ class EmailSenderHandler
         if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
+            $this->entityCollection->setPageSize(
+                $this->globalConfig->getValue('sales_email/general/sending_limit')
+            );
 
             /** @var \Magento\Sales\Model\AbstractModel $item */
             foreach ($this->entityCollection->getItems() as $item) {
