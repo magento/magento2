@@ -21,7 +21,7 @@ $taxCalculationData['including_tax_apply_tax_after_discount'] = [
         SetupUtil::TAX_RATE_OVERRIDES => [
             SetupUtil::TAX_RATE_TX => 10,
             SetupUtil::TAX_STORE_RATE => 10,
-            SetupUtil::TAX_RATE_SHIPPING => 10
+            SetupUtil::TAX_RATE_SHIPPING => 10,
         ],
         SetupUtil::TAX_RULE_OVERRIDES => [
             [
