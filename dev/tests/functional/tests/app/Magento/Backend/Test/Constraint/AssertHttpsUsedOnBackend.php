@@ -74,7 +74,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
     {
         $fakeUrl = str_replace(self::SCHEME_HTTPS, self::SCHEME_HTTP, $this->browser->getUrl());
         $this->browser->open($fakeUrl);
-        \PHPUnit\Framework\Assert::assertStringStartsWith(
+        \PHPUnit_Framework_Assert::assertStringStartsWith(
             self::SCHEME_HTTPS,
             $this->browser->getUrl(),
             'Merchant is not redirected to https if tries to access the Admin panel page directly via http.'
