@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3426"/>
             <group value="Downloadable"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <after>
             <!-- Delete downloadable product -->

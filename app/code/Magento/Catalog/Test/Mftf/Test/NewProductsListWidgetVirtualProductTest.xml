@@ -17,6 +17,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-122"/>
             <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
+
         </annotations>
 
         <!-- A Cms page containing the New Products Widget gets created here via extends -->

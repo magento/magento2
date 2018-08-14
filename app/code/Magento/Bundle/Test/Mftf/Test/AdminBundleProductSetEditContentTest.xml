@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3343"/>
             <group value="Bundle"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <after>
             <!-- Delete bundle product -->

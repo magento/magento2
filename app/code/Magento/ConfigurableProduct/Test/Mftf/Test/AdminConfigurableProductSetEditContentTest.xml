@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3424"/>
             <group value="ConfigurableProduct"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <after>
             <!-- Delete configurable product -->

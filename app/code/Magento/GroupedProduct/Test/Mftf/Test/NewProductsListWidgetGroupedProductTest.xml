@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-121"/>
             <group value="GroupedProduct"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>

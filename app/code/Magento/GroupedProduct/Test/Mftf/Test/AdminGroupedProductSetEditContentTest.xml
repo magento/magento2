@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3423"/>
             <group value="GroupedProduct"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <after>
             <!-- Delete grouped product -->
