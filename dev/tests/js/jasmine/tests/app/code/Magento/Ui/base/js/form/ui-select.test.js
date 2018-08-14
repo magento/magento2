@@ -9,7 +9,7 @@ define([
     'uiRegistry',
     'squire',
     'ko',
-    'jquery',
+    'jquery'
 ], function (_, registry, Squire, ko, $) {
     'use strict';
 
