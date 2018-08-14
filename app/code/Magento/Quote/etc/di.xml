@@ -104,6 +104,7 @@
                 <item name="ShippingMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule</item>
                 <item name="BillingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\BillingAddressValidationRule</item>
                 <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
+                <item name="MinimumAmountValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\MinimumAmountValidationRule</item>
             </argument>
         </arguments>
     </type>
