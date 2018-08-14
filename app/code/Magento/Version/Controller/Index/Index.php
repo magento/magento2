@@ -38,7 +38,14 @@ class Index extends Action
      */
     public function execute()
     {
-        $versionParts = explode('.', $this->productMetadata->getVersion());
+        $version = $this->productMetadata->getVersion();
+        $versionParts = explode('.', $version);
+        if ((!isset($versionParts[0]) || !isset($versionParts[1]))
+            || $this->isGitBasedInstallation($version)
+        ) {
+            return;
+        }
+            
         if (!isset($versionParts[0]) || !isset($versionParts[1])) {
             return; // Major and minor version are not set - return empty response
         }
