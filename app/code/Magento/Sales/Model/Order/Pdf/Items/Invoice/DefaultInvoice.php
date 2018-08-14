@@ -127,7 +127,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                     'feed' => 35,
                 ];
 
-                if ($option['value']) {
+                if ($option['value'] !== null) {
                     if (isset($option['print_value'])) {
                         $printValue = $option['print_value'];
                     } else {
