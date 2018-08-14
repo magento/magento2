@@ -16,6 +16,7 @@
             <item name="back" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Back</item>
             <item name="addAttribute" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Edit\Button\AddAttribute</item>
             <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Save</item>
+            <item name="showParent" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Edit\Button\ShowParent</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="config" xsi:type="array">
