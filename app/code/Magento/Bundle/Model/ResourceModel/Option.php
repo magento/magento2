@@ -97,16 +97,17 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ],
                 $conditions
             );
-        } else {
-            $data = new \Magento\Framework\DataObject();
-            $data->setOptionId($object->getId())
-                ->setStoreId($object->getStoreId())
-                ->setParentProductId($object->getParentId())
-                ->setTitle($object->getTitle());
 
-            $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());            
+            return $this;
         }
+        
+        $data = new \Magento\Framework\DataObject();
+        $data->setOptionId($object->getId())
+        ->setStoreId($object->getStoreId())
+        ->setParentProductId($object->getParentId())
+        ->setTitle($object->getTitle());
 
+        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
         return $this;
     }
 
