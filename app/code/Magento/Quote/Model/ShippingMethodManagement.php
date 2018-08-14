@@ -5,17 +5,17 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\App\ObjectManager;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 
 /**
  * Shipping method read service.
@@ -67,6 +67,11 @@ class ShippingMethodManagement implements
     private $addressFactory;
 
     /**
+     * @var QuoteAddressResource
+     */
+    private $quoteAddressResource;
+
+    /**
      * Constructs a shipping method read service object.
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -75,6 +80,7 @@ class ShippingMethodManagement implements
      * @param Quote\TotalsCollector $totalsCollector
      * @param DataObjectProcessor|null $dataProcessor
      * @param AddressInterfaceFactory|null $addressFactory
+     * @param QuoteAddressResource|null $quoteAddressResource
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -82,7 +88,8 @@ class ShippingMethodManagement implements
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         DataObjectProcessor $dataProcessor = null,
-        AddressInterfaceFactory $addressFactory = null
+        AddressInterfaceFactory $addressFactory = null,
+        QuoteAddressResource $quoteAddressResource = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
@@ -90,6 +97,8 @@ class ShippingMethodManagement implements
         $this->totalsCollector = $totalsCollector;
         $this->dataProcessor = $dataProcessor ?: ObjectManager::getInstance()->get(DataObjectProcessor::class);
         $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()->get(AddressInterfaceFactory::class);
+        $this->quoteAddressResource = $quoteAddressResource ?: ObjectManager::getInstance()
+            ->get(QuoteAddressResource::class);
     }
 
     /**
@@ -176,9 +185,9 @@ class ShippingMethodManagement implements
      * @param string $methodCode The shipping method code.
      * @return void
      * @throws InputException The shipping method is not valid for an empty cart.
-     * @throws CouldNotSaveException The shipping method could not be saved.
      * @throws NoSuchEntityException Cart contains only virtual products. Shipping method is not applicable.
      * @throws StateException The billing or shipping address is not set.
+     * @throws \Exception
      */
     public function apply($cartId, $carrierCode, $methodCode)
     {
@@ -194,6 +203,8 @@ class ShippingMethodManagement implements
         }
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
+            // Remove empty quote address
+            $this->quoteAddressResource->delete($shippingAddress);
             throw new StateException(__('Shipping address is not set'));
         }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
