@@ -80,11 +80,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_customFactory;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation
-     */
-    protected $appEmulation;
-
-    /**
      * @var ThemeFactory
      */
     private $themeModelFactory;
@@ -93,6 +88,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @var ThemeInterface[]
      */
     protected $inheritanceSequence;
+
+    /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    private $appEmulation;
 
     /**
      * Initialize dependencies
@@ -104,11 +104,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory
      * @param \Magento\Framework\View\Design\Theme\Validator $validator
      * @param \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Theme\Model\ResourceModel\Theme $resource
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
      * @param ThemeFactory $themeModelFactory
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,11 +119,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
         \Magento\Framework\View\Design\Theme\Validator $validator,
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
-        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
         array $data = [],
-        ThemeFactory $themeModelFactory = null
+        ThemeFactory $themeModelFactory = null,
+        \Magento\Store\Model\App\Emulation $appEmulation = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -131,8 +131,9 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
-        $this->appEmulation = $appEmulation;
         $this->themeModelFactory = $themeModelFactory ?? ObjectManager::getInstance()->get(ThemeFactory::class);
+        $this->appEmulation = $appEmulation ?? ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\App\Emulation::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 

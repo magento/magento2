@@ -76,7 +76,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * @var \Magento\Store\Model\App\Emulation
      */
-    protected $appEmulation;
+    private $appEmulation;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -85,8 +85,8 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param array $themes
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -95,17 +95,17 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Store\Model\App\Emulation $appEmulation,
-        array $themes
+        array $themes,
+        \Magento\Store\Model\App\Emulation $appEmulation = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
         $this->_themeFactory = $themeFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
-        $this->appEmulation = $appEmulation;
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
+        $this->appEmulation = $appEmulation ?? $objectManager->get(\Magento\Store\Model\App\Emulation::class);
     }
 
     /**
@@ -125,6 +125,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * Retrieve package area
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getArea()
     {

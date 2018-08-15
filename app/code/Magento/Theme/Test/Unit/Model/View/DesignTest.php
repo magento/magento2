@@ -75,8 +75,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             $this->themeFactory,
             $this->objectManager,
             $this->state,
-            $this->appEmulation,
-            $themes
+            $themes,
+            $this->appEmulation
         );
     }
 
