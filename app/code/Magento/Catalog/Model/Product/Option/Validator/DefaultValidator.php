@@ -107,8 +107,8 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
             return true;
         }
 
-        // checking whether title is null and also changed is_empty to is_null
-        if ($title === null) {
+        // checking whether title is null and is empty string
+        if ($title === null || $title === '') {
             return false;
         }
 
