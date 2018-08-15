@@ -99,8 +99,8 @@
     <type name="Magento\Quote\Model\ValidationRules\QuoteValidationComposite">
         <arguments>
             <argument name="validationRules" xsi:type="array">
-                <item name="ShippingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule</item>
                 <item name="AllowedCountryValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule</item>
+                <item name="ShippingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule</item>
                 <item name="ShippingMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule</item>
                 <item name="BillingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\BillingAddressValidationRule</item>
                 <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
@@ -108,14 +108,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule">
-        <arguments>
-            <argument name="defaultMessage" xsi:type="string">Please check the shipping address information.</argument>
-        </arguments>
-    </type>
     <type name="Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule">
         <arguments>
             <argument name="defaultMessage" xsi:type="string">Some addresses can't be used due to the configurations for specific countries.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule">
+        <arguments>
+            <argument name="defaultMessage" xsi:type="string">Please check the shipping address information.</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
