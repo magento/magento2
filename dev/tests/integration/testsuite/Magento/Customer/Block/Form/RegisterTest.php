@@ -19,8 +19,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testCompanyDefault()
+    public function testCompanyDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
         $block = Bootstrap::getObjectManager()->create(Register::class)
@@ -34,8 +35,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testTelephoneDefault()
+    public function testTelephoneDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
         $block = Bootstrap::getObjectManager()->create(
@@ -50,8 +52,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testFaxDefault()
+    public function testFaxDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
         $block = Bootstrap::getObjectManager()->create(
@@ -66,8 +69,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testCompanyDisabled()
+    public function testCompanyDisabled(): void
     {
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = Bootstrap::getObjectManager()->create(
@@ -89,8 +93,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testTelephoneDisabled()
+    public function testTelephoneDisabled(): void
     {
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = Bootstrap::getObjectManager()->create(
@@ -112,8 +117,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testFaxEnabled()
+    public function testFaxEnabled(): void
     {
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = Bootstrap::getObjectManager()->create(
@@ -132,6 +138,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('title="Fax"', $block->toHtml());
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
@@ -145,7 +154,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      * @param Template $block
      * @return void
      */
-    private function setAttributeDataProvider(Template $block)
+    private function setAttributeDataProvider(Template $block): void
     {
         $attributeData = Bootstrap::getObjectManager()->get(AddressAttributeData::class);
         $block->setAttributeData($attributeData);
