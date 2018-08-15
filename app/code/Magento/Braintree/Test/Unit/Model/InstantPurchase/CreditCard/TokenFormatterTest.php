@@ -3,19 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\CreditCard;
 
 use Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter as CreditCardTokenFormatter;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @covers CreditCardTokenFormatter
  */
-class TokenFormatterTest extends TestCase
+class TokenFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PaymentTokenInterface|PHPUnit_Framework_MockObject_MockObject
