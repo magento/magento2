@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\File;
 
-use Magento\Framework\Image\Adapter\ConfigInterface;
+use Magento\Framework\Image\Adapter\UploadConfigInterface;
 
 /**
  * File upload class
@@ -140,14 +140,14 @@ class Uploader
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated
-     * @see ConfigInterface::getMaxWidth()
+     * @see UploadConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
-     * @see ConfigInterface::getMaxHeight()
+     * @see UploadConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 1200;
 
