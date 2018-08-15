@@ -12,6 +12,9 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * @magentoDbIsolation disabled
+ */
 class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
