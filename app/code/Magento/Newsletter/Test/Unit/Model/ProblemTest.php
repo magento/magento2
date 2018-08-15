@@ -9,12 +9,11 @@ namespace Magento\Newsletter\Test\Unit\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Problem as ProblemModel;
 use Magento\Newsletter\Model\Queue;
-use Magento\Newsletter\Model\ResourceModel\Problem;
+use Magento\Newsletter\Model\ResourceModel\Problem as ProblemResource;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 
@@ -41,9 +40,9 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
     private $subscriberMock;
 
     /**
-     * @var AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProblemResource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $abstractResourceMock;
+    private $resourceModelMock;
 
     /**
      * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
@@ -73,14 +72,14 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
         $this->subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->abstractResourceMock = $this->getMockBuilder(Problem::class)
+        $this->resourceModelMock = $this->getMockBuilder(ProblemResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->abstractResourceMock->expects($this->any())
+        $this->resourceModelMock->expects($this->any())
             ->method('getIdFieldName')
             ->willReturn('id');
 
@@ -92,7 +91,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
                 'subscriberFactory' => $this->subscriberFactoryMock,
-                'resource' => $this->abstractResourceMock,
+                'resource' => $this->resourceModelMock,
                 'resourceCollection' => $this->abstractDbMock,
                 'data' => [],
             ]
