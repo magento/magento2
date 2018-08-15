@@ -34,26 +34,11 @@ class CustomerChangePasswordTest extends GraphQlAbstract
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'anotherPassword1';
 
-        $query = <<<QUERY
-mutation {
-  changePassword(
-    currentPassword: "$oldCustomerPassword",
-    newPassword: "$newCustomerPassword"
-  ) {
-    id
-    email
-    firstname
-    lastname
-  }
-}
-QUERY;
+        $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
 
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($customerEmail, $oldCustomerPassword);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertEquals($customerEmail, $response['changePassword']['email']);
+        $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
 
         try {
             // registry contains the old password hash so needs to be reset
@@ -67,22 +52,12 @@ QUERY;
 
     public function testGuestUserCannotChangePassword()
     {
-        $query = <<<QUERY
-mutation {
-  changePassword(
-    currentPassword: "currentpassword",
-    newPassword: "newpassword"
-  ) {
-    id
-    email
-    firstname
-    lastname
-  }
-}
-QUERY;
+        $query = $this->getChangePassQuery('currentpassword', 'newpassword');
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Current customer' . ' ' .
-                                     'does not have access to the resource "customer"');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Current customer' . ' ' .
+            'does not have access to the resource "customer"'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -95,11 +70,44 @@ QUERY;
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'weakpass';
 
+        $query = $this->getChangePassQuery($oldCustomerPassword, $newCustomerPassword);
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
+
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCannotChangeWithIncorrectPassword()
+    {
+        $customerEmail = 'customer@example.com';
+        $oldCustomerPassword = 'password';
+        $newCustomerPassword = 'anotherPassword1';
+        $incorrectPassword = 'password-incorrect';
+
+        $query = $this->getChangePassQuery($incorrectPassword, $newCustomerPassword);
+
+        // acquire authentication with correct password
+        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $oldCustomerPassword);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageRegExp('/The password doesn\'t match this account. Verify the password.*/');
+
+        // but try to change with incorrect 'old' password
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    private function getChangePassQuery($currentPassword, $newPassword)
+    {
         $query = <<<QUERY
 mutation {
-  changePassword(
-    currentPassword: "$oldCustomerPassword",
-    newPassword: "$newCustomerPassword"
+  changeCustomerPassword(
+    currentPassword: "$currentPassword",
+    newPassword: "$newPassword"
   ) {
     id
     email
@@ -109,15 +117,15 @@ mutation {
 }
 QUERY;
 
+        return $query;
+    }
+
+    private function getCustomerAuthHeaders($customerEmail, $oldCustomerPassword)
+    {
         /** @var CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $customerToken = $customerTokenService->createCustomerAccessToken($customerEmail, $oldCustomerPassword);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
-
-        $this->graphQlQuery($query, [], '', $headerMap);
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     protected function setUp()

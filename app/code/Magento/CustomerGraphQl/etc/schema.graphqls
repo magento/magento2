@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-    changePassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\ChangePassword") @doc(description:"Changes password for logged in customer")
+    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\ChangePassword") @doc(description:"Changes password for logged in customer")
 }
 
 type Customer @doc(description: "Customer defines the customer name and address and other details") {
