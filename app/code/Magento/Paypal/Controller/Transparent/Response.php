@@ -21,8 +21,6 @@ use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
 
 /**
- * Class Response
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
