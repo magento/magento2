@@ -14,6 +14,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Model\Product\Option\ValueFactory;
 
 /**
  * Catalog product option select type model
@@ -72,13 +73,19 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     private $customOptionPriceCalculator;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
+     * @param \Magento\Framework\Model\Context                                            $context
+     * @param \Magento\Framework\Registry                                                 $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null                $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null                          $resourceCollection
+     * @param array                                                                       $data
+     * @param CustomOptionPriceCalculator|null                                            $customOptionPriceCalculator
+     * @param \Magento\Catalog\Model\Product\Option\ValueFactory|null                     $valueFactory
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -87,12 +94,14 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CustomOptionPriceCalculator $customOptionPriceCalculator = null
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null,
+        ValueFactory $valueFactory = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
         $this->customOptionPriceCalculator = $customOptionPriceCalculator
             ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
-
+        $this->valueFactory = $valueFactory
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(ValueFactory::class);
         parent::__construct(
             $context,
             $registry,
@@ -208,18 +217,25 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $option = $this->getOption();
 
         foreach ($this->getValues() as $value) {
-            $this->isDeleted(false);
-            $this->setData($value)
-                ->setData('option_id', $option->getId())
-                ->setData('store_id', $option->getStoreId());
+            $valueModel = $this->valueFactory->create();
 
-            if ((bool) $this->getData('is_delete') === true) {
-                if ($this->getId()) {
-                    $this->deleteValues($this->getId());
-                    $this->delete();
+            $valueModel->setData(
+                $value
+            )->setData(
+                'option_id',
+                $option->getId()
+            )->setData(
+                'store_id',
+                $option->getStoreId()
+            );
+
+            if ((bool) $valueModel->getData('is_delete') === true) {
+                if ($valueModel->getId()) {
+                    $this->deleteValues($valueModel->getId());
+                    $valueModel->delete();
                 }
             } else {
-                $this->save();
+                $valueModel->save();
             }
         }
 
