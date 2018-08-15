@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomer">
+        <arguments>
+            <argument name="webSite" defaultValue="testData.website"/>
+            <argument name="storeView" defaultValue="testData.storeView"/>
+            <argument name="value" defaultValue="testData.customerGroup"/>
+        </arguments>
+        <click selector="{{AdminMenuSection.customers}}" stepKey="openCustomers"/>
+        <waitForPageLoad stepKey="waitForCatalogSubmenu"/>
+        <click selector="{{CustomersSubmenuSection.allCustomers}}" stepKey="clickOnAllCustomers"/>
+        <waitForPageLoad stepKey="waitForProductsPage"/>
+        <click selector="{{CustomersPageSection.addNewCustomerButton}}" stepKey="addNewCustomer"/>
+        <waitForPageLoad stepKey="waitForNewProductPage"/>
+        <click selector="{{NewCustomerPageSection.associateToWebsite}}" stepKey="AssociateToWebsite"/>
+        <click selector="{{NewCustomerPageSection.website(webSite)}}" stepKey="SetWebsite"/>
+        <click selector="{{NewCustomerPageSection.group}}" stepKey="Group"/>
+        <click selector="{{NewCustomerPageSection.groupValue(value)}}" stepKey="GroupValue"/>
+
+        <fillField selector="{{NewCustomerPageSection.firstName}}" userInput="{{NewCustomerData.FirstName}}" stepKey="FillFirstName"/>
+        <fillField selector="{{NewCustomerPageSection.lastName}}" userInput="{{NewCustomerData.LastName}}" stepKey="FillLastName"/>
+        <fillField selector="{{NewCustomerPageSection.email}}" userInput="{{NewCustomerData.Email}}" stepKey="FillEmail"/>
+        <click selector="{{NewCustomerPageSection.storeView}}" stepKey="clickToSelectStore"/>
+        <click selector="{{NewCustomerPageSection.storeViewValue(storeView)}}" stepKey="clickToSelectStoreView"/>
+        <scrollToTopOfPage stepKey="scrollToAddresses"/>
+        <click selector="{{NewCustomerPageSection.addresses}}" stepKey="goToAddresses"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+        <click selector="{{NewCustomerPageSection.addNewAddress}}" stepKey="AddNewAddress"/>
+        <waitForPageLoad stepKey="waitForAddressFields"/>
+        <click selector="{{NewCustomerPageSection.defaultBillingAddress}}" stepKey="thickBillingAddress"/>
+        <click selector="{{NewCustomerPageSection.defaultShippingAddress}}" stepKey="thickShippingAddress"/>
+        <fillField selector="{{NewCustomerPageSection.firstNameForAddress}}" userInput="{{NewCustomerData.AddressFirstName}}" stepKey="fillFirstNameForAddress"/>
+        <fillField selector="{{NewCustomerPageSection.lastNameForAddress}}" userInput="{{NewCustomerData.AddressLastName}}" stepKey="fillLastNameForAddress"/>
+        <fillField selector="{{NewCustomerPageSection.streetAddress}}" userInput="{{NewCustomerData.StreetAddress}}" stepKey="fillStreetAddress"/>
+        <fillField selector="{{NewCustomerPageSection.city}}" userInput="{{NewCustomerData.City}}" stepKey="fillCity"/>
+        <click selector="{{NewCustomerPageSection.country}}" stepKey="openCountry"/>
+        <waitForPageLoad stepKey="waitForCountryList"/>
+        <click selector="{{NewCustomerPageSection.countryArmenia}}" stepKey="chooseCountry"/>
+        <fillField selector="{{NewCustomerPageSection.zip}}" userInput="{{NewCustomerData.Zip}}" stepKey="fillZip"/>
+        <fillField selector="{{NewCustomerPageSection.phoneNumber}}" userInput="{{NewCustomerData.PhoneNumber}}" stepKey="fillPhoneNumber"/>
+        <waitForPageLoad stepKey="wait"/>
+        <click selector="{{NewCustomerPageSection.saveCustomer}}" stepKey="save"/>
+        <waitForPageLoad stepKey="waitForCustomersPage"/>
+        <waitForElementVisible selector="{{NewCustomerPageSection.createdSuccessMessage}}" stepKey="waitForSuccessfullyCreatedMessage"/>
+    </actionGroup>
+</actionGroups>

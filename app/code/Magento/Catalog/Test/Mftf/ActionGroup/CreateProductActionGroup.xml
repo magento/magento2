@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GoToProductPage">
+        <click selector="{{GoToProductPageSection.catalog}}" stepKey="clickOnCatalog" />
+        <waitForPageLoad stepKey="waitForPage"/>
+        <click selector="{{GoToProductPageSection.product}}" stepKey="clickToSelectProductsItem" />
+        <waitForPageLoad stepKey="waitForPageProducts"/>
+    </actionGroup>
+
+    <actionGroup name="CreateProduct">
+        <arguments>
+            <argument name="product" defaultValue="Product1"/>
+            <argument name="website" defaultValue="testData.website"/>
+            <argument name="group" type="string" defaultValue="Retailer"/>
+            <argument name="price" type="string" defaultValue="Discount"/>
+        </arguments>
+        <click selector="{{GoToProductPageSection.add}}" stepKey="clickToAddProduct"/>
+        <waitForPageLoad stepKey="WaitForProductPageIsLoaded"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="setNameForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="setSKUForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="setPriceForProduct"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}"  stepKey="setQuantityForProduct"/>
+        <scrollTo selector="{{CreateProductSection.productInWebsite}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{CreateProductSection.productInWebsite}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click selector="{{CreateProductSection.isSelected(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <scrollToTopOfPage stepKey="ScrollToTop"/>
+        <click selector="{{CreateProductSection.advancedPricing}}" stepKey="ClickToAdvancedPricing"/>
+        <maximizeWindow stepKey="maximizeWindow"/>
+        <click selector="{{CreateProductSection.addPricing}}" stepKey="ClickToAddPricing"/>
+        <click selector="{{CreateProductSection.selectWebsite}}" stepKey="ClickToSelectWebsite"/>
+        <click selector="{{CreateProductSection.websiteOption(website)}}" stepKey="ClickToSelectWebsiteOption"/>
+        <click selector="{{CreateProductSection.selectGroup}}" stepKey="ClickToSelectGroup"/>
+        <click selector="{{CreateProductSection.groupOption(group)}}" stepKey="ClickToSelectGroupOption"/>
+        <fillField selector="{{CreateProductSection.setQuantity}}" userInput="1" stepKey="SetQuantity"/>
+        <click selector="{{CreateProductSection.setPrice}}" stepKey="ClickToSelectPrice"/>
+        <click selector="{{CreateProductSection.priceOption(price)}}" stepKey="ClickToSelectPriceOption"/>
+        <click selector="{{CreateProductSection.setPrice}}" stepKey="ClickToSelectPrice1"/>
+        <fillField selector="{{CreateProductSection.discount}}" userInput="45" stepKey="TypeAmount"/>
+        <waitForPageLoad stepKey="WaitForPageLoaded"/>
+        <click selector="{{CreateProductSection.done1}}" stepKey="ClickToFinish"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct1"/>
+        <waitForPageLoad stepKey="WaitForProductSave1"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CheckTierPricingOfProductsTest">
+        <annotations>
+            <features value="Shopping Cart"/>
+            <stories value="MAGETWO-91697 - [Magento Cloud] 'Tier Pricing' of Products changes to 'Price' (without discount) after Updated Items and Quantities in the Order of B2B Store View."/>
+            <title value="Checking 'Tier Pricing' of Products and 'Price' (without discount) in the Order of B2B Store View"/>
+            <description value="Checking 'Tier Pricing' of Products and 'Price' (without discount) in the Order of B2B Store View"/>
+            <testCaseId value="MAGETWO-94111"/>
+            <severity value="CRITICAL"/>
+            <group value="Shopping Cart"/>
+        </annotations>
+
+        <!--Login as admin-->
+        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="GoToAllStores" stepKey="GoToAllStores"/>
+        <!--Create website, Sore adn Store View-->
+        <actionGroup ref="CreateWebsite" stepKey="AdminCreateWebsite">
+            <argument name="newWebsiteName" value="{{testData.website}}"/>
+            <argument name="websiteCode" value="{{testData.code}}"/>
+        </actionGroup>
+        <actionGroup ref="CreateNewStore" stepKey="AdminCreateStore">
+            <argument name="website" value="{{testData.website}}"/>
+            <argument name="storeGroupName" value="{{testData.store}}"/>
+            <argument name="storeGroupCode" value="{{testData.storeCode}}"/>
+        </actionGroup>
+        <actionGroup ref="CreateStoreView" stepKey="AdminCreateStoreView">
+            <argument name="StoreGroup" value="{{testData.store}}"/>
+            <argument name="storeView" value="{{testData.storeView}}"/>
+            <argument name="storeViewCode" value="{{testData.storeViewCode}}"/>
+        </actionGroup>
+        <!--Set Configuration-->
+        <actionGroup ref="SetCatalogConfigurations" stepKey="SetCatalogConfigurations"/>
+        <!--Create 4 products-->
+        <actionGroup ref="GoToProductPage" stepKey="GoToProductPage1"/>
+        <actionGroup ref="CreateProduct" stepKey="CreateProduct"/>
+        <actionGroup ref="GoToProductPage" stepKey="GoToProductPage2"/>
+        <actionGroup ref="CreateProduct" stepKey="CreateProduct2">
+            <argument name="product" value="Product2"/>
+        </actionGroup>
+        <actionGroup ref="GoToProductPage" stepKey="GoToProductPage3"/>
+        <actionGroup ref="CreateProduct" stepKey="CreateProduct3">
+            <argument name="product" value="Product3"/>
+        </actionGroup>
+        <actionGroup ref="GoToProductPage" stepKey="GoToProductPage4"/>
+        <actionGroup ref="CreateProduct" stepKey="CreateProduct4">
+            <argument name="product" value="Product4"/>
+        </actionGroup>
+        <!--Create Cart Price Rule-->
+        <actionGroup ref="CreateCartPriceRule" stepKey="CreateCartPriceRule"/>
+        <!--Create customer-->
+        <actionGroup ref="CreateCustomer" stepKey="CreateCustomer"/>
+        <!--Create new order-->
+        <actionGroup ref="CreateNewOrder" stepKey="CreateNewOrder"/>
+        <!--TEST CASE #1-->
+        <!--Add 3 products to order with specified quantity-->
+        <click selector="{{NewOrderSection.selectProduct(Product1.name)}}" stepKey="selectProduct1"/>
+        <click selector="{{NewOrderSection.selectProduct(Product2.name)}}" stepKey="selectProduct2"/>
+        <click selector="{{NewOrderSection.selectProduct(Product3.name)}}" stepKey="selectProduct3"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product1.name)}}" userInput="10" stepKey="AddProductQuantity1"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product2.name)}}" userInput="10" stepKey="AddProductQuantity2"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product3.name)}}" userInput="10" stepKey="AddProductQuantity3"/>
+        <click stepKey="addProductsToOrder" selector="{{NewOrderSection.addProductsToOrder}}"/>
+        <!--Verify discount and tier price values-->
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice1"/>
+        <assertEquals stepKey="verifyPrice1">
+            <expectedResult type="string">{{testData.price1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice1</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product2.name)}}" stepKey="checkProductPrice2"/>
+        <assertEquals stepKey="verifyPrice2">
+            <expectedResult type="string">{{testData.price2}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice2</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product3.name)}}" stepKey="checkProductPrice3"/>
+        <assertEquals stepKey="verifyPrice3">
+            <expectedResult type="string">{{testData.price3}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice3</actualResult>
+        </assertEquals>
+        <!--Edit order and verify values of discount and tier price-->
+        <actionGroup ref="EditOrder" stepKey="EditOrder"/>
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice4"/>
+        <assertEquals stepKey="verifyPrice4">
+            <expectedResult type="string">{{testData.price4}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice4</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product2.name)}}" stepKey="checkProductPrice5"/>
+        <assertEquals stepKey="verifyPrice5">
+            <expectedResult type="string">{{testData.price2}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice5</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product3.name)}}" stepKey="checkProductPrice6"/>
+        <assertEquals stepKey="verifyPrice6">
+            <expectedResult type="string">{{testData.price3}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice3</actualResult>
+        </assertEquals>
+
+        <!--Remove products from order-->
+        <click selector="{{NewOrderSection.removeItems(Product1.name)}}" stepKey="clickToExpandAction1"/>
+        <click selector="{{NewOrderSection.removeAction(Product1.name)}}" stepKey="clickToRemove1"/>
+        <click selector="{{NewOrderSection.removeItems(Product2.name)}}" stepKey="clickToExpandAction2"/>
+        <click selector="{{NewOrderSection.removeAction(Product2.name)}}" stepKey="clickToRemove2"/>
+        <click selector="{{NewOrderSection.removeItems(Product3.name)}}" stepKey="clickToExpandAction3"/>
+        <click selector="{{NewOrderSection.removeAction(Product3.name)}}" stepKey="clickToRemove4"/>
+        <click selector="{{NewOrderSection.update}}" stepKey="ClickToUpdate"/>
+        <waitForPageLoad stepKey="WaitProductsDeleted"/>
+
+        <!--TEST CASE #2-->
+        <!--Add 3 products to order with specified quantity-->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click stepKey="clickToAddProduct" selector="{{NewOrderSection.addProducts}}"/>
+        <click selector="{{NewOrderSection.selectProduct(Product1.name)}}" stepKey="selectProduct5"/>
+        <click selector="{{NewOrderSection.selectProduct(Product2.name)}}" stepKey="selectProduct6"/>
+        <click selector="{{NewOrderSection.selectProduct(Product3.name)}}" stepKey="selectProduct7"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product1.name)}}" userInput="10" stepKey="AddProductQuantity5"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product2.name)}}" userInput="10" stepKey="AddProductQuantity6"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product3.name)}}" userInput="10" stepKey="AddProductQuantity7"/>
+        <click stepKey="addProductsToOrder1" selector="{{NewOrderSection.addProductsToOrder}}"/>
+        <!--Verify discount and tier price values-->
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice7"/>
+        <assertEquals stepKey="verifyPrice7">
+            <expectedResult type="string">{{testData.price1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice7</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product2.name)}}" stepKey="checkProductPrice8"/>
+        <assertEquals stepKey="verifyPrice8">
+            <expectedResult type="string">{{testData.price2}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice8</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product3.name)}}" stepKey="checkProductPrice9"/>
+        <assertEquals stepKey="verifyPrice9">
+            <expectedResult type="string">{{testData.price3}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice9</actualResult>
+        </assertEquals>
+
+        <!--Add one more product and verify values-->
+        <click selector="{{NewOrderSection.addProducts}}" stepKey="clickToAddProduct1"/>
+        <click selector="{{NewOrderSection.selectProduct(Product4.name)}}" stepKey="selectProduct8"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product4.name)}}" userInput="10" stepKey="AddProductQuantity9"/>
+        <click selector="{{NewOrderSection.addProductsToOrder}}" stepKey="addProductsToOrder2"/>
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product4.name)}}" stepKey="checkProductPrice10"/>
+        <assertEquals stepKey="verifyPrice10">
+            <expectedResult type="string">{{testData.price5}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice10</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice12"/>
+        <assertEquals stepKey="verifyPrice12">
+            <expectedResult type="string">{{testData.price1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice12</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product2.name)}}" stepKey="checkProductPrice13"/>
+        <assertEquals stepKey="verifyPrice13">
+            <expectedResult type="string">{{testData.price2}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice13</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product3.name)}}" stepKey="checkProductPrice14"/>
+        <assertEquals stepKey="verifyPrice14">
+            <expectedResult type="string">{{testData.price3}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice14</actualResult>
+        </assertEquals>
+
+        <click selector="{{NewOrderSection.removeItems(Product1.name)}}" stepKey="clickToExpandAction5"/>
+        <click selector="{{NewOrderSection.removeAction(Product1.name)}}" stepKey="clickToRemove5"/>
+        <click selector="{{NewOrderSection.removeItems(Product2.name)}}" stepKey="clickToExpandAction6"/>
+        <click selector="{{NewOrderSection.removeAction(Product2.name)}}" stepKey="clickToRemove6"/>
+        <click selector="{{NewOrderSection.removeItems(Product3.name)}}" stepKey="clickToExpandAction7"/>
+        <click selector="{{NewOrderSection.removeAction(Product3.name)}}" stepKey="clickToRemove7"/>
+        <click selector="{{NewOrderSection.update}}" stepKey="ClickToUpdate1"/>
+
+        <!--TEST CASE #3-->
+        <waitForPageLoad stepKey="WaitProductsDeleted1"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <click selector="{{NewOrderSection.addProducts}}" stepKey="clickToAddProduct3" />
+        <click selector="{{NewOrderSection.selectProduct(Product1.name)}}" stepKey="selectProduct9"/>
+        <fillField selector="{{NewOrderSection.setQuantity(Product1.name)}}" userInput="10" stepKey="AddProductQuantity10"/>
+        <click selector="{{NewOrderSection.addProductsToOrder}}" stepKey="addProductsToOrder3"/>
+        <fillField selector="{{NewOrderSection.applyCoupon}}" userInput="{{testData.cartCode}}" stepKey="AddCouponCode"/>
+        <click selector="{{NewOrderSection.update}}" stepKey="ClickToUpdate2"/>
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice11"/>
+        <grabTextFrom selector="{{NewOrderSection.productPrice(Product4.name)}}" stepKey="checkProductPrice15"/>
+        <assertEquals stepKey="verifyPrice11">
+            <expectedResult type="string">{{testData.price1}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice11</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="verifyPrice15">
+            <expectedResult type="string">{{testData.price5}}</expectedResult>
+            <actualResult type="variable">$checkProductPrice15</actualResult>
+        </assertEquals>
+
+        <actionGroup ref="DeleteCartPriceRule" stepKey="DeleteCartPriceRule"/>
+        <actionGroup ref="GoToAllStores" stepKey="GoToAllStores1"/>
+        <actionGroup ref="DeleteWebsite" stepKey="DeleteWebsite">
+            <argument name="websiteName" value="{{testData.website}}"/>
+        </actionGroup>
+        <actionGroup ref="DeleteAllProducts" stepKey="DeleteAllProducts"/>
+        <actionGroup ref="DeleteCustomer" stepKey="DeleteCustomer">
+            <argument name="lastName" value="NewCustomerData.LastName"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CartPriceRuleSection">
+        <element name="market" type="button" selector="#menu-magento-backend-marketing"/>
+        <element name="discount" type="button" selector="//span[contains(text(), 'Cart Price Rules')]"/>
+        <element name="add" type="button" selector="#add"/>
+        <element name="ruleName" type="input" selector="//input[@name='name']"/>
+        <element name="selectWebSite" type="button" selector="//*[contains(text(), '{{arg1}}')]" parameterized="true"/>
+        <element name="customerGroup" type="button" selector="//select[@name='customer_group_ids']"/>
+        <element name="customerGroupValue" type="checkbox" selector="//select[@name='customer_group_ids']/option[contains(text(), '{{arg2}}')]" parameterized="true"/>
+        <element name="done" type="button" selector=".action-secondary"/>
+        <element name="coupon" type="button" selector="//*[@name='coupon_type']"/>
+        <element name="specificCoupon" type="button" selector="//*[text()='{{arg3}}']" parameterized="true"/>
+        <element name="code" type="input" selector="//*[@name='coupon_code']"/>
+        <element name="userPerCoupon" type="input" selector="//input[@name='uses_per_coupon']"/>
+        <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
+        <element name="priority" type="input" selector="//*[@name='sort_order']"/>
+        <element name="actions" type="button" selector="//*[text()='Actions']"/>
+        <element name="actionsState" type="button" selector="//div[@class='admin__fieldset-wrapper-content admin__collapsible-content _hide']/parent::div//span[text()='Actions']"/>
+        <element name="amount" type="input" selector="//*[@name='discount_amount']"/>
+        <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
+        <element name="option" type="select" selector="//select[@name='simple_free_shipping']/option[text()='{{arg4}}']" parameterized="true"/>
+        <element name="save" type="button" selector="#save"/>
+        <element name="couponCode" type="button" selector="//td[contains(text(), '{{arg5}}')]" parameterized="true"/>
+        <element name="delete" type="button" selector="#delete"/>
+        <element name="confirm" type="button" selector=".action-primary.action-accept"/>
+    </section>
+</sections>

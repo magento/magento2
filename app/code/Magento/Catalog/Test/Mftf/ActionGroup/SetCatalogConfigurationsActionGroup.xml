@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetCatalogConfigurations">
+        <arguments>
+            <argument name="website" type="string" defaultValue="Website"/>
+            <argument name="price" type="string" defaultValue="0"/>
+        </arguments>
+        <click selector="{{StoreConfigurationsSection.stores}}" stepKey="clickOnCreateWebsiteButton"/>
+        <waitForPageLoad stepKey="waitForStoresOpened"/>
+        <click selector="{{StoreConfigurationsSection.config}}" stepKey="clickToOpenConfigurations"/>
+        <waitForPageLoad stepKey="waitForConfigurationsOpened"/>
+        <scrollTo selector="{{StoreConfigurationsSection.catalog}}" stepKey="ScrollToCatalog"/>
+        <click selector="{{StoreConfigurationsSection.catalog}}" stepKey="ClickToCatalog"/>
+        <click selector="{{StoreConfigurationsSection.subCatalog}}" stepKey="ClickToSubCatalog"/>
+        <waitForPageLoad stepKey="waitForCatalogOpened"/>
+        <conditionalClick selector="{{StoreConfigurationsSection.price}}" dependentSelector="{{StoreConfigurationsSection.priceState}}" visible="false" stepKey="ClickToExpandPrice"/>
+        <waitForPageLoad stepKey="WaitForPriceOpens"/>
+        <click selector="{{StoreConfigurationsSection.priceScope}}" stepKey="ClickToSetCatalogPriceScope"/>
+        <click selector="{{StoreConfigurationsSection.priceScopeValue(website)}}" stepKey="ClickToSetCatalogPriceScopeValue"/>
+        <fillField selector="{{StoreConfigurationsSection.defaultProductPrice}}" userInput="{{price}}" stepKey="SetDefaultPrice"/>
+        <click selector="{{StoreConfigurationsSection.save}}" stepKey="ClickToSave"/>
+        <waitForPageLoad stepKey="WaitForWebsiteSaved"/>
+        <see userInput="You saved the configuration." stepKey="seeSavedMessage" />
+        <click selector="{{StoreConfigurationsSection.price}}" stepKey="ClickToCollapsePrise"/>
+    </actionGroup>
+</actionGroups>
