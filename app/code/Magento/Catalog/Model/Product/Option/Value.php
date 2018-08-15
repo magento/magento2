@@ -217,9 +217,9 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $option = $this->getOption();
 
         foreach ($this->getValues() as $value) {
-            $optionModel = $this->valueFactory->create();
+            $valueModel = $this->valueFactory->create();
 
-            $optionModel->setData(
+            $valueModel->setData(
                 $value
             )->setData(
                 'option_id',
@@ -229,13 +229,13 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 $option->getStoreId()
             );
 
-            if ((bool) $optionModel->getData('is_delete') === true) {
-                if ($optionModel->getId()) {
-                    $this->deleteValues($optionModel->getId());
-                    $optionModel->delete();
+            if ((bool) $valueModel->getData('is_delete') === true) {
+                if ($valueModel->getId()) {
+                    $this->deleteValues($valueModel->getId());
+                    $valueModel->delete();
                 }
             } else {
-                $optionModel->save();
+                $valueModel->save();
             }
         }
 
