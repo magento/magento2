@@ -13,7 +13,7 @@ use Magento\Catalog\Helper\Product\Flat\Indexer;
 /**
  * @covers \Magento\Catalog\Cron\DeleteAbandonedStoreFlatTables
  */
-class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
+class AvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Testable Object

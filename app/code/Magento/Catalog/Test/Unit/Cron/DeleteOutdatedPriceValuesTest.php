@@ -20,7 +20,7 @@ use Magento\Store\Model\Store;
 /**
  * @covers \Magento\Catalog\Cron\DeleteOutdatedPriceValues
  */
-class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
+class DeleteOutdatedPriceValuesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Testable Object
@@ -90,20 +90,43 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         $attributeId = 15;
         $conditions = ['first', 'second'];
 
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(Store::XML_PATH_PRICE_SCOPE)
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(Store::XML_PATH_PRICE_SCOPE)
             ->willReturn(Store::XML_PATH_PRICE_SCOPE);
-        $this->attributeRepositoryMock->expects($this->once())->method('get')
+        $this->attributeRepositoryMock
+            ->expects($this->once())
+            ->method('get')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE)
             ->willReturn($this->attributeMock);
-        $this->attributeMock->expects($this->once())->method('getId')->willReturn($attributeId);
-        $this->attributeMock->expects($this->once())->method('getBackend')->willReturn($this->attributeBackendMock);
-        $this->attributeBackendMock->expects($this->once())->method('getTable')->willReturn($table);
-        $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
-        $this->dbAdapterMock->expects($this->exactly(2))->method('quoteInto')->willReturnMap([
-            ['attribute_id = ?', $attributeId, null, null, $conditions[0]],
-            ['store_id != ?', Store::DEFAULT_STORE_ID, null, null, $conditions[1]],
-        ]);
-        $this->dbAdapterMock->expects($this->once())->method('delete')->with($table, $conditions);
+        $this->attributeMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($attributeId);
+        $this->attributeMock
+            ->expects($this->once())
+            ->method('getBackend')
+            ->willReturn($this->attributeBackendMock);
+        $this->attributeBackendMock
+            ->expects($this->once())
+            ->method('getTable')
+            ->willReturn($table);
+        $this->resourceConnectionMock
+            ->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock
+            ->expects($this->exactly(2))
+            ->method('quoteInto')
+            ->willReturnMap([
+                ['attribute_id = ?', $attributeId, null, null, $conditions[0]],
+                ['store_id != ?', Store::DEFAULT_STORE_ID, null, null, $conditions[1]],
+            ]);
+        $this->dbAdapterMock
+            ->expects($this->once())
+            ->method('delete')
+            ->with($table, $conditions);
         $this->deleteOutdatedPriceValues->execute();
     }
 
@@ -115,10 +138,17 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecutePriceConfigIsNotSetToGlobal()
     {
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(Store::XML_PATH_PRICE_SCOPE)
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(Store::XML_PATH_PRICE_SCOPE)
             ->willReturn(null);
-        $this->attributeRepositoryMock->expects($this->never())->method('get');
-        $this->dbAdapterMock->expects($this->never())->method('delete');
+        $this->attributeRepositoryMock
+            ->expects($this->never())
+            ->method('get');
+        $this->dbAdapterMock
+            ->expects($this->never())
+            ->method('delete');
 
         $this->deleteOutdatedPriceValues->execute();
     }
