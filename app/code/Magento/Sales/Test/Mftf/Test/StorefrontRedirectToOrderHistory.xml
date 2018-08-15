@@ -58,8 +58,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
         <!--Log in to Storefront as Customer 2 -->
-        <actionGroup ref="CustomerLoginOnStorefront" stepKey="signUp2">
-            <argument name="customer" value="$$createCustomer2$$"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
+            <argument name="Customer" value="$$createCustomer2$$"/>
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 2 -->
