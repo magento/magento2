@@ -183,6 +183,7 @@ abstract class EntityAbstract
      */
     protected function _getClassProperties()
     {
+        // protected $_objectManager = null;
         $objectManager = [
             'name' => '_objectManager',
             'visibility' => 'protected',
