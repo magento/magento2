@@ -35,7 +35,7 @@
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
-            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!--Create an order at Storefront as Customer 1 -->
