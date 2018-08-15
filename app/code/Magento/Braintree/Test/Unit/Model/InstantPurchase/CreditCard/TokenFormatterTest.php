@@ -12,9 +12,6 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
-/**
- * @covers CreditCardTokenFormatter
- */
 class TokenFormatterTest extends TestCase
 {
     /**
