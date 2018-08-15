@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -63,9 +64,6 @@ class CategoryTest extends GraphQlAbstract
           children {
             level
             id
-            children {
-              id
-            }
           }
         }
       }
@@ -286,16 +284,13 @@ QUERY;
      */
     public function testAnchorCategory()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-        $categoryCollection = $this->objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
-        );
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
         $categoryCollection->addFieldToFilter('name', 'Category 1');
+        /** @var CategoryInterface $category */
         $category = $categoryCollection->getFirstItem();
-        /** @var \Magento\Framework\EntityManager\MetadataPool $entityManagerMetadataPool */
-        $entityManagerMetadataPool = $this->objectManager->create(\Magento\Framework\EntityManager\MetadataPool::class);
-        $categoryLinkField = $entityManagerMetadataPool->getMetadata(CategoryInterface::class)->getLinkField();
-        $categoryId = $category->getData($categoryLinkField);
+        $categoryId = $category->getId();
+
         $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
 
         $query = <<<QUERY
