@@ -69,7 +69,7 @@
         <fillField selector="{{NewOrderSection.setQuantity(Product2.name)}}" userInput="10" stepKey="AddProductQuantity2"/>
         <fillField selector="{{NewOrderSection.setQuantity(Product3.name)}}" userInput="10" stepKey="AddProductQuantity3"/>
         <click stepKey="addProductsToOrder" selector="{{NewOrderSection.addProductsToOrder}}"/>
-        <!--Verify discount and tier price values-->
+        <!--Verify tier price values-->
         <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice1"/>
         <assertEquals stepKey="verifyPrice1">
             <expectedResult type="string">{{testData.price1}}</expectedResult>
@@ -87,7 +87,7 @@
             <expectedResult type="string">{{testData.price3}}</expectedResult>
             <actualResult type="variable">$checkProductPrice3</actualResult>
         </assertEquals>
-        <!--Edit order and verify values of discount and tier price-->
+        <!--Edit order and verify values-->
         <actionGroup ref="EditOrder" stepKey="EditOrder"/>
         <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice4"/>
         <assertEquals stepKey="verifyPrice4">
@@ -127,7 +127,7 @@
         <fillField selector="{{NewOrderSection.setQuantity(Product2.name)}}" userInput="10" stepKey="AddProductQuantity6"/>
         <fillField selector="{{NewOrderSection.setQuantity(Product3.name)}}" userInput="10" stepKey="AddProductQuantity7"/>
         <click stepKey="addProductsToOrder1" selector="{{NewOrderSection.addProductsToOrder}}"/>
-        <!--Verify discount and tier price values-->
+        <!--Verify tier price values-->
         <grabTextFrom selector="{{NewOrderSection.productPrice(Product1.name)}}" stepKey="checkProductPrice7"/>
         <assertEquals stepKey="verifyPrice7">
             <expectedResult type="string">{{testData.price1}}</expectedResult>
@@ -203,14 +203,16 @@
             <actualResult type="variable">$checkProductPrice15</actualResult>
         </assertEquals>
 
-        <actionGroup ref="DeleteCartPriceRule" stepKey="DeleteCartPriceRule"/>
-        <actionGroup ref="GoToAllStores" stepKey="GoToAllStores1"/>
-        <actionGroup ref="DeleteWebsite" stepKey="DeleteWebsite">
-            <argument name="websiteName" value="{{testData.website}}"/>
-        </actionGroup>
-        <actionGroup ref="DeleteAllProducts" stepKey="DeleteAllProducts"/>
-        <actionGroup ref="DeleteCustomer" stepKey="DeleteCustomer">
-            <argument name="lastName" value="NewCustomerData.LastName"/>
-        </actionGroup>
+        <after>
+            <actionGroup ref="DeleteCartPriceRule" stepKey="DeleteCartPriceRule"/>
+            <actionGroup ref="GoToAllStores" stepKey="GoToAllStores1"/>
+            <actionGroup ref="DeleteWebsite" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{testData.website}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteAllProducts" stepKey="DeleteAllProducts"/>
+            <actionGroup ref="DeleteCustomer" stepKey="DeleteCustomer">
+                <argument name="lastName" value="NewCustomerData.LastName"/>
+            </actionGroup>
+        </after>
     </test>
 </tests>
