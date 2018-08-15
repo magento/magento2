@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="GoToProductPageSection">
+        <!--Go to Catalog/Products-->
+        <element name="catalog" type="button" selector="#menu-magento-catalog-catalog"/>
+        <element name="product" type="button" selector="//span[contains(text(), 'Products')]"/>
+        <element name="add" type="button" selector="#add_new_product-button"/>
+    </section>
+
+    <section name="AdminAddSimpleProductSection">
+        <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
+        <element name="searchOptimization" type="button" selector="//*[contains(text(),'Search Engine Optimization')]"/>
+        <element name="urlKey" type="input" selector="//input[contains(@name,'url_key')]"/>
+        <element name="saveButton" type="button" selector="#save-button"/>
+    </section>
+
+    <section name="StorefrontCreateAccountSection">
+        <element name="createAccount" type="button" selector="//div[contains(@class, 'panel wrapper')]//a[text()='Create an Account']"/>
+        <element name="firstName" type="input" selector="#firstname"/>
+        <element name="lastName" type="input" selector="#lastname"/>
+        <element name="email" type="input" selector="#email_address"/>
+        <element name="password" type="input" selector="#password"/>
+        <element name="confirmPass" type="input" selector="#password-confirmation"/>
+        <element name="create" type="button" selector="//button[@type='submit' and @title='Create an Account']"/>
+    </section>
+
+    <section name="StorefrontAddCreatedProductToCartSection">
+        <element name="addToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="successMsg" type="button" selector="div.message-success"/>
+        <element name="showCard" type="button" selector=".action.showcart"/>
+        <element name="proceed" type="button" selector="#top-cart-btn-checkout"/>
+        <element name="successMessage" type="button" selector="div.message-success"/>
+    </section>
+
+    <section name="ShipmentFormSection">
+        <element name="street" type="input" selector="//*[@name='street[0]']"/>
+        <element name="city" type="input" selector="//*[@name='city']"/>
+        <element name="postcode" type="input" selector="//*[@name='postcode']"/>
+        <element name="telephone" type="input" selector="//*[@name='telephone']"/>
+        <element name="region" type="input" selector="//*[@name='region_id']"/>
+        <element name="state" type="input" selector="//*[@name='country_id']"/>
+        <element name="stateAlabama" type="select" selector="//*[@name='region_id']/option[contains(text(),'Alabama')]"/>
+        <element name="next" type="input" selector="//span[contains(text(), 'Next')]"/>
+        
+        <element name="billingShippingAddressTheSameCheckbox" type="select" selector="#billing-address-same-as-shipping-checkmo"/>
+        <element name="placeOrderButton" type="button" selector="//span[contains(text(),'Place Order')]"/>
+        <element name="shippingAddress" type="textarea" selector="//*[@class='box box-billing-address']//address"/>
+        <element name="billingAddress" type="textarea" selector="//*[@class='box box-shipping-address']//address"/>
+    </section>
+
+    <section name="GoToMyAccountSection">
+        <element name="customerName" type="input" selector="//*[@class='page-header']//*[@data-bind='text: customer().fullname']"/>
+        <element name="myAccountItem" type="input" selector="//*[@class='page-header']//*[contains(text(),'My Account')]"/>
+    </section>
+
+    <section name="DeleteCreatedProductSection">
+        <element name="searchToKeyword" type="input" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/input"/>
+        <element name="searchButton" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/button"/>
+        <element name="createdProductID" type="select" selector="//*[@class='data-grid-checkbox-cell-inner']/input"/>
+        <element name="actionSelectBox" type="button" selector="//*[@class='col-xs-2']//span[text()='Actions']"/>
+        <element name="deleteButton" type="button" selector="//div[@class='col-xs-2']//*[text()='Delete']"/>
+        <element name="okButton" type="button" selector=".action-primary.action-accept"/>
+        <element name="clearAll" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[contains(text(), 'Clear all')]"/>
+        <element name="filterButton" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-filters-action-wrap']/button"/>
+        <element name="filterSKUField" type="input" selector="//*[@name='sku']"/>
+        <element name="filtersApplyButton" type="button" selector="//*[contains(text(),'Apply Filters')]"/>
+    </section>
+
+    <section name="DashboardSection">
+        <element name="customerAllCustomer" type="button" selector="//*[@data-ui-id='menu-magento-customer-customer-manage']"/>
+        <element name="customer" type="button" selector="#menu-magento-customer-customer"/>
+    </section>
+
+    <section name="AdminCustomerAccInformationSection">
+        <element name="searchToKeyword" type="input" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/input"/>
+        <element name="searchButton" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/button"/>
+        <element name="selectCustomer" type="checkbox" selector="//*[@class='admin__data-grid-wrap' and @data-role='grid-wrapper']//*[@class='data-grid-multicheck-cell']/div/label"/>
+        <element name="actions" type="button" selector="//div[@class='admin__data-grid-header']//div[@class='col-xs-2']//span[text()='Actions']"/>
+        <element name="delete" type="button" selector="//div[@class='col-xs-2']//span[text()='Delete']"/>
+        <element name="confirm" type="button" selector=".action-primary.action-accept"/>
+    </section>
+
+</sections>

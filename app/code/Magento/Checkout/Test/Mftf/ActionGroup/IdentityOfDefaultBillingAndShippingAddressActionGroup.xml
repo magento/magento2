@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+
+    <!-- Go To Product Page -->
+    <actionGroup name="GoToProductPage">
+        <click selector="{{GoToProductPageSection.catalog}}" stepKey="clickOnCatalog" />
+        <waitForPageLoad stepKey="waitForPage"/>
+        <click selector="{{GoToProductPageSection.product}}" stepKey="clickToSelectProductsItem" />
+        <waitForPageLoad stepKey="waitForPageProducts"/>
+    </actionGroup>
+
+    <!-- Create Simple Product -->
+    <actionGroup name="CreateSimpleProduct">
+        <arguments>
+            <argument name="product" defaultValue="SimpleProduct"/>
+        </arguments>
+        <click selector="{{GoToProductPageSection.add}}" stepKey="clickToAddProduct"/>
+        <waitForPageLoad stepKey="WaitForProductPageIsLoaded"/>
+        <fillField selector="{{AdminAddSimpleProductSection.productName}}" userInput="{{product.name}}" stepKey="setNameForProduct"/>
+        <fillField selector="{{AdminAddSimpleProductSection.productSku}}" userInput="{{product.sku}}" stepKey="setSKUForProduct"/>
+        <fillField selector="{{AdminAddSimpleProductSection.productPrice}}" userInput="{{product.price}}" stepKey="setPriceForProduct"/>
+        <fillField selector="{{AdminAddSimpleProductSection.productQuantity}}" userInput="{{product.quantity}}"  stepKey="setQuantityForProduct"/>
+        <click selector="{{AdminAddSimpleProductSection.searchOptimization}}" stepKey="clickOnSearchEngineOptimization"/>
+        <fillField selector="{{AdminAddSimpleProductSection.urlKey}}" userInput="{{product.urlKey}}" stepKey="setSearchUrlForProduct"/>
+        <click selector="{{AdminAddSimpleProductSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
+    <!--Create Account -->
+    <actionGroup name="StorefrontCreateAccountActionGroup">
+        <click selector="{{StorefrontCreateAccountSection.createAccount}}" stepKey="ClickToCreateAccount"/>
+        <waitForPageLoad stepKey="waitForAccountFormIsOpened"/>
+        <fillField selector="{{StorefrontCreateAccountSection.firstName}}" userInput="{{CreateUserData.firstName}}" stepKey="TypeFirstName"/>
+        <fillField selector="{{StorefrontCreateAccountSection.lastName}}" userInput="{{CreateUserData.lastName}}" stepKey="TypeLastName"/>
+        <fillField selector="{{StorefrontCreateAccountSection.email}}" userInput="{{CreateUserData.firstName}}@magento.com" stepKey="TypeEmail"/>
+        <fillField selector="{{StorefrontCreateAccountSection.password}}" userInput="{{CreateUserData.password}}" stepKey="TypePassword"/>
+        <waitForPageLoad stepKey="waitToConfirmPassword"/>
+        <fillField selector="{{StorefrontCreateAccountSection.confirmPass}}" userInput="{{CreateUserData.password}}" stepKey="confirmPassword"/>
+        <click selector="{{StorefrontCreateAccountSection.create}}" stepKey="ClickToSaveAccount"/>
+        <waitForPageLoad stepKey="waitForAccountPageLoaded"/>
+    </actionGroup>
+
+    <!--Find and add product to cart-->
+    <actionGroup name="FindAndAddProductToCardActionGroup">
+        <!--Navigate to a category page -->
+        <amOnPage url="/{{SimpleProduct.name}}.html" stepKey="goToCreatedProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
+        <click selector="{{StorefrontAddCreatedProductToCartSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontAddCreatedProductToCartSection.successMessage}}" time="30" stepKey="waitForProductAdded"/>
+        <click selector="{{StorefrontAddCreatedProductToCartSection.showCard}}" stepKey="clickToOpenCard"/>
+        <waitForPageLoad stepKey="WaitForFormOpened"/>
+        <click selector="{{StorefrontAddCreatedProductToCartSection.proceed}}" stepKey="clickToProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
+        <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
+    </actionGroup>
+
+    <!--Fill shipment form-->
+    <actionGroup name="FillShipmentFormActionGroup">
+        <fillField selector="{{ShipmentFormSection.street}}" userInput="{{Account.street}}" stepKey="SetCustomerStreetAddress"/>
+        <fillField selector="{{ShipmentFormSection.city}}" userInput="{{Account.city}}" stepKey="SetCustomerCity"/>
+        <fillField selector="{{ShipmentFormSection.postcode}}" userInput="{{Account.postcode}}" stepKey="SetCustomerZipCode"/>
+        <fillField selector="{{ShipmentFormSection.telephone}}" userInput="{{Account.telephone}}" stepKey="SetCustomerPhoneNumber"/>
+        <click selector="{{ShipmentFormSection.region}}" stepKey="clickToSetState"/>
+        <click selector="{{ShipmentFormSection.state}}" stepKey="clickToChooseState"/>
+        <click selector="{{ShipmentFormSection.stateAlabama}}" stepKey="chooseStateAlabama"/>
+        <click selector="{{ShipmentFormSection.next}}" stepKey="clickToSaveShippingInfo"/>
+        <waitForPageLoad stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
+    </actionGroup>
+
+    <!--Mark "My billing and shipping address are the same"-->
+    <actionGroup name="MarkMyBillingAndShippingAddressAreTheSame">
+        <conditionalClick selector="{{ShipmentFormSection.billingShippingAddressTheSameCheckbox}}" dependentSelector="{{ShipmentFormSection.placeOrderButton}}" visible="0" stepKey="selectkMyBillingAndShippingAddressAreTheSameCheckbox"/>
+        <click stepKey="clickPlaceOrderButton" selector="{{ShipmentFormSection.placeOrderButton}}"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoaded"/>
+        <see stepKey="seeSuccessfulMessage" userInput="Thank you for your purchase!"/>
+    </actionGroup>
+
+    <!--Go To My Account Page-->
+    <actionGroup name="GoToMyAccountPage">
+        <click stepKey="clickCustomerNameItem" selector="{{GoToMyAccountSection.customerName}}"/>
+        <click stepKey="clickMyAccountItem" selector="{{GoToMyAccountSection.myAccountItem}}"/>
+        <waitForPageLoad stepKey="waitForMyAccountPageLoaded"/>
+    </actionGroup>
+
+    <!--Assert That Shipping And Billing Address are the same-->
+    <actionGroup name="AssertThatShippingAndBillingAddressTheSame">
+        <!--Get shipping and billing addresses-->
+        <grabTextFrom selector="{{ShipmentFormSection.shippingAddress}}" stepKey="shippingAddr"/>
+        <grabTextFrom selector="{{ShipmentFormSection.billingAddress}}" stepKey="billingAddr"/>
+        <!--Make sure that shipping and billing addresses are different-->
+        <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
+        <see userInput="Billing Address" stepKey="seeBillingAddress"/>
+        <assertEquals stepKey="assert" actual="$billingAddr" expected="$shippingAddr"/>
+    </actionGroup>
+
+    <!-- Delete Created Product -->
+    <actionGroup name="DeleteCreatedProduct">
+        <conditionalClick selector="{{DeleteCreatedProductSection.clearAll}}" dependentSelector="{{DeleteCreatedProductSection.clearAll}}" visible="1" stepKey="clickClearAllIfThereIsAnyValue"/>
+        <click stepKey="clickFilterButton" selector="{{DeleteCreatedProductSection.filterButton}}"/>
+        <waitForElementVisible selector="{{DeleteCreatedProductSection.filterSKUField}}" stepKey="waitForFilterDataLoaded"/>
+        <fillField stepKey="searchProductUsingSKUField" selector="{{DeleteCreatedProductSection.filterSKUField}}" userInput="{{SimpleProduct.sku}}"/>
+        <click stepKey="clickFiltersApplyButton" selector="{{DeleteCreatedProductSection.filtersApplyButton}}"/>
+        <waitForElementNotVisible selector="{{DeleteCreatedProductSection.filterSKUField}}" stepKey="waitForFilterBecomeNotVisible"/>
+        <click selector="{{DeleteCreatedProductSection.createdProductID}}" stepKey="selectCreatedProduct"/>
+        <wait stepKey="waitSelectCreatedProduct" time="2"/>
+        <waitForElementVisible selector="{{DeleteCreatedProductSection.actionSelectBox}}" stepKey="waitToSelectActionVisible"/>
+        <click stepKey="clickToSelectAction"  selector="{{DeleteCreatedProductSection.actionSelectBox}}"/>
+        <waitForElementVisible selector="{{DeleteCreatedProductSection.deleteButton}}" stepKey="waitForDeleteButtonAppeared"/>
+        <click selector="{{DeleteCreatedProductSection.deleteButton}}" stepKey="clickToDeleteProduct"/>
+        <waitForElementVisible selector="{{DeleteCreatedProductSection.okButton}}" stepKey="waitForOkButtonAppeared"/>
+        <click selector="{{DeleteCreatedProductSection.okButton}}" stepKey="clickToConfirm"/>
+        <wait stepKey="waitForRecordIsDeleted" time="2"/>
+        <see userInput="A total of 1 record(s) have been deleted." stepKey="productDeletedSuccessfully"/>
+        <click stepKey="clickClearAllFilterButton" selector="{{DeleteCreatedProductSection.clearAll}}"/>
+        <wait stepKey="waitToClearAllFilters" time="2"/>
+    </actionGroup>
+
+    <!--Delete created Customer -->
+    <actionGroup name="DeleteCreatedCustomerActionGroup">
+        <click stepKey="clickCustomerItem" selector="{{DashboardSection.customer}}"/>
+        <wait stepKey="WaitForCustomerViewOpened" time="2"/>
+        <click stepKey="clickCustomerAllCustomerItem" selector="{{DashboardSection.customerAllCustomer}}"/>
+        <waitForPageLoad stepKey="WaitForCustomerPageIsLoaded"/>
+        <fillField stepKey="searchToKeyword" selector="{{AdminCustomerAccInformationSection.searchToKeyword}}" userInput="{{CreateUserData.firstName}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminCustomerAccInformationSection.searchButton}}"/>
+        <waitForElementVisible stepKey="waitForFiltering" selector="{{AdminCustomerAccInformationSection.selectCustomer}}"/>
+        <click selector="{{AdminCustomerAccInformationSection.selectCustomer}}" stepKey="ClickOnCustomer"/>
+        <click selector="{{AdminCustomerAccInformationSection.actions}}" stepKey="ClickOnActions"/>
+        <waitForElementVisible selector="{{AdminCustomerAccInformationSection.delete}}" stepKey="waitForDeleteButtonAppeared"/>
+        <click selector="{{AdminCustomerAccInformationSection.delete}}" stepKey="ClickOnDelete"/>
+        <waitForElementVisible selector="{{AdminCustomerAccInformationSection.confirm}}" stepKey="waitForConfirmButtonAppeared"/>
+        <click selector="{{AdminCustomerAccInformationSection.confirm}}" stepKey="ClickToConfirm"/>
+        <waitForPageLoad stepKey="waitClickToConfirmButton"/>
+        <click stepKey="clickClearAllFilterButton" selector="{{DeleteCreatedProductSection.clearAll}}"/>
+        <wait stepKey="waitToClearAllFilters" time="2"/>
+    </actionGroup>
+
+</actionGroups>

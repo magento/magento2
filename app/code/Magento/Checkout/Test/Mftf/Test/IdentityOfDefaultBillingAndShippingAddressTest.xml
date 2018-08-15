@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="IdentityOfDefaultBillingAndShippingAddressTest">
+        <annotations>
+            <features value="Customer"/>
+            <title value="Checking assignment of default billing address after placing an orde"/>
+            <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94108"/>
+            <stories value="MAGETWO-62891: New address is not marked as 'Default Billing'"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create product-->
+            <actionGroup ref="GoToProductPage" stepKey="goToProductPage"/>
+            <actionGroup ref="CreateSimpleProduct" stepKey="createSimpleProduct"/>
+        </before>
+
+        <!--Go to Storefront-->
+        <amOnPage url="" stepKey="DoToStorefront"/>
+
+        <!--Create account-->
+        <actionGroup ref="StorefrontCreateAccountActionGroup" stepKey="storefrontCreateAccountActionGroup"/>
+
+        <!--Add product to cart-->
+        <actionGroup ref="FindAndAddProductToCardActionGroup" stepKey="FindAndAddProductToCard"/>
+
+        <!--Fill shipment form-->
+        <actionGroup ref="FillShipmentFormActionGroup" stepKey="ShipmentFormActionGroup"/>
+
+        <!--Fill cart data-->
+        <actionGroup ref="MarkMyBillingAndShippingAddressAreTheSame" stepKey="markMyBillingAndShippingAddressAreTheSame"/>
+
+        <!--Go To My Account-->
+        <actionGroup ref="GoToMyAccountPage" stepKey="goToMyAccountPage"/>
+
+        <!--Assert That Shipping And Billing Address are the same-->
+        <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
+
+        <after>
+            <!--Delete created Product-->
+            <amOnPage url="/admin" stepKey="GoToDashboard"/>
+            <actionGroup ref="GoToProductPage" stepKey="againGoToProductPage"/>
+            <actionGroup ref="DeleteCreatedProduct" stepKey="deleteCreatedProduct"/>
+
+            <!--Delete created Customer-->
+            <actionGroup ref="DeleteCreatedCustomerActionGroup" stepKey="deleteCreatedCustomer"/>
+        </after>
+    </test>
+</tests>
