@@ -61,7 +61,6 @@ class CreateHandler extends AbstractHandler
         if (!empty($mediaCollection)) {
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
-            $this->saveAdditionalStoreData($newVideoCollection);
 
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection, $product->getStoreId());
