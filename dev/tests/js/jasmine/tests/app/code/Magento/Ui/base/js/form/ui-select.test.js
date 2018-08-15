@@ -8,13 +8,12 @@ define([
     'underscore',
     'uiRegistry',
     'squire',
-    'ko',
-    'jquery'
-], function (_, registry, Squire, ko, $) {
+    'ko'
+], function (_, registry, Squire, ko) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
-        var obj, originaljQueryAjax,
+        var obj, jq, originaljQueryAjax,
             injector = new Squire(),
             mocks = {
                 'Magento_Ui/js/lib/registry/registry': {
@@ -37,8 +36,9 @@ define([
             injector.mock(mocks);
             injector.require([
                 'Magento_Ui/js/form/element/ui-select',
+                'jquery',
                 'knockoutjs/knockout-es5'
-            ], function (Constr) {
+            ], function (Constr, $) {
                 obj = new Constr({
                     provider: 'provName',
                     name: '',
@@ -52,13 +52,13 @@ define([
                 obj.value = ko.observableArray([]);
                 obj.cacheOptions.plain = [];
                 originaljQueryAjax = $.ajax;
-
+                jq = $;
                 done();
             });
         });
 
         afterEach(function () {
-            $.ajax = originaljQueryAjax;
+            jq.ajax = originaljQueryAjax;
             injector.clean();
         });
 
