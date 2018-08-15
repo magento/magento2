@@ -17,7 +17,7 @@
     </actionGroup>
 
     <!--Create new user with specified role-->
-    <actionGroup name="AdminCreateUser">
+    <actionGroup name="AdminCreateUserAction">
         <click selector="{{AdminCreateUserSection.create}}" stepKey="clickToCreateNewUser"/>
         <waitForPageLoad stepKey="waitForNewUserPageLoad" time="10"/>
         <fillField selector="{{AdminCreateUserSection.usernameTextField}}" userInput="{{NewAdmin.username}}" stepKey="enterUserName" />
