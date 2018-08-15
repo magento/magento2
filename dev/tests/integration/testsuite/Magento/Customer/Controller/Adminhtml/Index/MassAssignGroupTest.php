@@ -5,13 +5,17 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * @magentoAppArea adminhtml
  */
-class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class MassAssignGroupTest extends AbstractBackendController
 {
     /**
      * Base controller URL
@@ -28,9 +32,7 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     protected function setUp()
     {
         parent::setUp();
-        $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
-        );
+        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
     protected function tearDown()
@@ -47,39 +49,125 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * Tests os update a single customer record.
+     *
+     * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
+     * @magentoDbIsolation disabled
      */
     public function testMassAssignGroupAction()
     {
-        $customer = $this->customerRepository->getById(1);
-        $this->assertEquals(1, $customer->getGroupId());
+        $customerEmail = 'customer1@example.com';
+        try {
+            /** @var CustomerInterface $customer */
+            $customer = $this->customerRepository->get($customerEmail);
+            $this->assertEquals(1, $customer->getGroupId());
+
+            /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+            $formKey = $this->_objectManager->get(
+                \Magento\Framework\Data\Form\FormKey::class
+            );
+
+            $params = [
+                'group' => 0,
+                'namespace' => 'customer_listing',
+                'selected' => [$customer->getId()],
+                'form_key' => $formKey->getFormKey()
+            ];
+
+            $this->getRequest()
+                ->setParams($params)
+                ->setMethod('POST');
+            $this->dispatch('backend/customer/index/massAssignGroup');
+            $this->assertSessionMessages(
+                self::equalTo(['A total of 1 record(s) were updated.']),
+                MessageInterface::TYPE_SUCCESS
+            );
+            $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
+
+            $customer = $this->customerRepository->get($customerEmail);
+            $this->assertEquals(0, $customer->getGroupId());
+        } catch (LocalizedException $e) {
+            self::fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Tests os update a multiple customer records.
+     *
+     * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
+     * @magentoDbIsolation disabled
+     */
+    public function testLargeGroupMassAssignGroupAction()
+    {
+        $ids = [];
+        for ($i = 1; $i <= 5; $i++) {
+            /** @var CustomerInterface $customer */
+            try {
+                $customer = $this->customerRepository->get('customer'.$i.'@example.com');
+                $this->assertEquals(1, $customer->getGroupId());
+                $ids[] = $customer->getId();
+            } catch (\Exception $e) {
+                self::fail($e->getMessage());
+            }
+        }
+
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
+        $params = [
+            'group' => 0,
+            'namespace' => 'customer_listing',
+            'selected' => $ids,
+            'form_key' => $formKey->getFormKey()
+        ];
 
         $this->getRequest()
-            ->setParam('group', 0)
-            ->setPostValue('namespace', 'customer_listing')
-            ->setPostValue('selected', [1]);
+            ->setParams($params)
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
-            $this->equalTo(['A total of 1 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            self::equalTo(['A total of 5 record(s) were updated.']),
+            MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
-
-        $customer = $this->customerRepository->getById(1);
-        $this->assertEquals(0, $customer->getGroupId());
+        for ($i = 1; $i < 5; $i++) {
+            try {
+                /** @var CustomerInterface $customer */
+                $customer = $this->customerRepository->get('customer'.$i.'@example.com');
+                $this->assertEquals(0, $customer->getGroupId());
+            } catch (\Exception $e) {
+                self::fail($e->getMessage());
+            }
+        }
     }
 
     /**
      * Valid group Id but no customer Ids specified
+     *
      * @magentoDbIsolation enabled
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
-        $this->getRequest()->setParam('group', 0)->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
+        $params = [
+            'group' => 0,
+            'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
+        ];
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['Please select item(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            MessageInterface::TYPE_ERROR
         );
     }
 }
