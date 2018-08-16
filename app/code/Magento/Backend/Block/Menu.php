@@ -77,12 +77,18 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
+     * @var \Magento\Framework\App\Route\ConfigInterface
+     */
+    private $routeConfig;
+
+    /**
      * @param Template\Context $context
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
@@ -94,6 +100,7 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         array $data = [],
         MenuItemChecker $menuItemChecker = null,
         AnchorRenderer $anchorRenderer = null
@@ -203,8 +210,9 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _callbackSecretKey($match)
     {
+        $routeId = $this->routeConfig->getRouteByFrontName($match[1]);
         return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
-            $match[1],
+            $routeId,
             $match[2],
             $match[3]
         );
