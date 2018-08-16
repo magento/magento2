@@ -51,15 +51,15 @@ class Crypt
     {
         $this->_cipher = $cipher;
         $this->_mode = $mode;
-        $this->_handle = mcrypt_module_open($cipher, '', $mode, '');
+        $this->_handle = @mcrypt_module_open($cipher, '', $mode, '');
         try {
-            $maxKeySize = mcrypt_enc_get_key_size($this->_handle);
+            $maxKeySize = @mcrypt_enc_get_key_size($this->_handle);
             if (strlen($key) > $maxKeySize) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase('Key must not exceed %1 bytes.', [$maxKeySize])
                 );
             }
-            $initVectorSize = mcrypt_enc_get_iv_size($this->_handle);
+            $initVectorSize = @mcrypt_enc_get_iv_size($this->_handle);
             if (true === $initVector) {
                 /* Generate a random vector from human-readable characters */
                 $abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -77,10 +77,10 @@ class Crypt
             }
             $this->_initVector = $initVector;
         } catch (\Exception $e) {
-            mcrypt_module_close($this->_handle);
+            @mcrypt_module_close($this->_handle);
             throw $e;
         }
-        mcrypt_generic_init($this->_handle, $key, $initVector);
+        @mcrypt_generic_init($this->_handle, $key, $initVector);
     }
 
     /**
@@ -90,8 +90,8 @@ class Crypt
      */
     public function __destruct()
     {
-        mcrypt_generic_deinit($this->_handle);
-        mcrypt_module_close($this->_handle);
+        @mcrypt_generic_deinit($this->_handle);
+        @mcrypt_module_close($this->_handle);
     }
 
     /**
@@ -135,7 +135,7 @@ class Crypt
         if (strlen($data) == 0) {
             return $data;
         }
-        return mcrypt_generic($this->_handle, $data);
+        return @mcrypt_generic($this->_handle, $data);
     }
 
     /**
@@ -149,7 +149,7 @@ class Crypt
         if (strlen($data) == 0) {
             return $data;
         }
-        $data = mdecrypt_generic($this->_handle, $data);
+        $data = @mdecrypt_generic($this->_handle, $data);
         /*
          * Returned string can in fact be longer than the unencrypted string due to the padding of the data
          * @link http://www.php.net/manual/en/function.mdecrypt-generic.php

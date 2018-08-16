@@ -37,7 +37,16 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->subscriber = $this->getMockBuilder('\Magento\Newsletter\Model\Subscriber')
-            ->setMethods(['loadByEmail', 'getId', 'delete', 'updateSubscription', 'subscribeCustomerById', 'unsubscribeCustomerById'])
+            ->setMethods(
+                [
+                    'loadByEmail',
+                    'getId',
+                    'delete',
+                    'updateSubscription',
+                    'subscribeCustomerById',
+                    'unsubscribeCustomerById',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->subscriberFactory->expects($this->any())->method('create')->willReturn($this->subscriber);
@@ -69,7 +78,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface');
-        $proceed  = function(CustomerInterface $customer, $passwordHash = null) use($customer) {
+        $proceed  = function (CustomerInterface $customer, $passwordHash = null) {
             return $customer;
         };
         /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */
@@ -85,17 +94,19 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function provideExtensionAttributeDataForAroundSave() {
+    public function provideExtensionAttributeDataForAroundSave()
+    {
         return [
             [true, true] ,
-            [false, false]
+            [false, false],
         ];
     }
 
     /**
      * @dataProvider provideExtensionAttributeDataForAroundSave
      */
-    public function testAroundSaveWithIsSubscribed($isSubscribed, $subscribeIsCreated) {
+    public function testAroundSaveWithIsSubscribed($isSubscribed, $subscribeIsCreated)
+    {
         $passwordHash = null;
         $customerId = 1;
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
@@ -124,7 +135,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
                 ->with($customerId);
         }
 
-        $proceed  = function(CustomerInterface $customer, $passwordHash = null) use($customer) {
+        $proceed  = function (CustomerInterface $customer, $passwordHash = null) {
             return $customer;
         };
         /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */
