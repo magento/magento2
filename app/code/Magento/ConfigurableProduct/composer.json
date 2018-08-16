@@ -14,7 +14,8 @@
         "magento/framework": "101.0.*",
         "magento/module-media-storage": "100.2.*",
         "magento/module-quote": "101.0.*",
-        "magento/module-ui": "101.0.*"
+        "magento/module-ui": "101.0.*",
+        "magento/module-downloadable": "100.2.*"
     },
     "suggest": {
         "magento/module-webapi": "100.2.*",

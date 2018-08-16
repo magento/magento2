@@ -104,4 +104,22 @@ class Downloadable extends Section
 
         return $this;
     }
+
+    /**
+     * Set "Is this downloadable Product?" value.
+     *
+     * @param string $downloadable
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function setIsDownloadable($downloadable = 'Yes', SimpleElement $element = null) : void
+    {
+        $context = $element ?: $this->_rootElement;
+        $isDownloadable = $context->find($this->isDownloadableProduct);
+        $value = 'Yes' == $downloadable ? '1' : '0';
+        if ($isDownloadable->isVisible() && $isDownloadable->getAttribute('value') != $value) {
+            $isDownloadable->click();
+        }
+    }
 }

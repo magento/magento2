@@ -9,6 +9,7 @@ use Magento\Ui\Component\Control\Container;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
 
 /**
  * Class Save
@@ -21,7 +22,8 @@ class Save extends Generic
     private static $availableProductTypes = [
         ConfigurableType::TYPE_CODE,
         Type::TYPE_SIMPLE,
-        Type::TYPE_VIRTUAL
+        Type::TYPE_VIRTUAL,
+        DownloadableType::TYPE_DOWNLOADABLE,
     ];
 
     /**
