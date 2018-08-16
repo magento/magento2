@@ -42,3 +42,6 @@ Password:,Password:
 "Placed on <span class=""no-link"">%created_at</span>","Placed on <span class=""no-link"">%created_at</span>"
 "Your shipping confirmation is below. Thank you again for your business.","Your shipping confirmation is below. Thank you again for your business."
 "Your Shipment #%shipment_id for Order #%order_id","Your Shipment #%shipment_id for Order #%order_id"
+"Update to your %store_name shipment","Update to your %store_name shipment"
+"Address Book","Address Book"
+"Account Information","Account Information"

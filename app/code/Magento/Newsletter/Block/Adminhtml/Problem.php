@@ -17,7 +17,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'problem/list.phtml';
+    protected $_template = 'Magento_Newsletter::problem/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection
