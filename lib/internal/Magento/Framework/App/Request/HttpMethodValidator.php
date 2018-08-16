@@ -45,13 +45,14 @@ class HttpMethodValidator implements ValidatorInterface
     /**
      * @param Http $request
      * @param ActionInterface $action
+     * @throws InvalidRequestException
      *
-     * @return InvalidRequestException
+     * @return void
      */
-    private function createException(
+    private function throwException(
         Http $request,
         ActionInterface $action
-    ): InvalidRequestException {
+    ): void {
         $uri = $request->getRequestUri();
         $method = $request->getMethod();
         if ($action instanceof InterceptorInterface) {
@@ -59,12 +60,11 @@ class HttpMethodValidator implements ValidatorInterface
         } else {
             $actionClass = get_class($action);
         }
-
         $this->log->debug(
             "URI '$uri'' cannot be accessed with $method method ($actionClass)"
         );
 
-        return new InvalidRequestException(
+        throw new InvalidRequestException(
             new NotFoundException(new Phrase('Page not found.'))
         );
     }
@@ -87,7 +87,7 @@ class HttpMethodValidator implements ValidatorInterface
                     && !$action instanceof $map[$method]
                 )
             ) {
-                throw $this->createException($request, $action);
+                $this->throwException($request, $action);
             }
         }
     }
