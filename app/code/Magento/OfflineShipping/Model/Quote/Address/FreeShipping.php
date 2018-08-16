@@ -77,7 +77,6 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
         return (bool)$shippingAddress->getFreeShipping();
     }
 
-
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param bool $isFreeShipping
