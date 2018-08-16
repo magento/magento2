@@ -10,6 +10,27 @@ use Magento\Framework\App\TemplateTypesInterface;
 
 class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
+    
+    /**
+     * @var \Magento\Email\Api\BackendTemplateRepositoryInterface
+     */
+    private $templateRepository;
+    
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Email\Api\BackendTemplateRepositoryInterface $templateRepository = null
+    ) {
+        $this->templateRepository = $templateRepository ?: $this->_objectManager->get(
+            \Magento\Email\Api\BackendTemplateRepositoryInterface::class
+        );
+        parent::__construct($context, $coreRegistry);
+    }
+    
     /**
      * Save transactional email action
      *
@@ -20,6 +41,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
         $request = $this->getRequest();
         $id = $this->getRequest()->getParam('id');
 
+        /** @var \Magento\Email\Model\BackendTemplate $template */
         $template = $this->_initTemplate('id');
         if (!$template->getId() && $id) {
             $this->messageManager->addError(__('This email template no longer exists.'));
@@ -53,7 +75,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
                 $template->setTemplateStyles('');
             }
 
-            $template->save();
+            $this->templateRepository->save($template);
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
             $this->messageManager->addSuccess(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');

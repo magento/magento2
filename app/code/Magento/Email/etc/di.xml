@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Email\Model\Transport" />
     <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
     <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
+    <preference for="Magento\Email\Api\BackendTemplateRepositoryInterface" type="Magento\Email\Model\BackendTemplateRepository" />
     <type name="Magento\Email\Model\BackendTemplate">
         <arguments>
             <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
