@@ -91,11 +91,6 @@ class Repository
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\UrlInterfaceFactory
-     */
-    private $baseUrlFactory;
-
-    /**
      * Repository constructor.
      * @param UrlInterface                                       $baseUrl
      * @param \Magento\Framework\View\DesignInterface            $design
@@ -107,7 +102,6 @@ class Repository
      * @param File\ContextFactory                                $contextFactory
      * @param RemoteFactory                                      $remoteFactory
      * @param \Magento\Store\Model\StoreManagerInterface         $storeManager
-     * @param \Magento\Framework\UrlInterfaceFactory|null        $baseUrlFactory
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
