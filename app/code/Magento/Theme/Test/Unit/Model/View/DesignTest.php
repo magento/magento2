@@ -13,6 +13,8 @@ use Magento\Theme\Model\View\Design;
 
 class DesignTest extends \PHPUnit\Framework\TestCase
 {
+    const THEME_NAME = 'anyName4Theme';
+
     /**
      * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -41,12 +43,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $appEmulation;
-
-    /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $defaultTheme = 'anyName4Theme';
+    private $appEmulation;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -66,8 +63,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->state = $this->createMock(\Magento\Framework\App\State::class);
+        $themes = [Design::DEFAULT_AREA => self::THEME_NAME];
         $this->appEmulation = $this->createMock(\Magento\Store\Model\App\Emulation::class);
-        $themes = [Design::DEFAULT_AREA => $this->defaultTheme];
         $this->model = new Design(
             $this->storeManager,
             $this->flyweightThemeFactory,
@@ -140,7 +137,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
         $this->flyweightThemeFactory->expects($this->once())
             ->method('create')
-            ->with($this->defaultTheme, $area);
+            ->with(self::THEME_NAME, $area);
         $this->assertInstanceOf(get_class($this->model), $this->model->setDefaultDesignTheme());
     }
 
