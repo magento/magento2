@@ -98,6 +98,17 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $conditions
             );
 
+            if ($object->getStoreId() != '0')
+                {
+                    $conditions['store_id = ?'] = 0;
+                    $connection->update(
+                        $this->getTable('catalog_product_bundle_option_value'),
+                        [
+                            'title' => $object->getDefaultTitle()
+                        ],
+                        $conditions
+                    );
+                }
             return $this;
         }
         
