@@ -21,5 +21,6 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{ruleName.apply}}" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discountAmount}}" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
