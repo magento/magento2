@@ -40,11 +40,6 @@
             <argument name="filter" xsi:type="object">Magento\CatalogInventory\Model\FilterCustomAttribute</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product">
-        <arguments>
-            <argument name="filter" xsi:type="object">Magento\CatalogInventory\Model\FilterCustomAttribute</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogInventory\Model\FilterCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
@@ -86,6 +81,9 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\CatalogInventory\Model\FilterCustomAttribute</argument>
+        </arguments>
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
