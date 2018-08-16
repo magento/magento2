@@ -42,7 +42,7 @@
             <!--Delete created product-->
             <amOnPage url="/admin" stepKey="GoToDashboard"/>
             <actionGroup ref="GoToProductPage" stepKey="againGoToProductPage"/>
-            <actionGroup ref="DeleteCreatedProduct" stepKey="deleteCreatedProduct"/>
+            <actionGroup ref="DeleteCreatedProductActionGroup" stepKey="deleteCreatedProduct"/>
         </after>
 
     </test>
