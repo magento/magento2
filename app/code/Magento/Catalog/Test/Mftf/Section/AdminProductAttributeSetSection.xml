@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSetSection">
+        <element name="save" type="button" selector="button[title='Save']" timeout="30"/>
+        <element name="deleteBtn" type="button" selector="button[title='Delete']" timeout="30"/>
+        <element name="attribute" type="button" selector="//span[text()='{{var1}}']" parameterized="true"/>
+        <element name="addNewGroupBtn" type="button" selector="button.add" timeout="30"/>
+        <element name="name" type="input" selector="#attribute_set_name"/>
+        <element name="basedOn" type="select" selector="#skeleton_set"/>
+    </section>
+    <section name="AdminModifyAttributesSection">
+        <!-- Parameter is the attribute name -->
+        <element name="dropDownAttributeByName" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+    </section>
+</sections>

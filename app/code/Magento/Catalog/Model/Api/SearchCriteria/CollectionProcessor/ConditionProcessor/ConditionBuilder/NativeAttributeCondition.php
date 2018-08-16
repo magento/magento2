@@ -74,7 +74,7 @@ class NativeAttributeCondition implements CustomConditionInterface
             ];
         }
 
-        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
+        return $conditionsMap[$conditionType] ?? $conditionType;
     }
 
     /**

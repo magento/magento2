@@ -14,5 +14,5 @@ class Tax extends \Magento\Checkout\Block\Total\DefaultTotal
     /**
      * @var string
      */
-    protected $_template = 'checkout/tax.phtml';
+    protected $_template = 'Magento_Tax::checkout/tax.phtml';
 }

@@ -7,8 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="checkout" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
-            <group id="cart" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="checkout" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="cart" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="grouped_product_image" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Grouped Product Image</label>
                     <source_model>Magento\Catalog\Model\Config\Source\Product\Thumbnail</source_model>

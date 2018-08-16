@@ -28,7 +28,7 @@ class ConfigurationScanner
      *
      * @param string $fileName
      *
-     * @return array array of paths to the configuration files
+     * @return array of paths to the configuration files
      */
     public function scan($fileName)
     {

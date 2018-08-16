@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\ScopeResolverInterface;
 use \Magento\Framework\DB\Adapter\AdapterInterface;
 use \Magento\Framework\DB\Select;
-use \Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Locale\Format;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use \Magento\Rule\Model\Condition\Context;
 use \Magento\Backend\Helper\Data;
@@ -130,8 +134,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->formatMock = $this->getMockBuilder(FormatInterface::class)
-            ->getMockForAbstractClass();
+        $this->formatMock = new Format(
+            $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()
+        );
+
         $this->model = new SalesRuleProduct(
             $this->contextMock,
             $this->backendHelperMock,
@@ -230,5 +238,82 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->with($this->logicalNot($this->stringContains('visibility')), $this->anything(), $this->anything());
 
         $this->model->validate($item);
+    }
+
+    /**
+     * @param boolean $isValid
+     * @param string $conditionValue
+     * @param string $operator
+     * @param double $productPrice
+     * @dataProvider localisationProvider
+     */
+    public function testQuoteLocaleFormatPrice($isValid, $conditionValue, $operator = '>=', $productPrice = 2000.00)
+    {
+        $attr = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMockForAbstractClass();
+
+        $attr->expects($this->any())
+            ->method('getAttribute')
+            ->willReturn('');
+
+        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData',])
+            ->getMock();
+
+        $product->expects($this->any())
+            ->method('setQuoteItemPrice')
+            ->willReturnSelf();
+
+        $product->expects($this->any())
+            ->method('getResource')
+            ->willReturn($attr);
+
+        $product->expects($this->any())
+            ->method('hasData')
+            ->willReturn(true);
+
+        $product->expects($this->any())
+            ->method('getData')
+            ->with('quote_item_price')
+            ->willReturn($productPrice);
+
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPrice', 'getProduct',])
+            ->getMockForAbstractClass();
+
+        $item->expects($this->any())
+            ->method('getPrice')
+            ->willReturn($productPrice);
+
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+
+        $this->model->setAttribute('quote_item_price')
+            ->setOperator($operator);
+
+        $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
+    }
+
+    /**
+     * DataProvider for testQuoteLocaleFormatPrice
+     *
+     * @return array
+     */
+    public function localisationProvider(): array
+    {
+        return [
+            'number' => [true, 500.01],
+            'locale' => [true, '1,500.03'],
+            'operation' => [true, '1,500.03', '!='],
+            'stringOperation' => [false, '1,500.03', '{}'],
+            'smallPrice' => [false, '1,500.03', '>=', 1000],
+        ];
     }
 }

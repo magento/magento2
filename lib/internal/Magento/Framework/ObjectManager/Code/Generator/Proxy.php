@@ -155,7 +155,8 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameterNames = [];
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
-            $parameterNames[] = '$' . $parameter->getName();
+            $name = $parameter->isVariadic() ? '... $' . $parameter->getName() : '$' . $parameter->getName();
+            $parameterNames[] = $name;
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
@@ -164,6 +165,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => $parameters,
             'body' => $this->_getMethodBody($method->getName(), $parameterNames),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'returnType' => $method->getReturnType(),
         ];
 
         return $methodInfo;

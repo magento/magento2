@@ -450,6 +450,10 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $this->quantityValidator->validate($this->observerMock);
     }
 
+    /**
+     * @param $qty
+     * @param $hasError
+     */
     private function setUpStubForQuantity($qty, $hasError)
     {
         $this->productMock->expects($this->any())
@@ -480,6 +484,9 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('');
     }
 
+    /**
+     * @param $qty
+     */
     private function createInitialStub($qty)
     {
         $this->storeMock->expects($this->any())
