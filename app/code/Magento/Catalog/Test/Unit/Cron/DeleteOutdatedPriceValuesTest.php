@@ -65,12 +65,18 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
-        $this->attributeRepositoryMock = $this->getMockBuilder(AttributeRepository::class)->disableOriginalConstructor()->getMock();
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)->disableOriginalConstructor()->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfig::class)->disableOriginalConstructor()->getMock();
-        $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMock();
-        $this->attributeBackendMock = $this->getMockBuilder(BackendInterface::class)->disableOriginalConstructor()->getMock();
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->attributeRepositoryMock = $this->getMockBuilder(AttributeRepository::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfig::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->attributeBackendMock = $this->getMockBuilder(BackendInterface::class)
+            ->disableOriginalConstructor()->getMock();
         $this->deleteOutdatedPriceValues = new DeleteOutdatedPriceValues(
             $this->resourceConnectionMock,
             $this->attributeRepositoryMock,
