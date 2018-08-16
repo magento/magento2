@@ -5,10 +5,13 @@
  */
 
 if (!isset($_GET['name'])) {
-    throw new \InvalidArgumentException('The name of log file is required for getting logs.');
+    throw new \InvalidArgumentException(
+        'The name of log file is required for getting logs.'
+    );
+}
+$name = urldecode($_GET['name']);
+if (preg_match('/\.\.(\\\|\/)/', $name)) {
+    throw new \InvalidArgumentException('Invalid log file name');
 }
 
-$name = urldecode($_GET['name']);
-$file = file_get_contents('../../../../var/log/' . $name);
-
-echo serialize($file);
+echo serialize(file_get_contents('../../../../var/log' .'/' .$name));
