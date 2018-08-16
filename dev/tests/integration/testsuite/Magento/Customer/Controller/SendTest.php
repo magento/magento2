@@ -21,28 +21,27 @@ class SendTest extends AbstractController
     /** @var FormKey */
     private $formKey;
 
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     protected function setUp()
     {
         parent::setUp();
+
+        $this->accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
+        $this->formKey = Bootstrap::getObjectManager()->create(FormKey::class);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testExecutePost()
+    {
         $logger = $this->getMock(LoggerInterface::class);
         $session = Bootstrap::getObjectManager()->create(
             Session::class,
             [$logger]
         );
-        $this->accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
-        $this->formKey = Bootstrap::getObjectManager()->create(FormKey::class);
         $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testExecutePost()
-    {
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue(
