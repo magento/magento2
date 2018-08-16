@@ -511,7 +511,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $this
             ));
 
-            $this->filterCustomAttribute->execute($this->customAttributesCodes);
+            $this->customAttributesCodes = $this->filterCustomAttribute->execute($this->customAttributesCodes);
             $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
         }
 
