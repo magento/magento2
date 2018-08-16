@@ -84,6 +84,9 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
             }
 
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+
+            // The automatic translation is not necessary since the category title can be set per store view
+            $pageMainTitle->setUseTranslations(false);
             if ($pageMainTitle) {
                 $pageMainTitle->setPageTitle($this->getCurrentCategory()->getName());
             }
