@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\File;
 
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Image\Adapter\UploadConfigInterface;
 
 /**
  * File upload class
@@ -118,6 +118,11 @@ class Uploader
      */
     protected $_validateCallbacks = [];
 
+    /**
+     * @var \Magento\Framework\File\Mime
+     */
+    private $fileMime;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -133,12 +138,16 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see UploadConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 1920;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see UploadConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 1200;
 
@@ -154,10 +163,13 @@ class Uploader
      * Init upload
      *
      * @param string|array $fileId
+     * @param null|\Magento\Framework\File\Mime $fileMime
      * @throws \Exception
      */
-    public function __construct($fileId)
-    {
+    public function __construct(
+        $fileId,
+        Mime $fileMime = null
+    ) {
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -165,6 +177,7 @@ class Uploader
         } else {
             $this->_fileExists = true;
         }
+        $this->fileMime = $fileMime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Mime::class);
     }
 
     /**
@@ -511,7 +524,7 @@ class Uploader
      */
     private function _getMimeType()
     {
-        return $this->_file['type'];
+        return $this->fileMime->getMimeType($this->_file['tmp_name']);
     }
 
     /**

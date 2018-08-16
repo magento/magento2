@@ -2,7 +2,7 @@
     "name": "magento/module-signifyd",
     "description": "Submitting Case Entry to Signifyd on Order Creation",
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.0.13|~7.1.0",
         "magento/module-config": "101.0.*",
         "magento/framework": "101.0.*",
         "magento/module-sales": "101.0.*",
@@ -17,7 +17,7 @@
         "magento/module-config": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "100.2.1",
+    "version": "100.2.2",
     "license": [
         "proprietary"
     ],

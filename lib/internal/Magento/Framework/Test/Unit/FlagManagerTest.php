@@ -112,6 +112,9 @@ class FlagManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param $flagCode
+     */
     private function setupFlagObject($flagCode)
     {
         $this->flagFactoryMock->expects($this->once())

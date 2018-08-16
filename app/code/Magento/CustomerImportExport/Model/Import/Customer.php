@@ -346,6 +346,43 @@ class Customer extends AbstractCustomer
     }
 
     /**
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
+     *
+     * @param array $rows Each row must contain data from columns email
+     * and website code.
+     *
+     * @return void
+     */
+    public function prepareCustomerData($rows)
+    {
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
+    }
+
+    /**
      * Prepare customer data for update
      *
      * @param array $rowData
@@ -456,6 +493,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $this->prepareCustomerData($bunch);
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];

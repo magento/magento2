@@ -156,6 +156,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testConfigurableImportWithMultipleStores()
     {
@@ -204,6 +205,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testConfigurableImportWithStoreSpecifiedMainItem()

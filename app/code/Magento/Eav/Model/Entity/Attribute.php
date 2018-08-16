@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -276,12 +277,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = $this->_localeDate->getDateFormat(
-                    \IntlDateFormatter::SHORT
-                );
                 try {
-                    $defaultValue = $this->dateTimeFormatter->formatObject(new \DateTime($defaultValue), $format);
-                    $this->setDefaultValue($defaultValue);
+                    $locale = $this->_localeResolver->getLocale();
+                    $defaultValue = $this->_localeDate->date($defaultValue, $locale, false, false);
+                    $this->setDefaultValue($defaultValue->format(DateTime::DATETIME_PHP_FORMAT));
                 } catch (\Exception $e) {
                     throw new LocalizedException(__('Invalid default date'));
                 }

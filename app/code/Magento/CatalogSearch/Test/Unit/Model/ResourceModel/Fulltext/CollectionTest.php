@@ -206,6 +206,12 @@ class CollectionTest extends BaseCollection
         return $filterBuilder;
     }
 
+    /**
+     * @param MockObject $filterBuilder
+     * @param array $filters
+     *
+     * @return MockObject
+     */
     protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters)
     {
         $i = 1;
@@ -222,6 +228,9 @@ class CollectionTest extends BaseCollection
         return $filterBuilder;
     }
 
+    /**
+     * @return MockObject
+     */
     protected function createFilter()
     {
         $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)

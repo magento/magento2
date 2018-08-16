@@ -81,7 +81,7 @@ class Search extends \Magento\Backend\Block\Widget
      *
      * @param string $labelPart
      * @param int $templateId
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @return array
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {

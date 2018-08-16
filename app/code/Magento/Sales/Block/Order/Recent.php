@@ -5,6 +5,13 @@
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Customer\Model\Session;
+use Magento\Sales\Model\Order\Config;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Sales order history block
  *
@@ -13,6 +20,11 @@ namespace Magento\Sales\Block\Order;
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Limit of orders
+     */
+    const ORDER_LIMIT = 5;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
@@ -29,24 +41,33 @@ class Recent extends \Magento\Framework\View\Element\Template
     protected $_orderConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Sales\Model\Order\Config $orderConfig,
-        array $data = []
+        Context $context,
+        CollectionFactory $orderCollectionFactory,
+        Session $customerSession,
+        Config $orderConfig,
+        array $data = [],
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -55,11 +76,22 @@ class Recent extends \Magento\Framework\View\Element\Template
     protected function _construct()
     {
         parent::_construct();
+        $this->getRecentOrders();
+    }
+
+    /**
+     * Get recently placed orders. By default they will be limited by 5.
+     */
+    protected function getRecentOrders()
+    {
         $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
             '*'
         )->addAttributeToFilter(
             'customer_id',
             $this->_customerSession->getCustomerId()
+        )->addAttributeToFilter(
+            'store_id',
+            $this->storeManager->getStore()->getId()
         )->addAttributeToFilter(
             'status',
             ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
@@ -67,7 +99,7 @@ class Recent extends \Magento\Framework\View\Element\Template
             'created_at',
             'desc'
         )->setPageSize(
-            '5'
+            self::ORDER_LIMIT
         )->load();
         $this->setOrders($orders);
     }

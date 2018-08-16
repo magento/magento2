@@ -3,27 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflineShipping\Model\Quote\Address;
 
-class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInterface
+use Magento\OfflineShipping\Model\SalesRule\Calculator;
+use Magento\OfflineShipping\Model\SalesRule\ExtendedCalculator;
+use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Store\Model\StoreManagerInterface;
+
+class FreeShipping implements FreeShippingInterface
 {
     /**
-     * @var \Magento\OfflineShipping\Model\SalesRule\Calculator
+     * @var ExtendedCalculator
      */
     protected $calculator;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
+     * @param StoreManagerInterface $storeManager
+     * @param Calculator $calculator
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
+        StoreManagerInterface $storeManager,
+        Calculator $calculator
     ) {
         $this->storeManager = $storeManager;
         $this->calculator = $calculator;
@@ -38,6 +46,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
         if (!count($items)) {
             return false;
         }
+
         $store = $this->storeManager->getStore($quote->getStoreId());
         $this->calculator->init(
             $store->getWebsiteId(),
@@ -70,15 +79,14 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
              * }
              *
              */
-
-            /** Parent free shipping we apply to all children*/
+             /** Parent free shipping we apply to all children*/
             $this->applyToChildren($item, $itemFreeShipping);
         }
         return (bool)$shippingAddress->getFreeShipping();
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param AbstractItem $item
      * @param bool $isFreeShipping
      * @return void
      */
@@ -91,6 +99,22 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
                     $child->setFreeShipping($isFreeShipping);
                 }
             }
+        }
+    }
+
+    /**
+     * Sets free shipping availability to the quote items.
+     *
+     * @param array $items
+     * @param bool $freeShipping
+     */
+    private function applyToItems(array $items, bool $freeShipping)
+    {
+        /** @var AbstractItem $item */
+        foreach ($items as $item) {
+            $item->getAddress()
+                ->setFreeShipping((int)$freeShipping);
+            $this->applyToChildren($item, $freeShipping);
         }
     }
 }

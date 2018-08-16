@@ -6,28 +6,39 @@
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
 use Magento\Framework\Api\Test\Unit\Code\Generator\EntityChildTestAbstract;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class RepositoryTest
  */
 class RepositoryTest extends EntityChildTestAbstract
 {
+    /**
+     * @return mixed|string
+     */
     protected function getSourceClassName()
     {
         return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample::class;
     }
 
+    /**
+     * @return mixed|string
+     */
     protected function getResultClassName()
     {
         return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample\Repository::class;
     }
 
+    /**
+     * @return mixed|string
+     */
     protected function getGeneratorClassName()
     {
         return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Repository::class;
     }
 
+    /**
+     * @return mixed|string
+     */
     protected function getOutputFileName()
     {
         return 'SampleConverter.php';

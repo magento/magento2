@@ -8,10 +8,7 @@ namespace Magento\Bundle\Model\Category;
 use Magento\Catalog\Model\Category;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
- * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  */
 class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 {
@@ -57,6 +54,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testReindex()
     {
@@ -88,6 +88,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testCategoryMove()
     {
@@ -130,8 +133,10 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @depends testReindex
+     * @magentoDbIsolation disabled
      */
     public function testCategoryDelete()
     {
@@ -161,7 +166,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testCategoryCreate()
     {

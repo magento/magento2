@@ -176,7 +176,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation11_ProductsGridFilter" summary="Apply category products grid filter">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>

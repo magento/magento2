@@ -16,6 +16,11 @@ class CouponUsagesIncrement
      */
     private $updateCouponUsages;
 
+    /**
+     * CouponUsagesIncrement constructor.
+     *
+     * @param UpdateCouponUsages $updateCouponUsages
+     */
     public function __construct(
         UpdateCouponUsages $updateCouponUsages
     ) {

@@ -123,6 +123,9 @@ class LoadTest extends \PHPUnit\Framework\TestCase
         $this->loadAction->execute();
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
