@@ -425,7 +425,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
-            imagealphablending($newWatermark, true);
             imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
@@ -450,7 +449,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
-            imagealphablending($newWatermark, true);
             imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
