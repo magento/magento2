@@ -44,7 +44,7 @@ class OauthClient extends AbstractService
             $httpClient->setTimeout(self::DEFAULT_TIMEOUT);
         }
         if (!isset($storage)) {
-            $storage = new \OAuth\Common\Storage\Session();
+            $storage = new \OAuth\Common\Storage\Memory();
         }
         if (!isset($signature)) {
             $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($credentials);

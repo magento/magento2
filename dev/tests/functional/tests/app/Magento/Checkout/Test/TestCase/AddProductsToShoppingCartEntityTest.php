@@ -114,6 +114,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         // Steps
         $this->addToCart($products);
 
+        $cart['data'] = (array)$cart['data'];
         $cart['data']['items'] = ['products' => $products];
         return [
             'cart' => $this->fixtureFactory->createByCode('cart', $cart),

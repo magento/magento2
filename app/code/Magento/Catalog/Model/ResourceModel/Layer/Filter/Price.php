@@ -82,7 +82,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $rangeExpr = new \Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1");
 
         $select->columns(['range' => $rangeExpr, 'count' => $countExpr]);
-        $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
+        $select->group($rangeExpr)->order(new \Zend_Db_Expr("({$rangeExpr}) ASC"));
 
         return $this->getConnection()->fetchPairs($select);
     }
@@ -115,10 +115,10 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // remove join with main table
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
-            ) || !isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
-            )
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
+        ) || !isset(
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
+        )
         ) {
             return $select;
         }
