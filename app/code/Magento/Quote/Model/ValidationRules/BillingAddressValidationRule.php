@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
 class BillingAddressValidationRule implements QuoteValidationRuleInterface
@@ -14,14 +15,23 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
     /**
      * @var string
      */
-    private $defaultMessage;
+    private $generalMessage;
 
     /**
-     * @param string $defaultMessage
+     * @var ValidationResultFactory
      */
-    public function __construct(string $defaultMessage = '')
-    {
-        $this->defaultMessage = $defaultMessage;
+    private $validationResultFactory;
+
+    /**
+     * @param ValidationResultFactory $validationResultFactory
+     * @param string $generalMessage
+     */
+    public function __construct(
+        ValidationResultFactory $validationResultFactory,
+        string $generalMessage = ''
+    ) {
+        $this->validationResultFactory = $validationResultFactory;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
@@ -32,12 +42,12 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
         $validationErrors = [];
         $validationResult = $quote->getBillingAddress()->validate();
         if ($validationResult !== true) {
-            $validationErrors = [$this->defaultMessage];
+            $validationErrors = [$this->generalMessage];
         }
         if (is_array($validationResult)) {
             $validationErrors = array_merge($validationErrors, $validationResult);
         }
 
-        return $validationErrors ? [get_class($this) => $validationErrors] : [];
+        return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }

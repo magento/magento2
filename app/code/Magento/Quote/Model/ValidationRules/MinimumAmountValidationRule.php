@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage;
 
@@ -15,7 +16,7 @@ class MinimumAmountValidationRule implements QuoteValidationRuleInterface
     /**
      * @var string
      */
-    private $defaultMessage;
+    private $generalMessage;
 
     /**
      * @var ValidationMessage
@@ -23,13 +24,23 @@ class MinimumAmountValidationRule implements QuoteValidationRuleInterface
     private $amountValidationMessage;
 
     /**
-     * @param ValidationMessage $amountValidationMessage
-     * @param string $defaultMessage
+     * @var ValidationResultFactory
      */
-    public function __construct(ValidationMessage $amountValidationMessage, string $defaultMessage = '')
-    {
+    private $validationResultFactory;
+
+    /**
+     * @param ValidationMessage $amountValidationMessage
+     * @param ValidationResultFactory $validationResultFactory
+     * @param string $generalMessage
+     */
+    public function __construct(
+        ValidationMessage $amountValidationMessage,
+        ValidationResultFactory $validationResultFactory,
+        string $generalMessage = ''
+    ) {
         $this->amountValidationMessage = $amountValidationMessage;
-        $this->defaultMessage = $defaultMessage;
+        $this->validationResultFactory = $validationResultFactory;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
@@ -41,12 +52,12 @@ class MinimumAmountValidationRule implements QuoteValidationRuleInterface
         $validationErrors = [];
         $validationResult = $quote->validateMinimumAmount($quote->getIsMultiShipping());
         if (!$validationResult) {
-            if (!$this->defaultMessage) {
-                $this->defaultMessage = $this->amountValidationMessage->getMessage();
+            if (!$this->generalMessage) {
+                $this->generalMessage = $this->amountValidationMessage->getMessage();
             }
-            $validationErrors = [$this->defaultMessage];
+            $validationErrors = [$this->generalMessage];
         }
 
-        return $validationErrors ? [get_class($this) => $validationErrors] : [];
+        return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }

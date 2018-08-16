@@ -11,7 +11,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class QuoteValidatorTest
+ * Class QuoteValidatorTest.
  *
  * @magentoDbIsolation enabled
  */
@@ -106,7 +106,8 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateBeforeSubmitMinimumAmountInvalid()
     {
         $quote = $this->getQuote();
-
+        $quote->getShippingAddress()
+            ->setBaseSubtotal(0);
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
@@ -116,6 +117,18 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateBeforeSubmitWithoutMinimumOrderAmount()
     {
         $this->quoteValidator->validateBeforeSubmit($this->getQuote());
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/active 1
+     * @magentoConfigFixture current_store sales/minimum_order/amount 100
+     */
+    public function testValidateBeforeSubmitWithMinimumOrderAmount()
+    {
+        $quote = $this->getQuote();
+        $quote->getShippingAddress()
+            ->setBaseSubtotal(200);
+        $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**

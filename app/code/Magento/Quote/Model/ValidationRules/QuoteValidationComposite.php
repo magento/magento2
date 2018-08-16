@@ -16,8 +16,22 @@ class QuoteValidationComposite implements QuoteValidationRuleInterface
      */
     private $validationRules = [];
 
+    /**
+     * @param QuoteValidationRuleInterface[] $validationRules
+     * @throws \InvalidArgumentException
+     */
     public function __construct(array $validationRules)
     {
+        foreach ($validationRules as $validationRule) {
+            if (!($validationRule instanceof QuoteValidationRuleInterface)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Instance of the ValidationRuleInterface is expected, got %s instead.',
+                        get_class($validationRule)
+                    )
+                );
+            }
+        }
         $this->validationRules = $validationRules;
     }
 
@@ -30,7 +44,11 @@ class QuoteValidationComposite implements QuoteValidationRuleInterface
 
         foreach ($this->validationRules as $validationRule) {
             $ruleValidationResult = $validationRule->validate($quote);
-            $aggregateResult += $ruleValidationResult;
+            foreach ($ruleValidationResult as $item) {
+                if (!$item->isValid()) {
+                    array_push($aggregateResult, $item);
+                }
+            }
         }
 
         return $aggregateResult;

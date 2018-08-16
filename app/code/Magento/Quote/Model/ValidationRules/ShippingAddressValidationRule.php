@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
 class ShippingAddressValidationRule implements QuoteValidationRuleInterface
@@ -14,14 +15,24 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
     /**
      * @var string
      */
-    private $defaultMessage;
+    private $generalMessage;
 
     /**
-     * @param string $defaultMessage
+     * @var ValidationResultFactory
      */
-    public function __construct(string $defaultMessage = '')
+    private $validationResultFactory;
+
+    /**
+     * @param ValidationResultFactory $validationResultFactory
+     * @param string $generalMessage
+     */
+    public function __construct(
+        ValidationResultFactory $validationResultFactory,
+        string $generalMessage = ''
+    )
     {
-        $this->defaultMessage = $defaultMessage;
+        $this->validationResultFactory = $validationResultFactory;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
@@ -34,13 +45,13 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         if (!$quote->isVirtual()) {
             $validationResult = $quote->getShippingAddress()->validate();
             if ($validationResult !== true) {
-                $validationErrors = [$this->defaultMessage];
+                $validationErrors = [$this->generalMessage];
             }
             if (is_array($validationResult)) {
                 $validationErrors = array_merge($validationErrors, $validationResult);
             }
         }
 
-        return $validationErrors ? [get_class($this) => $validationErrors] : [];
+        return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }

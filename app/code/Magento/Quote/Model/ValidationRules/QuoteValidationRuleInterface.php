@@ -6,6 +6,7 @@
 
 namespace Magento\Quote\Model\ValidationRules;
 
+use Magento\Framework\Validation\ValidationResult;
 use Magento\Quote\Model\Quote;
 
 interface QuoteValidationRuleInterface
@@ -14,19 +15,7 @@ interface QuoteValidationRuleInterface
      * Validate quote model.
      *
      * @param Quote $quote
-     * @return array
-     * [
-     *      'ruleId_1' => [
-     *          'Base error message',
-     *          'Additional error message #1',
-     *          'Additional error message #2',
-     *          'Additional error message #3',
-     *          'Additional error message #4',
-     *      ],
-     *      'ruleId_2' => [
-     *          'Base error message',
-     *      ]
-     * ]
+     * @return ValidationResult[]
      */
     public function validate(Quote $quote): array;
 }

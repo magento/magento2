@@ -84,7 +84,12 @@ class QuoteValidator
      */
     public function validateBeforeSubmit(QuoteEntity $quote)
     {
-        foreach ($this->quoteValidationRule->validate($quote) as $messages) {
+        foreach ($this->quoteValidationRule->validate($quote) as $validationResult) {
+            if ($validationResult->isValid()) {
+                continue;
+            }
+
+            $messages = $validationResult->getErrors();
             $defaultMessage = array_shift($messages);
             if ($defaultMessage && !empty($messages)) {
                 $defaultMessage .= ' %1';

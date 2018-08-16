@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\ValidationRules;
 
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
 class AllowedCountryValidationRule implements QuoteValidationRuleInterface
@@ -15,7 +16,7 @@ class AllowedCountryValidationRule implements QuoteValidationRuleInterface
     /**
      * @var string
      */
-    private $defaultMessage;
+    private $generalMessage;
 
     /**
      * @var AllowedCountries
@@ -23,13 +24,23 @@ class AllowedCountryValidationRule implements QuoteValidationRuleInterface
     private $allowedCountryReader;
 
     /**
-     * @param AllowedCountries $allowedCountryReader
-     * @param string $defaultMessage
+     * @var ValidationResultFactory
      */
-    public function __construct(AllowedCountries $allowedCountryReader, string $defaultMessage = '')
-    {
-        $this->defaultMessage = $defaultMessage;
+    private $validationResultFactory;
+
+    /**
+     * @param AllowedCountries $allowedCountryReader
+     * @param ValidationResultFactory $validationResultFactory
+     * @param string $generalMessage
+     */
+    public function __construct(
+        AllowedCountries $allowedCountryReader,
+        ValidationResultFactory $validationResultFactory,
+        string $generalMessage = ''
+    ) {
         $this->allowedCountryReader = $allowedCountryReader;
+        $this->validationResultFactory = $validationResultFactory;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
@@ -46,10 +57,10 @@ class AllowedCountryValidationRule implements QuoteValidationRuleInterface
                     $this->allowedCountryReader->getAllowedCountries()
                 );
             if (!$validationResult) {
-                $validationErrors = [$this->defaultMessage];
+                $validationErrors = [$this->generalMessage];
             }
         }
 
-        return $validationErrors ? [get_class($this) => $validationErrors] : [];
+        return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }

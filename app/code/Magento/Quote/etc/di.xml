@@ -110,27 +110,27 @@
     </type>
     <type name="Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule">
         <arguments>
-            <argument name="defaultMessage" xsi:type="string">Some addresses can't be used due to the configurations for specific countries.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Some addresses can't be used due to the configurations for specific countries.</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule">
         <arguments>
-            <argument name="defaultMessage" xsi:type="string">Please check the shipping address information.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the shipping address information.</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
         <arguments>
-            <argument name="defaultMessage" xsi:type="string">The shipping method is missing. Select the shipping method and try again.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">The shipping method is missing. Select the shipping method and try again.</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\ValidationRules\BillingAddressValidationRule">
         <arguments>
-            <argument name="defaultMessage" xsi:type="string">Please check the billing address information.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the billing address information.</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule">
         <arguments>
-            <argument name="defaultMessage" xsi:type="string">Enter a valid payment method and try again.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Enter a valid payment method and try again.</argument>
         </arguments>
     </type>
 </config>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
 class ShippingMethodValidationRule implements QuoteValidationRuleInterface
@@ -14,14 +15,23 @@ class ShippingMethodValidationRule implements QuoteValidationRuleInterface
     /**
      * @var string
      */
-    private $defaultMessage;
+    private $generalMessage;
 
     /**
-     * @param string $defaultMessage
+     * @var ValidationResultFactory
      */
-    public function __construct(string $defaultMessage = '')
-    {
-        $this->defaultMessage = $defaultMessage;
+    private $validationResultFactory;
+
+    /**
+     * @param ValidationResultFactory $validationResultFactory
+     * @param string $generalMessage
+     */
+    public function __construct(
+        ValidationResultFactory $validationResultFactory,
+        string $generalMessage = ''
+    ) {
+        $this->validationResultFactory = $validationResultFactory;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
@@ -36,10 +46,10 @@ class ShippingMethodValidationRule implements QuoteValidationRuleInterface
             $shippingRate = $quote->getShippingAddress()->getShippingRateByCode($shippingMethod);
             $validationResult = $shippingMethod && $shippingRate;
             if (!$validationResult) {
-                $validationErrors = [$this->defaultMessage];
+                $validationErrors = [$this->generalMessage];
             }
         }
 
-        return $validationErrors ? [get_class($this) => $validationErrors] : [];
+        return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }
