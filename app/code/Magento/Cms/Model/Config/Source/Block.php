@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Config\Source;
 
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class Block
  */
-class Block implements \Magento\Framework\Option\ArrayInterface
+class Block implements OptionSourceInterface
 {
     /**
      * @var array
@@ -18,12 +21,12 @@ class Block implements \Magento\Framework\Option\ArrayInterface
     private $options;
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
      */
     private $collectionFactory;
 
     /**
-     * @param CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory
@@ -32,15 +35,14 @@ class Block implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * To option array
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
         if (!$this->options) {
             $this->options = $this->collectionFactory->create()->toOptionIdArray();
         }
+
         return $this->options;
     }
 }
