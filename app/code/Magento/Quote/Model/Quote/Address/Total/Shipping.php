@@ -160,7 +160,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $address->setWeight($addressWeight);
         $address->setFreeMethodWeight($freeMethodWeight);
 
-
         $address->collectShippingRates();
 
         if ($method) {
