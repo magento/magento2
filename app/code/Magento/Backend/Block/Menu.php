@@ -81,7 +81,6 @@ class Menu extends \Magento\Backend\Block\Template
      */
     private $routeConfig;
 
-
     /**
      * @param Template\Context $context
      * @param \Magento\Backend\Model\UrlInterface $url
