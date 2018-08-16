@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Test\Unit\DataProvider;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -29,6 +30,9 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -42,11 +46,13 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $attributeInputType
+     * @param mixed $validateRules
      * @param array $data
      * @param array $expected
      * @dataProvider buildDataProvider
      */
-    public function testBuild($attributeInputType, $validateRules, $data, $expected)
+    public function testBuild($attributeInputType, $validateRules, $data, $expected): void
     {
         $this->attributeMock->expects($this->once())->method('getFrontendInput')->willReturn($attributeInputType);
         $this->attributeMock->expects($this->any())->method('getValidateRules')->willReturn($validateRules);
@@ -70,11 +76,25 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
             ['', ['input_validation' => 'email'], [], ['validate-email' => true]],
             ['', ['input_validation' => 'date'], [], ['validate-date' => true]],
             ['', ['input_validation' => 'other'], [], []],
-            ['', ['max_text_length' => '254'], ['required' => 1], ['max_text_length' => 254, 'required-entry' => true]],
-            ['', ['max_text_length' => '254', 'min_text_length' => 1], [],
-                ['max_text_length' => 254, 'min_text_length' => 1]],
-            ['', ['max_text_length' => '254', 'input_validation' => 'date'], [],
-                ['max_text_length' => 254, 'validate-date' => true]],
+            ['', ['max_text_length' => '254'], ['required' => 1], ['required-entry' => true]],
+            [
+                '',
+                ['input_validation' => 'other', 'max_text_length' => '254'],
+                ['required' => 1],
+                ['max_text_length' => 254, 'required-entry' => true]
+            ],
+            [
+                '',
+                ['input_validation' => 'other', 'max_text_length' => '254', 'min_text_length' => 1],
+                [],
+                ['max_text_length' => 254, 'min_text_length' => 1]
+            ],
+            [
+                '',
+                ['max_text_length' => '254', 'input_validation' => 'date'],
+                [],
+                ['max_text_length' => 254, 'validate-date' => true]
+            ],
         ];
     }
 }

@@ -62,4 +62,40 @@
     <entity name="DefaultPrivateKey" type="private_key">
         <data key="value"/>
     </entity>
+
+    <entity name="testData" type="data">
+        <data key="websiteName" unique="suffix">Website</data>
+        <data key="websiteCode" unique="suffix">new_website</data>
+        <data key="name" unique="suffix">Store</data>
+        <data key="storeCode" unique="suffix">new_store</data>
+        <data key="block" unique="suffix">Block</data>
+    </entity>
+
+    <entity name="role" type="data">
+        <data key="name" unique="suffix">Role</data>
+    </entity>
+    <entity name="NewAdmin" type="user">
+        <data key="username" unique="suffix">admin</data>
+        <data key="firstName">John</data>
+        <data key="lastName">Smith</data>
+        <data key="password">admin123</data>
+        <data key="email">mail@mail.com</data>
+    </entity>
+
+    <entity name="PaymentAndShippingInfo" type="data">
+        <data key="cardNumber">5105105105105100</data>
+        <data key="month">12</data>
+        <data key="year">20</data>
+        <data key="cvv">113</data>
+    </entity>
+
+    <entity name="BraintreeConfigurationData" type="data">
+        <data key="title">Credit Card (Braintree)</data>
+        <data key="merchantID">d4pdjhxgjfrsmzbf</data>
+        <data key="publicKey">m7q4wmh43xrgyrst</data>
+        <data key="privateKey">67de364080b1b4e2492d7a3de413a572</data>
+        <data key="merchantAccountID">Magneto</data>
+        <data key="titleForPayPalThroughBraintree">PayPal (Braintree)</data>
+    </entity>
+
 </entities>

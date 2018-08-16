@@ -18,6 +18,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /** @var FormKey */
     private $formKey;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -150,8 +153,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(
                 [
                     'One or more input exceptions have occurred.',
-                    '"street" is required. Enter and try again.',
-                    '"city" is required. Enter and try again.',
+                    '&quot;street&quot; is required. Enter and try again.',
+                    '&quot;city&quot; is required. Enter and try again.',
                 ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
