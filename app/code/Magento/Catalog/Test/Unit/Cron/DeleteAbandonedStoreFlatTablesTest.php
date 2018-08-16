@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Cron;
 
@@ -34,7 +33,7 @@ class AvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->indexerMock = $this->createMock(Indexer::class);
+        $this->indexerMock = $this->getMockBuilder(Indexer::class)->disableOriginalConstructor()->getMock();
         $this->deleteAbandonedStoreFlatTables = new DeleteAbandonedStoreFlatTables($this->indexerMock);
     }
 

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Cron;
 
@@ -66,12 +65,12 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
-        $this->attributeMock = $this->createMock(Attribute::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfig::class);
-        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
-        $this->attributeBackendMock = $this->createMock(BackendInterface::class);
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
+        $this->attributeRepositoryMock = $this->getMockBuilder(AttributeRepository::class)->disableOriginalConstructor()->getMock();
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)->disableOriginalConstructor()->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfig::class)->disableOriginalConstructor()->getMock();
+        $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMock();
+        $this->attributeBackendMock = $this->getMockBuilder(BackendInterface::class)->disableOriginalConstructor()->getMock();
         $this->deleteOutdatedPriceValues = new DeleteOutdatedPriceValues(
             $this->resourceConnectionMock,
             $this->attributeRepositoryMock,
