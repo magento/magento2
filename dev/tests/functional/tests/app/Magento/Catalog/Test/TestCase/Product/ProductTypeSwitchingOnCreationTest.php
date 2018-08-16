@@ -93,12 +93,12 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
     }
 
     /**
-    * Perform action.
-    *
-    * @param string $actionName
-    * @throws \Exception
-    * @return void
-    */
+     * Perform action.
+     *
+     * @param string $actionName
+     * @throws \Exception
+     * @return void
+     */
     protected function performAction($actionName) : void
     {
         if (method_exists(__CLASS__, $actionName)) {
@@ -107,10 +107,10 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
     }
 
     /**
-    * Clear downloadable product data.
-    *
-    * @return void
-    */
+     * Clear downloadable product data.
+     *
+     * @return void
+     */
     protected function clearDownloadableData() : void
     {
         $this->catalogProductNew->getProductForm()->openSection('downloadable_information');
