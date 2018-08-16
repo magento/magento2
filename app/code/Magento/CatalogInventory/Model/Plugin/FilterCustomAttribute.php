@@ -37,6 +37,11 @@ class FilterCustomAttribute
      */
     public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes): array
     {
-        return $this->filter->execute($attributes);
+        $return = [];
+        foreach ($attributes as $attribute) {
+            $return[$attribute->getAttributeCode()] = $attribute;
+        }
+
+        return $this->filter->execute($return);
     }
 }

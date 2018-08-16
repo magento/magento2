@@ -29,13 +29,5 @@ class FilterCustomAttribute
     public function execute(array $attributes)
     {
         return array_diff($attributes, $this->blackList);
-
-        foreach ($attributes as $key => $attribute) {
-            if (in_array($attribute->getAttributeCode(), $this->blackList)) {
-                unset($attributes[$key]);
-            }
-        }
-
-        return $attributes;
     }
 }
