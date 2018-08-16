@@ -78,7 +78,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      * @param string $product
      * @return array
      */
-    public function test($createProduct, $product, $actionName) : array
+    public function test(string $createProduct, string $product, array $actionName) : array
     {
         // Steps
         list($fixture, $dataset) = explode('::', $product);
@@ -99,7 +99,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      * @throws \Exception
      * @return void
      */
-    protected function performAction($actionName) : void
+    protected function performAction(string $actionName)
     {
         if (method_exists(__CLASS__, $actionName)) {
             $this->$actionName();
@@ -111,7 +111,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @return void
      */
-    protected function clearDownloadableData() : void
+    protected function clearDownloadableData()
     {
         $this->catalogProductNew->getProductForm()->openSection('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
@@ -128,7 +128,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @throws \Exception
      */
-    protected function setIsDownloadable($downloadable = 'Yes') : void
+    protected function setIsDownloadable(string $downloadable = 'Yes')
     {
         $this->catalogProductNew->getProductForm()->openSection('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
