@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateAnAdminOrderUsingBraintreePaymentTest1">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Creation an admin order using Braintree payment"/>
+            <title value="Create order using Braintree payment"/>
+            <description value="Admin should be able to create order using Braintree payment"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-93677"/>
+            <group value="braintree"/>
+            <skip>
+                <issueId value="MQE-1187" />
+            </skip>
+        </annotations>
+
+
+        <before>
+            <!--Login As Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--CreateNewProduct-->
+            <actionGroup ref="CreateNewProductActionGroup" stepKey="CreateNewProduct"/>
+
+            <!--Create New Customer-->
+            <actionGroup ref="CreateCustomerActionGroup" stepKey="CreateCustomer"/>
+
+        </before>
+
+
+        <!--Configure Braintree-->
+        <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
+
+        <!--Create New Role-->
+        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
+        <actionGroup ref="AdminCreateRole" stepKey="AdminCreateNewRole"/>
+
+        <!--Create New User With Specific Role-->
+        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+
+        <!--SignOut-->
+        <actionGroup ref="SignOut" stepKey="signOutFromAdmin"/>
+
+        <!--SignIn New User-->
+        <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
+        <waitForPageLoad stepKey="waitForLogin" time="3"/>
+
+        <!--Create New Order-->
+        <actionGroup ref="CreateNewOrderActionGroup" stepKey="createNewOrder"/>
+
+
+        <after>
+            <!--SignOut-->
+            <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Delete Product-->
+            <actionGroup ref="DeleteProductActionGroup" stepKey="DeleteAllProducts">
+                <argument name="productName" value="NewProductData.ProductName"/>
+            </actionGroup>
+
+            <!--Delete Customer-->
+            <actionGroup ref="DeleteCustomerActionGroup" stepKey="DeleteCustomer">
+                <argument name="lastName" value="NewCustomerData.LastName"/>
+            </actionGroup>
+
+            <!--Delete User -->
+            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
+
+            <!--Delete Role-->
+            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
+
+        </after>
+
+    </test>
+</tests>
