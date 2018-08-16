@@ -160,8 +160,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function createBatchBaseSelect($storeId, $attributeId)
     {
         $linkField = $this->metadata->getLinkField();
+        $conn = $this->getConnection();
 
-        $positionCheckSql = $this->getConnection()->getCheckSql(
+        $positionCheckSql = $conn->getCheckSql(
             'value.position IS NULL',
             'default_value.position',
             'value.position'
@@ -169,54 +170,64 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $mainTableAlias = $this->getMainTableAlias();
 
-        $select = $this->getConnection()->select()->from(
-            [$mainTableAlias => $this->getMainTable()],
-            [
-                'value_id',
-                'file' => 'value',
-                'media_type'
-            ]
-        )->joinInner(
-            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
-            $mainTableAlias . '.value_id = entity.value_id',
-            [$linkField]
-        )->joinLeft(
-            ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            implode(
-                ' AND ',
+        $storeCondition = $conn->quoteInto('value.store_id = ?', (int)$storeId);
+        $defStoreCondition = $conn->quoteInto('default_value.store_id = ?', Store::DEFAULT_STORE_ID);
+        $select = $conn->select()
+            ->from(
+                [$mainTableAlias => $this->getMainTable()],
                 [
-                    $mainTableAlias . '.value_id = value.value_id',
-                    $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
-                    'value.' . $linkField . ' = entity.' . $linkField,
+                    'value_id',
+                    'file' => 'value',
+                    'media_type'
                 ]
-            ),
-            []
-        )->joinLeft(
-            ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            implode(
-                ' AND ',
-                [
-                    $mainTableAlias . '.value_id = default_value.value_id',
-                    $this->getConnection()->quoteInto('default_value.store_id = ?', Store::DEFAULT_STORE_ID),
-                    'default_value.' . $linkField . ' = entity.' . $linkField,
-                ]
-            ),
-            []
-        )->columns([
-            'label' => $this->getConnection()->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
-            'position' => $this->getConnection()->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
-            'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
-            'label_default' => 'default_value.label',
-            'position_default' => 'default_value.position',
-            'disabled_default' => 'default_value.disabled'
-        ])->where(
-            $mainTableAlias . '.attribute_id = ?',
-            $attributeId
-        )->where(
-            $mainTableAlias . '.disabled = 0'
-        )->order(
-            $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
-        );
+            )
+            ->joinInner(
+                ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+                $mainTableAlias . '.value_id = entity.value_id',
+                [$linkField]
+            )
+            ->joinLeft(
+                ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
+                implode(
+                    ' AND ',
+                    [
+                        $mainTableAlias . '.value_id = value.value_id',
+                        $storeCondition,
+                        'value.' . $linkField . ' = entity.' . $linkField,
+                    ]
+                ),
+                []
+            )
+            ->joinLeft(
+                ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
+                implode(
+                    ' AND ',
+                    [
+                        $mainTableAlias . '.value_id = default_value.value_id',
+                        $defStoreCondition,
+                        'default_value.' . $linkField . ' = entity.' . $linkField,
+                    ]
+                ),
+                []
+            )
+            ->columns([
+                'label' => $conn->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
+                'position' => $conn->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
+                'disabled' => $conn->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
+                'label_default' => 'default_value.label',
+                'position_default' => 'default_value.position',
+                'disabled_default' => 'default_value.disabled'
+            ])
+            ->where($mainTableAlias . '.attribute_id = ?', $attributeId)
+            ->where($mainTableAlias . '.disabled = 0');
+
+        // filter entities by store
+        if ($storeId > 0) {
+            $orWhere = $storeCondition . ' OR '. $defStoreCondition;
+            $select->where($orWhere);
+        }
+
+        $select->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         return $select;
     }

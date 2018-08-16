@@ -11,6 +11,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\CacheCleaner;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerRepositoryInterface */
@@ -159,7 +162,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
         );
 
         // Verify the consistency of custom attribute metadata from two services
-        // after getAttrbiuteCode was called
+        // after getAttributeCode was called
         foreach ($customAttributesMetadata2 as $attribute) {
             $attribute->getAttributeCode();
         }
@@ -260,7 +263,7 @@ class CustomerMetadataTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(
                 $attributeMetadata,
                 $attributeMetadata1,
-                'Attribute metadata from the the same service became different after getAttributeCode was called'
+                'Attribute metadata from the same service became different after getAttributeCode was called'
             );
             // Verify the consistency of attribute metadata from two services
             // after getAttributeCode was called

@@ -17,7 +17,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
      * Core registry

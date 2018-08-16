@@ -16,7 +16,7 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @var string
      */
-    protected $_template = 'system/config/payflowlink/info.phtml';
+    protected $_template = 'Magento_Paypal::system/config/payflowlink/info.phtml';
 
     /**
      * Render fieldset html

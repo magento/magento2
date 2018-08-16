@@ -106,7 +106,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + pow(2, 16)) * 1.65
         );
     }
 
@@ -425,8 +425,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
-            imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -450,8 +449,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $col = imagecolorallocate($newWatermark, 255, 255, 255);
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
-            imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -669,7 +667,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     private function _saveAlpha($imageHandler)
     {
         $background = imagecolorallocate($imageHandler, 0, 0, 0);
-        ImageColorTransparent($imageHandler, $background);
+        imagecolortransparent($imageHandler, $background);
         imagealphablending($imageHandler, false);
         imagesavealpha($imageHandler, true);
     }

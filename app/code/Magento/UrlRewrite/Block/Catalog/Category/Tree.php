@@ -34,7 +34,7 @@ class Tree extends AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'categories.phtml';
+    protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
      * Adminhtml data

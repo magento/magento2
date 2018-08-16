@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Store\Model\Store $store */
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if (!$store->load('fixture_second_store', 'code')->getId()) {
     $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -29,8 +30,3 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
     );
     $store->save();
 }
-
-/* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();

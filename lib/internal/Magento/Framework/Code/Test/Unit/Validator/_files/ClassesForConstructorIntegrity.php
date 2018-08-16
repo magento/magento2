@@ -57,6 +57,15 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      */
     protected $_implOfBInterface;
 
+    /**
+     * Context constructor.
+     *
+     * @param ClassA $exA
+     * @param ClassB $exB
+     * @param ClassC $exC
+     * @param FirstInterface $interfaceA
+     * @param ImplementationOfSecondInterface $implOfBInterface
+     */
     public function __construct(
         \ClassA $exA,
         \ClassB $exB,

@@ -16,6 +16,11 @@ class CouponUsagesDecrement
      */
     private $updateCouponUsages;
 
+    /**
+     * CouponUsagesDecrement constructor.
+     *
+     * @param UpdateCouponUsages $updateCouponUsages
+     */
     public function __construct(
         UpdateCouponUsages $updateCouponUsages
     ) {
