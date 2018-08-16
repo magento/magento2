@@ -483,8 +483,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id IN (?)',
             $storeIds
         )->where(
-            'attribute_code IN (?)',
-            ['small_image', 'thumbnail', 'image']
+            'attr.frontend_input = ?',
+            'media_image'
         );
 
         return $this->getConnection()->fetchAll($select);
