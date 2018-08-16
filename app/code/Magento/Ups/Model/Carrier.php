@@ -424,8 +424,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * Set free method request
      *
-     * @param string $
-     
+     * @param string $freeMethod  
      * @return void
      */
     protected function _setFreeMethodRequest($freeMethod)
