@@ -80,6 +80,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $_priceInfoMock;
 
     /**
+     * @var \Magento\CatalogInventory\Model\FilterCustomAttribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterCustomAttribute;
+
+    /**
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     private $store;
@@ -375,6 +380,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->extensionAttributes);
 
+        $this->filterCustomAttribute = $this->createTestProxy(
+            \Magento\CatalogInventory\Model\FilterCustomAttribute::class
+        );
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product::class,
@@ -404,7 +413,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1],
-                'eavConfig' => $this->eavConfig
+                'eavConfig' => $this->eavConfig,
+                'filterCustomAttribute' => $this->filterCustomAttribute
             ]
         );
     }
