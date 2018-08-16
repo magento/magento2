@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
+            <group value="skip"/><!-- MAGETWO-94170 -->
         </annotations>
 
         <before>
