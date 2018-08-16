@@ -76,6 +76,7 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @param string $createProduct
      * @param string $product
+     * @param array $actionName
      * @return array
      */
     public function test(string $createProduct, string $product, array $actionName) : array
