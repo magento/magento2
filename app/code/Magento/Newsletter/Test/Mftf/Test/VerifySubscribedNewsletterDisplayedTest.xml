@@ -24,11 +24,11 @@
             <!--Go to Stores.-->
             <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
             <!--Create Website.-->
-            <actionGroup ref="AdminCreateWebsite" stepKey="adminCreateWebsite"/>
+            <actionGroup ref="AdminCreateWebsiteActGroup" stepKey="adminCreateWebsite"/>
             <!--Create Store.-->
-            <actionGroup ref="AdminCreateNewStore" stepKey="adminCreateNewStore"/>
+            <actionGroup ref="AdminCreateNewStoreActGroup" stepKey="adminCreateNewStore"/>
             <!--Create Store View.-->
-            <actionGroup ref="AdminCreateStoreView" stepKey="adminCreateStoreView"/>
+            <actionGroup ref="AdminCreateStoreViewActGroup" stepKey="adminCreateStoreView"/>
             <!--Go to Stores -> Configuration -> Web.-->
             <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
             <actionGroup ref="SelectYesInAddStoreCodeToUrlsField" stepKey="selectYesInAddStoreCodeToUrlsField"/>
@@ -55,7 +55,7 @@
             <waitForPageLoad stepKey="waitForAdminPageLoaded"/>
             <actionGroup ref="AdminDeleteCreatedCustomer" stepKey="adminDeleteCustomer"/>
             <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
-            <actionGroup ref="AdminDeleteWebsite" stepKey="adminDeleteWebsite"/>
+            <actionGroup ref="AdminDeleteWebsiteActGroup" stepKey="adminDeleteWebsite"/>
             <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
             <actionGroup ref="AdminSetDefaultConfig" stepKey="adminSetDefaultConfig"/>
         </after>

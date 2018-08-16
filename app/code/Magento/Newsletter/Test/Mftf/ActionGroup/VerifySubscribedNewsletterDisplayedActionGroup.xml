@@ -17,7 +17,7 @@
     </actionGroup>
 
     <!--Create new website-->
-    <actionGroup name="AdminCreateWebsite">
+    <actionGroup name="AdminCreateWebsiteActGroup">
         <!--Fill required fields-->
         <click selector="{{AdminNewWebsiteSection.addWebSite}}" stepKey="clickOnCreateWebsiteButton"/>
         <waitForPageLoad stepKey="waitFormToBeOpened"/>
@@ -29,7 +29,7 @@
     </actionGroup>
 
     <!--Create new store-->
-    <actionGroup name="AdminCreateNewStore">
+    <actionGroup name="AdminCreateNewStoreActGroup">
         <!--Fill required fields-->
         <click selector="{{AdminNewStoreGroupSection.create}}" stepKey="clickOnCreateStore"/>
         <waitForPageLoad stepKey="waitFormToBeOpened"/>
@@ -43,7 +43,7 @@
     </actionGroup>
 
     <!--Create store view-->
-    <actionGroup name="AdminCreateStoreView">
+    <actionGroup name="AdminCreateStoreViewActGroup">
         <!--Fill required fields-->
         <click selector="{{AdminNewStoreSection.create}}" stepKey="clickOnCreateStoreView"/>
         <waitForPageLoad stepKey="waitFormToBeOpened"/>
@@ -114,7 +114,7 @@
     </actionGroup>
 
     <!--Delete created Website -->
-    <actionGroup name="AdminDeleteWebsite">
+    <actionGroup name="AdminDeleteWebsiteActGroup">
         <fillField stepKey="fillSearchWebsiteField" selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{AdminTestData.testData}}"/>
         <click stepKey="clickSearchButton" selector="{{AdminStoresGridSection.searchButton}}"/>
         <see stepKey="verifyThatCorrectWebsiteFound" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" userInput="{{AdminTestData.testData}}"/>
