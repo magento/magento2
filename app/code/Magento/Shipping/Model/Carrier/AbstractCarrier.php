@@ -422,7 +422,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         if (!$freeMethod || !is_object($this->_result)) {
             return;
         }
-        return array_reduce($this->_result->getAllRates(), function($acc, $rate) use ($freeMethod) {
+        return array_reduce($this->_result->getAllRates(), function ($acc, $rate) use ($freeMethod) {
             if (!$acc && $rate->getMethod() == $freeMethod) {
                 return $freeMethod;
             } else {
