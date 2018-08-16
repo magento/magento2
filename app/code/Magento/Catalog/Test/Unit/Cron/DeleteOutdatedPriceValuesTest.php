@@ -103,7 +103,9 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())->method('getId')->willReturn($attributeId);
         $this->attributeMock->expects($this->once())->method('getBackend')->willReturn($this->attributeBackendMock);
         $this->attributeBackendMock->expects($this->once())->method('getTable')->willReturn($table);
-        $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->exactly(2))->method('quoteInto')->willReturnMap([
             ['attribute_id = ?', $attributeId, null, null, $conditions[0]],
             ['store_id != ?', Store::DEFAULT_STORE_ID, null, null, $conditions[1]],
