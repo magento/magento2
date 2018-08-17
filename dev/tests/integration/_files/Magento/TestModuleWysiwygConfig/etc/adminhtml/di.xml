@@ -10,8 +10,6 @@
         <arguments>
             <argument name="wysiwygConfigPostProcessor" xsi:type="array">
                 <item name="testAdapter" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
-            </argument>
-            <argument name="wysiwygConfigPostProcessor" xsi:type="array">
                 <item name="Magento_TestModuleWysiwygConfig/wysiwyg/tinymce4TestAdapter" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
             </argument>
             <argument name="variablePluginConfigProvider" xsi:type="array">
