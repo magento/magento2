@@ -31,13 +31,13 @@
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
-    <actionGroup name="FindAndAddProductToCardActionGroup">
+    <actionGroup name="FindAndAddProductToCardActGr">
         <click selector="{{StorefrontAddProductToCartSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
         <click selector="{{StorefrontAddProductToCartSection.showCard}}" stepKey="clickToOpenCard"/>
-        <waitForPageLoad stepKey="WaitForFormOpened" time="3"/>
+        <waitForPageLoad stepKey="WaitForFormOpened"/>
         <click selector="{{StorefrontAddProductToCartSection.proceed}}" stepKey="clickToProceedToCheckout"/>
-        <waitForPageLoad time="5" stepKey="waitForTheFormIsOpened"/>
+        <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
     </actionGroup>
 

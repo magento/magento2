@@ -25,7 +25,7 @@
         </before>
 
          <!--Navigate to a category page -->
-        <amOnPage url="/{{SimpleProductOne.name}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="/{{SimpleProductOne.urlKey}}.html" stepKey="GoToProductPage"/>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
@@ -36,7 +36,7 @@
                             delete_cookie('form_key');" stepKey="removeCookies" after="waitForPageLoad"/>
 
         <!-- "Add to Cart" any product-->
-        <actionGroup ref="FindAndAddProductToCardActionGroup" stepKey="addProductToCard"/>
+        <actionGroup ref="FindAndAddProductToCardActGr" stepKey="addProductToCard"/>
 
         <after>
             <!--Delete created product-->
