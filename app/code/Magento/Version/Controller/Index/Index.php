@@ -46,9 +46,6 @@ class Index extends Action
             return;
         }
             
-        if (!isset($versionParts[0]) || !isset($versionParts[1])) {
-            return; // Major and minor version are not set - return empty response
-        }
         $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
         $this->getResponse()->setBody(
             $this->productMetadata->getName() . '/' .
