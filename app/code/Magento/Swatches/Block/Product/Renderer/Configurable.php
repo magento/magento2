@@ -473,4 +473,22 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             return [];
         }
     }
+
+    /**
+     * Get Swatch image size config data.
+     *
+     * @return string
+     */
+    public function getJsonSwatchSizeConfig()
+    {
+        $imageConfig = $this->swatchMediaHelper->getImageConfig();
+        $sizeConfig = [];
+
+        $sizeConfig[Swatch::SWATCH_IMAGE_NAME]['width'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['width'];
+        $sizeConfig[Swatch::SWATCH_IMAGE_NAME]['height'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['height'];
+        $sizeConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height'];
+        $sizeConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'];
+
+        return $this->jsonEncoder->encode($sizeConfig);
+    }
 }
