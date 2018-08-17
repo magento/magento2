@@ -101,20 +101,4 @@ class FreeShipping implements FreeShippingInterface
             }
         }
     }
-
-    /**
-     * Sets free shipping availability to the quote items.
-     *
-     * @param array $items
-     * @param bool $freeShipping
-     */
-    private function applyToItems(array $items, bool $freeShipping)
-    {
-        /** @var AbstractItem $item */
-        foreach ($items as $item) {
-            $item->getAddress()
-                ->setFreeShipping((int)$freeShipping);
-            $this->applyToChildren($item, $freeShipping);
-        }
-    }
 }
