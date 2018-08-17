@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\File\Uploader;
+
 /**
  * Catalog image uploader
  */
@@ -192,7 +194,7 @@ class ImageUploader
      *
      * @param string $imageName
      *
-     * @return string
+     * @return string $destinationImageName saved filename
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -201,7 +203,14 @@ class ImageUploader
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        /**
+         * Get the absolute path to the new destination and then retrieve a new filename to prevent overwriting
+         * existing category images with the same filename
+         */
+        $absolutePath = $this->mediaDirectory->getAbsolutePath($this->getFilePath($basePath, $imageName));
+        $destinationImageName = Uploader::getNewFileName($absolutePath);
+
+        $baseImagePath = $this->getFilePath($basePath, $destinationImageName);
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {
@@ -219,7 +228,7 @@ class ImageUploader
             );
         }
 
-        return $imageName;
+        return $destinationImageName;
     }
 
     /**

@@ -170,7 +170,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
-                $this->getImageUploader()->moveFileFromTmp($imageName);
+                // @TODO: Assign this (possibly) new-filename to the category so it shows the correct image
+                $newImageName = $this->getImageUploader()->moveFileFromTmp($imageName);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
