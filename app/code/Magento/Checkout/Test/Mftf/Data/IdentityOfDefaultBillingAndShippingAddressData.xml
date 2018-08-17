@@ -23,4 +23,10 @@
         <data key="telephone">222222222</data>
     </entity>
 
+    <entity name="CreateNewUserData" type="user">
+        <data key="firstName" unique="suffix">John</data>
+        <data key="lastName">Smith</data>
+        <data key="password">Admin@123</data>
+    </entity>
+
 </entities>
