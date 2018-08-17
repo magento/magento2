@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Developer\Console\Command;
 
@@ -44,7 +45,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(
@@ -65,7 +66,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProvider contentsDataProvider
      */
-    public function testExecute(array $expectedWhitelistContent)
+    public function testExecute(array $expectedWhitelistContent) : void
     {
         $moduleName = 'Magento_TestSetupDeclarationModule1';
         $this->cliCommand->install([$moduleName]);
@@ -94,7 +95,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function contentsDataProvider()
+    public function contentsDataProvider() : array
     {
         return [
             [
