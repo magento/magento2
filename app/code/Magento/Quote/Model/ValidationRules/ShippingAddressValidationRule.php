@@ -32,8 +32,7 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
     public function __construct(
         ValidationResultFactory $validationResultFactory,
         string $generalMessage = ''
-    )
-    {
+    ) {
         $this->validationResultFactory = $validationResultFactory;
         $this->generalMessage = $generalMessage;
     }
