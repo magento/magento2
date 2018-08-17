@@ -45,7 +45,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp() : void
+    public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(
@@ -66,7 +66,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProvider contentsDataProvider
      */
-    public function testExecute(array $expectedWhitelistContent) : void
+    public function testExecute(array $expectedWhitelistContent)
     {
         $moduleName = 'Magento_TestSetupDeclarationModule1';
         $this->cliCommand->install([$moduleName]);
@@ -95,7 +95,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function contentsDataProvider() : array
+    public function contentsDataProvider(): array
     {
         return [
             [
