@@ -115,7 +115,7 @@ class Result
     {
         return isset($this->_rates[$id]) ? $this->_rates[$id] : null;
     }
-    
+
     /**
      * Return rate by method id
      *
@@ -127,9 +127,8 @@ class Result
         return array_reduce($this->_rates, function ($foundItem, $item) use ($rateMethodId) {
             if (!$foundItem && $item->getMethod() == $rateMethodId) {
                 return $item;
-            } else {
-                return $foundItem;
-            }
+            } 
+            return $foundItem;
         });
     }
     
