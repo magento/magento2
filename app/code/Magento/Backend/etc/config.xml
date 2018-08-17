@@ -28,6 +28,10 @@
             <dashboard>
                 <enable_charts>1</enable_charts>
             </dashboard>
+            <upload_configuration>
+                <max_width>1920</max_width>
+                <max_height>1200</max_height>
+            </upload_configuration>
         </system>
         <general>
             <validator_data>
