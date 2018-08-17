@@ -15,17 +15,6 @@ return [
         'sku' => 'sku1',
         'max_characters' => 10,
     ],
-    'negative_price' => [
-        'title' => 'area option',
-        'type' => 'area',
-        'sort_order' => 2,
-        'is_require' => 0,
-        'price' => -20,
-        'price_type' => 'percent',
-        'sku' => 'sku2',
-        'max_characters' => 20,
-
-    ],
     'negative_value_of_image_size' => [
         'title' => 'file option',
         'type' => 'file',
