@@ -38,12 +38,12 @@
     <actionGroup name="StorefrontCreateAccountActionGroup">
         <click selector="{{StorefrontCreateAccountSection.createAccount}}" stepKey="ClickToCreateAccount"/>
         <waitForPageLoad stepKey="waitForAccountFormIsOpened"/>
-        <fillField selector="{{StorefrontCreateAccountSection.firstName}}" userInput="{{CreateUserData.firstName}}" stepKey="TypeFirstName"/>
-        <fillField selector="{{StorefrontCreateAccountSection.lastName}}" userInput="{{CreateUserData.lastName}}" stepKey="TypeLastName"/>
-        <fillField selector="{{StorefrontCreateAccountSection.email}}" userInput="{{CreateUserData.firstName}}@magento.com" stepKey="TypeEmail"/>
-        <fillField selector="{{StorefrontCreateAccountSection.password}}" userInput="{{CreateUserData.password}}" stepKey="TypePassword"/>
+        <fillField selector="{{StorefrontCreateAccountSection.firstName}}" userInput="{{CreateNewUserData.firstName}}" stepKey="TypeFirstName"/>
+        <fillField selector="{{StorefrontCreateAccountSection.lastName}}" userInput="{{CreateNewUserData.lastName}}" stepKey="TypeLastName"/>
+        <fillField selector="{{StorefrontCreateAccountSection.email}}" userInput="{{CreateNewUserData.firstName}}@magento.com" stepKey="TypeEmail"/>
+        <fillField selector="{{StorefrontCreateAccountSection.password}}" userInput="{{CreateNewUserData.password}}" stepKey="TypePassword"/>
         <waitForPageLoad stepKey="waitToConfirmPassword"/>
-        <fillField selector="{{StorefrontCreateAccountSection.confirmPass}}" userInput="{{CreateUserData.password}}" stepKey="confirmPassword"/>
+        <fillField selector="{{StorefrontCreateAccountSection.confirmPass}}" userInput="{{CreateNewUserData.password}}" stepKey="confirmPassword"/>
         <click selector="{{StorefrontCreateAccountSection.create}}" stepKey="ClickToSaveAccount"/>
         <waitForPageLoad stepKey="waitForAccountPageLoaded"/>
     </actionGroup>
@@ -129,9 +129,12 @@
         <wait stepKey="WaitForCustomerViewOpened" time="2"/>
         <click stepKey="clickCustomerAllCustomerItem" selector="{{DashboardSection.customerAllCustomer}}"/>
         <waitForPageLoad stepKey="WaitForCustomerPageIsLoaded"/>
-        <fillField stepKey="searchToKeyword" selector="{{AdminCustomerAccInformationSection.searchToKeyword}}" userInput="{{CreateUserData.firstName}}"/>
-        <click stepKey="clickSearchButton" selector="{{AdminCustomerAccInformationSection.searchButton}}"/>
-        <waitForElementVisible stepKey="waitForFiltering" selector="{{AdminCustomerAccInformationSection.selectCustomer}}"/>
+        <conditionalClick selector="{{AdminCustomerAccInformationSection.clearAll}}" dependentSelector="{{AdminCustomerAccInformationSection.clearAll}}" visible="1" stepKey="clickClearAllIfThereIsAnyValue"/>
+        <click stepKey="clickFilterButton" selector="{{AdminCustomerAccInformationSection.filterButton}}"/>
+        <waitForElementVisible selector="{{AdminCustomerAccInformationSection.filterNameField}}" stepKey="waitForFilterDataLoaded"/>
+        <fillField stepKey="searchProductUsingNameField" selector="{{AdminCustomerAccInformationSection.filterNameField}}" userInput="{{CreateNewUserData.firstName}}"/>
+        <click stepKey="clickFiltersApplyButton" selector="{{AdminCustomerAccInformationSection.filtersApplyButton}}"/>
+        <waitForElementNotVisible selector="{{AdminCustomerAccInformationSection.filterNameField}}" stepKey="waitForFilterBecomeNotVisible"/>
         <click selector="{{AdminCustomerAccInformationSection.selectCustomer}}" stepKey="ClickOnCustomer"/>
         <click selector="{{AdminCustomerAccInformationSection.actions}}" stepKey="ClickOnActions"/>
         <waitForElementVisible selector="{{AdminCustomerAccInformationSection.delete}}" stepKey="waitForDeleteButtonAppeared"/>
