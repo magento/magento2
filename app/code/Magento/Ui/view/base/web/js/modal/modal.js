@@ -305,6 +305,9 @@ define([
          * * @return {Element} - current element.
          */
         closeModal: function () {
+            if (!this.options.isOpen) {
+                return this.element;
+            }
             var that = this;
 
             this._removeKeyListener();
