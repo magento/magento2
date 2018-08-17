@@ -10,6 +10,9 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class BillingAddressValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -42,7 +45,7 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
         $validationErrors = [];
         $validationResult = $quote->getBillingAddress()->validate();
         if ($validationResult !== true) {
-            $validationErrors = [$this->generalMessage];
+            $validationErrors = [__($this->generalMessage)];
         }
         if (is_array($validationResult)) {
             $validationErrors = array_merge($validationErrors, $validationResult);

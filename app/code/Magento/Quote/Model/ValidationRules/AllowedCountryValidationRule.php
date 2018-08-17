@@ -11,6 +11,9 @@ use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class AllowedCountryValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -57,7 +60,7 @@ class AllowedCountryValidationRule implements QuoteValidationRuleInterface
                     $this->allowedCountryReader->getAllowedCountries()
                 );
             if (!$validationResult) {
-                $validationErrors = [$this->generalMessage];
+                $validationErrors = [__($this->generalMessage)];
             }
         }
 

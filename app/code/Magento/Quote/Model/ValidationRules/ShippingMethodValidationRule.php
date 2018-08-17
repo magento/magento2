@@ -10,6 +10,9 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class ShippingMethodValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -46,7 +49,7 @@ class ShippingMethodValidationRule implements QuoteValidationRuleInterface
             $shippingRate = $quote->getShippingAddress()->getShippingRateByCode($shippingMethod);
             $validationResult = $shippingMethod && $shippingRate;
             if (!$validationResult) {
-                $validationErrors = [$this->generalMessage];
+                $validationErrors = [__($this->generalMessage)];
             }
         }
 

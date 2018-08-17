@@ -18,7 +18,7 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <createData entity="EnabledMinimumOrderAmount" stepKey="enableMinimumOrderAmount"/>
+            <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>

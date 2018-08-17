@@ -10,6 +10,9 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class ShippingAddressValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -45,7 +48,7 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         if (!$quote->isVirtual()) {
             $validationResult = $quote->getShippingAddress()->validate();
             if ($validationResult !== true) {
-                $validationErrors = [$this->generalMessage];
+                $validationErrors = [__($this->generalMessage)];
             }
             if (is_array($validationResult)) {
                 $validationErrors = array_merge($validationErrors, $validationResult);

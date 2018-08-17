@@ -11,6 +11,9 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage;
 
+/**
+ * @inheritdoc
+ */
 class MinimumAmountValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -55,7 +58,7 @@ class MinimumAmountValidationRule implements QuoteValidationRuleInterface
             if (!$this->generalMessage) {
                 $this->generalMessage = $this->amountValidationMessage->getMessage();
             }
-            $validationErrors = [$this->generalMessage];
+            $validationErrors = [__($this->generalMessage)];
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];

@@ -7,14 +7,14 @@
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="EnabledMinimumOrderAmount" type="sales_minimum_order">
+    <entity name="EnabledMinimumOrderAmount500" type="sales_minimum_order">
         <requiredEntity type="active">EnableMinimumOrderCheck</requiredEntity>
-        <requiredEntity type="amount">MinimumOrderAmount</requiredEntity>
+        <requiredEntity type="amount">MinimumOrderAmount500</requiredEntity>
     </entity>
     <entity name="EnableMinimumOrderCheck" type="active">
         <data key="value">1</data>
     </entity>
-    <entity name="MinimumOrderAmount" type="amount">
+    <entity name="MinimumOrderAmount500" type="amount">
         <data key="value">500</data>
     </entity>
 

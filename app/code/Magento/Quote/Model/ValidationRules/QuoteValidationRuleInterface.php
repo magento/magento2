@@ -9,10 +9,13 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Provides validation of Quote model.
+ */
 interface QuoteValidationRuleInterface
 {
     /**
-     * Validate quote model.
+     * Validate Quote model.
      *
      * @param Quote $quote
      * @return ValidationResult[]

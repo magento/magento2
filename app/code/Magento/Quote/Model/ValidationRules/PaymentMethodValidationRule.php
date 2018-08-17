@@ -10,6 +10,9 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class PaymentMethodValidationRule implements QuoteValidationRuleInterface
 {
     /**
@@ -42,7 +45,7 @@ class PaymentMethodValidationRule implements QuoteValidationRuleInterface
         $validationErrors = [];
         $validationResult = $quote->getPayment()->getMethod();
         if (!$validationResult) {
-            $validationErrors = [$this->generalMessage];
+            $validationErrors = [__($this->generalMessage)];
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];

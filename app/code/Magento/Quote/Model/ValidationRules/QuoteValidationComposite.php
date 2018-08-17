@@ -9,6 +9,9 @@ namespace Magento\Quote\Model\ValidationRules;
 
 use Magento\Quote\Model\Quote;
 
+/**
+ * @inheritdoc
+ */
 class QuoteValidationComposite implements QuoteValidationRuleInterface
 {
     /**
