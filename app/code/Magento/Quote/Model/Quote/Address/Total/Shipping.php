@@ -75,15 +75,15 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $addressQty = 0;
 
         foreach ($shippingAssignment->getItems() as $item) {
-            /**                                                                                                                                        
-             * Skip if this item is virtual                                                                                                            
-             */
+            /**
+            * Skip if this item is virtual
+            */
             if ($item->getProduct()->isVirtual()) {
                 continue;
             }
-            /**                                                                                                                                        
-             * Children weight we calculate for parent                                                                                                 
-             */
+            /**
+            * Children weight we calculate for parent
+            */
             if ($item->getParentItem()) {
                 continue;
             }
@@ -122,7 +122,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     } elseif (is_numeric($item->getFreeShipping())) {
                         $freeQty = $item->getFreeShipping();
                         if ($item->getQty() > $freeQty) {
-                         $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
+                            $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
                         } else {
                             $rowWeight = 0;
                         }
