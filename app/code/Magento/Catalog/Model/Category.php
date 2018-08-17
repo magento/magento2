@@ -796,11 +796,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param boolean $recursive
      * @param boolean $isActive
      * @param boolean $sortByPosition
-     * @return string
+     * @param boolean $asArray return result as array instead of comma-separated list of IDs
+     * @return array|string
      */
-    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false)
+    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false, $asArray = false)
     {
-        return implode(',', $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition));
+        $children = $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition);
+        if ($asArray) {
+            return $children;
+        } else {
+            return implode(',', $children);
+        }
     }
 
     /**
