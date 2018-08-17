@@ -232,7 +232,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
-     * @param \Magento\Dhl\Model\Validator\XmlValidatorFactory $xmlValidatorFactory
+     * @param \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -1970,6 +1970,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            && !$this->_isDomestic;
+            || !$this->_isDomestic;
     }
 }
