@@ -124,7 +124,7 @@ class Result
      */
     public function getRateByMethodId($rateMethodId)
     {
-        return array_reduce($this->_rates, function($foundItem, $item) use ($rateMethodId) {
+        return array_reduce($this->_rates, function ($foundItem, $item) use ($rateMethodId) {
             if (!$foundItem && $item->getMethod() == $rateMethodId) {
                 return $item;
             } else {
