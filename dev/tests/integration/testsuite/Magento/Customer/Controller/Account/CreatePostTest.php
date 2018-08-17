@@ -26,7 +26,7 @@ class CreatePostTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/date_attribute.php
      * @magentoDataFixture Magento/Customer/_files/customer_date_attribute.php
      */
