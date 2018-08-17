@@ -31,7 +31,7 @@
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
-    <actionGroup name="FindAndAddProductToCardActionGroup">
+    <actionGroup name="FindAndAddProductToCardActGr">
         <click selector="{{StorefrontAddProductToCartSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
         <click selector="{{StorefrontAddProductToCartSection.showCard}}" stepKey="clickToOpenCard"/>

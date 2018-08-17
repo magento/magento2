@@ -36,7 +36,7 @@
                             delete_cookie('form_key');" stepKey="removeCookies" after="waitForPageLoad"/>
 
         <!-- "Add to Cart" any product-->
-        <actionGroup ref="FindAndAddProductToCardActionGroup" stepKey="addProductToCard"/>
+        <actionGroup ref="FindAndAddProductToCardActGr" stepKey="addProductToCard"/>
 
         <after>
             <!--Delete created product-->
