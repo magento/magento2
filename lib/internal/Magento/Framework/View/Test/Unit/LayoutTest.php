@@ -233,7 +233,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo([]))
             ->will($this->returnSelf());
         $this->assertSame($this->model, $this->model->generateXml());
-        $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXml());
+        $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXML());
     }
 
     public function testGetChildBlock()

@@ -12,6 +12,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Checks permissions to files and folders.
+ */
 class FilePermissions
 {
     /**
@@ -147,6 +150,7 @@ class FilePermissions
      */
     private function checkRecursiveDirectories($directory)
     {
+        /** @var $directoryIterator \RecursiveIteratorIterator   */
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
@@ -167,6 +171,8 @@ class FilePermissions
                 $this->directoryList->getPath(DirectoryList::SESSION) . '/',
             ]
         );
+
+        $directoryIterator->setMaxDepth(1);
 
         $foundNonWritable = false;
 

@@ -118,7 +118,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         static::assertEquals(
             $expected,
-            $this->model->getCctypesMapper()
+            $this->model->getCcTypesMapper()
         );
     }
 

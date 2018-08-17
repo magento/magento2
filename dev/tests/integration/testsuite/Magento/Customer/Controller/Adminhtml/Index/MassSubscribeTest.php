@@ -5,8 +5,12 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\Message\MessageInterface;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -25,58 +29,110 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
+     * Tests subscriber status of customers.
+     *
+     * @magentoDataFixture Magento/Customer/_files/five_repository_customers.php
+     * @magentoDbIsolation disabled
      */
     public function testMassSubscriberAction()
     {
-        // Pre-condition
-        /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
-        $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $this->assertNull($subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus());
-        $this->assertNull($subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus());
-        // Setup
-        $this->getRequest()->setPostValue('selected', [1, 2])->setPostValue('namespace', 'customer_listing');
+        /** @var SubscriberFactory $subscriberFactory */
+        $subscriberFactory = Bootstrap::getObjectManager()->get(SubscriberFactory::class);
+        $customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
 
-        // Test
+        $this->assertNull(
+            $subscriberFactory->create()
+                ->loadByEmail('customer1@example.com')
+                ->getSubscriberStatus()
+        );
+        $this->assertNull(
+            $subscriberFactory->create()
+                ->loadByEmail('customer2@example.com')
+                ->getSubscriberStatus()
+        );
+
+        try {
+            /** @var CustomerInterface $customer1 */
+            $customer1 = $customerRepository->get('customer1@example.com');
+            /** @var CustomerInterface $customer2 */
+            $customer2 = $customerRepository->get('customer2@example.com');
+        } catch (\Exception $e) {
+            self::fail($e->getMessage());
+        }
+
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
+        $params = [
+            'selected' => [
+                $customer1->getId(),
+                $customer2->getId(),
+            ],
+            'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
+        ];
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
+
         $this->dispatch('backend/customer/index/massSubscribe');
 
         // Assertions
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
-            $this->equalTo(['A total of 2 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+            self::equalTo(['A total of 2 record(s) were updated.']),
+            MessageInterface::TYPE_SUCCESS
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
+            $subscriberFactory->create()
+                ->loadByEmail('customer1@example.com')
+                ->getSubscriberStatus()
         );
         $this->assertEquals(
             Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
+            $subscriberFactory->create()
+                ->loadByEmail('customer2@example.com')
+                ->getSubscriberStatus()
         );
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
     public function testMassSubscriberActionNoSelection()
     {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
+        $params = [
+            'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
+        ];
+
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            self::equalTo(['Please select item(s).']),
+            MessageInterface::TYPE_ERROR
         );
     }
 }

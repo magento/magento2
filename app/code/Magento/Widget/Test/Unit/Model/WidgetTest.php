@@ -174,7 +174,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '10',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
@@ -187,7 +187,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
                 ['1', false, '1'],
                 ['5', false, '5'],
                 ['10', false, '10'],
-                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['Magento_CatalogWidget::product/widget/content/grid.phtml',
+                 false,
+                 'Magento_CatalogWidget::product/widget/content/grid.phtml'
+                ],
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
 
@@ -225,7 +228,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '0',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
