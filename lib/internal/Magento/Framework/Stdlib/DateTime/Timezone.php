@@ -192,7 +192,7 @@ class Timezone implements TimezoneInterface
      * @param bool $includeTime
      * @return string
      */
-    private function prepareDate(string $date, string $locale, string $timezone, bool $includeTime)
+    private function prepareDate($date, $locale, $timezone, $includeTime)
     {
         $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
         $formatter = new \IntlDateFormatter(
@@ -360,7 +360,7 @@ class Timezone implements TimezoneInterface
      * @param string $date
      * @return string
      */
-    private function appendTimeIfNeeded(string $date)
+    private function appendTimeIfNeeded($date)
     {
         if (!preg_match('/\d{1,2}:\d{2}/', $date)) {
             $date .= " 00:00";
