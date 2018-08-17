@@ -212,7 +212,7 @@ class Base implements ActionInterface
     {
         return !count($ids)
             ? $this->createResultCollection()
-            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldName(), $ids);
     }
 
     /**

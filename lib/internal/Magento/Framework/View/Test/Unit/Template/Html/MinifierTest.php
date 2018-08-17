@@ -155,6 +155,11 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         <?php echo '//some.link.com/' ?>
         <em>inline text</em>
         <a href="http://www.<?php echo 'hi' ?>"></a>
+        <?php// if (\$block->getSomeVariable() > 1):?>
+            <?php echo \$block->getChildHtml('someChildBlock'); ?>
+        <?php //else:?>
+            <?php // echo \$block->getChildHtml('anotherChildBlock'); ?>
+        <?php // endif; ?>
     </body>
 </html>
 TEXT;
@@ -178,7 +183,7 @@ TEXT;
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a></body></html>
+</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())

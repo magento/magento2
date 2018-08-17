@@ -38,7 +38,6 @@
 </tr>
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0): ?>
-    <?php $isTop = 1; ?>
     <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) {
             continue;
@@ -64,7 +63,6 @@
                 <?php endif; ?>
             </tr>
             <?php $isFirst = 0; ?>
-            <?php $isTop = 0; ?>
         <?php endforeach; ?>
     <?php endforeach; ?>
 <?php endif;?>
