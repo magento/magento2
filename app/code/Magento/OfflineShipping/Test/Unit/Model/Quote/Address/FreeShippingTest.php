@@ -100,7 +100,7 @@ class FreeShippingTest extends \PHPUnit\Framework\TestCase
             ['addressFree' => 1, 'fItemFree' => 0, 'sItemFree' => 0, 'expected' => true],
             ['addressFree' => 0, 'fItemFree' => 1, 'sItemFree' => 0, 'expected' => false],
             ['addressFree' => 0, 'fItemFree' => 0, 'sItemFree' => 1, 'expected' => false],
-            ['addressFree' => 0, 'fItemFree' => 1, 'sItemFree' => 1, 'expected' => true],
+            ['addressFree' => 0, 'fItemFree' => 1, 'sItemFree' => 1, 'expected' => false],
         ];
     }
 
