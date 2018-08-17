@@ -25,7 +25,7 @@
         </before>
 
          <!--Navigate to a category page -->
-        <amOnPage url="/{{SimpleProductOne.name}}.html" stepKey="GoToProductPage"/>
+        <amOnPage url="/{{SimpleProductOne.urlKey}}.html" stepKey="GoToProductPage"/>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
