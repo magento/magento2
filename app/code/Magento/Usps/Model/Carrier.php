@@ -341,7 +341,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
         $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
 
-        $r->setFreeMethodWeight($request->getFreeMethodWeight());  
+        $r->setFreeMethodWeight($request->getFreeMethodWeight());
 
         $r->setValue($request->getPackageValue());
         $r->setValueWithDiscount($request->getPackageValueWithDiscount());
