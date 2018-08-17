@@ -143,9 +143,12 @@
         <wait stepKey="WaitForCustomerViewOpened" time="2"/>
         <click stepKey="clickCustomerAllCustomerItem" selector="{{Dashboard.customerAllCustomer}}"/>
         <waitForPageLoad stepKey="WaitForCustomerPageIsLoaded"/>
-        <fillField stepKey="searchToKeyword" selector="{{AdminCustomerAccountInformationSection.searchToKeyword}}" userInput="{{CreateUserData.firstName}}"/>
-        <click stepKey="clickSearchButton" selector="{{AdminCustomerAccountInformationSection.searchButton}}"/>
-        <waitForElementVisible stepKey="waitForFiltering" selector="{{AdminCustomerAccountInformationSection.selectCustomer}}"/>
+        <conditionalClick selector="{{AdminCustomerAccountInformationSection.clearAll}}" dependentSelector="{{AdminCustomerAccountInformationSection.clearAll}}" visible="1" stepKey="clickClearAllIfThereIsAnyValue"/>
+        <click stepKey="clickFilterButton" selector="{{AdminCustomerAccountInformationSection.filterButton}}"/>
+        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.filterNameField}}" stepKey="waitForFilterDataLoaded"/>
+        <fillField stepKey="searchProductUsingNameField" selector="{{AdminCustomerAccountInformationSection.filterNameField}}" userInput="{{CreateUserData.firstName}}"/>
+        <click stepKey="clickFiltersApplyButton" selector="{{AdminCustomerAccountInformationSection.filtersApplyButton}}"/>
+        <waitForElementNotVisible selector="{{AdminCustomerAccountInformationSection.filterNameField}}" stepKey="waitForFilterBecomeNotVisible"/>
         <click selector="{{AdminCustomerAccountInformationSection.selectCustomer}}" stepKey="ClickOnCustomer"/>
         <click selector="{{AdminCustomerAccountInformationSection.actions}}" stepKey="ClickOnActions"/>
         <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.delete}}" stepKey="waitForDeleteButtonAppeared"/>
