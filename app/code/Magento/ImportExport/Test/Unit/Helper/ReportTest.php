@@ -164,6 +164,9 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         $this->report->importFileExists($fileName);
     }
 
+    /**
+     * Test importFileExists()
+     */
     public function testImportFileExists()
     {
         $this->assertEquals($this->report->importFileExists('..file..name'), true);
