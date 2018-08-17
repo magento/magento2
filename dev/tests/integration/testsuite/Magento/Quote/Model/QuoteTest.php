@@ -324,7 +324,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $quote->getItemsQty());
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We don\'t have as many "Simple Product" as you requested.');
+        $this->expectExceptionMessage('The requested qty is not available');
         $updateParams['qty'] = $productStockQty + 1;
         $quote->updateItem($updateParams['id'], $updateParams);
     }
