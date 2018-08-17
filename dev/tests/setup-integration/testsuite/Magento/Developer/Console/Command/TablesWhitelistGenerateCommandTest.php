@@ -67,9 +67,8 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
      */
     public function testExecute(array $expectedWhitelistContent)
     {
-        $this->cliCommand->install(['Magento_TestSetupDeclarationModule1']);
-
         $moduleName = 'Magento_TestSetupDeclarationModule1';
+        $this->cliCommand->install([$moduleName]);
         $modulePath = $this->componentRegistrar->getPath('module', $moduleName);
         $whiteListFileName = $modulePath
             . DIRECTORY_SEPARATOR

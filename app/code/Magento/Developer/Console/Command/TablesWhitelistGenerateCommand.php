@@ -197,9 +197,7 @@ class TablesWhitelistGenerateCommand extends Command
         $primaryDbSchema = $this->getPrimaryDbSchema();
         if (isset($moduleDbSchema['table']) && isset($primaryDbSchema['table'])) {
             foreach ($primaryDbSchema['table'] as $tableNameKey => $tableContents) {
-                if (isset($moduleDbSchema['table'][$tableNameKey])) {
-                    unset($moduleDbSchema['table'][$tableNameKey]);
-                }
+                unset($moduleDbSchema['table'][$tableNameKey]);
             }
         }
         return $moduleDbSchema;
