@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder
 {
@@ -116,8 +117,7 @@ class TransportBuilder
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
-        $this->messageFactory = $messageFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(MessageInterfaceFactory::class);
+        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
         $this->message = $this->messageFactory->create();
     }
 
