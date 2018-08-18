@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
+namespace Magento\CatalogUrlRewrite\Plugin\Model\Category\Store;
 
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;

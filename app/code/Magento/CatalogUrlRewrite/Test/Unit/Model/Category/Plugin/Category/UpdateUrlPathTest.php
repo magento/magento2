@@ -97,7 +97,7 @@ class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->updateUrlPathPlugin = $this->objectManager->getObject(
-            \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\UpdateUrlPath::class,
+            \Magento\CatalogUrlRewrite\Plugin\Model\Category\UpdateUrlPath::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'categoryUrlRewriteGenerator' => $this->categoryUrlRewriteGenerator,
