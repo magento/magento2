@@ -145,17 +145,20 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $billingAddress = $addressInformation->getBillingAddress();
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
+        $invalidShippingAddress = false;
 
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
         }
 
-        if (!$address->getCountryId() || !$address->getCity() || !$address->getFirstname() || !$address->getLastname()) {
-            throw new StateException(__('Shipping address is not set'));
+        $shippingStreet = $address->getStreet();
+        if(!$shippingStreet || (is_array($shippingStreet) && count(array_filter($shippingStreet)) == 0))
+        {
+            $invalidShippingAddress = true;
         }
 
-        if ($billingAddress && (!$billingAddress->getCountryId() || !$billingAddress->getCity() || !$billingAddress->getFirstname() || !$billingAddress->getLastname())) {
-            throw new StateException(__('Billing address is not set'));
+        if (!$address->getCountryId() || !$address->getCity() || !$address->getFirstname() || !$address->getLastname() || !$address->getPostcode() || !$address->getTelephone() || $invalidShippingAddress) {
+            throw new StateException(__('Shipping address is not set'));
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */

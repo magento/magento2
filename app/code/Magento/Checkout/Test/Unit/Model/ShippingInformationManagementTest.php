@@ -175,6 +175,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
 
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
+        $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
+        $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
+        $this->shippingAddressMock->expects($this->once())->method('getTelephone')->willReturn('(555) 229-3326');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
@@ -287,6 +293,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
 
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
+        $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
+        $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
+        $this->shippingAddressMock->expects($this->once())->method('getTelephone')->willReturn('(555) 229-3326');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
@@ -326,6 +338,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
+        $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
+        $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
+        $this->shippingAddressMock->expects($this->once())->method('getTelephone')->willReturn('(555) 229-3326');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
@@ -367,6 +385,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
+        $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
+        $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
+        $this->shippingAddressMock->expects($this->once())->method('getTelephone')->willReturn('(555) 229-3326');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
