@@ -14,7 +14,23 @@ class SkuTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testGenerateUniqueSkuExistingProduct()
+    public function testGenerateUniqueSkuExistingProductDuplication()
+    {
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        $product = $repository->get('simple');
+        $product->setId(null);
+        $product->setIsDuplicate(true);
+        $this->assertEquals('simple', $product->getSku());
+        $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
+        $this->assertEquals('simple-1', $product->getSku());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGenerateUniqueSkuExistingProductNoDuplication()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ProductRepository::class
@@ -23,7 +39,7 @@ class SkuTest extends \PHPUnit\Framework\TestCase
         $product->setId(null);
         $this->assertEquals('simple', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('simple-1', $product->getSku());
+        $this->assertEquals('simple', $product->getSku());
     }
 
     /**
@@ -54,10 +70,14 @@ class SkuTest extends \PHPUnit\Framework\TestCase
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Copier::class
         );
-        $copier->copy($product);
+        $copy = $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
+        $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
+        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $copy->getSku());
+
+        $copy->getResource()->getAttribute('sku')->getBackend()->beforeSave($copy);
+        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-2', $copy->getSku());
     }
 
     /**
