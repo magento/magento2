@@ -23,11 +23,7 @@ define([
      * @param {HTMLElement} $loader - Loader DOM element.
      */
     function init(config, $loader) {
-        resolver(
-            hideLoader.bind(null, $loader),
-            null,
-            hideLoader.bind(null, $loader)
-        );
+        resolver(hideLoader.bind(null, $loader));
     }
 
     return init;
