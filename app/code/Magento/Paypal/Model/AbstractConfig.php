@@ -224,7 +224,18 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function shouldUseUnilateralPayments()
     {
-        return $this->getValue('business_account') && !$this->isWppApiAvailabe();
+        return $this->getValue('business_account') && !$this->isWppApiAvailable();
+    }
+
+    /**
+     * Check whether WPP API credentials are available for this method
+     *
+     * @deprecated
+     * @return bool
+     */
+    public function isWppApiAvailabe()
+    {
+        return $this->isWppApiAvailable();
     }
 
     /**
@@ -232,7 +243,7 @@ abstract class AbstractConfig implements ConfigInterface
      *
      * @return bool
      */
-    public function isWppApiAvailabe()
+    public function isWppApiAvailable()
     {
         return $this->getValue('api_username')
         && $this->getValue('api_password')

@@ -677,7 +677,7 @@ class Config extends AbstractConfig
                 }
                 break;
             case self::METHOD_BILLING_AGREEMENT:
-                $result = $this->isWppApiAvailabe();
+                $result = $this->isWppApiAvailable();
                 break;
         }
         return $result;
