@@ -188,8 +188,8 @@ define([
                 var addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
 
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
-                addToCartButton.find('span').text(addToCartButtonTextDefault);
-                addToCartButton.attr('title', addToCartButtonTextDefault);
+                addToCartButton.find('span').text($t('Add to Cart'));
+                addToCartButton.attr('title', $t('Add to Cart'));
             }, 1000);
         }
     });
