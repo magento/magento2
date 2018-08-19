@@ -16,7 +16,7 @@ use Magento\Newsletter\Model\ResourceModel\Problem as ProblemResource;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 
-class ProblemTest extends \PHPUnit\Framework\TestCase
+class ProblemTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
