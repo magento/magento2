@@ -204,7 +204,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
-                if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
+                $images = $product->getMediaGallery('images');
+                if (is_array($images) && $expectedImagesAmount != count($images)) {
                     $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
@@ -215,6 +216,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * Do copying data to stores
+     *
+     * If the 'copy_from' field is not specified in the input data,
+     * the store fallback mechanism will automatically take the admin store's default value.
      *
      * @param array $data
      * @param int $productId
@@ -227,15 +231,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 if (isset($data['product']['website_ids'][$websiteId])
                     && (bool)$data['product']['website_ids'][$websiteId]) {
                     foreach ($group as $store) {
-                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
-                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
-                        if ($copyTo) {
-                            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
-                                ->setStoreId($copyFrom)
-                                ->load($productId)
-                                ->setStoreId($copyTo)
-                                ->setCopyFromView(true)
-                                ->save();
+                        if (isset($store['copy_from'])) {
+                            $copyFrom = $store['copy_from'];
+                            $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                            if ($copyTo) {
+                                $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
+                                    ->setStoreId($copyFrom)
+                                    ->load($productId)
+                                    ->setStoreId($copyTo)
+                                    ->setCopyFromView(true)
+                                    ->save();
+                            }
                         }
                     }
                 }

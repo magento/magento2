@@ -33,7 +33,7 @@ class Downloadable extends Widget implements TabInterface
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable.phtml';
 
     /**
      * Accordion block id

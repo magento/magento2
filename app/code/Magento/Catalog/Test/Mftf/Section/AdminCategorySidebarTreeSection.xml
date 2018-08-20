@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCategorySidebarTreeSection">
+        <element name="collapseAll" type="button" selector=".tree-actions a:first-child"/>
+        <element name="expandAll" type="button" selector=".tree-actions a:last-child"/>
+        <element name="categoryTreeRoot" type="text" selector="div.x-tree-root-node>li.x-tree-node:first-of-type>div.x-tree-node-el:first-of-type" timeout="30"/>
+        <element name="categoryInTree" type="text" selector="//a/span[contains(text(), '{{name}}')]" parameterized="true" timeout="30"/>
+        <element name="categoryInTreeUnderRoot" type="text" selector="//div[@class='x-tree-root-node']/li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{name}}')]" parameterized="true"/>
+        <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
+        <element name="treeContainer" type="block" selector=".tree-holder" />
+    </section>
+</sections>

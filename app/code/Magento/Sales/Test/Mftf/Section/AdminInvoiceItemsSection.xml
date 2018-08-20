@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminInvoiceItemsSection">
+        <element name="itemName" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .product-title" parameterized="true"/>
+        <element name="itemSku" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .product-sku-block" parameterized="true"/>
+        <element name="itemPrice" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-price .price" parameterized="true"/>
+        <element name="itemQty" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-qty .qty-table" parameterized="true"/>
+        <element name="itemQtyToInvoice" type="input" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-qty-invoice .qty-input" parameterized="true"/>
+        <element name="itemSubtotal" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-subtotal .price" parameterized="true"/>
+        <element name="itemTaxAmount" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-tax .price" parameterized="true"/>
+        <element name="itemDiscountAmount" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-discount .price" parameterized="true"/>
+        <element name="itemTotal" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
+        <element name="nameColumn" type="text" selector=".order-invoice-tables .product-title"/>
+        <element name="skuColumn" type="text" selector=".order-invoice-tables .product-sku-block"/>
+        <element name="priceColumn" type="text" selector=".order-invoice-tables .col-price .price"/>
+        <element name="qtyColumn" type="text" selector=".order-invoice-tables .col-qty .qty-table"/>
+        <element name="qtyToInvoiceColumn" type="input" selector=".order-invoice-tables .col-qty-invoice .qty-input"/>
+        <element name="subtotalColumn" type="text" selector=".order-invoice-tables .col-subtotal .price"/>
+        <element name="taxAmountColumn" type="text" selector=".order-invoice-tables .col-tax .price"/>
+        <element name="discountAmountColumn" type="text" selector=".order-invoice-tables .col-discount .price"/>
+        <element name="totalColumn" type="text" selector=".order-invoice-tables .col-total .price"/>
+        <element name="updateQty" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button']"/>
+    </section>
+</sections>
