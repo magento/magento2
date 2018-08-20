@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 declare(strict_types=1);
 
@@ -47,17 +51,17 @@ class Mcrypt implements EncryptionAdapterInterface
     ) {
         $this->cipher = $cipher;
         $this->mode = $mode;
-        // @codingStandardIgnoreLine
+        // @codingStandardsIgnoreLine
         $this->handle = @mcrypt_module_open($cipher, '', $mode, '');
         try {
-            // @codingStandardIgnoreLine
+            // @codingStandardsIgnoreLine
             $maxKeySize = @mcrypt_enc_get_key_size($this->handle);
             if (strlen($key) > $maxKeySize) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase('Key must not exceed %1 bytes.', [$maxKeySize])
                 );
             }
-            // @codingStandardIgnoreLine
+            // @codingStandardsIgnoreLine
             $initVectorSize = @mcrypt_enc_get_iv_size($this->handle);
             if (null === $initVector) {
                 /* Set vector to zero bytes to not use it */
@@ -72,11 +76,11 @@ class Mcrypt implements EncryptionAdapterInterface
             }
             $this->initVector = $initVector;
         } catch (\Exception $e) {
-            // @codingStandardIgnoreLine
+            // @codingStandardsIgnoreLine
             @mcrypt_module_close($this->handle);
             throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($e->getMessage()));
         }
-        // @codingStandardIgnoreLine
+        // @codingStandardsIgnoreLine
         @mcrypt_generic_init($this->handle, $key, $initVector);
     }
 
@@ -156,7 +160,7 @@ class Mcrypt implements EncryptionAdapterInterface
         if (strlen($data) == 0) {
             return $data;
         }
-        // @codingStandardIgnoreLine
+        // @codingStandardsIgnoreLine
         $data = @mdecrypt_generic($this->handle, $data);
         /*
          * Returned string can in fact be longer than the unencrypted string due to the padding of the data

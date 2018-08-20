@@ -22,7 +22,7 @@ $deployConfig = $objectManager->get(DeploymentConfig::class);
  * Creates an encrypted card number with the current crypt key using
  * a legacy cipher.
  */
-// @codingStandardIgnoreStart
+// @codingStandardsIgnoreStart
 $handle = @mcrypt_module_open(MCRYPT_RIJNDAEL_256, '', MCRYPT_MODE_CBC, '');
 $initVectorSize = @mcrypt_enc_get_iv_size($handle);
 $initVector = str_repeat("\0", $initVectorSize);
@@ -32,7 +32,7 @@ $encCcNumber = @mcrypt_generic($handle, EncryptionUpdateTest::TEST_CC_NUMBER);
 
 @mcrypt_generic_deinit($handle);
 @mcrypt_module_close($handle);
-// @codingStandardIgnoreEnd
+// @codingStandardsIgnoreEnd
 
 /** @var SearchCriteria $searchCriteria */
 $searchCriteria = $objectManager->get(SearchCriteriaBuilder::class)
