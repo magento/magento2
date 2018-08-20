@@ -30,7 +30,9 @@
         <span data-bind="i18n: 'Edit'"></span>
     </button>
     <!-- /ko -->
+    <!-- ko if: (!isSelected()) -->
     <button type="button" data-bind="click: selectAddress" class="action action-select-shipping-item">
         <span data-bind="i18n: 'Ship Here'"></span>
     </button>
+    <!-- /ko -->
 </div>
