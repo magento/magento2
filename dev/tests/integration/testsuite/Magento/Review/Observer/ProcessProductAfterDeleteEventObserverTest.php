@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Review\Controller;
+namespace Magento\Review\Observer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
