@@ -80,7 +80,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $_priceInfoMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\FilterCustomAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\FilterProductCustomAttribute|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterCustomAttribute;
 
@@ -381,7 +381,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->extensionAttributes);
 
         $this->filterCustomAttribute = $this->createTestProxy(
-            \Magento\CatalogInventory\Model\FilterCustomAttribute::class
+            \Magento\CatalogInventory\Model\FilterProductCustomAttribute::class
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

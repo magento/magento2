@@ -5,7 +5,10 @@
  */
 namespace Magento\CatalogInventory\Model;
 
-class FilterCustomAttribute
+/**
+ * Filter custom attributes for product using the blacklist
+ */
+class FilterProductCustomAttribute
 {
     /**
      * @var array
@@ -22,7 +25,6 @@ class FilterCustomAttribute
 
     /**
      * Delete custom attribute
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param array $attributes
      * @return mixed
      */
