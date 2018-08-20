@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
-use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\EavGraphQl\Model\Resolver\DataProvider\AttributeOptions as AttributeOptionsDataProvider;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -20,31 +24,29 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class AttributeOptions implements ResolverInterface
 {
     /**
-     * @var AttributeOptionManagementInterface
+     * @var AttributeOptionsDataProvider
      */
-    protected $optionManager;
+    private $attributeOptionsDataProvider;
 
     /**
-     * @var ValueFactory
+     * @var AttributeOptions
      */
-    protected $valueFactory;
+    private $valueFactory;
 
     /**
-     * AttributeOptions constructor.
-     *
-     * @param AttributeOptionManagementInterface $optionManager
+     * @param AttributeOptionsDataProvider $attributeOptionsDataProvider
      * @param ValueFactory $valueFactory
      */
     public function __construct(
-        AttributeOptionManagementInterface $optionManager,
+        AttributeOptionsDataProvider $attributeOptionsDataProvider,
         ValueFactory $valueFactory
     ) {
-        $this->optionManager = $optionManager;
+        $this->attributeOptionsDataProvider = $attributeOptionsDataProvider;
         $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
@@ -53,36 +55,60 @@ class AttributeOptions implements ResolverInterface
         array $value = null,
         array $args = null
     ) : Value {
-        $options = [];
 
-        $entityType = !empty($value['entity_type']) ? $value['entity_type'] : '';
-        $attributeCode = !empty($value['attribute_code']) ? $value['attribute_code'] : '';
+        return $this->valueFactory->create(function () use ($value) {
+            $entityType = $this->getEntityType($value);
+            $attributeCode = $this->getAttributeCode($value);
 
+            $optionsData = $this->getAttributeOptionsData($entityType, $attributeCode);
+            return $optionsData;
+        });
+    }
+
+    /**
+     * @param array $value
+     * @return int
+     * @throws GraphQlInputException
+     */
+    private function getEntityType(array $value): int
+    {
+        if (!isset($value['entity_type'])) {
+            throw new GraphQlInputException(__('"Entity type should be specified'));
+        }
+
+        return (int)$value['entity_type'];
+    }
+
+    /**
+     * @param array $value
+     * @return string
+     * @throws GraphQlInputException
+     */
+    private function getAttributeCode(array $value): string
+    {
+        if (!isset($value['attribute_code'])) {
+            throw new GraphQlInputException(__('"Attribute code should be specified'));
+        }
+
+        return $value['attribute_code'];
+    }
+
+    /**
+     * @param int $entityType
+     * @param string $attributeCode
+     * @return array
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
+     */
+    private function getAttributeOptionsData(int $entityType, string $attributeCode): array
+    {
         try {
-            /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $attributeOptions */
-            $attributeOptions = $this->optionManager->getItems($entityType, $attributeCode);
-        } catch (\Exception $e) {
-            $attributeOptions = [];
+            $optionsData = $this->attributeOptionsDataProvider->getData($entityType, $attributeCode);
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()), $e);
+        } catch (StateException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
-
-        if (is_array($attributeOptions)) {
-            /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $option */
-            foreach ($attributeOptions as $option) {
-                if ($option->getValue() === '') {
-                    continue;
-                }
-
-                $options[] = [
-                    'label' => $option->getLabel(),
-                    'value' => $option->getValue()
-                ];
-            }
-        }
-
-        $result = function () use ($options) {
-            return $options;
-        };
-
-        return $this->valueFactory->create($result);
+        return $optionsData;
     }
 }
