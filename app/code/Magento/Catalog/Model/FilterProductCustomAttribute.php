@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model;
+namespace Magento\Catalog\Model;
 
 /**
  * Filter custom attributes for product using the blacklist

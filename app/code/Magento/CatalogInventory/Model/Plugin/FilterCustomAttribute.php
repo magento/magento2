@@ -8,7 +8,7 @@
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
-use Magento\CatalogInventory\Model\FilterProductCustomAttribute as Filter;
+use Magento\Catalog\Model\FilterProductCustomAttribute as Filter;
 
 class FilterCustomAttribute
 {
