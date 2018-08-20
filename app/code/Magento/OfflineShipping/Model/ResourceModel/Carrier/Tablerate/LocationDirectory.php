@@ -16,6 +16,11 @@ class LocationDirectory
     /**
      * @var array
      */
+    private $regionsByCode;
+
+    /**
+     * @var array
+     */
     protected $iso2Countries;
 
     /**
@@ -115,16 +120,21 @@ class LocationDirectory
      */
     protected function loadRegions()
     {
-        if ($this->regions !== null) {
+        if ($this->regions !== null && $this->regionsByCode !== null) {
             return $this;
         }
 
         $this->regions = [];
+        $this->regionsByCode = [];
 
         /** @var $collection \Magento\Directory\Model\ResourceModel\Region\Collection */
         $collection = $this->_regionCollectionFactory->create();
         foreach ($collection->getData() as $row) {
             $this->regions[$row['country_id']][$row['code']] = (int)$row['region_id'];
+            if (empty($this->regionsByCode[$row['country_id']][$row['code']])) {
+                $this->regionsByCode[$row['country_id']][$row['code']] = [];
+            }
+            $this->regionsByCode[$row['country_id']][$row['code']][] = (int)$row['region_id'];
         }
 
         return $this;
@@ -134,10 +144,24 @@ class LocationDirectory
      * @param int $countryId
      * @param string $regionCode
      * @return string
+     * @deprecated
      */
     public function getRegionId($countryId, $regionCode)
     {
         $this->loadRegions();
         return $this->regions[$countryId][$regionCode];
+    }
+
+    /**
+     * Return region ids for country and region
+     *
+     * @param $countryId
+     * @param $regionCode
+     * @return array
+     */
+    public function getRegionIds($countryId, $regionCode)
+    {
+        $this->loadRegions();
+        return $this->regionsByCode[$countryId][$regionCode];
     }
 }

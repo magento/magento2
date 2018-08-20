@@ -135,7 +135,7 @@ class Import
                 if (empty($csvLine)) {
                     continue;
                 }
-                $rowData = $this->rowParser->parse(
+                $rowsData = $this->rowParser->parse(
                     $csvLine,
                     $rowNumber,
                     $websiteId,
@@ -144,20 +144,25 @@ class Import
                     $columnResolver
                 );
 
-                // protect from duplicate
-                $hash = $this->dataHashGenerator->getHash($rowData);
-                if (array_key_exists($hash, $this->uniqueHash)) {
-                    throw new RowException(
-                        __(
-                            'Duplicate Row #%1 (duplicates row #%2)',
-                            $rowNumber,
-                            $this->uniqueHash[$hash]
-                        )
-                    );
-                }
-                $this->uniqueHash[$hash] = $rowNumber;
+                foreach ($rowsData as $rowData) {
+                    // protect from duplicate
+                    $hash = $this->dataHashGenerator->getHash($rowData);
+                    if (array_key_exists($hash, $this->uniqueHash)) {
+                        throw new RowException(
+                            __(
+                                'Duplicate Row #%1 (duplicates row #%2)',
+                                $rowNumber,
+                                $this->uniqueHash[$hash]
+                            )
+                        );
+                    }
+                    $this->uniqueHash[$hash] = $rowNumber;
 
-                $items[] = $rowData;
+                    $items[] = $rowData;
+                }
+                if (count($rowsData) > 1) {
+                    $bunchSize += count($rowsData) - 1;
+                }
                 if (count($items) === $bunchSize) {
                     yield $items;
                     $items = [];

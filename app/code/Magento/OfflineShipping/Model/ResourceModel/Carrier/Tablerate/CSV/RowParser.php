@@ -71,20 +71,25 @@ class RowParser
         }
 
         $countryId = $this->getCountryId($rowData, $rowNumber, $columnResolver);
-        $regionId = $this->getRegionId($rowData, $rowNumber, $columnResolver, $countryId);
+        $regionIds = $this->getRegionIds($rowData, $rowNumber, $columnResolver, $countryId);
         $zipCode = $this->getZipCode($rowData, $columnResolver);
         $conditionValue = $this->getConditionValue($rowData, $rowNumber, $conditionFullName, $columnResolver);
         $price = $this->getPrice($rowData, $rowNumber, $columnResolver);
 
-        return [
-            'website_id' => $websiteId,
-            'dest_country_id' => $countryId,
-            'dest_region_id' => $regionId,
-            'dest_zip' => $zipCode,
-            'condition_name' => $conditionShortName,
-            'condition_value' => $conditionValue,
-            'price' => $price,
-        ];
+        $rates = [];
+        foreach ($regionIds as $regionId) {
+            $rates[] = [
+                'website_id' => $websiteId,
+                'dest_country_id' => $countryId,
+                'dest_region_id' => $regionId,
+                'dest_zip' => $zipCode,
+                'condition_name' => $conditionShortName,
+                'condition_value' => $conditionValue,
+                'price' => $price,
+            ];
+        }
+
+        return $rates;
     }
 
     /**
@@ -120,17 +125,17 @@ class RowParser
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
      * @param int $countryId
-     * @return int|string
+     * @return array
      * @throws ColumnNotFoundException
      * @throws RowException
      */
-    private function getRegionId(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
+    private function getRegionIds(array $rowData, $rowNumber, ColumnResolver $columnResolver, $countryId)
     {
         $regionCode = $columnResolver->getColumnValue(ColumnResolver::COLUMN_REGION, $rowData);
         if ($countryId !== '0' && $this->locationDirectory->hasRegionId($countryId, $regionCode)) {
-            $regionId = $this->locationDirectory->getRegionId($countryId, $regionCode);
+            $regionIds = $this->locationDirectory->getRegionIds($countryId, $regionCode);
         } elseif ($regionCode === '*' || $regionCode === '') {
-            $regionId = 0;
+            $regionIds = [0];
         } else {
             throw new RowException(
                 __(
@@ -141,7 +146,7 @@ class RowParser
                 )
             );
         }
-        return $regionId;
+        return $regionIds;
     }
 
     /**
