@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2dd0a131df2b0f816b7dea047b3c136e",
+    "content-hash": "74013a4027763e05b29b127b4c03c752",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3074,16 +3074,16 @@
         },
         {
             "name": "zendframework/zend-http",
-            "version": "2.8.1",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-http.git",
-                "reference": "44197164a270259116162a442f639085ea24094a"
+                "reference": "2c8aed3d25522618573194e7cc51351f8cd4a45b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/44197164a270259116162a442f639085ea24094a",
-                "reference": "44197164a270259116162a442f639085ea24094a",
+                "url": "https://api.github.com/repos/zendframework/zend-http/zipball/2c8aed3d25522618573194e7cc51351f8cd4a45b",
+                "reference": "2c8aed3d25522618573194e7cc51351f8cd4a45b",
                 "shasum": ""
             },
             "require": {
@@ -3125,7 +3125,7 @@
                 "zend",
                 "zf"
             ],
-            "time": "2018-08-01T13:50:48+00:00"
+            "time": "2018-08-13T18:47:03+00:00"
         },
         {
             "name": "zendframework/zend-hydrator",
