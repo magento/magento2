@@ -34,7 +34,7 @@ $productModel->setTypeId(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setWebsiteIds(
     [1]
-)->setCateroryIds(
+)->setCategoryIds(
     []
 )->setStockData(
     ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]

@@ -251,6 +251,9 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->model->run($data);
     }
 
+    /**
+     * @return array
+     */
     private function getData()
     {
         return [

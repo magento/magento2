@@ -33,6 +33,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
     }
 
+    /**
+     * @return array
+     */
     public static function dataGetBackendTypeByInput()
     {
         return [
@@ -61,6 +64,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
     }
 
+    /**
+     * @return array
+     */
     public static function dataGetDefaultValueByInput()
     {
         return [

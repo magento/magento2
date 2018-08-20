@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SimpleTaxNY" type="tax">
+        <data key="state">New York</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">8.375</data>
+    </entity>
+    <entity name="SimpleTaxCA" type="tax">
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">8.25</data>
+    </entity>
+    <entity name="SimpleTaxSwiss" type="tax">
+        <data key="state">Aargau</data>
+        <data key="country">Switzerland</data>
+        <data key="zip">*</data>
+        <data key="rate">0</data>
+    </entity>
+</entities>

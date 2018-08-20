@@ -120,6 +120,7 @@
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
             </argument>
         </arguments>
     </type>

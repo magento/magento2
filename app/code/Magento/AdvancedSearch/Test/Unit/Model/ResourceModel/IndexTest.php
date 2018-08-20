@@ -15,6 +15,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,10 +62,24 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
+        $indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+        );
+        $traversableMock = $this->createMock(\Traversable::class);
+        $dimensionsMock = $this->createMock(\Magento\Framework\Indexer\MultiDimensionProvider::class);
+        $dimensionsMock->method('getIterator')->willReturn($traversableMock);
+        $dimensionFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+        );
+        $dimensionFactoryMock->method('create')->willReturn($dimensionsMock);
+
         $this->model = new Index(
             $this->resourceContextMock,
             $this->storeManagerMock,
-            $this->metadataPoolMock
+            $this->metadataPoolMock,
+            'connectionName',
+            $indexScopeResolverMock,
+            $dimensionFactoryMock
         );
     }
 
@@ -71,11 +88,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
+        $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
 
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
+        $selectMock->expects($this->any())->method('union')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->adapterMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn([]);
 

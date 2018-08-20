@@ -276,6 +276,9 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         $this->object->detectDesign($requestMock);
     }
 
+    /**
+     * @return array
+     */
     public function detectDesignByRequestDataProvider()
     {
         return [

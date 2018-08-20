@@ -11,8 +11,6 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $product->setTypeId(
     'simple'
-)->setId(
-    1
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
