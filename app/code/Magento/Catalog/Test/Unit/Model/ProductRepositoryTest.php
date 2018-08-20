@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\EntityManager\Operation\Read\ReadExtensions;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -160,6 +161,11 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $cacheLimit = 2;
 
     /**
+     * @var ReadExtensions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readExtensionsMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -271,6 +277,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                     }
                 )
             );
+        $this->readExtensionsMock = $this->getMockBuilder(ReadExtensions::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->model = $this->objectManager->getObject(
             \Magento\Catalog\Model\ProductRepository::class,
@@ -294,7 +302,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
                 'collectionProcessor' => $this->collectionProcessorMock,
                 'serializer' => $this->serializerMock,
-                'cacheLimit' => $this->cacheLimit
+                'cacheLimit' => $this->cacheLimit,
+                'readExtensions' => $this->readExtensionsMock,
             ]
         );
     }
@@ -747,6 +756,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())->method('load');
         $collectionMock->expects($this->once())->method('addCategoryIds');
         $collectionMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$this->productMock]);
+        $this->readExtensionsMock->expects($this->once())->method('execute')->with($this->productMock);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
         $searchResultsMock = $this->createMock(\Magento\Catalog\Api\Data\ProductSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
