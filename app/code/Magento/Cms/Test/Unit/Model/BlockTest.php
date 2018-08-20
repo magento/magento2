@@ -69,7 +69,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
                 'resource' => $this->resourceMock,
             ]
-        );;
+        );
     }
 
     /**
