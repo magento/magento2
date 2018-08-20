@@ -49,6 +49,10 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+            <!-- MAGETWO-94169 -->
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-94169: [MTF] - OnePageCheckoutUsingNonDefaultAddress_0 fails on 2.3-develop</data>
+            <!-- MAGETWO-94169 -->
         </variation>
         <variation name="OnePageCheckoutUsingNewAddress" summary="Checkout as Customer using New address" ticketId="MAGETWO-42601">
             <data name="tag" xsi:type="string">severity:S1</data>
