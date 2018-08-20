@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Review\Test\Unit\Model;
+namespace Magento\Review\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event;
