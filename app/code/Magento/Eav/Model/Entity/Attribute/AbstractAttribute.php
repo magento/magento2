@@ -167,8 +167,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavExtensionFactory
+     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -188,8 +188,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        FrontendLabelFactory $frontendLabelFactory = null,
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
+        FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,

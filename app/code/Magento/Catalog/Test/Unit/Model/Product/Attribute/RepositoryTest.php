@@ -71,6 +71,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $optionManagementMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->attributeResourceMock =
@@ -115,6 +118,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGet()
     {
         $attributeCode = 'some attribute code';
@@ -127,6 +133,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->get($attributeCode);
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
@@ -140,6 +149,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->getList($searchCriteriaMock);
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -148,6 +160,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->model->delete($attributeMock));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteById()
     {
         $attributeCode = 'some attribute code';
@@ -163,6 +178,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->model->deleteById($attributeCode));
     }
 
+    /**
+     * @return void
+     */
     public function testGetCustomAttributesMetadata()
     {
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
@@ -243,6 +261,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($attributeMock);
     }
 
+    /**
+     * @return void
+     */
     public function testSaveDoesNotSaveAttributeOptionsIfOptionsAreAbsentInPayload()
     {
         $attributeId = 1;
@@ -268,6 +289,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($attributeMock);
     }
 
+    /**
+     * @return void
+     */
     public function testSaveSavesDefaultFrontendLabelIfItIsPresentInPayload()
     {
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeFrontendLabelInterface::class);

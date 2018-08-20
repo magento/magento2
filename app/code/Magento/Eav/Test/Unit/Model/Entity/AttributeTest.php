@@ -13,11 +13,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_model = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->_model = null;
@@ -27,6 +33,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param string $givenFrontendInput
      * @param string $expectedBackendType
      * @dataProvider dataGetBackendTypeByInput
+     * @return void
      */
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
@@ -113,6 +120,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * return void
+     */
     public function testGetFrontendLabels()
     {
         $attributeId = 1;

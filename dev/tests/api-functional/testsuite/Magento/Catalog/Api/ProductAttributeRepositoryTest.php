@@ -23,6 +23,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testGet()
     {
@@ -35,6 +36,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertEquals($attributeCode, $attribute['attribute_code']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $searchCriteria = [
@@ -83,6 +87,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testCreate()
     {
@@ -117,6 +122,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testCreateWithExceptionIfAttributeAlreadyExists()
     {
@@ -133,6 +139,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdate()
     {
@@ -202,6 +209,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdateWithNoDefaultLabelAndAdminStorelabel()
     {
@@ -234,6 +242,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdateWithNoDefaultLabelAndNoAdminStoreLabel()
     {
@@ -265,6 +274,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
      */
     public function testUpdateWithNewOption()
     {
@@ -302,6 +312,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @return void
      */
     public function testDeleteById()
     {
@@ -309,6 +320,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertTrue($this->deleteAttribute($attributeCode));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
@@ -490,6 +504,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         return $this->_webApiCall($serviceInfo, $attributeData);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         foreach ($this->createdAttributes as $attributeCode) {
