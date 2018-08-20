@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\EncryptionKey\Setup\Patch\Data;
@@ -27,26 +30,26 @@ class SodiumChachaPatch implements DataPatchInterface
     private $encryptor;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface
+     * @var \Magento\Framework\App\State
      */
-    private $scope;
+    private $state;
 
     /**
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Config\Model\Config\Structure\Proxy $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Config\ScopeInterface $scope
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Config\Model\Config\Structure\Proxy $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Config\ScopeInterface $scope
+        \Magento\Framework\App\State $state
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->structure = $structure;
         $this->encryptor = $encryptor;
-        $this->scope = $scope;
+        $this->state = $state;
     }
 
     /**
@@ -79,17 +82,16 @@ class SodiumChachaPatch implements DataPatchInterface
 
     private function reEncryptSystemConfigurationValues()
     {
-        $currentScope = $this->scope->getCurrentScope();
-
-        $this->scope->setCurrentScope(\Magento\Framework\App\Area::AREA_ADMINHTML);
-
-        $paths = $this->structure->getFieldPathsByAttribute(
-            'backend_model',
-            \Magento\Config\Model\Config\Backend\Encrypted::class
+        $structure = $this->structure;
+        $paths = $this->state->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_ADMINHTML,
+            function () use ($structure) {
+                return $structure->getFieldPathsByAttribute(
+                    'backend_model',
+                    \Magento\Config\Model\Config\Backend\Encrypted::class
+                );
+            }
         );
-
-        $this->scope->setCurrentScope($currentScope);
-
         // walk through found data and re-encrypt it
         if ($paths) {
             $table = $this->moduleDataSetup->getTable('core_config_data');
