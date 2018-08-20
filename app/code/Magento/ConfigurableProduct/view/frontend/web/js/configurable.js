@@ -404,7 +404,7 @@ define([
                                 options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
                                     optionPriceDiff,
                                     this.options.priceFormat,
-                                    1);
+                                    true);
                             }
                         }
                     }
