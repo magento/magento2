@@ -85,6 +85,21 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Get the destination image name which prevents overwriting existing images with the same name
+     *
+     * @param array $value Attribute value
+     * @return string
+     */
+    private function getFinalImageName($value)
+    {
+        if (is_array($value) && isset($value[0]['name'])) {
+            return $this->getImageUploader()->getFinalImageName($value[0]['name']);
+        }
+
+        return '';
+    }
+
+    /**
      * Avoiding saving potential upload data to DB
      * Will set empty image attribute value if image was not uploaded
      *
@@ -102,7 +117,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $value[0]['name'] = $value[0]['url'];
         }
 
-        if ($imageName = $this->getUploadedImageName($value)) {
+        if ($imageName = $this->getFinalImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -170,8 +185,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
-                // @TODO: Assign this (possibly) new-filename to the category so it shows the correct image
-                $newImageName = $this->getImageUploader()->moveFileFromTmp($imageName);
+                $this->getImageUploader()->moveFileFromTmp($imageName);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
