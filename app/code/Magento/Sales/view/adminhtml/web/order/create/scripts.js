@@ -907,6 +907,7 @@ define([
                     qtyElement.value = confirmedCurrentQty.value;
                 }
                 this.productConfigureAddFields['item['+itemId+'][configured]'] = 1;
+                this.itemsUpdate();
 
             }.bind(this));
             productConfigure.setShowWindowCallback(listType, function() {
