@@ -222,7 +222,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     $setIds
                 )
                 ->group('entity_attribute.attribute_id')
-                ->having('count = ' . count($setIds));
+                ->having(new \Zend_Db_Expr('COUNT(*)') . ' = ' . count($setIds));
         }
 
         //$this->getSelect()->distinct(true);
