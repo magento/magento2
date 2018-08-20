@@ -7,6 +7,9 @@ namespace Magento\Checkout\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class SessionTest
+ */
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -14,6 +17,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_checkoutSession;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_checkoutSession = Bootstrap::getObjectManager()->create(\Magento\Checkout\Model\Session::class);
@@ -101,6 +107,71 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->_checkoutSession->loadCustomerQuote();
         $quote = $this->_checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     */
+    public function testGetQuoteWithProductWithTierPrice()
+    {
+        $reservedOrderId = 'test01';
+        $customerGroupId = 1;
+        $tierPriceQty = 1;
+        $tierPriceValue = 9;
+
+        $productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+        $tierPrice = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\Data\ProductTierPriceInterface::class)
+            ->setCustomerGroupId($customerGroupId)
+            ->setQty($tierPriceQty)
+            ->setValue($tierPriceValue);
+        $product->setTierPrices([$tierPrice]);
+        $productRepository->save($product);
+
+        $quote = $this->getQuote($reservedOrderId);
+        $this->_checkoutSession->setQuoteId($quote->getId());
+
+        $quote = $this->_checkoutSession->getQuote();
+        $item = $quote->getItems()[0];
+        /** @var \Magento\Catalog\Model\Product $quoteProduct */
+        $quoteProduct = $item->getProduct();
+        $this->assertEquals(10, $quoteProduct->getTierPrice($tierPriceQty));
+
+        $customerRepository = Bootstrap::getObjectManager()->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $customer = $customerRepository->getById(1);
+        $customerSession = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        $customerSession->setCustomerDataAsLoggedIn($customer);
+
+        $quote = $this->_checkoutSession->getQuote();
+        $item = $quote->getItems()[0];
+        /** @var \Magento\Catalog\Model\Product $quoteProduct */
+        $quoteProduct = $item->getProduct();
+        $this->assertEquals($tierPriceValue, $quoteProduct->getTierPrice(1));
+    }
+
+    /**
+     * Returns quote by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return \Magento\Quote\Api\Data\CartInterface
+     */
+    private function getQuote(string $reservedOrderId): \Magento\Quote\Api\Data\CartInterface
+    {
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $filter = $filterBuilder->setField('reserved_order_id')
+            ->setConditionType('=')
+            ->setValue($reservedOrderId)
+            ->create();
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilters([$filter])
+            ->create();
+        $quoteRepository = Bootstrap::getObjectManager()->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $searchResult = $quoteRepository->getList($searchCriteria);
+        /** @var \Magento\Quote\Api\Data\CartInterface[] $items */
+        $items = $searchResult->getItems();
+
+        return \array_values($items)[0];
     }
 
     /**

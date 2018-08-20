@@ -230,7 +230,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         );
         $this->skipStockStatusFilter($productCollection);
         $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
-        $this->addTierPriceData($productCollection);
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
@@ -299,21 +298,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     private function skipStockStatusFilter(ProductCollection $productCollection)
     {
         $productCollection->setFlag('has_stock_status_filter', true);
-    }
-
-    /**
-     * Add tier prices to product collection.
-     *
-     * @param ProductCollection $productCollection
-     * @return void
-     */
-    private function addTierPriceData(ProductCollection $productCollection)
-    {
-        if (empty($this->_quote)) {
-            $productCollection->addTierPriceData();
-        } else {
-            $productCollection->addTierPriceDataByGroupId($this->_quote->getCustomerGroupId());
-        }
     }
 
     /**
