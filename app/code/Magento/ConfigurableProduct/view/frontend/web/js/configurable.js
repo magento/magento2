@@ -362,7 +362,6 @@ define([
                 i,
                 j,
                 basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
-                optionPriceLabel,
                 optionFinalPrice,
                 optionPriceDiff,
                 optionPrices = this.options.spConfig.optionPrices;
@@ -379,7 +378,6 @@ define([
             if (options) {
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
-                    optionPriceLabel = '';
                     optionPriceDiff = 0;
 
                     /* eslint-disable max-depth */
