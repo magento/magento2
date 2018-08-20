@@ -263,10 +263,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Framework\DataObject $attribute
      * @return bool
      */
-    private function isEnabledInFlat(\Magento\Framework\DataObject $attribute)
+    private function isEnabledInFlat(\Magento\Framework\DataObject $attribute): bool
     {
-        return $attribute->getData('backend_type') == 'static'
-            || $attribute->getData('used_in_product_listing') == 1
-            || $attribute->getData('used_for_sort_by') == 1;
+        return $attribute->getData('backend_type') === 'static'
+            || (int) $attribute->getData('used_in_product_listing') === 1
+            || (int) $attribute->getData('used_for_sort_by') === 1;
     }
 }
