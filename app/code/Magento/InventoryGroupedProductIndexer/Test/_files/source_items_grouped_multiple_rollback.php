@@ -22,12 +22,7 @@ $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
 
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     SourceItemInterface::SKU,
-    [
-        'configurable_out_of_stock',
-        'configurable_1', 'configurable_2',
-        'simple_11', 'simple_21', 'simple_31',
-        'simple_12', 'simple_22', 'simple_32'
-    ],
+    ['simple_11', 'simple_22', 'grouped_in_stock', 'grouped_out_of_stock'],
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();

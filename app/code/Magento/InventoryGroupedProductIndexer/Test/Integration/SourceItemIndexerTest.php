@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurableProductIndexer\Test\Integration;
+namespace Magento\InventoryGroupedProductIndexer\Test\Integration;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
