@@ -27,6 +27,13 @@ class Title extends Template
     protected $pageTitle;
 
     /**
+     * Defines whether the i18n translation should be applied for title
+     *
+     * @var bool
+     */
+    protected $useTranslation = true;
+
+    /**
      * Provide own page title or pick it from Head Block
      *
      * @return string
@@ -34,9 +41,11 @@ class Title extends Template
     public function getPageTitle()
     {
         if (!empty($this->pageTitle)) {
-            return $this->pageTitle;
+            return $this->useTranslation ? __($this->pageTitle) : $this->pageTitle;
         }
-        return __($this->pageConfig->getTitle()->getShort());
+
+        $shortTitle = $this->pageConfig->getTitle()->getShort();
+        return $this->useTranslation ? __($shortTitle) : $shortTitle;
     }
 
     /**
@@ -47,9 +56,11 @@ class Title extends Template
     public function getPageHeading()
     {
         if (!empty($this->pageTitle)) {
-            return __($this->pageTitle);
+            return $this->useTranslation ? __($this->pageTitle) : $this->pageTitle;
         }
-        return __($this->pageConfig->getTitle()->getShortHeading());
+
+        $shortHeading = $this->pageConfig->getTitle()->getShortHeading();
+        return $this->useTranslation ? __($shortHeading) : $shortHeading;
     }
 
     /**
@@ -61,5 +72,17 @@ class Title extends Template
     public function setPageTitle($pageTitle)
     {
         $this->pageTitle = $pageTitle;
+    }
+
+    /**
+     * Define whether the i18n translation should be applied for title
+     * E.g. the additional translations should be disabled for the category title specified on store view level
+     *
+     * @param bool $useTranslation
+     * @return void
+     */
+    public function setUseTranslations($useTranslation)
+    {
+        $this->useTranslation = $useTranslation;
     }
 }
