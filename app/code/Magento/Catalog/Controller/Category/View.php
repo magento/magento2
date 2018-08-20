@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -70,6 +71,11 @@ class View extends \Magento\Framework\App\Action\Action
     protected $categoryRepository;
 
     /**
+     * @var ToolbarMemorizer
+     */
+    private $toolbarMemorizer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -82,6 +88,7 @@ class View extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param ToolbarMemorizer|null $toolbarMemorizer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -94,7 +101,8 @@ class View extends \Magento\Framework\App\Action\Action
         PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ToolbarMemorizer $toolbarMemorizer = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -106,6 +114,7 @@ class View extends \Magento\Framework\App\Action\Action
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
+        $this->toolbarMemorizer = $toolbarMemorizer ?: $context->getObjectManager()->get(ToolbarMemorizer::class);
     }
 
     /**
@@ -130,6 +139,7 @@ class View extends \Magento\Framework\App\Action\Action
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
+        $this->toolbarMemorizer->memorizeParams();
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
