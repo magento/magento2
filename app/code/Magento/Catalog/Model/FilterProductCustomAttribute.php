@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 /**
@@ -26,9 +28,9 @@ class FilterProductCustomAttribute
     /**
      * Delete custom attribute
      * @param array $attributes
-     * @return mixed
+     * @return array
      */
-    public function execute(array $attributes)
+    public function execute(array $attributes): array
     {
         return array_diff($attributes, $this->blackList);
     }
