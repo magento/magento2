@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortByPriceTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Customer should be able to sort by price with catalog rules applied to configurable product"/>
+            <description value="Customer should be able to sort by price with catalog rules applied to configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-182"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <!-- Create category and two simple products -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct5">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">5</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct10">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Enable SKU for use in promo rule conditions -->
+            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+            <waitForPageLoad stepKey="waitForProductAttributes"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="SKU" stepKey="setAttributeLabel"/>
+            <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromGrid"/>
+            <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
+            <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+            <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="Yes" stepKey="selectUseForPromoRuleCondition"/>
+            <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAttribute"/>
+
+            <!-- Create a configurable product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
+            <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+            <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+            <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+            <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+            <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+            <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+            <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+            <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
+            <waitForPageLoad stepKey="waitForIFrame"/>
+            <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+            <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
+            <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
+            <waitForPageLoad stepKey="waitForSaveAttribute"/>
+            <switchToIFrame stepKey="switchOutOfIFrame"/>
+            <waitForPageLoad stepKey="waitForFilters"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
+            <fillField userInput="{{colorProductAttribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+            <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
+            <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute2"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue3"/>
+            <fillField userInput="{{colorProductAttribute3.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+            <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="{{colorProductAttribute.default_label}}" stepKey="selectAttributes"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="15" stepKey="fillAttributePrice1"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" userInput="20" stepKey="fillAttributePrice2"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute3}}" userInput="25" stepKey="fillAttributePrice3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+            <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        </before>
+        <after>
+            <!-- Delete category and two simple products -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+
+            <!-- Delete the catalog price rule -->
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- 1. Check category page price sorting BEFORE catalog rule is created -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory1"/>
+        <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="price" stepKey="sortByPrice1"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProduct5.name$$" stepKey="seeOrder1"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$5.00" stepKey="seePrice1"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$$createSimpleProduct10.name$$" stepKey="seeOrder2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$10.00" stepKey="seePrice2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="{{_defaultProduct.name}}" stepKey="seeOrder3"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$15.00" stepKey="seePrice3"/>
+        <click selector="{{StorefrontCategoryTopToolbarSection.sortDirectionAsc}}" stepKey="clickSortByArrow1"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="{{_defaultProduct.name}}" stepKey="seeOrder4"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$15.00" stepKey="seePrice4"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$$createSimpleProduct10.name$$" stepKey="seeOrder5"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$10.00" stepKey="seePrice5"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$$createSimpleProduct5.name$$" stepKey="seeOrder6"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$5.00" stepKey="seePrice6"/>
+
+        <!-- 2. Create a new catalog rule that adjusts one of the configurable products down to $1 -->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
+        <waitForPageLoad stepKey="waitForIndividualRulePage"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{_defaultCatalogRule.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{_defaultCatalogRule.website_ids[0]}}" stepKey="selectSite"/>
+        <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
+        <click selector="{{AdminNewCatalogPriceRule.toDateButton}}" stepKey="clickToCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickToToday"/>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditions"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="clickNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="SKU" stepKey="selectSKU"/>
+        <waitForPageLoad stepKey="waitForEllipsis"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" stepKey="clickEllipsis"/>
+        <waitForPageLoad stepKey="waitForInput"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="{{_defaultProduct.sku}}-{{colorProductAttribute3.name}}" stepKey="fillSku"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" stepKey="clickApply"/>
+        <click selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="openActionDropdown"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{_defaultCatalogRule.simple_action}}" stepKey="discountType"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="96" stepKey="fillDiscountValue"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <!-- 3. Save the catalog rule, reindex, and flush cache-->
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!-- 4. Check category page price sorting AFTER catalog rule is created -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory2"/>
+        <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="price" stepKey="sortByPrice2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="{{_defaultProduct.name}}" stepKey="seeOrder7"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$1.00" stepKey="seePrice7"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$$createSimpleProduct5.name$$" stepKey="seeOrder8"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$5.00" stepKey="seePrice8"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$$createSimpleProduct10.name$$" stepKey="seeOrder9"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$10.00" stepKey="seePrice9"/>
+        <click selector="{{StorefrontCategoryTopToolbarSection.sortDirectionAsc}}" stepKey="clickSortByArrow2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProduct10.name$$" stepKey="seeOrder10"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$10.00" stepKey="seePrice10"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$$createSimpleProduct5.name$$" stepKey="seeOrder11"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" userInput="$5.00" stepKey="seePrice11"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="{{_defaultProduct.name}}" stepKey="seeOrder12"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('3')}}" userInput="$1.00" stepKey="seePrice12"/>
+    </test>
+</tests>

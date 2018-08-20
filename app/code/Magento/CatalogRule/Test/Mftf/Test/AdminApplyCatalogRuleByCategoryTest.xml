@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogRuleByCategoryTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog rule by category"/>
+            <description value="Admin should be able to apply the catalog rule by category"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-74"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategoryOne"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProductOne">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="ApiCategory" stepKey="createCategoryTwo"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProductTwo">
+                <requiredEntity createDataKey="createCategoryTwo"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>
+            <deleteData createDataKey="createSimpleProductOne" stepKey="deleteSimpleProductOne"/>
+            <deleteData createDataKey="createCategoryTwo" stepKey="deleteCategoryTwo"/>
+            <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteSimpleProductTwo"/>
+
+            <!-- Delete the catalog price rule -->
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- 1. Begin creating a new catalog price rule -->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
+        <waitForPageLoad stepKey="waitForIndividualRulePage"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{_defaultCatalogRule.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{_defaultCatalogRule.website_ids[0]}}" stepKey="selectSite"/>
+        <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>
+        <click selector="{{AdminNewCatalogPriceRule.toDateButton}}" stepKey="clickToCalender"/>
+        <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickToToday"/>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditions"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="clickNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="Category" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForEllipsis"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.targetEllipsis('1')}}" stepKey="clickEllipsis"/>
+        <waitForPageLoad stepKey="waitForInput"/>
+
+        <!-- 2. Fill condition of category = createCategoryOne -->
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.targetInput('1', '1')}}" userInput="$$createCategoryOne.id$$" stepKey="fillCategory"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.applyButton('1', '1')}}" stepKey="clickApply"/>
+        <click selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="openActionDropdown"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{_defaultCatalogRule.simple_action}}" stepKey="discountType"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="50" stepKey="fillDiscountValue"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <!-- 3. Save and apply the new catalog price rule -->
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!-- 4. Verify the storefront -->
+        <amOnPage url="$$createCategoryOne.name$$.html" stepKey="goToCategoryOne"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductOne.name$$" stepKey="seeProductOne"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="seeProductOnePrice"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="Regular Price $123.00" stepKey="seeProductOneRegularPrice"/>
+        <amOnPage url="$$createCategoryTwo.name$$.html" stepKey="goToCategoryTwo"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductTwo.name$$" stepKey="seeProductTwo"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeProductTwoPrice"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="dontSeeDiscount"/>
+    </test>
+</tests>
