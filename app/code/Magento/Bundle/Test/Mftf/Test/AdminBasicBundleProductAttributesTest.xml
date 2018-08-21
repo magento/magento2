@@ -6,8 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminBasicBundleProductAttributesTest">
         <annotations>
             <features value="Bundle"/>
@@ -16,6 +15,9 @@
             <description value="Admin should be able to set/edit all the basic product attributes when creating/editing a bundle product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-222"/>
+            <skip>
+                <issueId value="MQE-1214"/>
+            </skip>
             <group value="Bundle"/>
         </annotations>
         <before>
