@@ -41,6 +41,35 @@ class FileFactory
      * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength explicit content length, if strlen($content) isn't applicable
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @return \Magento\Framework\App\ResponseInterface
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @deprecated
+     */
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = DirectoryList::ROOT,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
+        return $this->createWithDispositionType($fileName, $content, $baseDir, $contentType, $contentLength);
+    }
+
+    /**
+     * Declare headers and content file in response for file download
+     *
+     * @param string $fileName
+     * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
+     *                              that case
+     * @param string $baseDir
+     * @param string $contentType
+     * @param int $contentLength explicit content length, if strlen($content) isn't applicable
      * @param string $dispositionType defines where to show content e.g. attachment or inline
      * @throws \Exception
      * @throws \InvalidArgumentException
@@ -50,7 +79,7 @@ class FileFactory
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function create(
+    public function createWithDispositionType(
         $fileName,
         $content,
         $baseDir = DirectoryList::ROOT,
