@@ -11,7 +11,6 @@ use Magento\Cms\Model\GetPageByIdentifier;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-
 class CmsPageTest extends GraphQlAbstract
 {
     /**
@@ -101,7 +100,6 @@ QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The CMS page with the "0" ID doesn\'t exist.');
         $this->graphQlQuery($query);
-
     }
 
     /**
@@ -132,5 +130,4 @@ QUERY;
         $this->expectExceptionMessage('No such entity.');
         $this->graphQlQuery($query);
     }
-
 }
