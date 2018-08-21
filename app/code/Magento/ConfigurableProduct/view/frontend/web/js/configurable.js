@@ -393,8 +393,8 @@ define([
                     } else {
                         allowedProducts = options[i].products.slice(0);
 
-                        if (typeof allowedProducts[0] !== 'undefined'
-                            && typeof optionPrices[allowedProducts[0]] !== 'undefined') {
+                        if (typeof allowedProducts[0] !== 'undefined' &&
+                            typeof optionPrices[allowedProducts[0]] !== 'undefined') {
 
                             optionFinalPrice = parseFloat(optionPrices[allowedProducts[0]].finalPrice.amount);
                             optionPriceDiff = optionFinalPrice - basePrice;
