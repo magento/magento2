@@ -127,7 +127,7 @@ define([
 
             $(tmpl).appendTo(row);
 
-            $(this.options.rowContainer).append(row);
+            $(this.options.rowContainer).append(row).trigger('contentUpdated');
 
             row.addClass(this.options.additionalRowClass);
 

@@ -35,6 +35,7 @@
             <div class="control">
                 <input name="recipients[email][<%- data._index_ %>]" title="<?php /* @escapeNotVerified */ echo __('Email') ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
+                       data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
@@ -73,6 +74,9 @@
             <div class="control">
                 <input name="sender[email]" value="<?php echo $block->escapeHtml($block->getEmail()) ?>"
                        title="<?php /* @escapeNotVerified */ echo __('Email') ?>" id="sender-email" type="text" class="input-text"
+                <input name="sender[email]" value="<?= $block->escapeHtmlAttr($block->getEmail()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="email" class="input-text"
+                       data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
