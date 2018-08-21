@@ -51,3 +51,14 @@ type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the 
     region_id: Int @doc(description: "Uniquely identifies the region")
 }
 
+type Mutation {
+    customerUpdate (firstname: String, lastname: String, email: String, password: String, is_subscribed: Boolean): customerItem @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerUpdate") @doc(description:"Update customer personal information")
+}
+
+type customerItem {
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+    is_subscribed: Boolean
+}
