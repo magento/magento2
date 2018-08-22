@@ -190,7 +190,7 @@ class Config
      */
     protected function _load($id)
     {
-        return isset($this->_objects[$id]) ? $this->_objects[$id] : null;
+        return $this->_objects[$id] ?? null;
     }
 
     /**
@@ -201,7 +201,7 @@ class Config
      */
     private function loadAttributes($entityTypeCode)
     {
-        return isset($this->attributes[$entityTypeCode]) ? $this->attributes[$entityTypeCode] : [];
+        return $this->attributes[$entityTypeCode] ?? [];
     }
 
     /**
@@ -252,7 +252,7 @@ class Config
      */
     protected function _getEntityTypeReference($id)
     {
-        return isset($this->_references['entity'][$id]) ? $this->_references['entity'][$id] : null;
+        return $this->_references['entity'][$id] ?? null;
     }
 
     /**

@@ -264,9 +264,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getSelectAttrIdByValue(array $attributeParameters, $value)
     {
-        return isset($attributeParameters['options'][strtolower($value)])
-            ? $attributeParameters['options'][strtolower($value)]
-            : 0;
+        return $attributeParameters['options'][strtolower($value)] ?? 0;
     }
 
     /**

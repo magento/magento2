@@ -110,9 +110,7 @@ class AssertProductInItemsOrderedGrid extends AbstractAssertForm
      */
     protected function getProductPrice(FixtureInterface $product)
     {
-        return isset($product->getCheckoutData()['cartItem']['price'])
-            ? $product->getCheckoutData()['cartItem']['price']
-            : $product->getPrice();
+        return $product->getCheckoutData()['cartItem']['price'] ?? $product->getPrice();
     }
 
     /**

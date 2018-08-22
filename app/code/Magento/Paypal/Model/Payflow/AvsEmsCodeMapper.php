@@ -64,6 +64,6 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
         $zipCode = $additionalInfo[Info::PAYPAL_AVSZIP];
         $key = $zipCode . $streetCode;
 
-        return isset(self::$avsMap[$key]) ? self::$avsMap[$key] : self::$unavailableCode;
+        return self::$avsMap[$key] ?? self::$unavailableCode;
     }
 }

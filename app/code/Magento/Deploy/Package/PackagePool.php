@@ -66,7 +66,7 @@ class PackagePool
     public function getPackage($path)
     {
         $this->collect();
-        return isset($this->packages[$path]) ? $this->packages[$path] : null;
+        return $this->packages[$path] ?? null;
     }
 
     /**
@@ -322,7 +322,7 @@ class PackagePool
      */
     private function getOption($name, $options)
     {
-        return isset($options[$name]) ? $options[$name] : null;
+        return $options[$name] ?? null;
     }
 
     /**

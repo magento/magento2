@@ -193,7 +193,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/debug' => 1,
             'shipping/origin/country_id' => 'GB',
         ];
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     public function testPrepareShippingLabelContent()

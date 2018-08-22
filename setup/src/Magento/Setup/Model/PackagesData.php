@@ -308,8 +308,7 @@ class PackagesData
     {
         $packagesJson = $this->getPackagesJson();
 
-        return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
-            $packagesJson[$packageName][$packageVersion]['extra'] : [];
+        return $packagesJson[$packageName][$packageVersion]['extra'] ?? [];
     }
 
     /**

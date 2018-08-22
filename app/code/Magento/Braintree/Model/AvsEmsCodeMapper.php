@@ -66,6 +66,6 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
         $streetCode = $additionalInfo[PaymentDetailsHandler::AVS_STREET_ADDRESS_RESPONSE_CODE];
         $zipCode = $additionalInfo[PaymentDetailsHandler::AVS_POSTAL_RESPONSE_CODE];
         $key = $zipCode . $streetCode;
-        return isset(self::$avsMap[$key]) ? self::$avsMap[$key] : self::$unavailableCode;
+        return self::$avsMap[$key] ?? self::$unavailableCode;
     }
 }

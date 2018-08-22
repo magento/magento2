@@ -46,7 +46,6 @@ class TypeMapper
      */
     public function map($packageType)
     {
-        return isset($this->packageTypesMap[$packageType]) ?
-            $this->packageTypesMap[$packageType] : self::UNDEFINED_PACKAGE_TYPE;
+        return $this->packageTypesMap[$packageType] ?? self::UNDEFINED_PACKAGE_TYPE;
     }
 }

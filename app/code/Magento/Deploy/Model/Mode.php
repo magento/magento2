@@ -205,7 +205,7 @@ class Mode
     public function getMode()
     {
         $env = $this->reader->load();
-        return isset($env[State::PARAM_MODE]) ? $env[State::PARAM_MODE] : null;
+        return $env[State::PARAM_MODE] ?? null;
     }
 
     /**

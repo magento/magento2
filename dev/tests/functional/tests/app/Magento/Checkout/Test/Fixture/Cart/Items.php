@@ -45,7 +45,7 @@ class Items extends DataSource
     protected function getModuleName(FixtureInterface $product)
     {
         preg_match('/^Magento\\\\([^\\\\]+)\\\\Test/', get_class($product), $match);
-        return isset($match[1]) ? $match[1] : '';
+        return $match[1] ?? '';
     }
 
     /**

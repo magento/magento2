@@ -472,7 +472,7 @@ class Transaction extends AbstractModel implements TransactionInterface
             $info = [];
         }
         if ($key) {
-            return isset($info[$key]) ? $info[$key] : null;
+            return $info[$key] ?? null;
         }
         return $info;
     }
@@ -898,7 +898,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     public function getHtmlTxnId()
     {
         $this->_eventManager->dispatch($this->_eventPrefix . '_html_txn_id', $this->_getEventData());
-        return isset($this->_data['html_txn_id']) ? $this->_data['html_txn_id'] : $this->getTxnId();
+        return $this->_data['html_txn_id'] ?? $this->getTxnId();
     }
 
     /**

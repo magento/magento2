@@ -119,7 +119,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function getConfigData()
     {
-        return isset($this->data['config']) ? $this->data['config'] : [];
+        return $this->data['config'] ?? [];
     }
 
     /**
