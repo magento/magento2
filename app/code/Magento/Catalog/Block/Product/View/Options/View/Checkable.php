@@ -13,12 +13,11 @@ use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
 use Magento\Catalog\Model\Product\Option;
 
 /**
- * Class Checkable
- * @package Magento\Catalog\Block\Product\View\Options\View
+ * Represent needed logic for checkbox and radio button
+ * option types
  */
 class Checkable extends AbstractOptions
 {
-    /** @noinspection ClassOverridesFieldOfSuperClassInspection */
     /**
      * @var string
      */

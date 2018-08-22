@@ -13,8 +13,7 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\View\Element\Html\Select;
 
 /**
- * Class Multiple
- * @package Magento\Catalog\Block\Product\View\Options\View
+ * Represent needed logic for dropdown and multi-select
  */
 class Multiple extends AbstractOptions
 {
@@ -59,7 +58,7 @@ class Multiple extends AbstractOptions
      * @param Option $option
      * @return Select
      */
-    private function insertSelectOption(Select $select, Option $option)
+    private function insertSelectOption(Select $select, Option $option): Select
     {
         $require = $option->getIsRequire() ? ' required' : '';
         if ($option->getType() === Option::OPTION_TYPE_DROP_DOWN) {
@@ -68,6 +67,7 @@ class Multiple extends AbstractOptions
             $select->setName('options[' . $option->getId() . '][]');
             $select->setClass('multiselect admin__control-multiselect' . $require . ' product-custom-option');
         }
+
         return $select;
     }
 
@@ -76,7 +76,7 @@ class Multiple extends AbstractOptions
      * @param Option $option
      * @return Select
      */
-    private function processSelectOption(Select $select, Option $option)
+    private function processSelectOption(Select $select, Option $option): Select
     {
         $store = $this->getProduct()->getStore();
         foreach ($option->getValues() as $_value) {
@@ -100,6 +100,7 @@ class Multiple extends AbstractOptions
                 ]
             );
         }
+
         return $select;
     }
 }
