@@ -135,7 +135,12 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
         return parent::createWithDispositionType(
-            $fileName, $content, $baseDir, $contentType, $contentLength, $dispositionType
+            $fileName,
+            $content,
+            $baseDir,
+            $contentType,
+            $contentLength,
+            $dispositionType
         );
     }
 }
