@@ -173,10 +173,10 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
         $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
         $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
-
+        $street = '6146 Honey Bluff Parkway';
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
         $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
-        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn([$street]);
         $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
         $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
         $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
@@ -291,10 +291,10 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
         $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
-
+        $street = '6146 Honey Bluff Parkway';
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
         $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
-        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn([$street]);
         $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
         $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
         $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
@@ -337,9 +337,10 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
         $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
+        $street = '6146 Honey Bluff Parkway';
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
         $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
-        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn([$street]);
         $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
         $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
         $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
@@ -384,9 +385,10 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
         $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
+        $street = '6146 Honey Bluff Parkway';
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
         $this->shippingAddressMock->expects($this->once())->method('getCity')->willReturn('Calder');
-        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn(array('6146 Honey Bluff Parkway'));
+        $this->shippingAddressMock->expects($this->once())->method('getStreet')->willReturn([$street]);
         $this->shippingAddressMock->expects($this->once())->method('getFirstname')->willReturn('Veronica');
         $this->shippingAddressMock->expects($this->once())->method('getLastname')->willReturn('Costello');
         $this->shippingAddressMock->expects($this->once())->method('getPostcode')->willReturn('49628-7978');
