@@ -16,9 +16,7 @@
             <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-61717"/>
-            <skip>
-                <issueId value="MAGETWO-90719"/>
-            </skip>
+            <group value="Catalog"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

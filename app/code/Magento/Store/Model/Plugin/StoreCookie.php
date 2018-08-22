@@ -72,15 +72,5 @@ class StoreCookie
                 $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             }
         }
-        if ($this->storeCookieManager->getStoreCodeFromCookie() === null
-            || $request->getParam(\Magento\Store\Model\StoreManagerInterface::PARAM_NAME) !== null
-        ) {
-            $storeId = $this->storeManager->getStore()->getId();
-            $store = $this->storeRepository->getActiveStoreById($storeId);
-            //delete initial cookie for the same store
-            $this->storeCookieManager->deleteStoreCookie($store);
-            //set cookie for the store
-            $this->storeCookieManager->setStoreCookie($store);
-        }
     }
 }
