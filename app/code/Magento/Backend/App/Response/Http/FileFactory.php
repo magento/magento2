@@ -134,6 +134,8 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::createWithDispositionType($fileName, $content, $baseDir, $contentType, $contentLength, $dispositionType);
+        return parent::createWithDispositionType(
+            $fileName, $content, $baseDir, $contentType, $contentLength, $dispositionType
+        );
     }
 }
