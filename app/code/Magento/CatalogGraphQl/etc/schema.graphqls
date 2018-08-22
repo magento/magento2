@@ -381,6 +381,14 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
     ): CategoryProducts @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
+}
+
+type Breadcrumb @doc(description: "Breadcrumb item"){
+    category_id: Int @doc(description: "Category ID")
+    category_name: String @doc(description: "Category name")
+    category_level: Int @doc(description: "Category level")
+    category_url_key: String @doc(description: "Category URL key")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option") {

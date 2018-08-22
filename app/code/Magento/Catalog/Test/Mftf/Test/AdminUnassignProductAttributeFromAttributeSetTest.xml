@@ -17,8 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-194"/>
             <group value="Catalog"/>
-            <!-- Skip because of MAGETWO-92780 -->
-            <group value="skip"/>
+            <skip>
+                <issueId value="MAGETWO-92780"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
