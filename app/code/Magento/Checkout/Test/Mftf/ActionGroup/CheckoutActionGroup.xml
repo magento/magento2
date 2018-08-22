@@ -145,4 +145,13 @@
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
     </actionGroup>
 
+    <!--Verify country options in checkout top destination section-->
+    <actionGroup name="VerifyTopDestinationsCountry">
+        <arguments>
+            <argument name="country" type="string"/>
+            <argument name="placeNumber"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
+        <see selector="{{CheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
+    </actionGroup>
 </actionGroups>
