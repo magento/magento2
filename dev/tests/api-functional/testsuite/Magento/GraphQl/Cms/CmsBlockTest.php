@@ -70,7 +70,8 @@ QUERY;
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $storeId = (int)$storeManager->getStore()->getId();
-        $cmsBlockId = $this->objectManager->get(GetBlockByIdentifier::class)->execute("fixture_block", $storeId)->getId();
+        $cmsBlockId = $this->objectManager->get(GetBlockByIdentifier::class)->execute("fixture_block",
+            $storeId)->getId();
         $this->objectManager->get(Block::class)->load($cmsBlockId)->setIsActive(0)->save();
         $query =
             <<<QUERY
