@@ -305,11 +305,10 @@ define([
          * * @return {Element} - current element.
          */
         closeModal: function () {
+            var that = this;            
             if (!this.options.isOpen) {
                 return this.element;
             }
-            var that = this;
-
             this._removeKeyListener();
             this.options.isOpen = false;
             this.modal.one(this.options.transitionEvent, function () {
