@@ -100,6 +100,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
 
         $output->writeln('<info>Module is disabled</info>');
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -115,6 +116,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
 
         $output->writeln(join("\n", $enabledModuleNames));
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -129,6 +131,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
 
         $output->writeln(join("\n", $disabledModuleNames));
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
