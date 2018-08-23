@@ -170,7 +170,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                     foreach ($item['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
                         $value = $option['value'];
-                        $setterName = 'set'.ucfirst($name);
+                        $setterName = 'set'.str_replace('_', '', ucwords($name, '_'));
                         // Check if setter exists
                         if (method_exists($productLinkExtension, $setterName)) {
                             call_user_func([$productLinkExtension, $setterName], $value);
