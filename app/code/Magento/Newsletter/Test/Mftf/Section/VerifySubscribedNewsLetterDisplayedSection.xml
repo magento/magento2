@@ -9,75 +9,12 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
 
-    <section name="Dashboard">
-        <element name="storesItem" type="button" selector="#menu-magento-backend-stores"/>
-        <element name="storesAllStoresItem" type="button" selector="//*[@data-ui-id='menu-magento-backend-system-store']/a/span"/>
-        <element name="storesConfigurationItem" type="button" selector="//*[@data-ui-id='menu-magento-config-system-config']/a/span"/>
-        <element name="customerAllCustomer" type="button" selector="//*[@data-ui-id='menu-magento-customer-customer-manage']"/>
-        <element name="customer" type="button" selector="#menu-magento-customer-customer"/>
-    </section>
-
-    <section name="AdminNewWebsiteSection">
-        <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
-        <element name="allStores" type="button" selector="//span[contains(text(), 'All Stores')]"/>
-        <element name="addWebSite" type="button" selector="#add"/>
-        <element name="name" type="input" selector="#website_name"/>
-        <element name="code" type="input" selector="#website_code"/>
-    </section>
-
-    <section name="AdminNewStoreGroupSection">
-        <element name="create" type="button" selector="#add_group"/>
-        <element name="storeGrpWebsiteDropdown" type="select" selector="#group_website_id"/>
-        <element name="storeGrpNameTextField" type="input" selector="#group_name"/>
-        <element name="storeGrpCodeTextField" type="input" selector="#group_code"/>
-        <element name="storeRootCategoryDropdown" type="select" selector="#group_root_category_id"/>
-    </section>
-
-    <section name="AdminNewStoreSection">
-        <element name="create" type="button" selector="#add_store"/>
-        <element name="storeNameTextField" type="input" selector="#store_name"/>
-        <element name="storeCodeTextField" type="input" selector="#store_code"/>
-        <element name="statusDropdown" type="select" selector="#store_is_active"/>
-        <element name="storeGrpDropdown" type="select" selector="#store_group_id"/>
-        <element name="sortOrderTextField" type="input" selector="#store_sort_order"/>
-        <element name="acceptNewStoreViewCreation" type="button" selector=".action-primary.action-accept" />
-    </section>
-
-    <section name="AdminStoresConfigurationSection">
-        <element name="openUrlOptions" type="button" selector="#web_url-head"/>
-        <element name="webItem" type="button" selector="//*[@id='system_config_tabs']/div[1]//span[contains(text(), 'Web')]"/>
-        <element name="useSystemValueCheckbox" type="checkbox" selector="#web_url_use_store_inherit"/>
-        <element name="addStoreCodeToUrlsDropDown" type="select" selector="#web_url_use_store"/>
-        <element name="saveConfigButton" type="button" selector="#save"/>
-    </section>
-
     <section name="StorefrontCustomerCreateFormSection">
-        <element name="firstNameField" type="input" selector="#firstname"/>
-        <element name="lastNameField" type="input" selector="#lastname"/>
-        <element name="emailField" type="input" selector="#email_address"/>
-        <element name="passwordField" type="input" selector="#password"/>
-        <element name="confirmPasswordField" type="input" selector="#password-confirmation"/>
-        <element name="createAccountButton" type="button" selector="button.action.submit.primary" timeout="30"/>
         <element name="signUpForNewsletter" type="checkbox" selector="//span[contains(text(), 'Sign Up for Newsletter')]"/>
     </section>
 
     <section name="CustomerMyAccountPage">
-        <element name="createNewAccount" type="button" selector="//*[@class='page-header']//a[contains(text(),'Create an Account')]"/>
-        <element name="customerName" type="button" selector="//*[@class='customer-welcome']//span[@class='customer-name']/button[@data-action='customer-menu-toggle']"/>
-        <element name="customerSignOut" type="button" selector="//*[@class='customer-menu']//*[normalize-space()='Sign Out']"/>
-    </section>
-
-    <section name="AdminCustomerAccountInformationSection">
-        <element name="searchToKeyword" type="input" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/input"/>
-        <element name="searchButton" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-search-control-wrap']/button"/>
-        <element name="selectCustomer" type="checkbox" selector="//*[@class='admin__data-grid-wrap' and @data-role='grid-wrapper']//*[@class='data-grid-multicheck-cell']/div/label"/>
-        <element name="actions" type="button" selector="//div[@class='admin__data-grid-header']//div[@class='col-xs-2']//span[text()='Actions']"/>
-        <element name="delete" type="button" selector="//div[@class='col-xs-2']//span[text()='Delete']"/>
-        <element name="confirm" type="button" selector=".action-primary.action-accept"/>
-        <element name="clearAll" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[contains(text(), 'Clear all')]"/>
-        <element name="filterButton" type="button" selector="//*[@class='admin__data-grid-outer-wrap']/*[@class='admin__data-grid-header']//*[@class='data-grid-filters-action-wrap']/button"/>
-        <element name="filterNameField" type="input" selector="//*[@name='name']"/>
-        <element name="filtersApplyButton" type="button" selector="//*[contains(text(),'Apply Filters')]"/>
+        <element name="DescriptionNewsletter" type="text" selector=".box-newsletter p"/>
     </section>
 
 </sections>

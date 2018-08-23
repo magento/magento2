@@ -20,46 +20,47 @@
 
         <before>
             <!--Log in to Magento as admin.-->
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <!--Go to Stores.-->
-            <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
-            <!--Create Website.-->
-            <actionGroup ref="AdminCreateWebsiteActGroup" stepKey="adminCreateWebsite"/>
-            <!--Create Store.-->
-            <actionGroup ref="AdminCreateNewStoreActGroup" stepKey="adminCreateNewStore"/>
-            <!--Create Store View.-->
-            <actionGroup ref="AdminCreateStoreViewActGroup" stepKey="adminCreateStoreView"/>
-            <!--Go to Stores -> Configuration -> Web.-->
-            <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
-            <actionGroup ref="SelectYesInAddStoreCodeToUrlsField" stepKey="selectYesInAddStoreCodeToUrlsField"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="Second"/>
+                <argument name="websiteCode" value="Base2"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="Second"/>
+                <argument name="storeGroupName" value="NewStore"/>
+                <argument name="storeGroupCode" value="Base12"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="staticStoreGroup"/>
+                <argument name="customStore" value="staticStore"/>
+            </actionGroup>
+            <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         </before>
-
-        <!--Go to store front (default) and click Create an Account.-->
-        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="navigateToCustomers"/>
-        <actionGroup ref="StorefrontCreateNewAccount" stepKey="createNewAccount"/>
-
-        <!--Sign Out-->
-        <actionGroup ref="StorefrontSignOut" stepKey="storefrontSignOut"/>
-
-        <!--Change 'default' to 'url_name' in url-->
-        <amOnPage url="{{AdminTestData.testData}}" stepKey="goToCreatedWebPage"/>
-        <waitForPageLoad stepKey="waitForCreatedWebPageLoaded"/>
-
-        <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked"/>
-        <dontSee stepKey="verifySubscribedNewsletters" userInput="You aren't subscribed to our newsletter displayed"/>
-
         <after>
             <!--Delete created data and set Default Configuration-->
-            <amOnPage url="admin" stepKey="goToAdminPage"/>
-            <waitForPageLoad stepKey="waitForAdminPageLoaded"/>
-            <actionGroup ref="AdminDeleteCreatedCustomer" stepKey="adminDeleteCustomer"/>
-            <actionGroup ref="GoToAllStores" stepKey="goToAllStores"/>
-            <actionGroup ref="AdminDeleteWebsiteActGroup" stepKey="adminDeleteWebsite"/>
-            <actionGroup ref="GoToStoresConfigurationWeb" stepKey="goToStoresConfigurationWeb"/>
-            <actionGroup ref="AdminSetDefaultConfig" stepKey="adminSetDefaultConfig"/>
+            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="Second"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
+        <!--Go to store front (default) and click Create an Account.-->
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterChecked" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!--Sign Out-->
+        <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
+        <waitForPageLoad stepKey="waitLogoutCustomer"/>
+        <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="Store" value="staticStore"/>
+        </actionGroup>
     </test>
 </tests>
 
