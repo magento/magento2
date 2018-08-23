@@ -35,7 +35,7 @@
 
         <!-- "Add to Cart" any product-->
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" time="30" stepKey="assertErrorMessage"/>
+        <see stepKey="assertErrorMessage" userInput="Your session has expired"/>
         <after>
             <!--Delete created product-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
