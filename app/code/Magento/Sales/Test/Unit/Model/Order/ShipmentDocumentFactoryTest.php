@@ -140,9 +140,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         $packages = [];
         $items = [1 => 10];
 
-        $this->extensionAttributeProcessorMock->expects($this->once())
-            ->method('execute')
-            ->with($this->shipmentMock, null);
+        $this->extensionAttributeProcessorMock->expects($this->never())->method('execute');
         $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
         $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
         $this->itemMock->expects($this->once())
