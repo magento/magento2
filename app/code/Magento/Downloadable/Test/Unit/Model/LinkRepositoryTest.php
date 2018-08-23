@@ -540,6 +540,10 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
+    /**
+     * @param $resource
+     * @param $inputData
+     */
     protected function setLinkAssertions($resource, $inputData)
     {
         $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));

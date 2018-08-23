@@ -52,6 +52,12 @@
                     <label>Connection Timeout in Seconds</label>
                 </field>
             </group>
+            <group id="currencyconverterapi" translate="label" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Currency Converter API</label>
+                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Connection Timeout in Seconds</label>
+                </field>
+            </group>
             <group id="import" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Scheduled Import Settings</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

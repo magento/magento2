@@ -355,10 +355,10 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     {
         if (!$this->hasValueParsed()) {
             $value = $this->getData('value');
-            if (is_array($value) && isset($value[0]) && is_string($value[0])) {
-                $value = $value[0];
+            if (is_array($value) && count($value) === 1) {
+                $value = reset($value);
             }
-            if ($this->isArrayOperatorType() && $value) {
+            if (!is_array($value) && $this->isArrayOperatorType() && $value) {
                 $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
             }
             $this->setValueParsed($value);
@@ -380,7 +380,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getValue()
     {
