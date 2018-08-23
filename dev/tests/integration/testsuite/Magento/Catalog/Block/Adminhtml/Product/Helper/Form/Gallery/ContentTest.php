@@ -63,7 +63,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getImagesAndImageTypesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @magentoDataFixture Magento/Catalog/Fixtures/product_with_image.php
      * @magentoAppIsolation enabled
      * @param bool $isProductNew
      * @return void
@@ -73,13 +72,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->prepareProduct($isProductNew);
         $imagesJson = $this->block->getImagesJson();
         $images = json_decode($imagesJson);
-        self::assertEquals(2, count($images));
-        foreach ($images as $image) {
-            self::assertRegExp('/\/m\/a\/magento_image/', $image->file);
-            self::assertSame('image', $image->media_type);
-            self::assertRegExp('/Image Alt Text/', $image->label);
-            self::assertRegExp('/\/pub\/media\/catalog\/product\/m\/a\/magento_image/', $image->url);
-        }
+        $image = array_shift($images);
+        $this->assertRegExp('/\/m\/a\/magento_image/', $image->file);
+        $this->assertSame('image', $image->media_type);
+        $this->assertSame('Image Alt Text', $image->label);
+        $this->assertSame('Image Alt Text', $image->label_default);
+        $this->assertRegExp('/\/pub\/media\/catalog\/product\/m\/a\/magento_image/', $image->url);
     }
 
     /**
