@@ -13,10 +13,14 @@
         "magento/functional-test-module-ui": "100.0.0-dev",
         "magento/functional-test-module-inventory-catalog-api": "100.0.0-dev",
         "magento/functional-test-module-inventory-configuration-api": "100.0.0-dev",
-        "magento/functional-test-module-inventory-indexer": "100.0.0-dev"
+        "magento/functional-test-module-inventory-indexer": "100.0.0-dev",
+        "magento/functional-test-module-store": "100.0.0-dev",
+        "magento/functional-test-module-inventory": "100.0.0-dev",
+        "magento/functional-test-module-inventory-sales-api": "100.0.0-dev"
     },
     "suggest": {
-        "magento/functional-test-module-inventory-admin-ui": "100.0.0-dev"
+        "magento/functional-test-module-inventory-admin-ui": "100.0.0-dev",
+        "magento/functional-test-module-inventory-reservations-api": "100.0.0-dev"
     },
     "type": "magento2-test",
     "license": [
