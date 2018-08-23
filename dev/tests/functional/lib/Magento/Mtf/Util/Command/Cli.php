@@ -59,14 +59,6 @@ class Cli
     private function prepareUrl($command, $options = [])
     {
         $command .= ' ' . implode(' ', $options);
-        // replacing index.php if it presents
-        $count = 1;
-        $trimmedAppFrontendUrl = str_replace(
-            'index.php',
-            '',
-            rtrim($_ENV['app_frontend_url'], '/'),
-            $count
-        );
-        return $trimmedAppFrontendUrl . self::URL . '?command=' . urlencode($command);
+        return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);
     }
 }
