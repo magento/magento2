@@ -16,7 +16,14 @@
     <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
         <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
             <!-- ko if: (typeof element[attribute] === "object") -->
-                <!-- ko text: element[attribute].value --><!-- /ko -->
+                <!-- ko if: (element[attribute].label) -->
+                    <!-- ko text: element[attribute].label --><!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: (element[attribute].label) -->
+                    <!-- ko if: (element[attribute].value) -->
+                        <!-- ko text: element[attribute].value --><!-- /ko -->
+                    <!-- /ko -->
+                <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: (typeof element[attribute] === "string") -->
                 <!-- ko text: element[attribute] --><!-- /ko -->
