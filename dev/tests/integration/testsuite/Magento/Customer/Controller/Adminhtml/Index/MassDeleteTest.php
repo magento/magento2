@@ -101,12 +101,17 @@ class MassDeleteTest extends AbstractBackendController
      */
     private function massDeleteAssertions($ids, Constraint $constraint, $messageType)
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+
         $requestData = [
             'selected' => $ids,
             'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
         ];
 
         $this->getRequest()->setParams($requestData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $constraint,

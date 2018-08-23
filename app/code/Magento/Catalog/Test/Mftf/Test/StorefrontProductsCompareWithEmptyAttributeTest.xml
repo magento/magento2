@@ -37,7 +37,7 @@
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.attributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
-        <dragAndDrop selector1="{{AdminProductAttributeUnassignedSection.productAttributeName('testattribute')}}" selector2="{{AdminProductAttributeGroupSection.folderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <dragAndDrop selector1="{{AdminProductAttributeUnassignedSection.productAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{AdminProductAttributeGroupSection.folderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AdminProductAttributeSetSection.save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
@@ -80,6 +80,6 @@
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <seeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('SKU')}}" stepKey="seeCompareAttributeSku"/>
-        <dontSeeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('testattribute')}}" stepKey="dontSeeCompareTestAttribute"/>
+        <dontSeeElement selector="{{StorefrontProductCompareMainSection.productAttributeByName('$$createProductAttribute.attribute_code$$')}}" stepKey="dontSeeCompareTestAttribute"/>
     </test>
 </tests>

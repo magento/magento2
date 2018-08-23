@@ -16,5 +16,7 @@
         <section name="AdminProductMessagesSection"/>
         <section name="AdminMessagesSection"/>
         <section name="AdminProductCustomizableOptionsSection" />
+        <section name="AdminAddProductsToOptionPanelSection" />
+        <section name="AdminProductFormAdvancedPricingSection"/>
     </page>
 </pages>
