@@ -18,11 +18,11 @@ define([
         /**
          * Get source items from product data.
          *
-         * @param {Object} rowData product data
-         * @returns {Array} source items array
+         * @param {Object} rowData
+         * @returns {Array}
          */
         getSourceItemsData: function (rowData) {
-            return rowData.quantity_per_source;
+            return rowData['quantity_per_source'];
         }
     });
 });

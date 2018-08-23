@@ -49,7 +49,7 @@ class AddQuantityPerSourceToProductsData
      */
     public function afterGetData(GroupedProductDataProvider $subject, array $result): array
     {
-        if ($this->isSingleSourceMode) {
+        if ($this->isSingleSourceMode->execute()) {
             return $result;
         }
 
