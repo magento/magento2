@@ -110,7 +110,7 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
         $collection->load();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $collection->getFirstItem();
-        $this->assertEquals(333, $product->getData('min_price'));
+        $this->assertEquals(323, $product->getData('min_price'));
     }
 
     /**
