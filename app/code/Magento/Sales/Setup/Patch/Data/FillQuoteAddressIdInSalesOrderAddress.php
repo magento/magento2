@@ -7,19 +7,16 @@
 namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\State;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Sales\Model\OrderFactory;
-use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Sales\Setup\SalesSetup;
+use Magento\Sales\Setup\SalesSetupFactory;
 
 class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
+     * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
@@ -29,50 +26,24 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     private $salesSetupFactory;
 
     /**
-     * @var State
-     */
-    private $state;
-
-    /**
      * @var Config
      */
     private $eavConfig;
 
     /**
-     * @var AddressCollectionFactory
-     */
-    private $addressCollectionFactory;
-
-    /**
-     * @var OrderFactory
-     */
-    private $orderFactory;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param SalesSetupFactory $salesSetupFactory
+     * @param Config $eavConfig
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        ModuleDataSetupInterface $moduleDataSetup,
         SalesSetupFactory $salesSetupFactory,
-        State $state,
-        Config $eavConfig,
-        AddressCollectionFactory $addressCollectionFactory,
-        OrderFactory $orderFactory,
-        QuoteFactory $quoteFactory
+        Config $eavConfig
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->salesSetupFactory = $salesSetupFactory;
-        $this->state = $state;
         $this->eavConfig = $eavConfig;
-        $this->addressCollectionFactory = $addressCollectionFactory;
-        $this->orderFactory = $orderFactory;
-        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -80,41 +51,9 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
      */
     public function apply()
     {
-        $this->state->emulateAreaCode(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-            [$this, 'fillQuoteAddressIdInSalesOrderAddress']
-        );
+        $salesSetup = $this->salesSetupFactory->create();
+        $this->fillQuoteAddressIdInSalesOrderAddress($salesSetup);
         $this->eavConfig->clear();
-    }
-
-    /**
-     * Fill quote_address_id in table sales_order_address if it is empty.
-     */
-    public function fillQuoteAddressIdInSalesOrderAddress()
-    {
-        $addressCollection = $this->addressCollectionFactory->create();
-        $addressCollection->addFieldToFilter('quote_address_id', ['null' => true]);
-
-        /** @var \Magento\Sales\Model\Order\Address $orderAddress */
-        foreach ($addressCollection as $orderAddress) {
-            $orderId = $orderAddress->getParentId();
-            $addressType = $orderAddress->getAddressType();
-
-            /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->orderFactory->create()->load($orderId);
-            $quoteId = $order->getQuoteId();
-            $quote = $this->quoteFactory->create()->load($quoteId);
-
-            if ($addressType == \Magento\Sales\Model\Order\Address::TYPE_SHIPPING) {
-                $quoteAddressId = $quote->getShippingAddress()->getId();
-                $orderAddress->setData('quote_address_id', $quoteAddressId);
-            } elseif ($addressType == \Magento\Sales\Model\Order\Address::TYPE_BILLING) {
-                $quoteAddressId = $quote->getBillingAddress()->getId();
-                $orderAddress->setData('quote_address_id', $quoteAddressId);
-            }
-
-            $orderAddress->save();
-        }
     }
 
     /**
@@ -141,5 +80,37 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     public function getAliases()
     {
         return [];
+    }
+
+    /**
+     * Fill quote_address_id in table sales_order_address if it is empty.
+     *
+     * @param SalesSetup $setup
+     * @return void
+     */
+    private function fillQuoteAddressIdInSalesOrderAddress(SalesSetup $setup)
+    {
+        $addressTable = $setup->getTable('sales_order_address');
+        $updateOrderAddress = $setup->getConnection()
+            ->select()
+            ->joinInner(
+                ['sales_order' => $setup->getTable('sales_order')],
+                $addressTable . '.parent_id = sales_order.entity_id',
+                ['quote_address_id' => 'quote_address.address_id']
+            )
+            ->joinInner(
+                ['quote_address' => $setup->getTable('quote_address')],
+                'sales_order.quote_id = quote_address.quote_id 
+                AND ' . $addressTable . '.address_type = quote_address.address_type',
+                []
+            )
+            ->where(
+                $addressTable . '.quote_address_id IS NULL'
+            );
+        $updateOrderAddress = $setup->getConnection()->updateFromSelect(
+            $updateOrderAddress,
+            $addressTable
+        );
+        $setup->getConnection()->query($updateOrderAddress);
     }
 }
