@@ -11,6 +11,9 @@
         "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-catalog-admin-ui": "*"
     },
+    "suggest": {
+      "magento/module-inventory-configuration-api": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",

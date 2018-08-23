@@ -15,7 +15,7 @@ Licensed under the Open Software License version 3.0
 
          4. to perform the Original Work publicly; and
 
-         5. to display the Original Work publicly. 
+         5. to display the Original Work publicly.
 
    2. Grant of Patent License. Licensor grants You a worldwide, royalty-free, non-exclusive, sublicensable license, under patent claims owned or controlled by the Licensor that are embodied in the Original Work as furnished by the Licensor, for the duration of the patents, to make, use, sell, offer for sale, have made, and import the Original Work and Derivative Works.
 
