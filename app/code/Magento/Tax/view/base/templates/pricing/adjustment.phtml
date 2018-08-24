@@ -14,7 +14,7 @@
     <span id="<?= /* @escapeNotVerified */ $block->buildIdWithPrefix('price-excluding-tax-') ?>"
           data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>"
           data-price-amount="<?= /* @escapeNotVerified */ $block->getRawAmount() ?>"
-          data-price-type="basePrice"
+          data-price-type="<?= /* @escapeNotVerified */ $block->getDataPriceType() ?>"
           class="price-wrapper price-excluding-tax">
         <span class="price"><?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?></span></span>
 <?php endif; ?>

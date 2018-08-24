@@ -173,4 +173,17 @@ class Adjustment extends AbstractAdjustment
     {
         return $this->taxHelper->displayPriceExcludingTax();
     }
+
+    /**
+     * Obtain a value for data-price-type attribute
+     *
+     * @return string
+     */
+    public function getDataPriceType()
+    {
+        if ($priceType = $this->getData('price_type')) {
+            return 'base' . ucfirst($priceType);
+        }
+        return 'basePrice';
+    }
 }
