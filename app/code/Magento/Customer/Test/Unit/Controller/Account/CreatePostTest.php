@@ -529,6 +529,9 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $this->model->execute();
     }
 
+    /**
+     * @return array
+     */
     public function getSuccessRedirectDataProvider()
     {
         return [

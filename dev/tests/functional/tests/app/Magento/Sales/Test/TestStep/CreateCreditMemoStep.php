@@ -96,11 +96,8 @@ class CreateCreditMemoStep implements TestStepInterface
                 $this->orderCreditMemoNew->getFormBlock()->updateQty();
             }
 
-            $hasChangeTotals = $this->compareRefundTotalsData($refundData);
             $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
-            if ($hasChangeTotals) {
-                $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
-            }
+            $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
             
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
@@ -120,32 +117,5 @@ class CreateCreditMemoStep implements TestStepInterface
     {
         $this->salesOrderView->getOrderForm()->openTab('creditmemos');
         return $this->salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock()->getIds();
-    }
-
-    /**
-     * Compare refund total items.
-     *
-     * @param array $data
-     * @return int
-     */
-    private function compareRefundTotalsData($data)
-    {
-        $compareData = [
-            'shipping_amount' =>
-                $this->orderCreditMemoNew->getTotalsBlock()->getRefundShippingElement()->getValue(),
-            'adjustment_positive' =>
-                $this->orderCreditMemoNew->getTotalsBlock()->getAdjustmentRefundElement()->getValue(),
-            'adjustment_negative' =>
-                $this->orderCreditMemoNew->getTotalsBlock()->getAdjustmentFeeElement()->getValue(),
-        ];
-
-        $count = 0;
-        foreach ($compareData as $key => $val) {
-            if (isset($data['form_data'][$key])) {
-                $count += ($val != $data['form_data'][$key] ? 1 : 0);
-            }
-        }
-
-        return $count;
     }
 }

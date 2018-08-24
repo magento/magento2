@@ -114,7 +114,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * @param array $classNames
      * @param string $fileItemPath
-     * @return bool Whether the clas is included or not
+     * @return bool Whether the class is included or not
      */
     private function includeClasses(array $classNames, $fileItemPath)
     {

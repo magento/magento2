@@ -73,7 +73,7 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
         $this->abstractElementMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Eastern Standard Time (America/New_York)');
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );

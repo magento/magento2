@@ -39,7 +39,7 @@ class UrlRewriteForm extends Form
      *
      * @param array $data
      * @param SimpleElement $context
-     * @retun void
+     * @return void
      */
     protected function fillFields(array $data, SimpleElement $context)
     {

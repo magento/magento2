@@ -30,6 +30,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation disabled
      */
     public function testPrepareData()
     {
@@ -64,7 +65,6 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareDataWithDifferentStoreValues()
     {
-        $this->markTestSkipped('Test is blocked by MAGETWO-84209.');
         $storeCode = 'default';
         $expectedNames = [
             'name' => 'Bundle Product Items',

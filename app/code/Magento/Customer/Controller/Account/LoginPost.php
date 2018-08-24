@@ -171,27 +171,24 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     );
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
                         'You did not sign in correctly or your account is temporarily disabled.'
                     );
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __('You did not sign in correctly or your account is temporarily disabled.');
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
+                } finally {
+                    if (isset($message)) {
+                        $this->messageManager->addError($message);
+                        $this->session->setUsername($login['username']);
+                    }
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));

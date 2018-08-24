@@ -139,6 +139,9 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleProvider()
     {
         return [

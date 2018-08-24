@@ -189,4 +189,12 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Cms\Ui\Component\DataProvider">
+        <arguments>
+            <argument name="additionalFilterPool" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Magento\Cms\Ui\Component\Page\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

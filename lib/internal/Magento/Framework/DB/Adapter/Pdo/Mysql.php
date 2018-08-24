@@ -483,7 +483,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (empty($field)) {
             return $row;
         } else {
-            return isset($row[$field]) ? $row[$field] : false;
+            return $row[$field] ?? false;
         }
     }
 
@@ -557,6 +557,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 ) {
                     $retry = true;
                     $triesCount++;
+                    
+                    /**
+                    * _connect() function does not allow port parameter, so put the port back with the host
+                    */
+                    if (!empty($this->_config['port'])) {
+                        $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                        unset($this->_config['port']);
+                    }
+
                     $this->closeConnection();
                     $this->_connect();
                 }

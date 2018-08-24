@@ -130,7 +130,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             ->method('writeln')
             ->withConsecutive(
                 [['system' => 'Some comment message']],
-                ['<info>Done.</info>']
+                ['<info>Done. Config types dumped: system</info>']
             );
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');

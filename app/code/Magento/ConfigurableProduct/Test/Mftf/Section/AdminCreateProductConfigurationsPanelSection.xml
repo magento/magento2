@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminCreateProductConfigurationsPanelSection">
+        <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
+        <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
+        <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
+        <element name="attributeCode" type="input" selector=".admin__control-text[name='attribute_code']"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
+        <element name="selectAll" type="button" selector=".action-select-all"/>
+        <element name="selectAllByAttribute" type="button" selector="//div[@data-attribute-title='{{attr}}']//button[contains(@class, 'action-select-all')]" parameterized="true"/>
+        <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
+        <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
+        <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
+        <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
+        <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
+        <element name="attribute" type="input" selector="#apply-single-price-input-{{var1}}" parameterized="true"/>
+        <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
+    </section>
+</sections>

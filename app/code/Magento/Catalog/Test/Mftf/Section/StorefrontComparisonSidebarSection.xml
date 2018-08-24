@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontComparisonSidebarSection">
+        <element name="compare" type="button" selector="div.block-compare a.compare"/>
+        <element name="clearAll" type="button" selector="div.block-compare a.clear"/>
+        <element name="productTitleByName" type="button" selector="//main//ol[@id='compare-items']//a[@class='product-item-link'][text()='{{var1}}']" parameterized="true"/>
+        <element name="noItemsMessage" type="text" selector="div.block-compare div.empty"/>
+    </section>
+</sections>

@@ -32,7 +32,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
      */
-    protected $collectionFactory;
+    protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

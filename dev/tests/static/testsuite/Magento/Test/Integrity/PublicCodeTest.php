@@ -49,7 +49,6 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             }
             $this->blockWhitelist = $whiteListItems;
         }
-
         return $this->blockWhitelist;
     }
 

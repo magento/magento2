@@ -31,7 +31,6 @@ define([
             data = {},
             parameters = {},
             root = {},
-            len = 0,
             key = '';
 
         /* eslint-disable */
@@ -160,15 +159,15 @@ define([
              * @returns {void}
              */
             categoryLoader.buildCategoryTree = function (parent, config) {// eslint-disable-line no-shadow
-                var j = 0;
+                var i = 0;
 
                 if (!config) {
                     return null;
                 }
 
                 if (parent && config && config.length) {
-                    for (j = 0; j < config.length; j++) {
-                        categoryLoader.processCategoryTree(parent, config, j);
+                    for (i; i < config.length; i++) {
+                        categoryLoader.processCategoryTree(parent, config, i);
                     }
                 }
             };
@@ -180,19 +179,20 @@ define([
              * @returns {Object}
              */
             categoryLoader.buildHashChildren = function (hash, node) {// eslint-disable-line no-shadow
-                var j = 0;
+                var i = 0,
+                    len;
 
                 // eslint-disable-next-line no-extra-parens
                 if ((node.childNodes.length > 0) || (node.loaded === false && node.loading === false)) {
                     hash.children = [];
 
-                    for (j = 0, len = node.childNodes.length; j < len; j++) {
+                    for (i, len = node.childNodes.length; i < len; i++) {
                         /* eslint-disable */
                         if (!hash.children) {
                             hash.children = [];
                         }
                         /* eslint-enable */
-                        hash.children.push(this.buildHash(node.childNodes[j]));
+                        hash.children.push(this.buildHash(node.childNodes[i]));
                     }
                 }
 

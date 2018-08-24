@@ -264,7 +264,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getEnableQtyIncrements($store = null)
     {
-        return (bool) $this->scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_ENABLE_QTY_INCREMENTS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

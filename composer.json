@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Open Source)",
     "type": "project",
-    "version": "2.2.5",
+    "version": "2.2.6-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -80,6 +80,9 @@
         "friendsofphp/php-cs-fixer": "~2.2.1",
         "lusitanian/oauth": "~0.8.10",
         "sebastian/phpcpd": "2.0.4"
+    },
+    "suggest": {
+        "ext-pcntl": "Need for run processes in parallel mode"
     },
     "replace": {
         "magento/module-marketplace": "100.2.2",
@@ -176,6 +179,7 @@
         "magento/module-signifyd": "100.2.2",
         "magento/module-sitemap": "100.2.4",
         "magento/module-store": "100.2.4",
+        "magento/module-swagger-webapi": "100.0.0",
         "magento/module-swagger": "100.2.3",
         "magento/module-swatches": "100.2.3",
         "magento/module-swatches-layered-navigation": "100.2.1",
@@ -241,7 +245,8 @@
         },
         "psr-0": {
             "": [
-                "app/code/"
+                "app/code/",
+                "generated/code/"
             ]
         },
         "files": [

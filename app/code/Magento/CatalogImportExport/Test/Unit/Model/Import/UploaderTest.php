@@ -209,6 +209,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDriverPoolDataProvider()
     {
         return [
@@ -227,6 +230,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDataProvider()
     {
         return [

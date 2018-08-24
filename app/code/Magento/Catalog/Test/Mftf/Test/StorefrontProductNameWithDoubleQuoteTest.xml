@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameWithDoubleQuote">
+        <annotations>
+            <title value="Product with double quote in name"/>
+            <description value="Product with a double quote in the name should appear correctly on the storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-92864"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProductWithImage" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Double Quote"</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Check product in category listing-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc($$createProduct.name$$, $$createProduct.product[media_gallery_entries][0][content][name]$$)}}" stepKey="seeCorrectImageCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.productTitleByName($$createProduct.name$$)}}" userInput="$$createProduct.name$$" stepKey="seeCorrectNameCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createProduct.name$$)}}" userInput="$$createProduct.price$$" stepKey="seeCorrectPriceCategoryPage"/>
+        <!--Open product display page-->
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createProduct.name$$)}}" stepKey="clickProductToGoProductPage"/>
+        <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeCorrectName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createProduct.sku$$" stepKey="seeCorrectSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seeCorrectPrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc($$createProduct.product[media_gallery_entries][0][content][name]$$)}}" stepKey="seeCorrectImage"/>
+        <see selector="{{StorefrontProductInfoMainSection.stock}}" userInput="In Stock" stepKey="seeInStock"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategory.name$$" stepKey="seeCorrectBreadCrumbCategory"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createProduct.name$$" stepKey="seeCorrectBreadCrumbProduct"/>
+    </test>
+</tests>

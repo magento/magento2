@@ -25,7 +25,7 @@ class ZeroUnitsSniff implements Sniff
     const CSS_PROPERTY_UNIT_REM = 'rem';
 
     /**
-     * List of available CSS Propery units
+     * List of available CSS Property units
      *
      * @var array
      */

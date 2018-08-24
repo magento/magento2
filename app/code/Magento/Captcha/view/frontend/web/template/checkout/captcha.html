@@ -8,13 +8,14 @@
 <div class="field captcha required" data-bind="blockLoader: getIsLoading()">
     <label data-bind="attr: {for: 'captcha_' + formId}" class="label"><span data-bind="i18n: 'Please type the letters and numbers below'"></span></label>
     <div class="control captcha">
-        <input name="captcha_string" type="text" class="input-text required-entry" data-bind="value: captchaValue(), attr: {id: 'captcha_' + formId, 'data-scope': dataScope}" />
+        <input name="captcha_string" type="text" class="input-text required-entry" data-bind="value: captchaValue(), attr: {id: 'captcha_' + formId, 'data-scope': dataScope}" autocomplete="off"/>
         <input name="captcha_form_id" type="hidden" data-bind="value: formId,  attr: {'data-scope': dataScope}" />
         <div class="nested">
             <div class="field captcha no-label">
                 <div class="control captcha-image">
                     <img data-bind="attr: {
                                         alt: $t('Please type the letters and numbers below'),
+                                        title: $t('Please type the letters and numbers below'),
                                         height: imageHeight(),
                                         src: getImageSource(),
                                         }"

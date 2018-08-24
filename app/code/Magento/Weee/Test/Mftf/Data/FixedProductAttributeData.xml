@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="productFPTAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="is_unique">false</data>
+        <data key="frontend_input">weee</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+</entities>

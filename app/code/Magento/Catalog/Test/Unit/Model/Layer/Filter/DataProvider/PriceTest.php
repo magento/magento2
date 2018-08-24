@@ -152,7 +152,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
             ->will($this->returnValue($maxPrice));
-        $this->assertSame(floatval($maxPrice), $this->target->getMaxPrice());
+        $this->assertSame((float)$maxPrice, $this->target->getMaxPrice());
     }
 
     /**
@@ -165,6 +165,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->target->validateFilter($filter));
     }
 
+    /**
+     * @return array
+     */
     public function validateFilterDataProvider()
     {
         return [

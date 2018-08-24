@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!-- Checkout select Check/Money Order payment -->
+    <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
+    </actionGroup>
+
+    <!-- Checkout place order -->
+    <actionGroup name="CheckoutPlaceOrderActionGroup">
+        <arguments>
+            <argument name="orderNumberMessage"/>
+            <argument name="emailYouMessage"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
+    </actionGroup>
+</actionGroups>
