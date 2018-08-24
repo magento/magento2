@@ -25,6 +25,8 @@
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
+        <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
+        <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
 
