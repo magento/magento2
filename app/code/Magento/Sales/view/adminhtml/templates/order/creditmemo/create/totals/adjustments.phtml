@@ -15,11 +15,15 @@
     <tr>
         <td class="label"><?= /* @escapeNotVerified */ $block->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
         <td>
-            <input type="text"
-                   name="creditmemo[shipping_amount]"
-                   value="<?= /* @escapeNotVerified */ $block->getShippingAmount() ?>"
-                   class="input-text admin__control-text not-negative-amount"
-                   id="shipping_amount" />
+            <?php if ($block->getShippingAmount() == 0): ?>
+                <span><?= /* @escapeNotVerified */ $block->getShippingAmount(); ?></span>
+            <?php else: ?>
+                <input type="text"
+                       name="creditmemo[shipping_amount]"
+                       value="<?= /* @escapeNotVerified */ $block->getShippingAmount() ?>"
+                       class="input-text admin__control-text not-negative-amount"
+                       id="shipping_amount" />
+            <?php endif; ?>
         </td>
     </tr>
     <tr>
