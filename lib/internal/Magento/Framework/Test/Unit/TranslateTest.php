@@ -313,6 +313,12 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('themeTheme Title', $this->translate->getTheme());
     }
 
+    public function testSetTheme()
+    {
+        $this->translate->setTheme('Magento/blank');
+        $this->assertEquals('themeMagento/blank', $this->translate->getTheme());
+    }
+
     public function testLoadDataNoTheme()
     {
         $forceReload = true;

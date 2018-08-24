@@ -30,6 +30,13 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_localeCode;
 
     /**
+     * Theme
+     *
+     * @var string
+     */
+    protected $_theme;
+
+    /**
      * Translator configuration array
      *
      * @var array
@@ -458,6 +465,19 @@ class Translate implements \Magento\Framework\TranslateInterface
             return self::CONFIG_THEME_KEY . $this->getConfig(self::CONFIG_THEME_KEY);
         }
         return self::CONFIG_THEME_KEY . $theme['theme_title'];
+    }
+
+    /**
+     * Set theme
+     *
+     * @param string $theme
+     * @return \Magento\Framework\TranslateInterface
+     */
+    public function setTheme($theme)
+    {
+        $this->_theme = $theme;
+        $this->_config[self::CONFIG_THEME_KEY] = $theme;
+        return $this;
     }
 
     /**
