@@ -90,7 +90,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
             $error->setErrorMessage($errorMsg);
 
             return $error;
-
         } else if ($request->getFreeShipping() || $request->getBaseSubtotalInclTax() >= $this->getConfigData(
             'free_shipping_subtotal'
         )
