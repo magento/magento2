@@ -20,43 +20,53 @@
         </annotations>
 
         <before>
-            <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!--Create product-->
-            <actionGroup ref="GoToProductPage" stepKey="goToProductPage"/>
-            <actionGroup ref="CreateSimpleProduct" stepKey="createSimpleProduct"/>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
         </before>
 
         <!--Go to Storefront-->
         <amOnPage url="" stepKey="DoToStorefront"/>
 
-        <!--Create account-->
-        <actionGroup ref="StorefrontCreateAccountActionGroup" stepKey="storefrontCreateAccountActionGroup"/>
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
 
-        <!--Add product to cart-->
-        <actionGroup ref="FindAndAddProductToCardActionGroup" stepKey="FindAndAddProductToCard"/>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <!--Proceed to shipment-->
+        <amOnPage url="{{CheckoutPage.url}}/" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForShippingSection"/>
 
         <!--Fill shipment form-->
-        <actionGroup ref="FillShipmentFormActionGroup" stepKey="ShipmentFormActionGroup"/>
+        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
+            <argument name="customerVar" value="Simple_US_Customer_NY" />
+            <argument name="customerAddressVar" value="US_Address_NY" />
+        </actionGroup>
 
         <!--Fill cart data-->
-        <actionGroup ref="MarkMyBillingAndShippingAddressAreTheSame" stepKey="markMyBillingAndShippingAddressAreTheSame"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
 
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
         <!--Go To My Account-->
-        <actionGroup ref="GoToMyAccountPage" stepKey="goToMyAccountPage"/>
+        <amOnPage stepKey="goToMyAccountPage" url="/customer/account/"/>
 
         <!--Assert That Shipping And Billing Address are the same-->
         <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
 
         <after>
             <!--Delete created Product-->
-            <amOnPage url="/admin" stepKey="GoToDashboard"/>
-            <actionGroup ref="GoToProductPage" stepKey="againGoToProductPage"/>
-            <actionGroup ref="DeleteCreatedProduct" stepKey="deleteCreatedProduct"/>
-
-            <!--Delete created Customer-->
-            <actionGroup ref="DeleteCreatedCustomerActionGroup" stepKey="deleteCreatedCustomer"/>
+            <deleteData stepKey="deleteProduct" createDataKey="product"/>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
         </after>
     </test>
 </tests>
