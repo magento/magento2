@@ -27,7 +27,6 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        ini_set('memory_limit', '1024M');
         $helper = new ObjectManager($this);
 
         $this->synReaderModel = $this->getMockBuilder(\Magento\Search\Model\SynonymReader::class)
