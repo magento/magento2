@@ -213,6 +213,10 @@
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
                 </item>
+                <item name="footer_report_bugs" xsi:type="array">
+                    <item name="path" xsi:type="string">design/footer/report_bugs</item>
+                    <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
                 <item name="default_robots" xsi:type="array">
                     <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
                     <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
