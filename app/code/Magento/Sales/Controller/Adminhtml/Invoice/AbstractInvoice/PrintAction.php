@@ -45,6 +45,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
 
     /**
      * @return ResponseInterface|void
+     * @throws \Exception
      */
     public function execute()
     {
@@ -54,9 +55,10 @@ abstract class PrintAction extends \Magento\Backend\App\Action
             if ($invoice) {
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf([$invoice]);
                 $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+                $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
                 return $this->_fileFactory->create(
                     'invoice' . $date . '.pdf',
-                    $pdf->render(),
+                    $fileContent,
                     DirectoryList::VAR_DIR,
                     'application/pdf'
                 );
