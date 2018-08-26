@@ -16,4 +16,14 @@ interface ConfigInterface
      * @return array
      */
     public function getAdapters();
+
+    /**
+     * @return int
+     */
+    public function getMaxWidth();
+
+    /**
+     * @return int
+     */
+    public function getMaxHeight();
 }

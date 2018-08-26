@@ -18,7 +18,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock = $this->getMock(
             'Magento\Framework\Image\Adapter\ConfigInterface',
-            ['getAdapterAlias', 'getAdapters'],
+            ['getAdapterAlias', 'getAdapters', 'getMaxWidth', 'getMaxHeight'],
             [],
             '',
             false
