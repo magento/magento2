@@ -80,7 +80,8 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
         $this->_updateFreeMethodQuote($request);
 
-        if ($request->getBaseSubtotalInclTax() < $this->getConfigData('free_shipping_subtotal') && $this->getConfigData('showmethod')) {
+        if ($request->getBaseSubtotalInclTax() < $this->getConfigData('free_shipping_subtotal')
+            && $this->getConfigData('showmethod')) {
             /** @var Error $error */
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier($this->_code);
