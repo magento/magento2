@@ -21,15 +21,14 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod;
-            var shippingMethodTitle = '';
+            var shippingMethod = shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
                 return '';
             }
             shippingMethod = quote.shippingMethod();
 
-            if (typeof(shippingMethod['method_title']) !== 'undefined') {
+            if (typeof (shippingMethod['method_title']) !== 'undefined') {
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
