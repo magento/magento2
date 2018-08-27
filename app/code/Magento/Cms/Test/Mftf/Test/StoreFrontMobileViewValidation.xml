@@ -15,7 +15,7 @@
             <description value="Mobile view page footer should stick to the bottom of page on Store front"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94333"/>
-            <group value="Cms12"/>
+            <group value="Cms"/>
         </annotations>
         <before>
             <createData entity="_longContentCmsPage" stepKey="createPreReqCMSPage"/>
