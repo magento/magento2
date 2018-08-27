@@ -166,7 +166,7 @@
         <arguments>
             <argument name="intervals" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
             </argument>
         </arguments>
     </type>
