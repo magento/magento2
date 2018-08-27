@@ -129,6 +129,7 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     {
         switch ($frontendInput) {
             case 'select':
+            case 'multiselect':
                 return in_array($fieldType, ['string','integer'], true) ? $attributeCode . '_value' : $attributeCode;
             case 'boolean':
                 return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
