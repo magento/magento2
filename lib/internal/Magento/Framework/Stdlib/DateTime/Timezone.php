@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Timezone library
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Timezone implements TimezoneInterface
 {
@@ -110,11 +111,21 @@ class Timezone implements TimezoneInterface
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
-        return (new \IntlDateFormatter(
+        $pattern = (new \IntlDateFormatter(
             $this->_localeResolver->getLocale(),
             $type,
             \IntlDateFormatter::NONE
         ))->getPattern();
+
+        /**
+         * This replacement is a workaround to prevent bugs in some third party libraries,
+         * that works incorrectly with 'yyyy' value.
+         * According to official doc of the ICU library
+         * internally used in \Intl, 'yyyy' and 'y' formats are the same
+         * @see http://userguide.icu-project.org/formatparse/datetime
+         */
+        $pattern = str_replace('yyyy', 'y', $pattern);
+        return $pattern;
     }
 
     /**
@@ -151,9 +162,8 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function date($date = null, $locale = null, $useTimezone = true)
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
@@ -164,15 +174,50 @@ class Timezone implements TimezoneInterface
             return new \DateTime('now', new \DateTimeZone($timezone));
         } elseif ($date instanceof \DateTime) {
             return $date->setTimezone(new \DateTimeZone($timezone));
+        } elseif ($date instanceof \DateTimeImmutable) {
+            return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
         } elseif (!is_numeric($date)) {
-            $formatter = new \IntlDateFormatter(
-                $locale,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE
-            );
+            $date = $this->prepareDate($date, $locale, $timezone, $includeTime);
+        }
+
+        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+    }
+
+    /**
+     * Convert string date according to locale format
+     *
+     * @param string $date
+     * @param string $locale
+     * @param string $timezone
+     * @param bool $includeTime
+     * @return string
+     */
+    private function prepareDate($date, $locale, $timezone, $includeTime)
+    {
+        $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
+        $formatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            $timeType,
+            new \DateTimeZone($timezone)
+        );
+
+        /**
+         * IntlDateFormatter does not parse correctly date formats per some locales
+         * It depends on ICU lib version used by intl extension
+         * For locales like fr_FR, ar_KW parse date with hyphen as separator
+         */
+        if ($includeTime) {
+            $date = $this->appendTimeIfNeeded($date);
+        }
+        try {
+            $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+        } catch (\Exception $e) {
+            $date = str_replace('/', '-', $date);
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
-        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+
+        return $date;
     }
 
     /**
@@ -195,7 +240,7 @@ class Timezone implements TimezoneInterface
     {
         $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
 
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -232,12 +277,8 @@ class Timezone implements TimezoneInterface
             $toTimeStamp += 86400;
         }
 
-        $result = false;
-        if (!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp) {
-        } elseif (!$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp) {
-        } else {
-            $result = true;
-        }
+        $result = !(!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp)
+            && !(!$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp);
         return $result;
     }
 
@@ -258,7 +299,7 @@ class Timezone implements TimezoneInterface
         $timezone = null,
         $pattern = null
     ) {
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -294,8 +335,12 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        if (!($date instanceof \DateTime)) {
-            $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+        if (!($date instanceof \DateTimeInterface)) {
+            if ($date instanceof \DateTimeImmutable) {
+                $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
+            } else {
+                $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+            }
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
                 throw new LocalizedException(
@@ -307,5 +352,19 @@ class Timezone implements TimezoneInterface
         $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date->format($format);
+    }
+
+    /**
+     * Add time in case if no time provided but required
+     *
+     * @param string $date
+     * @return string
+     */
+    private function appendTimeIfNeeded($date)
+    {
+        if (!preg_match('/\d{1,2}:\d{2}/', $date)) {
+            $date .= " 00:00";
+        }
+        return $date;
     }
 }
