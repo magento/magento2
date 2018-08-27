@@ -392,11 +392,13 @@ abstract class AbstractGroupPrice extends Price
         $old = [];
         $new = [];
 
+        $linkFieldName = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         // prepare original data for compare
         $origPrices = $object->getOrigData($this->getAttribute()->getName());
-        if (!is_array($origPrices)) {
+        if (!is_array($origPrices) || $object->getData($linkFieldName) != $object->getOrigData($linkFieldName)) {
             $origPrices = [];
         }
+
         foreach ($origPrices as $data) {
             if ($data['website_id'] > 0 || $data['website_id'] == '0' && $isGlobal) {
                 $key = implode(
@@ -454,7 +456,7 @@ abstract class AbstractGroupPrice extends Price
         $update = array_intersect_key($new, $old);
 
         $isChanged = false;
-        $productId = $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField());
+        $productId = $object->getData($linkFieldName);
 
         if (!empty($delete)) {
             foreach ($delete as $data) {
@@ -467,7 +469,7 @@ abstract class AbstractGroupPrice extends Price
             foreach ($insert as $data) {
                 $price = new \Magento\Framework\DataObject($data);
                 $price->setData(
-                    $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField(),
+                    $linkFieldName,
                     $productId
                 );
                 $this->_getResource()->savePriceData($price);
