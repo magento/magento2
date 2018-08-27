@@ -84,7 +84,7 @@ class Source extends AbstractEav
         if ($multiSelect == true) {
             $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
         } else {
-            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input = ?', 'select');
+            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input IN( ? )', ['select', 'boolean']);
         }
 
         return $this->getConnection()->fetchCol($select);
