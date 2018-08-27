@@ -43,9 +43,12 @@ class AttributeValidation
         \Closure $proceed,
         \Magento\Framework\DataObject $entity
     ) {
-        $isAllowedType = !empty(array_filter(array_map(function ($allowedEntity) use ($entity) {
-            return $entity instanceof $allowedEntity;
-        }, $this->allowedEntityTypes)));
+        $isAllowedType = !empty(array_filter(
+                array_map(function ($allowedEntity) use ($entity) {
+                    return $entity instanceof $allowedEntity;
+                }, $this->allowedEntityTypes)
+            )
+        );
 
         if ($isAllowedType && (int) $this->storeManager->getStore()->getId() !== Store::DEFAULT_STORE_ID) {
             $attrCode = $subject->getAttribute()->getAttributeCode();
