@@ -252,7 +252,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Make that only exired tokens were cleaned up
+     * Make that only expired tokens were cleaned up
      *
      * @param array $expectedRemovedTokenNumbers
      * @param array $expectedPreservedTokenNumbers

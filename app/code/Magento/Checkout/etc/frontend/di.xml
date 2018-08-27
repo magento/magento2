@@ -39,7 +39,7 @@
     </type>
     <preference for="Magento\Checkout\CustomerData\ItemPoolInterface"
                 type="Magento\Checkout\CustomerData\ItemPool"/>
-    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
+    <type name="Magento\Checkout\CustomerData\ItemPool">
         <arguments>
             <argument name="defaultItemId" xsi:type="string">Magento\Checkout\CustomerData\DefaultItem</argument>
         </arguments>
@@ -80,6 +80,18 @@
             <argument name="filterList" xsi:type="array">
                 <item name="form_key" xsi:type="string">form_key</item>
                 <item name="custom_price" xsi:type="string">custom_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addCartSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Checkout::messages/addCartSuccessMessage.phtml</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>

@@ -21,7 +21,7 @@ class SimplifiedselectElement extends SelectElement
     protected $optionGroupValue = ".//*[@data-title='%s' or contains(normalize-space(.), %s)]";
 
     /**
-     * Select value in ropdown which has option groups.
+     * Select value in dropdown which has option groups.
      *
      * @param string $value
      * @return void

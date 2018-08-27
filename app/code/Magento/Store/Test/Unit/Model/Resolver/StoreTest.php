@@ -52,7 +52,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScopeWithInvalidScope()
     {
-        $scopeMock = new \StdClass();
+        $scopeMock = new \stdClass();
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getStore')

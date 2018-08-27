@@ -115,7 +115,7 @@ class Db
     }
 
     /**
-     * Return triggers fro table(s)
+     * Return triggers for table(s)
      *
      * @param string|null $tableName
      * @param bool $addDropIfExists

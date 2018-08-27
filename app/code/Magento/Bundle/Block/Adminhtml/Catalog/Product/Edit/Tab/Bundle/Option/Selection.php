@@ -15,7 +15,7 @@ class Selection extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'product/edit/bundle/option/selection.phtml';
+    protected $_template = 'Magento_Bundle::product/edit/bundle/option/selection.phtml';
 
     /**
      * Catalog data

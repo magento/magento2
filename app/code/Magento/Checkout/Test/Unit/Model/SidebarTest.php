@@ -45,6 +45,9 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetResponseData()
     {
         return [

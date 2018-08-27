@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Fixed Product Taxes Enable-->
+    <entity name="WeeeConfigEnable" type="weee_config">
+        <requiredEntity type="enableFPT">EnableFPT</requiredEntity>
+    </entity>
+    <entity name="EnableFPT" type="enableFPT">
+        <data key="value">1</data>
+    </entity>
+    <!-- Fixed Product Taxes Disable-->
+    <entity name="WeeeConfigDisable" type="weee_config_default">
+        <requiredEntity type="disableFPT">DisableFPT</requiredEntity>
+    </entity>
+    <entity name="DisableFPT" type="disableFPT">
+        <data key="value">0</data>
+    </entity>
+</entities>

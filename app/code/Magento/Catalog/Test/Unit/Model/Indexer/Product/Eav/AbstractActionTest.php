@@ -22,6 +22,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_eavSourceFactoryMock;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
@@ -32,9 +37,16 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
             ['create']
         );
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
-            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, []]
+            [
+                $this->_eavDecimalFactoryMock,
+                $this->_eavSourceFactoryMock,
+                $this->scopeConfig
+            ]
         );
     }
 
@@ -110,6 +122,10 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
         $this->_model->reindex();
     }
 
@@ -174,9 +190,28 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
         $this->_model->reindex($ids);
     }
 
+    public function testReindexWithDisabledEavIndexer()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(0);
+
+        $this->_eavSourceFactoryMock->expects($this->never())->method('create');
+        $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
+
+        $this->_model->reindex();
+    }
+
+    /**
+     * @return array
+     */
     public function reindexEntitiesDataProvider()
     {
         return [

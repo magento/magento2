@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Controller;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
+
 /**
  * Payflow Checkout Controller
  */
@@ -42,12 +44,18 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
     protected $_redirectBlockName = 'payflow.link.iframe';
 
     /**
+     * @var PaymentFailuresInterface
+     */
+    private $paymentFailures;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param PaymentFailuresInterface|null $paymentFailures
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -55,14 +63,17 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        PaymentFailuresInterface $paymentFailures = null
     ) {
+        parent::__construct($context);
+
         $this->_checkoutSession = $checkoutSession;
         $this->_orderFactory = $orderFactory;
         $this->_logger = $logger;
         $this->_payflowModelFactory = $payflowModelFactory;
         $this->_checkoutHelper = $checkoutHelper;
-        parent::__construct($context);
+        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
     }
 
     /**
@@ -74,6 +85,10 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
     protected function _cancelPayment($errorMsg = '')
     {
         $errorMsg = trim(strip_tags($errorMsg));
+        $order = $this->_checkoutSession->getLastRealOrder();
+        if ($order->getId()) {
+            $this->paymentFailures->handle((int)$order->getQuoteId(), $errorMsg);
+        }
 
         $gotoSection = false;
         $this->_checkoutHelper->cancelCurrentOrder($errorMsg);

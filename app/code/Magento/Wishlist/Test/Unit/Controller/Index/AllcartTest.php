@@ -136,6 +136,9 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultFactoryMock);
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Allcart
+     */
     public function getController()
     {
         $this->prepareContext();

@@ -355,7 +355,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             'unsetChild',
             'unsetChildren',
             'updateButton',
-            'setIsProductListingContext'
+            'setIsProductListingContext',
+            'checkCompanyStatus', // MAGETWO-88965
+            'setRendererType', // MAGETWO-88965
         ];
     }
 }

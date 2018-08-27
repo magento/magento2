@@ -73,6 +73,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
                 'filterProperty' => 'name',
                 'preventClickPropagation' => false,
                 'minLength' => 2,
+                'submitInputOnEnter' => false,
             ]
         ];
     }
