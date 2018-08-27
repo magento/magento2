@@ -256,7 +256,8 @@ class Value extends AbstractDb
                 $object->unsetData('title');
             }
 
-            if ($object->getTitle()) {
+            /*** Checking whether title is not null ***/
+            if ($object->getTitle()!= null) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
                         $where = [
