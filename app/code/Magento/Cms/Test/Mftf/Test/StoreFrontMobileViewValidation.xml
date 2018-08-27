@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontMobileViewValidation">
+        <annotations>
+            <features value="Cms"/>
+            <title value="Mobile view page footer should stick to the bottom of page on Store front"/>
+            <description value="Mobile view page footer should stick to the bottom of page on Store front"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94333"/>
+            <group value="Cms12"/>
+        </annotations>
+        <before>
+            <createData entity="_longContentCmsPage" stepKey="createPreReqCMSPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage"/>
+        </after>
+        <resizeWindow width="375" height="812" stepKey="resizeWindowToDesktop"/>
+        <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad6" />
+        <!--check header/footer location on Storefront-->
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
+        <assertGreaterThan stepKey="assertDefaultLoad">
+            <actualResult type="variable">topOfFooter</actualResult>
+            <expectedResult type="string">812</expectedResult>
+        </assertGreaterThan>
+        <scrollTo selector="{{StorefrontCMSPageFooterSection.footerSection}}" stepKey="scrollToFooterSection"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="bottomOfFooter"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.mainContent}}').getBoundingClientRect().bottom" stepKey="mainContent"/>
+        <assertGreaterThan stepKey="assertAfterScroll">
+            <actualResult type="variable">bottomOfFooter</actualResult>
+            <expectedResult type="variable">mainContent</expectedResult>
+        </assertGreaterThan>
+    </test>
+</tests>
