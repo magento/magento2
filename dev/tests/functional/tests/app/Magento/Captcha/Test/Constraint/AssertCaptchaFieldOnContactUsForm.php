@@ -6,7 +6,7 @@
 
 namespace Magento\Captcha\Test\Constraint;
 
-use Magento\Contact\Test\Page\ContactIndex;
+use Magento\Captcha\Test\Page\ContactIndexCaptcha as ContactIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
