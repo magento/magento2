@@ -1523,7 +1523,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setPasswordHash')
             ->willReturn(null);
 
-        $this->sessionManager->expects($this->atLeastOnce())->method('destroy');
         $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
         $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
             ->disableOriginalConstructor()
@@ -1539,8 +1538,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
         $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($visitorCollection);
-        $this->saveHandler->expects($this->at(0))->method('destroy')->with('session_id_1');
-        $this->saveHandler->expects($this->at(1))->method('destroy')->with('session_id_2');
         $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));
     }
 
