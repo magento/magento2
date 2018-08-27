@@ -15,6 +15,7 @@
             <description value="Mobile view page footer should stick to the bottom of page on Store front"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94333"/>
+            <useCaseId value="MAGETWO-93978"/>
             <group value="Cms"/>
         </annotations>
         <before>
@@ -22,22 +23,24 @@
         </before>
         <after>
             <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage"/>
+            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
         </after>
-        <resizeWindow width="375" height="812" stepKey="resizeWindowToDesktop"/>
+        <resizeWindow width="375" height="812" stepKey="resizeWindowToMobile"/>
         <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="waitForPageLoad6" />
-        <!--check header/footer location on Storefront-->
+        <!-- Verifying that Footer is not in visible area by default as the CMS page has lots of content which -->
         <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
         <assertGreaterThan stepKey="assertDefaultLoad">
             <actualResult type="variable">topOfFooter</actualResult>
             <expectedResult type="string">812</expectedResult>
         </assertGreaterThan>
+        <!-- Verifying that even after scroll footer section is below the main content section -->
         <scrollTo selector="{{StorefrontCMSPageFooterSection.footerSection}}" stepKey="scrollToFooterSection"/>
-        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="bottomOfFooter"/>
-        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.mainContent}}').getBoundingClientRect().bottom" stepKey="mainContent"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="topOfTheFooterAfterScroll"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.mainContent}}').getBoundingClientRect().bottom" stepKey="bottomOfMainContent"/>
         <assertGreaterThan stepKey="assertAfterScroll">
-            <actualResult type="variable">bottomOfFooter</actualResult>
-            <expectedResult type="variable">mainContent</expectedResult>
+            <actualResult type="variable">topOfTheFooterAfterScroll</actualResult>
+            <expectedResult type="variable">bottomOfMainContent</expectedResult>
         </assertGreaterThan>
     </test>
 </tests>
