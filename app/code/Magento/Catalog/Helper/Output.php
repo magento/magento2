@@ -164,8 +164,8 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         if ($attributeHtml !== null
-            && $attribute->getIsHtmlAllowedOnFront()
-            && $attribute->getIsWysiwygEnabled()
+            && ($attribute->getIsHtmlAllowedOnFront()
+            || $attribute->getIsWysiwygEnabled())
             && $this->isDirectivesExists($attributeHtml)
         ) {
             $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
