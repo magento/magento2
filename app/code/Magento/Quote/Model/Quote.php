@@ -1608,7 +1608,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          * Error message
          */
         if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
-            return strval($cartCandidates);
+            return (string)$cartCandidates;
         }
 
         /**
