@@ -47,7 +47,7 @@ class AttributeValidation
             return $entity instanceof $allowedEntity;
         }, $this->allowedEntityTypes)));
 
-        if ($isAllowedType && (int)$this->storeManager->getStore()->getId() !== Store::DEFAULT_STORE_ID) {
+        if ($isAllowedType && (int) $this->storeManager->getStore()->getId() !== Store::DEFAULT_STORE_ID) {
             $attrCode = $subject->getAttribute()->getAttributeCode();
             // Null is meaning "no value" which should be overridden by value from default scope
             if (array_key_exists($attrCode, $entity->getData()) && $entity->getData($attrCode) === null) {

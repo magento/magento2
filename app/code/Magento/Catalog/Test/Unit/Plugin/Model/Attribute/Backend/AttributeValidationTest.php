@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Unit\Plugin\Attribute\Backend;
+namespace Magento\Catalog\Test\Unit\Plugin\Model\Attribute\Backend;
 
 use Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -65,7 +65,6 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-
         $this->attributeMock = $this->getMockBuilder(AbstractBackend::class)
             ->setMethods(['getAttributeCode'])
             ->getMockForAbstractClass();
@@ -74,7 +73,7 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->subjectMock->expects($this->any())
             ->method('getAttribute')
-            ->willReturn( $this->attributeMock);
+            ->willReturn($this->attributeMock);
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getId'])
@@ -137,7 +136,6 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
         $this->attributeValidation->aroundValidate($this->subjectMock, $this->proceedMock, $this->entityMock);
         $this->assertSame($shouldProceedRun, $this->isProceedMockCalled);
     }
-
 
     /**
      * Data provider for testAroundValidate
