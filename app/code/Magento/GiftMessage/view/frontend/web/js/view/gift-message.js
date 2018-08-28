@@ -31,8 +31,9 @@ define([
 
             this.itemId = this.itemId || 'orderLevel';
             model = new GiftMessage(this.itemId);
-            giftOptions.addOption(model);
             this.model = model;
+            this.isResultBlockVisible();
+            giftOptions.addOption(model);
 
             this.model.getObservable('isClear').subscribe(function (value) {
                 if (value == true) { //eslint-disable-line eqeqeq
@@ -40,8 +41,6 @@ define([
                     self.model.getObservable('alreadyAdded')(true);
                 }
             });
-
-            this.isResultBlockVisible();
         },
 
         /**
