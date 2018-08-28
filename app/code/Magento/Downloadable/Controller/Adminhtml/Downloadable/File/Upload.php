@@ -96,17 +96,10 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
                 $relativePath = rtrim($tmpPath, '/') . '/' . ltrim($result['file'], '/');
                 $this->storageDatabase->saveFile($relativePath);
             }
-
-            $result['cookie'] = [
-                'name' => $this->_getSession()->getName(),
-                'value' => $this->_getSession()->getSessionId(),
-                'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path' => $this->_getSession()->getCookiePath(),
-                'domain' => $this->_getSession()->getCookieDomain(),
-            ];
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
+
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
     }
 }
