@@ -82,6 +82,6 @@
         <!--Testing deletion of product-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement selector="{{BundleStorefrontSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
+        <dontSeeElement selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="LookingForNameOfProductTwo"/>
     </test>
 </tests>
