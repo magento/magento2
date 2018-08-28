@@ -151,21 +151,17 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $address->setCustomerAddressId(null);
         }
 
-        $shippingStreet = $address->getStreet();
-        if (!$shippingStreet || (is_array($shippingStreet) && count(array_filter($shippingStreet)) == 0))
-        {
-            $invalidAddress = true;
-        }
+        $checkArray = [
+                        $address->getCountryId(),
+                        $address->getCountryId(),
+                        $address->getFirstname(),
+                        $address->getLastname(),
+                        $address->getPostcode(),
+                        $address->getTelephone()
+                      ];
 
-        if (
-            !$address->getCountryId() || 
-            !$address->getCity() || 
-            !$address->getFirstname() || 
-            !$address->getLastname() || 
-            !$address->getPostcode() || 
-            !$address->getTelephone() || 
-            $invalidAddress
-            ) {
+        $shippingStreet = $address->getStreet();
+        if ((!$shippingStreet || (is_array($shippingStreet) && count(array_filter($shippingStreet)) == 0)) || count(array_filter($checkArray)) < 6 ){
             throw new StateException(__('Shipping address is not set'));
         }
 
