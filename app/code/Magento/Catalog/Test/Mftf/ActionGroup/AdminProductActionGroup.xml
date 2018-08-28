@@ -121,6 +121,7 @@
             <argument name="simpleProduct"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
