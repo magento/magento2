@@ -117,7 +117,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
         $content->setId($this->getHtmlId() . '_content')->setElement($this);
         $content->setFormName($this->formName);
         $galleryJs = $content->getJsObjectName();
-        $content->getUploader()->getConfig()->setMegiaGallery($galleryJs);
+        $content->getUploader()->getConfig()->setMediaGallery($galleryJs);
         return $content->toHtml();
     }
 
