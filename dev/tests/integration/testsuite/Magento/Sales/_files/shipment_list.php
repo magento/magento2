@@ -57,5 +57,6 @@ foreach ($shipments as $shipmentData) {
     $shipment->setShippingAddressId($shipmentData['shipping_address_id']);
     $shipment->setShipmentStatus($shipmentData['shipment_status']);
     $shipment->setStoreId($shipmentData['store_id']);
+    $shipment->setShippingLabel($shipmentData['shipping_label']);
     $shipment->save();
 }
