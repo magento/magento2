@@ -23,25 +23,26 @@ if ($option) : ?>
 $option->getId() ?>-list">
     <?php if ($optionType === Option::OPTION_TYPE_RADIO) : ?>
     <div class="field choice admin__field admin__field-option">
-    <input type="radio"
-           id="options_<?php echo /* @noEscape */
-           $option->getId() ?>"
-           class="radio admin__control-radio product-custom-option"
-           name="options[<?php echo /* @noEscape */
-           $option->getId() ?>]"
-           data-selector="options[<?php echo /* @noEscape */
-           $option->getId() ?>]"
-           onclick="<?php echo $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
-           value=""
-           checked="checked"
-    />
-    <label class="label admin__field-label" for="options_<?php echo /* @noEscape */
-    $option->getId() ?>">
-                    <span>
-                        <?php echo /* @noEscape */
-                        __('None') ?>
-                    </span>
-    </label>
+        <input type="radio"
+               id="options_<?php echo /* @noEscape */
+               $option->getId() ?>"
+               class="radio admin__control-radio product-custom-option"
+               name="options[<?php echo /* @noEscape */
+               $option->getId() ?>]"
+               data-selector="options[<?php echo /* @noEscape */
+               $option->getId() ?>]"
+               onclick="<?php echo $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
+               value=""
+               checked="checked"
+        />
+        <label class="label admin__field-label" for="options_<?php echo /* @noEscape */
+        $option->getId() ?>">
+                        <span>
+                            <?php echo /* @noEscape */
+                            __('None') ?>
+                        </span>
+        </label>
+    </div>
 <?php endif; ?>
 
     <?php foreach ($option->getValues() as $value) : ?>
