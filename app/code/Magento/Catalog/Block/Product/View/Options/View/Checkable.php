@@ -13,8 +13,7 @@ use Magento\Framework\Pricing\Helper\Data;
 use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
- * Class Checkable
- * @package Magento\Catalog\Block\Product\View\Options\View
+ * Represent necessary logic for checkbox and radio button option type
  */
 class Checkable extends AbstractOptions
 {
