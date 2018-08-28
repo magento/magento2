@@ -69,6 +69,11 @@
             <!--Delete created Product-->
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Delete created customer-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="removeCreatedCustomer">
+                <argument name="customer" value="Simple_US_NY_Customer"/>
+            </actionGroup>
         </after>
     </test>
 </tests>
