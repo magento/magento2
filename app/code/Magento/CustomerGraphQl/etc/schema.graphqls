@@ -59,6 +59,5 @@ type customerItem {
     firstname: String
     lastname: String
     email: String
-    password: String
     is_subscribed: Boolean
 }

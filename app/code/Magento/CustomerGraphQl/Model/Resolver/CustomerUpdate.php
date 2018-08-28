@@ -20,7 +20,6 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Customer\Model\CustomerRegistry;
 
-
 /**
  * Customers field resolver, used for GraphQL request processing.
  */
@@ -45,11 +44,6 @@ class CustomerUpdate implements ResolverInterface
      * @var \Magento\Newsletter\Model\SubscriberFactory
      */
     protected $subscriberFactory;
-
-    /**
-     * @var AuthenticationInterface
-     */
-    private $authentication;
 
     /**
      * @var CustomerRegistry
@@ -118,7 +112,7 @@ class CustomerUpdate implements ResolverInterface
         if (isset($args['firstname'])) {
             $customer->setFirstname($args['firstname']);
         }
-        if (isset($args['lastname'])){
+        if (isset($args['lastname'])) {
             $customer->setLastname($args['lastname']);
         }
 
@@ -126,9 +120,7 @@ class CustomerUpdate implements ResolverInterface
         $this->customerRepository->save($customer);
 
         if (isset($args['is_subscribed'])) {
-
             $checkSubscriber = $this->subscriberFactory->create()->loadByCustomerId($context->getUserId());
-
             if ($args['is_subscribed'] === true && !$checkSubscriber->isSubscribed()) {
                 $this->subscriberFactory->create()->subscribeCustomerById($context->getUserId());
             } elseif ($args['is_subscribed'] === false && $checkSubscriber->isSubscribed()) {
@@ -136,15 +128,11 @@ class CustomerUpdate implements ResolverInterface
             }
         }
 
-
         $data = $args;
         $result = function () use ($data) {
             return !empty($data) ? $data : [];
         };
 
         return $this->valueFactory->create($result);
-
-
     }
-
 }
