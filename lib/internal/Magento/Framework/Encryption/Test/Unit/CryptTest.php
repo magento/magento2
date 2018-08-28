@@ -105,6 +105,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function getConstructorExceptionData()
     {
+        $key = substr(__CLASS__, -32, 32);
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
             /** @var array $modes */
@@ -114,8 +115,8 @@ class CryptTest extends \PHPUnit\Framework\TestCase
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
                 $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
                 $keyPrefix = 'key-' . $cipher . '-' . $mode;
-                $result[$keyPrefix . '-tooShortInitVector'] = [$this->_key, $cipher, $mode, $tooShortInitVector];
-                $result[$keyPrefix . '-tooLongInitVector'] = [$this->_key, $cipher, $mode, $tooLongInitVector];
+                $result[$keyPrefix . '-tooShortInitVector'] = [$key, $cipher, $mode, $tooShortInitVector];
+                $result[$keyPrefix . '-tooLongInitVector'] = [$key, $cipher, $mode, $tooLongInitVector];
             }
         }
         return $result;
