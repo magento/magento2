@@ -155,7 +155,11 @@ class System implements ConfigTypeInterface
         }
         $scopeId = array_shift($pathParts);
         if (!isset($this->data[$scopeType][$scopeId])) {
-            $this->data = array_replace_recursive($this->loadScopeData($scopeType, $scopeId), $this->data);
+            $scopeData = $this->loadScopeData($scopeType, $scopeId);
+            /* Starting from 2.2.0 $this->data can be already loaded with $this->loadScopeData  */
+            if (!isset($this->data[$scopeType][$scopeId])) {
+                $this->data = array_replace_recursive($scopeData, $this->data);
+            }
         }
         return isset($this->data[$scopeType][$scopeId])
             ? $this->getDataByPathParts($this->data[$scopeType][$scopeId], $pathParts)
