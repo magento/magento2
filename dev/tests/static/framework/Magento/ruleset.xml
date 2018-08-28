@@ -22,6 +22,10 @@
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
+    <rule ref="Magento.Annotation.MethodArguments">
+        <!--Disabled due to MAGETWO-94083-->
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
     <rule ref="Magento.Functions.OutputBuffering">
         <include-pattern>*/(app/code|vendor|setup/src|lib/internal/Magento)/*</include-pattern>
         <exclude-pattern>*/lib/internal/Magento/Framework/Image/Adapter/Gd2.php</exclude-pattern>

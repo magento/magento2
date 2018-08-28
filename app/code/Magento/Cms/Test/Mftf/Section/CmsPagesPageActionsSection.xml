@@ -25,5 +25,7 @@
         <element name="firstItemEditButton" type="button" selector=".data-grid .action-select-wrap .action-menu-item[data-action~='item-edit']"/>
         <element name="activeFilter" type="button" selector="(//div[contains(@class, 'admin__data-grid-filters-current') and contains(@class, '_show')])[1]"/>
         <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
+        <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
+        <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
     </section>
 </sections>

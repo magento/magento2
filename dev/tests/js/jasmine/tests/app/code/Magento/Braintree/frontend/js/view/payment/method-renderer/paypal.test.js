@@ -27,7 +27,24 @@ define([
                     })
                 },
                 'Magento_Braintree/js/view/payment/adapter': {
+                    config: {},
+
+                    /** Stub */
+                    onReady: function () {},
+
+                    /** Stub */
+                    setConfig: function (config) {
+                        this.config = config;
+                    },
+
+                    /** Stub */
+                    setup: function () {
+                        this.config.onReady(this.checkout);
+                    },
+
                     checkout: {
+                        /** Stub */
+                        teardown: function () {},
                         paypal: {
                             /** Stub */
                             initAuthFlow: function () {}

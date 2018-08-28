@@ -158,6 +158,8 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1587');
+
         $this->storeManager->setCurrentStore('store_for_eu_website');
         $sku = 'SKU-1';
         $quoteItemQty = 3.5;
