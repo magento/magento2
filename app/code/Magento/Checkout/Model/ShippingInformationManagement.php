@@ -145,7 +145,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $billingAddress = $addressInformation->getBillingAddress();
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
-        $invalidAddress = false;
 
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
