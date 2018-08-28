@@ -162,7 +162,10 @@ class Minification
     private function getMinificationExcludeValues($key)
     {
         $configValues = $this->scopeConfig->getValue($key, $this->scope) ?? [];
-
+        //compatibility fix for type change from string to array
+        if (!is_array($configValues)) {
+            $configValues = [$configValues => $configValues];
+        }
         return array_values($configValues);
     }
 }
