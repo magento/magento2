@@ -373,7 +373,7 @@ class Cart extends DataObject implements CartInterface
             try {
                 $this->_eventManager->dispatch(
                     'checkout_cart_product_add_before',
-                    ['quote_item' => $result, 'product' => $product]
+                    ['quote_item' => $this->getQuote()->getItems(), 'product' => $product]
                 );
 
                 $result = $this->getQuote()->addProduct($product, $request);
