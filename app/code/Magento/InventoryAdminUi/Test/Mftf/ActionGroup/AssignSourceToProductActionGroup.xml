@@ -20,7 +20,6 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
                           dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true"
                           stepKey="clickClearFilters"/>
-
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{sourceCode}}"
                    stepKey="fillKeywordSearchField"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
@@ -29,7 +28,6 @@
                stepKey="clickOnCheckbox"/>
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone"/>
         <waitForPageLoad time="5" stepKey="waitForSlideClosed"/>
-
     </actionGroup>
 </actionGroups>
 
