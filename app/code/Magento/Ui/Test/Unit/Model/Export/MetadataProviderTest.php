@@ -20,23 +20,26 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var MetadataProvider
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Filter | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filter;
+    private $filter;
 
     /**
      * @var TimezoneInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDate;
+    private $localeDate;
 
     /**
      * @var ResolverInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeResolver;
+    private $localeResolver;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->filter = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
