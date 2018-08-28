@@ -28,15 +28,15 @@
         <resizeWindow width="375" height="812" stepKey="resizeWindowToMobile"/>
         <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="waitForPageLoad6" />
-        <!-- Verifying that Footer is not in visible area by default as the CMS page has lots of content which will occupy entire visible area-->
-        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
+         <!--Verifying that Footer is not in visible area by default as the CMS page has lots of content which will occupy entire visible area-->
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.footerTop}}').getBoundingClientRect().top" stepKey="topOfFooter"/>
         <assertGreaterThan stepKey="assertDefaultLoad">
             <actualResult type="variable">topOfFooter</actualResult>
             <expectedResult type="string">812</expectedResult>
         </assertGreaterThan>
-        <!-- Verifying that even after scroll footer section is below the main content section -->
-        <scrollTo selector="{{StorefrontCMSPageFooterSection.footerSection}}" stepKey="scrollToFooterSection"/>
-        <executeJS function="return document.querySelector('{{StorefrontCMSPageFooterSection.footerSection}}').getBoundingClientRect().top" stepKey="topOfTheFooterAfterScroll"/>
+         <!--Verifying that even after scroll footer section is below the main content section-->
+        <scrollTo selector="{{StorefrontCMSPageSection.footerTop}}" stepKey="scrollToFooterSection"/>
+        <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.footerTop}}').getBoundingClientRect().top" stepKey="topOfTheFooterAfterScroll"/>
         <executeJS function="return document.querySelector('{{StorefrontCMSPageSection.mainContent}}').getBoundingClientRect().bottom" stepKey="bottomOfMainContent"/>
         <assertGreaterThan stepKey="assertAfterScroll">
             <actualResult type="variable">topOfTheFooterAfterScroll</actualResult>
