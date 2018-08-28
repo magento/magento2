@@ -70,7 +70,7 @@ class ReturnUrl extends Payflow implements CsrfAwareActionInterface
                     $redirectBlock->setData('goto_success_page', true);
                 } else {
                     if ($this->checkPaymentMethod($order)) {
-                        $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                        $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
                         $redirectBlock->setData('goto_section', $gotoSection);
                         $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
                     } else {

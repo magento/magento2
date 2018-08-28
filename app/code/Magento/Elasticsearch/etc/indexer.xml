@@ -9,6 +9,7 @@
     <indexer id="catalogsearch_fulltext">
         <dependencies>
             <indexer id="cataloginventory_stock" />
+            <indexer id="catalog_product_price" />
         </dependencies>
     </indexer>
 </config>
