@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
+use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcherConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\App\Config;
@@ -30,9 +31,6 @@ class IndexerDimensionMode
 
     /** @var ModeSwitcher */
     private $modeSwitcher;
-
-    /** @var ConfigInterface */
-    private $configWriter;
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -55,31 +53,24 @@ class IndexerDimensionMode
 
     /**
      * @param string $mode
+     * @param TestCase $test
+     * @throws \Exception
      */
-    private function setDimensionMode($mode, $test)
+    private function setDimensionMode(string $mode, TestCase $test)
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->modeSwitcher = $this->objectManager->get(ModeSwitcher::class);
-        $this->configWriter = $this->objectManager->get(ConfigInterface::class);
         $this->configReader = $this->objectManager->get(ScopeConfigInterface::class);
         $this->cacheTypeList = $this->objectManager->get(TypeListInterface::class);
 
         $this->configReader->clean();
-        $previousMode = $this->configReader->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE) ?:
+        $previousMode = $this->configReader->getValue(ModeSwitcherConfiguration::XML_PATH_PRICE_DIMENSIONS_MODE) ?:
             DimensionModeConfiguration::DIMENSION_NONE;
 
         if ($previousMode !== $mode) {
             //Create new tables and move data
-            $this->modeSwitcher->createTables($mode);
-            $this->modeSwitcher->moveData($mode, $previousMode);
-
-            //Change config options
-            $this->configWriter->saveConfig(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE, $mode);
-            $this->cacheTypeList->cleanType('config');
+            $this->modeSwitcher->switchMode($mode, $previousMode);
             $this->objectManager->get(Config::class)->clean();
-
-            //Delete old tables
-            $this->modeSwitcher->dropTables($previousMode);
         } else {
             $this->fail('Dimensions mode for indexer has not been changed', $test);
         }
@@ -90,6 +81,7 @@ class IndexerDimensionMode
      *
      * @param TestCase $test
      * @return void
+     * @throws \Exception
      */
     public function startTest(TestCase $test)
     {
