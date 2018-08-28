@@ -118,7 +118,7 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $path = 'sales_email/general/async_sending';
 
         $this->globalConfig
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('getValue')
             ->with($path)
             ->willReturn($configValue);
