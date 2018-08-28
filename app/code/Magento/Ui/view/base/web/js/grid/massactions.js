@@ -175,11 +175,14 @@ define([
          *      invoked if action is confirmed.
          */
         _confirm: function (action, callback) {
-            var confirmData = action.confirm;
+            var confirmData = action.confirm,
+                data = this.getSelections(),
+                total = data.total ? data.total : 0,
+                confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
 
             confirm({
                 title: confirmData.title,
-                content: confirmData.message,
+                content: confirmMessage,
                 actions: {
                     confirm: callback
                 }
