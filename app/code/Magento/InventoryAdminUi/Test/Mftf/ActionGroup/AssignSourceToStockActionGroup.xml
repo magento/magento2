@@ -35,6 +35,5 @@
         <click selector="{{AdminManageSourcesGridControls.done}}" stepKey="clickOnDone"/>
         <waitForPageLoad time="30" stepKey="waitSourceAssigned"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveAndContinue"/>
-
     </actionGroup>
 </actionGroups>
