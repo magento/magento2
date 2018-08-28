@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 /**
@@ -13,10 +15,10 @@ interface UploadConfigInterface
     /**
      * @return int
      */
-    public function getMaxWidth();
+    public function getMaxWidth(): int;
 
     /**
      * @return int
      */
-    public function getMaxHeight();
+    public function getMaxHeight(): int;
 }

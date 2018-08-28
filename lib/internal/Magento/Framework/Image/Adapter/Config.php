@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 class Config implements ConfigInterface, UploadConfigInterface
@@ -53,7 +55,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      *
      * @return int
      */
-    public function getMaxWidth()
+    public function getMaxWidth(): int
     {
         return (int)$this->config->getValue(self::XML_PATH_MAX_WIDTH_IMAGE);
     }
@@ -63,7 +65,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      *
      * @return int
      */
-    public function getMaxHeight()
+    public function getMaxHeight(): int
     {
         return (int)$this->config->getValue(self::XML_PATH_MAX_HEIGHT_IMAGE);
     }
