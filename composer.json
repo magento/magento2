@@ -41,6 +41,7 @@
         "magento/zendframework1": "~1.14.1",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
+        "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^2.0.0",
         "php-amqplib/php-amqplib": "~2.7.0",
         "phpseclib/mcrypt_compat": "1.0.5",
@@ -89,6 +90,9 @@
         "phpunit/phpunit": "~6.5.0",
         "sebastian/phpcpd": "~3.0.0",
         "squizlabs/php_codesniffer": "3.3.0"
+    },
+    "suggest": {
+        "ext-pcntl": "Need for run processes in parallel mode"
     },
     "replace": {
         "magento/module-marketplace": "*",
