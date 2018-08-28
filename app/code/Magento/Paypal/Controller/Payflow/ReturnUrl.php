@@ -6,11 +6,14 @@
  */
 namespace Magento\Paypal\Controller\Payflow;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
-class ReturnUrl extends Payflow
+class ReturnUrl extends Payflow implements CsrfAwareActionInterface
 {
     /**
      * @var array of allowed order states on frontend
@@ -29,6 +32,23 @@ class ReturnUrl extends Payflow
         Config::METHOD_PAYFLOWPRO,
         Config::METHOD_PAYFLOWLINK
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
 
     /**
      * When a customer return to website from payflow gateway.
@@ -50,7 +70,7 @@ class ReturnUrl extends Payflow
                     $redirectBlock->setData('goto_success_page', true);
                 } else {
                     if ($this->checkPaymentMethod($order)) {
-                        $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                        $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
                         $redirectBlock->setData('goto_section', $gotoSection);
                         $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
                     } else {
