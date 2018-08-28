@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Lock\Test\Unit\Backend;
 
 use Magento\Framework\Lock\Backend\Database;
@@ -34,6 +36,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     private $database;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -63,7 +68,10 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testLock()
+    /**
+     * @return void
+     */
+    public function testLock(): void
     {
         $this->statement->expects($this->once())
             ->method('fetchColumn')
@@ -74,6 +82,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
+     * @return void
      */
     public function testlockWithTooLongName()
     {
@@ -82,6 +91,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     * @return void
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {

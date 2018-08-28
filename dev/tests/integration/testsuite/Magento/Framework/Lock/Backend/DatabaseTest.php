@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * \Magento\Framework\Lock\Backend\Database test case
@@ -21,13 +22,19 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\Framework\Lock\Backend\Database::class);
     }
 
-    public function testLockAndUnlock()
+    /**
+     * @return void
+     */
+    public function testLockAndUnlock(): void
     {
         $name = 'test_lock';
 
@@ -40,7 +47,10 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->isLocked($name));
     }
 
-    public function testUnlockWithoutExistingLock()
+    /**
+     * @return void
+     */
+    public function testUnlockWithoutExistingLock(): void
     {
         $name = 'test_lock';
 
