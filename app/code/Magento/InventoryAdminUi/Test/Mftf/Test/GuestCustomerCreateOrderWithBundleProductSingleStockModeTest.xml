@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="GuestCustomerCreateOrderWithBundleProductSingleStockMode">
+    <test name="GuestCustomerCreateOrderWithBundleProductSingleStockModeTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Create order with bundle product in single stock mode from storefront as guest customer."/>
@@ -22,12 +22,12 @@
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
-
-            <comment userInput="Make sure system is in single stock mode." stepKey="setSystemToSingleStockModeComment"/>
-            <actionGroup ref="ChangeAllSourcesStatusActionGroup" stepKey="disableAllSources"/>
 
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
@@ -43,10 +43,6 @@
             <comment userInput="Perform reindex and cache flush after set system to single stock mode." stepKey="reindexCacheFlushAfterSetSystemToSingleStockMode"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
-
-            <createData entity="SimpleProduct" stepKey="simpleProduct">
-                <requiredEntity createDataKey="category"/>
-            </createData>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
