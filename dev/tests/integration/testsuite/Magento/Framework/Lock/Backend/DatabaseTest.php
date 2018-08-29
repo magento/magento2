@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
+namespace Magento\Framework\Lock\Backend;
+
 /**
  * \Magento\Framework\Lock\Backend\Database test case
  */
-namespace Magento\Framework\Lock\Backend;
-
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
