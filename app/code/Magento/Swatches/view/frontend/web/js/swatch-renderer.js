@@ -390,7 +390,6 @@ define([
                     select = $widget._RenderSwatchSelect(item, chooseText),
                     input = $widget._RenderFormInput(item),
                     listLabel = '',
-                    label = '',
                     firstSpan = '',
                     div = '',
                     subDiv = '',
@@ -408,8 +407,6 @@ define([
                     firstSpan.setAttribute('class', classes.attributeLabelClass);
                     firstSpan.textContent = item.label;
                     secondSpan.setAttribute('class', classes.attributeSelectedOptionLabelClass);
-
-                    label += firstSpan.outerHTML + secondSpan.outerHTML;
                 }
 
                 if ($widget.inProductList) {
@@ -436,6 +433,12 @@ define([
                 subDiv.setAttributeNode(listLabel);
                 subDiv.setAttribute('class', classes.attributeOptionsWrapper + ' clearfix');
                 subDiv.innerHTML = options + select;
+
+                if ($widget.options.enableControlLabel) {
+                    div.appendChild(firstSpan);
+                    div.appendChild(secondSpan);
+                }
+
                 div.appendChild(subDiv);
 
                 // Create new control
