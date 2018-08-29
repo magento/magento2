@@ -6,6 +6,7 @@
 
 namespace Magento\Backend\Test\Handler\Ui;
 
+use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Ui;
@@ -29,10 +30,15 @@ class LoginUser extends Ui
             $fixture = Factory::getFixtureFactory()->getMagentoBackendAdminSuperAdmin();
         }
 
+        /** @var AdminAuthLogin $loginPage */
         $loginPage = Factory::getPageFactory()->getAdminAuthLogin();
         $loginForm = $loginPage->getLoginBlock();
-
         $adminHeaderPanel = $loginPage->getHeaderBlock();
+        if (!$loginForm->isVisible() && !$adminHeaderPanel->isVisible()) {
+            //We are currently not in the admin area.
+            $loginPage->open();
+        }
+
         if (!$adminHeaderPanel || !$adminHeaderPanel->isVisible()) {
             $loginPage->open();
             if ($adminHeaderPanel->isVisible()) {
