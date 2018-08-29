@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\View\Element\Html\Select;
 
 /**
- * CLass represents necessary logic for dropdown and multiselect option types
+ * Class represents necessary logic for dropdown and multiselect option types
  */
 class Multiple extends AbstractOptions
 {
