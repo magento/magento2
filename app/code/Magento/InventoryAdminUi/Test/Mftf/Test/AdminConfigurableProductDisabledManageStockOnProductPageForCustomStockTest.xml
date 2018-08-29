@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductDisabledManageStockOnProductPageForCustomStock">
+    <test name="AdminConfigurableProductDisabledManageStockOnProductPageForCustomStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Manage Stock on Product page turned off for Configurable Product on Default stock in admin"/>

@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="BackordersEnabledOnConfigurationPageAndAppliedToSimpleProductOnTestSourceTest">
+    <test name="AdminBackordersEnabledOnConfigurationPageAndAppliedToSimpleProductOnTestSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="CatalogInventory stock option"/>
