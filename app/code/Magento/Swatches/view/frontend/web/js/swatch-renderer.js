@@ -507,7 +507,6 @@ define([
                     value,
                     thumb,
                     label,
-                    attr,
                     link;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
