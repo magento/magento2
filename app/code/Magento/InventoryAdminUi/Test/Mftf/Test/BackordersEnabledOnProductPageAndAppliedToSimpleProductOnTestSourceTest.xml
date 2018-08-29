@@ -10,13 +10,14 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="BackordersEnabledOnProductPageAndAppliedToSimpleProductOnTestSourceTest">
         <annotations>
-            <features value="Catalog"/>
+            <features value="Multi-Source Inventory"/>
             <stories value="CatalogInventory stock option"/>
             <title value="Backorders enabled on Product page and applied from Homepage to Simple product on Test source"/>
             <description value="On test source you should be able to create order with simple product and enabled backorders on product page"/>
             <testCaseId value="1565"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
         </annotations>
         <before>
             <createData entity="_minimalSource" stepKey="createSource"/>
