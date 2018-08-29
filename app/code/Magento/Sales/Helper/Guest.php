@@ -83,7 +83,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $_storeManager;
+    private $storeManager;
 
     /**
      * @var string
@@ -119,7 +119,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria = null
     ) {
         $this->coreRegistry = $coreRegistry;
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
@@ -158,13 +158,14 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         // It is unique place in the class that process exception and only InputException. It is need because by
         // input data we found order and one more InputException could be throws deeper in stack trace
         try {
-            $order = (!empty($post) && isset($post['oar_order_id'], $post['oar_type']))
+            $order = (!empty($post)
+                && isset($post['oar_order_id'], $post['oar_type'])
+                && !$this->hasPostDataEmptyFields($post))
                 ? $this->loadFromPost($post) : $this->loadFromCookie($fromCookie);
-            $this->validateOrderStoreId($order->getStoreId());
             $this->coreRegistry->register('current_order', $order);
             return true;
         } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         }
     }
@@ -178,12 +179,15 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
     {
         $breadcrumbs = $resultPage->getLayout()->getBlock('breadcrumbs');
+        if (!$breadcrumbs) {
+            return;
+        }
         $breadcrumbs->addCrumb(
             'home',
             [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl()
+                'link' => $this->storeManager->getStore()->getBaseUrl()
             ]
         );
         $breadcrumbs->addCrumb(
@@ -244,12 +248,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function loadFromPost(array $postData)
     {
-        if ($this->hasPostDataEmptyFields($postData)) {
-            throw new InputException();
-        }
         /** @var $order \Magento\Sales\Model\Order */
         $order = $this->getOrderRecord($postData['oar_order_id']);
-        if (!$this->compareSoredBillingDataWithInput($order, $postData)) {
+        if (!$this->compareStoredBillingDataWithInput($order, $postData)) {
             throw new InputException(__('You entered incorrect data. Please try again.'));
         }
         $toCookie = base64_encode($order->getProtectCode() . ':' . $postData['oar_order_id']);
@@ -264,7 +265,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $postData
      * @return bool
      */
-    private function compareSoredBillingDataWithInput(Order $order, array $postData)
+    private function compareStoredBillingDataWithInput(Order $order, array $postData)
     {
         $type = $postData['oar_type'];
         $email = $postData['oar_email'];
@@ -285,7 +286,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     private function hasPostDataEmptyFields(array $postData)
     {
         return empty($postData['oar_order_id']) || empty($postData['oar_billing_lastname']) ||
-            empty($postData['oar_type']) || empty($this->_storeManager->getStore()->getId()) ||
+            empty($postData['oar_type']) || empty($this->storeManager->getStore()->getId()) ||
             !in_array($postData['oar_type'], ['email', 'zip'], true) ||
             ('email' === $postData['oar_type'] && empty($postData['oar_email'])) ||
             ('zip' === $postData['oar_type'] && empty($postData['oar_zip']));
@@ -303,26 +304,15 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         $records = $this->orderRepository->getList(
             $this->searchCriteriaBuilder
                 ->addFilter('increment_id', $incrementId)
+                ->addFilter('store_id', $this->storeManager->getStore()->getId())
                 ->create()
         );
-        if ($records->getTotalCount() < 1) {
-            throw new InputException(__($this->inputExceptionMessage));
-        }
-        $items = $records->getItems();
-        return array_shift($items);
-    }
 
-    /**
-     * Check that store_id from order are equals with system
-     *
-     * @param int $orderStoreId
-     * @return void
-     * @throws InputException
-     */
-    private function validateOrderStoreId($orderStoreId)
-    {
-        if ($orderStoreId != $this->_storeManager->getStore()->getId()) {
+        $items = $records->getItems();
+        if (empty($items)) {
             throw new InputException(__($this->inputExceptionMessage));
         }
+
+        return array_shift($items);
     }
 }

@@ -31,7 +31,7 @@ class AssertCustomVariableNotInCmsPageForm extends AbstractConstraint
         $cmsPageForm = $cmsPageNew->getPageForm();
         $variables = $cmsPageForm->getSystemVariables();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             in_array($customVariableName, $variables),
             'Custom System Variable "' . $customVariableName . '" is present in Cms Page Form.'
         );

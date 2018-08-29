@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
 
+use Magento\Framework\App\State;
 use Pelago\Emogrifier;
 
 /**
@@ -17,9 +18,13 @@ class CssInliner
      */
     private $emogrifier;
 
-    public function __construct()
+    /**
+     * @param State $appState
+     */
+    public function __construct(State $appState)
     {
         $this->emogrifier = new Emogrifier();
+        $this->emogrifier->setDebug($appState->getMode() === State::MODE_DEVELOPER);
     }
 
     /**

@@ -1,0 +1,170 @@
+{
+    "downloadable_link": {
+        "column": {
+            "link_id": true,
+            "product_id": true,
+            "sort_order": true,
+            "number_of_downloads": true,
+            "is_shareable": true,
+            "link_url": true,
+            "link_file": true,
+            "link_type": true,
+            "sample_url": true,
+            "sample_file": true,
+            "sample_type": true
+        },
+        "index": {
+            "DOWNLOADABLE_LINK_PRODUCT_ID_SORT_ORDER": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOWNLOADABLE_LINK_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
+        }
+    },
+    "downloadable_link_price": {
+        "column": {
+            "price_id": true,
+            "link_id": true,
+            "website_id": true,
+            "price": true
+        },
+        "index": {
+            "DOWNLOADABLE_LINK_PRICE_LINK_ID": true,
+            "DOWNLOADABLE_LINK_PRICE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOWNLOADABLE_LINK_PRICE_LINK_ID_DOWNLOADABLE_LINK_LINK_ID": true,
+            "DOWNLOADABLE_LINK_PRICE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "downloadable_link_purchased": {
+        "column": {
+            "purchased_id": true,
+            "order_id": true,
+            "order_increment_id": true,
+            "order_item_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "customer_id": true,
+            "product_name": true,
+            "product_sku": true,
+            "link_section_title": true
+        },
+        "index": {
+            "DOWNLOADABLE_LINK_PURCHASED_ORDER_ID": true,
+            "DOWNLOADABLE_LINK_PURCHASED_ORDER_ITEM_ID": true,
+            "DOWNLOADABLE_LINK_PURCHASED_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DL_LNK_PURCHASED_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "DOWNLOADABLE_LINK_PURCHASED_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "downloadable_link_purchased_item": {
+        "column": {
+            "item_id": true,
+            "purchased_id": true,
+            "order_item_id": true,
+            "product_id": true,
+            "link_hash": true,
+            "number_of_downloads_bought": true,
+            "number_of_downloads_used": true,
+            "link_id": true,
+            "link_title": true,
+            "is_shareable": true,
+            "link_url": true,
+            "link_file": true,
+            "link_type": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "DOWNLOADABLE_LINK_PURCHASED_ITEM_LINK_HASH": true,
+            "DOWNLOADABLE_LINK_PURCHASED_ITEM_ORDER_ITEM_ID": true,
+            "DOWNLOADABLE_LINK_PURCHASED_ITEM_PURCHASED_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DL_LNK_PURCHASED_ITEM_PURCHASED_ID_DL_LNK_PURCHASED_PURCHASED_ID": true,
+            "DL_LNK_PURCHASED_ITEM_ORDER_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID": true
+        }
+    },
+    "downloadable_link_title": {
+        "column": {
+            "title_id": true,
+            "link_id": true,
+            "store_id": true,
+            "title": true
+        },
+        "index": {
+            "DOWNLOADABLE_LINK_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOWNLOADABLE_LINK_TITLE_LINK_ID_DOWNLOADABLE_LINK_LINK_ID": true,
+            "DOWNLOADABLE_LINK_TITLE_STORE_ID_STORE_STORE_ID": true,
+            "DOWNLOADABLE_LINK_TITLE_LINK_ID_STORE_ID": true
+        }
+    },
+    "downloadable_sample": {
+        "column": {
+            "sample_id": true,
+            "product_id": true,
+            "sample_url": true,
+            "sample_file": true,
+            "sample_type": true,
+            "sort_order": true
+        },
+        "index": {
+            "DOWNLOADABLE_SAMPLE_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DOWNLOADABLE_SAMPLE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
+        }
+    },
+    "downloadable_sample_title": {
+        "column": {
+            "title_id": true,
+            "sample_id": true,
+            "store_id": true,
+            "title": true
+        },
+        "index": {
+            "DOWNLOADABLE_SAMPLE_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DL_SAMPLE_TTL_SAMPLE_ID_DL_SAMPLE_SAMPLE_ID": true,
+            "DOWNLOADABLE_SAMPLE_TITLE_STORE_ID_STORE_STORE_ID": true,
+            "DOWNLOADABLE_SAMPLE_TITLE_SAMPLE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_index_price_downlod_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_downlod_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

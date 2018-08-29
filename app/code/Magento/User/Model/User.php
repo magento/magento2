@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Model;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -46,6 +47,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /** @deprecated */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+
+    const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
 
     /**
      * Model event prefix
@@ -467,7 +470,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             $changes[] = __('password');
         }
 
-        if ($this->getUsername() != $this->getOrigData('username') && $this->getOrigData('username')) {
+        if ($this->getUserName() != $this->getOrigData('username') && $this->getOrigData('username')) {
             $changes[] = __('username');
         }
 
@@ -515,7 +518,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getName($separator = ' ')
     {
-        return $this->getFirstname() . $separator . $this->getLastname();
+        return $this->getFirstName() . $separator . $this->getLastName();
     }
 
     /**
@@ -547,7 +550,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 ['username' => $username, 'user' => $this]
             );
             $this->loadByUsername($username);
-            $sensitive = $config ? $username == $this->getUsername() : true;
+            $sensitive = $config ? $username == $this->getUserName() : true;
             if ($sensitive && $this->getId()) {
                 $result = $this->verifyIdentity($password);
             }
@@ -580,11 +583,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
                 throw new AuthenticationException(
-                    __('You did not sign in correctly or your account is temporarily disabled.')
+                    __(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    )
                 );
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('You need more permissions to access this.'));
+                throw new AuthenticationException(__('More permissions are needed to access this.'));
             }
             $result = true;
         }
@@ -669,7 +675,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The password reset token is incorrect. Verify the token and try again.')
+            );
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
@@ -903,13 +911,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $clonedUser->reload();
         if ($clonedUser->getLockExpires()) {
             throw new \Magento\Framework\Exception\State\UserLockedException(
-                __('Your account is temporarily disabled.')
+                __('Your account is temporarily disabled. Please try again later.')
             );
         }
 
         if (!$isCheckSuccessful) {
             throw new \Magento\Framework\Exception\AuthenticationException(
-                __('You have entered an invalid password for current user.')
+                __('The password entered for the current user is invalid. Verify the password and try again.')
             );
         }
 

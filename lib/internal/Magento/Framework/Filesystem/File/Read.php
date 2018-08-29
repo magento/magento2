@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
@@ -72,7 +73,9 @@ class Read implements ReadInterface
     protected function assertValid()
     {
         if (!$this->driver->isExists($this->path)) {
-            throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" doesn\'t exist', [$this->path]));
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$this->path])
+            );
         }
         return true;
     }

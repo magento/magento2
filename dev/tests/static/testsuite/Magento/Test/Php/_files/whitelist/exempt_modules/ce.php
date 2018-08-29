@@ -6,6 +6,7 @@
 /* These are the modules that have not been refactored from @escapeNotVerified yet. */
 return [
     'Magento_AdminNotification',
+    'Magento_AdvancedSearch',
     'Magento_Backend',
     'Magento_Backup',
     'Magento_Bundle',

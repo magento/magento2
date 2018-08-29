@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype">
+        <arguments>
+            <argument name="optionsArray" xsi:type="array">
+                <item name="100" xsi:type="array">
+                    <item name="value" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Text Field</item>
+                </item>
+                <item name="200" xsi:type="array">
+                    <item name="value" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Text Area</item>
+                </item>
+                <item name="300" xsi:type="array">
+                    <item name="value" xsi:type="string">texteditor</item>
+                    <item name="label" xsi:type="string" translate="true">Text Editor</item>
+                </item>
+                <item name="400" xsi:type="array">
+                    <item name="value" xsi:type="string">date</item>
+                    <item name="label" xsi:type="string" translate="true">Date</item>
+                </item>
+                <item name="500" xsi:type="array">
+                    <item name="value" xsi:type="string">boolean</item>
+                    <item name="label" xsi:type="string" translate="true">Yes/No</item>
+                </item>
+                <item name="600" xsi:type="array">
+                    <item name="value" xsi:type="string">multiselect</item>
+                    <item name="label" xsi:type="string" translate="true">Multiple Select</item>
+                </item>
+                <item name="700" xsi:type="array">
+                    <item name="value" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Dropdown</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

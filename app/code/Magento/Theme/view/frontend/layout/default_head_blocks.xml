@@ -10,10 +10,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <css src="mage/calendar.css"/>
         <script src="requirejs/require.js"/>
+        <script src="mage/polyfill.js"/>
     </head>
     <body>
         <referenceContainer name="after.body.start">
-            <block class="Magento\Framework\View\Element\Template" name="head.polyfill" as="polyfill" template="Magento_Theme::js/polyfill.phtml" before="-"/>
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
         </referenceContainer>
     </body>

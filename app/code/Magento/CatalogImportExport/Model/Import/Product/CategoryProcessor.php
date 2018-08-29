@@ -75,6 +75,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
+            $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
@@ -119,8 +120,12 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
-        $category->save();
-        $this->categoriesCache[$category->getId()] = $category;
+        try {
+            $category->save();
+            $this->categoriesCache[$category->getId()] = $category;
+        } catch (\Exception $e) {
+            $this->addFailedCategory($category, $e);
+        }
 
         return $category->getId();
     }

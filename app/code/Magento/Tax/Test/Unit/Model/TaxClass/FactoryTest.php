@@ -39,6 +39,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($classTypeMock, $taxClassFactory->create($classMock));
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         $customerClassMock = $this->createMock(\Magento\Tax\Model\TaxClass\Type\Customer::class);
@@ -70,10 +73,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $taxClassFactory = new \Magento\Tax\Model\TaxClass\Factory($objectManager);
 
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            sprintf('Invalid type of tax class "%s"', $wrongClassType)
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(sprintf('Invalid type of tax class "%s"', $wrongClassType));
         $taxClassFactory->create($classMock);
     }
 }

@@ -5,11 +5,12 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test case for Web API functional tests for Graphql.
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
@@ -33,6 +34,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param array $variables
      * @param string $operationName
      * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
      */
     public function graphQlQuery(
         string $query,
@@ -91,9 +93,37 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private function getGraphQlClient()
     {
         if ($this->graphQlClient === null) {
-            return Bootstrap::getObjectManager()->get(\Magento\TestFramework\TestCase\GraphQl\Client::class);
-        } else {
-            $this->graphQlClient;
+            $this->graphQlClient = Bootstrap::getObjectManager()->get(
+                \Magento\TestFramework\TestCase\GraphQl\Client::class
+            );
+        }
+        return $this->graphQlClient;
+    }
+
+    /**
+     * Compare actual response fields with expected
+     *
+     * @param array $actualResponse
+     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
+     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
+     */
+    protected function assertResponseFields($actualResponse, $assertionMap)
+    {
+        foreach ($assertionMap as $key => $assertionData) {
+            $expectedValue = isset($assertionData['expected_value'])
+                ? $assertionData['expected_value']
+                : $assertionData;
+            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            self::assertNotNull(
+                $expectedValue,
+                "Value of '{$responseField}' field must not be NULL"
+            );
+            self::assertEquals(
+                $expectedValue,
+                $actualResponse[$responseField],
+                "Value of '{$responseField}' field in response does not match expected value: "
+                . var_export($expectedValue, true)
+            );
         }
     }
 }

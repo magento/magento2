@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver\Query;
 
@@ -56,13 +57,9 @@ class Type
      * @return string
      * @throws GraphQlInputException
      */
-    public function getType(string $attributeCode, string $entityType)
+    public function getType(string $attributeCode, string $entityType) : string
     {
-        try {
-            $type = $this->typeLocator->getType($attributeCode, $entityType);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-        }
+        $type = $this->typeLocator->getType($attributeCode, $entityType);
 
         $isComplexType = strpos($type, '\\') !== false;
         if ($type === TypeProcessor::NORMALIZED_ANY_TYPE) {

@@ -141,6 +141,10 @@ sub vcl_backend_response {
         set beresp.do_gzip = true;
     }
 
+    if (beresp.http.X-Magento-Debug) {
+        set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
+    }
+
     # cache only successfully responses and 404s
     if (beresp.status != 200 && beresp.status != 404) {
         set beresp.ttl = 0s;
@@ -152,10 +156,6 @@ sub vcl_backend_response {
         return (deliver);
     }
 
-    if (beresp.http.X-Magento-Debug) {
-        set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
-    }
-
     # validate if we need to cache it and prevent from setting cookie
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
@@ -163,12 +163,15 @@ sub vcl_backend_response {
 
    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
    if (beresp.ttl <= 0s ||
-        beresp.http.Surrogate-control ~ "no-store" ||
-        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
-        # Mark as Hit-For-Pass for the next 2 minutes
+       beresp.http.Surrogate-control ~ "no-store" ||
+       (!beresp.http.Surrogate-Control &&
+       beresp.http.Cache-Control ~ "no-cache|no-store") ||
+       beresp.http.Vary == "*") {
+       # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
     }
+
     return (deliver);
 }
 
@@ -182,6 +185,13 @@ sub vcl_deliver {
         }
     } else {
         unset resp.http.Age;
+    }
+
+    # Not letting browser to cache non-static files.
+    if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
+        set resp.http.Pragma = "no-cache";
+        set resp.http.Expires = "-1";
+        set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
     }
 
     unset resp.http.X-Magento-Debug;

@@ -6,8 +6,6 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Indexer\StateInterface;
-
 /**
  * Class Visitor
  * @package Magento\Customer\Model
@@ -151,6 +149,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         if ($this->session->getVisitorData()) {
             $this->setData($this->session->getVisitorData());
+            if ($this->getSessionId() != $this->session->getSessionId()) {
+                $this->setSessionId($this->session->getSessionId());
+            }
         }
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));

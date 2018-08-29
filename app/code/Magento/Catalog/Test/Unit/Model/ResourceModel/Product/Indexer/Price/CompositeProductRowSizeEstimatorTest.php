@@ -49,6 +49,7 @@ class CompositeProductRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 
     public function testEstimateRowSize()
     {
+        $this->markTestSkipped('Unskip after MAGETWO-89738');
         $expectedResult = 40000000;
         $maxRelatedProductCount = 10;
 

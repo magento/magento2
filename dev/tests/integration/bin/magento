@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+if (PHP_SAPI !== 'cli') {
+    echo 'bin/magento must be run as a CLI application';
+    exit(1);
+}
+
+if (isset($_SERVER['INTEGRATION_TEST_PARAMS'])) {
+    parse_str($_SERVER['INTEGRATION_TEST_PARAMS'], $params);
+    foreach ($params as $paramName => $paramValue) {
+        $_SERVER[$paramName] = $paramValue;
+    }
+} else {
+    echo 'Test parameters are required';
+    exit(1);
+}
+
+try {
+    require $_SERVER['MAGE_DIRS']['base']['path'] . '/app/bootstrap.php';
+} catch (\Exception $e) {
+    echo 'Autoload error: ' . $e->getMessage();
+    exit(1);
+}
+try {
+    $handler = new \Magento\Framework\App\ErrorHandler();
+    set_error_handler([$handler, 'handler']);
+    $application = new Magento\Framework\Console\Cli('Magento CLI');
+    $application->run();
+} catch (\Exception $e) {
+    while ($e) {
+        echo $e->getMessage();
+        echo $e->getTraceAsString();
+        echo "\n\n";
+        $e = $e->getPrevious();
+    }
+    exit(Cli::RETURN_FAILURE);
+}

@@ -28,7 +28,7 @@ class AssertProductAttributeIsGlobal extends AbstractConstraint
     ) {
         $filter = ['frontend_label' => $attribute->getFrontendLabel(), 'is_global' => $attribute->getIsGlobal()];
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductAttributeIndex->open()->getGrid()->isRowVisible($filter),
             'Attribute is not global.'
         );

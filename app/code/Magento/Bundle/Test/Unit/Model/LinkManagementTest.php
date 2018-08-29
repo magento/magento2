@@ -339,7 +339,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Bundle product could not contain another composite product
+     * @expectedExceptionMessage The bundle product can't contain another composite product.
      */
     public function testAddChildLinkedProductIsComposite()
     {
@@ -797,7 +797,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Can not find product link with id "12345"
+     * @expectedExceptionMessage The product link with the "12345" ID field wasn't found. Verify the ID and try again.
      */
     public function testSaveChildWithInvalidId()
     {

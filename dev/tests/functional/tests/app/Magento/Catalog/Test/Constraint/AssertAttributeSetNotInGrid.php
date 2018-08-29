@@ -34,9 +34,10 @@ class AssertAttributeSetNotInGrid extends AbstractConstraint
         ];
 
         $productSetPage->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $productSetPage->getGrid()->isRowVisible($filterAttributeSet),
-            'An attribute set named "' . $filterAttributeSet['set_name'] . '" is present in Attribute Set grid.'
+            'A "' . $filterAttributeSet['set_name'] .
+            '" attribute set name already exists. Create a new name and try again.'
         );
     }
 

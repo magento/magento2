@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Test\Unit\Config\Initial;
 
 use Magento\Framework\Filesystem;
@@ -132,7 +133,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessageRegExp /Invalid XML in file (.*?)/
+     * @expectedExceptionMessage Verify the XML and try again.
      */
     public function testReadInvalidConfig()
     {

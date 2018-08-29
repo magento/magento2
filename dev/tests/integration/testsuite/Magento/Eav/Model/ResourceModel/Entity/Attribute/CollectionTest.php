@@ -53,6 +53,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test if getAllIds method return results after using setInAllAttributeSetsFilter method
+     *
+     * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::setInAllAttributeSetsFilter()
+     * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::getAllIds()
+     */
+    public function testSetInAllAttributeSetsFilterWithGetAllIds()
+    {
+        $sets = [1];
+        $this->_model->setInAllAttributeSetsFilter($sets);
+        $attributeIds = $this->_model->getAllIds();
+        $this->assertGreaterThan(0, count($attributeIds));
+    }
+
+    /**
      * Returns array of group ids, present in collection attributes
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection

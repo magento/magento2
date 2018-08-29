@@ -35,7 +35,13 @@
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <exportButton name="export_button"/>
+        <exportButton name="export_button">
+            <settings>
+                <additionalParams>
+                    <param xsi:type="string" active="true" name="order_id">*</param>
+                </additionalParams>
+            </settings>
+        </exportButton>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <filterSelect name="store_id" provider="${ $.parentName }">

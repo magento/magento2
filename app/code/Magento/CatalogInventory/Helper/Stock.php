@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Stock
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Stock
 {
@@ -156,7 +157,7 @@ class Stock
             $resource = $this->getStockStatusResource();
             $resource->addStockDataToCollection(
                 $collection,
-                !$isShowOutOfStock || $collection->getFlag('require_stock_items')
+                !$isShowOutOfStock
             );
             $collection->setFlag($stockFlag, true);
         }

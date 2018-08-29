@@ -5,13 +5,16 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice;
+use Magento\Sales\Api\Data\OrderItemInterface;
+
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
  */
 class CreditmemoFactory
 {
     /**
-     * Quote convert object
+     * Order convert object.
      *
      * @var \Magento\Sales\Model\Convert\Order
      */
@@ -63,31 +66,15 @@ class CreditmemoFactory
     {
         $totalQty = 0;
         $creditmemo = $this->convertor->toCreditmemo($order);
-        $qtys = isset($data['qtys']) ? $data['qtys'] : [];
+        $qtyList = isset($data['qtys']) ? $data['qtys'] : [];
 
         foreach ($order->getAllItems() as $orderItem) {
-            if (!$this->canRefundItem($orderItem, $qtys)) {
+            if (!$this->canRefundItem($orderItem, $qtyList)) {
                 continue;
             }
 
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
-            if ($orderItem->isDummy()) {
-                if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $parentQty = $data['qtys'][$orderItem->getParentItemId()];
-                } else {
-                    $parentQty = $orderItem->getParentItem() ? $orderItem->getParentItem()->getQtyToRefund() : 1;
-                }
-                $qty = $this->calculateProductOptions($orderItem, $parentQty);
-                $orderItem->setLockedDoShip(true);
-            } else {
-                if (isset($qtys[$orderItem->getId()])) {
-                    $qty = (double)$qtys[$orderItem->getId()];
-                } elseif (!count($qtys)) {
-                    $qty = $orderItem->getQtyToRefund();
-                } else {
-                    continue;
-                }
-            }
+            $qty = $this->getQtyToRefund($orderItem, $qtyList);
             $totalQty += $qty;
             $item->setQty($qty);
             $creditmemo->addItem($item);
@@ -106,72 +93,31 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @param array $data
      * @return Creditmemo
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createByInvoice(\Magento\Sales\Model\Order\Invoice $invoice, array $data = [])
     {
         $order = $invoice->getOrder();
         $totalQty = 0;
-        $qtys = isset($data['qtys']) ? $data['qtys'] : [];
+        $qtyList = isset($data['qtys']) ? $data['qtys'] : [];
         $creditmemo = $this->convertor->toCreditmemo($order);
         $creditmemo->setInvoice($invoice);
 
-        $invoiceQtysRefunded = [];
-        foreach ($invoice->getOrder()->getCreditmemosCollection() as $createdCreditmemo) {
-            if ($createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
-                $createdCreditmemo->getInvoiceId() == $invoice->getId()
-            ) {
-                foreach ($createdCreditmemo->getAllItems() as $createdCreditmemoItem) {
-                    $orderItemId = $createdCreditmemoItem->getOrderItem()->getId();
-                    if (isset($invoiceQtysRefunded[$orderItemId])) {
-                        $invoiceQtysRefunded[$orderItemId] += $createdCreditmemoItem->getQty();
-                    } else {
-                        $invoiceQtysRefunded[$orderItemId] = $createdCreditmemoItem->getQty();
-                    }
-                }
-            }
-        }
-
-        $invoiceQtysRefundLimits = [];
-        foreach ($invoice->getAllItems() as $invoiceItem) {
-            $invoiceQtyCanBeRefunded = $invoiceItem->getQty();
-            $orderItemId = $invoiceItem->getOrderItem()->getId();
-            if (isset($invoiceQtysRefunded[$orderItemId])) {
-                $invoiceQtyCanBeRefunded = $invoiceQtyCanBeRefunded - $invoiceQtysRefunded[$orderItemId];
-            }
-            $invoiceQtysRefundLimits[$orderItemId] = $invoiceQtyCanBeRefunded;
-        }
+        $invoiceRefundLimitsQtyList = $this->getInvoiceRefundLimitsQtyList($invoice);
 
         foreach ($invoice->getAllItems() as $invoiceItem) {
+            /** @var OrderItemInterface $orderItem */
             $orderItem = $invoiceItem->getOrderItem();
 
-            if (!$this->canRefundItem($orderItem, $qtys, $invoiceQtysRefundLimits)) {
+            if (!$this->canRefundItem($orderItem, $qtyList, $invoiceRefundLimitsQtyList)) {
                 continue;
             }
 
-            $item = $this->convertor->itemToCreditmemoItem($orderItem);
-            if ($orderItem->isDummy()) {
-                if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $parentQty = $data['qtys'][$orderItem->getParentItemId()];
-                } else {
-                    $parentQty = $orderItem->getParentItem() ? $orderItem->getParentItem()->getQtyToRefund() : 1;
-                }
-                $qty = $this->calculateProductOptions($orderItem, $parentQty);
-            } else {
-                if (isset($qtys[$orderItem->getId()])) {
-                    $qty = (double)$qtys[$orderItem->getId()];
-                } elseif (!count($qtys)) {
-                    $qty = $orderItem->getQtyToRefund();
-                } else {
-                    continue;
-                }
-                if (isset($invoiceQtysRefundLimits[$orderItem->getId()])) {
-                    $qty = min($qty, $invoiceQtysRefundLimits[$orderItem->getId()]);
-                }
-            }
-            $qty = min($qty, $invoiceItem->getQty());
+            $qty = min(
+                $this->getQtyToRefund($orderItem, $qtyList, $invoiceRefundLimitsQtyList),
+                $invoiceItem->getQty()
+            );
             $totalQty += $qty;
+            $item = $this->convertor->itemToCreditmemoItem($orderItem);
             $item->setQty($qty);
             $creditmemo->addItem($item);
         }
@@ -179,15 +125,7 @@ class CreditmemoFactory
 
         $this->initData($creditmemo, $data);
         if (!isset($data['shipping_amount'])) {
-            $isShippingInclTax = $this->taxConfig->displaySalesShippingInclTax($order->getStoreId());
-            if ($isShippingInclTax) {
-                $baseAllowedAmount = $order->getBaseShippingInclTax() -
-                    $order->getBaseShippingRefunded() -
-                    $order->getBaseShippingTaxRefunded();
-            } else {
-                $baseAllowedAmount = $order->getBaseShippingAmount() - $order->getBaseShippingRefunded();
-                $baseAllowedAmount = min($baseAllowedAmount, $invoice->getBaseShippingAmount());
-            }
+            $baseAllowedAmount = $this->getShippingAmount($invoice);
             $creditmemo->setBaseShippingAmount($baseAllowedAmount);
         }
 
@@ -272,11 +210,11 @@ class CreditmemoFactory
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
+     * @param Item $orderItem
      * @param int $parentQty
      * @return int
      */
-    private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
+    private function calculateProductOptions(Item $orderItem, int $parentQty): int
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
@@ -289,5 +227,114 @@ class CreditmemoFactory
             }
         }
         return $qty;
+    }
+
+    /**
+     * Gets list of quantities based on invoice refunded items.
+     *
+     * @param Invoice $invoice
+     * @return array
+     */
+    private function getInvoiceRefundedQtyList(Invoice $invoice): array
+    {
+        $invoiceRefundedQtyList = [];
+        foreach ($invoice->getOrder()->getCreditmemosCollection() as $creditmemo) {
+            if ($creditmemo->getState() !== Creditmemo::STATE_CANCELED &&
+                $creditmemo->getInvoiceId() === $invoice->getId()
+            ) {
+                foreach ($creditmemo->getAllItems() as $creditmemoItem) {
+                    $orderItemId = $creditmemoItem->getOrderItem()->getId();
+                    if (isset($invoiceRefundedQtyList[$orderItemId])) {
+                        $invoiceRefundedQtyList[$orderItemId] += $creditmemoItem->getQty();
+                    } else {
+                        $invoiceRefundedQtyList[$orderItemId] = $creditmemoItem->getQty();
+                    }
+                }
+            }
+        }
+
+        return $invoiceRefundedQtyList;
+    }
+
+    /**
+     * Gets limits of refund based on invoice items.
+     *
+     * @param Invoice $invoice
+     * @return array
+     */
+    private function getInvoiceRefundLimitsQtyList(Invoice $invoice): array
+    {
+        $invoiceRefundLimitsQtyList = [];
+        $invoiceRefundedQtyList = $this->getInvoiceRefundedQtyList($invoice);
+
+        foreach ($invoice->getAllItems() as $invoiceItem) {
+            $qtyCanBeRefunded = $invoiceItem->getQty();
+            $orderItemId = $invoiceItem->getOrderItem()->getId();
+            if (isset($invoiceRefundedQtyList[$orderItemId])) {
+                $qtyCanBeRefunded = $qtyCanBeRefunded - $invoiceRefundedQtyList[$orderItemId];
+            }
+            $invoiceRefundLimitsQtyList[$orderItemId] = $qtyCanBeRefunded;
+        }
+
+        return $invoiceRefundLimitsQtyList;
+    }
+
+    /**
+     * Gets quantity of items to refund based on order item.
+     *
+     * @param Item $orderItem
+     * @param array $qtyList
+     * @param array $refundLimits
+     * @return float
+     */
+    private function getQtyToRefund(Item $orderItem, array $qtyList, array $refundLimits = []): float
+    {
+        $qty = 0;
+        if ($orderItem->isDummy()) {
+            if (isset($qtyList[$orderItem->getParentItemId()])) {
+                $parentQty = $qtyList[$orderItem->getParentItemId()];
+            } elseif ($orderItem->getProductType() === BundlePrice::PRODUCT_TYPE) {
+                $parentQty = $orderItem->getQtyInvoiced();
+            } else {
+                $parentQty = $orderItem->getParentItem() ? $orderItem->getParentItem()->getQtyToRefund() : 1;
+            }
+            $qty = $this->calculateProductOptions($orderItem, $parentQty);
+        } else {
+            if (isset($qtyList[$orderItem->getId()])) {
+                $qty = $qtyList[$orderItem->getId()];
+            } elseif (!count($qtyList)) {
+                $qty = $orderItem->getQtyToRefund();
+            } else {
+                return (float)$qty;
+            }
+
+            if (isset($refundLimits[$orderItem->getId()])) {
+                $qty = min($qty, $refundLimits[$orderItem->getId()]);
+            }
+        }
+
+        return (float)$qty;
+    }
+
+    /**
+     * Gets shipping amount based on invoice.
+     *
+     * @param Invoice $invoice
+     * @return float
+     */
+    private function getShippingAmount(Invoice $invoice): float
+    {
+        $order = $invoice->getOrder();
+        $isShippingInclTax = $this->taxConfig->displaySalesShippingInclTax($order->getStoreId());
+        if ($isShippingInclTax) {
+            $amount = $order->getBaseShippingInclTax() -
+                $order->getBaseShippingRefunded() -
+                $order->getBaseShippingTaxRefunded();
+        } else {
+            $amount = $order->getBaseShippingAmount() - $order->getBaseShippingRefunded();
+            $amount = min($amount, $invoice->getBaseShippingAmount());
+        }
+
+        return (float)$amount;
     }
 }

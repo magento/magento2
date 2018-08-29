@@ -28,7 +28,7 @@ class AssertShippingReportIntervalResult extends AbstractAssertShippingReportRes
         $shipmentResult = $this->salesShippingReport->getGridBlock()->getLastResult();
         $prepareInitialResults = $this->prepareExpectedResult($initialShippingResult, $shipmentResult);
         list($prepareInitialResult, $shipmentResult) = $prepareInitialResults;
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,
             "Shipment report interval result not contains actual data."

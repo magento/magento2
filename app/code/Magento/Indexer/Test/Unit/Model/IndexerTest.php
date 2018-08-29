@@ -273,6 +273,59 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->model->reindexAll();
     }
 
+    /**
+     * @expectedException \Error
+     * @expectedExceptionMessage Test Engine Error
+     */
+    public function testReindexAllWithError()
+    {
+
+        $indexId = 'indexer_internal_name';
+        $this->loadIndexer($indexId);
+
+        $stateMock = $this->createPartialMock(
+            \Magento\Indexer\Model\Indexer\State::class,
+            ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save']
+        );
+        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->will($this->returnSelf());
+        $stateMock->expects($this->never())->method('setIndexerId');
+        $stateMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
+        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue('idle'));
+        $stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+
+        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->viewMock->expects($this->never())->method('suspend');
+        $this->viewMock->expects($this->once())->method('resume');
+
+        $actionMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\ActionInterface::class,
+            ['executeFull', 'executeList', 'executeRow']
+        );
+        $actionMock->expects($this->once())->method('executeFull')->will(
+            $this->returnCallback(
+                function () {
+                     throw new \Error('Test Engine Error');
+                }
+            )
+        );
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Some\Class\Name'
+        )->will(
+            $this->returnValue($actionMock)
+        );
+
+        $this->model->reindexAll();
+    }
+
+    /**
+     * @return array
+     */
     protected function getIndexerData()
     {
         return [

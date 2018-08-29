@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
  * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+class AddressTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /** @var \Magento\Quote\Model\Quote $quote */
     protected $_quote;
@@ -24,6 +24,19 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
     protected $customerRepository;
+
+    public static function setUpBeforeClass()
+    {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
 
     /**
      * Initialize quote and customer fixtures
@@ -225,7 +238,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setLastname('Doe')
             ->setTelephone('123456')
             ->setPostcode('12345')
-            ->setCountryId(1)
+            ->setCountryId('US')
             ->setCity($city)
             ->setStreet([$street]);
         $addressData = $addressRepository->save($addressData);

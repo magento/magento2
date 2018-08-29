@@ -226,7 +226,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
         } else {
-            throw new LocalizedException(__('Please specify at least one search term.'));
+            throw new LocalizedException(__('Enter a search term and try again.'));
         }
 
         return $this;

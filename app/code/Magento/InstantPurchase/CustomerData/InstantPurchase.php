@@ -30,7 +30,7 @@ class InstantPurchase implements SectionSourceInterface
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface\
+     * @var StoreManagerInterface
      */
     private $storeManager;
 

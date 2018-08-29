@@ -299,7 +299,7 @@ function togglePriceType() {
 jQuery('#bundle_product_container').bundleProduct();
 jQuery('#product_bundle_container .collapse').collapse('hide');
 
-jQuery(window).load(function() {
+jQuery(window).on('load', function() {
     togglePriceType();
     Event.observe('price_type', 'change', togglePriceType);
 });

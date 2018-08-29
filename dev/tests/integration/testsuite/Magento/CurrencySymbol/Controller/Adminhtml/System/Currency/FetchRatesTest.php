@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
 class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -20,7 +21,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('Please specify a correct Import Service.'),
+            $this->contains('The Import Service is incorrect. Verify the service and try again.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -38,7 +39,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('We can\'t initialize the import model.'),
+            $this->contains("The import model can't be initialized. Verify the model and try again."),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

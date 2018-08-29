@@ -165,6 +165,8 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated because doesn't take into consideration scopes and system config values.
+     * @see \Magento\Directory\Model\CurrencyConfig::getConfigCurrencies()
      */
     public function getConfigCurrencies($model, $path)
     {

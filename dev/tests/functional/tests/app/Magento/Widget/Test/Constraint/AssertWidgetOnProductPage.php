@@ -39,7 +39,7 @@ class AssertWidgetOnProductPage extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $urlKey . '.html');
         $widgetText = $widget->getParameters()['link_text'];
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productView->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget is absent on Product page.'
         );

@@ -25,7 +25,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\HttpRequestProcessor">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
         <arguments>
             <argument name="graphQlHeaders" xsi:type="array">
                 <item name="Content-Type" xsi:type="object">Magento\GraphQl\Controller\HttpHeaderProcessor\ContentTypeProcessor</item>

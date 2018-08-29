@@ -28,7 +28,7 @@ class AssertExportNoDataErrorMessage extends AbstractConstraint
     {
         $actualMessage = $adminExportIndex->getMessagesBlock()->getErrorMessage();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'

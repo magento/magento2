@@ -5,9 +5,13 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\RollbackCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RollbackCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -96,7 +100,8 @@ class RollbackCommandTest extends \PHPUnit\Framework\TestCase
         $this->command = new RollbackCommand(
             $objectManagerProvider,
             $maintenanceMode,
-            $this->deploymentConfig
+            $this->deploymentConfig,
+            new MaintenanceModeEnabler($maintenanceMode)
         );
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);

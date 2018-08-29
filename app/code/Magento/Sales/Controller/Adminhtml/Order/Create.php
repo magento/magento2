@@ -317,7 +317,7 @@ abstract class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __(
                         '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
                         $this->escaper->escapeHtml($couponCode)
@@ -325,14 +325,14 @@ abstract class Create extends \Magento\Backend\App\Action
                 );
             } else {
                 if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
-                            '"%1" coupon code is not valid.',
+                            'The "%1" coupon code isn\'t valid. Verify the code and try again.',
                             $this->escaper->escapeHtml($couponCode)
                         )
                     );
                 } else {
-                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
         }

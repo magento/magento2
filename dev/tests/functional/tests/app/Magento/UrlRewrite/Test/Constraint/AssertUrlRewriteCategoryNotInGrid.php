@@ -27,7 +27,7 @@ class AssertUrlRewriteCategoryNotInGrid extends AbstractConstraint
     {
         $urlRewriteIndex->open();
         $filter = ['request_path' => $category->getUrlKey()];
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter),
             "URL Rewrite with request path '{$category->getUrlKey()}' is present in grid."
         );

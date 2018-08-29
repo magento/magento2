@@ -30,13 +30,21 @@ class XmlScanner implements ScannerInterface
      */
     public function collectEntities(array $files)
     {
+        $virtualTypes = [];
         $output = [];
+        $factoriesOutput = [];
         foreach ($files as $file) {
             $dom = new \DOMDocument();
             $dom->load($file);
             $xpath = new \DOMXPath($dom);
             $xpath->registerNamespace("php", "http://php.net/xpath");
             $xpath->registerPhpFunctions('preg_match');
+            $virtualTypeQuery = "//virtualType/@name";
+
+            foreach ($xpath->query($virtualTypeQuery) as $virtualNode) {
+                $virtualTypes[] = $virtualNode->nodeValue;
+            }
+
             $regex = '/^(.*)\\\(.*)Proxy$/';
             $query = "/config/preference[ php:functionString('preg_match', '{$regex}', @type) > 0]/@type | " .
                 "//argument[@xsi:type='object' and php:functionString('preg_match', '{$regex}', text()) > 0] |" .
@@ -46,9 +54,33 @@ class XmlScanner implements ScannerInterface
             foreach ($xpath->query($query) as $node) {
                 $output[] = $node->nodeValue;
             }
+
+            $factoriesOutput = array_merge($factoriesOutput, $this->scanFactories($xpath));
         }
+
         $output = array_unique($output);
-        return $this->_filterEntities($output);
+        $factoriesOutput = array_unique($factoriesOutput);
+        $factoriesOutput = array_diff($factoriesOutput, $virtualTypes);
+        return array_merge($this->_filterEntities($output), $factoriesOutput);
+    }
+
+    /**
+     * Scan factories from all di.xml and retrieve non virtual one
+     *
+     * @param \DOMXPath $domXpath
+     * @return array
+     */
+    private function scanFactories(\DOMXPath $domXpath)
+    {
+        $output = [];
+        $regex = '/^(.*)Factory$/';
+        $query = "//argument[@xsi:type='object' and php:functionString('preg_match', '{$regex}', text()) > 0] |" .
+            "//item[@xsi:type='object' and php:functionString('preg_match', '{$regex}', text()) > 0]";
+        foreach ($domXpath->query($query) as $node) {
+            $output[] = $node->nodeValue;
+        }
+
+        return $output;
     }
 
     /**
@@ -72,7 +104,7 @@ class XmlScanner implements ScannerInterface
             }
             if (false === $isClassExists) {
                 if (class_exists($entityName) || interface_exists($entityName)) {
-                    array_push($filteredEntities, $className);
+                    $filteredEntities[] = $className;
                 } else {
                     $this->_log->add(
                         \Magento\Setup\Module\Di\Compiler\Log\Log::CONFIGURATION_ERROR,

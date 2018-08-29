@@ -60,12 +60,12 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                     $this->addOrderItem($item);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
-                        $this->messageManager->addNotice($e->getMessage());
+                        $this->messageManager->addNoticeMessage($e->getMessage());
                     } else {
-                        $this->messageManager->addError($e->getMessage());
+                        $this->messageManager->addErrorMessage($e->getMessage());
                     }
                 } catch (\Exception $e) {
-                    $this->messageManager->addException(
+                    $this->messageManager->addExceptionMessage(
                         $e,
                         __('We can\'t add this item to your shopping cart right now.')
                     );

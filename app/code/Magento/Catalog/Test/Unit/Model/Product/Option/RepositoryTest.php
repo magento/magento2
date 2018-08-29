@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use \Magento\Catalog\Model\Product\Option\Repository;
@@ -199,7 +200,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage ProductSku should be specified
+     * @expectedExceptionMessage The ProductSku is empty. Set the ProductSku and try again.
      */
     public function testSaveCouldNotSaveException()
     {

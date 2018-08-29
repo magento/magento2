@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\System;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Class to work with remote FTP server
  */
@@ -107,6 +105,12 @@ class Ftp
         if ($data['scheme'] != 'ftp') {
             throw new \Exception("Support for scheme unsupported: '{$data['scheme']}'");
         }
+        
+        // Decode user & password strings from URL
+        foreach (array_intersect(array_keys($data), ['user','pass']) as $key) {
+            $data[$key] = urldecode($data[$key]);
+        }
+        
         return $data;
     }
 

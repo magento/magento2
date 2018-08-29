@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Contact\Controller;
+
+use Zend\Http\Request;
 
 /**
  * Contact index controller test
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * testPostAction
+     */
     public function testPostAction()
     {
         $params = [
@@ -19,12 +25,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'hideit' => '',
         ];
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
             $this->contains(
-                "Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+                "Thanks for contacting us with your comments and questions. We&#039;ll respond to you very soon."
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
@@ -32,12 +39,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider dataInvalidPostAction
-     * @param $params
-     * @param $expectedMessage
+     * @param array $params
+     * @param string $expectedMessage
      */
     public function testInvalidPostAction($params, $expectedMessage)
     {
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
@@ -47,6 +55,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public static function dataInvalidPostAction()
     {
         return [
@@ -57,7 +68,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
                     'email' => 'user@example.com',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "Comment is missing",
+                'expectedMessage' => "Enter the comment and try again.",
             ],
             'missing_name' => [
                 'params' => [
@@ -66,7 +77,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
                     'email' => 'user@example.com',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "Name is missing",
+                'expectedMessage' => "Enter the Name and try again.",
             ],
             'invalid_email' => [
                 'params' => [
@@ -75,7 +86,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
                     'email' => 'invalidemail',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "Invalid email address",
+                'expectedMessage' => "The email address is invalid. Verify the email address and try again.",
             ],
         ];
     }

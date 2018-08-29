@@ -88,39 +88,67 @@ class PhpRule implements RuleInterface
             return [];
         }
 
-        $pattern = '~\b(?<class>(?<module>(' . implode(
-            '_|',
-            Files::init()->getNamespaces()
-        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+        $dependenciesInfo = [];
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->caseClassesAndIdentifiers($currentModule, $file, $contents)
+        );
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->_caseGetUrl($currentModule, $contents)
+        );
+        $dependenciesInfo = $this->considerCaseDependencies(
+            $dependenciesInfo,
+            $this->_caseLayoutBlock($currentModule, $fileType, $file, $contents)
+        );
+        return $dependenciesInfo;
+    }
+
+    /**
+     * Check references to classes and identifiers defined in other modules
+     *
+     * @param string $currentModule
+     * @param string $file
+     * @param string $contents
+     * @return array
+     */
+    private function caseClassesAndIdentifiers($currentModule, $file, &$contents)
+    {
+        $pattern = '~\b(?<class>(?<module>('
+            . implode(
+                '[_\\\\]|',
+                Files::init()->getNamespaces()
+            )
+            . '[_\\\\])[a-zA-Z0-9]+)'
+            . '(?<class_inside_module>[a-zA-Z0-9_\\\\]*))\b(?:::(?<module_scoped_key>[a-z0-9_]+)[\'"])?~';
+
+        if (!preg_match_all($pattern, $contents, $matches)) {
+            return [];
+        }
 
         $dependenciesInfo = [];
-        if (preg_match_all($pattern, $contents, $matches)) {
-            $matches['module'] = array_unique($matches['module']);
-            foreach ($matches['module'] as $i => $referenceModule) {
-                $referenceModule = str_replace('_', '\\', $referenceModule);
-                if ($currentModule == $referenceModule) {
-                    continue;
-                }
-                $dependencyClass = trim($matches['class'][$i]);
+        $matches['module'] = array_unique($matches['module']);
+        foreach ($matches['module'] as $i => $referenceModule) {
+            $referenceModule = str_replace('_', '\\', $referenceModule);
+            if ($currentModule == $referenceModule) {
+                continue;
+            }
+
+            $dependencyClass = trim($matches['class'][$i]);
+            if (empty($matches['class_inside_module'][$i]) && !empty($matches['module_scoped_key'][$i])) {
+                $dependencyType = RuleInterface::TYPE_SOFT;
+            } else {
                 $currentClass = $this->getClassFromFilepath($file, $currentModule);
                 $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
                     ? RuleInterface::TYPE_SOFT
                     : RuleInterface::TYPE_HARD;
-
-                $dependenciesInfo[] = [
-                    'module' => $referenceModule,
-                    'type' => $dependencyType,
-                    'source' => $dependencyClass,
-                ];
             }
-        }
-        $result = $this->_caseGetUrl($currentModule, $contents);
-        if (count($result)) {
-            $dependenciesInfo = array_merge($dependenciesInfo, $result);
-        }
-        $result = $this->_caseLayoutBlock($currentModule, $fileType, $file, $contents);
-        if (count($result)) {
-            $dependenciesInfo = array_merge($dependenciesInfo, $result);
+
+            $dependenciesInfo[] = [
+                'module' => $referenceModule,
+                'type' => $dependencyType,
+                'source' => $dependencyClass,
+            ];
         }
 
         return $dependenciesInfo;
@@ -365,5 +393,15 @@ class PhpRule implements RuleInterface
             $result[] = ['module' => $module, 'type' => $value['type'], 'source' => $value['source']];
         }
         return $result;
+    }
+
+    /**
+     * @param array $known
+     * @param array $new
+     * @return array
+     */
+    private function considerCaseDependencies($known, $new)
+    {
+        return array_merge($known, $new);
     }
 }

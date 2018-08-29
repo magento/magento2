@@ -38,7 +38,7 @@ class AssertSearchTermNotInGrid extends AbstractConstraint
 
         $grid->search($filters);
         unset($filters['store_id']);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $grid->isRowVisible($filters, false),
             'Search term "' . $queryText . '" was found in grid.'
         );

@@ -36,7 +36,7 @@ class AssertPageByUrlRewriteIsNotFound extends AbstractConstraint
         UrlRewrite $productRedirect
     ) {
         $browser->open($_ENV['app_frontend_url'] . $productRedirect->getRequestPath());
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,
             $catalogProductView->getTitleBlock()->getTitle(),
             'Wrong page is displayed.'

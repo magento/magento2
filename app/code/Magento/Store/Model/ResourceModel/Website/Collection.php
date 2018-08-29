@@ -138,11 +138,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->getSelect()->joinLeft(
                 ['group_table' => $this->getTable('store_group')],
                 'main_table.website_id = group_table.website_id',
-                ['group_id' => 'group_id', 'group_title' => 'name']
+                ['group_id' => 'group_id', 'group_title' => 'name', 'group_code' => 'code']
             )->joinLeft(
                 ['store_table' => $this->getTable('store')],
                 'group_table.group_id = store_table.group_id',
-                ['store_id' => 'store_id', 'store_title' => 'name']
+                ['store_id' => 'store_id', 'store_title' => 'name', 'store_code' => 'code']
             );
             $this->addOrder('group_table.name', \Magento\Framework\DB\Select::SQL_ASC)       // store name
                 ->addOrder(

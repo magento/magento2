@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
 use Magento\Eav\Model\Config;
@@ -393,7 +394,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _checkDefaultOptionValue($values)
     {
         if (!isset($values[0])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Default option value is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("The default option isn't defined. Set the option and try again.")
+            );
         }
     }
 

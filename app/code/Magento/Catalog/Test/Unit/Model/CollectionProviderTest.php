@@ -101,7 +101,7 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
      * Test exception when collection provider is not configured for product link type.
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Collection provider is not registered
+     * @expectedExceptionMessage The collection provider isn't registered.
      */
     public function testGetCollectionWithMissingProviders()
     {

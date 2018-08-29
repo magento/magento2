@@ -15,7 +15,9 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 use Magento\Quote\Model\ShippingMethodManagement;
+use Magento\Store\Model\Store;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -83,6 +85,16 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $totalsCollector;
 
+    /**
+     * @var Store|MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var QuoteAddressResource|MockObject
+     */
+    private $quoteAddressResource;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -98,7 +110,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $className = \Magento\Framework\Reflection\DataObjectProcessor::class;
         $this->dataProcessor = $this->createMock($className);
 
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->quoteAddressResource = $this->createMock(QuoteAddressResource::class);
+        $this->storeMock = $this->createMock(Store::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -150,6 +163,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
                 'converter' => $this->converter,
                 'totalsCollector' => $this->totalsCollector,
                 'addressRepository' => $this->addressRepository,
+                'quoteAddressResource' => $this->quoteAddressResource,
             ]
         );
 
@@ -168,7 +182,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address not set.
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testGetMethodWhenShippingAddressIsNotSet()
     {
@@ -257,7 +271,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address not set.
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testGetListWhenShippingAddressIsNotSet()
     {
@@ -307,7 +321,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Shipping method is not applicable for empty cart
+     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSetMethodWithInputException()
     {
@@ -326,7 +340,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping method is not applicable.
+     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetMethodWithVirtualProduct()
     {
@@ -346,7 +360,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetMethodWithoutShippingAddress()
     {
@@ -362,13 +376,14 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->quote->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
+        $this->quoteAddressResource->expects($this->once())->method('delete')->with($this->shippingAddress);
 
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Cannot set shipping method. Custom Error
+     * @expectedExceptionMessage The shipping method can't be set. Custom Error
      */
     public function testSetMethodWithCouldNotSaveException()
     {
@@ -404,7 +419,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetMethodWithoutAddress()
     {
@@ -421,6 +436,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
         $this->shippingAddress->expects($this->once())->method('getCountryId');
+        $this->quoteAddressResource->expects($this->once())->method('delete')->with($this->shippingAddress);
 
         $this->model->set($cartId, $carrierCode, $methodCode);
     }

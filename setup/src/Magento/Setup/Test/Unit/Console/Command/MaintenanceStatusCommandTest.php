@@ -50,7 +50,7 @@ class MaintenanceStatusCommandTest extends \PHPUnit\Framework\TestCase
             [
                 [true, ['127.0.0.1', '127.0.0.2']],
                 'Status: maintenance mode is active' . PHP_EOL .
-                'List of exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
+                'List of exempt IP-addresses: 127.0.0.1 127.0.0.2' . PHP_EOL
             ],
             [
                 [true, []],
@@ -63,7 +63,7 @@ class MaintenanceStatusCommandTest extends \PHPUnit\Framework\TestCase
             [
                 [false, ['127.0.0.1', '127.0.0.2']],
                 'Status: maintenance mode is not active' . PHP_EOL .
-                'List of exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
+                'List of exempt IP-addresses: 127.0.0.1 127.0.0.2' . PHP_EOL
             ],
         ];
     }

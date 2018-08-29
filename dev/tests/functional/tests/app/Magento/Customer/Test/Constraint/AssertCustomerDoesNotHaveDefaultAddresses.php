@@ -48,7 +48,7 @@ class AssertCustomerDoesNotHaveDefaultAddresses extends AbstractConstraint
             ]
         ];
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedAddressesTextValues,
             $actualAddressesTextValues,
             'Customer has default shipping/billing address but should not.'

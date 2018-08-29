@@ -44,21 +44,21 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type catalog category link is absent on Home page.'
         );
 
         $cmsIndex->getWidgetView()->clickToWidget($widget, $widgetText);
         $title = $categoryView->getTitleBlock()->getTitle();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $widget->getParameters()['entities'][0]->getName(),
             $title,
             'Wrong category title.'
         );
 
         $cmsIndex->getFooterBlock()->openAdvancedSearch();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type catalog category link is absent on Advanced Search page.'
         );

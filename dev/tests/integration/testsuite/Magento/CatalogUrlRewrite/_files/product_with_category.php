@@ -75,8 +75,8 @@ $product->setStoreId(0)
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-$productRepository->save($product);
+$product = $productRepository->save($product);
 
 /** @var CategoryLinkManagementInterface $linkManagement */
 $linkManagement = $objectManager->get(CategoryLinkManagementInterface::class);
-$linkManagement->assignProductToCategories($product->getSku(), [$category->getEntityId()]);
+$linkManagement->assignProductToCategories($product->getSku(), [Category::TREE_ROOT_ID, $category->getEntityId()]);

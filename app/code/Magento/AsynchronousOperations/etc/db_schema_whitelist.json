@@ -1,0 +1,47 @@
+{
+    "magento_bulk": {
+        "column": {
+            "id": true,
+            "uuid": true,
+            "user_id": true,
+            "description": true,
+            "operation_count": true,
+            "start_time": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true,
+            "MAGENTO_BULK_UUID": true
+        }
+    },
+    "magento_operation": {
+        "column": {
+            "id": true,
+            "bulk_uuid": true,
+            "topic_name": true,
+            "serialized_data": true,
+            "result_serialized_data": true,
+            "status": true,
+            "error_code": true,
+            "result_message": true
+        },
+        "index": {
+            "MAGENTO_OPERATION_BULK_UUID_ERROR_CODE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID": true
+        }
+    },
+    "magento_acknowledged_bulk": {
+        "column": {
+            "id": true,
+            "bulk_uuid": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID_MAGENTO_BULK_UUID": true,
+            "MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID": true
+        }
+    }
+}

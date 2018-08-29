@@ -195,7 +195,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * Gets minimal sales quantity
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return int|null
+     * @return float|null
      */
     public function getMinimalQty($product)
     {
@@ -510,9 +510,6 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
-            ->setImageId($imageId)
-            ->setAttributes($attributes)
-            ->create();
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

@@ -59,7 +59,7 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
 
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getSearchBlock()->isPlaceholderContains($welcomeText),
             "Locale not applied."
         );

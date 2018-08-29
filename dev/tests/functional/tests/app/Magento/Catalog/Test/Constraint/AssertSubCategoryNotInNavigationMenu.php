@@ -30,7 +30,7 @@ class AssertSubCategoryNotInNavigationMenu extends AbstractConstraint
         CmsIndex $cmsIndex
     ) {
         $cmsIndex->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $catalogCategoryView->getTopmenu()->isCategoryVisible($subcategory->getName()),
             'Expected that ' . $subcategory->getName() . ' is not visible in navigation menu.'
         );

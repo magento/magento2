@@ -74,7 +74,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testResetSearchResult()
+    public function testResetSearchResultByStore()
     {
         $this->resource->expects($this->once())
             ->method('getTableName')
@@ -82,9 +82,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn('table_name_search_query');
         $this->connection->expects($this->once())
             ->method('update')
-            ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != 0'])
+            ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != ?' => 0, 'store_id = ?' => 1])
             ->willReturn(10);
-        $result = $this->target->resetSearchResults();
+        $result = $this->target->resetSearchResultsByStore(1);
         $this->assertEquals($this->target, $result);
     }
 

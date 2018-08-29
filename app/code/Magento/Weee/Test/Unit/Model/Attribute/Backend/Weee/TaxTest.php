@@ -80,7 +80,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($taxes));
 
         // Exception caught
-        $this->expectException('Exception', $expected);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($expected);
         $modelMock->validate($productMock);
     }
 
@@ -97,7 +98,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     ['state' => 12, 'country' => 'US', 'website_id' => '1'],
                     ['state' => null, 'country' => 'ES', 'website_id' => '1']
                 ],
-                'expected' => 'You must set unique country-state combinations within the same fixed product tax',
+                'expected' => 'Set unique country-state combinations within the same fixed product tax. '
+                    . 'Verify the combinations and try again.',
                 ]
         ];
     }
@@ -266,5 +268,32 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         );
 
         $model->getTable();
+    }
+
+    /**
+     * Test method GetEntityIdField.
+     *
+     * @return void
+     */
+    public function testGetEntityIdField() : void
+    {
+        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
+            ->setMethods(['getIdFieldName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $attributeTaxMock
+            ->expects($this->once())
+            ->method('getIdFieldName')
+            ->willReturn(null);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
+            [
+                'attributeTax' => $attributeTaxMock,
+            ]
+        );
+
+        $model->getEntityIdField();
     }
 }

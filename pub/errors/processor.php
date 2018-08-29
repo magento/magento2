@@ -215,7 +215,7 @@ class Processor
     public function processReport()
     {
         $this->pageTitle = 'There has been an error processing your request';
-        $this->_response->setHttpResponseCode(503);
+        $this->_response->setHttpResponseCode(500);
 
         $this->showErrorMsg = false;
         $this->showSentMsg  = false;
@@ -463,7 +463,7 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs(intval(microtime(true) * rand(100, 1000)));
+        $this->reportId   = abs(intval(microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 

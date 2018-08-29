@@ -69,12 +69,21 @@ class Tree extends \Magento\Backend\Block\Template
         );
         $jsonArray = [];
         foreach ($collection as $item) {
-            $jsonArray[] = [
+            $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
+
+            $hasNestedDirectories = count(glob($item->getFilename() . '/*', GLOB_ONLYDIR)) > 0;
+
+            // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
+            if (!$hasNestedDirectories) {
+                $data['state'] = 'leaf';
+            }
+
+            $jsonArray[] = $data;
         }
         return $this->serializer->serialize($jsonArray);
     }
@@ -86,7 +95,18 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('cms/*/treeJson');
+        $params = [];
+
+        $currentTreePath = $this->getRequest()->getParam('current_tree_path');
+
+        if (strlen($currentTreePath)) {
+            $params['current_tree_path'] = $currentTreePath;
+        }
+
+        return $this->getUrl(
+            'cms/*/treeJson',
+            $params
+        );
     }
 
     /**
@@ -107,7 +127,14 @@ class Tree extends \Magento\Backend\Block\Template
     public function getTreeCurrentPath()
     {
         $treePath = ['root'];
-        if ($path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath()) {
+
+        if ($idEncodedPath = $this->getRequest()->getParam('current_tree_path')) {
+            $path = $this->_cmsWysiwygImages->idDecode($idEncodedPath);
+        } else {
+            $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
+        }
+
+        if (strlen($path)) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {
@@ -117,6 +144,7 @@ class Tree extends \Magento\Backend\Block\Template
                 }
             }
         }
+
         return $treePath;
     }
 

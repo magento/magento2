@@ -79,7 +79,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Unknown link type: bad type
+     * @expectedExceptionMessage The "bad type" link type is unknown. Verify the type and try again.
      */
     public function testGetLinkedItemsByTypeWithWrongType()
     {
@@ -132,7 +132,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage linkType is a required field.
+     * @expectedExceptionMessage "linkType" is required. Enter and try again.
      */
     public function testSetProductLinksWithoutLinkTypeInLink()
     {
@@ -154,7 +154,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Provided link type "bad type" does not exist
+     * @expectedExceptionMessage The "bad type" link type wasn't found. Verify the type and try again.
      */
     public function testSetProductLinksThrowExceptionIfProductLinkTypeDoesNotExist()
     {
@@ -181,7 +181,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testSetProductLinksNoProductException()
     {
@@ -205,7 +205,9 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will(
                 $this->throwException(
-                    new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))
+                    new \Magento\Framework\Exception\NoSuchEntityException(
+                        __("The product that was requested doesn't exist. Verify the product and try again.")
+                    )
                 )
             );
         $this->model->setProductLinks($productSku, $links);
@@ -213,7 +215,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid data provided for linked products
+     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testSetProductLinksInvalidDataException()
     {

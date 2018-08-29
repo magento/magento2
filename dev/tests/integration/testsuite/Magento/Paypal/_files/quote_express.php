@@ -33,6 +33,7 @@ $product->setTypeId('simple')
         [
             'qty' => 100,
             'is_in_stock' => 1,
+            'manage_stock' => 1,
         ]
     )->save();
 $product->load(1);

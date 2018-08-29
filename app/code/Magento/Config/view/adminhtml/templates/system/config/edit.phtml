@@ -32,7 +32,6 @@
 require([
     "jquery",
     "uiRegistry",
-    "jquery/jquery.hashchange",
     "mage/mage",
     "prototype",
     "mage/adminhtml/form",
@@ -379,7 +378,7 @@ require([
         return false;
     };
 
-    jQuery(window).hashchange(handleHash);
+    window.addEventListener('hashchange', handleHash);
     handleHash();
 
     registry.set('adminSystemConfig', adminSystemConfig);

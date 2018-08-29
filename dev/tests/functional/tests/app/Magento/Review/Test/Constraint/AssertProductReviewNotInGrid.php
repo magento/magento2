@@ -56,7 +56,7 @@ class AssertProductReviewNotInGrid extends AbstractConstraint
 
         $reviewIndex->getReviewGrid()->search($filter);
         unset($filter['visible_in']);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $reviewIndex->getReviewGrid()->isRowVisible($filter, false),
             'Review available in grid'
         );

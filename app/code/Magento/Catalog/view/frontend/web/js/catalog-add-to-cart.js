@@ -38,10 +38,32 @@ define([
         _bindSubmit: function () {
             var self = this;
 
+            if (this.element.data('catalog-addtocart-initialized')) {
+                return;
+            }
+
+            this.element.data('catalog-addtocart-initialized', 1);
             this.element.on('submit', function (e) {
                 e.preventDefault();
                 self.submitForm($(this));
             });
+        },
+
+        /**
+         * @private
+         */
+        _redirect: function (url) {
+            var urlParts, locationParts, forceReload;
+
+            urlParts = url.split('#');
+            locationParts = window.location.href.split('#');
+            forceReload = urlParts[0] === locationParts[0];
+
+            window.location.assign(url);
+
+            if (forceReload) {
+                window.location.reload();
+            }
         },
 
         /**
@@ -57,34 +79,28 @@ define([
          * @param {Object} form
          */
         submitForm: function (form) {
-            var addToCartButton, self = this;
-
-            if (form.has('input[type="file"]').length && form.find('input[type="file"]').val() !== '') {
-                self.element.off('submit');
-                // disable 'Add to Cart' button
-                addToCartButton = $(form).find(this.options.addToCartButtonSelector);
-                addToCartButton.prop('disabled', true);
-                addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
-                form.submit();
-            } else {
-                self.ajaxSubmit(form);
-            }
+            this.ajaxSubmit(form);
         },
 
         /**
          * @param {String} form
          */
         ajaxSubmit: function (form) {
-            var self = this;
+            var self = this,
+                formData;
 
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+            formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),
-                data: form.serialize(),
+                data: formData,
                 type: 'post',
                 dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
 
                 /** @inheritdoc */
                 beforeSend: function () {
@@ -97,7 +113,11 @@ define([
                 success: function (res) {
                     var eventData, parameters;
 
-                    $(document).trigger('ajax:addToCart', form.data().productSku);
+                    $(document).trigger('ajax:addToCart', {
+                        'sku': form.data().productSku,
+                        'form': form,
+                        'response': res
+                    });
 
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);
@@ -116,7 +136,8 @@ define([
                             parameters.push(eventData.redirectParameters.join('&'));
                             res.backUrl = parameters.join('#');
                         }
-                        window.location = res.backUrl;
+
+                        self._redirect(res.backUrl);
 
                         return;
                     }
@@ -138,6 +159,13 @@ define([
                             .html(res.product.statusText);
                     }
                     self.enableAddToCartButton(form);
+                },
+
+                /** @inheritdoc */
+                complete: function (res) {
+                    if (res.state() === 'rejected') {
+                        location.reload();
+                    }
                 }
             });
         },

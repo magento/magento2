@@ -252,6 +252,7 @@
     <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
+                <item name="const" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Constant</item>
                 <item name="object" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="configurableObject" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
@@ -416,6 +417,7 @@
                 <item name="additionalClasses" xsi:type="object">Magento\Ui\Config\Converter\AdditionalClasses</item>
                 <item name="options" xsi:type="object">Magento\Ui\Config\Converter\Options</item>
                 <item name="actions" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
+                <item name="urlTypes" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
             </argument>
             <argument name="discriminator" xsi:type="string">type</argument>
         </arguments>

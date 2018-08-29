@@ -40,7 +40,7 @@ class AssertOnlineInvoiceCannotBeCreated extends AbstractConstraint
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $salesOrderView->getPageActions()->invoice();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::OFFLINE_INVOICE_MESSAGE,
             $orderInvoiceNew->getTotalsBlock()->getCaptureOfflineMessage(),
             'Message incorrect or is not present.'

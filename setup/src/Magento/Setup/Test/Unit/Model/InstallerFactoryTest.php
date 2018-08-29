@@ -6,24 +6,58 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\InstallerFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Setup\LoggerInterface;
+use Magento\Framework\Setup\SchemaPersistor;
+use Magento\Setup\Model\DeclarationInstaller;
+use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Module\ResourceFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerProviderMock;
+
     public function testCreate()
     {
+        $this->objectManagerProviderMock = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap(
+                [
+                    [DeclarationInstaller::class, $this->createMock(DeclarationInstaller::class)],
+                    [SchemaPersistor::class, $this->createMock(SchemaPersistor::class)],
+                ]
+            );
+        $this->objectManagerProviderMock->expects($this->any())
+            ->method('get')
+            ->willReturn($objectManagerMock);
+        /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocatorMock */
         $serviceLocatorMock = $this->getMockForAbstractClass(
-            \Zend\ServiceManager\ServiceLocatorInterface::class,
+            ServiceLocatorInterface::class,
             ['get']
         );
         $serviceLocatorMock->expects($this->any())->method('get')
             ->will($this->returnValueMap($this->getReturnValueMap()));
 
-        $log = $this->getMockForAbstractClass(\Magento\Framework\Setup\LoggerInterface::class);
-        $resourceFactoryMock = $this->createMock(\Magento\Setup\Module\ResourceFactory::class);
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $log */
+        $log = $this->getMockForAbstractClass(LoggerInterface::class);
+        /** @var ResourceFactory|\PHPUnit_Framework_MockObject_MockObject $resourceFactoryMock */
+        $resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $resourceFactoryMock
             ->expects($this->any())
             ->method('create')
@@ -81,7 +115,7 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 \Magento\Setup\Model\ObjectManagerProvider::class,
-                $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class),
+                $this->objectManagerProviderMock
             ],
             [
                 \Magento\Framework\Model\ResourceModel\Db\TransactionManager::class,

@@ -125,30 +125,18 @@ Ok,Ok
 "Label Actions Two","Label Actions Two"
 "Some Dynamic Actions","Some Dynamic Actions"
 "Log JS Errors to Session Storage","Log JS Errors to Session Storage"
+"If enabled, can be used by functional tests for extended reporting","If enabled, can be used by functional tests for extended reporting"
 "Log JS Errors to Session Storage Key","Log JS Errors to Session Storage Key"
+"Use this key to retrieve collected js errors","Use this key to retrieve collected js errors"
 settings/label,settings/label
 settings/confirm/title,settings/confirm/title
-"settings/confirm/message
-                        ","settings/confirm/message
-                        "
-"
-                            settings/callback/provider
-                        ","
-                            settings/callback/provider
-                        "
-"settings/callback/target
-                        ","settings/callback/target
-                        "
-"settings/newViewLabel
-                    ","settings/newViewLabel
-                    "
+"settings/confirm/message","settings/confirm/message"
+"settings/callback/provider","settings/callback/provider"
+"settings/callback/target","settings/callback/target"
+"settings/newViewLabel","settings/newViewLabel"
 settings/title,settings/title
 settings/description,settings/description
-"
-                        settings/addButtonLabel
-                    ","
-                        settings/addButtonLabel
-                    "
+"settings/addButtonLabel","settings/addButtonLabel"
 "
                         formElements/*[name(.)=../../@formElement]/settings/description
                     ","
@@ -201,3 +189,4 @@ CSV,CSV
 "Please enter at least {0} characters.","Please enter at least {0} characters."
 "Please enter a value between {0} and {1} characters long.","Please enter a value between {0} and {1} characters long."
 "Please enter a value between {0} and {1}.","Please enter a value between {0} and {1}."
+"was not uploaded","was not uploaded"

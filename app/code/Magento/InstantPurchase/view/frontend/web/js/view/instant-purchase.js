@@ -1,110 +1,115 @@
-/*jshint browser:true*/
-/*global define*/
-define(
-    [
-        'uiComponent',
-        'ko',
-        'Magento_Ui/js/modal/confirm',
-        'jquery',
-        'Magento_Customer/js/customer-data',
-        'mage/url',
-        'mage/template',
-        'jquery/ui',
-        'mage/translate'
-    ], function (
-        Component,
-        ko,
-        confirm,
-        $,
-        customerData,
-        urlBuilder,
-        mageTemplate
-    ) {
-        'use strict';
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+define([
+    'ko',
+    'jquery',
+    'underscore',
+    'uiComponent',
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Customer/js/customer-data',
+    'mage/url',
+    'mage/template',
+    'mage/translate',
+    'text!Magento_InstantPurchase/template/confirmation.html',
+    'mage/validation'
+], function (ko, $, _, Component, confirm, customerData, urlBuilder, mageTemplate, $t, confirmationTemplate) {
+    'use strict';
 
-        return Component.extend({
-            showButton: ko.observable(false),
-            paymentToken: ko.observable(null),
-            shippingAddress: ko.observable(null),
-            billingAddress: ko.observable(null),
-            shippingMethod: ko.observable(null),
-            defaults: {
-                template: 'Magento_InstantPurchase/instant-purchase',
-                buttonText: $.mage.__('Instant Purchase'),
-                purchaseUrl: urlBuilder.build('instantpurchase/button/placeOrder')
-            },
-            options: {
-                message: $.mage.__('Are you sure you want to place order and pay?'),
-                formSelector: '#product_addtocart_form',
-                confirmTemplate: '<p class="message"><%- data.message %></p>' +
-                                 '<strong>' + $.mage.__('Shipping Address') + ':</strong>' +
-                                 '<p><%- data.shippingAddress().summary %></p>' +
-                                 '<strong>' + $.mage.__('Billing Address') + ':</strong>' +
-                                 '<p><%- data.billingAddress().summary %></p>' +
-                                 '<strong>' + $.mage.__('Payment Method') + ':</strong>\n' +
-                                 '<p><%- data.paymentToken().summary %></p>' +
-                                 '<strong>' + $.mage.__('Shipping Method') + ':</strong>\n' +
-                                 '<p><%- data.shippingMethod().summary %></p>'
-            },
-
-            /** @inheritdoc */
-            initialize: function () {
-                var self = this,
-                    data = customerData.get('instant-purchase')();
-
-                this._super();
-                self.showButton(data.available);
-                self.paymentToken(data.paymentToken);
-                self.shippingAddress(data.shippingAddress);
-                self.billingAddress(data.billingAddress);
-                self.shippingMethod(data.shippingMethod);
-            },
-
-            /**
-             * Confirmation method
-             */
-            instantPurchase: function () {
-                var self = this,
-                    form = $(self.options.formSelector),
-                    confirmTemplate = mageTemplate(this.options.confirmTemplate);
-
-                if (!(form.validation() && form.validation('isValid'))) {
-                    return;
-                }
-
-                confirm({
-                    title: $.mage.__('Instant Purchase Confirmation'),
-                    content: confirmTemplate(
-                        {
-                            data: {
-                                message: self.options.message,
-                                paymentToken: self.paymentToken,
-                                shippingAddress: self.shippingAddress,
-                                billingAddress: self.billingAddress,
-                                shippingMethod: self.shippingMethod
-                            }
-                        }
-                    ),
-                    actions: {
-                        /** @inheritdoc */
-                        confirm: function () {
-                            $.ajax({
-                                url: self.purchaseUrl,
-                                data: form.serialize(),
-                                type: 'post',
-                                dataType: 'json',
-
-                                /** Show loader before send */
-                                beforeSend: function () {
-                                    $('body').trigger('processStart');
-                                }
-                            }).always(function () {
-                                $('body').trigger('processStop');
-                            });
-                        }
-                    }
-                });
+    return Component.extend({
+        defaults: {
+            template: 'Magento_InstantPurchase/instant-purchase',
+            buttonText: $t('Instant Purchase'),
+            purchaseUrl: urlBuilder.build('instantpurchase/button/placeOrder'),
+            showButton: false,
+            paymentToken: null,
+            shippingAddress: null,
+            billingAddress: null,
+            shippingMethod: null,
+            productFormSelector: '#product_addtocart_form',
+            confirmationTitle: $t('Instant Purchase Confirmation'),
+            confirmationData: {
+                message: $t('Are you sure you want to place order and pay?'),
+                shippingAddressTitle: $t('Shipping Address'),
+                billingAddressTitle: $t('Billing Address'),
+                paymentMethodTitle: $t('Payment Method'),
+                shippingMethodTitle: $t('Shipping Method')
             }
-        });
-    }
-);
+        },
+
+        /** @inheritdoc */
+        initialize: function () {
+            var instantPurchase = customerData.get('instant-purchase');
+
+            this._super();
+
+            this.setPurchaseData(instantPurchase());
+            instantPurchase.subscribe(this.setPurchaseData, this);
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super()
+                .observe('showButton paymentToken shippingAddress billingAddress shippingMethod');
+
+            return this;
+        },
+
+        /**
+         * Set data from customerData.
+         *
+         * @param {Object} data
+         */
+        setPurchaseData: function (data) {
+            this.showButton(data.available);
+            this.paymentToken(data.paymentToken);
+            this.shippingAddress(data.shippingAddress);
+            this.billingAddress(data.billingAddress);
+            this.shippingMethod(data.shippingMethod);
+        },
+
+        /**
+         * Confirmation method
+         */
+        instantPurchase: function () {
+            var form = $(this.productFormSelector),
+                confirmTemplate = mageTemplate(confirmationTemplate),
+                confirmData = _.extend({}, this.confirmationData, {
+                    paymentToken: this.paymentToken().summary,
+                    shippingAddress: this.shippingAddress().summary,
+                    billingAddress: this.billingAddress().summary,
+                    shippingMethod: this.shippingMethod().summary
+                });
+
+            if (!(form.validation() && form.validation('isValid'))) {
+                return;
+            }
+
+            confirm({
+                title: this.confirmationTitle,
+                content: confirmTemplate({
+                    data: confirmData
+                }),
+                actions: {
+                    /** @inheritdoc */
+                    confirm: function () {
+                        $.ajax({
+                            url: this.purchaseUrl,
+                            data: form.serialize(),
+                            type: 'post',
+                            dataType: 'json',
+
+                            /** Show loader before send */
+                            beforeSend: function () {
+                                $('body').trigger('processStart');
+                            }
+                        }).always(function () {
+                            $('body').trigger('processStop');
+                        });
+                    }.bind(this)
+                }
+            });
+        }
+    });
+});

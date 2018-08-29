@@ -10,9 +10,11 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="CreateSalesRuleByApiTest">
         <annotations>
-            <features value="Create a Sales Rule By API"/>
+            <features value="SampleTests"/>
             <stories value="Create a Sales Rule By API"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData stepKey="saleRule" entity="SimpleSalesRule" />

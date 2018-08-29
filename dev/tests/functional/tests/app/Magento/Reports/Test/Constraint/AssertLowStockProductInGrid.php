@@ -26,7 +26,7 @@ class AssertLowStockProductInGrid extends AbstractConstraint
     public function processAssert(CatalogProductSimple $product, ProductLowStock $productLowStock)
     {
         $productLowStock->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productLowStock->getLowStockGrid()->isRowVisible(['name' => $product->getName()]),
             'Product with Low Stock is absent in Low Stock grid.'
         );

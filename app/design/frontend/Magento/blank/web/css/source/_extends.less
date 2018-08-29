@@ -804,20 +804,6 @@
 }
 
 //
-//  Checkout order review price
-//  ---------------------------------------------
-
-.abs-checkout-cart-price {
-}
-
-//
-//  Checkout order product name
-//  ---------------------------------------------
-
-.abs-checkout-product-name {
-}
-
-//
 //  Checkout order review
 //  ---------------------------------------------
 
@@ -846,7 +832,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
@@ -1233,7 +1219,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }
@@ -1402,7 +1388,7 @@
         &.active {
             > .title {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-prev,
+                @_icon-font-content: @icon-up,
                 @_icon-font-position: after
                 );
             }

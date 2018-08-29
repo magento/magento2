@@ -5,13 +5,13 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
+ *
+ * @api
  */
 class ShipmentFactory
 {
@@ -96,14 +96,17 @@ class ShipmentFactory
         \Magento\Sales\Model\Order $order,
         array $items = []
     ) {
-        $totalQty = 0;
+        $shipmentItems = [];
         foreach ($order->getAllItems() as $orderItem) {
-            if (!$this->canShipItem($orderItem, $items)) {
+            if ($this->validateItem($orderItem, $items) === false) {
                 continue;
             }
 
             /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
             $item = $this->converter->itemToShipmentItem($orderItem);
+            if ($orderItem->getIsVirtual() || ($orderItem->getParentItemId() && !$orderItem->isShipSeparately())) {
+                $item->isDeleted(true);
+            }
 
             if ($orderItem->isDummy(true)) {
                 $qty = 0;
@@ -121,8 +124,7 @@ class ShipmentFactory
                             $qty = min($qty, $orderItem->getSimpleQtyToShip());
 
                             $item->setQty($this->castQty($orderItem, $qty));
-                            $shipment->addItem($item);
-
+                            $shipmentItems[] = $item;
                             continue;
                         } else {
                             $qty = 1;
@@ -141,10 +143,65 @@ class ShipmentFactory
                 }
             }
 
-            $totalQty += $qty;
-
             $item->setQty($this->castQty($orderItem, $qty));
-            $shipment->addItem($item);
+            $shipmentItems[] = $item;
+        }
+        return $this->setItemsToShipment($shipment, $shipmentItems);
+    }
+
+    /**
+     * Validate order item before shipment
+     *
+     * @param Item $orderItem
+     * @param array $items
+     * @return bool
+     */
+    private function validateItem(\Magento\Sales\Model\Order\Item $orderItem, array $items)
+    {
+        if (!$this->canShipItem($orderItem, $items)) {
+            return false;
+        }
+
+        // Remove from shipment items without qty or with qty=0
+        if (!$orderItem->isDummy(true)
+            && (!isset($items[$orderItem->getId()]) || $items[$orderItem->getId()] <= 0)
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Set prepared items to shipment document
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
+     * @param array $shipmentItems
+     * @return \Magento\Sales\Api\Data\ShipmentInterface
+     */
+    private function setItemsToShipment(\Magento\Sales\Api\Data\ShipmentInterface $shipment, $shipmentItems)
+    {
+        $totalQty = 0;
+
+        /**
+         * Verify that composite products shipped separately has children, if not -> remove from collection
+         */
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
+        foreach ($shipmentItems as $key => $shipmentItem) {
+            if ($shipmentItem->getOrderItem()->getHasChildren()
+                && $shipmentItem->getOrderItem()->isShipSeparately()
+            ) {
+                $containerId = $shipmentItem->getOrderItem()->getId();
+                $childItems = array_filter($shipmentItems, function ($item) use ($containerId) {
+                    return $containerId == $item->getOrderItem()->getParentItemId();
+                });
+
+                if (count($childItems) <= 0) {
+                    unset($shipmentItems[$key]);
+                    continue;
+                }
+            }
+            $totalQty += $shipmentItem->getQty();
+            $shipment->addItem($shipmentItem);
         }
         return $shipment->setTotalQty($totalQty);
     }

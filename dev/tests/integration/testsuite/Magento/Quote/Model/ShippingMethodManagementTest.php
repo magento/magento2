@@ -14,6 +14,21 @@ namespace Magento\Quote\Model;
 class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @return void
+     */
+    public function testRateAppliedToShipping(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $customerQuote = $quoteRepository->getForCustomer(1);
+        $this->assertEquals(0, $customerQuote->getBaseGrandTotal());
+    }
+
+    /**
      * @magentoConfigFixture current_store carriers/tablerate/active 1
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php

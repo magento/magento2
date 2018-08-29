@@ -66,7 +66,9 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
         if ($email) {
             if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $this->session->setForgottenEmail($email);
-                $this->messageManager->addErrorMessage(__('Please correct the email address.'));
+                $this->messageManager->addErrorMessage(
+                    __('The email address is incorrect. Verify the email address and try again.')
+                );
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
 

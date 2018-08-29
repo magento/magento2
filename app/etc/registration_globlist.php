@@ -15,4 +15,5 @@ return [
     'app/i18n/*/*/registration.php',
     'lib/internal/*/*/registration.php',
     'lib/internal/*/*/*/registration.php',
+    'setup/src/*/*/registration.php'
 ];

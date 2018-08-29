@@ -83,8 +83,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateUndefinedClass()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             sprintf(
                 'Cannot create standard driver output, class "%s" doesn\'t exist.',
                 'Magento_Framework_Profiler_Driver_Standard_Output_Test_Baz'
@@ -95,8 +95,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateInvalidClass()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Output class "stdClass" must implement \Magento\Framework\Profiler\Driver\Standard\OutputInterface.'
         );
         $this->_factory->create(['type' => 'stdClass']);

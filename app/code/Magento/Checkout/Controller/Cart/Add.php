@@ -80,6 +80,9 @@ class Add extends \Magento\Checkout\Controller\Cart
     public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->messageManager->addErrorMessage(
+                __('Your session has expired')
+            );
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
@@ -132,13 +135,13 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
                 );
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($message)
                     );
                 }
@@ -153,7 +156,10 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             return $this->goBack($url);
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t add this item to your shopping cart right now.')
+            );
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->goBack();
         }

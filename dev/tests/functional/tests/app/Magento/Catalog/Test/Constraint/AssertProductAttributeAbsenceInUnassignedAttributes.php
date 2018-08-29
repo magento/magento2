@@ -39,7 +39,7 @@ class AssertProductAttributeAbsenceInUnassignedAttributes extends AbstractConstr
             ->getAttributes()[0]
             ->getAttributeCode();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $productSetEdit->getAttributeSetEditBlock()->checkUnassignedProductAttribute($attributeCode),
             "Attribute " . $attributeCode . " is present in Unassigned Attribute set's section."
         );

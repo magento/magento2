@@ -1,0 +1,37 @@
+{
+    "admin_user_session": {
+        "column": {
+            "id": true,
+            "session_id": true,
+            "user_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true,
+            "ip": true
+        },
+        "index": {
+            "ADMIN_USER_SESSION_SESSION_ID": true,
+            "ADMIN_USER_SESSION_USER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "password_reset_request_event": {
+        "column": {
+            "id": true,
+            "request_type": true,
+            "account_reference": true,
+            "created_at": true,
+            "ip": true
+        },
+        "index": {
+            "PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE": true,
+            "PASSWORD_RESET_REQUEST_EVENT_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

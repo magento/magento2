@@ -1,0 +1,13 @@
+{
+    "queue_lock": {
+        "column": {
+            "id": true,
+            "message_code": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "QUEUE_LOCK_MESSAGE_CODE": true
+        }
+    }
+}

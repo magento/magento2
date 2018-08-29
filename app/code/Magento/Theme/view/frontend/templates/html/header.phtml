@@ -15,11 +15,11 @@ $welcomeMessage = $block->getWelcome();
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'customer'">
             <!-- ko if: customer().fullname  -->
-            <span data-bind="text: new String('<?= $block->escapeHtml(__('Welcome, %1!', '%1')) ?>').replace('%1', customer().firstname)">
+            <span data-bind="text: new String('<?= $block->escapeHtml(__('Welcome, %1!', '%1')) ?>').replace('%1', customer().fullname)">
             </span>
             <!-- /ko -->
             <!-- ko ifnot: customer().fullname  -->
-            <span data-bind='html:"<?= $block->escapeHtmlAttr($welcomeMessage) ?>"'></span>
+            <span data-bind='html:"<?= $block->escapeHtml($welcomeMessage) ?>"'></span>
             <?= $block->getBlockHtml('header.additional') ?>
             <!-- /ko -->
         </li>

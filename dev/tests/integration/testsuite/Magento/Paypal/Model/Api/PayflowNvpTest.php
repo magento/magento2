@@ -81,6 +81,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
      * Checks a case when items and discount are present in the request.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
+     * @magentoDbIsolation disabled
      */
     public function testRequestLineItems()
     {

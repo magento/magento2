@@ -65,7 +65,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
@@ -83,7 +83,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
@@ -110,7 +110,7 @@ class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php

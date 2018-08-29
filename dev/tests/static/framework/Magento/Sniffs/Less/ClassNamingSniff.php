@@ -62,11 +62,5 @@ class ClassNamingSniff implements Sniff
         if (preg_match_all('/[^a-z0-9\-_]/U', $className, $matches)) {
             $phpcsFile->addError('Class name contains not allowed symbols', $stackPtr, 'NotAllowedSymbol', $matches);
         }
-
-        if (strpos($className, self::STRING_HELPER_CLASSES_PREFIX) !== false
-            && strpos($className, self::STRING_ALLOWED_UNDERSCORES) === false
-        ) {
-            $phpcsFile->addError('"_" symbol allowed only for helper classes', $stackPtr, 'UnderscoreSymbol');
-        }
     }
 }

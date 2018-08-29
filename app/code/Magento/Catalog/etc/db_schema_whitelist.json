@@ -1,0 +1,1124 @@
+{
+    "catalog_product_entity": {
+        "column": {
+            "entity_id": true,
+            "attribute_set_id": true,
+            "type_id": true,
+            "sku": true,
+            "has_options": true,
+            "required_options": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID": true,
+            "CATALOG_PRODUCT_ENTITY_SKU": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID": true
+        }
+    },
+    "catalog_product_entity_datetime": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_DATETIME_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_DTIME_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_decimal": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_DECIMAL_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_DEC_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DECIMAL_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_int": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_INT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_text": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_TEXT_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_TEXT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_TEXT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_TEXT_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_varchar": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_VARCHAR_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_VCHR_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_gallery": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "position": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_GALLERY_ENTITY_ID": true,
+            "CATALOG_PRODUCT_ENTITY_GALLERY_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_GALLERY_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_GLR_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_PRD_ENTT_GLR_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_ENTITY_GALLERY_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_GALLERY_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_entity": {
+        "column": {
+            "entity_id": true,
+            "attribute_set_id": true,
+            "parent_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "path": true,
+            "position": true,
+            "level": true,
+            "children_count": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_LEVEL": true,
+            "CATALOG_CATEGORY_ENTITY_PATH": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_category_entity_datetime": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_DATETIME_ENTITY_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DATETIME_ATTRIBUTE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DATETIME_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_CTGR_ENTT_DTIME_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DATETIME_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_entity_decimal": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_ENTITY_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_ATTRIBUTE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_CTGR_ENTT_DEC_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_entity_int": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_INT_ENTITY_ID": true,
+            "CATALOG_CATEGORY_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_INT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_CTGR_ENTT_INT_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_ENTITY_INT_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_entity_text": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_TEXT_ENTITY_ID": true,
+            "CATALOG_CATEGORY_ENTITY_TEXT_ATTRIBUTE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_TEXT_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_CTGR_ENTT_TEXT_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_ENTITY_TEXT_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_entity_varchar": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_ENTITY_VARCHAR_ENTITY_ID": true,
+            "CATALOG_CATEGORY_ENTITY_VARCHAR_ATTRIBUTE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_VARCHAR_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID": true,
+            "CAT_CTGR_ENTT_VCHR_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_ENTITY_VARCHAR_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_STORE_ID": true
+        }
+    },
+    "catalog_category_product": {
+        "column": {
+            "entity_id": true,
+            "category_id": true,
+            "product_id": true,
+            "position": true
+        },
+        "index": {
+            "CATALOG_CATEGORY_PRODUCT_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID": true,
+            "CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID": true,
+            "CAT_CTGR_PRD_CTGR_ID_SEQUENCE_CAT_CTGR_SEQUENCE_VAL": true
+        }
+    },
+    "catalog_category_product_index": {
+        "column": {
+            "category_id": true,
+            "product_id": true,
+            "position": true,
+            "is_parent": true,
+            "store_id": true,
+            "visibility": true
+        },
+        "index": {
+            "CAT_CTGR_PRD_IDX_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY": true,
+            "CAT_CTGR_PRD_IDX_STORE_ID_CTGR_ID_VISIBILITY_IS_PARENT_POSITION": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_compare_item": {
+        "column": {
+            "catalog_compare_item_id": true,
+            "visitor_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "store_id": true
+        },
+        "index": {
+            "CATALOG_COMPARE_ITEM_PRODUCT_ID": true,
+            "CATALOG_COMPARE_ITEM_VISITOR_ID_PRODUCT_ID": true,
+            "CATALOG_COMPARE_ITEM_CUSTOMER_ID_PRODUCT_ID": true,
+            "CATALOG_COMPARE_ITEM_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOG_COMPARE_ITEM_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "CATALOG_COMPARE_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
+            "CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "catalog_product_website": {
+        "column": {
+            "product_id": true,
+            "website_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_WEBSITE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOG_PRODUCT_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "CAT_PRD_WS_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "catalog_product_link_type": {
+        "column": {
+            "link_type_id": true,
+            "code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_link": {
+        "column": {
+            "link_id": true,
+            "product_id": true,
+            "linked_product_id": true,
+            "link_type_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_LINK_PRODUCT_ID": true,
+            "CATALOG_PRODUCT_LINK_LINKED_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_LNK_LNKED_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_LINK_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
+            "CAT_PRD_LNK_LNK_TYPE_ID_CAT_PRD_LNK_TYPE_LNK_TYPE_ID": true,
+            "CATALOG_PRODUCT_LINK_LINK_TYPE_ID_PRODUCT_ID_LINKED_PRODUCT_ID": true
+        }
+    },
+    "catalog_product_link_attribute": {
+        "column": {
+            "product_link_attribute_id": true,
+            "link_type_id": true,
+            "product_link_attribute_code": true,
+            "data_type": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_LINK_ATTRIBUTE_LINK_TYPE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_LNK_ATTR_LNK_TYPE_ID_CAT_PRD_LNK_TYPE_LNK_TYPE_ID": true
+        }
+    },
+    "catalog_product_link_attribute_decimal": {
+        "column": {
+            "value_id": true,
+            "product_link_attribute_id": true,
+            "link_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_LINK_ATTRIBUTE_DECIMAL_LINK_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_LNK_ATTR_DEC_LNK_ID_CAT_PRD_LNK_LNK_ID": true,
+            "FK_AB2EFA9A14F7BCF1D5400056203D14B6": true,
+            "CAT_PRD_LNK_ATTR_DEC_PRD_LNK_ATTR_ID_LNK_ID": true
+        }
+    },
+    "catalog_product_link_attribute_int": {
+        "column": {
+            "value_id": true,
+            "product_link_attribute_id": true,
+            "link_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_LINK_ATTRIBUTE_INT_LINK_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_LNK_ATTR_INT_LNK_ID_CAT_PRD_LNK_LNK_ID": true,
+            "FK_D6D878F8BA2A4282F8DDED7E6E3DE35C": true,
+            "CAT_PRD_LNK_ATTR_INT_PRD_LNK_ATTR_ID_LNK_ID": true
+        }
+    },
+    "catalog_product_link_attribute_varchar": {
+        "column": {
+            "value_id": true,
+            "product_link_attribute_id": true,
+            "link_id": true,
+            "value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_LINK_ATTRIBUTE_VARCHAR_LINK_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_LNK_ATTR_VCHR_LNK_ID_CAT_PRD_LNK_LNK_ID": true,
+            "FK_DEE9C4DA61CFCC01DFCF50F0D79CEA51": true,
+            "CAT_PRD_LNK_ATTR_VCHR_PRD_LNK_ATTR_ID_LNK_ID": true
+        }
+    },
+    "catalog_product_entity_tier_price": {
+        "column": {
+            "value_id": true,
+            "entity_id": true,
+            "all_groups": true,
+            "customer_group_id": true,
+            "qty": true,
+            "value": true,
+            "website_id": true,
+            "percentage_value": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_TIER_PRICE_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_ENTITY_TIER_PRICE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_TIER_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true,
+            "CAT_PRD_ENTT_TIER_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CAT_PRD_ENTT_TIER_PRICE_WS_ID_STORE_WS_WS_ID": true,
+            "UNQ_E8AB433B9ACB00343ABB312AD2FAB087": true
+        }
+    },
+    "catalog_product_entity_media_gallery": {
+        "column": {
+            "value_id": true,
+            "attribute_id": true,
+            "entity_id": true,
+            "value": true,
+            "media_type": true,
+            "disabled": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_MDA_GLR_ATTR_ID_EAV_ATTR_ATTR_ID": true
+        }
+    },
+    "catalog_product_entity_media_gallery_value": {
+        "column": {
+            "value_id": true,
+            "store_id": true,
+            "entity_id": true,
+            "label": true,
+            "position": true,
+            "disabled": true,
+            "record_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ENTITY_ID": true,
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_VALUE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_VAL_ID_CAT_PRD_ENTT_MDA_GLR_VAL_ID": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_STORE_ID_STORE_STORE_ID": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "catalog_product_option": {
+        "column": {
+            "option_id": true,
+            "product_id": true,
+            "type": true,
+            "is_require": true,
+            "sku": true,
+            "max_characters": true,
+            "file_extension": true,
+            "image_size_x": true,
+            "image_size_y": true,
+            "sort_order": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_OPT_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "catalog_product_option_price": {
+        "column": {
+            "option_price_id": true,
+            "option_id": true,
+            "store_id": true,
+            "price": true,
+            "price_type": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_PRICE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_OPT_PRICE_OPT_ID_CAT_PRD_OPT_OPT_ID": true,
+            "CATALOG_PRODUCT_OPTION_PRICE_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_OPTION_PRICE_OPTION_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_option_title": {
+        "column": {
+            "option_title_id": true,
+            "option_id": true,
+            "store_id": true,
+            "title": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_OPT_TTL_OPT_ID_CAT_PRD_OPT_OPT_ID": true,
+            "CATALOG_PRODUCT_OPTION_TITLE_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_OPTION_TITLE_OPTION_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_option_type_value": {
+        "column": {
+            "option_type_id": true,
+            "option_id": true,
+            "sku": true,
+            "sort_order": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_TYPE_VALUE_OPTION_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_OPT_TYPE_VAL_OPT_ID_CAT_PRD_OPT_OPT_ID": true
+        }
+    },
+    "catalog_product_option_type_price": {
+        "column": {
+            "option_type_price_id": true,
+            "option_type_id": true,
+            "store_id": true,
+            "price": true,
+            "price_type": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_TYPE_PRICE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_B523E3378E8602F376CC415825576B7F": true,
+            "CATALOG_PRODUCT_OPTION_TYPE_PRICE_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_OPTION_TYPE_PRICE_OPTION_TYPE_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_option_type_title": {
+        "column": {
+            "option_type_title_id": true,
+            "option_type_id": true,
+            "store_id": true,
+            "title": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_OPTION_TYPE_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_C085B9CF2C2A302E8043FDEA1937D6A2": true,
+            "CATALOG_PRODUCT_OPTION_TYPE_TITLE_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_PRODUCT_OPTION_TYPE_TITLE_OPTION_TYPE_ID_STORE_ID": true
+        }
+    },
+    "catalog_eav_attribute": {
+        "column": {
+            "attribute_id": true,
+            "frontend_input_renderer": true,
+            "is_global": true,
+            "is_visible": true,
+            "is_searchable": true,
+            "is_filterable": true,
+            "is_comparable": true,
+            "is_visible_on_front": true,
+            "is_html_allowed_on_front": true,
+            "is_used_for_price_rules": true,
+            "is_filterable_in_search": true,
+            "used_in_product_listing": true,
+            "used_for_sort_by": true,
+            "apply_to": true,
+            "is_visible_in_advanced_search": true,
+            "position": true,
+            "is_wysiwyg_enabled": true,
+            "is_used_for_promo_rules": true,
+            "is_required_in_admin_store": true,
+            "is_used_in_grid": true,
+            "is_visible_in_grid": true,
+            "is_filterable_in_grid": true
+        },
+        "index": {
+            "CATALOG_EAV_ATTRIBUTE_USED_FOR_SORT_BY": true,
+            "CATALOG_EAV_ATTRIBUTE_USED_IN_PRODUCT_LISTING": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOG_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true
+        }
+    },
+    "catalog_product_relation": {
+        "column": {
+            "parent_id": true,
+            "child_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_RELATION_CHILD_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_RELATION_CHILD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CAT_PRD_RELATION_PARENT_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "catalog_product_index_eav": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_eav_decimal": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_DEC_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_price": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "price": true,
+            "final_price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_MIN_PRICE": true,
+            "CAT_PRD_IDX_PRICE_WS_ID_CSTR_GROUP_ID_MIN_PRICE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true,
+            "CAT_PRD_IDX_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "catalog_product_index_tier_price": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_TIER_PRICE_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_TIER_PRICE_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_TIER_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true,
+            "CAT_PRD_IDX_TIER_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CAT_PRD_IDX_TIER_PRICE_WS_ID_STORE_WS_WS_ID": true
+        }
+    },
+    "catalog_product_index_website": {
+        "column": {
+            "website_id": true,
+            "website_date": true,
+            "rate": true,
+            "default_store_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_WEBSITE_WEBSITE_DATE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_WS_WS_ID_STORE_WS_WS_ID": true
+        }
+    },
+    "catalog_product_index_price_cfg_opt_agr_idx": {
+        "column": {
+            "parent_id": true,
+            "child_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_cfg_opt_agr_tmp": {
+        "column": {
+            "parent_id": true,
+            "child_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_cfg_opt_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_cfg_opt_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_final_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "orig_price": true,
+            "price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true,
+            "base_tier": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_final_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "orig_price": true,
+            "price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true,
+            "base_tier": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_opt_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_opt_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_opt_agr_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "option_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_opt_agr_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "option_id": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_eav_idx": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_IDX_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_IDX_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_IDX_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_eav_tmp": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_eav_decimal_idx": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_DEC_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_eav_decimal_tmp": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_IDX_EAV_DEC_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID": true
+        }
+    },
+    "catalog_product_index_price_idx": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "price": true,
+            "final_price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_PRICE_IDX_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_IDX_WEBSITE_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_IDX_MIN_PRICE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_tmp": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "price": true,
+            "final_price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_category_product_index_tmp": {
+        "column": {
+            "category_id": true,
+            "product_id": true,
+            "position": true,
+            "is_parent": true,
+            "store_id": true,
+            "visibility": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        },
+        "index": {
+            "CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID": true
+        }
+    },
+    "catalog_product_entity_media_gallery_value_to_entity": {
+        "column": {
+            "value_id": true,
+            "entity_id": true
+        },
+        "constraint": {
+            "FK_A6C6C8FAA386736921D3A7C4B50B1185": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID": true
+        }
+    },
+    "catalog_product_index_eav_replica": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_REPLICA_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_REPLICA_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_REPLICA_VALUE": true,
+            "CATALOG_PRODUCT_INDEX_EAV_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_eav_decimal_replica": {
+        "column": {
+            "entity_id": true,
+            "attribute_id": true,
+            "store_id": true,
+            "value": true,
+            "source_id": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_VALUE": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_STORE_ID": true,
+            "CATALOG_PRODUCT_INDEX_EAV_DECIMAL_VALUE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_index_price_replica": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true,
+            "tax_class_id": true,
+            "price": true,
+            "final_price": true,
+            "min_price": true,
+            "max_price": true,
+            "tier_price": true
+        },
+        "index": {
+            "CATALOG_PRODUCT_INDEX_PRICE_REPLICA_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_REPLICA_MIN_PRICE": true,
+            "CAT_PRD_IDX_PRICE_REPLICA_WS_ID_CSTR_GROUP_ID_MIN_PRICE": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID": true,
+            "CATALOG_PRODUCT_INDEX_PRICE_MIN_PRICE": true,
+            "CAT_PRD_IDX_PRICE_WS_ID_CSTR_GROUP_ID_MIN_PRICE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_category_product_index_replica": {
+        "column": {
+            "category_id": true,
+            "product_id": true,
+            "position": true,
+            "is_parent": true,
+            "store_id": true,
+            "visibility": true
+        },
+        "index": {
+            "CAT_CTGR_PRD_IDX_REPLICA_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY": true,
+            "IDX_87EB2E3059853CF89A75B4C55074810B": true,
+            "CAT_CTGR_PRD_IDX_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY": true,
+            "CAT_CTGR_PRD_IDX_STORE_ID_CTGR_ID_VISIBILITY_IS_PARENT_POSITION": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_product_frontend_action": {
+        "column": {
+            "action_id": true,
+            "type_id": true,
+            "visitor_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "added_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_PRD_FRONTEND_ACTION_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "CAT_PRD_FRONTEND_ACTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "CATALOG_PRODUCT_FRONTEND_ACTION_VISITOR_ID_PRODUCT_ID_TYPE_ID": true,
+            "CATALOG_PRODUCT_FRONTEND_ACTION_CUSTOMER_ID_PRODUCT_ID_TYPE_ID": true
+        }
+    }
+}

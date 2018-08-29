@@ -15,7 +15,7 @@ class Edit extends RatingController
      */
     public function execute()
     {
-        $this->initEnityId();
+        $this->initEntityId();
         /** @var \Magento\Review\Model\Rating $ratingModel */
         $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
         if ($this->getRequest()->getParam('id')) {

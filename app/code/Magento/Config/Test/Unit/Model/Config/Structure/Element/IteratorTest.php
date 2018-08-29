@@ -93,6 +93,9 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage($expectedMessage);
     }
 
+    /**
+     * @return array
+     */
     public function isLastDataProvider()
     {
         return [[1, false], [2, false], [3, true]];

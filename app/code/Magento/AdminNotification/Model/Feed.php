@@ -214,9 +214,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
-        if ($data === false) {
-            return false;
-        }
         $data = preg_split('/^\r?$/m', $data, 2);
         $data = trim($data[1]);
         $curl->close();

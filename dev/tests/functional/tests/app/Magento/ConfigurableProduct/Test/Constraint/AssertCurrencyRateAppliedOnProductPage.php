@@ -58,7 +58,7 @@ class AssertCurrencyRateAppliedOnProductPage extends AbstractConstraint
      */
     public function assertPrice(CatalogProductView $view, $price, $currency = '')
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $price,
             $view->getViewBlock()->getPriceBlock()->getPrice($currency),
             'Wrong price is displayed on Product page.'
