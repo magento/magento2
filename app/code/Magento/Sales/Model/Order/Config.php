@@ -193,7 +193,7 @@ class Config
     }
 
     /**
-     * Convert State Code to State Label
+    * Convert State Code to State Label
     */
     public function getStateLabelByCode($stateCode)
     {
