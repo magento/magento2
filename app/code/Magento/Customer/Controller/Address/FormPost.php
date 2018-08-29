@@ -95,6 +95,8 @@ class FormPost extends \Magento\Customer\Controller\Address
      * Extract address from request
      *
      * @return \Magento\Customer\Api\Data\AddressInterface
+     *
+     * @throws \Exception
      */
     protected function _extractAddress()
     {
@@ -106,7 +108,11 @@ class FormPost extends \Magento\Customer\Controller\Address
             'customer_address_edit',
             $existingAddressData
         );
-        $addressData = $addressForm->extractData($this->getRequest());
+
+        $addressData = $this->ksortStreetData(
+            $addressForm->extractData($this->getRequest())
+        );
+
         $attributeValues = $addressForm->compactData($addressData);
 
         $this->updateRegionData($attributeValues);
@@ -122,6 +128,26 @@ class FormPost extends \Magento\Customer\Controller\Address
             ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
 
         return $addressDataObject;
+    }
+
+    /**
+     * Sort street data by key
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function ksortStreetData($data)
+    {
+        if (empty($data['street']) || !is_array($data['street'])) {
+            return $data;
+        }
+
+        $street = $data['street'];
+        ksort($street);
+        $data['street'] = $street;
+
+        return $data;
     }
 
     /**
