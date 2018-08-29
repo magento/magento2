@@ -28,9 +28,10 @@
             <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAllToCleanUpBefore"/>
             <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAllToCleanUpBefore"/>
             <click selector="//button[@class='action-select']" stepKey="massActionsToCleanUpBefore"/>
-            <click selector="//span[text()='Delete']" stepKey="massDeleteToCleanUpBefore"/>
+            <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
+            <click selector="#anchor-content .action-menu._active span" stepKey="massDeleteToCleanUpBefore"/>
             <click selector=".action-accept" stepKey="okToCleanUpBefore"/>
-            <waitForPageLoad stepKey="waitForPageLoaded" time="30" />
+            <waitForPageLoad time="30" stepKey="waitForPageLoaded"/>
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="BasicMsiStock1" stepKey="createStock2"/>
             <createData entity="BasicMsiStock1" stepKey="createStock3"/>
@@ -62,7 +63,8 @@
             <click selector="{{AdminManageStockGridControls.multicheckDropdown}}" stepKey="openDropdownToSelectAllToCleanUp"/>
             <click selector="{{AdminManageStockGridControls.multicheckOption('Select All')}}" stepKey="selectAllToCleanUp"/>
             <click selector="//button[@class='action-select']" stepKey="massActionsToCleanUp"/>
-            <click selector="//span[text()='Delete']" stepKey="massDeleteToCleanUp"/>
+            <waitForPageLoad time="5" stepKey="waitForPageLoad1"/>
+            <click selector="#anchor-content .action-menu._active span" stepKey="massDeleteToCleanUp"/>
             <click selector=".action-accept" stepKey="okToCleanUp"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
