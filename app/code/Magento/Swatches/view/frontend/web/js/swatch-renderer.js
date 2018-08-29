@@ -504,6 +504,7 @@ define([
                     value,
                     thumb,
                     label,
+                    attr,
                     link;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
@@ -583,30 +584,33 @@ define([
          */
         _RenderSwatchSelect: function (config, chooseText) {
             var select,
-            option;
+            firstOption,
+            otherOption;
 
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
             }
 
             select = document.createElement('select');
-            select.class = this.options.classes.selectClass;
-            option = document.createElement('option');
-            select.appendChild(option);
+            $(select).attr('class', this.options.classes.selectClass);
+            firstOption = document.createElement('option');
+            $(firstOption).attr('value', 0);
+            $(firstOption).attr('option-id', 0);
+            $(firstOption).text(chooseText);
+            select.appendChild(firstOption);
 
             $.each(config.options, function () {
-                $(option).attr(
-                    {
-                        'value': this.id,
-                        'option-id': this.id
-                    }
-                );
+                otherOption = document.createElement('option');
+                $(otherOption).attr('value', this.id);
+                $(otherOption).attr('option-id', this.id);
+                $(otherOption).text(this.label);
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
-                    option.setAttribute('option-empty', true);
+                    otherOption.setAttribute('option-empty', true);
                 }
 
-                select.appendChild(option.textContent = chooseText);
+                // option.textContent = chooseText;
+                select.appendChild(otherOption);
             });
 
             return select.outerHTML;
