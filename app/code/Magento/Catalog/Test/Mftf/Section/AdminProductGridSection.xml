@@ -28,5 +28,6 @@
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
         <element name="productGridCheckboxOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td[1]//input" parameterized="true"/>
         <element name="productGridNameProduct" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="selectRowBasedOnName" type="input" selector="//td/div[text()='{{var1}}']" parameterized="true"/>
     </section>
 </sections>

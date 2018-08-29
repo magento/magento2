@@ -18,7 +18,7 @@
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>
-        <data key="store_type">group</data>
+        <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
     <entity name="customStoreEN" type="store">
@@ -27,7 +27,7 @@
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>
-        <data key="store_type">group</data>
+        <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
     <entity name="customStoreFR" type="store">
@@ -37,6 +37,16 @@
         <data key="store_id">null</data>
         <data key="store_action">add</data>
         <data key="store_type">group</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="staticStore" type="store">
+        <!--data key="group_id">customStoreGroup.id</data-->
+        <data key="name" >Second Store View</data>
+        <data key="code" >store123</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
 </entities>

@@ -1,24 +1,26 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
-*/
+ */
 
 define([
     'jquery',
     'Magento_Ui/js/modal/modal'
-], function ($) {
+], function ($, modal) {
     'use strict';
 
     return function (data, element) {
-        if (this.modal) {
-            this.modal.html($(element).html());
+
+        if (modal.modal) {
+            modal.modal.html($(element).html());
         } else {
-            this.modal = $(element).modal({
+            modal.modal = $(element).modal({
                 modalClass: data.class,
                 type: 'popup',
                 buttons: []
             });
         }
-        this.modal.modal('openModal');
+
+        modal.modal.modal('openModal');
     };
 });
