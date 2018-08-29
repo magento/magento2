@@ -126,8 +126,7 @@ define([
                     fileTypes: /^image\/(gif|jpeg|png)$/
                 }, {
                     action: 'resize',
-                    maxWidth: this.options.maxWidth,
-                    maxHeight: this.options.maxHeight
+                    disableImageResize: true
                 }, {
                     action: 'save'
                 }]
