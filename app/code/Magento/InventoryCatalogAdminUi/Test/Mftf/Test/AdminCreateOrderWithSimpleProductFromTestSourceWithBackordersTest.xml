@@ -50,7 +50,8 @@
             <actionGroup ref="FillMainProductFormInMultiSourceModeActionGroup" stepKey="fillMainProductFieldsInAdmin">
                 <argument name="product" value="SimpleMsiProduct"/>
             </actionGroup>
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+            <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
             <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToProduct">
                 <argument name="sourceCode" value="$$customSource.source[name]$$"/>
             </actionGroup>
