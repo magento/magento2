@@ -139,7 +139,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('This page no longer exists.'));
 
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())

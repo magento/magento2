@@ -17,6 +17,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Class to test the JoinProcessor functionality
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -144,55 +145,55 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
     private function getConfig()
     {
         return [\Magento\Catalog\Api\Data\ProductInterface::class => [
-                'review_id' => [
-                    Converter::DATA_TYPE => 'string',
-                    Converter::RESOURCE_PERMISSIONS => [],
-                    Converter::JOIN_DIRECTIVE => [
-                        Converter::JOIN_REFERENCE_TABLE => "reviews",
-                        Converter::JOIN_REFERENCE_FIELD => "product_id",
-                        Converter::JOIN_FIELDS => [
-                            [
-                                Converter::JOIN_FIELD => "review_id",
-                                Converter::JOIN_FIELD_COLUMN => "db_review_id",
-                            ],
+            'review_id' => [
+                Converter::DATA_TYPE => 'string',
+                Converter::RESOURCE_PERMISSIONS => [],
+                Converter::JOIN_DIRECTIVE => [
+                    Converter::JOIN_REFERENCE_TABLE => "reviews",
+                    Converter::JOIN_REFERENCE_FIELD => "product_id",
+                    Converter::JOIN_FIELDS => [
+                        [
+                            Converter::JOIN_FIELD => "review_id",
+                            Converter::JOIN_FIELD_COLUMN => "db_review_id",
                         ],
-                        Converter::JOIN_ON_FIELD => "id",
                     ],
-                ],
-            ], \Magento\Customer\Api\Data\CustomerInterface::class => [
-                'library_card_id' => [
-                    Converter::DATA_TYPE => 'string',
-                    Converter::RESOURCE_PERMISSIONS => [],
-                    Converter::JOIN_DIRECTIVE => [
-                        Converter::JOIN_REFERENCE_TABLE => "library_account",
-                        Converter::JOIN_FIELDS => [
-                            [
-                                Converter::JOIN_FIELD => "library_card_id",
-                                Converter::JOIN_FIELD_COLUMN => "",
-                            ],
-                        ],
-                        Converter::JOIN_ON_FIELD => "customer_id",
-                    ],
-                ],
-                'reviews' => [
-                    Converter::DATA_TYPE => 'Magento\Reviews\Api\Data\Reviews[]',
-                    Converter::RESOURCE_PERMISSIONS => [],
-                    Converter::JOIN_DIRECTIVE => [
-                        Converter::JOIN_REFERENCE_TABLE => "reviews",
-                        Converter::JOIN_FIELDS => [
-                            [
-                                Converter::JOIN_FIELD => "comment",
-                                Converter::JOIN_FIELD_COLUMN => "",
-                            ],
-                            [
-                                Converter::JOIN_FIELD => "rating",
-                                Converter::JOIN_FIELD_COLUMN => "",
-                            ],
-                        ],
-                        Converter::JOIN_ON_FIELD => "customer_id",
-                    ],
+                    Converter::JOIN_ON_FIELD => "id",
                 ],
             ],
+        ], \Magento\Customer\Api\Data\CustomerInterface::class => [
+            'library_card_id' => [
+                Converter::DATA_TYPE => 'string',
+                Converter::RESOURCE_PERMISSIONS => [],
+                Converter::JOIN_DIRECTIVE => [
+                    Converter::JOIN_REFERENCE_TABLE => "library_account",
+                    Converter::JOIN_FIELDS => [
+                        [
+                            Converter::JOIN_FIELD => "library_card_id",
+                            Converter::JOIN_FIELD_COLUMN => "",
+                        ],
+                    ],
+                    Converter::JOIN_ON_FIELD => "customer_id",
+                ],
+            ],
+            'reviews' => [
+                Converter::DATA_TYPE => 'Magento\Reviews\Api\Data\Reviews[]',
+                Converter::RESOURCE_PERMISSIONS => [],
+                Converter::JOIN_DIRECTIVE => [
+                    Converter::JOIN_REFERENCE_TABLE => "reviews",
+                    Converter::JOIN_FIELDS => [
+                        [
+                            Converter::JOIN_FIELD => "comment",
+                            Converter::JOIN_FIELD_COLUMN => "",
+                        ],
+                        [
+                            Converter::JOIN_FIELD => "rating",
+                            Converter::JOIN_FIELD_COLUMN => "",
+                        ],
+                    ],
+                    Converter::JOIN_ON_FIELD => "customer_id",
+                ],
+            ],
+        ],
         ];
     }
 

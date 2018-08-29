@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <title value="Verify dynamic bundle product prices for combination of options"/>
+            <description value="Verify prices for various configurations of Dynamic Bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-78827"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+
+            <!--Create 5 simple product-->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">4.99</field>
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">2.89</field>
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3">
+                <field key="price">7.33</field>
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4">
+                <field key="price">18.25</field>
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+
+            <!--Add special price to simple product-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct5.id$$)}}" stepKey="openAdminEditPage"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
+            <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+            <!--Create Bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">false</field>
+            </createData>
+            <createData entity="CheckboxOption" stepKey="createBundleOption1_2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct3">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="simpleProduct3"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct4">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="simpleProduct4"/>
+            </createData>
+
+            <!--Create Bundle product 2-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct2">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption2_1">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="createBundleOption2_2">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct5">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+                <requiredEntity createDataKey="createBundleOption2_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+                <field key="qty">2</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct6">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+                <requiredEntity createDataKey="createBundleOption2_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct7">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+                <requiredEntity createDataKey="createBundleOption2_2"/>
+                <requiredEntity createDataKey="simpleProduct3"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct8">
+                <requiredEntity createDataKey="createBundleProduct2"/>
+                <requiredEntity createDataKey="createBundleOption2_2"/>
+                <requiredEntity createDataKey="simpleProduct4"/>
+                <field key="qty">5</field>
+            </createData>
+
+            <!--Create Bundle product 3-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct3">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption3_1">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption3_2">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+                <field key="required">false</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct9">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+                <requiredEntity createDataKey="createBundleOption3_1"/>
+                <requiredEntity createDataKey="simpleProduct4"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct10">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+                <requiredEntity createDataKey="createBundleOption3_1"/>
+                <requiredEntity createDataKey="simpleProduct5"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct11">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+                <requiredEntity createDataKey="createBundleOption3_2"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct12">
+                <requiredEntity createDataKey="createBundleProduct3"/>
+                <requiredEntity createDataKey="createBundleOption3_2"/>
+                <requiredEntity createDataKey="simpleProduct3"/>
+            </createData>
+
+            <!-- navigate to the tax configuration page -->
+            <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+            <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedDisabled}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+            <selectOption userInput="Shipping Origin" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettingsOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+
+            <!-- Save the settings -->
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
+            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
+
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <!-- navigate to the tax configuration page -->
+            <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+            <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="false" stepKey="openCalculationSettingsTab"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmDisabled}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+            <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedDisabled}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+            <selectOption userInput="Shipping Address" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesDisabled}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="clickCalculationPrices"/>
+
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettingsOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
+            <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesDisabled}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+            <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+
+            <!-- Save the settings -->
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
+            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory1"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
+
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createBundleProduct2" stepKey="deleteBundleProduct2"/>
+            <deleteData createDataKey="createBundleProduct3" stepKey="deleteBundleProduct3"/>
+        </after>
+
+        <!-- Go to storefront category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+
+        <see userInput="From $7.33" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceFromInCategoryBundle1"/>
+        <see userInput="To $33.46" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceToInCategoryBundle1"/>
+
+        <see userInput="From $10.22" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct2.id$$)}}" stepKey="seePriceFromInCategoryBundle2"/>
+        <see userInput="To $101.23" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct2.id$$)}}" stepKey="seePriceToInCategoryBundle2"/>
+
+        <see userInput="From $8.00 Regular Price $10.00" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct3.id$$)}}" stepKey="seePriceFromInCategoryBundle3"/>
+        <see userInput="To $33.58 Regular Price $35.58" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct3.id$$)}}" stepKey="seePriceToInCategoryBundle3"/>
+
+        <!-- Go to storefront product pages -->
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleProduct.custom_attributes[url_key]$$)}}" stepKey="onPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="From $7.33" selector="{{StorefrontProductInfoMainSection.priceFrom}}" stepKey="seePriceFromBundle1"/>
+        <see userInput="To $33.46" selector="{{StorefrontProductInfoMainSection.priceTo}}" stepKey="seePriceToBundle1"/>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleProduct2.custom_attributes[url_key]$$)}}" stepKey="onPageBundle2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="From $10.22" selector="{{StorefrontProductInfoMainSection.priceFrom}}" stepKey="seePriceFromBundle2"/>
+        <see userInput="To $101.23" selector="{{StorefrontProductInfoMainSection.priceTo}}" stepKey="seePriceToBundle2"/>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleProduct3.custom_attributes[url_key]$$)}}" stepKey="onPageBundle3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="From $8.00 Regular Price $10.00" selector="{{StorefrontProductInfoMainSection.priceFrom}}" stepKey="seePriceFromBundle3"/>
+        <see userInput="To $33.58 Regular Price $35.58" selector="{{StorefrontProductInfoMainSection.priceTo}}" stepKey="seePriceToBundle3"/>
+    </test>
+</tests>

@@ -113,7 +113,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getImages()
     {
-        $images = $this->registry->registry('current_product')->getData('media_gallery') ?: null;
+        $images = $this->getDataObject()->getData('media_gallery') ?: null;
         if ($images === null) {
             $images = ((array)$this->dataPersistor->get('catalog_product'))['product']['media_gallery'] ?? null;
         }

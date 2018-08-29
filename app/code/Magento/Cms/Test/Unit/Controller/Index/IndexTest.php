@@ -84,7 +84,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'response' => $responseMock,
                 'objectManager' => $objectManagerMock,
                 'request' => $this->requestMock,
-                'resultForwardFactory' => $this->forwardFactoryMock
+                'resultForwardFactory' => $this->forwardFactoryMock,
+                'scopeConfig' => $scopeConfigMock,
+                'page' => $this->cmsHelperMock
             ]
         );
     }

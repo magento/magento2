@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssignUserRoleActionGroup">
+        <arguments>
+            <argument name="user_restricted"/>
+            <argument name="roleName" type="string" />
+        </arguments>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
+        <waitForPageLoad time="10" stepKey="waitUsersGrid"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user_restricted.username}}" stepKey="fillUsernameSearch"/>
+        <click stepKey="clickSearchButton" selector="{{AdminUserGridSection.searchButton}}"/>
+        <waitForPageLoad time="10" stepKey="waitUserGridReload"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user_restricted.username}}" stepKey="seeFoundUsername"/>
+        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="clickFoundUsername"/>
+        <waitForPageLoad time="30" stepKey="waitUserEditPage"/>
+        <seeInField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{user_restricted.username}}" stepKey="seeUsernameInField"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>
+        <waitForElementVisible selector="{{AdminEditUserSection.roleNameFilterTextField}}" stepKey="waitRoleTabSwitched"/>
+        <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="fillRoleNameSearch"/>
+        <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearchButtonUserRole"/>
+        <waitForPageLoad time="10" stepKey="waitForRoleGrid"/>
+        <see selector="{{AdminEditUserSection.roleNameInFirstRow}}" userInput="{{roleName}}" stepKey="seeFoundRoleName"/>
+        <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="clickFoundRoleName"/>
+        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad time="10" stepKey="waitUserSaved"/>
+        <see selector="{{AdminUserGridSection.successMessage}}" userInput="You saved the user." stepKey="saveUserSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
