@@ -501,6 +501,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
         )->setExpirationDate(
             $this->getToDate()
+        )->setType(
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
