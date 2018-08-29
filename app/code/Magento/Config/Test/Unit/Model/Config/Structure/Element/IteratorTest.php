@@ -86,7 +86,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testInvalidConfigThrowsExceptionInDeveloperMode() {
-        $this->_stateMock->expects($this->at(0))->method('getMode')->willReturn(State::MODE_DEVELOPER);
+        $this->_stateMock->expects($this->at(0))->method('getMode')->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3], 'group4' => ['invalid' => "broken"]];
         $expectedMessage = "Invalid configuration element defined for element with key 'group4'";
         $this->_model->setElements($elementData, 'scope');
