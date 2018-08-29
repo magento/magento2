@@ -31,7 +31,9 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /** @var Database $database */
+    /**
+     * @var Database $database
+     */
     private $database;
 
     protected function setUp()

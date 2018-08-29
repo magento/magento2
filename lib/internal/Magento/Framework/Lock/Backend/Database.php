@@ -14,23 +14,32 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
+/**
+ * LockManager using the DB locks
+ */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
-    /** @var ResourceConnection */
+    /**
+     * @var ResourceConnection
+     */
     private $resource;
 
-    /** @var DeploymentConfig */
+    /**
+     * @var DeploymentConfig
+     */
     private $deploymentConfig;
 
-    /** @var string Lock prefix */
+    /**
+     * @var string Lock prefix
+     */
     private $prefix;
 
-    /** @var string|false Holds current lock name if set, otherwise false */
+    /**
+     * @var string|false Holds current lock name if set, otherwise false
+     */
     private $currentLock = false;
 
     /**
-     * Database constructor.
-     *
      * @param ResourceConnection $resource
      * @param DeploymentConfig $deploymentConfig
      * @param string|null $prefix
