@@ -121,7 +121,7 @@ define([
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
                                     'background-size': 'initial',
                                     'width': width + 'px',
-                                    'height': height +'px'
+                                    'height': height + 'px'
                                 });
                                 $image.show();
                             } else if (type === 1) {
@@ -516,8 +516,8 @@ define([
                 type = parseInt(optionConfig[id].type, 10);
                 value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
-                width = sizeConfig.swatch_thumb.width;
-                height = sizeConfig.swatch_thumb.height;
+                width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
+                height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
                 label = this.label ? this.label : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
@@ -551,8 +551,8 @@ define([
                 } else if (type === 2) {
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:'
-                        + sizeConfig.swatch_image.width + 'px; height:'+ sizeConfig.swatch_image.height + 'px">' + '' +
+                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
                         '</div>';
                 } else if (type === 3) {
                     // Clear
