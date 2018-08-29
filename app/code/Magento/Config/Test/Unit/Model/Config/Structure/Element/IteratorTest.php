@@ -17,12 +17,24 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_flyweightMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_loggerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_stateMock;
+
     protected function setUp()
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
         $this->_flyweightMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $this->_loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->_stateMock = $this->createMock(\Magento\Framework\App\State::class);
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator($this->_flyweightMock);
+        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator($this->_flyweightMock, $this->_loggerMock, $this->_stateMock);
         $this->_model->setElements($elementData, 'scope');
     }
 
@@ -66,6 +78,19 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
         $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
         $this->assertEquals($result, $this->_model->isLast($elementMock));
+    }
+
+    /**
+     * Test whether an element without an id will throw the expected exception and message when in developer mode
+     *
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testInvalidConfigThrowsExceptionInDeveloperMode() {
+        $this->_stateMock->expects($this->at(0))->method('getMode')->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
+        $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3], 'group4' => ['invalid' => "broken"]];
+        $expectedMessage = "Invalid configuration element defined for element with key 'group4'";
+        $this->_model->setElements($elementData, 'scope');
+        $this->expectExceptionMessage($expectedMessage);
     }
 
     /**

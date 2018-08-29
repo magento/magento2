@@ -40,11 +40,29 @@ class Iterator implements \Iterator
     protected $_lastId;
 
     /**
-     * @param \Magento\Config\Model\Config\Structure\AbstractElement $element
+     * @var \Psr\Log\LoggerInterface|null
      */
-    public function __construct(\Magento\Config\Model\Config\Structure\AbstractElement $element)
+    protected $_logger;
+
+    /**
+     * @var \Magento\Framework\App\State|null
+     */
+    protected $_state;
+
+    /**
+     * @param \Magento\Config\Model\Config\Structure\AbstractElement $element
+     * @param \Psr\Log\LoggerInterface|null                          $logger
+     * @param \Magento\Framework\App\State|null                      $state
+     */
+    public function __construct(
+        \Magento\Config\Model\Config\Structure\AbstractElement $element,
+        \Psr\Log\LoggerInterface $logger = null,
+        \Magento\Framework\App\State $state = null
+    )
     {
         $this->_flyweight = $element;
+        $this->_logger = $logger;
+        $this->_state = $state;
     }
 
     /**
@@ -53,6 +71,7 @@ class Iterator implements \Iterator
      * @param array $elements
      * @param string $scope
      * @return void
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function setElements(array $elements, $scope)
     {
@@ -60,6 +79,16 @@ class Iterator implements \Iterator
         $this->_scope = $scope;
         if (count($elements)) {
             $lastElement = end($elements);
+            $keys = array_keys($elements);
+            $elementKey = end($keys);
+            if (!isset($lastElement['id'])) {
+                if ($this->_logger) {
+                    $this->_logger->error("Invalid module adminhtml/system.xml config for element with key '$elementKey'.");
+                }
+                if ($this->_state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                    throw new \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException("Invalid configuration element defined for element with key '$elementKey'");
+                }
+            }
             $this->_lastId = $lastElement['id'];
         }
     }
