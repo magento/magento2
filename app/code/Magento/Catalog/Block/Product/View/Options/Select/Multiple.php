@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Block\Product\View\Options\View;
+namespace Magento\Catalog\Block\Product\View\Options\Select;
 
 use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;

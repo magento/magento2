@@ -7,7 +7,7 @@
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
- * @var \Magento\Catalog\Block\Product\View\Options\View\Checkable $block
+ * @var \Magento\Catalog\Block\Product\View\Options\Select\Checkable $block
  */
 $option = $block->getOption();
 
@@ -37,6 +37,7 @@ $count = 1;
                     <?= /* @noEscape */ __('None') ?>
                 </span>
         </label>
+    </div>
     <?php endif; ?>
 
         <?php foreach ($option->getValues() as $value) : ?>
