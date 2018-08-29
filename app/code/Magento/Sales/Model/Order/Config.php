@@ -193,8 +193,8 @@ class Config
     }
 
     /**
-    * Convert State Code to State Label
-    */
+     * Convert State Code to State Label
+     */
     public function getStateLabelByCode($stateCode)
     {
         $stateLabel = preg_replace('/[^a-z0-9]+/i', ' ', $stateCode);

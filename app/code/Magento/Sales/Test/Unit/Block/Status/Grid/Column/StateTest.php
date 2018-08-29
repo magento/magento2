@@ -78,6 +78,6 @@ class StateTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($statuses));
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
-        $this->assertSame('processing[Suspected Fraud]', $result);
+        $this->assertSame('processing[Processing]', $result);
     }
 }
