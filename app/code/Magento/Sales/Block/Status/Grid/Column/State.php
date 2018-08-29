@@ -55,7 +55,7 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
     {
         $status = $row->getStatus();
         if ($value) {
-            $cell = $value . '[' . $this->_config->getStateLabelByStateAndStatus($value, $status) . ']';
+            $cell = $value . '[' . $this->_config->getStateLabelByCode($value, $status) . ']';
         } else {
             $cell = $value;
         }

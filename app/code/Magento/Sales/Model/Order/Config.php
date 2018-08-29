@@ -181,13 +181,25 @@ class Config
      */
     public function getStates()
     {
+
         $states = [];
+
         foreach ($this->_getCollection() as $item) {
             if ($item->getState()) {
-                $states[$item->getState()] = __($item->getData('label'));
+                $states[$item->getState()] = __($this->getStateLabelByCode($item->getState()));
             }
         }
         return $states;
+    }
+
+    /**
+     * Convert State Code to State Label
+    */
+    public function getStateLabelByCode($stateCode)
+    {
+        $stateLabel = preg_replace('/[^a-z0-9]+/i', ' ', $stateCode);
+        $stateLabel = ucwords($stateLabel);
+        return $stateLabel;
     }
 
     /**
