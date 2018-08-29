@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminUserApplyOnlyXLeftThresholdForSimpleProductOnSingleStockModeTest">
+    <test name="AdminUserApplyOnlyXLeftThresholdForSimpleProductOnDefaultSourceModeTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="CatalogInventory stock option"/>
@@ -18,8 +18,6 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <!-- SKIPPED DUE TO BUG: https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/1535 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
@@ -114,11 +112,14 @@
         <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+
         <comment userInput="Verify that message 'Only 500 left' appeared on product page on frontend." stepKey="verifyMessageIsDisplayedComment"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryForVerifyMessage"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadForVerifyMessage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadForVerifyMessage1"/>
         <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(SimpleProduct.name)}}" stepKey="openProductPageForVerifyMessage"/>
-        <waitForAjaxLoad stepKey="waitForImageLoaderForVerifyMessage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadForVerifyMessage2"/>
         <see selector=".availability.only" userInput="Only 500 left" stepKey="checkProductsLeftMessage"/>
     </test>
 </tests>

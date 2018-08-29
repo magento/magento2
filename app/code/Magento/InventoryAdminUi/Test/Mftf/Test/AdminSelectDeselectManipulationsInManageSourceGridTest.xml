@@ -17,6 +17,8 @@
             <testCaseId value="494"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
+            <group value="multi_mode"/>
+            <!-- SKIPPED DUE TO BUG: https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/1041 -->
             <group value="skip"/>
         </annotations>
 

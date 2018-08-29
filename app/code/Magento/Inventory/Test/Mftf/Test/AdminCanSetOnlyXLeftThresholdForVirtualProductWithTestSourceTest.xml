@@ -11,8 +11,8 @@
     <test name="AdminCanSetOnlyXLeftThresholdForVirtualProductWithTestSourceTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Test source 1"/>
-            <title value="Admin user apply 'Only X left Threshold' for Virtual product on Test source 2"/>
+            <stories value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
+            <title value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
             <description value="Admin user apply 'Only X left Threshold' for Virtual product on Test source"/>
             <testCaseId value="1485"/>
             <severity value="CRITICAL"/>
