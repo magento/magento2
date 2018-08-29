@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCaptchaFormsDisplayingTest">
         <annotations>
             <features value="Captcha"/>
@@ -22,10 +22,10 @@
         <!--Login as admin-->
         <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         <!--Go to Captcha-->
-        <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="CaptchaFormsDisplayingActionGroup"/>
+        <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="captchaFormsDisplayingActionGroup"/>
         <waitForPageLoad time="30" stepKey="WaitForPageLoaded"/>
         <!--Verify fields removed-->
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
         <assertNotContains stepKey="checkoutAsGuest">
             <expectedResult type="string">{{CaptchaData.checkoutAsGuest}}</expectedResult>
             <actualResult type="variable">$formItems</actualResult>
@@ -35,27 +35,27 @@
             <actualResult type="variable">$formItems</actualResult>
         </assertNotContains>
         <!--Verify fields existence-->
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
         <assertEquals stepKey="CreateUserFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.createUser}}</expectedResult>
             <actualResult type="variable">$createUser</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.userLogin}}" stepKey="login"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.userLogin}}" stepKey="login"/>
         <assertEquals stepKey="LoginFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.login}}</expectedResult>
             <actualResult type="variable">login</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forgotpassword}}" stepKey="forgotpassword"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.forgotpassword}}" stepKey="forgotpassword"/>
         <assertEquals stepKey="PasswordFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.passwd}}</expectedResult>
             <actualResult type="variable">$forgotpassword</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.contactUs}}" stepKey="contactUs"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.contactUs}}" stepKey="contactUs"/>
         <assertEquals stepKey="contactUsFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.contactUs}}</expectedResult>
             <actualResult type="variable">$contactUs</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.userEdit}}" stepKey="userEdit"/>
+        <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.userEdit}}" stepKey="userEdit"/>
         <assertEquals stepKey="userEditFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.changePasswd}}</expectedResult>
             <actualResult type="variable">$userEdit</actualResult>
@@ -63,7 +63,6 @@
 
         <!--Roll back configuration-->
         <scrollToTopOfPage stepKey="ScrollToTop"/>
-        <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="ClickToCloseCaptcha"/>
-
+        <click selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" stepKey="clickToCloseCaptcha"/>
     </test>
 </tests>
