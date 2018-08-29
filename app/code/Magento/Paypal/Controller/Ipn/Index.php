@@ -7,12 +7,15 @@
 
 namespace Magento\Paypal\Controller\Ipn;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
 /**
  * Unified IPN controller for all supported PayPal methods
  */
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -37,6 +40,23 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;
         parent::__construct($context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 
     /**
