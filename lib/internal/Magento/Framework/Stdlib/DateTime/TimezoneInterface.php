@@ -65,9 +65,10 @@ interface TimezoneInterface
      * @param mixed $date
      * @param string $locale
      * @param bool $useTimezone
+     * @param bool $includeTime
      * @return \DateTime
      */
-    public function date($date = null, $locale = null, $useTimezone = true);
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true);
 
     /**
      * Create \DateTime object with date converted to scope timezone and scope Locale
@@ -125,8 +126,8 @@ interface TimezoneInterface
      * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
-     * @param string|null $locale
-     * @param string|null $timezone
+     * @param null $locale
+     * @param null $timezone
      * @param string|null $pattern
      * @return string
      */
