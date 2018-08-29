@@ -26,7 +26,7 @@
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
             <?php foreach ($block->getOrderOptions() as $_option): ?>
-                <dt><?php /* @escapeNotVerified */ echo $_option['label'] ?>:</dt>
+                <dt><?php echo $block->escapeHtml($_option['label']) ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
                         <?php /* @escapeNotVerified */ echo $block->getCustomizedOptionValue($_option); ?>
