@@ -15,6 +15,7 @@
                 comment="Bulk UUID (can be exposed to reference bulk entity)"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="ID of the WebAPI user that performed an action"/>
+        <column xsi:type="int" name="user_type" nullable="false" comment="Which type of user"/>
         <column xsi:type="varchar" name="description" nullable="true" length="255" comment="Bulk Description"/>
         <column xsi:type="int" name="operation_count" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Total number of operations scheduled within this bulk"/>

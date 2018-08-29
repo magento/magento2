@@ -13,6 +13,7 @@ use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class BulkManagement
@@ -52,6 +53,11 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     private $resourceConnection;
 
     /**
+     * @var \Magento\Authorization\Model\UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -73,6 +79,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
+        UserContextInterface $userContext,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
@@ -81,6 +88,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
         $this->publisher = $publisher;
+        $this->userContext = $userContext;
         $this->logger = $logger;
     }
 
@@ -93,6 +101,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         // save bulk summary and related operations
         $connection->beginTransaction();
+        $userType = $this->userContext->getUserType();
         try {
             /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface $bulkSummary */
             $bulkSummary = $this->bulkSummaryFactory->create();
@@ -100,6 +109,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $bulkSummary->setBulkId($bulkUuid);
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
+            $bulkSummary->setUserType($userType);
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
 
             $this->entityManager->save($bulkSummary);
