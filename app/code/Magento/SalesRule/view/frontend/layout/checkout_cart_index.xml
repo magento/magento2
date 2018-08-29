@@ -16,7 +16,7 @@
                                 <item name="before_grandtotal" xsi:type="array">
                                     <item name="children" xsi:type="array">
                                         <item name="discount" xsi:type="array">
-                                            <item name="component"  xsi:type="string">Magento_SalesRule/js/view/cart/totals/discount</item>
+                                            <item name="component" xsi:type="string">Magento_SalesRule/js/view/cart/totals/discount</item>
                                             <item name="config" xsi:type="array">
                                                 <item name="title" xsi:type="string" translate="true">Discount</item>
                                             </item>

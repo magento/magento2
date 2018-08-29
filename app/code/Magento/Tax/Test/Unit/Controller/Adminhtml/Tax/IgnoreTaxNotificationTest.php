@@ -19,7 +19,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $cacheTypeList->expects($this->once())
             ->method('cleanType')
-            ->with('block_html')
+            ->with('config')
             ->willReturn(null);
 
         $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)

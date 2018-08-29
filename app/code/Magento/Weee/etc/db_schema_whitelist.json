@@ -1,0 +1,79 @@
+{
+    "weee_tax": {
+        "column": {
+            "value_id": true,
+            "website_id": true,
+            "entity_id": true,
+            "country": true,
+            "value": true,
+            "state": true,
+            "attribute_id": true
+        },
+        "index": {
+            "WEEE_TAX_WEBSITE_ID": true,
+            "WEEE_TAX_ENTITY_ID": true,
+            "WEEE_TAX_COUNTRY": true,
+            "WEEE_TAX_ATTRIBUTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "WEEE_TAX_COUNTRY_DIRECTORY_COUNTRY_COUNTRY_ID": true,
+            "WEEE_TAX_ENTITY_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
+            "WEEE_TAX_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "WEEE_TAX_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID": true,
+            "WEEE_TAX_ENTITY_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "weee_tax_applied": true,
+            "weee_tax_applied_amount": true,
+            "weee_tax_applied_row_amount": true,
+            "weee_tax_disposition": true,
+            "weee_tax_row_disposition": true,
+            "base_weee_tax_applied_amount": true,
+            "base_weee_tax_applied_row_amnt": true,
+            "base_weee_tax_disposition": true,
+            "base_weee_tax_row_disposition": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "weee_tax_applied": true,
+            "weee_tax_applied_amount": true,
+            "weee_tax_applied_row_amount": true,
+            "weee_tax_disposition": true,
+            "weee_tax_row_disposition": true,
+            "base_weee_tax_applied_amount": true,
+            "base_weee_tax_applied_row_amnt": true,
+            "base_weee_tax_disposition": true,
+            "base_weee_tax_row_disposition": true
+        }
+    },
+    "sales_invoice_item": {
+        "column": {
+            "weee_tax_applied": true,
+            "weee_tax_applied_amount": true,
+            "weee_tax_applied_row_amount": true,
+            "weee_tax_disposition": true,
+            "weee_tax_row_disposition": true,
+            "base_weee_tax_applied_amount": true,
+            "base_weee_tax_applied_row_amnt": true,
+            "base_weee_tax_disposition": true,
+            "base_weee_tax_row_disposition": true
+        }
+    },
+    "sales_creditmemo_item": {
+        "column": {
+            "weee_tax_applied": true,
+            "weee_tax_applied_amount": true,
+            "weee_tax_applied_row_amount": true,
+            "weee_tax_disposition": true,
+            "weee_tax_row_disposition": true,
+            "base_weee_tax_applied_amount": true,
+            "base_weee_tax_applied_row_amnt": true,
+            "base_weee_tax_disposition": true,
+            "base_weee_tax_row_disposition": true
+        }
+    }
+}

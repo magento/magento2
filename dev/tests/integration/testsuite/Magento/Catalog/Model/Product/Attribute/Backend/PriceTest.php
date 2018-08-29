@@ -12,7 +12,6 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
  *
- * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -60,6 +59,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testSetScopeDefault()
     {
         /* validate result of setAttribute */
@@ -75,7 +77,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      */
     public function testSetScope()
@@ -88,7 +90,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoConfigFixture current_store currency/options/base GBP
@@ -110,7 +112,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testAfterSaveWithDifferentStores()
@@ -148,7 +150,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testAfterSaveWithSameCurrency()
@@ -184,7 +186,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
@@ -236,7 +238,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php

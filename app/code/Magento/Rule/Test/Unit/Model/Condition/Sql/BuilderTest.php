@@ -35,7 +35,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $collection = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            ['getResource', 'getSelect']
+            [
+                'getResource',
+                'getSelect',
+                'getStoreId',
+                'getDefaultStoreId',
+            ]
         );
         $combine = $this->createPartialMock(\Magento\Rule\Model\Condition\Combine::class, ['getConditions']);
         $resource = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['getConnection']);
@@ -53,10 +58,15 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())
             ->method('getResource')
             ->will($this->returnValue($resource));
-
         $collection->expects($this->any())
             ->method('getSelect')
             ->will($this->returnValue($select));
+        $collection->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+        $collection->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn(1);
 
         $resource->expects($this->once())
             ->method('getConnection')

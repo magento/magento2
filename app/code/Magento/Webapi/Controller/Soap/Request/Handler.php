@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -106,7 +107,7 @@ class Handler
      *
      * @param string $operation
      * @param array $arguments
-     * @return \stdClass|null
+     * @return array
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
@@ -126,7 +127,7 @@ class Handler
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
-                    'Consumer is not authorized to access %resources',
+                    "The consumer isn't authorized to access %resources.",
                     ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );

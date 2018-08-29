@@ -25,7 +25,8 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
  * 3. Start to edit existing Integration.
  * 4. Fill in all data according to data set (password is incorrect).
  * 5. Perform action 4 specified number of times.
- * 6. "You have entered an invalid password for current user." appears after each attempt.
+ * 6. "The password entered for the current user is invalid. Verify the password and try again." appears after each
+ *    attempt.
  * 7. Perform all assertions.
  *
  * @ZephyrId MAGETWO-49039
@@ -84,7 +85,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
     /**
      * Run Lock user when creating new integration test.
      *
-     * @param Integration $initintegration
+     * @param Integration $initIntegration
      * @param Integration $integration
      * @param int $attempts
      * @param User $customAdmin
@@ -92,7 +93,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
      * @return void
      */
     public function test(
-        Integration $initintegration,
+        Integration $initIntegration,
         Integration $integration,
         $attempts,
         User $customAdmin,
@@ -106,7 +107,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
             ['configData' => $this->configData]
         )->run();
         $customAdmin->persist();
-        $initintegration->persist();
+        $initIntegration->persist();
 
         // login to backend with new user
         $this->adminAuthLogin->open();
@@ -114,7 +115,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
         $this->adminAuthLogin->getLoginBlock()->submit();
 
         // Steps
-        $filter = ['name' => $initintegration->getName()];
+        $filter = ['name' => $initIntegration->getName()];
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getIntegrationGrid()->searchAndOpen($filter);
         for ($i = 0; $i < $attempts; $i++) {

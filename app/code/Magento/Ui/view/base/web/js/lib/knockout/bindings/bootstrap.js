@@ -37,6 +37,7 @@ define(function (require) {
         bindHtml:       require('./bind-html'),
         tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
-        fastForEach:    require('knockoutjs/knockout-fast-foreach')
+        fastForEach:    require('knockoutjs/knockout-fast-foreach'),
+        colorPicker:    require('./color-picker')
     };
 });

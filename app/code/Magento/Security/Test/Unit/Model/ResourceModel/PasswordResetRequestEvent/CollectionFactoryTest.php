@@ -86,6 +86,9 @@ class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model->create($securityEventType, $accountReference, $longIp);
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

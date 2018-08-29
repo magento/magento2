@@ -233,7 +233,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getSimpleQtyToShip()
     {
         $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
-        return max($qty, 0);
+        return max(round($qty, 8), 0);
     }
 
     /**
@@ -248,7 +248,7 @@ class Item extends AbstractModel implements OrderItemInterface
         }
 
         $qty = $this->getQtyOrdered() - $this->getQtyInvoiced() - $this->getQtyCanceled();
-        return max($qty, 0);
+        return max(round($qty, 8), 0);
     }
 
     /**

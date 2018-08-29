@@ -8,10 +8,7 @@ namespace Magento\Bundle\Model\Category;
 use Magento\Catalog\Model\Category;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
- * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  */
 class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 {
@@ -57,6 +54,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testReindex()
     {
@@ -88,6 +88,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testCategoryMove()
     {
@@ -130,8 +133,10 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @depends testReindex
+     * @magentoDbIsolation disabled
      */
     public function testCategoryDelete()
     {
@@ -161,7 +166,9 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation disabled
      */
     public function testCategoryCreate()
     {
@@ -208,18 +215,28 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Finds 4 categories
+     *
      * @return Category[]
      */
     private function getCategories()
     {
-        /** @var Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
+        $collectionFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class
         );
 
-        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
-        $result = array_slice($result, 2);
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $collectionFactory->create();
 
-        return array_slice($result, 0, 4);
+        $collection
+            ->addAttributeToSelect('name')
+            ->addAttributeToFilter('name', ['in' => [
+                'Category 1',
+                'Category 2',
+                'Category 3',
+                'Category 4',
+            ]]);
+
+        return array_values($collection->getItems());
     }
 }

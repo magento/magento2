@@ -29,7 +29,7 @@ class AssertCustomerInvalidEmail extends AbstractConstraint
         $expectMessage = self::ERROR_EMAIL_MESSAGE;
         $actualMessage = $pageCustomerIndexNew->getMessagesBlock()->getErrorMessage();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectMessage,
             $actualMessage,
             'Wrong success message is displayed.'

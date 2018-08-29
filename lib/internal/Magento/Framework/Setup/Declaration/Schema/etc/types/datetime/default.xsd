@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:attributeGroup name="default">
+        <xs:annotation>
+            <xs:documentation>
+                This is default types for timestamp and datetime DDL types.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="default" type="defaults" />
+        <xs:attribute name="nullable" type="xs:boolean" />
+        <xs:attribute name="on_update" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>
+                    Logically on update can accept only one value - CURRENT_TIMESTAMP
+                    So we just choose if we want to add next construction or not
+                    'ON UPDATE CURRENT_TIMESTAMP'
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:simpleType name="defaults">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CURRENT_TIMESTAMP">
+                <xs:annotation>
+                    <xs:documentation>
+                        Use current time according to your SQL server time zone
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Please be aware that NO_ZERO_DATE SQL mode should be turned off. The default value will have next formatL:
+                        0000-00-00 00:00:00
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NULL">
+                <xs:annotation>
+                    <xs:documentation>
+                        In this case timestamp column will not have any value at all by default. And become
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

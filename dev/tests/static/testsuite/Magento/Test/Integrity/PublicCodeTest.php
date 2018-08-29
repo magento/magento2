@@ -23,10 +23,41 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
+     * @var string[]|null
+     */
+    private $blockWhitelist;
+
+    /**
+     * Return whitelist class names
+     *
+     * @return string[]
+     */
+    private function getWhitelist(): array
+    {
+        if ($this->blockWhitelist === null) {
+            $whiteListFiles = str_replace(
+                '\\',
+                '/',
+                realpath(__DIR__) . '/_files/whitelist/public_code*.txt'
+            );
+            $whiteListItems = [];
+            foreach (glob($whiteListFiles) as $fileName) {
+                $whiteListItems = array_merge(
+                    $whiteListItems,
+                    file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                );
+            }
+            $this->blockWhitelist = $whiteListItems;
+        }
+        return $this->blockWhitelist;
+    }
+
+    /**
      * Since blocks can be referenced from templates, they should be stable not to break theme customizations.
      * So all blocks should be @api annotated. This test checks that all blocks declared in layout files are public
      *
      * @param $layoutFile
+     * @throws \ReflectionException
      * @dataProvider layoutFilesDataProvider
      */
     public function testAllBlocksReferencedInLayoutArePublic($layoutFile)
@@ -37,7 +68,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
         /** @var $node \SimpleXMLElement */
         foreach ($elements as $node) {
             $class = (string) $node['class'];
-            if ($class && \class_exists($class)) {
+            if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
                 $reflection = (new \ReflectionClass($class));
                 if (strpos($reflection->getDocComment(), '@api') === false) {
                     $nonPublishedBlocks[] = $class;
@@ -47,7 +78,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
         if (count($nonPublishedBlocks)) {
             $this->fail(
                 "Layout file '$layoutFile' uses following blocks that are not marked with @api annotation:\n"
-                . implode(",\n", $nonPublishedBlocks)
+                . implode(",\n", array_unique($nonPublishedBlocks))
             );
         }
     }
@@ -56,6 +87,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * Find all layout update files in magento modules and themes.
      *
      * @return array
+     * @throws \Exception
      */
     public function layoutFilesDataProvider()
     {
@@ -68,8 +100,8 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * This test walks through all public PHP types and makes sure that all their method arguments
      * and return values are public types.
      *
-     *
      * @param string $class
+     * @throws \ReflectionException
      * @dataProvider publicPHPTypesDataProvider
      */
     public function testAllPHPClassesReferencedFromPublicClassesArePublic($class)
@@ -102,7 +134,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
         if (count($nonPublishedClasses)) {
             $this->fail(
                 "Public type '" . $class . "' references following non-public types:\n"
-                . implode("\n", $nonPublishedClasses)
+                . implode("\n", array_unique($nonPublishedClasses))
             );
         }
     }
@@ -110,6 +142,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve list of all interfaces and classes in Magento codebase that are marked with @api annotation.
      * @return array
+     * @throws \Exception
      */
     public function publicPHPTypesDataProvider()
     {
@@ -119,7 +152,9 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             $fileContents = \file_get_contents($file);
             if (strpos($fileContents, '@api') !== false) {
                 foreach ($this->getDeclaredClassesAndInterfaces($file) as $class) {
-                    if (class_exists($class->getName()) || interface_exists($class->getName())) {
+                    if (!in_array($class->getName(), $this->getWhitelist())
+                        && (class_exists($class->getName()) || interface_exists($class->getName()))
+                    ) {
                         $result[$class->getName()] = [$class->getName()];
                     }
                 }

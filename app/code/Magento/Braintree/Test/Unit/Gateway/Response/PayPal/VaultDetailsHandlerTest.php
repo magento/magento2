@@ -5,9 +5,10 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response\PayPal;
 
+use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -15,54 +16,54 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class VaultDetailsHandlerTest
+ * Tests \Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class VaultDetailsHandlerTest extends TestCase
 {
     private static $transactionId = '1n2suy';
 
-    /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReader;
+    private static $token = 'rc39al';
+
+    private static $payerEmail = 'john.doe@example.com';
 
     /**
      * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDataObject;
+    private $paymentDataObjectMock;
 
     /**
      * @var Payment|MockObject
      */
-    private $paymentInfo;
+    private $paymentInfoMock;
 
     /**
-     * @var AccountPaymentTokenFactory|MockObject
+     * @var PaymentTokenFactoryInterface|MockObject
      */
-    private $paymentTokenFactory;
+    private $paymentTokenFactoryMock;
 
     /**
      * @var PaymentTokenInterface|MockObject
      */
-    protected $paymentToken;
+    protected $paymentTokenMock;
 
     /**
      * @var OrderPaymentExtension|MockObject
      */
-    private $paymentExtension;
+    private $paymentExtensionMock;
 
     /**
      * @var OrderPaymentExtensionInterfaceFactory|MockObject
      */
-    private $paymentExtensionFactory;
+    private $paymentExtensionFactoryMock;
 
     /**
      * @var VaultDetailsHandler
@@ -72,7 +73,7 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var DateTimeFactory|MockObject
      */
-    private $dateTimeFactory;
+    private $dateTimeFactoryMock;
 
     /**
      * @var array
@@ -83,146 +84,119 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->paymentDataObject = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->paymentInfo = $this->getMockBuilder(Payment::class)
+        $this->paymentInfoMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
 
-        $this->paymentToken = $objectManager->getObject(PaymentToken::class);
+        $this->paymentTokenMock = $objectManager->getObject(PaymentToken::class);
 
-        $this->paymentTokenFactory = $this->getMockBuilder(AccountPaymentTokenFactory::class)
+        $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
+        $this->paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
             ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
+        $this->paymentExtensionFactoryMock = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->subject = [
-            'payment' => $this->paymentDataObject,
-        ];
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readPayment', 'readTransaction'])
-            ->getMock();
-        $this->subjectReader->expects(static::once())
-            ->method('readPayment')
-            ->with($this->subject)
-            ->willReturn($this->paymentDataObject);
+        $this->paymentInfoMock->expects(self::any())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->paymentExtensionMock);
 
-        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+        $this->subject = [
+            'payment' => $this->paymentDataObjectMock,
+        ];
+
+        $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         
         $this->handler = new VaultDetailsHandler(
-            $this->paymentTokenFactory,
-            $this->paymentExtensionFactory,
-            $this->subjectReader,
-            $this->dateTimeFactory
+            $this->paymentTokenFactoryMock,
+            $this->paymentExtensionFactoryMock,
+            new SubjectReader(),
+            $this->dateTimeFactoryMock
         );
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler::handle
-     */
     public function testHandle()
     {
-        /** @var Transaction $transaction */
         $transaction = $this->getTransaction();
         $response = [
             'object' => $transaction
         ];
 
-        $this->paymentExtension->expects(static::once())
-            ->method('setVaultPaymentToken')
-            ->with($this->paymentToken);
-        $this->paymentExtension->expects(static::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn($this->paymentToken);
-
-        $this->subjectReader->expects(static::once())
-            ->method('readTransaction')
-            ->with($response)
-            ->willReturn($transaction);
+        $this->paymentExtensionMock->method('setVaultPaymentToken')
+            ->with($this->paymentTokenMock);
+        $this->paymentExtensionMock->method('getVaultPaymentToken')
+            ->willReturn($this->paymentTokenMock);
         
-        $this->paymentDataObject->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentInfo);
+        $this->paymentDataObjectMock->method('getPayment')
+            ->willReturn($this->paymentInfoMock);
 
-        $this->paymentTokenFactory->expects(static::once())
-            ->method('create')
-            ->willReturn($this->paymentToken);
+        $this->paymentTokenFactoryMock->method('create')
+            ->with(PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT)
+            ->willReturn($this->paymentTokenMock);
 
-        $this->paymentExtensionFactory->expects(static::once())
-            ->method('create')
-            ->willReturn($this->paymentExtension);
+        $this->paymentExtensionFactoryMock->method('create')
+            ->willReturn($this->paymentExtensionMock);
 
         $dateTime = new \DateTime('2016-07-05 00:00:00', new \DateTimeZone('UTC'));
         $expirationDate = '2017-07-05 00:00:00';
-        $this->dateTimeFactory->expects(static::once())
-            ->method('create')
+        $this->dateTimeFactoryMock->method('create')
             ->willReturn($dateTime);
         
         $this->handler->handle($this->subject, $response);
 
-        $extensionAttributes = $this->paymentInfo->getExtensionAttributes();
-        /** @var PaymentTokenInterface $paymentToken */
+        $extensionAttributes = $this->paymentInfoMock->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
-        static::assertNotNull($paymentToken);
+        self::assertNotNull($paymentToken);
 
         $tokenDetails = json_decode($paymentToken->getTokenDetails(), true);
 
-        static::assertSame($this->paymentToken, $paymentToken);
-        static::assertEquals($transaction->paypalDetails->token, $paymentToken->getGatewayToken());
-        static::assertEquals($transaction->paypalDetails->payerEmail, $tokenDetails['payerEmail']);
-        static::assertEquals($expirationDate, $paymentToken->getExpiresAt());
+        self::assertSame($this->paymentTokenMock, $paymentToken);
+        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
+        self::assertEquals(self::$payerEmail, $tokenDetails['payerEmail']);
+        self::assertEquals($expirationDate, $paymentToken->getExpiresAt());
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler::handle
-     */
     public function testHandleWithoutToken()
     {
         $transaction = $this->getTransaction();
-        $transaction->paypalDetails->token = null;
+        $transaction->transaction->paypalDetails->token = null;
 
         $response = [
             'object' => $transaction
         ];
 
-        $this->subjectReader->expects(static::once())
-            ->method('readTransaction')
-            ->with($response)
-            ->willReturn($transaction);
+        $this->paymentDataObjectMock->method('getPayment')
+            ->willReturn($this->paymentInfoMock);
 
-        $this->paymentDataObject->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentInfo);
-
-        $this->paymentTokenFactory->expects(static::never())
+        $this->paymentTokenFactoryMock->expects(self::never())
             ->method('create');
 
-        $this->dateTimeFactory->expects(static::never())
+        $this->dateTimeFactoryMock->expects(self::never())
             ->method('create');
 
         $this->handler->handle($this->subject, $response);
-        static::assertNull($this->paymentInfo->getExtensionAttributes());
+        self::assertNotNull($this->paymentInfoMock->getExtensionAttributes());
     }
 
     /**
-     * Create Braintree transaction
-     * @return Transaction
+     * Creates Braintree transaction.
+     *
+     * @return Successful
      */
-    private function getTransaction()
+    private function getTransaction(): Successful
     {
         $attributes = [
             'id' => self::$transactionId,
@@ -230,19 +204,21 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $transaction = Transaction::factory($attributes);
+        $result = new Successful(['transaction' => $transaction]);
 
-        return $transaction;
+        return $result;
     }
 
     /**
-     * Get PayPal transaction details
+     * Gets PayPal transaction details.
+     *
      * @return PayPalDetails
      */
-    private function getPayPalDetails()
+    private function getPayPalDetails(): PayPalDetails
     {
         $attributes = [
-            'token' => 'rc39al',
-            'payerEmail' => 'john.doe@example.com'
+            'token' => self::$token,
+            'payerEmail' => self::$payerEmail
         ];
 
         $details = new PayPalDetails($attributes);

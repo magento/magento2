@@ -31,7 +31,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    private $whiteListetBackendControllers = [];
+    private $whiteListedBackendControllers = [];
 
     /**
      * List of ACL resources collected from acl.xml files.
@@ -57,7 +57,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
             if (substr($item, 0, 1) === '#') {
                 continue;
             }
-            $this->whiteListetBackendControllers[$item] = 1;
+            $this->whiteListedBackendControllers[$item] = 1;
         }
     }
 
@@ -83,7 +83,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
 
             $controllerClass = $this->getClassByFilePath($controllerPath);
             // skip whitelisted controllers.
-            if (isset($this->whiteListetBackendControllers[$controllerClass->getName()])) {
+            if (isset($this->whiteListedBackendControllers[$controllerClass->getName()])) {
                 continue;
             }
             // we don't have to check abstract classes.
@@ -148,10 +148,10 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
         if ($this->aclResources !== null) {
             return $this->aclResources;
         }
-        $aclFiles = array_keys(Files::init()->getConfigFiles('acl.xml', []));
+        $aclFiles = Files::init()->getConfigFiles('acl.xml', []);
         $xmlResources = [];
         array_map(function ($file) use (&$xmlResources) {
-            $config = simplexml_load_file($file);
+            $config = simplexml_load_file($file[0]);
             $nodes = $config->xpath('.//resource/@id') ?: [];
             foreach ($nodes as $node) {
                 $xmlResources[(string)$node] = $node;
@@ -232,8 +232,8 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
      */
     private function getControllerPath($relativeFilePath)
     {
-        if (preg_match('~(Magento\/.*Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
-            if (count($matches) === 2 && count($partPath = $matches[1]) >= 1) {
+        if (preg_match('~(Magento\/[^\/]+\/Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
+            if (count($matches) === 2) {
                 $partPath = $matches[1];
                 return $partPath;
             }

@@ -22,5 +22,12 @@
                 <item name="admin" xsi:type="string">white</item>
             </field>
         </dataset>
+
+        <dataset name="option_with_single_quotation">
+            <field name="0" xsi:type="array">
+                <item name="is_default" xsi:type="string">Yes</item>
+                <item name="admin" xsi:type="string">test option with single\&apos;</item>
+            </field>
+        </dataset>
     </repository>
 </config>

@@ -40,12 +40,12 @@ class AssertMsrpOnProductView extends AbstractConstraint
 
         $viewBlock = $catalogProductView->getMsrpViewBlock();
         $priceBlock = $viewBlock->getPriceBlock();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $product->getMsrp(),
             $priceBlock->getOldPrice(),
             'Displayed on Product view page MSRP is incorrect'
         );
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $priceBlock->isRegularPriceVisible(),
             'Regular price on Product view page is visible and not expected.'
         );

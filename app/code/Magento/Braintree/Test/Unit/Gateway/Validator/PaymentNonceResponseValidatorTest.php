@@ -5,15 +5,13 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
-use Braintree\Transaction;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
-use Magento\Payment\Gateway\Validator\ResultInterface;
+use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class PaymentNonceResponseValidatorTest
- */
 class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -22,14 +20,9 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
     private $validator;
 
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     private $resultInterfaceFactory;
-
-    /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $subjectReader;
 
     protected function setUp()
     {
@@ -37,20 +30,14 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readResponseObject'])
-            ->getMock();
 
         $this->validator = new PaymentNonceResponseValidator(
             $this->resultInterfaceFactory,
-            $this->subjectReader
+            new SubjectReader(),
+            new ErrorCodeProvider()
         );
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator::validate
-     */
     public function testFailedValidate()
     {
         $obj = new \stdClass();
@@ -61,23 +48,12 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->subjectReader->expects(static::once())
-            ->method('readResponseObject')
-            ->willReturn($obj);
-
-        $result = $this->createMock(ResultInterface::class);
-        $this->resultInterfaceFactory->expects(self::once())
-            ->method('create')
-            ->with([
-                'isValid' => false,
-                'failsDescription' => [
-                    __('Payment method nonce can\'t be retrieved.')
-                ]
-            ])
+        $result = new Result(false, [__('Payment method nonce can\'t be retrieved.')]);
+        $this->resultInterfaceFactory->method('create')
             ->willReturn($result);
 
         $actual = $this->validator->validate($subject);
-        static::assertEquals($result, $actual);
+        self::assertEquals($result, $actual);
     }
 
     public function testValidateSuccess()
@@ -93,20 +69,11 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->subjectReader->expects(static::once())
-            ->method('readResponseObject')
-            ->willReturn($obj);
-
-        $result = $this->createMock(ResultInterface::class);
-        $this->resultInterfaceFactory->expects(self::once())
-            ->method('create')
-            ->with([
-                'isValid' => true,
-                'failsDescription' => []
-            ])
+        $result = new Result(true);
+        $this->resultInterfaceFactory->method('create')
             ->willReturn($result);
 
         $actual = $this->validator->validate($subject);
-        static::assertEquals($result, $actual);
+        self::assertEquals($result, $actual);
     }
 }

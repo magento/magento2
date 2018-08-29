@@ -188,6 +188,8 @@ define([
 
                     if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionList.attr('disabled', 'disabled');
+                    } else {
+                        regionList.removeAttr('disabled');
                     }
                 }
 
@@ -195,6 +197,8 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');
@@ -206,7 +210,7 @@ define([
                     regionInput.removeClass('required-entry');
                 }
 
-                regionList.removeClass('required-entry').hide();
+                regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
                 regionInput.show();
                 label.attr('for', regionInput.attr('id'));
             }

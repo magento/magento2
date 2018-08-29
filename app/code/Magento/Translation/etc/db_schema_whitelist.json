@@ -1,0 +1,17 @@
+{
+    "translation": {
+        "column": {
+            "key_id": true,
+            "string": true,
+            "store_id": true,
+            "translate": true,
+            "locale": true,
+            "crc_string": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "TRANSLATION_STORE_ID_STORE_STORE_ID": true,
+            "TRANSLATION_STORE_ID_LOCALE_CRC_STRING_STRING": true
+        }
+    }
+}

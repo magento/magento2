@@ -95,7 +95,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         $fixtureCustomOptions = $this->prepareOptions($product, $actualPrice);
         $formCustomOptions = $catalogProductView->getViewBlock()->getOptions($product)['custom_options'];
         $error = $this->verifyData($fixtureCustomOptions, $formCustomOptions);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

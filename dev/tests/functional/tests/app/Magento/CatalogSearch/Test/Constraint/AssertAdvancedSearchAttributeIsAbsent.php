@@ -32,7 +32,7 @@ class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
         $label = $attribute->hasData('manage_frontend_label')
             ? $attribute->getManageFrontendLabel()
             : $attribute->getFrontendLabel();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             in_array($label, $formLabels),
             'Created custom product attribute is present in advanced search form on frontend but must be absent.'
         );

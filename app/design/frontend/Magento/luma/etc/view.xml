@@ -12,9 +12,9 @@
                 <width>140</width>
                 <height>140</height>
             </image>
-            <image id="cart_cross_sell_products" type="thumbnail">
-                <width>200</width>
-                <height>248</height>
+            <image id="cart_cross_sell_products" type="small_image">
+                <width>240</width>
+                <height>300</height>
             </image>
             <image id="cart_page_product_thumbnail" type="small_image">
                 <width>165</width>
@@ -77,19 +77,20 @@
                 <height>140</height>
             </image>
             <image id="product_page_image_large" type="image"/>
-            <image id="product_page_image_large_no_frame" type="image">
-                <frame>false</frame>
-            </image>
             <image id="product_page_image_medium" type="image">
                 <width>700</width>
-                <height>560</height>
-            </image>
-            <image id="product_page_image_medium_no_frame" type="image">
-                <width>700</width>
                 <height>700</height>
-                <frame>false</frame>
             </image>
             <image id="product_page_image_small" type="thumbnail">
+                <width>88</width>
+                <height>110</height>
+            </image>
+            <image id="product_swatch_image_large" type="image"/>
+            <image id="product_swatch_image_medium" type="image">
+                <width>240</width>
+                <height>300</height>
+            </image>
+            <image id="product_swatch_image_small" type="thumbnail">
                 <width>88</width>
                 <height>110</height>
             </image>
@@ -231,6 +232,7 @@
             <var name="height"></var> <!-- Height of magnifier block -->
             <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
             <var name="enabled">false</var> <!-- Turn on/off magnifier (true/false) -->
+            <var name="mode">outside</var> <!-- Zoom type (outside/inside) -->
         </var>
 
         <var name="breakpoints">
@@ -270,7 +272,6 @@
     <exclude>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui-1.9.2.js</item>
-        <item type="file">Lib::jquery/jquery.ba-hashchange.min.js</item>
         <item type="file">Lib::jquery/jquery.details.js</item>
         <item type="file">Lib::jquery/jquery.details.min.js</item>
         <item type="file">Lib::jquery/jquery.hoverIntent.js</item>

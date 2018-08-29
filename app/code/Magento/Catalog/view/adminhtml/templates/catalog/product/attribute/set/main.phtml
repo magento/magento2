@@ -315,7 +315,7 @@
                         },
 
                         validateGroupName : function(name, exceptNodeId) {
-                            name = name.strip();
+                            name = name.strip().escapeHTML();
                             var result = true;
                             if (name === '') {
                                 result = false;

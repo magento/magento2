@@ -14,7 +14,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserIsLocked extends AbstractConstraint
 {
-    const USER_ACCOUNT_DISABLED_MESSAGE = 'account is temporarily disabled';
+    const USER_ACCOUNT_DISABLED_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
+    . 'Please wait and try again later.';
 
     /**
      * Verify that user account has been locked.
@@ -26,7 +27,7 @@ class AssertUserIsLocked extends AbstractConstraint
         AdminAuthLogin $adminAuth
     ) {
         $ignoreCase = true;
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::USER_ACCOUNT_DISABLED_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::USER_ACCOUNT_DISABLED_MESSAGE . '" is not visible.',

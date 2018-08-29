@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -124,7 +125,7 @@ class TransactionService
             $responseXmlDocument = new Element($responseBody);
             libxml_use_internal_errors(false);
         } catch (\Exception $e) {
-            throw new LocalizedException(__('Unable to get transaction details. Try again later.'));
+            throw new LocalizedException(__('The transaction details are unavailable. Please try again later.'));
         } finally {
             $context->debugData($debugData);
         }
@@ -132,7 +133,7 @@ class TransactionService
         if (!isset($responseXmlDocument->messages->resultCode)
             || $responseXmlDocument->messages->resultCode != static::PAYMENT_UPDATE_STATUS_CODE_SUCCESS
         ) {
-            throw new LocalizedException(__('Unable to get transaction details. Try again later.'));
+            throw new LocalizedException(__('The transaction details are unavailable. Please try again later.'));
         }
 
         $this->transactionDetails[$transactionId] = $responseXmlDocument;

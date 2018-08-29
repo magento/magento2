@@ -39,7 +39,7 @@
         <?php /* downloadable */?>
         <?php if ($links = $block->getLinks()): ?>
             <dl class="item-options links">
-                <dt><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></dt>
+                <dt><?= $block->escapeHtml($block->getLinksTitle()) ?></dt>
                 <?php foreach ($links->getPurchasedItems() as $link): ?>
                     <dd><?= $block->escapeHtml($link->getLinkTitle()) ?></dd>
                 <?php endforeach; ?>

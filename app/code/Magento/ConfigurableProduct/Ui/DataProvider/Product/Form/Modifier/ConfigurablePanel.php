@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
@@ -466,7 +467,20 @@ class ConfigurablePanel extends AbstractModifier
                         [],
                         ['dataScope' => 'product_link']
                     ),
-                    'sku_container' => $this->getColumn('sku', __('SKU')),
+                    'sku_container' => $this->getColumn(
+                        'sku',
+                        __('SKU'),
+                        [
+                            'validation' =>
+                                [
+                                    'required-entry' => true,
+                                    'max_text_length' => Sku::SKU_MAX_LENGTH,
+                                ],
+                        ],
+                        [
+                            'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-sku',
+                        ]
+                    ),
                     'price_container' => $this->getColumn(
                         'price',
                         __('Price'),

@@ -169,7 +169,8 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
         $filePath = 'design/area/theme_path/Module_One/override/theme/vendor/parent_theme/1.xml';
         $expectedMessage = "Trying to override modular view file '$filePath' for theme 'vendor/parent_theme'"
             . ", which is not ancestor of theme 'vendor/theme_path'";
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $expectedMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($expectedMessage);
 
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);

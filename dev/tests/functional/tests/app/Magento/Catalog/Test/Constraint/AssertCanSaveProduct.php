@@ -28,7 +28,7 @@ class AssertCanSaveProduct extends \Magento\Mtf\Constraint\AbstractConstraint
         $catalogProductIndex->open()->getProductGrid()->searchAndOpen($filter);
         $catalogProductEdit->getFormPageActions()->save();
 
-        \PHPUnit_Framework_Assert::assertNotEmpty(
+        \PHPUnit\Framework\Assert::assertNotEmpty(
             $catalogProductEdit->getMessagesBlock()->getSuccessMessage(),
             'Can\'t save existing product.'
         );

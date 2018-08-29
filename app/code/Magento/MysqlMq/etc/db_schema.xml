@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="queue" resource="default" engine="innodb" comment="Table storing unique queues">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Queue ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Queue name"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="QUEUE_NAME">
+            <column name="name"/>
+        </constraint>
+    </table>
+    <table name="queue_message" resource="default" engine="innodb" comment="Queue messages">
+        <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Message ID"/>
+        <column xsi:type="varchar" name="topic_name" nullable="true" length="255" comment="Message topic"/>
+        <column xsi:type="longtext" name="body" nullable="true" comment="Message body"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="queue_message_status" resource="default" engine="innodb"
+           comment="Relation table to keep associations between queues and messages">
+        <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Relation ID"/>
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Queue ID"/>
+        <column xsi:type="bigint" name="message_id" padding="20" unsigned="true" nullable="false" identity="false"
+                comment="Message ID"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Message status in particular queue"/>
+        <column xsi:type="smallint" name="number_of_trials" padding="5" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Number of trials to processed failed message processing"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_MESSAGE_ID_QUEUE_MESSAGE_ID"
+                    table="queue_message_status" column="message_id" referenceTable="queue_message" referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_QUEUE_ID" table="queue_message_status"
+                    column="queue_id" referenceTable="queue" referenceColumn="id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="QUEUE_MESSAGE_STATUS_QUEUE_ID_MESSAGE_ID">
+            <column name="queue_id"/>
+            <column name="message_id"/>
+        </constraint>
+        <index name="QUEUE_MESSAGE_STATUS_STATUS_UPDATED_AT" indexType="btree">
+            <column name="status"/>
+            <column name="updated_at"/>
+        </index>
+    </table>
+</schema>

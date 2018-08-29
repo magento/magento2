@@ -44,7 +44,8 @@ class SetTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();
     }
@@ -65,8 +66,8 @@ class SetTest extends \PHPUnit\Framework\TestCase
     public function invalidAttributeSetDataProvider()
     {
         return [
-            ['', 'Attribute set name is empty.'],
-            ['existing_name', 'An attribute set named "existing_name" already exists.']
+            ['', 'The attribute set name is empty. Enter the name and try again.'],
+            ['existing_name', 'A "existing_name" attribute set name already exists. Create a new name and try again.']
         ];
     }
 }

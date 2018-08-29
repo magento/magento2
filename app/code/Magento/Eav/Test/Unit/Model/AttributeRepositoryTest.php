@@ -100,7 +100,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage entity_type_code is a required field.
+     * @expectedExceptionMessage "entity_type_code" is required. Enter and try again.
      */
     public function testGetListInputException()
     {

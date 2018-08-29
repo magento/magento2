@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
@@ -94,7 +95,7 @@ class NewAction extends \Magento\Backend\App\Action
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('You can\'t create an invoice without products.')
+                    __("The invoice can't be created without products. Add products and try again.")
                 );
             }
             $this->registry->register('current_invoice', $invoice);
@@ -111,10 +112,10 @@ class NewAction extends \Magento\Backend\App\Action
             $resultPage->getConfig()->getTitle()->prepend(__('New Invoice'));
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->messageManager->addError($exception->getMessage());
+            $this->messageManager->addErrorMessage($exception->getMessage());
             return $this->_redirectToOrder($orderId);
         } catch (\Exception $exception) {
-            $this->messageManager->addException($exception, 'Cannot create an invoice.');
+            $this->messageManager->addExceptionMessage($exception, 'Cannot create an invoice.');
             return $this->_redirectToOrder($orderId);
         }
     }

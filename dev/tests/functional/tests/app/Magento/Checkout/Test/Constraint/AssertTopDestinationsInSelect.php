@@ -24,7 +24,7 @@ class AssertTopDestinationsInSelect extends AbstractConstraint
     public function processAssert(CheckoutCart $checkoutCart, array $topDestinations)
     {
         $checkoutCart->open();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $topDestinations,
             $checkoutCart->getShippingBlock()->getTopCountries(),
             'Top countries are different from the ones selected as Top Destinations.'

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontCatalogSearchAdvancedFormSection">
+        <element name="SearchTitle" type="text" selector=".page-title span"/>
+        <element name="ProductName" type="input" selector="#name"/>
+        <element name="SKU" type="input" selector="#sku"/>
+        <element name="Description" type="input" selector="#description"/>
+        <element name="ShortDescription" type="input" selector="#short_description"/>
+        <element name="PriceFrom" type="input" selector="#price"/>
+        <element name="PriceTo" type="input" selector="#price_to"/>
+        <element name="AttributeByCode" type="input" selector="#{{var1}}" parameterized="true"/>
+        <element name="SubmitButton" type="button" selector="//*[@id='form-validate']//button[@type='submit']"/>
+    </section>
+</sections>

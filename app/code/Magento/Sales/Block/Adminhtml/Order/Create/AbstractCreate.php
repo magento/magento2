@@ -160,4 +160,22 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
             )
             : $this->priceCurrency->convert($value, $this->getStore());
     }
+
+    /**
+     * If item is quote or wishlist we need to get product from it.
+     *
+     * @param $item
+     *
+     * @return Product
+     */
+    public function getProduct($item)
+    {
+        if ($item instanceof Product) {
+            $product = $item;
+        } else {
+            $product = $item->getProduct();
+        }
+
+        return $product;
+    }
 }

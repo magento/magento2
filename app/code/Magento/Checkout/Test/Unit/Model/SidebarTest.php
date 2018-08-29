@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Model\Sidebar;
@@ -45,6 +46,9 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetResponseData()
     {
         return [
@@ -94,7 +98,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exceptedExceptionMessage We can't find the quote item.
+     * @exceptedExceptionMessage The quote item isn't found. Verify the item and try again.
      */
     public function testCheckQuoteItemWithException()
     {

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="multi.topic.queue.topic.c.deprecated" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.c.deprecated" name="queue.for.multiple.topics.test.c.deprecated"/>
+        <queue consumer="mixed.sync.and.async.queue.consumer.deprecated" name="mixed.sync.and.async.queue.deprecated"/>
+    </broker>
+    <broker topic="multi.topic.queue.topic.d.deprecated" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.d.deprecated" name="queue.for.multiple.topics.test.d.deprecated"/>
+    </broker>
+</config>
+
+
+
+
+

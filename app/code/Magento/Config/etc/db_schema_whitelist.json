@@ -1,0 +1,15 @@
+{
+    "core_config_data": {
+        "column": {
+            "config_id": true,
+            "scope": true,
+            "scope_id": true,
+            "path": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CORE_CONFIG_DATA_SCOPE_SCOPE_ID_PATH": true
+        }
+    }
+}

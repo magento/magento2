@@ -71,6 +71,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends Abs
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification
         $message = 'Prices from dataset should be equal to prices on frontend';
-        \PHPUnit_Framework_Assert::assertEquals($prices, array_filter($actualPrices), $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, array_filter($actualPrices), $message);
     }
 }

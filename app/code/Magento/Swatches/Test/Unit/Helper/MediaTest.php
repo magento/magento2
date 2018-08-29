@@ -30,9 +30,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Factory */
     protected $imageFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection */
-    protected $themeCollectionMock;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
     protected $viewConfigMock;
 
@@ -59,10 +56,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
 
         $this->imageFactoryMock = $this->createMock(\Magento\Framework\Image\Factory::class);
-        $this->themeCollectionMock = $this->createPartialMock(
-            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
-            ['loadRegisteredThemes']
-        );
 
         $this->viewConfigMock = $this->createMock(\Magento\Framework\View\Config::class);
 
@@ -83,7 +76,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
                 'fileStorageDb' => $this->fileStorageDbMock,
                 'storeManager' => $this->storeManagerMock,
                 'imageFactory' => $this->imageFactoryMock,
-                'themeCollection' => $this->themeCollectionMock,
                 'configInterface' => $this->viewConfigMock,
             ]
         );
@@ -114,6 +106,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
+    /**
+     * @return array
+     */
     public function dataForFullPath()
     {
         return [
@@ -166,6 +161,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
         $image->expects($this->any())->method('resize')->will($this->returnSelf());
+        $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }
 
@@ -201,6 +197,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataForFolderName()
     {
         return [
@@ -248,10 +247,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     protected function generateImageConfig()
     {
-        $themeMock = $this->createMock(\Magento\Theme\Model\Theme::class);
-        $themesArrayMock = [$themeMock];
-        $this->themeCollectionMock->expects($this->any())->method('loadRegisteredThemes')->willReturn($themesArrayMock);
-
         $configMock = $this->createMock(\Magento\Framework\Config\View::class);
 
         $this->viewConfigMock
@@ -292,6 +287,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->mediaHelperObject->getSwatchCachePath($swatchType));
     }
 
+    /**
+     * @return array
+     */
     public function getSwatchTypes()
     {
         return [

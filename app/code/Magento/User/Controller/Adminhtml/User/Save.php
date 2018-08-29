@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Exception\AuthenticationException;
@@ -79,7 +80,9 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
             if (!($isCurrentUserPasswordValid)) {
-                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
+                throw new AuthenticationException(
+                    __('The password entered for the current user is invalid. Verify the password and try again.')
+                );
             }
             $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
@@ -96,7 +99,9 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             );
             $this->_redirect('adminhtml/*/');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addError(
+                __('The password entered for the current user is invalid. Verify the password and try again.')
+            );
             $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();

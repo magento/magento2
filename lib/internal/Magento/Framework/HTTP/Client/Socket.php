@@ -273,7 +273,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Make POST request
      *
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
     public function post($uri, $params)
@@ -455,10 +455,12 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Make request
+     *
      * @param string $method
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
+     * @throws \Exception
      */
     protected function makeRequest($method, $uri, $params = [])
     {
@@ -473,8 +475,8 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
         $appendHeaders = [];
         $paramsStr = false;
-        if ($isPost && count($params)) {
-            $paramsStr = http_build_query($params);
+        if ($isPost && $params) {
+            $paramsStr = is_array($params) ? http_build_query($params) : $params;
             $appendHeaders['Content-type'] = 'application/x-www-form-urlencoded';
             $appendHeaders['Content-length'] = strlen($paramsStr);
         }

@@ -44,16 +44,16 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     public function testException()
     {
         $visibility = [
-            'stdClass' => new \StdClass()
+            'stdClass' => new \stdClass()
         ];
 
         new ElementVisibilityComposite($visibility);
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $firstExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $firstExpects
      * @param bool $firstResult
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $secondExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $secondExpects
      * @param bool $secondResult
      * @param bool $expectedResult
      * @dataProvider visibilityDataProvider
@@ -74,9 +74,9 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $firstExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $firstExpects
      * @param bool $firstResult
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $secondExpects
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $secondExpects
      * @param bool $secondResult
      * @param bool $expectedResult
      * @dataProvider visibilityDataProvider

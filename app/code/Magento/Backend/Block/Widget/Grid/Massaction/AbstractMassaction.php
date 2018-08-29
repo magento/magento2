@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
@@ -57,7 +58,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeHtml(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -222,9 +223,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -237,9 +237,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
-        } else {
-            return [];
         }
+        return [];
     }
 
     /**
@@ -278,13 +277,13 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         }
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        
+
         if ($this->getMassactionIdField()) {
             $massActionIdField = $this->getMassactionIdField();
         } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
-        
+
         $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
             return join(",", $gridIds);

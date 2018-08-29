@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -89,7 +90,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         } catch (\Exception $e) {
             $this->getLogger()->critical($e);
             throw new CouldNotSaveException(
-                __('An error occurred on the server. Please try to place the order again.'),
+                __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
             );
         }

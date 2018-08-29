@@ -75,7 +75,7 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
      */
     protected function assertAbsentUpSellSection()
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $this->catalogProductView->getUpsellBlock()->isVisible(),
             "Up-sell section is present."
         );
@@ -101,7 +101,7 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
 
         sort($productNames);
         sort($pageProductNames);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $productNames,
             $pageProductNames,
             'Wrong products are displayed in up-sell section.'

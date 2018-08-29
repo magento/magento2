@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 return [
-    '/\.(jpe?g|png|gif|ttf|swf|eot|woff|pdf|mp3|pdf|jar|jbf)$/',
+    '/\.(jpe?g|png|gif|ttf|swf|eot|woff|pdf|mp3|pdf|jar|jbf|php\.dist)$/',
     '/pub\/opt\/magento\/var/',
-    '/COPYING\.txt/'
+    '/COPYING\.txt/',
+    '/setup\/src\/Zend\/Mvc\/Controller\/LazyControllerAbstractFactory\.php/',
+    '/app\/code\/(?!Magento)[^\/]*/'
 ];

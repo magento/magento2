@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Gateway\Payflowpro\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -73,7 +74,7 @@ class AuthorizationCommand implements CommandInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(Transparent::PNREF));
             $this->payflowFacade->void($payment);
-            throw new LocalizedException(__('Error processing payment, please try again later.'));
+            throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 
         $this->payflowFacade->setTransStatus($payment, $response);

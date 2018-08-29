@@ -145,7 +145,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Category does not contain specified product
+     * @expectedExceptionMessage The category doesn't contain the specified product.
      */
     public function testDeleteWithInputException()
     {

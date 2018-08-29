@@ -35,7 +35,7 @@ class AssertInvoiceStatusInOrdersGrid extends AbstractConstraint
             'order_id' => $orderId,
             'status' => $invoiceStatus,
         ];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $grid->isRowVisible($filter),
             'Invoice status is incorrect.'
         );

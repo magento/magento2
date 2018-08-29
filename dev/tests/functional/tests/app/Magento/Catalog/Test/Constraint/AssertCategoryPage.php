@@ -71,7 +71,7 @@ class AssertCategoryPage extends AbstractConstraint
         $diff = array_merge($diff, $this->verifyContent($categoryData));
         $diff = array_merge($diff, $this->verifyDisplaySettings($categoryData));
         $diff = array_merge($diff, $this->verifySearchEngineOptimization($categoryData));
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $diff,
             "Category settings on Storefront page are different.\n" . implode(' ', $diff)
         );

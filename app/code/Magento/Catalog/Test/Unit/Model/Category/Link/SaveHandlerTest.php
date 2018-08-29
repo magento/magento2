@@ -197,6 +197,21 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                 ],
                 [], //affected category_ids
             ],
+            [
+                [3], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30],
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30],
+                ],
+                [3, 4], //affected category_ids
+            ],
         ];
     }
 

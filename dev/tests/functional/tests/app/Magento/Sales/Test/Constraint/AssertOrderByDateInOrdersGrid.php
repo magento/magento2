@@ -31,7 +31,7 @@ class AssertOrderByDateInOrdersGrid extends AbstractConstraint
         ];
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->search($filter);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $orderIndex->getSalesOrderGrid()->isFirstRowVisible(),
             'Order with following id ' . $order->getId() . ' is absent in Orders grid with applied date.'
         );

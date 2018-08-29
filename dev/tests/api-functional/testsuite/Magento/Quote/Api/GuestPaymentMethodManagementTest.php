@@ -156,7 +156,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {

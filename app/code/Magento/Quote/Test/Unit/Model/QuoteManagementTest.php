@@ -246,11 +246,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-
-        $quoteAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates']
+        );
+        $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteAddress);
 
         $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 
@@ -316,7 +320,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store
+     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerFromAnotherStore()
     {
@@ -360,7 +364,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
+     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerToNonanonymousCart()
     {
@@ -409,7 +413,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerNoSuchCustomer()
     {
@@ -459,6 +462,10 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId);
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
+
+        $this->expectExceptionMessage(
+            "The customer can't be assigned to the cart because the customer already has an active cart."
+        );
     }
 
     public function testAssignCustomer()

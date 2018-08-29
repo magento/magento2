@@ -37,7 +37,7 @@ class AssertCouponReportResult extends AbstractConstraint
             'subtotal' => $currency . number_format($data['price']['subtotal'], 2),
             'discount' => $discount,
         ];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $salesCouponReportView->getGridBlock()->isRowVisible($filter, false),
             "Coupon with code - '$couponCode' is not visible."
         );

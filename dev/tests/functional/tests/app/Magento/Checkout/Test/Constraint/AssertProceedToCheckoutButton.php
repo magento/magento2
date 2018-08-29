@@ -31,7 +31,7 @@ class AssertProceedToCheckoutButton extends AbstractConstraint
     public function processAssert(CheckoutCart $checkoutCart)
     {
         $checkoutCart->open();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::BUTTON_TITLE,
             $checkoutCart->getProceedToCheckoutBlock()->getTitle()
         );

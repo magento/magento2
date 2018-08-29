@@ -20,7 +20,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @param string $expectedClass
      * @dataProvider factoryDataProvider
      */
@@ -52,7 +52,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @dataProvider factoryReturnsSingletonDataProvider
      */
     public function testFactoryReturnsSingleton($typeId)
@@ -82,7 +82,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param sring|null $typeId
+     * @param string|null $typeId
      * @param string $expectedClass
      * @dataProvider priceFactoryDataProvider
      */

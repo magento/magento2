@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Crontab\Test\Unit;
 
 use Magento\Framework\Crontab\CrontabManager;
@@ -192,7 +193,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage List of tasks is empty
+     * @expectedExceptionMessage The list of tasks is empty. Add tasks and try again.
      */
     public function testSaveTasksWithEmptyTasksList()
     {
@@ -219,7 +220,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Command should not be empty
+     * @expectedExceptionMessage The command shouldn't be empty. Enter and try again.
      */
     public function testSaveTasksWithoutCommand()
     {

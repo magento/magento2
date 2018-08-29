@@ -37,6 +37,10 @@ class Session implements ConfigOptionsListInterface
     const INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING = 'session-save-redis-disable-locking';
     const INPUT_KEY_SESSION_REDIS_MIN_LIFETIME = 'session-save-redis-min-lifetime';
     const INPUT_KEY_SESSION_REDIS_MAX_LIFETIME = 'session-save-redis-max-lifetime';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS = 'session-save-redis-sentinel-servers';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER = 'session-save-redis-sentinel-master';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session-save-redis-sentinel-verify-master';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session-save-redis-sentinel-connect-retires';
 
     const CONFIG_PATH_SESSION_REDIS = 'session/redis';
     const CONFIG_PATH_SESSION_REDIS_HOST = 'session/redis/host';
@@ -57,6 +61,10 @@ class Session implements ConfigOptionsListInterface
     const CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING = 'session/redis/disable_locking';
     const CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME = 'session/redis/min_lifetime';
     const CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME = 'session/redis/max_lifetime';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_SERVERS = 'session/redis/sentinel_servers';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER = 'session/redis/sentinel_master';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session/redis/sentinel_verify_master';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
 
     /**
      * @var array
@@ -80,7 +88,9 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_BOT_LIFETIME => '7200',
         self::INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING => '0',
         self::INPUT_KEY_SESSION_REDIS_MIN_LIFETIME => '60',
-        self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => '2592000'
+        self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => '2592000',
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER => '0',
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES => '5',
     ];
 
     /**
@@ -121,6 +131,11 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING => self::CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING,
         self::INPUT_KEY_SESSION_REDIS_MIN_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME,
         self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_SERVERS,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES =>
+            self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER,
     ];
 
     /**
@@ -245,6 +260,30 @@ class Session implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME,
                 'Redis max session lifetime, in seconds'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER,
+                'Redis Sentinel master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS,
+                'Redis Sentinel servers, comma separated'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER,
+                'Redis Sentinel verify master. Values: false (default), true'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+                'Redis Sentinel connect retries.'
             ),
         ];
     }

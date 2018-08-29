@@ -67,7 +67,7 @@ class AssertBIEssentialsLink extends AbstractConstraint
             }
         } while ($count < self::MAX_TRY_COUNT);
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isVisible,
             "BI Essentials Sign Up page was not opened by link.\n
                 Actual link is '{$this->browser->getUrl()}'\n

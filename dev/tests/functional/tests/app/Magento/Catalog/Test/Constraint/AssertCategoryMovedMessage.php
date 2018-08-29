@@ -28,7 +28,7 @@ class AssertCategoryMovedMessage extends AbstractConstraint
     public function processAssert(CatalogCategoryEdit $catalogCategoryEdit)
     {
         $actualMessage = $catalogCategoryEdit->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

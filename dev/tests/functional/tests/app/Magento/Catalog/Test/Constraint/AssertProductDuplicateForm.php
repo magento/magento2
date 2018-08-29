@@ -62,7 +62,7 @@ class AssertProductDuplicateForm extends AssertProductForm
         $fixtureData = $this->prepareFixtureData($product->getData());
 
         $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

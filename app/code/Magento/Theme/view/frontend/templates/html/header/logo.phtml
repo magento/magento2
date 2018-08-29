@@ -18,6 +18,7 @@
     <a class="logo" href="<?= $block->getUrl('') ?>" title="<?= /* @escapeNotVerified */ $storeName ?>">
 <?php endif ?>
         <img src="<?= /* @escapeNotVerified */ $block->getLogoSrc() ?>"
+             title="<?= /* @escapeNotVerified */ $block->getLogoAlt() ?>"
              alt="<?= /* @escapeNotVerified */ $block->getLogoAlt() ?>"
              <?= $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
              <?= $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>

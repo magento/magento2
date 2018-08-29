@@ -54,7 +54,7 @@ class AssertAddressDeletedFrontend extends AbstractConstraint
             $isAddressDeleted = true;
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isAddressDeleted,
             'Customer address was not deleted.'
         );

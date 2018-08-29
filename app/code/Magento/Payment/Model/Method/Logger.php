@@ -5,12 +5,11 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Payment\Gateway\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Logger for payment related information (request, response, etc.) which is used for debug
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Class Logger for payment related information (request, response, etc.) which is used for debug.
  *
  * @api
  * @since 100.0.2
@@ -25,17 +24,17 @@ class Logger
     protected $logger;
 
     /**
-     * @var \Magento\Payment\Gateway\ConfigInterface
+     * @var ConfigInterface
      */
     private $config;
 
     /**
      * @param LoggerInterface $logger
-     * @param \Magento\Payment\Gateway\ConfigInterface $config
+     * @param ConfigInterface|null $config
      */
     public function __construct(
         LoggerInterface $logger,
-        \Magento\Payment\Gateway\ConfigInterface $config = null
+        ConfigInterface $config = null
     ) {
         $this->logger = $logger;
         $this->config = $config;
@@ -69,7 +68,7 @@ class Logger
      */
     private function getDebugReplaceFields()
     {
-        if ($this->config and $this->config->getValue('debugReplaceKeys')) {
+        if ($this->config && $this->config->getValue('debugReplaceKeys')) {
             return explode(',', $this->config->getValue('debugReplaceKeys'));
         }
         return [];
@@ -82,7 +81,7 @@ class Logger
      */
     private function isDebugOn()
     {
-        return $this->config and (bool)$this->config->getValue('debug');
+        return $this->config && (bool)$this->config->getValue('debug');
     }
 
     /**

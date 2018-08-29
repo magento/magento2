@@ -99,6 +99,9 @@
                     </validation>
                     <label translate="true">Qty</label>
                     <dataScope>quantity_and_stock_status.qty</dataScope>
+                    <links>
+                        <link name="value">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:value</link>
+                    </links>
                     <imports>
                         <link name="handleChanges">${$.provider}:data.product.stock_data.is_qty_decimal</link>
                         <link name="visible">${$.provider}:data.product.stock_data.manage_stock</link>
@@ -568,7 +571,7 @@
                     <settings>
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
-                            <rule name="validate-digits" xsi:type="boolean">true</rule>
+                            <rule name="validate-integer" xsi:type="boolean">true</rule>
                             <rule name="validate-number" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Qty Increments</label>

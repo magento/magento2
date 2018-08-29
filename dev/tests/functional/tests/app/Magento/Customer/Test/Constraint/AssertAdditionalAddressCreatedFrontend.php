@@ -32,7 +32,7 @@ class AssertAdditionalAddressCreatedFrontend extends AbstractConstraint
         )->render();
         $isAddressExists = $customerAccountIndex->getAdditionalAddressBlock()
             ->isAdditionalAddressExists($addressRenderer);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isAddressExists,
             'Customers address is absent in customer address book.'
         );

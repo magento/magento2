@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Layer;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
@@ -42,7 +43,7 @@ class State extends DataObject
     public function setFilters($filters)
     {
         if (!is_array($filters)) {
-            throw new LocalizedException(__('The filters must be an array.'));
+            throw new LocalizedException(__('The filters are invalid. Set them in an array and try again.'));
         }
         $this->setData('filters', $filters);
         return $this;

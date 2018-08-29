@@ -76,6 +76,13 @@ class Options extends Section
     protected $staticDataRow = '[data-index="container_type_static"] div:nth-child(%d)';
 
     /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
+
+    /**
      * Sort rows data.
      *
      * @var array
@@ -385,5 +392,15 @@ class Options extends Section
         }
 
         return $formDataItem;
+    }
+
+    /**
+     * Returns notice-message elements for 'file_extension' fields.
+     *
+     * @return ElementInterface[]
+     */
+    public function getFileOptionElements()
+    {
+        return $this->_rootElement->getElements($this->hintMessage);
     }
 }

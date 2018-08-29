@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -84,7 +85,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please check input data.'));
+            throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }
         return $quote->getBillingAddress()->getId();
     }

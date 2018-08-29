@@ -25,7 +25,7 @@ class AssertShippingTotalOrderReview extends AbstractConstraint
     {
         $reviewShippingTotal = $checkoutOnepage->getReviewBlock()->getShippingExclTax();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $reviewShippingTotal,
             number_format($shippingTotal, 2),
             'Shipping price: \'' . $reviewShippingTotal

@@ -30,7 +30,7 @@ class AssertProductsOnStorefront extends AbstractConstraint
     ) {
         foreach ($entities as $entity) {
             $browser->open($_ENV['app_frontend_url'] . $entity->getUrlKey() . '.html');
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $catalogProductView->getViewBlock()->getProductName(),
                 $entity->getName(),
                 "Can't find product in store front"

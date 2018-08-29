@@ -94,7 +94,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         $prices = $this->preparePrices($prices);
         //Order review prices verification
         $message = 'Prices on order review should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             array_diff_key($prices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
             array_diff_key($actualPrices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
             $message
@@ -109,7 +109,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
 
         //Frontend order prices verification
         $message = 'Prices on order view page should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, $actualPrices, $message);
     }
 
     /**

@@ -5,8 +5,10 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\ModuleUninstallCommand;
 use Magento\Setup\Model\ModuleUninstaller;
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -96,6 +98,11 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     private $tester;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierMock;
+
+    /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function setUp()
@@ -129,6 +136,9 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
+        $this->patchApplierMock = $this->getMockBuilder(PatchApplier::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager->expects($this->any())
             ->method('get')
@@ -142,6 +152,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
                     $this->createMock(\Magento\Framework\App\State::class)
                 ],
                 [\Magento\Framework\Setup\BackupRollbackFactory::class, $this->backupRollbackFactory],
+                [PatchApplier::class, $this->patchApplierMock],
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
             ]));
         $composer = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
@@ -158,7 +169,8 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
             $objectManagerProvider,
             $this->uninstallCollector,
             $this->moduleUninstaller,
-            $this->moduleRegistryUninstaller
+            $this->moduleRegistryUninstaller,
+            new MaintenanceModeEnabler($this->maintenanceMode)
         );
         $this->question = $this->createMock(\Symfony\Component\Console\Helper\QuestionHelper::class);
         $this->question
@@ -433,6 +445,18 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('removeModulesFromDeploymentConfig')
             ->with($this->isInstanceOf(\Symfony\Component\Console\Output\OutputInterface::class), $input['module']);
         $this->tester->execute($input);
+    }
+
+    public function testExecuteNonComposerModules()
+    {
+        $this->deploymentConfig->expects(self::once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $input = ['module' => ['Magento_A'], '-c' => true, '-r' => true, '--non-composer' => true];
+        $this->patchApplierMock->expects(self::once())
+            ->method('revertDataPatches')
+            ->with('Magento_A');
+        self::assertEquals(0, $this->tester->execute($input));
     }
 
     public function testExecuteAll()

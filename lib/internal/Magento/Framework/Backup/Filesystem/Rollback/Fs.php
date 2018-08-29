@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
 use Magento\Framework\App\ObjectManager;
@@ -66,7 +67,7 @@ class Fs extends AbstractRollback
             }
 
             throw new NotEnoughPermissions(
-                new Phrase('Unable to make rollback because not all files are writable')
+                new Phrase("The rollback can't be executed because not all files are writable.")
             );
         }
 

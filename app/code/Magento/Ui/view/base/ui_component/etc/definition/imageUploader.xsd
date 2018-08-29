@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include fileUploader section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/fileUploader.xsd"/>
+
+    <xs:complexType name="componentImageUploader">
+        <xs:sequence>
+            <xs:group ref="configurable" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="settings" maxOccurs="1" minOccurs="0">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:group ref="componentImageUploaderSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="formElementImageUploader">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentImageUploaderSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentImageUploaderSettings">
+        <xs:choice>
+            <xs:group ref="componentFileUploaderSettings"/>
+            <xs:element name="openDialogTitle" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines the title that appears when opening media browser dialog slideout.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="initialMediaGalleryOpenSubpath" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines the initial subpath relative to root that will be open when opening media gallery
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+</xs:schema>

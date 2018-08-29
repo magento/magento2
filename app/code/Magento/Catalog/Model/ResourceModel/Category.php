@@ -11,6 +11,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
@@ -83,6 +85,11 @@ class Category extends AbstractResource
     protected $aggregateCount;
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -90,6 +97,7 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
+     * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
@@ -100,6 +108,7 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        Processor $indexerProcessor,
         $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -113,6 +122,7 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
+        $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
@@ -195,6 +205,18 @@ class Category extends AbstractResource
         parent::_beforeDelete($object);
         $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
+    }
+
+    /**
+     * Mark Category indexer as invalid to be picked up by cron.
+     *
+     * @param DataObject $object
+     * @return $this
+     */
+    protected function _afterDelete(DataObject $object)
+    {
+        $this->indexerProcessor->markIndexerAsInvalid();
+        return parent::_afterDelete($object);
     }
 
     /**
@@ -410,9 +432,18 @@ class Category extends AbstractResource
          * Update product positions in category
          */
         if (!empty($update)) {
+            $newPositions = [];
             foreach ($update as $productId => $position) {
-                $where = ['category_id = ?' => (int)$id, 'product_id = ?' => (int)$productId];
-                $bind = ['position' => (int)$position];
+                $delta = $position - $oldProducts[$productId];
+                if (!isset($newPositions[$delta])) {
+                    $newPositions[$delta] = [];
+                }
+                $newPositions[$delta][] = $productId;
+            }
+
+            foreach ($newPositions as $delta => $productIds) {
+                $bind = ['position' => new \Zend_Db_Expr("position + ({$delta})")];
+                $where = ['category_id = ?' => (int)$id, 'product_id IN (?)' => $productIds];
                 $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
@@ -423,6 +454,8 @@ class Category extends AbstractResource
                 'catalog_category_change_products',
                 ['category' => $category, 'product_ids' => $productIds]
             );
+
+            $category->setChangedProductIds($productIds);
         }
 
         if (!empty($insert) || !empty($update) || !empty($delete)) {

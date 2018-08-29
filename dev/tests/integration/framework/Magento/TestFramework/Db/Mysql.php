@@ -87,7 +87,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     }
 
     /**
-     * Is dump esxists
+     * Is dump exists
      *
      * @return bool
      */
