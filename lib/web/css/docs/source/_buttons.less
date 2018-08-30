@@ -48,10 +48,10 @@ button {
     &.example-button-3 {
         .lib-button-s();
         border-radius: 0;
-        color: #000;
+        color: @color-black;
         &:hover,
         &.active {
-            color: #000;
+            color: @color-black;
         }
     }
 }
@@ -524,10 +524,10 @@ button {
     }
     &.example-button-6 {
         .lib-button-s();
-        color: #fff;
+        color: @color-white;
         &:hover,
         &.active {
-            color: #fff;
+            color: @color-white;
         }
     }
 }
@@ -721,13 +721,13 @@ button {
         @_button-padding: @button__padding,
         @_button-gradient-color-start: #1979c3,
         @_button-gradient-color-end: #006bb4,
-        @_button-color: #fff,
+        @_button-color: @color-white,
         @_button-gradient-color-start-hover: #006bb4,
         @_button-gradient-color-end-hover: #1979c3,
-        @_button-color-hover: #fff,
+        @_button-color-hover: @color-white,
         @_button-gradient-color-start-active: #006bb4,
         @_button-gradient-color-end-active: #006bb4,
-        @_button-color-active: #fff,
+        @_button-color-active: @color-white,
         @_button-gradient: true,
         @_button-gradient-direction: vertical,
         @_button-border: @button-primary__border,

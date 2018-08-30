@@ -53,4 +53,24 @@
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart" />
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage" />
     </actionGroup>
+
+    <!--Remove a product from the wishlist using the sidebar -->
+    <actionGroup name="StorefrontCustomerRemoveProductFromWishlistUsingSidebar">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="RemoveProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="RemoveProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="RemoveProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
+    </actionGroup>
+
+    <!--Add a product to the cart from the wishlist using the sidebar -->
+    <actionGroup name="StorefrontCustomerAddProductToCartFromWishlistUsingSidebar">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="AddProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="AddProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="AddProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
+    </actionGroup>
 </actionGroups>
