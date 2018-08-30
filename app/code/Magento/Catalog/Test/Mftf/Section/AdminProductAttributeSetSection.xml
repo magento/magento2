@@ -29,6 +29,6 @@
     </section>
     <section name="ModifyAttributes">
         <!-- Parameter is the attribute name -->
-        <element name="nthExistingAttribute" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+        <element name="nthExistingAttribute" type="select" selector="//*[text()='{{attributeName}}']/../../..//select" parameterized="true"/>
     </section>
 </sections>
