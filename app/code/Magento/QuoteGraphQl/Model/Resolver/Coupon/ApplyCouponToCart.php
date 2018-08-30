@@ -7,17 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\Coupon;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CouponManagementInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\QuoteGraphQl\Model\CartMutationsAllowedInterface;
 
 /**
  * {@inheritdoc}
@@ -35,22 +36,31 @@ class ApplyCouponToCart implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var QuoteIdMaskFactory
+     * @var MaskedQuoteIdToQuoteIdInterface
      */
-    private $quoteIdMaskFactory;
+    private $maskedQuoteIdToQuoteId;
+
+    /**
+     * @var CartMutationsAllowedInterface
+     */
+    private $cartMutationsAllowed;
 
     /**
      * @param ValueFactory $valueFactory
-     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param CouponManagementInterface $couponManagement
+     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId
+     * @param CartMutationsAllowedInterface $cartMutationsAllowed
      */
     public function __construct(
         ValueFactory $valueFactory,
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        CouponManagementInterface $couponManagement
+        CouponManagementInterface $couponManagement,
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId,
+        CartMutationsAllowedInterface $cartMutationsAllowed
     ) {
         $this->valueFactory = $valueFactory;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->couponManagement = $couponManagement;
+        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToId;
+        $this->cartMutationsAllowed = $cartMutationsAllowed;
     }
 
     /**
@@ -58,20 +68,24 @@ class ApplyCouponToCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
-        $maskedCartId = $args['input']['cart_id'];
+        $maskedQuoteId = $args['input']['cart_id'];
         $couponCode = $args['input']['coupon_code'];
 
-        if (!$maskedCartId || !$couponCode) {
+        if (!$maskedQuoteId || !$couponCode) {
             throw new GraphQlInputException(__('Required parameter is missing'));
         }
 
-        // FIXME: use resource model instead
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($maskedCartId, 'masked_id');
-        if (!$quoteIdMask->getId()) {
+        try {
+            $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedQuoteId);
+        } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__('No cart with provided ID found'));
         }
 
-        $cartId = $quoteIdMask->getQuoteId();
+        if (!$this->cartMutationsAllowed->execute($cartId)) {
+            throw new GraphQlAuthorizationException(
+                __('Operations with selected card is not permitted for current user')
+            );
+        }
 
         /* Check current cart does not have coupon code applied */
         $appliedCouponCode = $this->couponManagement->get($cartId);

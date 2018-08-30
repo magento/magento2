@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver\Coupon;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CouponManagementInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\QuoteGraphQl\Model\CartMutationsAllowedInterface;
 
 /**
  * {@inheritdoc}
@@ -28,7 +28,6 @@ class RemoveCouponFromCart implements ResolverInterface
      * @var CouponManagementInterface
      */
     private $couponManagement;
-
     /**
      * @var ValueFactory
      */
@@ -40,17 +39,26 @@ class RemoveCouponFromCart implements ResolverInterface
     private $quoteIdMaskFactory;
 
     /**
+     * @var CartMutationsAllowedInterface
+     */
+    private $cartMutationsAllowed;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param CouponManagementInterface $couponManagement
+     * @param CartMutationsAllowedInterface $cartMutationsAllowed
      */
     public function __construct(
         ValueFactory $valueFactory,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        CouponManagementInterface $couponManagement
+        CouponManagementInterface $couponManagement,
+        CartMutationsAllowedInterface $cartMutationsAllowed
     ) {
         $this->valueFactory = $valueFactory;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->couponManagement = $couponManagement;
+        $this->cartMutationsAllowed = $cartMutationsAllowed;
     }
 
     /**
@@ -71,6 +79,12 @@ class RemoveCouponFromCart implements ResolverInterface
         }
 
         $cartId = $quoteIdMask->getQuoteId();
+
+        if (!$this->cartMutationsAllowed->execute((int) $cartId)) {
+            throw new GraphQlAuthorizationException(
+                __('Operations with selected card is not permitted for current user')
+            );
+        }
 
         try {
             $this->couponManagement->remove($cartId);
