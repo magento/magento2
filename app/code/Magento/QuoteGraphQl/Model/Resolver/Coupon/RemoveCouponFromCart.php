@@ -81,7 +81,7 @@ class RemoveCouponFromCart implements ResolverInterface
 
         if (!$this->cartMutationsAllowed->execute((int) $cartId)) {
             throw new GraphQlAuthorizationException(
-                __('Operations with selected card is not permitted for current user')
+                __('Operations with selected cart is not permitted for current user')
             );
         }
 
