@@ -17,6 +17,7 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
 /**
  * Product options text type block
  *
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
