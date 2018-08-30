@@ -54,7 +54,8 @@ define([
                 add: function (e, data) {
                     var
                         fileSize,
-                        tmpl;
+                        tmpl,
+                        maxFileSize = e.data.fileupload.options.maxFileSize;
 
                     $.each(data.files, function (index, file) {
                         fileSize = typeof file.size == 'undefined' ?
@@ -62,6 +63,15 @@ define([
                             byteConvert(file.size);
 
                         data.fileId = Math.random().toString(33).substr(2, 18);
+                        if (file.size > maxFileSize) {
+                            data.process = [
+                                {
+                                    action: 'resize',
+                                    disableImageResize: false,
+                                    forceImageResize: true
+                                }
+                            ];
+                        }
 
                         tmpl = progressTmpl({
                             data: {
@@ -123,10 +133,12 @@ define([
             this.element.find('input[type=file]').fileupload('option', {
                 process: [{
                     action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/
+                    fileTypes: /^image\/(gif|jpeg|png)$/,
+                    maxFileSize: this.options.maxFileSize
                 }, {
                     action: 'resize',
-                    disableImageResize: true
+                    maxWidth: 4096,
+                    maxHeight: 2160
                 }, {
                     action: 'save'
                 }]
