@@ -4,6 +4,7 @@
       "id": true,
       "uuid": true,
       "user_id": true,
+      "user_type": true,
       "description": true,
       "operation_count": true,
       "start_time": true
