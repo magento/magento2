@@ -125,12 +125,12 @@ class Filter
         try {
             if (is_array($excluded) && !empty($excluded)) {
                 $this->filterBuilder->setConditionType('nin')
-                    ->setField($dataProvider->getPrimaryFieldName())
+                    ->setField('main_table.'.$dataProvider->getPrimaryFieldName())
                     ->setValue($excluded);
                 $dataProvider->addFilter($this->filterBuilder->create());
             } elseif (is_array($selected) && !empty($selected)) {
                 $this->filterBuilder->setConditionType('in')
-                    ->setField($dataProvider->getPrimaryFieldName())
+                    ->setField('main_table.'.$dataProvider->getPrimaryFieldName())
                     ->setValue($selected);
                 $dataProvider->addFilter($this->filterBuilder->create());
             }
