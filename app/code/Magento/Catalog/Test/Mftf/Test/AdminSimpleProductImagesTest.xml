@@ -87,9 +87,10 @@
         <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorMedium"/>
 
         <!-- 10~ mb is allowed -->
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="large.jpg" stepKey="attachLarge"/>
+        <!-- Skipped MAGETWO-94092 -->
+        <!--<attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="large.jpg" stepKey="attachLarge"/>
         <waitForPageLoad stepKey="waitForUploadLarge"/>
-        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorLarge"/>
+        <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorLarge"/>-->
 
         <!-- *.gif is allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="gif.gif" stepKey="attachGif"/>
