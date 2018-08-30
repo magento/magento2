@@ -10,6 +10,7 @@ use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class CreditmemoTest
@@ -29,6 +30,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected $creditmemo;
 
     /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cmItemCollectionFactoryMock;
@@ -36,6 +42,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
@@ -62,6 +69,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'commentCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class
             ),
+            'scopeConfig' => $this->scopeConfigMock
         ];
         $this->creditmemo = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Creditmemo::class,
@@ -109,8 +117,25 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     public function testIsValidGrandTotalGrandTotal()
     {
         $this->creditmemo->setGrandTotal(0);
-        $this->creditmemo->getAllowZeroGrandTotal(true);
+        $this->creditmemo->isAllowZeroGrandTotal(true);
         $this->assertFalse($this->creditmemo->isValidGrandTotal());
+    }
+
+    /**
+     * Test for isAllowZeroGrandTotal method.
+     *
+     * @return void
+     */
+    public function testIsAllowZeroGrandTotal()
+    {
+        $isAllowed = 0;
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn($isAllowed);
+        $this->assertEquals($isAllowed, $this->creditmemo->isAllowZeroGrandTotal());
     }
 
     public function testIsValidGrandTotal()

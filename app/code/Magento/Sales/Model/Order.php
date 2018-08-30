@@ -620,11 +620,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return $this->getForcedCanCreditmemo();
         }
 
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-
-        if ($this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
+        if ($this->canUnhold() || $this->isPaymentReview() ||
+            $this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
             return false;
         }
 
@@ -634,15 +631,39 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * TotalPaid - contains amount, that were not rounded.
          */
         $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
-        if (abs($totalRefunded) < .0001) {
-            return false;
+        if (abs($this->getGrandTotal()) < .0001) {
+            return $this->canCreditmemoForZeroTotal($totalRefunded);
         }
+
+        $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
+        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
             return false;
         }
 
-        if ($this->getActionFlag(self::ACTION_FLAG_EDIT) === false) {
+        return true;
+    }
+
+    /**
+     * Retrieve credit memo for zero total availability.
+     *
+     * @param $totalRefunded
+     * @return bool
+     */
+    public function canCreditmemoForZeroTotal($totalRefunded)
+    {
+        $totalPaid = $this->getTotalPaid();
+        //check if total paid is less than grandtotal
+        $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
+        //case when amount is due for invoice
+        $dueAmountCondition = $this->canInvoice() && ($checkAmtTotalPaid);
+        //case when paid amount is refunded and order has creditmemo created
+        $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && count($this->getCreditmemosCollection()) > 0;
+        if (($dueAmountCondition || $paidAmtIsRefunded) ||
+            (!$checkAmtTotalPaid &&
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;

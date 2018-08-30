@@ -203,10 +203,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,
-            ['load', 'getGrandTotal', 'getAllowZeroGrandTotal', '__wakeup']
+            ['load', 'getGrandTotal', 'isAllowZeroGrandTotal', '__wakeup']
         );
         $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('0'));
-        $creditmemoMock->expects($this->once())->method('getAllowZeroGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock->expects($this->once())->method('isAllowZeroGrandTotal')->will($this->returnValue(false));
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
