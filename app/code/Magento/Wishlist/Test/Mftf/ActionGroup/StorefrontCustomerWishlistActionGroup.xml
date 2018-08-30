@@ -28,28 +28,9 @@
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
         <!--<click selector="{{StorefrontCategoryProductSection.ProductAddToSplitWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>-->
         <click selector="{{StorefrontCategoryProductSection.addToWishListArrow(productVar.name)}}" stepKey="clickAddToWishlist"/>
-        <click selector="{{StorefrontCategoryProductSection.chooseWishlist}}" stepKey="selectWishlist"/>
-
+        <clickWithLeftButton selector="{{StorefrontCategoryProductSection.chooseWishlist(productVar.name)}}" x="96" y="5" stepKey="selectWishlistWithOffset"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
-        <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
-    </actionGroup>
-
-    <actionGroup name="StorefrontCustomerAddCategoryProductToWishlistActionGroup3">
-        <arguments>
-            <argument name="productVar"/>
-        </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
-        <!--<click selector="{{StorefrontCategoryProductSection.ProductAddToSplitWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>-->
-        <click selector="{{StorefrontCategoryProductSection.addToWishListArrow(productVar.name)}}" stepKey="clickDropdownToAddToWishlist"/>
-        <!--<click selector="{{StorefrontCategoryProductSection.testWishlist(productVar.name)}}" stepKey="chooseWishlistSpan"/>-->
-        <!--<scrollTo selector="{{StorefrontCategoryProductSection.testWishlist(productVar.name)}}" x="-10" y="10" stepKey="selectWishlistwithOffset"/>-->
-        <!--<scrollTo selector="{{StorefrontCategoryProductSection.chooseWishlist}}" x="10" y="10" stepKey="selectWishlistwithOffset"/>-->
-        <!--<clickWithLeftButton selector="{{StorefrontCategoryProductSection.chooseWishlist}}" x="-90" y="0" stepKey="selectWishlistWithOffset"/>-->
-        <clickWithLeftButton selector="{{StorefrontCategoryProductSection.testWishlist(productVar.name)}}" x="90" y="0" stepKey="selectWishlistWithOffset"/>
-
-        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="SeeProductNameAddedToWishlist"/>
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
     </actionGroup>
 

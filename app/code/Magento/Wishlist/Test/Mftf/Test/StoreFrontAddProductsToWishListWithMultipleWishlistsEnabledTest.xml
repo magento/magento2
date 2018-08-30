@@ -10,10 +10,10 @@
     <test name="StoreFrontAddProductsToWishListWithMultipleWishlistsEnabledTest">
         <annotations>
             <stories value="Wishlist"/>
-            <title value="Add products from the wishlist to the cart using the sidebar."/>
-            <description value="Products added to the cart from wishlist and a customer remains on the same page."/>
+            <title value="Add products to wishlist from Category page with multiple wishlist enabled"/>
+            <description value="Registered customer should be able to add products from category page to wishlist when multiple wishlist enabled"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-94021"/>
+            <testCaseId value="MAGETWO-94422"/>
             <group value="wishlist"/>
         </annotations>
         <before>
@@ -22,10 +22,6 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
                 <requiredEntity createDataKey="categoryFirst"/>
             </createData>
-            <!--<createData entity="SimpleProduct" stepKey="simpleProduct2">-->
-                <!--<requiredEntity createDataKey="categoryFirst"/>-->
-            <!--</createData>-->
-
             <createData entity="Simple_US_Customer" stepKey="customer"/>
         </before>
         <after>
@@ -41,9 +37,6 @@
         <comment userInput="Enable multiple wishlist" stepKey="enableMultipleWishlist"/>
         <actionGroup ref="EnableCustomerMultipleWishlistOption" stepKey="enableCustomerWishlist"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-
-        <!--<amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>-->
-        <!-- Sign in as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
@@ -52,12 +45,8 @@
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <!--<actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup2" stepKey="addSimpleProduct1ToWishlist">-->
-            <!--<argument name="productVar" value="$$simpleProduct1$$"/>-->
-        <!--</actionGroup>-->
-
         <!-- Add product from first category to the wishlist after shifting-->
-        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup3" stepKey="addSimpleProduct1ToWishlist">
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup2" stepKey="addSimpleProduct1ToWishlist">
             <argument name="productVar" value="$$simpleProduct1$$"/>
         </actionGroup>
           </test>
