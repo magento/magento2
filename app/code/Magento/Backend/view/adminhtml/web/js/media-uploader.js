@@ -63,6 +63,7 @@ define([
                             byteConvert(file.size);
 
                         data.fileId = Math.random().toString(33).substr(2, 18);
+
                         if (file.size > maxFileSize) {
                             data.process = [
                                 {
