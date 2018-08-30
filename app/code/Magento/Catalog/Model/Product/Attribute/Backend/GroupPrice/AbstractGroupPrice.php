@@ -395,7 +395,10 @@ abstract class AbstractGroupPrice extends Price
         $linkFieldName = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         // prepare original data for compare
         $origPrices = $object->getOrigData($this->getAttribute()->getName());
-        if (!is_array($origPrices) || $object->getData($linkFieldName) != $object->getOrigData($linkFieldName)) {
+        $originalId = $object->getOrigData($linkFieldName);
+        if (!is_array($origPrices)
+            || (!empty($originalId) && $object->getData($linkFieldName) != $originalId)
+        ) {
             $origPrices = [];
         }
 
