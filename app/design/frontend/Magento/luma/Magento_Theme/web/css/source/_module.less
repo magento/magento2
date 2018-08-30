@@ -67,6 +67,16 @@
         .lib-css(background-color, @page__background-color);
     }
 
+    .page-wrapper {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        min-height: 100vh; // Stretch content area for sticky footer
+    }
+
+    .page-main {
+        .lib-vendor-prefix-flex-grow(1);
+    }
+
     //
     //  Header
     //  ---------------------------------------------
@@ -306,7 +316,6 @@
     //
     //  Widgets
     //  ---------------------------------------------
-
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
@@ -410,12 +419,6 @@
                 }
             }
         }
-    }
-    .page-footer,
-    .copyright {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
     }
 }
 
@@ -614,10 +617,7 @@
     }
 
     .page-wrapper {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
         margin: 0;
-        min-height: 100%; // Stretch content area for sticky footer
         position: relative;
         transition: margin .3s ease-out 0s;
 
