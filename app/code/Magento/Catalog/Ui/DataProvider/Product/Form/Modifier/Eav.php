@@ -259,8 +259,7 @@ class Eav extends AbstractModifier
         $attributesToDisable = [],
         $attributesToEliminate = [],
         CompositeConfigProcessor $wysiwygConfigProcessor = null,
-        ScopeConfigInterface $scopeConfig = null
-        $attributesToEliminate = [],
+        ScopeConfigInterface $scopeConfig = null,
         AttributeCollectionFactory $attributeCollectionFactory = null
     ) {
         $this->locator = $locator;
