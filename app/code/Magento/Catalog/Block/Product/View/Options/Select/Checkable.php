@@ -11,8 +11,7 @@ use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
 use Magento\Catalog\Model\Product\Option;
 
 /**
- * Class Checkable
- * @package Magento\Catalog\Block\Product\View\Options\View
+ * Represent necessary logic for checkbox and radio button option type
  */
 class Checkable extends AbstractOptions
 {

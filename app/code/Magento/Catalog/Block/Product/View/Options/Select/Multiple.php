@@ -11,8 +11,7 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\View\Element\Html\Select;
 
 /**
- * Class Multiple
- * @package Magento\Catalog\Block\Product\View\Options\View
+ * Class represents necessary logic for dropdown and multiselect option types
  */
 class Multiple extends AbstractOptions
 {
