@@ -164,7 +164,13 @@ class Minification
         $configValues = $this->scopeConfig->getValue($key, $this->scope) ?? [];
         //compatibility fix for type change from new line separated string values to array
         if (!is_array($configValues)) {
-            $configValues = explode("\n", $configValues);
+            $configValuesFromString = [];
+            foreach (explode("\n", $configValues) as $exclude) {
+                if (trim($exclude) != '') {
+                    $configValuesFromString[] = trim($exclude);
+                }
+            }
+            $configValues = $configValuesFromString;
         }
         return array_values($configValues);
     }

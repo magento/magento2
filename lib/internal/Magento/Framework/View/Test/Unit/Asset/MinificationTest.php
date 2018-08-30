@@ -245,8 +245,9 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
     public function getExcludesTinyMceAsStringDataProvider()
     {
         return [
-            ["/tiny_mce/\n/tiny_mce2/", ['/tiny_mce/', '/tiny_mce2/']],
+            ["/tiny_mce/  \n  /tiny_mce2/", ['/tiny_mce/', '/tiny_mce2/']],
             ['/tiny_mce/', ['/tiny_mce/']],
+            [' /tiny_mce/', ['/tiny_mce/']],
         ];
     }
 }
