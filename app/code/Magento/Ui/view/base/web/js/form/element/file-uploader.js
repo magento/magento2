@@ -6,6 +6,7 @@
 /**
  * @api
  */
+/* global Base64 */
 define([
     'jquery',
     'underscore',
@@ -167,6 +168,10 @@ define([
          */
         processFile: function (file) {
             file.previewType = this.getFilePreviewType(file);
+
+            if (!file.id && file.name) {
+                file.id = Base64.mageEncode(file.name);
+            }
 
             this.observe.call(file, true, [
                 'previewWidth',
