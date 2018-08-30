@@ -71,7 +71,7 @@
         <element name="inStockOption" type="text" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']//option[@data-title='{{stock}}']" parameterized="true" timeout="30"/>
         <element name="dynamicWeightToggle" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']" timeout="30"/>
         <element name="weightField" type="input" selector="//div[@data-index='weight']//input"/>
-        <element name="categoriesDropDown" type="block" selector="//div[@data-index='category_ids']//div" timeout="30"/>
+        <element name="categoriesDropDown" type="block" selector="//div[@data-index='category_ids']//div[@class='admin__field-control']" timeout="30"/>
         <element name="defaultCategory" type="text" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/>
         <element name="visibilityDropDown" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="catalogOption1" type="text" selector="//select[@name='product[visibility]']//option[1]"/>
@@ -88,8 +88,6 @@
         <element name="categoryDone" type="button" selector=".admin__action-multiselect-actions-wrap [type='button'] span" timeout="30"/>
         <element name="dynamicPriceToggleOff" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']//input[@value='1']"/>
         <!--Category Selection-->
-        <!-- <element name="categoriesDropDown" type="multiselect" selector="//div[@data-index='category_ids']//div" timeout="30"/> -->
-        <!-- <element name="defaultCategory" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/> -->
         <element name="categoryByName" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
         <element name="searchForCategory" type="input" selector="div.action-menu._active > div.admin__action-multiselect-search-wrap input" timeout="30"/>
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>

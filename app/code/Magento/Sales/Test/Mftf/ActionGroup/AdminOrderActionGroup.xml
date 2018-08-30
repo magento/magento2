@@ -22,6 +22,19 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
+    <!--Navigate to create order page (New Order -> Create New Customer)-->
+    <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+
     <!--Navigate to create order page (New Order -> Select Customer)-->
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
