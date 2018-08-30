@@ -52,4 +52,12 @@ interface TranslateInterface
      * @return string
      */
     public function getTheme();
+
+    /**
+     * Set theme
+     *
+     * @param string $theme
+     * @return \Magento\Framework\TranslateInterface
+     */
+    public function setTheme($theme);
 }

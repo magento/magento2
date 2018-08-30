@@ -32,10 +32,22 @@ class Design extends \Magento\Framework\Model\AbstractModel
     protected $_localeDate;
 
     /**
+     * @var \Magento\Framework\TranslateInterface
+     */
+    protected $_translator;
+
+    /**
+     * @var \Magento\Framework\View\Design\ThemeInterfaceFactory
+     */
+    protected $_themeFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\TranslateInterface $translator
+     * @param \Magento\Framework\View\Design\ThemeInterfaceFactory $themeFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -45,12 +57,16 @@ class Design extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\TranslateInterface $translator,
+        \Magento\Framework\View\Design\ThemeInterfaceFactory $themeFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_localeDate = $localeDate;
         $this->_design = $design;
+        $this->_translator = $translator;
+        $this->_themeFactory = $themeFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -63,6 +79,13 @@ class Design extends \Magento\Framework\Model\AbstractModel
     public function applyCustomDesign($design)
     {
         $this->_design->setDesignTheme($design);
+        $this->applyCustomDesingTranslations($design);
+        return $this;
+    }
+
+    protected function applyCustomDesingTranslations($design) {
+        $theme = $this->_themeFactory->create()->load($design)->getThemePath();
+        $this->_translator->setTheme($theme)->loadData(null, true);
         return $this;
     }
 
