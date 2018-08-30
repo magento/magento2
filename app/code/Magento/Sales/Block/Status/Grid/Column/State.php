@@ -53,7 +53,6 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      */
     public function decorateState($value, $row, $column, $isExport)
     {
-        $status = $row->getStatus();
         if ($value) {
             $cell = $value . '[' . $this->_config->getStateLabelByCode($value) . ']';
         } else {
