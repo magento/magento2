@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
@@ -156,7 +157,6 @@ class ProductDataMapper implements BatchDataMapperInterface
         }
 
         foreach ($indexData as $attributeId => $attributeValues) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->dataProvider->getSearchableAttribute($attributeId);
             if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
                 continue;
@@ -176,11 +176,11 @@ class ProductDataMapper implements BatchDataMapperInterface
      * Convert data for attribute: 1) add new value {attribute_code}_value for select and multiselect searchable
      * attributes, that will contain actual value 2) add child products data to composite products
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param Attribute $attribute
      * @param array $attributeValues
      * @return array
      */
-    private function convertAttribute($attribute, array $attributeValues): array
+    private function convertAttribute(Attribute $attribute, array $attributeValues): array
     {
         $productAttributes = [];
 
@@ -202,13 +202,17 @@ class ProductDataMapper implements BatchDataMapperInterface
 
     /**
      * @param int $productId
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param Attribute $attribute
      * @param array $attributeValues
      * @param int $storeId
      * @return array
      */
-    private function prepareAttributeValues(int $productId, $attribute, array $attributeValues, int $storeId): array
-    {
+    private function prepareAttributeValues(
+        int $productId,
+        Attribute $attribute,
+        array $attributeValues,
+        int $storeId
+    ): array {
         if (in_array($attribute->getAttributeCode(), $this->attributesExcludedFromMerge, true)) {
             $attributeValues = [
                 $productId => $attributeValues[$productId] ?? '',
@@ -240,21 +244,21 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
-    private function isAttributeDate($attribute): bool
+    private function isAttributeDate(Attribute $attribute): bool
     {
         return $attribute->getFrontendInput() === 'date'
             || in_array($attribute->getBackendType(), ['datetime', 'timestamp'], true);
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param Attribute $attribute
      * @param array $attributeValues
      * @return array
      */
-    private function getValuesLabels($attribute, array $attributeValues): array
+    private function getValuesLabels(Attribute $attribute, array $attributeValues): array
     {
         $attributeLabels = [];
         foreach ($attribute->getOptions() as $option) {
