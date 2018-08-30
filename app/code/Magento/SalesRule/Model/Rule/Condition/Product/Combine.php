@@ -85,4 +85,46 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         }
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isValid($entity)
+    {
+        if (!$this->getConditions()) {
+            return true;
+        }
+
+        $all = $this->getAggregator() === 'all';
+        $true = (bool)$this->getValue();
+
+        foreach ($this->getConditions() as $cond) {
+            if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
+                $attributeScope = $cond->getAttributeScope();
+                if ($attributeScope === 'parent') {
+                    $validateEntities = [$entity];
+                } elseif ($attributeScope === 'children') {
+                    $validateEntities = $entity->getChildren() ?: [$entity];
+                } else {
+                    $validateEntities = $entity->getChildren() ?: [];
+                    $validateEntities[] = $entity;
+                }
+                $validated = !$true;
+                foreach ($validateEntities as $validateEntity) {
+                    $validated = $cond->validate($validateEntity);
+                    if ($validated === $true) {
+                        break;
+                    }
+                }
+            } else {
+                $validated = $cond->validateByEntityId($entity);
+            }
+            if ($all && $validated !== $true) {
+                return false;
+            } elseif (!$all && $validated === $true) {
+                return true;
+            }
+        }
+        return $all ? true : false;
+    }
 }
