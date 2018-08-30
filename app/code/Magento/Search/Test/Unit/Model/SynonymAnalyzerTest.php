@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class SynonymAnalyzerTest
  */
-class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
+class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymAnalyzer
