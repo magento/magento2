@@ -21,14 +21,14 @@
 
         <before>
             <!--Create product-->
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product" entity="SimpleProduct">
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
         </before>
 
         <!--Go to Storefront-->
-        <amOnPage url="" stepKey="DoToStorefront"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <!-- Fill out form for a new user with address -->
@@ -59,7 +59,7 @@
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
         <!--Go To My Account-->
-        <amOnPage url="/customer/account/" stepKey="goToMyAccountPage"/>
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToMyAccountPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!--Assert That Shipping And Billing Address are the same-->
@@ -74,6 +74,7 @@
             <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="removeCreatedCustomer">
                 <argument name="customer" value="Simple_US_NY_Customer"/>
             </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>
 </tests>

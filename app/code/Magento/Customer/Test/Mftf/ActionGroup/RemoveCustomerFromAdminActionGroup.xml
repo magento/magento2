@@ -24,8 +24,8 @@
         <click selector="{{AdminCustomerGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
         <click selector="{{AdminCustomerGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminCustomerGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
-        <waitForElementVisible selector="{{AdminCustomerGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminCustomerGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmProductDelete"/>
         <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
         <conditionalClick selector="{{AdminCustomerFiltersSection.clearFilters}}" dependentSelector="{{AdminCustomerFiltersSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
