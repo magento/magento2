@@ -185,4 +185,12 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     {
         return $this->_attributeTax->getTable('weee_tax');
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEntityIdField()
+    {
+        return $this->_attributeTax->getIdFieldName();
+    }
 }

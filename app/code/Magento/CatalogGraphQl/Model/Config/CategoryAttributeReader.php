@@ -30,7 +30,15 @@ class CategoryAttributeReader implements ReaderInterface
         'is_active',
         'children',
         'level',
-        'default_sort_by'
+        'default_sort_by',
+        'all_children',
+        'page_layout',
+        'custom_design',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout_update',
+        'custom_use_parent_settings',
+        'custom_apply_to_products',
     ];
 
     /**

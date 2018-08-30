@@ -221,7 +221,7 @@ class DataProvider
         $lastProductId,
         $batch
     ) {
-        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
         $lastProductId = (int) $lastProductId;
 
         $select = $this->connection->select()
@@ -538,7 +538,7 @@ class DataProvider
      * @param array $indexData
      * @param array $productData
      * @param int $storeId
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 100.0.3
      */

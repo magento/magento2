@@ -7,11 +7,9 @@
 /** @var \Magento\Catalog\ViewModel\Product\Breadcrumbs $viewModel */
 $viewModel = $block->getData('viewModel');
 ?>
-<div class="breadcrumbs" data-mage-init='{
-    "breadcrumbs": {
-        "categoryUrlSuffix": "<?= $block->escapeHtml($viewModel->getCategoryUrlSuffix()); ?>",
-        "useCategoryPathInUrl": <?= (int)$viewModel->isCategoryUsedInProductUrl(); ?>,
-        "product": "<?= $block->escapeHtml($viewModel->getProductName()); ?>"
-    }
-}'>
-</div>
+<div class="breadcrumbs"></div>
+<script type="text/x-magento-init">
+        {
+            ".breadcrumbs": <?= $viewModel->getJsonConfigurationHtmlEscaped() ?>
+        }
+</script>

@@ -10,8 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AssertsTest">
         <annotations>
-            <features value="Test Asserts"/>
-            <group value="skip"/>
+            <features value="SampleTests"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
 
         <createData entity="Simple_US_Customer" stepKey="createData2"/>

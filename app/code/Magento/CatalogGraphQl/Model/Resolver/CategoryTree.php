@@ -55,11 +55,11 @@ class CategoryTree implements ResolverInterface
      */
     private function assertFiltersAreValidAndGetCategoryRootIds(array $args) : int
     {
-        if (!isset($args['filter']['root_category_id'])) {
-            throw new GraphQlInputException(__('"root_category_id" filter should be specified'));
+        if (!isset($args['id'])) {
+            throw new GraphQlInputException(__('"id for category should be specified'));
         }
 
-        return (int) $args['filter']['root_category_id'];
+        return (int) $args['id'];
     }
 
     /**
@@ -74,9 +74,11 @@ class CategoryTree implements ResolverInterface
 
             $rootCategoryId = $this->assertFiltersAreValidAndGetCategoryRootIds($args);
             $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-            return [
-                'category_tree' => reset($categoriesTree)
-            ];
+            if (!empty($categoriesTree)) {
+                return current($categoriesTree);
+            } else {
+                return null;
+            }
         });
     }
 }

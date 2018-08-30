@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="298.367px" height="298.365px" viewBox="0 0 298.367 298.365" enable-background="new 0 0 298.367 298.365"
+	 xml:space="preserve">
+<g>
+	<path fill="#13110C" d="M131.233,193.113H75.177c-24.224,0-43.931-19.708-43.931-43.932s19.707-43.93,43.931-43.93h56.056v-30
+		H75.177c-40.831,0-73.931,33.1-73.931,73.93c0,40.832,33.1,73.932,73.931,73.932h56.056V193.113z"/>
+	<path fill="#13110C" d="M224.222,75.252h-57.088v30h57.088c24.224,0,43.931,19.706,43.931,43.93s-19.707,43.932-43.931,43.932
+		h-57.088v30h57.088c40.831,0,73.931-33.1,73.931-73.932C298.152,108.351,265.053,75.252,224.222,75.252z"/>
+</g>
+<g>
+	<path fill="#13110C" d="M192.391,164.182h-86.414c-8.284,0-15-6.716-15-15s6.716-15,15-15h86.414c8.284,0,15,6.716,15,15
+		S200.675,164.182,192.391,164.182z"/>
+</g>
+<script type="text/javascript">
+    alert('This app is probably vulnerable to XSS attacks!');
+  </script>
+</svg>

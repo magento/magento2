@@ -1,7 +1,10 @@
 .idea
 .env
+.htaccess
 codeception.yml
 tests/_output/*
 tests/functional.suite.yml
 tests/functional/Magento/FunctionalTest/_generated
 vendor/*
+mftf.log
+/utils/

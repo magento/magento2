@@ -40,15 +40,13 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
      */
-    public function testLoadByCustomerDataWithoutCustomerId()
+    public function testTryLoadByCustomerDataWithoutCustomerId()
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customerData = $customerRepository->getById(2);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
-
-        $this->assertEquals(0, $result['customer_id']);
-        $this->assertEquals('customer_two@example.com', $result['subscriber_email']);
+        $this->assertEmpty($result);
     }
 }

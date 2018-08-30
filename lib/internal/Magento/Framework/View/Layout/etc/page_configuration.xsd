@@ -32,4 +32,10 @@
             <xs:field xpath="@name"/>
         </xs:unique>
     </xs:element>
+
+    <xs:complexType name="const">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>

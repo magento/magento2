@@ -163,6 +163,9 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
     }
 
+    /**
+     * @return array
+     */
     public function getCreateConfigDataProvider()
     {
         return [
