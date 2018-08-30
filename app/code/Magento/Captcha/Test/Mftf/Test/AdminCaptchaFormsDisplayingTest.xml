@@ -20,10 +20,10 @@
         </annotations>
 
         <!--Login as admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Go to Captcha-->
         <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="captchaFormsDisplayingActionGroup"/>
-        <waitForPageLoad time="30" stepKey="WaitForPageLoaded"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoaded"/>
         <!--Verify fields removed-->
         <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
         <assertNotContains stepKey="checkoutAsGuest">
@@ -36,17 +36,17 @@
         </assertNotContains>
         <!--Verify fields existence-->
         <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
-        <assertEquals stepKey="CreateUserFieldIsPresent">
+        <assertEquals stepKey="createUserFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.createUser}}</expectedResult>
             <actualResult type="variable">$createUser</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.userLogin}}" stepKey="login"/>
-        <assertEquals stepKey="LoginFieldIsPresent">
+        <assertEquals stepKey="loginFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.login}}</expectedResult>
             <actualResult type="variable">login</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{AdminCaptchaFormsDisplayingSection.forgotpassword}}" stepKey="forgotpassword"/>
-        <assertEquals stepKey="PasswordFieldIsPresent">
+        <assertEquals stepKey="passwordFieldIsPresent">
             <expectedResult type="string">{{CaptchaData.passwd}}</expectedResult>
             <actualResult type="variable">$forgotpassword</actualResult>
         </assertEquals>
@@ -62,7 +62,7 @@
         </assertEquals>
 
         <!--Roll back configuration-->
-        <scrollToTopOfPage stepKey="ScrollToTop"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminCaptchaFormsDisplayingSection.captcha}}" stepKey="clickToCloseCaptcha"/>
     </test>
 </tests>
