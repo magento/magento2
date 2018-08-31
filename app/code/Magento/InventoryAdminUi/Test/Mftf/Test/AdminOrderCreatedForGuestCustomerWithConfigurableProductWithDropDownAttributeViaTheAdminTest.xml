@@ -108,6 +108,7 @@
         <waitForPageLoad stepKey="waitUntilPageIsReady" />
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <conditionalClick selector="button[data-index='confirm_button']" dependentSelector="button[data-index='confirm_button']" visible="true" stepKey="clickOnConfirm1"/>
         <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear1" />
         <waitForPageLoad stepKey="waitUntilPageIsReady1" />
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
