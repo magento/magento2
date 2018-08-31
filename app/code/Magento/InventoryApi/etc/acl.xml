@@ -9,13 +9,17 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_InventoryApi::source" title="Inventory Sources" translate="title" sortOrder="10">
-                    <resource id="Magento_InventoryApi::source_edit" title="Edit Inventory Sources" translate="title" sortOrder="10" />
-                </resource>
-                <resource id="Magento_InventoryApi::stock" title="Inventory Stocks" translate="title" sortOrder="20">
-                    <resource id="Magento_InventoryApi::stock_edit" title="Edit Inventory Stocks" translate="title" sortOrder="10" />
-                    <resource id="Magento_InventoryApi::stock_delete" title="Delete Inventory Stocks" translate="title" sortOrder="20" />
-                    <resource id="Magento_InventoryApi::source_stock_link" title="Source to Stock Assigning" translate="title" sortOrder="30" />
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_InventoryApi::inventory" title="Inventory" translate="title" sortOrder="10">
+                        <resource id="Magento_InventoryApi::source" title="Sources" translate="title" sortOrder="10">
+                            <resource id="Magento_InventoryApi::source_edit" title="Edit Sources" translate="title" sortOrder="10" />
+                        </resource>
+                        <resource id="Magento_InventoryApi::stock" title="Stocks" translate="title" sortOrder="20">
+                            <resource id="Magento_InventoryApi::stock_edit" title="Edit Stocks" translate="title" sortOrder="10" />
+                            <resource id="Magento_InventoryApi::stock_delete" title="Delete Stocks" translate="title" sortOrder="20" />
+                            <resource id="Magento_InventoryApi::source_stock_link" title="Source to Stock Assigning" translate="title" sortOrder="30" />
+                        </resource>
+                    </resource>
                 </resource>
             </resource>
         </resources>
