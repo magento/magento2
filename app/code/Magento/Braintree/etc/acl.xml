@@ -14,6 +14,15 @@
                         <resource id="Magento_Braintree::settlement_report" title="Braintree Settlement" translate="title" sortOrder="80" />
                     </resource>
                 </resource>
+                <resource id="Magento_Sales::sales">
+                    <resource id="Magento_Sales::sales_operation">
+                        <resource id="Magento_Sales::sales_order">
+                            <resource id="Magento_Sales::actions">
+                                <resource id="Magento_Braintree::get_client_token" title="Get Client Token Braintree" sortOrder="170" />
+                            </resource>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>
