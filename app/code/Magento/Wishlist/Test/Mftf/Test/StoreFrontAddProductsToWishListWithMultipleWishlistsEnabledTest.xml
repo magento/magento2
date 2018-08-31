@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StoreFrontAddProductsToWishListWithMultipleWishlistsEnabledTest">
+        <annotations>
+            <stories value="Wishlist"/>
+            <title value="Add products to wishlist from Category page with multiple wishlist enabled"/>
+            <description value="Registered customer should be able to add products from category page to wishlist when multiple wishlist enabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94422"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
+
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="categoryFirst"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <!--<deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>-->
+            <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="ResetCustomerMultipleWishlistOption" stepKey="resetWishlistConfiguration"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+        </after>
+        <!--Login to admin-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        <comment userInput="Enable multiple wishlist" stepKey="enableMultipleWishlist"/>
+        <actionGroup ref="EnableCustomerMultipleWishlistOption" stepKey="enableCustomerWishlist"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Add product from first category to the wishlist -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <!-- Add product from first category to the wishlist after shifting-->
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup2" stepKey="addSimpleProduct1ToWishlist">
+            <argument name="productVar" value="$$simpleProduct1$$"/>
+        </actionGroup>
+          </test>
+</tests>

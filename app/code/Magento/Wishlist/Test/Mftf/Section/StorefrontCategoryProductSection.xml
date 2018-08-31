@@ -11,5 +11,7 @@
     <section name="StorefrontCategoryProductSection">
         <element name="ProductAddToWishlistByNumber" type="text" selector="//main//li[{{var1}}]//a[contains(@class, 'towishlist')]" parameterized="true"/>
         <element name="ProductAddToWishlistByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'towishlist')]" parameterized="true"/>
+        <element name="addToWishListArrow" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//button[@title='Add to:']" parameterized="true"/>
+        <element name="chooseWishlist" type="button" selector="(//main//li[.//a[contains(text(), '{{var1}}')]]//li[contains(@class,'item')]/span)[1]" parameterized="true"/>
     </section>
 </sections>
