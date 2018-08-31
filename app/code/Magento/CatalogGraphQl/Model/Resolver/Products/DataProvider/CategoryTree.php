@@ -101,8 +101,9 @@ class CategoryTree
         $collection->addIsActiveFilter();
         $collection->setOrder('level');
         $collection->getSelect()->orWhere(
-            $collection->getSelect()->getConnection()->quoteIdentifier(
-                'e.'. $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()) . ' = ?',
+            $collection->getSelect()
+                ->getConnection()
+                ->quoteIdentifier('e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()) . ' = ?',
             $rootCategoryId
         );
 
