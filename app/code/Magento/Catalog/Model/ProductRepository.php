@@ -455,18 +455,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $newEntries[] = $entry;
                 }
             }
-            foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
-                        unset($updatedEntry['file']);
-                    }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
-                } else {
-                    //set the removed flag
-                    $existingEntry['removed'] = true;
-                }
-            }
+            $existingMediaGallery = $this->processingExistingImages($existingMediaGallery, $entriesById);
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
             $newEntries = $mediaGalleryEntries;
@@ -487,25 +476,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         }
 
-        foreach ($newEntries as $newEntry) {
-            if (!isset($newEntry['content'])) {
-                throw new InputException(__('The image content is not valid.'));
-            }
-            /** @var ImageContentInterface $contentDataObject */
-            $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
-                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
-            $newEntry['content'] = $contentDataObject;
-            $this->processNewMediaGalleryEntry($product, $newEntry);
+        $this->processingNewEntries($newEntries, $product, $entriesById);
 
-            $finalGallery = $product->getData('media_gallery');
-            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
-            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
-            $entriesById[$newEntryId] = $newEntry;
-            $finalGallery['images'][$newEntryId] = $newEntry;
-            $product->setData('media_gallery', $finalGallery);
-        }
         return $this;
     }
 
@@ -759,5 +731,59 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
+    }
+
+    /**
+     * @param $existingMediaGallery
+     * @param $entriesById
+     * @return mixed
+     */
+    private function processingExistingImages($existingMediaGallery, $entriesById)
+    {
+        foreach ($existingMediaGallery as $key => &$existingEntry) {
+            if (isset($entriesById[$existingEntry['value_id']])) {
+                $updatedEntry = $entriesById[$existingEntry['value_id']];
+                if ($updatedEntry['file'] === null) {
+                    unset($updatedEntry['file']);
+                }
+                $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
+            } else {
+                //set the removed flag
+                $existingEntry['removed'] = true;
+            }
+        }
+
+        return $existingMediaGallery;
+    }
+
+    /**
+     * @param $newEntries
+     * @param $product
+     * @param $entriesById
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws StateException
+     */
+    private function processingNewEntries($newEntries, $product, $entriesById)
+    {
+        foreach ($newEntries as $newEntry) {
+            if (!isset($newEntry['content'])) {
+                throw new InputException(__('The image content is not valid.'));
+            }
+            /** @var ImageContentInterface $contentDataObject */
+            $contentDataObject = $this->contentFactory->create()
+                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
+            $newEntry['content'] = $contentDataObject;
+            $this->processNewMediaGalleryEntry($product, $newEntry);
+
+            $finalGallery = $product->getData('media_gallery');
+            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
+            $entriesById[$newEntryId] = $newEntry;
+            $finalGallery['images'][$newEntryId] = $newEntry;
+            $product->setData('media_gallery', $finalGallery);
+        }
     }
 }
