@@ -201,7 +201,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
-            ->with('checkout_success', $this->arrayHasKey('order'));
+            ->with('paypal_checkout_success', $this->arrayHasKey('order'));
 
         $result = $this->returnUrl->execute();
         $this->assertNull($result);
