@@ -103,7 +103,9 @@ class CategoryTree
         $collection->getSelect()->orWhere(
             $collection->getSelect()
                 ->getConnection()
-                ->quoteIdentifier('e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()) . ' = ?',
+                ->quoteIdentifier(
+                    'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                ) . ' = ?',
             $rootCategoryId
         );
 
