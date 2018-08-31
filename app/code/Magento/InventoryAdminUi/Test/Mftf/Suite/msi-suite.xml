@@ -38,4 +38,20 @@
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
         </after>
     </suite>
+    <suite name="MSI_Sort_Order_Tests">
+        <before>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+        </before>
+        <include>
+            <group name="sort_order_test"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="single_mode"/>
+            <group name="multi_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+        </after>
+    </suite>
 </suites>
