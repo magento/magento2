@@ -8,26 +8,29 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="GuestCustomerCreateOrderWithBundleProductSingleStockMode">
+    <test name="GuestCustomerCreateOrderWithBundleProductDefaultStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create order with bundle product in single stock mode from storefront as guest customer."/>
-            <title value="Create order with bundle product in single stock from storefront as guest customer."/>
-            <description value="Check, guest customer able to create order with bundle product in single stock mode from storefront."/>
-            <testCaseId value="1329"/>
+            <stories value="Create order with bundle product on default stock from storefront as guest customer."/>
+            <title value="Create order with bundle product on default stock from storefront as guest customer."/>
+            <description value="Check, guest customer able to create order with bundle product on default stock from storefront."/>
+            <testCaseId value="1330"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="single_mode"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
+            <createData entity="FullSource1" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
             <createData entity="SimpleSubCategory" stepKey="category"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
-
-            <comment userInput="Make sure system is in single stock mode." stepKey="setSystemToSingleStockModeComment"/>
-            <actionGroup ref="ChangeAllSourcesStatusActionGroup" stepKey="disableAllSources"/>
 
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
@@ -40,7 +43,7 @@
             <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
-            <comment userInput="Perform reindex and cache flush after set system to single stock mode." stepKey="reindexCacheFlushAfterSetSystemToSingleStockMode"/>
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
 
@@ -49,7 +52,12 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
 
             <comment userInput="Clean up bundle product." stepKey="cleanUpBundleProductComment"/>
@@ -124,7 +132,7 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.quantity('1')}}" userInput="1000.0000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="995" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder"/>
     </test>
 </tests>

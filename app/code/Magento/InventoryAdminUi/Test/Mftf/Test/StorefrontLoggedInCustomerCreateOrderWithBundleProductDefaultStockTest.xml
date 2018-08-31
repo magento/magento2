@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminCreateOrderWithBundleProductDefaultStock">
+    <test name="StorefrontLoggedInCustomerCreateOrderWithBundleProductDefaultStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
-            <stories value="Create order with bundle product on default stock from admin area."/>
-            <title value="Create order with bundle product on default stock from admin area"/>
-            <description value="Check, admin user able to create order with bundle product on default stock from admin area."/>
-            <testCaseId value="1332"/>
+            <stories value="Create order with bundle product on default stock from storefront."/>
+            <title value="Create order with bundle product on default stock from storefront."/>
+            <description value="Check, logged in customer able to create order with bundle product on default stock from storefront."/>
+            <testCaseId value="1331"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -53,10 +53,19 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <comment userInput="Clean up bundle product." stepKey="cleanUpBundleProductComment"/>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
 
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>
@@ -67,6 +76,7 @@
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" stepKey="searchAndSelectCategory"/>
         <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
@@ -86,31 +96,31 @@
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="5" stepKey="fillProductDefaultQty"/>
+
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedBundleProduct"/>
 
-        <comment userInput="Create order with bundle product from admin area." stepKey="createOrderWithBundleProductComment"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
-            <argument name="customer" value="$$customer$$"/>
+        <comment userInput="Navigate to storefront and buy one piece of bundle product as registered customer." stepKey="buyBundleProductComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
-
-        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoad20"/>
-
-        <actionGroup ref="addBundleProductToOrder" stepKey="addBundleProductToOrder">
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-
-        <waitForPageLoad time="60" stepKey="waitForPageLoad21"/>
-
-        <comment userInput="Select shipping method and check grand total and shipping cost." stepKey="selectShippingMethodComment"/>
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$615.00" stepKey="seeOrderSubTotal"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$5.00" stepKey="seeOrderShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$620.00" stepKey="seeCorrectGrandTotal"/>
-
-        <comment userInput="Submit order." stepKey="submitOrderComment"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="waitForShippingMethodsLoad"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButtonVisible"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
         <comment userInput="Check simple product quantity and salable quantity." stepKey="checkSimpleProductQuantityComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckSimpleProductQtyAfterPlaceOrder"/>

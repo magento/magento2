@@ -95,19 +95,19 @@
 
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{MsiCustomer1.email}}" stepKey="enterEmail"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterEmail"/>
-        <fillField selector="[id^=billing-new-address-form] input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector=".payment-method-billing-address input[name=firstname]" userInput="{{MsiCustomer1.firstname}}" stepKey="enterFirstName"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterFirstName"/>
-        <fillField selector="[id^=billing-new-address-form] input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
+        <fillField selector=".payment-method-billing-address input[name=lastname]" userInput="{{MsiCustomer1.lastname}}" stepKey="enterLastName"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterLastName"/>
-        <fillField selector="[id^=billing-new-address-form] input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector=".payment-method-billing-address input[name='street[0]']" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterStreet"/>
-        <fillField selector="[id^=billing-new-address-form] input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <fillField selector=".payment-method-billing-address input[name=city]" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterCity"/>
-        <selectOption selector="[id^=billing-new-address-form] select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <selectOption selector=".payment-method-billing-address select[name=region_id]" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterRegionId"/>
-        <fillField selector="[id^=billing-new-address-form] input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector=".payment-method-billing-address input[name=postcode]" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterPostcode"/>
-        <fillField selector="[id^=billing-new-address-form] input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <fillField selector=".payment-method-billing-address input[name=telephone]" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
         <waitForPageLoad time="10" stepKey="waitAfterEnterTelephone"/>
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="updateCustomerBillingAddress"/>
 

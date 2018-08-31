@@ -18,6 +18,8 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <!-- SKIPPED DUE TO BUG: https://github.com/magento-engcom/msi/issues/1588 -->
+            <group value="skip"/>
         </annotations>
 
         <before>

@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminConfigurableProductDisabledManageStockOnProductPageForCustomStock">
+    <test name="AdminConfigurableProductDisabledManageStockOnProductPageForCustomStockTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Manage Stock on Product page turned off for Configurable Product on Default stock in admin"/>
@@ -17,8 +17,10 @@
             <testCaseId value="967"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <!-- SKIPPING DUE TO BUG https://github.com/magento-engcom/msi/pull/1082 -->
-            <group value="skip"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1597"/>
+            </skip>
         </annotations>
 
         <before>
@@ -167,6 +169,9 @@
         <click selector="{{AdminAdvancedInventoryControlsSection.done}}"
                stepKey="clickOnDoneToSetManageStockToNoForRed"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseToSetManageStockToNoForRed"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
 
         <comment userInput="Check, configurable product back to category page and has 'In Stock' status on product view page." stepKey="checkConfigurableProductBackOnStorefront"/>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsBackToCategoryPage">
