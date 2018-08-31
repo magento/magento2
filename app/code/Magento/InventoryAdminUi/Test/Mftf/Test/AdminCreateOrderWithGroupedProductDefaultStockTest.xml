@@ -88,17 +88,22 @@
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalTaAddSimpleProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindSimpleProduct">
             <argument name="sku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSimpleProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddVirtualProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalToAddVirtualProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindVirtualProduct">
             <argument name="sku" value="$$virtualProduct.sku$$"/>
         </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
 
