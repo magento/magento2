@@ -1561,7 +1561,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                /**
+                 * Only populate URL KEY if a value has been provided.
+                 * @see https://github.com/magento/magento2/issues/17023
+                 */
+                if ($urlKey = $this->getUrlKey($rowData)) {
+                    $rowData[self::URL_KEY] = $urlKey;
+                }
 
                 $rowSku = $rowData[self::COL_SKU];
 
@@ -2406,6 +2412,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        /**
+         * If the product exists, assume it already has a URL Key and even
+         * if a name is provided in the import data, it should not be used
+         * to overwrite that existing URL Key the product already has.
+         * @see https://github.com/magento/magento2/issues/17023
+         */
+        $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
+        if ($isSkuExist && !array_key_exists(self::URL_KEY, $rowData)) {
+            return false;
+        }
+        
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
             || $rowData[self::COL_VISIBILITY]
@@ -2710,7 +2727,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param array $rowData
-     * @return string
+     * @return string|bool
      * @since 100.0.3
      */
     protected function getUrlKey($rowData)
@@ -2718,12 +2735,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::URL_KEY])) {
             return strtolower($rowData[self::URL_KEY]);
         }
+        
+        /**
+         * If the product already exists, do not overwrite its
+         * URL Key with a value generated from the provided name.
+         * @see https://github.com/magento/magento2/issues/17023
+         */
+        if ($this->isSkuExist($rowData[self::COL_SKU])) {
+            return false;
+        }
 
         if (!empty($rowData[self::COL_NAME])) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
-        return '';
+        return false;
     }
 
     /**
