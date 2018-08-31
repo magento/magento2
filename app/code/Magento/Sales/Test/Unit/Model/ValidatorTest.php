@@ -113,7 +113,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
-
     /**
      * Test validate method
      *
