@@ -37,28 +37,35 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' .
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
+            $this->escapeHtml($row->getUrl())
+            . '">' .
             __('Read Details') . '</a>' : '';
 
-        $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
-            '*/*/markAsRead/',
-            ['_current' => true, 'id' => $row->getId()]
-        ) . '">' . __(
-            'Mark as Read'
-        ) . '</a>' : '';
+        $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' .
+            $this->getUrl(
+                $this->escapeHtml(
+                    '*/*/markAsRead/',
+                    ['_current' => true, 'id' => $row->getId()]
+                )
+            ) . '">' . __(
+                'Mark as Read'
+            ) . '</a>' : '';
 
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf(
             '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
             $readDetailsHtml,
             $markAsReadHtml,
-            $this->getUrl(
-                '*/*/remove/',
-                [
-                    '_current' => true,
-                    'id' => $row->getId(),
-                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
-                ]
+            $this->escapeHtml(
+                $this->getUrl(
+                    '*/*/remove/',
+                    [
+                        '_current' => true,
+                        'id' => $row->getId(),
+                        \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
+                    ]
+                )
             ),
             __('Are you sure?'),
             __('Remove')
