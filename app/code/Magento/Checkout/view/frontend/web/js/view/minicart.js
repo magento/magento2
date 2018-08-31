@@ -101,7 +101,7 @@ define([
                 self.isLoading(true);
             });
 
-            if (cartData()['website_id'] !== window.checkout.websiteId) {
+            if ((cartData()['website_id'] !== window.checkout.websiteId) && !customerData.get('is-loading')) {
                 customerData.reload(['cart'], false);
             }
 
