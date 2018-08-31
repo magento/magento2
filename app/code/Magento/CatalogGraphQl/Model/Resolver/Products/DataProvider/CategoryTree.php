@@ -98,9 +98,12 @@ class CategoryTree
         $collection->addPathFilter(sprintf('.*/%s/[/0-9]*$', $rootCategoryId));
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
+        $collection->addIsActiveFilter();
         $collection->setOrder('level');
         $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
+            $collection->getSelect()->getConnection()->quoteIdentifier('e.'.
+                $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+            ) . ' = ?',
             $rootCategoryId
         );
         return $this->processTree($collection->getIterator());
