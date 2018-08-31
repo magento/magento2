@@ -200,7 +200,8 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->eventManagerMock->expects($this->once())
-            ->method('dispatch');
+            ->method('dispatch')
+            ->with('checkout_success', $this->arrayHasKey('order'));
 
         $result = $this->returnUrl->execute();
         $this->assertNull($result);

@@ -83,7 +83,7 @@ class PlaceOrder implements ObserverInterface
         $orderId = $order->getEntityId();
         if (null === $orderId
             || $order->getPayment()->getMethodInstance()->isOffline()
-            || $order->getState() == Order::STATE_PENDING_PAYMENT) {
+            || $order->getState() === Order::STATE_PENDING_PAYMENT) {
             return;
         }
 
