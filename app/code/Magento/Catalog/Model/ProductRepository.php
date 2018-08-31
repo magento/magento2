@@ -734,11 +734,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @param $existingMediaGallery
-     * @param $entriesById
-     * @return mixed
+     * @param array $existingMediaGallery
+     * @param array $entriesById
+     * @return array
      */
-    private function processingExistingImages($existingMediaGallery, $entriesById)
+    private function processingExistingImages(array $existingMediaGallery, array $entriesById)
     {
         foreach ($existingMediaGallery as $key => &$existingEntry) {
             if (isset($entriesById[$existingEntry['value_id']])) {
@@ -757,14 +757,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @param $newEntries
-     * @param $product
-     * @param $entriesById
+     * @param array $newEntries
+     * @param ProductInterface $product
+     * @param array $entriesById
+     * @return void
      * @throws InputException
      * @throws LocalizedException
      * @throws StateException
      */
-    private function processingNewEntries($newEntries, $product, $entriesById)
+    private function processingNewEntries(array $newEntries, ProductInterface $product, array $entriesById)
     {
         foreach ($newEntries as $newEntry) {
             if (!isset($newEntry['content'])) {
