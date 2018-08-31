@@ -17,7 +17,7 @@
             <testCaseId value="1317"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="multi_mode"/>
+            <group value="single_mode"/>
             <group value="skip" />
         </annotations>
 
