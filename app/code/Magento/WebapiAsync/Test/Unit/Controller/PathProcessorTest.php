@@ -56,6 +56,9 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->endpointPath, $result);
     }
 
+    /**
+     * @return array
+     */
     public function processPathDataProvider()
     {
         return [

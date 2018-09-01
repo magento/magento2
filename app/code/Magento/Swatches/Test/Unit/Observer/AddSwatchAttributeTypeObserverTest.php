@@ -66,6 +66,9 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
         $this->observerMock->execute($this->eventObserverMock);
     }
 
+    /**
+     * @return array
+     */
     public function dataAddSwatch()
     {
         return [
