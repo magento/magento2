@@ -238,7 +238,6 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
     }
 
-
     /**
      * @return array
      */
