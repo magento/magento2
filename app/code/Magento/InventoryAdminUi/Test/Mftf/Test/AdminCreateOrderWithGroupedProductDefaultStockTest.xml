@@ -21,6 +21,7 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
             <createData entity="FullSource1" stepKey="customSource"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
             <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
