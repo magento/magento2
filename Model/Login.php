@@ -18,6 +18,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
      */
     const TIME_FRAME = 60;
 
+    const XML_PATH_KEEP_GUEST_CART = 'mfloginascustomer/general/keep_guest_cart';
+
     /**
      * Prefix of model events names
      *
@@ -70,6 +72,11 @@ class Login extends \Magento\Framework\Model\AbstractModel
     protected $cart;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -83,6 +90,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param null|\Magento\Checkout\Model\Session $checkoutSession
+     * @param null|\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -95,7 +103,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        $checkoutSession = null
+        $checkoutSession = null,
+        $scopeConfig = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
@@ -103,9 +112,15 @@ class Login extends \Magento\Framework\Model\AbstractModel
         $this->_dateTime = $dateTime;
         $this->_random = $random;
         $this->cart = $cart;
-        $this->_checkoutSession = $checkoutSession ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_checkoutSession = $checkoutSession ?: $objectManager->get(
             \Magento\Checkout\Model\Session::class
         );
+        $this->scopeConfig = $scopeConfig ?: $objectManager->get(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        );
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -182,11 +197,19 @@ class Login extends \Magento\Framework\Model\AbstractModel
             /* Logout if logged in */
             $this->_customerSession->logout();
         } else {
-            /* Remove items from guest cart */
-            foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
-                $this->cart->removeItem($item->getId());
+
+            $keepItems = $this->scopeConfig->getValue(
+                self::XML_PATH_KEEP_GUEST_CART,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+            if (!$keepItems) {
+                /* Remove items from guest cart */
+                foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
+                    $this->cart->removeItem($item->getId());
+                }
+                $this->cart->save();
             }
-            $this->cart->save();
         }
 
         $customer = $this->getCustomer();

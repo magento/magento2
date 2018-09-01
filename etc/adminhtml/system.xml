@@ -25,6 +25,12 @@
                 <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disable Page Cache For Admin User</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If set to "Yes", when login as customer Page Cache will be disabled.]]></comment>
+                </field>
+                <field id="keep_guest_cart" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Keep Guest Shopping Cart Items</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If set to "Yes", after login, guest shopping cart will be merged into customer shopping cart.]]></comment>
                 </field>
             </group>
         </section>
