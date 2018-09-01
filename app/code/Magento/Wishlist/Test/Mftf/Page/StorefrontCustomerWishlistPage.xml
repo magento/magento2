@@ -11,7 +11,4 @@
     <page name="StorefrontCustomerWishlistPage" url="/wishlist/" area="storefront" module="Magento_Wishlist">
         <section name="StorefrontCustomerWishlistSection" />
     </page>
-    <page name="AdminCustomerWishlistConfigurationPage" url="admin/system_config/edit/section/wishlist/" area="admin" module="Magento_Wishlist">
-        <section name="WishlistGeneralSection"/>
-    </page>
 </pages>

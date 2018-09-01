@@ -20,20 +20,6 @@
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
     </actionGroup>
 
-    <!-- Add Product to split wishlist from the category page and check message -->
-    <actionGroup name="StorefrontCustomerAddCategoryProductToWishlistActionGroup2">
-        <arguments>
-            <argument name="productVar"/>
-        </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct" />
-        <!--<click selector="{{StorefrontCategoryProductSection.ProductAddToSplitWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>-->
-        <click selector="{{StorefrontCategoryProductSection.addToWishListArrow(productVar.name)}}" stepKey="clickAddToWishlist"/>
-        <clickWithLeftButton selector="{{StorefrontCategoryProductSection.chooseWishlist(productVar.name)}}" x="96" y="5" stepKey="selectWishlistWithOffset"/>
-        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="SeeProductNameAddedToWishlist"/>
-        <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
-    </actionGroup>
-
     <!-- Add Product to wishlist from the product page and check message -->
     <actionGroup name="StorefrontCustomerAddProductToWishlistActionGroup">
         <arguments>
