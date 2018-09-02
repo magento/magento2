@@ -22,6 +22,19 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
+    <!--Navigate to create order page (New Order -> Create New Customer)-->
+    <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+
     <!--Navigate to create order page (New Order -> Select Customer)-->
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
@@ -93,28 +106,20 @@
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectConfigurableProduct"/>
-        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}" stepKey="waitForConfigurablePopover"/>
         <wait time="2" stepKey="waitForOptionsToLoad"/>
-        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
-                      userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}"
+                      userInput="{{option.name}}" stepKey="selectionConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-    <actionGroup name="configureOrderedConfigurableProduct">
-        <arguments>
-            <argument name="attribute"/>
-            <argument name="option"/>
-            <argument name="quantity" type="string"/>
-        </arguments>
-        <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
+    <!--Add configurable product to order -->
+    <actionGroup name="addConfigurableProductToOrderFromAdmin" extends="addConfigurableProductToOrder">
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
-        <wait time="2" stepKey="waitForOptionsToLoad"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
                       userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
-        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
-        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
     </actionGroup>
 
     <!--Add bundle product to order -->

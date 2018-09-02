@@ -83,8 +83,6 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
 
@@ -94,7 +92,7 @@
         </actionGroup>
 
         <!--Add configurable product to order-->
-        <actionGroup ref="addConfigurableProductToOrder" stepKey="addConfigurableProductToOrder">
+        <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
