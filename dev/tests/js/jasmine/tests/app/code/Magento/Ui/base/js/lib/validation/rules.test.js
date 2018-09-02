@@ -15,7 +15,7 @@ define([
                 var value = '',
                     params = [1,3];
 
-                expect(rules['range-words'].handler(value, params)).toBe(false);
+                expect(rules['range-words'].handler(value, params)).toBe(true);
             });
 
             it('Check on redundant words', function () {
