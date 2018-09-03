@@ -1561,10 +1561,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                /**
-                 * Only populate URL KEY if a value has been provided.
-                 * @see https://github.com/magento/magento2/issues/17023
-                 */
                 if ($urlKey = $this->getUrlKey($rowData)) {
                     $rowData[self::URL_KEY] = $urlKey;
                 }
@@ -2416,7 +2412,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
          * If the product exists, assume it already has a URL Key and even
          * if a name is provided in the import data, it should not be used
          * to overwrite that existing URL Key the product already has.
-         * @see https://github.com/magento/magento2/issues/17023
          */
         $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
         if ($isSkuExist && !array_key_exists(self::URL_KEY, $rowData)) {
@@ -2739,7 +2734,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         /**
          * If the product already exists, do not overwrite its
          * URL Key with a value generated from the provided name.
-         * @see https://github.com/magento/magento2/issues/17023
          */
         if ($this->isSkuExist($rowData[self::COL_SKU])) {
             return false;
