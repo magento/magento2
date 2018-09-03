@@ -9,6 +9,7 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -71,6 +72,7 @@ class DeployStaticContent
      * Run deploy procedure
      *
      * @param array $options
+     * @throws LocalizedException
      * @return void
      */
     public function deploy(array $options)
