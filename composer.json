@@ -184,6 +184,7 @@
         "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-grouped-product": "*",
         "magento/module-inventory-grouped-product-admin-ui": "*",
+        "magento/module-inventory-grouped-product-indexer": "*",
         "magento/module-inventory-import-export": "*",
         "magento/module-inventory-indexer": "*",
         "magento/module-inventory-multi-dimensional-indexer-api": "*",
