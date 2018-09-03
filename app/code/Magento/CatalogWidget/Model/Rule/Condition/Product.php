@@ -124,9 +124,22 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attribute = $this->getAttributeObject();
 
-        if ($attribute->getUsedInProductListing() && $collection->isEnabledFlat()) {
-            $alias = array_keys($collection->getSelect()->getPart('from'))[0];
-            $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+        if ($collection->isEnabledFlat()) {
+            if ($this->isEnabledInFlat($attribute)) {
+                $alias = array_keys($collection->getSelect()->getPart('from'))[0];
+                $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+            } else {
+                $alias = 'at_' . $attribute->getAttributeCode();
+                if (!in_array($alias, array_keys($collection->getSelect()->getPart('from')))) {
+                    $collection->joinAttribute(
+                        $attribute->getAttributeCode(),
+                        'catalog_product/'.$attribute->getAttributeCode(),
+                        'entity_id'
+                    );
+                }
+
+                $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.value';
+            }
             return $this;
         }
 
@@ -244,5 +257,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function collectValidatedAttributes($productCollection)
     {
         return $this->addToCollection($productCollection);
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $attribute
+     * @return bool
+     */
+    private function isEnabledInFlat(\Magento\Framework\DataObject $attribute): bool
+    {
+        return $attribute->getData('backend_type') === 'static'
+            || (int) $attribute->getData('used_in_product_listing') === 1
+            || (int) $attribute->getData('used_for_sort_by') === 1;
     }
 }
