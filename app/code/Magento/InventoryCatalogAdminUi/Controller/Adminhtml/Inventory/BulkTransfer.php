@@ -7,15 +7,44 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Inventory;
 
-use Magento\InventoryCatalogAdminUi\Controller\Adminhtml\BulkAbstract;
+use Magento\Backend\App\Action;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\ProcessBulkPage;
 
-class BulkTransfer extends BulkAbstract
+/**
+ * Mass transfer sources between products.
+ */
+class BulkTransfer extends Action
 {
     /**
-     * @inheritdoc
+     * @see _isAllowed()
      */
-    protected function getTitle(): string
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
+     * @var ProcessBulkPage
+     */
+    private $processBulkPage;
+
+    /**
+     * @param Action\Context $context
+     * @param ProcessBulkPage $processBulkPage
+     */
+    public function __construct(
+        Action\Context $context,
+        ProcessBulkPage $processBulkPage
+    ) {
+        parent::__construct($context);
+
+        $this->processBulkPage = $processBulkPage;
+    }
+
+    /**
+     * @return ResponseInterface|ResultInterface
+     */
+    public function execute()
     {
-        return 'Bulk Inventory Transfer';
+        return $this->processBulkPage->execute('Bulk Inventory Transfer');
     }
 }

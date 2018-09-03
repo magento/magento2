@@ -5,21 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml;
+namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk;
 
-use Magento\Backend\App\Action;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
 use Magento\Ui\Component\MassAction\Filter;
 
-abstract class BulkAbstract extends Action
+/**
+ * Bulk process page for assign, unassign and transfer sources.
+ */
+class ProcessBulkPage
 {
-    /**
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
-
     /**
      * @var Filter
      */
@@ -36,29 +36,42 @@ abstract class BulkAbstract extends Action
     private $collectionFactory;
 
     /**
-     * @param Action\Context $context
+     * @var ResultFactory
+     */
+    private $resultFactory;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param Filter $filter
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
+     * @param ResultFactory $resultFactory
+     * @param ManagerInterface $messageManager
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        Action\Context $context,
         CollectionFactory $collectionFactory,
         Filter $filter,
-        BulkSessionProductsStorage $bulkSessionProductsStorage
+        BulkSessionProductsStorage $bulkSessionProductsStorage,
+        ResultFactory $resultFactory,
+        ManagerInterface $messageManager
     ) {
-        parent::__construct($context);
-
         $this->collectionFactory = $collectionFactory;
         $this->filter = $filter;
         $this->bulkSessionProductsStorage = $bulkSessionProductsStorage;
+        $this->resultFactory = $resultFactory;
+        $this->messageManager = $messageManager;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @param string $title
+     * @return ResponseInterface|ResultInterface
      */
-    public function execute()
+    public function execute(string $title)
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
@@ -71,15 +84,8 @@ abstract class BulkAbstract extends Action
         $this->bulkSessionProductsStorage->setProductsSkus($collection->getColumnValues('sku'));
 
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__($this->getTitle()));
+        $resultPage->getConfig()->getTitle()->prepend(__($title));
 
         return $resultPage;
     }
-
-    /**
-     * Return title for page
-     *
-     * @return string
-     */
-    abstract protected function getTitle(): string;
 }
