@@ -258,7 +258,6 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
     /**
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
