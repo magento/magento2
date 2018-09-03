@@ -18,7 +18,7 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CreateEmptyCart implements ResolverInterface
 {
@@ -69,23 +69,21 @@ class CreateEmptyCart implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
         $customerId = $this->userContext->getUserId();
 
-        if ($customerId) {
+        if (null !== $customerId) {
             $quoteId = $this->cartManagement->createEmptyCartForCustomer($customerId);
             $maskedQuoteId = $this->quoteIdToMaskedId->execute($quoteId);
         } else {
             $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
         }
 
-        $result = function () use ($maskedQuoteId) {
+        return $this->valueFactory->create(function () use ($maskedQuoteId) {
             return $maskedQuoteId;
-        };
-
-        return $this->valueFactory->create($result);
+        });
     }
 }
