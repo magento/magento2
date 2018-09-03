@@ -75,7 +75,7 @@ class CreateEmptyCart implements ResolverInterface
     {
         $customerId = $this->userContext->getUserId();
 
-        if (null !== $customerId) {
+        if (0 !== $customerId && null !== $customerId) {
             $quoteId = $this->cartManagement->createEmptyCartForCustomer($customerId);
             $maskedQuoteId = $this->quoteIdToMaskedId->execute($quoteId);
         } else {
