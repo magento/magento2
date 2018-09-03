@@ -86,7 +86,7 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
