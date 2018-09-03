@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console;
 
 use Magento\Framework\Validator\Regex;
