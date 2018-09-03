@@ -183,10 +183,12 @@
         </assertEquals>
 
         <!--Edit order and verify values-->
-        <waitForPageLoad stepKey="waitForPgeLoaded2"/>
+        <waitForPageLoad stepKey="waitForPageLoaded2"/>
         <click selector="{{OrdersGridSection.customPrice($$product1.name$$)}}" stepKey="ClickOnCustomPrice"/>
         <fillField selector="{{OrdersGridSection.customQuantity($$product1.name$$)}}" userInput="5" stepKey="ClickOnQuantity"/>
+        <waitForLoadingMaskToDisappear stepKey="wait1"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice4"/>
         <assertEquals stepKey="verifyPrice4">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice2}}</expectedResult>
@@ -208,7 +210,7 @@
         <selectOption selector="{{OrdersGridSection.removeItems($$product1.name$$)}}" userInput="Remove" stepKey="clickToRemove1"/>
         <selectOption selector="{{OrdersGridSection.removeItems($$product2.name$$)}}" userInput="Remove" stepKey="clickToRemove2"/>
         <selectOption selector="{{OrdersGridSection.removeItems($$product3.name$$)}}" userInput="Remove" stepKey="clickToRemove3"/>
-
+        <waitForLoadingMaskToDisappear stepKey="wait3"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate1"/>
         <waitForPageLoad stepKey="WaitProductsDeleted"/>
 
@@ -277,6 +279,7 @@
         <selectOption selector="{{OrdersGridSection.removeItems($$product1.name$$)}}" userInput="Remove" stepKey="clickToRemove4"/>
         <selectOption selector="{{OrdersGridSection.removeItems($$product2.name$$)}}" userInput="Remove" stepKey="clickToRemove5"/>
         <selectOption selector="{{OrdersGridSection.removeItems($$product3.name$$)}}" userInput="Remove" stepKey="clickToRemove6"/>
+        <waitForLoadingMaskToDisappear stepKey="wait4"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate2"/>
 
         <!--TEST CASE #3-->
@@ -287,6 +290,7 @@
         <fillField selector="{{OrdersGridSection.setQuantity($$product1.name$$)}}" userInput="10" stepKey="AddProductQuantity10"/>
         <click selector="{{OrdersGridSection.addProductsToOrder}}" stepKey="addProductsToOrder3"/>
         <fillField selector="{{OrdersGridSection.applyCoupon}}" userInput="ship" stepKey="AddCouponCode"/>
+        <waitForLoadingMaskToDisappear stepKey="wait5"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate3"/>
         <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice14"/>
         <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.name$$)}}" stepKey="checkProductPrice15"/>
