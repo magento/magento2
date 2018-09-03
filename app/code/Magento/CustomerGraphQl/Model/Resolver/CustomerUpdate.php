@@ -16,9 +16,6 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Store\Api\StoreResolverInterface;
-use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
-use Magento\Customer\Model\CustomerRegistry;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
@@ -36,11 +33,6 @@ class CustomerUpdate implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var StoreResolverInterface
-     */
-    private $storeResolver;
-
-    /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
      */
     protected $subscriberFactory;
@@ -51,30 +43,17 @@ class CustomerUpdate implements ResolverInterface
     protected $customerRegistry;
 
     /**
-     * @var Encryptor
-     */
-    protected $encryptor;
-
-    /**
      * @param CustomerDataProvider $customerResolver
      * @param ValueFactory $valueFactory
      */
     public function __construct(
         CustomerDataProvider $customerResolver,
         ValueFactory $valueFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        StoreResolverInterface $storeResolver,
-        Encryptor $encryptor,
-        CustomerRegistry $customerRegistry
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
         $this->customerResolver = $customerResolver;
         $this->valueFactory = $valueFactory;
-        $this->customerRepository = $customerRepository;
         $this->subscriberFactory = $subscriberFactory;
-        $this->storeResolver = $storeResolver;
-        $this->encryptor = $encryptor;
-        $this->customerRegistry = $customerRegistry;
     }
 
     /**
@@ -98,34 +77,10 @@ class CustomerUpdate implements ResolverInterface
             );
         }
 
-        $customer = $this->customerRepository->getById($context->getUserId());
-
-        if (isset($args['email']) && $customer->getEmail() !== $args['email']) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($context->getUserId());
-            $hash = $customerSecure->getPasswordHash();
-            if (!$this->encryptor->validateHash($args['password'], $hash)) {
-                throw new GraphQlAuthorizationException(__('Invalid login or password.'));
-            }
-            $customer->setEmail($args['email']);
-        }
-
-        if (isset($args['firstname'])) {
-            $customer->setFirstname($args['firstname']);
-        }
-        if (isset($args['lastname'])) {
-            $customer->setLastname($args['lastname']);
-        }
-
-        $customer->setStoreId($this->storeResolver->getCurrentStoreId());
-        $this->customerRepository->save($customer);
+        $this->customerResolver->updateAccountInformation($context->getUserId(), $args);
 
         if (isset($args['is_subscribed'])) {
-            $checkSubscriber = $this->subscriberFactory->create()->loadByCustomerId($context->getUserId());
-            if ($args['is_subscribed'] === true && !$checkSubscriber->isSubscribed()) {
-                $this->subscriberFactory->create()->subscribeCustomerById($context->getUserId());
-            } elseif ($args['is_subscribed'] === false && $checkSubscriber->isSubscribed()) {
-                $this->subscriberFactory->create()->unsubscribeCustomerById($context->getUserId());
-            }
+            $this->customerResolver->manageSubscription($context->getUserId(), $args['is_subscribed']);
         }
 
         $data = $args;
