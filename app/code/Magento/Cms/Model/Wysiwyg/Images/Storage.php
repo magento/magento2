@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
 use Magento\Cms\Helper\Wysiwyg\Images;
@@ -500,14 +503,6 @@ class Storage extends \Magento\Framework\DataObject
 
         // create thumbnail
         $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
-
-        $result['cookie'] = [
-            'name' => $this->getSession()->getName(),
-            'value' => $this->getSession()->getSessionId(),
-            'lifetime' => $this->getSession()->getCookieLifetime(),
-            'path' => $this->getSession()->getCookiePath(),
-            'domain' => $this->getSession()->getCookieDomain(),
-        ];
 
         return $result;
     }
