@@ -51,7 +51,8 @@ class AbstractResetCheckoutConfig
     protected function getSerializedCheckoutConfig($subject, $result)
     {
         $resultArray = $data = $this->serializer->unserialize($result);
-        $customerAddresses = $resultArray['customerData']['addresses'];
+        $customerAddresses = isset($resultArray['customerData']['addresses'])
+            ? $resultArray['customerData']['addresses'] : [];
         $hasAtLeastOneOptionAttribute = false;
 
         if (is_array($customerAddresses) && !empty($customerAddresses)) {
