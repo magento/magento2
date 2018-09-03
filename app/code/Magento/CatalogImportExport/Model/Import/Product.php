@@ -2733,14 +2733,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         
         /**
-         * If the product already exists, do not overwrite its
-         * URL Key with a value generated from the provided name.
+         * If the product exists, assume it already has a URL Key and even
+         * if a name is provided in the import data, it should not be used
+         * to overwrite that existing URL Key the product already has.
          */
-        if ($this->isSkuExist($rowData[self::COL_SKU])) {
-            return '';
-        }
-
-        if (!empty($rowData[self::COL_NAME])) {
+        $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
+        if (!$isSkuExist && !empty($rowData[self::COL_NAME])) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
