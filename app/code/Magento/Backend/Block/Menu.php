@@ -8,6 +8,7 @@
 
 namespace Magento\Backend\Block;
 
+
 /**
  * Backend menu block
  *
@@ -77,7 +78,7 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface
+     * @var ConfigInterface
      */
     private $routeConfig;
 
@@ -88,7 +89,7 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
@@ -101,10 +102,10 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         array $data = [],
         MenuItemChecker $menuItemChecker = null,
-        AnchorRenderer $anchorRenderer = null
+        AnchorRenderer $anchorRenderer = null,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig = null
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;
@@ -113,8 +114,9 @@ class Menu extends \Magento\Backend\Block\Template
         $this->_localeResolver = $localeResolver;
         $this->menuItemChecker =  $menuItemChecker;
         $this->anchorRenderer = $anchorRenderer;
+        $this->routeConfig = $routeConfig ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Route\ConfigInterface::class);
         parent::__construct($context, $data);
-        $this->routeConfig = $routeConfig;
     }
 
     /**
