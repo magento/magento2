@@ -217,12 +217,12 @@ class QuantityValidator
         $removeErrors = true;
         foreach ($options as $option) {
             $result = $this->stockState->checkQtyIncrements(
-            $option->getProduct()->getId(),
+                $option->getProduct()->getId(),
                 $quoteItem->getData('qty'),
                 $option->getProduct()->getStore()->getWebsiteId()
             );
             if ($result->getHasError()) {
-                    $quoteItem->getQuote()->addErrorInfo(
+                $quoteItem->getQuote()->addErrorInfo(
                     $result->getQuoteMessageIndex(),
                     'cataloginventory',
                     Data::ERROR_QTY_INCREMENTS,
@@ -235,10 +235,7 @@ class QuantityValidator
 
         if ($removeErrors) {
             // Delete error from item and its quote, if it was set due to qty problems
-            $this->_removeErrorsFromQuoteAndItem(
-            $quoteItem,
-                Data::ERROR_QTY_INCREMENTS
-            );
+            $this->_removeErrorsFromQuoteAndItem($quoteItem, Data::ERROR_QTY_INCREMENTS);
         }
     }
 
