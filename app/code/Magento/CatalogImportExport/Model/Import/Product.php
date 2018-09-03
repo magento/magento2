@@ -1561,7 +1561,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                if ($urlKey = $this->getUrlKey($rowData)) {
+                $urlKey = $this->getUrlKey($rowData);
+                if (!empty($urlKey)) {
                     $rowData[self::URL_KEY] = $urlKey;
                 }
 
@@ -2722,7 +2723,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param array $rowData
-     * @return string|bool
+     * @return string
      * @since 100.0.3
      */
     protected function getUrlKey($rowData)
@@ -2736,14 +2737,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
          * URL Key with a value generated from the provided name.
          */
         if ($this->isSkuExist($rowData[self::COL_SKU])) {
-            return false;
+            return '';
         }
 
         if (!empty($rowData[self::COL_NAME])) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
-        return false;
+        return '';
     }
 
     /**
