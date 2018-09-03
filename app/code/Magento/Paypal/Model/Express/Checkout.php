@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
@@ -498,7 +500,8 @@ class Checkout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? \Magento\Paypal\Model\Config::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $this->_getApi()->setAmount($this->_quote->getBaseGrandTotal())
+        $totalAmount = round($this->_quote->getBaseGrandTotal(), 2);
+        $this->_getApi()->setAmount($totalAmount)
             ->setCurrencyCode($this->_quote->getBaseCurrencyCode())
             ->setInvNum($this->_quote->getReservedOrderId())
             ->setReturnUrl($returnUrl)
@@ -809,8 +812,12 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_PROCESSING:
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                if (!$order->getEmailSent()) {
-                    $this->orderSender->send($order);
+                try {
+                    if (!$order->getEmailSent()) {
+                        $this->orderSender->send($order);
+                    }
+                } catch (\Exception $e) {
+                    $this->_logger->critical($e);
                 }
                 $this->_checkoutSession->start();
                 break;
