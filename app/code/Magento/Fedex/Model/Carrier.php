@@ -1021,7 +1021,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getTracking($trackings)
     {
-        $this->setTrackingReqeust();
+        $this->setTrackingRequest();
 
         if (!is_array($trackings)) {
             $trackings = [$trackings];
@@ -1039,7 +1039,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @return void
      */
-    protected function setTrackingReqeust()
+    protected function setTrackingRequest()
     {
         $r = new \Magento\Framework\DataObject();
 
