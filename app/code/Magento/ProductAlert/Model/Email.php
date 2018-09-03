@@ -204,7 +204,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function setWebsite($website)
+    public function setWebsite(\Magento\Store\Model\Website $website)
     {
         $this->_website = $website;
         return $this;
@@ -273,7 +273,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function addPriceProduct($product)
+    public function addPriceProduct(\Magento\Catalog\Model\Product $product)
     {
         $this->_priceProducts[$product->getId()] = $product;
         return $this;
@@ -286,7 +286,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function addStockProduct($product)
+    public function addStockProduct(\Magento\Catalog\Model\Product $product)
     {
         $this->_stockProducts[$product->getId()] = $product;
         return $this;
