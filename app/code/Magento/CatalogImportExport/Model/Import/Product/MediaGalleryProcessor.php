@@ -153,13 +153,36 @@ class MediaGalleryProcessor
      */
     public function updateMediaGalleryLabels(array $labels)
     {
-        $insertData = [];
-        foreach ($labels as $label) {
-            $imageData = $label['imageData'];
+        $this->updateMediaGalleryField($labels, 'label');
+    }
 
-            if ($imageData['label'] === null) {
+    /**
+     * Update 'disabled' field for media gallery entity
+     *
+     * @param array $labels
+     * @return void
+     */
+    public function updateMediaGalleryVisibility(array $images)
+    {
+        $this->updateMediaGalleryField($images, 'disabled');
+    }
+
+    /**
+     * Update value for requested field in media gallery entities
+     *
+     * @param array $data
+     * @param string $field
+     * @return void
+     */
+    private function updateMediaGalleryField(array $data, $field)
+    {
+        $insertData = [];
+        foreach ($data as $datum) {
+            $imageData = $datum['imageData'];
+
+            if ($imageData[$field] === null) {
                 $insertData[] = [
-                    'label' => $label['label'],
+                    $field => $datum[$field],
                     $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
                     'value_id' => $imageData['value_id'],
                     'store_id' => Store::DEFAULT_STORE_ID,
@@ -168,7 +191,7 @@ class MediaGalleryProcessor
                 $this->connection->update(
                     $this->mediaGalleryValueTableName,
                     [
-                        'label' => $label['label'],
+                        $field => $datum[$field],
                     ],
                     [
                         $this->getProductEntityLinkField() . ' = ?' => $imageData[$this->getProductEntityLinkField()],
@@ -224,6 +247,7 @@ class MediaGalleryProcessor
             ),
             [
                 'label' => 'mgv.label',
+                'disabled' => 'mgv.disabled',
             ]
         )->joinInner(
             ['pe' => $this->productEntityTableName],

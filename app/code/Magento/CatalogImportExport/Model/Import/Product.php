@@ -312,6 +312,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         self::COL_MEDIA_IMAGE => 'additional_images',
         '_media_image_label' => 'additional_image_labels',
         '_media_is_disabled' => 'hide_from_product_page',
+        '_media_is_enabled' => 'show_on_product_page',
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
@@ -1599,6 +1600,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $tierPrices = [];
             $mediaGallery = [];
             $labelsForUpdate = [];
+            $imagesForChangeVisibility = [];
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
@@ -1718,21 +1720,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 5. Media gallery phase
-                $disabledImages = [];
                 list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
                 $storeId = !empty($rowData[self::COL_STORE])
                     ? $this->getStoreIdByCode($rowData[self::COL_STORE])
                     : Store::DEFAULT_STORE_ID;
-                if (isset($rowData['_media_is_disabled']) && strlen(trim($rowData['_media_is_disabled']))) {
-                    $disabledImages = array_flip(
-                        explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled'])
-                    );
-                    if (empty($rowImages)) {
-                        foreach (array_keys($disabledImages) as $disabledImage) {
-                            $rowImages[self::COL_MEDIA_IMAGE][] = $disabledImage;
-                        }
+                $imageHiddenStates = $this->getImagesHiddenStates($rowData);
+                foreach (array_keys($imageHiddenStates) as $image) {
+                    if (array_key_exists($image, $existingImages[$rowSku])) {
+                        $rowImages[self::COL_MEDIA_IMAGE][] = $image;
+                        $uploadedImages[$image] = $image;
                     }
                 }
+
                 $rowData[self::COL_MEDIA_IMAGE] = [];
 
                 /*
@@ -1766,13 +1765,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                         if ($uploadedFile && !isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
                             if (isset($existingImages[$rowSku][$uploadedFile])) {
+                                $currentFileData = $existingImages[$rowSku][$uploadedFile];
                                 if (isset($rowLabels[$column][$columnImageKey])
                                     && $rowLabels[$column][$columnImageKey] !=
-                                    $existingImages[$rowSku][$uploadedFile]['label']
+                                    $currentFileData['label']
                                 ) {
                                     $labelsForUpdate[] = [
                                         'label' => $rowLabels[$column][$columnImageKey],
-                                        'imageData' => $existingImages[$rowSku][$uploadedFile]
+                                        'imageData' => $currentFileData
+                                    ];
+                                }
+
+                                if (array_key_exists($uploadedFile, $imageHiddenStates)
+                                    && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
+                                ) {
+                                    $imagesForChangeVisibility[] = [
+                                        'disabled' => $imageHiddenStates[$uploadedFile],
+                                        'imageData' => $currentFileData
                                     ];
                                 }
                             } else {
@@ -1785,7 +1794,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                         ? $rowLabels[$column][$columnImageKey]
                                         : '',
                                     'position' => ++$position,
-                                    'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
+                                    'disabled' => isset($imageHiddenStates[$columnImage])
+                                        ? $imageHiddenStates[$columnImage] : '0',
                                     'value' => $uploadedFile,
                                 ];
                             }
@@ -1905,6 +1915,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $mediaGallery
             )->_saveProductAttributes(
                 $attributes
+            )->updateMediaGalleryVisibility(
+                $imagesForChangeVisibility
             )->updateMediaGalleryLabels(
                 $labelsForUpdate
             );
@@ -1916,6 +1928,32 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Prepare array with image states (visible or hidden from product page)
+     * @param array $rowData
+     * @return array
+     */
+    private function getImagesHiddenStates($rowData)
+    {
+        $statesArray = [];
+        $mappingArray = [
+            '_media_is_disabled' => '1',
+            '_media_is_enabled' => '0'
+        ];
+
+        foreach ($mappingArray as $key => $value) {
+            if (isset($rowData[$key]) && strlen(trim($rowData[$key]))) {
+                $items = explode($this->getMultipleValueSeparator(), $rowData[$key]);
+
+                foreach ($items as $item) {
+                    $statesArray[$item] = $value;
+                }
+            }
+        }
+
+        return $statesArray;
     }
 
     /**
@@ -2833,6 +2871,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($labels)) {
             $this->mediaProcessor->updateMediaGalleryLabels($labels);
         }
+    }
+
+    /**
+     * Update 'disabled' field for media gallery entity
+     *
+     * @param array $images
+     * @return $this
+     */
+    private function updateMediaGalleryVisibility(array $images)
+    {
+        if (!empty($images)) {
+            $this->mediaProcessor->updateMediaGalleryVisibility($images);
+        }
+
+        return $this;
     }
 
     /**
