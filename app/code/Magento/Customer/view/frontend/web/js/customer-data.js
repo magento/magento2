@@ -87,16 +87,9 @@ define([
             } : [];
             parameters['update_section_id'] = updateSectionId;
 
-            return $.getJSON(options.sectionLoadUrl, parameters)
-                .done(
-                    function () {
-                        if (_.isEmpty(sectionNames)) {
-                            customerData.set('is_loading', false);
-                        }
-                    }
-                ).fail(function (jqXHR) {
-                    throw new Error(jqXHR);
-                });
+            return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
+                throw new Error(jqXHR);
+            });
         }
     };
 
@@ -216,7 +209,7 @@ define([
                 $.cookieStorage.set(privateContentVersion, needVersion);
                 $.localStorage.set(privateContentVersion, needVersion);
                 this.reload([], false);
-                this.set('is_loading', true);
+                isLoading = true;
             } else if (localPrivateContent !== privateContent) {
                 if (!$.cookieStorage.isSet(privateContentVersion)) {
                     privateContent = needVersion;
@@ -224,7 +217,7 @@ define([
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
                 this.reload([], false);
-                this.set('is_loading', true);
+                isLoading = true;
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -242,7 +235,6 @@ define([
 
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
-                isLoading = this.get('is_loading');
 
                 if (_.isEmpty(countryData()) && !isLoading) {
                     customerData.reload(['directory-data'], false);
