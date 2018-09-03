@@ -8,7 +8,6 @@
 
 namespace Magento\Backend\Block;
 
-
 /**
  * Backend menu block
  *
