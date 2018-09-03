@@ -112,7 +112,8 @@ class Menu extends \Magento\Backend\Block\Template
         $this->menuItemChecker =  $menuItemChecker;
         $this->anchorRenderer = $anchorRenderer;
         $this->routeConfig = $routeConfig ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Route\ConfigInterface::class);
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Route\ConfigInterface::class);
         parent::__construct($context, $data);
     }
 
