@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * Main service for static content deployment
  *
  * Aggregates services to deploy static files, static files bundles, translations and minified templates
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContent
 {
