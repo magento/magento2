@@ -2409,17 +2409,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
-        /**
-         * If the product exists, assume it already has a URL Key and even
-         * if a name is provided in the import data, it should not be used
-         * to overwrite that existing URL Key the product already has.
-         */
-        $isSkuExist = $this->isSkuExist($rowData[self::COL_SKU]);
-        if ($isSkuExist && !array_key_exists(self::URL_KEY, $rowData)) {
-            return false;
-        }
+        $urlKey = $this->getUrlKey($rowData);
         
-        return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
+        return (!empty($urlKey))
             && (empty($rowData[self::COL_VISIBILITY])
             || $rowData[self::COL_VISIBILITY]
             !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
