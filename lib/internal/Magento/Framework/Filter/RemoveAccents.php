@@ -176,9 +176,12 @@ class RemoveAccents implements \Zend_Filter_Interface
             }
         }
 
+        $mbstringSubstituteCharacter = ini_get('mbstring.substitute_character');
+        ini_set('mbstring.substitute_character', 'none');
         // convert string from default database format (UTF-8)
         // to encoding which replacement arrays made with (ISO-8859-1)
-        $convertedString = @iconv('UTF-8', 'ISO-8859-1//IGNORE', $string);
+        $convertedString = mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+        ini_set('mbstring.substitute_character', $mbstringSubstituteCharacter);
         if ($convertedString) {
             $string = $convertedString;
         }
