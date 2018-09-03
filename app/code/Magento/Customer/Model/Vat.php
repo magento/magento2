@@ -184,13 +184,13 @@ class Vat
 
             $requestParams = [];
             $requestParams['countryCode'] = $countryCode;
-            $vatNumberSanitized = $this->isCountryInEU($countryCode) 
-                ? str_replace([' ', '-', $countryCode], ['', '', ''], $vatNumber) 
+            $vatNumberSanitized = $this->isCountryInEU($countryCode)
+                ? str_replace([' ', '-', $countryCode], ['', '', ''], $vatNumber)
                 : str_replace([' ', '-'], ['', ''], $vatNumber);
             $requestParams['vatNumber'] = $vatNumberSanitized;
             $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode) 
-                ? str_replace([' ', '-', $requesterCountryCode], ['', '', ''], $requesterVatNumber) 
+            $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
+                ? str_replace([' ', '-', $requesterCountryCode], ['', '', ''], $requesterVatNumber)
                 : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
             $requestParams['requesterVatNumber'] = $reqVatNumSanitized;
             // Send request to service
