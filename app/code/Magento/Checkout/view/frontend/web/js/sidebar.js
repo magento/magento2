@@ -226,7 +226,7 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:updateCartItemQty', productData['product_sku']);
+                $(document).trigger('ajax:updateCartItemQty');
             }
             this._hideItemButton(elem);
         },
@@ -253,7 +253,9 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
             }
         },
 
