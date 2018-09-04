@@ -39,7 +39,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
-        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="createFolder1"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" stepKey="waitForPopUp1" />
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
