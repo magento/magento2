@@ -76,17 +76,19 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
      *
      * @param string $createProduct
      * @param string $product
-     * @param array $actionName
+     * @param string $actionName
      * @return array
      */
-    public function test(string $createProduct, string $product, array $actionName) : array
+    public function test(string $createProduct, string $product, string $actionName = null) : array
     {
         // Steps
         list($fixture, $dataset) = explode('::', $product);
         $product = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct($createProduct);
-        $this->performAction($actionName);
+        if ($actionName) {
+            $this->performAction($actionName);
+        }
         $this->catalogProductNew->getProductForm()->fill($product);
         $this->catalogProductNew->getFormPageActions()->save($product);
 
