@@ -9,11 +9,12 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
+    'underscore',
     'jquery/ui',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies'
-], function ($, authenticationPopup, customerData, alert, confirm) {
+], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 
     $.widget('mage.sidebar', {
@@ -60,13 +61,15 @@ define([
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
-                    customer = customerData.get('customer');
+                    customer = customerData.get('customer'),
+                    element = $(this.options.button.checkout);
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
 
                     if (this.options.url.isRedirectRequired) {
+                        element.prop('disabled', true);
                         location.href = this.options.url.loginUrl;
                     } else {
                         authenticationPopup.showModal();
@@ -74,6 +77,7 @@ define([
 
                     return false;
                 }
+                element.prop('disabled', true);
                 location.href = this.options.url.checkout;
             }, this);
 
@@ -102,6 +106,13 @@ define([
              * @param {jQuery.Event} event
              */
             events['keyup ' + this.options.item.qty] = function (event) {
+                self._showItemButton($(event.target));
+            };
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['change ' + this.options.item.qty] = function (event) {
                 self._showItemButton($(event.target));
             };
 
@@ -212,6 +223,11 @@ define([
          * @param {HTMLElement} elem
          */
         _updateItemQtyAfter: function (elem) {
+            var productData = this._getProductById(Number(elem.data('cart-item')));
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:updateCartItemQty');
+            }
             this._hideItemButton(elem);
         },
 
@@ -234,11 +250,26 @@ define([
          * @private
          */
         _removeItemAfter: function (elem) {
-            var productData = customerData.get('cart')().items.find(function (item) {
-                return Number(elem.data('cart-item')) === Number(item['item_id']);
-            });
+            var productData = this._getProductById(Number(elem.data('cart-item')));
 
-            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
+            }
+        },
+
+        /**
+         * Retrieves product data by Id.
+         *
+         * @param {Number} productId - product Id
+         * @returns {Object|undefined}
+         * @private
+         */
+        _getProductById: function (productId) {
+            return _.find(customerData.get('cart')().items, function (item) {
+                return productId === Number(item['item_id']);
+            });
         },
 
         /**

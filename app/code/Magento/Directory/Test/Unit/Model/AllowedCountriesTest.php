@@ -70,4 +70,20 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
             $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, true)
         );
     }
+
+    public function testGetAllowedCountriesDefaultScope()
+    {
+        $this->storeManagerMock->expects($this->never())
+            ->method('getStore');
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(AllowedCountries::ALLOWED_COUNTRIES_PATH, ScopeInterface::SCOPE_STORE, 0)
+            ->willReturn('AM');
+
+        $this->assertEquals(
+            ['AM' => 'AM'],
+            $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, 0)
+        );
+    }
 }

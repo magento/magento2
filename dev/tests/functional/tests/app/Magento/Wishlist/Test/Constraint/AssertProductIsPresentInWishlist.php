@@ -32,6 +32,7 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
         WishlistIndex $wishlistIndex,
         InjectableFixture $product
     ) {
+        $cmsIndex->open();
         $cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
 

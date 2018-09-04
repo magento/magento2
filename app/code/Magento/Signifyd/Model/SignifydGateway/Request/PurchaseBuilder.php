@@ -7,12 +7,13 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
-use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 
 /**
  * Prepare data related to purchase event represented in case creation request.
@@ -72,6 +73,7 @@ class PurchaseBuilder
      *
      * @param Order $order
      * @return array
+     * @throws ConfigurationMismatchException
      */
     public function build(Order $order)
     {
@@ -202,6 +204,7 @@ class PurchaseBuilder
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @throws ConfigurationMismatchException
      */
     private function getAvsCode(OrderPaymentInterface $orderPayment)
     {
@@ -214,6 +217,7 @@ class PurchaseBuilder
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @throws ConfigurationMismatchException
      */
     private function getCvvCode(OrderPaymentInterface $orderPayment)
     {

@@ -485,7 +485,7 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists()) {
+        if (!$db->isDbDumpExists() || $cleanup) {
             $this->getDbInstance()->storeDbDump();
         }
     }
@@ -600,6 +600,7 @@ class Application
      *
      * @param string $areaCode
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadArea($areaCode)
     {
@@ -616,7 +617,13 @@ class Application
             )
         );
         $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class);
-        if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
+        $areasForPartialLoading = [
+            \Magento\Framework\App\Area::AREA_GLOBAL,
+            \Magento\Framework\App\Area::AREA_WEBAPI_REST,
+            \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
+            \Magento\Framework\App\Area::AREA_CRONTAB,
+        ];
+        if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($areaCode);

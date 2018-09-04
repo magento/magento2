@@ -54,7 +54,7 @@ class MessageConfigurationsPoolTest extends \PHPUnit\Framework\TestCase
         return [
             [['message_identifier' => []]],
             [['message_identifier' => ['renderer' => 5]]],
-            [['message_identifier' => ['renderer' => new \StdClass]]],
+            [['message_identifier' => ['renderer' => new \stdClass]]],
         ];
     }
 
@@ -87,7 +87,7 @@ class MessageConfigurationsPoolTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'message_identifier' =>
-                        ['renderer' => 'RendererCode', 'data' => new \StdClass]
+                        ['renderer' => 'RendererCode', 'data' => new \stdClass]
                 ]
             ],
         ];

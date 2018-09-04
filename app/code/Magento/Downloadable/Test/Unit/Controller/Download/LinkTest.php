@@ -273,7 +273,13 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testExceptionInUpdateLinkStatus()
+    /**
+     * @param string $mimeType
+     * @param string $disposition
+     * @dataProvider downloadTypesDataProvider
+     * @return void
+     */
+    public function testExceptionInUpdateLinkStatus($mimeType, $disposition)
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -303,7 +309,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');
 
-        $this->processDownload('link_url', 'url');
+        $this->processDownload('link_url', 'url', $mimeType, $disposition);
 
         $this->linkPurchasedItem->expects($this->any())->method('setNumberOfDownloadsUsed')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
@@ -317,8 +323,18 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    private function processDownload($resource, $resourceType)
+    /**
+     * @param string $resource
+     * @param string $resourceType
+     * @param string $mimeType
+     * @param string $disposition
+     * @return void
+     */
+    private function processDownload($resource, $resourceType, $mimeType, $disposition)
     {
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
+
         $this->objectManager->expects($this->at(3))
             ->method('get')
             ->with(\Magento\Downloadable\Helper\Download::class)
@@ -327,30 +343,23 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('setResource')
             ->with($resource, $resourceType)
             ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn('file_name');
-        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn('content_type');
+        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn($fileName);
+        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn($mimeType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
-        $this->response->expects($this->at(1))->method('setHeader')->with('Pragma', 'public', true)->willReturnSelf();
-        $this->response->expects($this->at(2))
+        $this->response
+            ->expects($this->any())
             ->method('setHeader')
-            ->with('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
+                ['Content-type', $mimeType, true],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', $disposition . '; filename=' . $fileName]
+            )
             ->willReturnSelf();
-        $this->response->expects($this->at(3))
-            ->method('setHeader')
-            ->with('Content-type', 'content_type', true)
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn('file_size');
-        $this->response->expects($this->at(4))
-            ->method('setHeader')
-            ->with('Content-Length', 'file_size')
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())
-            ->method('getContentDisposition')
-            ->willReturn('content_disposition');
-        $this->response->expects($this->at(5))
-            ->method('setHeader')
-            ->with('Content-Disposition', 'content_disposition; filename=file_name')
-            ->willReturnSelf();
+
+        $this->downloadHelper->expects($this->once())->method('getContentDisposition')->willReturn($disposition);
+        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn($fileSize);
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('output');
@@ -404,6 +413,17 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ['addNotice', 'pending', 'The link is not available.'],
             ['addNotice', 'payment_review', 'The link is not available.'],
             ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function downloadTypesDataProvider()
+    {
+        return [
+            ['mimeType' => 'text/html',  'disposition' => \Zend_Mime::DISPOSITION_ATTACHMENT],
+            ['mimeType' => 'image/jpeg', 'disposition' => \Zend_Mime::DISPOSITION_INLINE],
         ];
     }
 }

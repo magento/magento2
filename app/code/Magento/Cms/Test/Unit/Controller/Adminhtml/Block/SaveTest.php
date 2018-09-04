@@ -66,6 +66,16 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected $saveController;
 
     /**
+     * @var \Magento\Cms\Model\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $blockFactory;
+
+    /**
+     * @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $blockRepository;
+
+    /**
      * @var int
      */
     protected $blockId = 1;
@@ -129,11 +139,22 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
+        $this->blockFactory = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->blockRepository = $this->getMockBuilder(\Magento\Cms\Api\BlockRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->saveController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Block\Save::class,
             [
                 'context' => $this->contextMock,
                 'dataPersistor' => $this->dataPersistorMock,
+                'blockFactory' => $this->blockFactory,
+                'blockRepository' => $this->blockRepository,
             ]
         );
     }
@@ -158,26 +179,24 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->blockFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with($this->equalTo(\Magento\Cms\Model\Block::class))
             ->willReturn($this->blockMock);
 
-        $this->blockMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $this->blockMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willReturn($this->blockMock);
+
         $this->blockMock->expects($this->once())->method('setData');
-        $this->blockMock->expects($this->once())->method('save');
+        $this->blockRepository->expects($this->once())->method('save')->with($this->blockMock);
 
         $this->dataPersistorMock->expects($this->any())
             ->method('clear')
             ->with('cms_block');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the block.'));
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
@@ -204,20 +223,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->blockFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with($this->equalTo(\Magento\Cms\Model\Block::class))
             ->willReturn($this->blockMock);
 
-        $this->blockMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $this->blockMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(false);
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Error message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('This block no longer exists.'));
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
@@ -237,22 +253,20 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->blockFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with($this->equalTo(\Magento\Cms\Model\Block::class))
             ->willReturn($this->blockMock);
 
-        $this->blockMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $this->blockMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willReturn($this->blockMock);
+
         $this->blockMock->expects($this->once())->method('setData');
-        $this->blockMock->expects($this->once())->method('save');
+        $this->blockRepository->expects($this->once())->method('save')->with($this->blockMock);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the block.'));
 
         $this->dataPersistorMock->expects($this->any())
@@ -279,24 +293,24 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->blockFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with($this->equalTo(\Magento\Cms\Model\Block::class))
             ->willReturn($this->blockMock);
 
-        $this->blockMock->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $this->blockMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willReturn($this->blockMock);
+
         $this->blockMock->expects($this->once())->method('setData');
-        $this->blockMock->expects($this->once())->method('save')->willThrowException(new \Exception('Error message.'));
+        $this->blockRepository->expects($this->once())->method('save')
+            ->with($this->blockMock)
+            ->willThrowException(new \Exception('Error message.'));
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')

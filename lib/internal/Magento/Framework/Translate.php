@@ -312,6 +312,9 @@ class Translate implements \Magento\Framework\TranslateInterface
     {
         foreach ($data as $key => $value) {
             if ($key === $value) {
+                if (isset($this->_data[$key])) {
+                    unset($this->_data[$key]);
+                }
                 continue;
             }
 

@@ -97,6 +97,8 @@ class CreateCreditMemoStep implements TestStepInterface
             }
 
             $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
+            $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
+            
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
 

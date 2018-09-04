@@ -5,6 +5,12 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Escaper;
+
 /**
  * Test class for \Magento\Backend\Model\UrlInterface.
  *
@@ -13,27 +19,109 @@ namespace Magento\Backend\Model;
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var UrlInterface
      */
     protected $_model;
 
     protected function setUp()
     {
-        parent::setUp();
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Model\UrlInterface::class
-        );
+        $this->request = Bootstrap::getObjectManager()->get(RequestInterface::class);
+        $this->_model = Bootstrap::getObjectManager()->create(UrlInterface::class);
     }
 
     /**
-     * App isolation is enabled to protect next tests from polluted registry by getUrl()
+     * App isolation is enabled to protect next tests from polluted registry by getUrl().
      *
+     * @param string $routePath
+     * @param array $requestParams
+     * @param string $expectedResult
+     * @param array|null $routeParams
+     * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
-    public function testGetUrl()
+    public function testGetUrl(
+        string $routePath,
+        array $requestParams,
+        string $expectedResult,
+        array $routeParams = null
+    ) {
+        $this->request->setParams($requestParams);
+        $url = $this->_model->getUrl($routePath, $routeParams);
+        $this->assertContains($expectedResult, $url);
+    }
+
+    /**
+     * Data provider for getUrl method.
+     *
+     * @return array
+     */
+    public function getUrlDataProvider()
     {
-        $url = $this->_model->getUrl('adminhtml/auth/login');
-        $this->assertContains('admin/auth/login/key/', $url);
+        /** @var $escaper Escaper */
+        $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
+
+        return [
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => [],
+                'expectedResult'=> 'admin/auth/login/key/',
+            ],
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => [],
+                'expectedResult'=> '/param1/a1==/',
+                'routeParams' => [
+                    '_escape_params' => false,
+                    'param1' => 'a1==',
+                ],
+            ],
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => [],
+                'expectedResult'=> '/param1/a1==/',
+                'routeParams' => [
+                    '_escape_params' => false,
+                    'param1' => 'a1==',
+                ],
+            ],
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => ['param2' => 'a2=='],
+                'expectedResult'=> '/param2/a2==/',
+                'routeParams' => [
+                    '_current' => true,
+                    '_escape_params' => false,
+                ],
+            ],
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => [],
+                'expectedResult' => '/param3/' . $escaper->encodeUrlParam('a3==') . '/',
+                'routeParams' => [
+                    '_escape_params' => true,
+                    'param3' => 'a3=='
+                ],
+            ],
+            [
+                'routePath' => 'adminhtml/auth/login',
+                'requestParams' => ['param4' => 'a4=='],
+                'expectedResult' => '/param4/' . $escaper->encodeUrlParam('a4==') . '/',
+                'routeParams' => [
+                    '_current' => true,
+                    '_escape_params' => true,
+                ],
+            ],
+            [
+                'routePath' => 'route/controller/action/id/100',
+                'requestParams' => [],
+                'expectedResult' => 'id/100',
+            ],
+        ];
     }
 
     /**
@@ -46,10 +134,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSecretKey($routeName, $controller, $action, $expectedHash)
     {
-        /** @var $request \Magento\Framework\App\RequestInterface */
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\App\RequestInterface::class);
-        $request->setControllerName(
+        $this->request->setControllerName(
             'default_controller'
         )->setActionName(
             'default_action'
@@ -57,7 +142,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'default_router'
         );
 
-        $this->_model->setRequest($request);
+        $this->_model->setRequest($this->request);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Session\SessionManagerInterface::class
         )->setData(
@@ -72,10 +157,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function getSecretKeyDataProvider()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
+        /** @var $encryptor EncryptorInterface */
+        $encryptor = Bootstrap::getObjectManager()->get(EncryptorInterface::class);
 
         return [
             [
@@ -129,19 +212,14 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSecretKeyForwarded()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $encryptor EncryptorInterface */
+        $encryptor = Bootstrap::getObjectManager()->get(EncryptorInterface::class);
 
-        /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
-
-        /** @var $request \Magento\Framework\App\Request\Http */
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\App\RequestInterface::class);
-        $request->setControllerName('controller')->setActionName('action');
-        $request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
-        $this->_model->setRequest($request);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Session\SessionManagerInterface::class
+        $this->request->setControllerName('controller')->setActionName('action');
+        $this->request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
+        $this->_model->setRequest($this->request);
+        Bootstrap::getObjectManager()->get(
+            SessionManagerInterface::class
         )->setData(
             '_form_key',
             'salt'

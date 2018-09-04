@@ -6,10 +6,10 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Webapi\Controller\Rest\Router;
+use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Webapi\Controller\Rest\Router\Route;
+use Magento\Webapi\Model\UrlDecoder;
 
 /**
  * This class is responsible for retrieving resolved input data
@@ -47,26 +47,32 @@ class InputParamsResolver
     private $requestValidator;
 
     /**
-     * Initialize dependencies
-     *
+     * @var UrlDecoder
+     */
+    private $urlDecoder;
+
+    /**
      * @param RestRequest $request
      * @param ParamsOverrider $paramsOverrider
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param Router $router
      * @param RequestValidator $requestValidator
+     * @param UrlDecoder $urlDecoder
      */
     public function __construct(
         RestRequest $request,
         ParamsOverrider $paramsOverrider,
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
-        RequestValidator $requestValidator
+        RequestValidator $requestValidator,
+        UrlDecoder $urlDecoder = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->router = $router;
         $this->requestValidator = $requestValidator;
+        $this->urlDecoder = $urlDecoder ?: \Magento\Framework\App\ObjectManager::getInstance()->get(UrlDecoder::class);
     }
 
     /**
@@ -97,6 +103,7 @@ class InputParamsResolver
             $inputData = $this->request->getRequestData();
         }
 
+        $inputData = $this->urlDecoder->decodeParams($inputData);
         $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
         $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
         return $inputParams;

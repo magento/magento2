@@ -81,7 +81,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function prepareForCart()
     {
-        if ($this->getIsValid() && strlen($this->getUserValue()) > 0) {
+        if ($this->getIsValid() && ($this->getUserValue() !== '')) {
             return $this->getUserValue();
         } else {
             return null;

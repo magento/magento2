@@ -6,12 +6,11 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
+use Magento\Cms\Helper\Page as PageHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Cms\Helper\Page as PageHelper;
 
 /**
  * Cms Page Model
@@ -546,6 +545,10 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();
+
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
 
         if (!$this->getId() || $originalIdentifier === $currentIdentifier) {
             return parent::beforeSave();

@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * 1. Login to backend.
  * 2. Create a product with invalid from and To dates
- * 3. Save the product which generates an error messsage
+ * 3. Save the product which generates an error message
  * 4. Modify the  dates to valid values
  * 5. Save the product again
  * 6. Product is saved successfully

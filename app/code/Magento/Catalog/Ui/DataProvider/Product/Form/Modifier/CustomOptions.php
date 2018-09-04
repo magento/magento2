@@ -923,7 +923,7 @@ class CustomOptions extends AbstractModifier
                         'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
                         'validation' => [
-                            'validate-zero-or-greater' => true
+                            'validate-number' => true
                         ],
                     ],
                 ],
@@ -1046,6 +1046,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'label' => __('Compatible File Extensions'),
+                        'notice' => __('Enter separated extensions, like: png, jpg, gif.'),
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,

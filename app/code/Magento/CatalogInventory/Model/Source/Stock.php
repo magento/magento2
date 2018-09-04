@@ -26,4 +26,23 @@ class Stock extends AbstractSource
             ['value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK, 'label' => __('Out of Stock')]
         ];
     }
+
+    /**
+     * Add Value Sort To Collection Select.
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param string $dir
+     *
+     * @return $this
+     */
+    public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
+    {
+        $collection->getSelect()->joinLeft(
+            ['stock_item_table' => 'cataloginventory_stock_item'],
+            "e.entity_id=stock_item_table.product_id",
+            []
+        );
+        $collection->getSelect()->order("stock_item_table.qty $dir");
+        return $this;
+    }
 }

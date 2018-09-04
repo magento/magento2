@@ -57,7 +57,7 @@ $stores = $block->getStoresSortedBySortOrder();
         <input type="hidden" id="option-count-check" value="" />
     </div>
     <script id="row-template" type="text/x-magento-template">
-         <tr>
+        <tr <% if (data.rowClasses) { %>class="<%- data.rowClasses %>"<% } %>>
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()): ?>
                     <div data-role="draggable-handle" class="draggable-handle"

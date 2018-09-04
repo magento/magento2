@@ -7,7 +7,7 @@ namespace Some\Testing\Name\Space;
 
 use Imported\Name\Space\One as FirstImport;
 use Imported\Name\Space\Object;
-use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest ;
+use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest;
 
 class AnotherSimpleClass
 {

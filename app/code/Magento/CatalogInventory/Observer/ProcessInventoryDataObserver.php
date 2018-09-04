@@ -74,7 +74,6 @@ class ProcessInventoryDataObserver implements ObserverInterface
                 $this->setStockDataToProduct($product, $stockItem, $quantityAndStockStatus);
             }
         }
-        $product->unsetData('quantity_and_stock_status');
     }
 
     /**
@@ -97,7 +96,7 @@ class ProcessInventoryDataObserver implements ObserverInterface
             ) {
                 unset($quantityAndStockStatus['is_in_stock']);
             }
-            if (isset($quantityAndStockStatus['qty'])
+            if (array_key_exists('qty', $quantityAndStockStatus)
                 && $stockItem->getQty() == $quantityAndStockStatus['qty']
             ) {
                 unset($quantityAndStockStatus['qty']);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\App\Config\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
@@ -88,12 +89,12 @@ class RuntimeConfigSource implements ConfigSourceInterface
             }
         }
 
-        foreach ($config as $scope => &$item) {
+        foreach ($config as $scope => $item) {
             if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $item = $this->converter->convert($item);
+                $config[$scope] = $this->converter->convert($item);
             } else {
-                foreach ($item as &$scopeItems) {
-                    $scopeItems = $this->converter->convert($scopeItems);
+                foreach ($item as $scopeCode => $scopeItems) {
+                    $config[$scope][$scopeCode] = $this->converter->convert($scopeItems);
                 }
             }
         }

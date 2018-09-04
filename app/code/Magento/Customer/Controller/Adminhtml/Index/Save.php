@@ -13,6 +13,9 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -264,6 +267,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $messages = $exception->getMessages();
                 if (empty($messages)) {
                     $messages = $exception->getMessage();
+                }
+                $this->_addSessionErrorMessages($messages);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $returnToEdit = true;
+            } catch (\Magento\Framework\Exception\AbstractAggregateException $exception) {
+                $errors = $exception->getErrors();
+                $messages = [];
+                foreach ($errors as $error) {
+                    $messages[] = $error->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerFormData($originalRequestData);

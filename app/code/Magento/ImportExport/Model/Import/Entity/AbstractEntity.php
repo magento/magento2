@@ -391,6 +391,7 @@ abstract class AbstractEntity
         $nextRowBackup = [];
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
+        $skuSet = [];
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
@@ -407,6 +408,7 @@ abstract class AbstractEntity
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
+                    $skuSet[$rowData['sku']] = true;
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                     $this->_processedRowsCount++;
@@ -434,6 +436,8 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
+        $this->_processedEntitiesCount = count($skuSet);
+
         return $this;
     }
 
@@ -803,7 +807,7 @@ abstract class AbstractEntity
                     if (!$this->isAttributeParticular($columnName)) {
                         if (trim($columnName) == '') {
                             $emptyHeaderColumns[] = $columnNumber;
-                        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                        } elseif (!preg_match('/^[a-z][\w]*$/u', $columnName)) {
                             $invalidColumns[] = $columnName;
                         } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;

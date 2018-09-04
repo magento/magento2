@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminProductStatusAttributeDisabledByDefaultTest">
+        <annotations>
+            <title value="Verify the default option value for product Status attribute is set correctly during product creation"/>
+            <description value="The default option value for product Status attribute is set correctly during product creation"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92838"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
+            <waitForPageLoad stepKey="wait1"/>
+            <click selector="{{AdminProductAttributeGridSection.resetFilter}}" stepKey="resetFiltersOnGrid1"/>
+            <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel1"/>
+            <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid1"/>
+            <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow1"/>
+            <waitForPageLoad stepKey="wait2"/>
+            <click selector="{{AdminNewAttributePanelSection.isDefault('1')}}" stepKey="resetOptionForStatusAttribute"/>
+            <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute1"/>
+            <waitForPageLoad stepKey="waitForSaveAttribute1"/>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache1"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{AdminProductAttributeGridSection.resetFilter}}" stepKey="resetFiltersOnGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel"/>
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <click selector="{{AdminNewAttributePanelSection.isDefault('2')}}" stepKey="chooseDisabledOptionForStatus"/>
+        <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridPageToLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForProductEditToLoad"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
+    </test>
+</tests>

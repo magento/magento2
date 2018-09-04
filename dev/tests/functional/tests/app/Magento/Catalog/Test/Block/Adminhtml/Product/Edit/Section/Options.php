@@ -83,6 +83,13 @@ class Options extends Section
     protected $sortRowsData = [];
 
     /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
+
+    /**
      * Fill custom options form on tab.
      *
      * @param array $fields
@@ -384,5 +391,15 @@ class Options extends Section
         }
 
         return $formDataItem;
+    }
+
+    /**
+     * Returns notice-message elements for 'file_extension' fields.
+     *
+     * @return ElementInterface[]
+     */
+    public function getFileOptionElements()
+    {
+        return $this->_rootElement->getElements($this->hintMessage);
     }
 }

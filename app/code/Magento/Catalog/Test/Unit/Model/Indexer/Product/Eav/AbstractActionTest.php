@@ -22,6 +22,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_eavSourceFactoryMock;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
@@ -32,9 +37,16 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
             ['create']
         );
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
-            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, []]
+            [
+                $this->_eavDecimalFactoryMock,
+                $this->_eavSourceFactoryMock,
+                $this->scopeConfig
+            ]
         );
     }
 
@@ -110,14 +122,27 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
         $this->_model->reindex();
     }
 
-    public function testReindexWithNotNullArgumentExecutesReindexEntities()
-    {
-        $childIds = [1, 2, 3];
-        $parentIds = [4];
-        $reindexIds = array_merge($childIds, $parentIds);
+    /**
+     * @param array $ids
+     * @param array $parentIds
+     * @param array $childIds
+     * @throws \Exception
+     * @dataProvider reindexEntitiesDataProvider
+     */
+    public function testReindexWithNotNullArgumentExecutesReindexEntities(
+        array $ids,
+        array $parentIds,
+        array $childIds
+    ) {
+        $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
+
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMockForAbstractClass();
 
@@ -129,11 +154,23 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($childIds)->willReturn($childIds);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($childIds)->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($ids)
+            ->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $ids)))
+            ->willReturn($childIds);
 
-        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($reindexIds)->willReturn($reindexIds);
-        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($reindexIds)->willReturn([]);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($reindexIds)
+            ->willReturn($parentIds);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $reindexIds)))
+            ->willReturn($childIds);
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
@@ -153,6 +190,34 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($eavDecimal));
 
-        $this->_model->reindex($childIds);
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
+        $this->_model->reindex($ids);
+    }
+
+    public function testReindexWithDisabledEavIndexer()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(0);
+
+        $this->_eavSourceFactoryMock->expects($this->never())->method('create');
+        $this->_eavDecimalFactoryMock->expects($this->never())->method('create');
+
+        $this->_model->reindex();
+    }
+
+    /**
+     * @return array
+     */
+    public function reindexEntitiesDataProvider()
+    {
+        return [
+            [[4], [], [1, 2, 3]],
+            [[3], [4], []],
+            [[5], [], []]
+        ];
     }
 }

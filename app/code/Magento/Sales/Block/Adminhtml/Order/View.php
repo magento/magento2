@@ -182,7 +182,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'class' => __('unhold'),
                     'id' => 'order-view-unhold-button',
                     'data_attribute' => [
-                        'url' => $this->getUnHoldUrl()
+                        'url' => $this->getUnholdUrl()
                     ]
                 ]
             );

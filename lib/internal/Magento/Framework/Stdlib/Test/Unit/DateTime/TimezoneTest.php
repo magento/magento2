@@ -157,6 +157,38 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $locale
+     * @param string $expectedResult
+     * @dataProvider getDateFormatDataProvider
+     */
+    public function testGetDateFormat(string $locale, string $expectedResult)
+    {
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        /** @var Timezone $timezone */
+        $timezone = $this->objectManager->getObject(
+            Timezone::class,
+            ['_localeResolver' => $this->localeResolver]
+        );
+
+        $this->assertSame($expectedResult, $timezone->getDateFormat());
+    }
+
+    /**
+     * Data provider for testGetDateFormat
+     * @return array
+     */
+    public function getDateFormatDataProvider()
+    {
+        return [
+            ['en_GB', 'dd/MM/y'],
+            ['en_US', 'M/d/yy'],
+        ];
+    }
+
+    /**
      * Test configuration of the different timezones.
      */
     public function testDate()

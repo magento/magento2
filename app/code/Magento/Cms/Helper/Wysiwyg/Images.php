@@ -8,7 +8,9 @@ namespace Magento\Cms\Helper\Wysiwyg;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Wysiwyg Images Helper
+ * Wysiwyg Images Helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -127,17 +129,23 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Decode HTML element id
+     * Decode HTML element id.
      *
      * @param string $id
      * @return string
+     * @throws \InvalidArgumentException When path contains restricted symbols.
      */
     public function convertIdToPath($id)
     {
         if ($id === \Magento\Theme\Helper\Storage::NODE_ROOT) {
             return $this->getStorageRoot();
         } else {
-            return $this->getStorageRoot() . $this->idDecode($id);
+            $path = $this->getStorageRoot() . $this->idDecode($id);
+            if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) !== false) {
+                throw new \InvalidArgumentException('Path is invalid');
+            }
+
+            return $path;
         }
     }
 
@@ -148,7 +156,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new \StdClass();
+        $checkResult = new \stdClass();
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',

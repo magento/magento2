@@ -158,6 +158,7 @@ sub vcl_backend_response {
     }
 
     # validate if we need to cache it and prevent from setting cookie
+    # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
     }
@@ -186,6 +187,13 @@ sub vcl_deliver {
         }
     } else {
         unset resp.http.Age;
+    }
+
+    # Not letting browser to cache non-static files.
+    if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
+        set resp.http.Pragma = "no-cache";
+        set resp.http.Expires = "-1";
+        set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
     }
 
     unset resp.http.X-Magento-Debug;

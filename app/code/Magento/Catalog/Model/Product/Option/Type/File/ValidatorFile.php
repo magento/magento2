@@ -150,7 +150,7 @@ class ValidatorFile extends Validator
             $extension = pathinfo(strtolower($fileInfo['name']), PATHINFO_EXTENSION);
 
             $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
-            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
 
             $filePath = $dispersion;
 

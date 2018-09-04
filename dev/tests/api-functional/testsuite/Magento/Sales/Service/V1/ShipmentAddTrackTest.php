@@ -74,6 +74,36 @@ class ShipmentAddTrackTest extends WebapiAbstract
         self::assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
         self::assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
     }
+
+    /**
+     * Try to create track with wrong order ID.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/shipment.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not save the shipment tracking.
+     */
+    public function testShipmentAddTrackThrowsError()
+    {
+        $shipmentCollection = $this->objectManager->get(Collection::class);
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $shipmentCollection->getFirstItem();
+
+        $trackData = [
+            ShipmentTrackInterface::ENTITY_ID => null,
+            ShipmentTrackInterface::ORDER_ID => $shipment->getOrderId() + 1,
+            ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
+            ShipmentTrackInterface::WEIGHT => 20,
+            ShipmentTrackInterface::QTY => 5,
+            ShipmentTrackInterface::TRACK_NUMBER => 2,
+            ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
+            ShipmentTrackInterface::TITLE => 'Shipment title',
+            ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
+        ];
+
+        $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
+    }
+
     /**
      * Returns details about API endpoints and services.
      *

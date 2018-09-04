@@ -279,6 +279,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($itemsCount, $this->cart->getSummaryQty());
     }
 
+    /**
+     * @return array
+     */
     public function useQtyDataProvider()
     {
         return [
