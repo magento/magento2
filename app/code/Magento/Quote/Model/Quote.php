@@ -1312,13 +1312,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
-        $old = $this->getBillingAddress();
-
+        $old = $this->getAddressesCollection()->getItemById($address->getId())
+            ?? $this->getBillingAddress();
         if (!empty($old)) {
             $old->addData($address->getData());
         } else {
             $this->addAddress($address->setAddressType(Address::TYPE_BILLING));
         }
+
         return $this;
     }
 
@@ -1333,13 +1334,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->getIsMultiShipping()) {
             $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
         } else {
-            $old = $this->getShippingAddress();
+            $old = $this->getAddressesCollection()->getItemById($address->getId())
+                ?? $this->getShippingAddress();
             if (!empty($old)) {
                 $old->addData($address->getData());
             } else {
                 $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
             }
         }
+
         return $this;
     }
 
