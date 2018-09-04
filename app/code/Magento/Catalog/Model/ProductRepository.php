@@ -242,7 +242,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 );
             }
 
-            $product = $this->getById($productId, $editMode, $storeId, $forceReload);
+            $product = $this->getById($productId, $editMode, $storeId, true);
 
             $this->cacheProduct($cacheKey, $product);
             $cachedProduct = $product;
