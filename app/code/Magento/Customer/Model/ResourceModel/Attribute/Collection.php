@@ -42,17 +42,4 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
     {
         return $this->getTable('customer_eav_attribute_website');
     }
-
-    /**
-     * Set collection item class name.
-     *
-     * @return $this
-     */
-    protected function _beforeLoad()
-    {
-        $entityType = $this->getEntityType();
-        $this->setItemObjectClass($entityType->getAttributeModel());
-
-        return parent::_beforeLoad();
-    }
 }
