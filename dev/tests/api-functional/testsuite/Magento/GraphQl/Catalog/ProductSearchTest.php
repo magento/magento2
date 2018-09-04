@@ -679,7 +679,7 @@ QUERY;
   products(
         filter:
         {
-            category_ids:{eq:"{$queryCategoryId}"}
+            category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
             
@@ -1280,31 +1280,6 @@ QUERY;
                     'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
-            );
-        }
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields(array $actualResponse, array $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
             );
         }
     }

@@ -514,6 +514,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($initCategoryCollection, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryCollectionCollectionNullDataProvider()
     {
         return [
@@ -624,6 +627,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function getProductReindexProvider()
     {
         return [

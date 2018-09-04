@@ -221,7 +221,7 @@ define([
         ],
         'time12h': [
             function (value) {
-                return /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\ [AP]M))$/i.test(value);
+                return /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\s[AP]M))$/i.test(value);
             },
             $.mage.__('Please enter a valid time, between 00:00 am and 12:00 pm')
         ],
@@ -636,7 +636,7 @@ define([
         'validate-number': [
             function (value) {
                 return utils.isEmptyNoTrim(value) ||
-                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(\.\d*)?\s*$/.test(value);
+                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(,\d*)*(\.\d*)?\s*$/.test(value);
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
@@ -754,6 +754,12 @@ define([
                 return utils.isEmptyNoTrim(value) || /^[a-zA-Z0-9]+$/.test(value);
             },
             $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')//eslint-disable-line max-len
+        ],
+        'validate-not-number-first': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^[^0-9-\.].*$/.test(value.trim());
+            },
+            $.mage.__('First character must be letter.')
         ],
         'validate-date': [
             function (value, params, additionalParams) {

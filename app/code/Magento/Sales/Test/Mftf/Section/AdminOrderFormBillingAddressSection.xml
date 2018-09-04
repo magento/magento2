@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormBillingAddressSection">
+        <element name="NamePrefix" type="input" selector="#order-billing_address_prefix" timeout="30"/>
+        <element name="FirstName" type="input" selector="#order-billing_address_firstname" timeout="30"/>
+        <element name="MiddleName" type="input" selector="#order-billing_address_middlename" timeout="30"/>
+        <element name="LastName" type="input" selector="#order-billing_address_lastname" timeout="30"/>
+        <element name="NameSuffix" type="input" selector="#order-billing_address_suffix" timeout="30"/>
+        <element name="Company" type="input" selector="#order-billing_address_company" timeout="30"/>
+        <element name="StreetLine1" type="input" selector="#order-billing_address_street0" timeout="30"/>
+        <element name="StreetLine2" type="input" selector="#order-billing_address_street1" timeout="30"/>
+        <element name="City" type="input" selector="#order-billing_address_city" timeout="30"/>
+        <element name="Country" type="select" selector="#order-billing_address_country_id" timeout="30"/>
+        <element name="State" type="select" selector="#order-billing_address_region_id" timeout="30"/>
+        <element name="Province" type="input" selector="#order-billing_address_region" timeout="30"/>
+        <element name="PostalCode" type="input" selector="#order-billing_address_postcode" timeout="30"/>
+        <element name="Phone" type="input" selector="#order-billing_address_telephone" timeout="30"/>
+        <element name="Fax" type="input" selector="#order-billing_address_fax" timeout="30"/>
+        <element name="VatNumber" type="input" selector="#order-billing_address_vat_id" timeout="30"/>
+        <element name="ValidateVatNumber" type="button" selector="#order-billing_address_vat_id + .actions>button.action-default" timeout="30"/>
+        <element name="SaveAddress" type="checkbox" selector="#order-billing_address_save_in_address_book"/>
+
+        <element name="emailError" type="text" selector="#email-error"/>
+        <element name="firstNameError" type="text" selector="#order-billing_address_firstname-error"/>
+        <element name="lastNameError" type="text" selector="#order-billing_address_lastname-error"/>
+        <element name="streetAddressError" type="text" selector="#order-billing_address_street0-error"/>
+        <element name="cityError" type="text" selector="#order-billing_address_city-error"/>
+        <element name="countryError" type="text" selector="#order-billing_address_country_id-error"/>
+        <element name="stateError" type="text" selector="#order-billing_address_region_id-error"/>
+        <element name="postalCodeError" type="text" selector="#order-billing_address_postcode-error"/>
+        <element name="phoneError" type="text" selector="#order-billing_address_telephone-error"/>
+    </section>
+</sections>

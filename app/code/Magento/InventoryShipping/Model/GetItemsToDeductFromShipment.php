@@ -11,7 +11,8 @@ use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryShipping\Model\SourceDeduction\Request\ItemToDeductInterfaceFactory;
+use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterface;
+use Magento\InventorySourceDeductionApi\Model\ItemToDeductInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -49,7 +50,7 @@ class GetItemsToDeductFromShipment
 
     /**
      * @param Shipment $shipment
-     * @return array
+     * @return ItemToDeductInterface[]
      * @throws NoSuchEntityException
      */
     public function execute(Shipment $shipment): array
@@ -59,6 +60,11 @@ class GetItemsToDeductFromShipment
         /** @var \Magento\Sales\Model\Order\Shipment\Item $shipmentItem */
         foreach ($shipment->getAllItems() as $shipmentItem) {
             $orderItem = $shipmentItem->getOrderItem();
+            // This code was added as quick fix for merge mainline
+            // https://github.com/magento-engcom/msi/issues/1586
+            if (null === $orderItem) {
+                continue;
+            }
             if ($orderItem->getHasChildren()) {
                 if (!$orderItem->isDummy(true)) {
                     foreach ($this->processComplexItem($shipmentItem) as $item) {

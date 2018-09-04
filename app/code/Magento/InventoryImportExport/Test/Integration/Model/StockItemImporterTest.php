@@ -78,8 +78,7 @@ class StockItemImporterTest extends TestCase
     {
         $productId = $this->productIdBySku->execute(['SKU-1'])['SKU-1'];
         $stockData = [
-            [
-                'sku' => 'SKU-1',
+            'SKU-1' => [
                 'qty' => 1,
                 'is_in_stock' => SourceItemInterface::STATUS_IN_STOCK,
                 'product_id' => $productId,

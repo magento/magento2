@@ -78,14 +78,14 @@ class Product
         $this->collectionProcessor->process($collection, $searchCriteria, $attributes);
 
         if (!$isChildSearch) {
-            $visibilityIds
-                = $isSearch ? $this->visibility->getVisibleInSearchIds() : $this->visibility->getVisibleInCatalogIds();
+            $visibilityIds = $isSearch
+                ? $this->visibility->getVisibleInSearchIds()
+                : $this->visibility->getVisibleInCatalogIds();
             $collection->setVisibility($visibilityIds);
         }
         $collection->load();
 
         // Methods that perform extra fetches post-load
-        $collection->addCategoryIds();
         $collection->addMediaGalleryData();
         $collection->addOptionsToResult();
 

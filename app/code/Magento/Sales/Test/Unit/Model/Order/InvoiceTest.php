@@ -137,6 +137,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($canVoid, $this->model->canVoid());
     }
 
+    /**
+     * @return array
+     */
     public function canVoidDataProvider()
     {
         return [[true], [false]];
@@ -379,6 +382,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
+    /**
+     * @return array
+     */
     public function payDataProvider()
     {
         return [

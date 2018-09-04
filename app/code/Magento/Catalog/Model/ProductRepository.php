@@ -334,9 +334,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
-            if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
-            }
+            $this->assignProductToWebsites($product);
         } else {
             $this->removeProductFromLocalCache($productData['sku']);
             $product = $this->get($productData['sku']);
@@ -345,31 +343,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = $product->getWebsiteIds();
-
-        if (!$this->storeManager->hasSingleStore()) {
-            $websiteIds = array_unique(
-                array_merge(
-                    $websiteIds,
-                    [$this->storeManager->getStore()->getWebsiteId()]
-                )
-            );
-        }
-
-        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
             $websiteIds = array_keys($this->storeManager->getWebsites());
+        } else {
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
         }
 
         $product->setWebsiteIds($websiteIds);
@@ -527,13 +514,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
+        $images = (array)$product->getMediaGallery('images');
+        $images = $this->determineImageRoles($product, $images);
+
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
-        $images = $product->getMediaGallery('images');
-        if ($images) {
-            foreach ($images as $image) {
-                if (!isset($image['removed']) && !empty($image['types'])) {
-                    $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
-                }
+
+        foreach ($images as $image) {
+            if (!isset($image['removed']) && !empty($image['types'])) {
+                $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }
 
@@ -769,6 +757,32 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $this->instances = null;
         $this->instancesById = null;
+    }
+
+    /**
+     * Ascertain image roles, if they are not set against the gallery entries
+     *
+     * @param ProductInterface $product
+     * @param array $images
+     * @return array
+     */
+    private function determineImageRoles(ProductInterface $product, array $images) : array
+    {
+        $imagesWithRoles = [];
+        foreach ($images as $image) {
+            if (!isset($image['types'])) {
+                $image['types'] = [];
+                if (isset($image['file'])) {
+                    foreach (array_keys($product->getMediaAttributes()) as $attribute) {
+                        if ($image['file'] == $product->getData($attribute)) {
+                            $image['types'][] = $attribute;
+                        }
+                    }
+                }
+            }
+            $imagesWithRoles[] = $image;
+        }
+        return $imagesWithRoles;
     }
 
     /**

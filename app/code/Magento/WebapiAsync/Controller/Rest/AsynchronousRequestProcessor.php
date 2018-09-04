@@ -63,7 +63,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      * @param RestResponse $response
      * @param InputParamsResolver $inputParamsResolver
      * @param MassSchedule $asyncBulkPublisher
-     * @param WebapiAsyncConfig $webapiAsyncConfig
+     * @param WebApiAsyncConfig $webapiAsyncConfig
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AsyncResponseInterfaceFactory $asyncResponse
      * @param string $processorPath

@@ -6,9 +6,9 @@
         "magento/framework": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-catalog-api": "*",
-        "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-source-selection-api": "*",
+        "magento/module-inventory-source-deduction-api": "*",
         "magento/module-sales": "*",
         "magento/module-shipping": "*",
         "magento/module-store": "*"

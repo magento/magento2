@@ -18,7 +18,7 @@ $sourceCode = $block->getSourceCode();
     </div>
     <div class="admin__page-section-content">
         <?= $block->escapeHtml(__('Source:')) ?>
-        <?= $block->escapeHtml($this->getSourceName($sourceCode)) ?>
+        <?= $block->escapeHtml($block->getSourceName($sourceCode)) ?>
     </div>
 </section>
 <input name="sourceCode" type="hidden" value="<?= /* @escapeNotVerified */ $sourceCode ?>">
