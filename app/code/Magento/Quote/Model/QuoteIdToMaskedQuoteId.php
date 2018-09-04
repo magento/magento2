@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResource;
 
 class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
 {
@@ -15,22 +16,29 @@ class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
-
     /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
 
     /**
+     * @var QuoteIdMaskResource
+     */
+    private $quoteIdMaskResource;
+
+    /**
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
+     * @param QuoteIdMaskResource $quoteIdMaskResource
      */
     public function __construct(
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        QuoteIdMaskResource $quoteIdMaskResource
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
+        $this->quoteIdMaskResource = $quoteIdMaskResource;
     }
 
     /**
@@ -42,8 +50,9 @@ class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
         $this->cartRepository->get($quoteId);
 
         $quoteIdMask = $this->quoteIdMaskFactory->create();
-        $quoteIdMask->setQuoteId($quoteId)->save();
+        $this->quoteIdMaskResource->load($quoteIdMask, $quoteId, 'quote_id');
+        $maskedId = $quoteIdMask->getMaskedId() ?? '';
 
-        return $quoteIdMask->getMaskedId();
+        return $maskedId;
     }
 }
