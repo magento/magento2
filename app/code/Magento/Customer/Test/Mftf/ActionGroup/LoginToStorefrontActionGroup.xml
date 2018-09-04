@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="LoginToStorefrontActionGroup">
+        <arguments>
+            <argument name="Customer"/>
+        </arguments>
+        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+    </actionGroup>
+</actionGroups>

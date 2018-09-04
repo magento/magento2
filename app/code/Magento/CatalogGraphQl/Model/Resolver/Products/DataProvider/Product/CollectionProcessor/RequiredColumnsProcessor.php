@@ -30,7 +30,6 @@ class RequiredColumnsProcessor implements CollectionProcessorInterface
         $collection->addAttributeToSelect('special_price_from');
         $collection->addAttributeToSelect('special_price_to');
         $collection->addAttributeToSelect('tax_class_id');
-        $collection->addWebsiteNamesToResult();
 
         return $collection;
     }

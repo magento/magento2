@@ -2,7 +2,7 @@
   "name": "magento/module-first",
   "description": "N/A",
   "suggest": {
-    "magento/module-first-sample-data": "Sample Data version:777.7.*"
+    "magento/module-first-sample-data": "Sample Data version: 777.7.*"
   },
   "type": "magento2-module",
   "config": {

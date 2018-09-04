@@ -15,6 +15,7 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\App\ObjectManager;
@@ -48,12 +49,18 @@ class Gallery extends AbstractView
     private $galleryImagesConfigFactory;
 
     /**
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
      * @param Context $context
      * @param ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
      * @param array $data
-     * @param ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param ImagesConfigFactoryInterface|null $imagesConfigFactory
      * @param array $galleryImagesConfig
+     * @param UrlBuilder|null $urlBuilder
      */
     public function __construct(
         Context $context,
@@ -61,13 +68,15 @@ class Gallery extends AbstractView
         EncoderInterface $jsonEncoder,
         array $data = [],
         ImagesConfigFactoryInterface $imagesConfigFactory = null,
-        array $galleryImagesConfig = []
+        array $galleryImagesConfig = [],
+        UrlBuilder $urlBuilder = null
     ) {
         parent::__construct($context, $arrayUtils, $data);
         $this->jsonEncoder = $jsonEncoder;
         $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()
             ->get(ImagesConfigFactoryInterface::class);
         $this->galleryImagesConfig = $galleryImagesConfig;
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
     }
 
     /**
@@ -88,9 +97,7 @@ class Gallery extends AbstractView
             foreach ($galleryImagesConfig as $imageConfig) {
                 $image->setData(
                     $imageConfig->getData('data_object_key'),
-                    $this->_imageHelper->init($product, $imageConfig['image_id'])
-                        ->setImageFile($image->getData('file'))
-                        ->getUrl()
+                    $this->imageUrlBuilder->getUrl($image->getFile(), $imageConfig['image_id'])
                 );
             }
         }

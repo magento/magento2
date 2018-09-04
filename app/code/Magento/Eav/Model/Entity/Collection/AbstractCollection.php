@@ -1498,6 +1498,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $condition
             );
         } else {
+            if (isset($condition['null'])) {
+                $joinType = 'left';
+            }
+
             $this->_addAttributeJoin($attribute, $joinType);
             if (isset($this->_joinAttributes[$attribute]['condition_alias'])) {
                 $field = $this->_joinAttributes[$attribute]['condition_alias'];

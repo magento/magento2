@@ -25,10 +25,7 @@
         <h1 class="image-label"><?= /* @escapeNotVerified */ $_imageTitle ?></h1>
     <?php endif; ?>
     <?php
-        $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
-            ->init($block->getProduct(), 'product_page_image_large')
-            ->setImageFile($block->getImageFile())
-            ->getUrl();
+        $imageUrl = $block->getImageUrl();
     ?>
     <img src="<?= /* @escapeNotVerified */ $imageUrl ?>"<?php if ($_width): ?> width="<?= /* @escapeNotVerified */ $_width ?>"<?php endif; ?> alt="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?= /* @escapeNotVerified */ __('Close Window') ?></span></a></div>

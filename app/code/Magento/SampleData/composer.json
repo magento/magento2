@@ -5,11 +5,11 @@
         "sort-packages": true
     },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.1.3||~7.2.0",
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/sample-data-media": "Sample Data version:100.3.*"
+        "magento/sample-data-media": "*"
     },
     "type": "magento2-module",
     "license": [

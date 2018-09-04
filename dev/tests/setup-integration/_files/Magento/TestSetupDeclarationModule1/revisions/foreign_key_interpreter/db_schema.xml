@@ -7,12 +7,13 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="reference_table" resource="sales">
+    <table name="reference_table" resource="default">
         <column xsi:type="tinyint" name="tinyint_ref" default="0" padding="7" nullable="true" unsigned="false"/>
     </table>
-    <table name="test_table" resource="sales">
+    <table name="test_table" resource="default">
         <column xsi:type="tinyint" name="tinyint" default="0" padding="7" nullable="true" unsigned="false"/>
-        <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table"
+        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+                    column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref"/>
     </table>
 </schema>

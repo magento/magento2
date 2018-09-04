@@ -77,10 +77,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $dir
-         * @param string $packageType
-         */
+            /**
+             * @param string $dir
+             * @param string $packageType
+             */
             function ($dir, $packageType) {
                 $file = $dir . '/composer.json';
                 $this->assertFileExists($file);
@@ -144,7 +144,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: no space before colon.');
+        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
         $this->assertNotRegExp('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
     }
 
@@ -171,7 +171,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         switch ($packageType) {
             case 'magento2-module':
                 $xml = simplexml_load_file("$dir/etc/module.xml");
-                $this->assertConsistentModuleName($xml, $json->name);
+                if ($this->isVendorMagento($json->name)) {
+                    $this->assertConsistentModuleName($xml, $json->name);
+                }
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -208,6 +210,17 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
         }
+    }
+
+    /**
+     * Checks if package vendor is Magento.
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    private function isVendorMagento(string $packageName): bool
+    {
+        return strpos($packageName, 'magento/') === 0;
     }
 
     /**
@@ -313,12 +326,24 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertPhpVersionInSync($name, $phpVersion)
     {
         if (isset(self::$rootJson['require']['php'])) {
-            $this->assertEquals(
-                self::$rootJson['require']['php'],
-                $phpVersion,
-                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
-                . self::$rootJson['require']['php'] . ' in root composer.json'
-            );
+            if ($this->isVendorMagento($name)) {
+                $this->assertEquals(
+                    self::$rootJson['require']['php'],
+                    $phpVersion,
+                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                    . self::$rootJson['require']['php'] . ' in root composer.json'
+                );
+            } else {
+                $composerVersionsPattern = '{\s*\|\|?\s*}';
+                $rootPhpVersions = preg_split($composerVersionsPattern, self::$rootJson['require']['php']);
+                $modulePhpVersions = preg_split($composerVersionsPattern, $phpVersion);
+
+                $this->assertEmpty(
+                    array_diff($rootPhpVersions, $modulePhpVersions),
+                    "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                    . self::$rootJson['require']['php'] . ' in root composer.json'
+                );
+            }
         }
     }
 

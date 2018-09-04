@@ -10,11 +10,13 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->load(21);
-if ($product->getId()) {
-    $product->delete();
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+try {
+    $product = $productRepository->get('virtual-product', false, null, true);
+    $productRepository->delete($product);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 }
 
 $registry->unregister('isSecureArea');

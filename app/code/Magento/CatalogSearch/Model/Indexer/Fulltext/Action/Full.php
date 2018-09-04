@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -307,27 +308,30 @@ class Full
     /**
      * Get parents IDs of product IDs to be re-indexed
      *
+     * @deprecated as it not used in the class anymore and duplicates another API method
+     * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::getRelationsByChild()
+     *
      * @param int[] $entityIds
      * @return int[]
+     * @throws \Exception
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $fieldForParent = $metadata->getLinkField();
+        $connection = $this->connection;
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
-        $select = $this->connection
+        $select = $connection
             ->select()
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
-            ->where('parent_id NOT IN (?)', $entityIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
-                'relation.parent_id = cpe.' . $fieldForParent,
+                'relation.parent_id = cpe.' . $linkField,
                 ['cpe.entity_id']
             );
-        return $this->connection->fetchCol($select);
+
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -345,7 +349,7 @@ class Full
     public function rebuildStoreIndex($storeId, $productIds = null)
     {
         if ($productIds !== null) {
-            $productIds = array_unique(array_merge($productIds, $this->getProductIdsFromParents($productIds)));
+            $productIds = array_unique($productIds);
         }
 
         // prepare searchable attributes

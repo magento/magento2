@@ -78,7 +78,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
-        $applyTo = $attribute->getApplyTo();
+        $applyTo = $attribute->getApplyTo() ?: [];
         return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
             && $attribute->isInSet($object->getAttributeSetId());
     }

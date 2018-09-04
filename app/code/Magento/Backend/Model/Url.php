@@ -202,7 +202,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         }
 
         $cacheSecretKey = false;
-        if (is_array($routeParams) && isset($routeParams['_cache_secret_key'])) {
+        if (isset($routeParams['_cache_secret_key'])) {
             unset($routeParams['_cache_secret_key']);
             $cacheSecretKey = true;
         }
@@ -210,25 +210,28 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         if (!$this->useSecretKey()) {
             return $result;
         }
+
+        $this->getRouteParamsResolver()->unsetData('route_params');
         $this->_setRoutePath($routePath);
+        $extraParams = $this->getRouteParamsResolver()->getRouteParams();
         $routeName = $this->_getRouteName('*');
         $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
         $actionName = $this->_getActionName(self::DEFAULT_ACTION_NAME);
-        if ($cacheSecretKey) {
-            $secret = [self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$"];
-        } else {
-            $secret = [
-                self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName),
-            ];
+
+        if (!isset($routeParams[self::SECRET_KEY_PARAM_NAME])) {
+            if (!is_array($routeParams)) {
+                $routeParams = [];
+            }
+            $secretKey = $cacheSecretKey
+                ? "\${$routeName}/{$controllerName}/{$actionName}\$"
+                : $this->getSecretKey($routeName, $controllerName, $actionName);
+            $routeParams[self::SECRET_KEY_PARAM_NAME] = $secretKey;
         }
-        if (is_array($routeParams)) {
-            $routeParams = array_merge($secret, $routeParams);
-        } else {
-            $routeParams = $secret;
+
+        if (!empty($extraParams)) {
+            $routeParams = array_merge($extraParams, $routeParams);
         }
-        if (is_array($this->_getRouteParams())) {
-            $routeParams = array_merge($this->_getRouteParams(), $routeParams);
-        }
+
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
     }
 

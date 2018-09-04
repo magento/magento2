@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="sales_sequence_profile" resource="sales" engine="innodb" comment="sales_sequence_profile">
+    <table name="sales_sequence_profile" resource="sales" engine="innodb" comment="sales_sequence_profile" onCreate="skip-migration">
         <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Id"/>
         <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false"
@@ -35,7 +35,7 @@
             <column name="suffix"/>
         </constraint>
     </table>
-    <table name="sales_sequence_meta" resource="sales" engine="innodb" comment="sales_sequence_meta">
+    <table name="sales_sequence_meta" resource="sales" engine="innodb" comment="sales_sequence_meta" onCreate="skip-migration">
         <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Id"/>
         <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>

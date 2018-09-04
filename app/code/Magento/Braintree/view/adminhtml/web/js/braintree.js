@@ -145,6 +145,8 @@ define([
         _initBraintree: function () {
             var self = this;
 
+            this.disableEventListeners();
+
             self.braintree.setup(self.clientToken, 'custom', {
                 id: self.selector,
                 hostedFields: self.getHostedFields(),
@@ -154,6 +156,7 @@ define([
                  */
                 onReady: function () {
                     $('body').trigger('processStop');
+                    self.enableEventListeners();
                 },
 
                 /**

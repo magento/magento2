@@ -8,6 +8,9 @@ namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Dto\Factories;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 
+/**
+ * Test table factory
+ */
 class TableTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table */
@@ -53,7 +56,10 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $expectedData = [
             'name' => 'pf_some_table',
             'engine' => 'innodb',
-            'nameWithoutPrefix' => 'some_table'
+            'nameWithoutPrefix' => 'some_table',
+            'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'onCreate' => ''
         ];
         $this->objectManagerMock->expects(self::once())
             ->method('create')
@@ -74,7 +80,10 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $expectedData = [
             'name' => 'pf_some_table',
             'engine' => 'memory',
-            'nameWithoutPrefix' => 'some_table'
+            'nameWithoutPrefix' => 'some_table',
+            'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'onCreate' => ''
         ];
         $this->objectManagerMock->expects(self::once())
             ->method('create')

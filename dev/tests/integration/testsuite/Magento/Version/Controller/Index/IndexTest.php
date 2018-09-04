@@ -20,8 +20,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $edition = $productMetadata->getEdition();
 
         $fullVersion = $productMetadata->getVersion();
-        $versionParts = explode('.', $fullVersion);
-        if (isset($versionParts[1]) && isset($versionParts[0])) {
+        if ($this->isComposerBasedInstallation($fullVersion)) {
+            $versionParts = explode('.', $fullVersion);
             $majorMinor = $versionParts[0] . '.' . $versionParts[1];
 
             // Response must contain Major.Minor version, product name, and edition
@@ -35,5 +35,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             // Response is supposed to be empty when the project is installed from git
             $this->assertEmpty($body);
         }
+    }
+
+    private function isComposerBasedInstallation($fullVersion)
+    {
+        $versionParts = explode('-', $fullVersion);
+        return !(isset($versionParts[0]) && $versionParts[0] == 'dev');
     }
 }

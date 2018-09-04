@@ -5,11 +5,13 @@
         "sort-packages": true
     },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-catalog": "*",
+        "magento/module-theme": "*"
     },
     "type": "magento2-module",
     "license": [

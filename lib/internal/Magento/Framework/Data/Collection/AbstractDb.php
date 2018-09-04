@@ -237,7 +237,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        if (!count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP))) {
+        $part = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+        if (!is_array($part) || !count($part)) {
             $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
             return $countSelect;
         }
@@ -629,7 +630,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param null $valueField
+     * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
      * @return array

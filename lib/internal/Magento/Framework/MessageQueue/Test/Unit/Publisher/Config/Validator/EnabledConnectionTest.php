@@ -49,8 +49,8 @@ class EnabledConnectionTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateMultipleEnabledConnections()
     {
-        $this->expectException(
-            '\LogicException',
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage(
             'More than 1 enabled connections configured for publisher pub01. ' .
             'More than 1 enabled connections configured for publisher pub02.'
         );

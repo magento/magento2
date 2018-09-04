@@ -77,7 +77,7 @@ interface StockConfigurationInterface
 
     /**
      * @param int $storeId
-     * @return int
+     * @return float
      */
     public function getQtyIncrements($store = null);
 

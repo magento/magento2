@@ -53,6 +53,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
      * Test reindex for configurable product with both disabled and enabled variations.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testReindexEntitiesForConfigurableProduct()
     {
@@ -96,10 +97,26 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         $result = $connection->fetchAll($select);
         $this->assertCount(0, $result);
+
+        /** @var \Magento\Catalog\Model\Product $product1 **/
+        $product1 = $productRepository->getById(10);
+        $product1->setStatus(Status::STATUS_ENABLED)->setWebsiteIds([]);
+        $productRepository->save($product1);
+
+        /** @var \Magento\Catalog\Model\Product $product2 **/
+        $product2 = $productRepository->getById(20);
+        $product2->setStatus(Status::STATUS_ENABLED);
+        $productRepository->save($product2);
+
+        $statusSelect = clone $select;
+        $statusSelect->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns(new \Magento\Framework\DB\Sql\Expression('COUNT(*)'));
+        $this->assertEquals(1, $connection->fetchOne($statusSelect));
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @magentoDbIsolation disabled
      */
     public function testReindexMultiselectAttribute()
     {

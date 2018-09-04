@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
@@ -18,7 +18,7 @@
     },
     "suggest": {
         "magento/module-cookie": "*",
-        "magento/module-review-sample-data": "Sample Data version:100.3.*"
+        "magento/module-review-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

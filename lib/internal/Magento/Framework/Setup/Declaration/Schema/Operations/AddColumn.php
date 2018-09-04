@@ -110,6 +110,7 @@ class AddColumn implements OperationInterface
             Index::TYPE,
             [
                 'name' => self::TEMPORARY_KEY,
+                'column' => $column->getName(),
                 'columns' => [$column],
                 'table' => $column->getTable()
             ]
@@ -148,15 +149,17 @@ class AddColumn implements OperationInterface
      * Setup triggers if column have onCreate syntax.
      *
      * @param Statement $statement
-     * @param Column $column
+     * @param ElementHistory $elementHistory
      * @return array
      */
-    private function setupTriggersIfExists(Statement $statement, Column $column)
+    private function setupTriggersIfExists(Statement $statement, ElementHistory $elementHistory)
     {
+        /** @var Column $column */
+        $column = $elementHistory->getNew();
         //Add triggers to column
         foreach ($this->triggers as $ddlTrigger) {
-            if ($ddlTrigger->isApplicable($column->getOnCreate())) {
-                $statement->addTrigger($ddlTrigger->getCallback($column));
+            if ($ddlTrigger->isApplicable((string) $column->getOnCreate())) {
+                $statement->addTrigger($ddlTrigger->getCallback($elementHistory));
             }
         }
         $statements = [$statement];
@@ -201,7 +204,7 @@ class AddColumn implements OperationInterface
             $definition,
             Column::TYPE
         );
-        $statements = $this->setupTriggersIfExists($statement, $element);
+        $statements = $this->setupTriggersIfExists($statement, $elementHistory);
 
         if ($this->columnIsAutoIncrement($element)) {
             /** We need to reset auto_increment as new field should goes from 1 */

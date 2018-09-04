@@ -175,7 +175,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                     $updateData[ScopeInterface::SCOPE_STORES],
                 ],
             ]);
-        $this->websiteMock->expects($this->exactly(4))
+        $this->websiteMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->websiteResourceMock);
         $this->websiteMock->expects($this->once())
@@ -203,7 +203,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->groupFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->groupMock);
-        $this->groupMock->expects($this->exactly(5))
+        $this->groupMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
         $this->groupMock->expects($this->once())
@@ -227,7 +227,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->exactly(4))
+        $this->storeMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->storeResourceMock);
         $this->storeMock->expects($this->once())
@@ -244,15 +244,16 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('setData')
             ->with($updateData[ScopeInterface::SCOPE_STORES]['test']);
-        $this->storeResourceMock->expects($this->once())
+        $this->storeMock->expects($this->once())
             ->method('save')
-            ->with($this->storeMock);
-        $this->storeResourceMock->expects($this->once())
-            ->method('addCommitCallback');
+            ->willReturnSelf();
 
         $this->model->run($data);
     }
 
+    /**
+     * @return array
+     */
     private function getData()
     {
         return [

@@ -36,6 +36,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabled()
     {
@@ -70,6 +71,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabledPerStore()
     {

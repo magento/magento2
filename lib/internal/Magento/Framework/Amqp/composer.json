@@ -11,8 +11,8 @@
     ],
     "require": {
         "magento/framework": "*",
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "php-amqplib/php-amqplib": "2.5.*"
+        "php": "~7.1.3||~7.2.0",
+        "php-amqplib/php-amqplib": "~2.7.0"
     },
     "autoload": {
         "psr-4": {

@@ -69,7 +69,8 @@ class ShellTest extends \PHPUnit\Framework\TestCase
         );
         $this->driverMock->expects($this->once())->method('execute')->willReturn($response);
         $this->loggerMock->expects($this->once())->method('error')->with($logEntry);
-        $this->expectException(LocalizedException::class, "Command returned non-zero exit code:\n`$command`");
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage("Command returned non-zero exit code:\n`$command`");
         $this->model->execute($command, []);
     }
 }

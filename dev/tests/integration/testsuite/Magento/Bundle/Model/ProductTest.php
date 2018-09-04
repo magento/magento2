@@ -100,6 +100,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Bundle/_files/product_with_multiple_options.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDbIsolation disabled
      */
     public function testMultipleStores()
     {

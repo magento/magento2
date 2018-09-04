@@ -17,7 +17,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Base product image path
      */
-    const BASE_IMAGE_PATH = 'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff';
+    const BASE_IMAGE_PATH = 'http://localhost/pub/media/catalog/product/cache/8d4d2075b1a30681853bef5bdc41b164';
     
     /**
      * Test getCollection None images

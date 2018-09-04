@@ -155,15 +155,25 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameterNames = [];
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
-            $parameterNames[] = '$' . $parameter->getName();
+            $name = $parameter->isVariadic() ? '... $' . $parameter->getName() : '$' . $parameter->getName();
+            $parameterNames[] = $name;
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        $returnType = $method->getReturnType();
+        $returnTypeValue = $returnType
+            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
+            : null;
         $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => $this->_getMethodBody($method->getName(), $parameterNames),
+            'body' => $this->_getMethodBody(
+                $method->getName(),
+                $parameterNames,
+                $returnTypeValue === 'void'
+            ),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'returntype' => $returnTypeValue,
         ];
 
         return $methodInfo;
@@ -212,16 +222,22 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param string $name
      * @param array $parameters
+     * @param bool $withoutReturn
      * @return string
      */
-    protected function _getMethodBody($name, array $parameters = [])
-    {
+    protected function _getMethodBody(
+        $name,
+        array $parameters = [],
+        bool $withoutReturn = false
+    ) {
         if (count($parameters) == 0) {
             $methodCall = sprintf('%s()', $name);
         } else {
             $methodCall = sprintf('%s(%s)', $name, implode(', ', $parameters));
         }
-        return 'return $this->_getSubject()->' . $methodCall . ';';
+
+        return ($withoutReturn ? '' : 'return ')
+            .'$this->_getSubject()->' . $methodCall . ';';
     }
 
     /**
