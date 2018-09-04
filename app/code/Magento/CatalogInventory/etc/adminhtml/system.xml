@@ -41,13 +41,13 @@
                     <![CDATA[Please note that these settings apply to individual items in the cart, not to the entire cart.]]>
                 </comment>
                 <label>Product Stock Options</label>
-                <field id="manage_stock" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="manage_stock" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Manage Stock</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Managestock</backend_model>
                     <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
-                <field id="backorders" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="backorders" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Backorders</label>
                     <source_model>Magento\CatalogInventory\Model\Source\Backorders</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Backorders</backend_model>
