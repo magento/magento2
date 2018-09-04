@@ -27,11 +27,13 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="ConfigAllowGiftWrappingForOrderItemsOnly" stepKey="configAllowGiftWrappingForOrderItemsOnly"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="ConfigAllowGiftWrappingForOrderItemsOnlyActionGroup" stepKey="configureGiftOptions"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
+
         </before>
 
         <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>
@@ -46,7 +48,7 @@
         <actionGroup ref="CheckingGiftOptionsActionGroup" stepKey="checkGiftOptions"/>
 
         <after>
-            <actionGroup ref="CleanConfigsForGiftOptionsActionGroup" stepKey="cleanGiftOptionsConfigs"/>
+            <createData entity="DefaultConfigGiftOptions" stepKey="restoreDefaultConfigGiftOptions"/>
             <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
