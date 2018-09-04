@@ -52,8 +52,7 @@
             <argument name="customStore" value="customStoreView"/>
         </actionGroup>
         <!--Set Configuration-->
-        <actionGroup ref="CatalogPriceConfigurations" stepKey="SetCatalogConfigurations"/>
-
+        <createData entity="CatalogPriceScopeWebsite" stepKey="paymentMethodsSettingConfig"/>
         <!--Set advanced pricing for all 4 products-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
             <argument name="product" value="$$product1$$"/>
@@ -306,9 +305,7 @@
             <deleteData createDataKey="product4" stepKey="deleteProduct4"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="CatalogPriceConfigurations" stepKey="SetCatalogConfigurations">
-                <argument name="website" value="Global"/>
-            </actionGroup>
+            <createData entity="DefaultConfigCatalogPrice" stepKey="defaultConfigCatalogPrice"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
