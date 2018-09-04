@@ -9,9 +9,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Block\Widget;
 
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Widget\Block\BlockInterface;
 use Magento\Cms\Model\Block as CmsBlock;
 
 /**
@@ -19,7 +17,7 @@ use Magento\Cms\Model\Block as CmsBlock;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Block extends \Magento\Framework\View\Element\Template implements BlockInterface, IdentityInterface
+class Block extends \Magento\Framework\View\Element\Template implements IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
