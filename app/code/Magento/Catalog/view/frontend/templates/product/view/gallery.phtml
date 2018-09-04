@@ -130,14 +130,12 @@
                         ? 'true' : 'false'; ?>
                     <?php endif; ?>
                     <?php if ($block->getVar("gallery/fullscreen/transition/duration")) : ?>
-                        ,"transitionduration": <?= $block->escapeHtml(
-                            $block->getVar("gallery/fullscreen/transition/duration")
-                        ); ?>
+                        ,"transitionduration": 
+                        <?= $block->escapeHtml($block->getVar("gallery/fullscreen/transition/duration")); ?>
                     <?php endif; ?>
                     <?php if ($block->getVar("gallery/fullscreen/transition/effect")) : ?>
-                        ,"transition": "<?= $block->escapeHtml(
-                            $block->getVar("gallery/fullscreen/transition/effect")
-                        ); ?>"
+                        ,"transition": 
+                        "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/transition/effect")); ?>"
                     <?php endif; ?>
                 },
                 "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
