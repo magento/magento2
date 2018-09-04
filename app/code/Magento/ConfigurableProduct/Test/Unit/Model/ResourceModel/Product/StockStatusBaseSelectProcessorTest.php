@@ -73,7 +73,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        if ($isShowOutOfStock) {
+        if (!$isShowOutOfStock) {
             $selectMock->expects($this->once())
                 ->method('joinInner')
                 ->with(

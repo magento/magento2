@@ -45,7 +45,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     public function process(Select $select)
     {
-        if ($this->stockConfig->isShowOutOfStock()) {
+        if (!$this->stockConfig->isShowOutOfStock()) {
             $select->joinInner(
                 ['stock' => $this->stockStatusResource->getMainTable()],
                 sprintf(
