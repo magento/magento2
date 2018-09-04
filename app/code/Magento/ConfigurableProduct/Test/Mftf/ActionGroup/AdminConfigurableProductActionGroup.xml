@@ -60,6 +60,7 @@
         <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="fillCategory"/>
+        <selectOption userInput="{{product.visibility}}" selector="{{AdminProductFormSection.visibility}}" stepKey="fillVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
 

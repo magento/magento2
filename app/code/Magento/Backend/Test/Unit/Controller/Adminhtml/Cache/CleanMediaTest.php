@@ -38,7 +38,7 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
         $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
         $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
         $messageManager = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
-            ->setMethods(['addSuccess'])
+            ->setMethods(['addSuccessMessage'])
             ->setConstructorArgs($messageManagerParams)
             ->getMock();
 
@@ -86,7 +86,7 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [
