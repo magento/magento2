@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Error;
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
 
 /**
  * @api
@@ -36,19 +36,28 @@ class QuoteValidator
     private $minimumAmountMessage;
 
     /**
+     * @var QuoteValidationRuleInterface
+     */
+    private $quoteValidationRule;
+
+    /**
      * QuoteValidator constructor.
      *
      * @param AllowedCountries|null $allowedCountryReader
      * @param OrderAmountValidationMessage|null $minimumAmountMessage
+     * @param QuoteValidationRuleInterface|null $quoteValidationRule
      */
     public function __construct(
         AllowedCountries $allowedCountryReader = null,
-        OrderAmountValidationMessage $minimumAmountMessage = null
+        OrderAmountValidationMessage $minimumAmountMessage = null,
+        QuoteValidationRuleInterface $quoteValidationRule = null
     ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
         $this->minimumAmountMessage = $minimumAmountMessage ?: ObjectManager::getInstance()
             ->get(OrderAmountValidationMessage::class);
+        $this->quoteValidationRule = $quoteValidationRule ?: ObjectManager::getInstance()
+            ->get(QuoteValidationRuleInterface::class);
     }
 
     /**
@@ -82,64 +91,22 @@ class QuoteValidator
             throw new LocalizedException(__($errors ?: 'Something went wrong. Please try to place the order again.'));
         }
 
-        if (!$quote->isVirtual()) {
-            $this->validateShippingAddress($quote);
-        }
+        foreach ($this->quoteValidationRule->validate($quote) as $validationResult) {
+            if ($validationResult->isValid()) {
+                continue;
+            }
 
-        $billingAddress = $quote->getBillingAddress();
-        $billingAddress->setStoreId($quote->getStoreId());
-        if ($billingAddress->validate() !== true) {
-            throw new LocalizedException(
-                __(
-                    'Please check the billing address information. %1',
-                    implode(' ', $quote->getBillingAddress()->validate())
-                )
-            );
-        }
-        if (!$quote->getPayment()->getMethod()) {
-            throw new LocalizedException(__('Please select a valid payment method.'));
-        }
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new LocalizedException($this->minimumAmountMessage->getMessage());
+            $messages = $validationResult->getErrors();
+            $defaultMessage = array_shift($messages);
+            if ($defaultMessage && !empty($messages)) {
+                $defaultMessage .= ' %1';
+            }
+            if ($defaultMessage) {
+                throw new LocalizedException(__($defaultMessage, implode(' ', $messages)));
+            }
         }
 
         return $this;
-    }
-
-    /**
-     * Validates shipping address.
-     *
-     * @param Quote $quote
-     * @throws LocalizedException
-     */
-    private function validateShippingAddress(QuoteEntity $quote)
-    {
-        $address = $quote->getShippingAddress();
-        $address->setStoreId($quote->getStoreId());
-        if ($address->validate() !== true) {
-            throw new LocalizedException(
-                __(
-                    'Please check the shipping address information. %1',
-                    implode(' ', $address->validate())
-                )
-            );
-        }
-
-        // Checks if country id present in the allowed countries list.
-        if (!in_array(
-            $address->getCountryId(),
-            $this->allowedCountryReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $quote->getStoreId())
-        )) {
-            throw new LocalizedException(
-                __('Some addresses cannot be used due to country-specific configurations.')
-            );
-        }
-
-        $method = $address->getShippingMethod();
-        $rate = $address->getShippingRateByCode($method);
-        if (!$method || !$rate) {
-            throw new LocalizedException(__('Please specify a shipping method.'));
-        }
     }
 
     /**
