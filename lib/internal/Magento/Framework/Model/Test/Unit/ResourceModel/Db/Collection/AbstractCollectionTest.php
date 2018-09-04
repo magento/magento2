@@ -267,10 +267,11 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider addExpressionFieldToSelectDataProvider
      */
-    public function testAddExpressionFieldToSelect($alias, $expression, $fields, $expected)
+    public function testAddExpressionFieldToSelect($alias, $expression, $fields, $expectedFieldsToSelect)
     {
-        $this->selectMock->expects($this->once())->method('columns')->with($expected);
         $this->assertTrue($this->uut->addExpressionFieldToSelect($alias, $expression, $fields) instanceof Uut);
+        $this->assertEquals($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
+        $this->assertTrue($this->uut->wereFieldsToSelectChanged());
     }
 
     /**
