@@ -101,8 +101,8 @@ require([
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
         }, {
             action: 'resize',
-            maxWidth: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+            maxWidth: <?= (int) $block->getImageUploadMaxWidth()  ?> ,
+            maxHeight: <?= (int) $block->getImageUploadMaxHeight()  ?>
         }, {
             action: 'save'
         }]
