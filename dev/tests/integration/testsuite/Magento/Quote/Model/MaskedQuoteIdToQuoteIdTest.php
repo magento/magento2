@@ -39,7 +39,7 @@ class MaskedQuoteIdToQuoteIdTest extends \PHPUnit\Framework\TestCase
 
     public function testMaskedQuoteIdToQuoteIdForNonExistentQuote()
     {
-        self::expectException('Magento\Framework\Exception\NoSuchEntityException');
+        self::expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
 
         $this->maskedQuoteIdToQuoteId->execute('test');
     }
