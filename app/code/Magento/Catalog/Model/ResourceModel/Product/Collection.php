@@ -675,9 +675,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add Store ID to products from collection.
      *
-     * @return void
+     * @return $this
      */
-    private function prepareStoreId()
+    protected function prepareStoreId()
     {
         if ($this->getStoreId() !== null) {
             /** @var $item \Magento\Catalog\Model\Product */
@@ -685,6 +685,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $item->setStoreId($this->getStoreId());
             }
         }
+
+        return $this;
     }
 
     /**
