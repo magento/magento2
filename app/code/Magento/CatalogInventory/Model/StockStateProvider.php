@@ -160,7 +160,7 @@ class StockStateProvider implements StockStateProviderInterface
         }
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
-            $message = __('We don\'t have as many "%1" as you requested.', $stockItem->getProductName());
+            $message = __('The requested qty is not available');
             $result->setHasError(true)->setMessage($message)->setQuoteMessage($message)->setQuoteMessageIndex('qty');
             return $result;
         } else {
@@ -212,7 +212,7 @@ class StockStateProvider implements StockStateProviderInterface
                         }
                     } elseif ($stockItem->getShowDefaultNotificationMessage()) {
                         $result->setMessage(
-                            __('We don\'t have as many "%1" as you requested.', $stockItem->getProductName())
+                            __('The requested qty is not available')
                         );
                     }
                 }

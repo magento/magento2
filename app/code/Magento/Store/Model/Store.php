@@ -1163,7 +1163,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve current url for store
      *
-     * @param bool|string $fromStore
+     * @param bool $fromStore
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1223,7 +1223,7 @@ class Store extends AbstractExtensibleModel implements
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
             . $storeParsedUrl['path']
             . $requestStringPath
-            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams, '', '&amp;') : '');
+            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams) : '');
 
         return $currentUrl;
     }
@@ -1379,7 +1379,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
+     * @return $this
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
