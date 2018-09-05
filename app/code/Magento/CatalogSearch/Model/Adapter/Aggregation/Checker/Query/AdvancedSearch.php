@@ -12,6 +12,8 @@ use Magento\Framework\Search\RequestInterface;
  * Request checker for advanced search.
  *
  * Checks advanced search query whether required to collect all attributes for entity.
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class AdvancedSearch implements RequestCheckerInterface
 {

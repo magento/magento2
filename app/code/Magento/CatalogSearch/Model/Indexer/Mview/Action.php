@@ -9,6 +9,10 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
+/**
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ */
 class Action implements ActionInterface
 {
     /**

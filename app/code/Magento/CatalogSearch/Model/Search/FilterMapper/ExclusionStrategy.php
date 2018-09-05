@@ -21,6 +21,9 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 /**
  * Strategy which processes exclusions from general rules
  *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExclusionStrategy implements FilterStrategyInterface

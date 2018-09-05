@@ -10,6 +10,9 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 /**
  * Abstract plugin for indexers
+ *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 abstract class AbstractPlugin
 {

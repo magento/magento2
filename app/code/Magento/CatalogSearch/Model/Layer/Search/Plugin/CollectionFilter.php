@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
+/**
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ */
 class CollectionFilter
 {
     /**

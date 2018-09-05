@@ -11,6 +11,8 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
