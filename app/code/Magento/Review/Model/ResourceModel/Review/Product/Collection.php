@@ -545,7 +545,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return $this
      */
-    protected function prepareStoreId() {
+    protected function prepareStoreId()
+    {
         return $this;
     }
 
