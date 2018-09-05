@@ -139,6 +139,146 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Retrieve gallery options in JSON format
+     *
+     * @return string
+     */
+    public function getGalleryOptionsJson()
+    {
+        $optionItems = null;
+        
+        //Need to catch the special case that if gallery/nav is false, we need to output
+        //the string "false", and not the boolean false. Otherwise output string.
+        //True is not a valid option, but is left in incase someone sets it to true
+        //by accident.
+        if (is_bool($this->getVar("gallery/nav"))) {
+            $optionItems['nav'] = $this->getVar("gallery/nav") ? 'true' : 'false';
+        } elseif ($this->getVar("gallery/nav") != null) {
+            $optionItems['nav'] = $this->getVar("gallery/nav");
+        }
+        
+        if (is_bool($this->getVar("gallery/loop"))) {
+            $optionItems['loop'] = $this->getVar("gallery/loop");
+        }
+        
+        if (is_bool($this->getVar("gallery/keyboard"))) {
+            $optionItems['keyboard'] = $this->getVar("gallery/keyboard");
+        }
+        
+        if (is_bool($this->getVar("gallery/arrows"))) {
+            $optionItems['arrows'] = $this->getVar("gallery/arrows");
+        }
+        
+        if (is_bool($this->getVar("gallery/allowfullscreen"))) {
+            $optionItems['allowfullscreen'] = $this->getVar("gallery/allowfullscreen");
+        }
+        
+        if (is_bool($this->getVar("gallery/caption"))) {
+            $optionItems['showCaption'] = $this->getVar("gallery/caption");
+        }
+        
+        $optionItems['width'] = (int)$this->escapeHtml(
+            $this->getImageAttribute('product_page_image_medium', 'width')
+        );
+        
+        $optionItems['thumbwidth'] = (int)$this->escapeHtml(
+            $this->getImageAttribute('product_page_image_small', 'width')
+        );
+        
+        $imgHeight = $this->getImageAttribute('product_page_image_medium', 'height')
+            ?: $this->getImageAttribute('product_page_image_medium', 'width');
+        if ($imgHeight) {
+            $optionItems['height'] = (int)$this->escapeHtml($imgHeight);
+        }
+        
+        $thumbHeight = $this->getImageAttribute('product_page_image_small', 'height')
+            ?: $this->getImageAttribute('product_page_image_small', 'width');
+        if ($thumbHeight) {
+            $optionItems['thumbheight'] = (int)$this->escapeHtml($thumbHeight);
+        }
+        
+        if ($this->getVar("gallery/thumbmargin")) {
+            $optionItems['thumbmargin'] = (int)$this->getVar("gallery/thumbmargin");
+        }
+        
+        if ($this->getVar("gallery/transition/duration")) {
+            $optionItems['transitionduration'] = (int)$this->getVar("gallery/transition/duration");
+        }
+        
+        if ($this->getVar("gallery/transition/effect")) {
+            $optionItems['transition'] = $this->getVar("gallery/transition/effect");
+        }
+        
+        if (is_bool($this->getVar("gallery/navarrows"))) {
+            $optionItems['navarrows'] = $this->getVar("gallery/navarrows");
+        }
+        
+        if ($this->getVar("gallery/navtype")) {
+            $optionItems['navtype'] = $this->getVar("gallery/navtype");
+        }
+        
+        if ($this->getVar("gallery/navdir")) {
+            $optionItems['navdir'] = $this->getVar("gallery/navdir");
+        }
+        
+        return json_encode($optionItems);
+    }
+
+    /**
+     * Retrieve gallery fullscreen options in JSON format
+     *
+     * @return string
+     */
+    public function getGalleryFSOptionsJson()
+    {
+        $fsOptionItems = null;
+  
+        //Need to catch the special case that if gallery/nav is false, we need to output
+        //the string "false", and not the boolean false. Otherwise output string.
+        //True is not a valid option, but is left in incase someone sets it to true
+        //by accident.
+        if (is_bool($this->getVar("gallery/fullscreen/nav"))) {
+            $fsOptionItems['nav'] = $this->getVar("gallery/fullscreen/nav") ? 'true' : 'false';
+        } elseif ($this->getVar("gallery/fullscreen/nav") != null) {
+            $fsOptionItems['nav'] = $this->getVar("gallery/fullscreen/nav");
+        }
+
+        if (is_bool($this->getVar("gallery/fullscreen/loop"))) {
+            $fsOptionItems['loop'] = $this->getVar("gallery/fullscreen/loop");
+        }
+        
+        if ($this->getVar("gallery/fullscreen/navtype")) {
+            $fsOptionItems['navtype'] = $this->getVar("gallery/fullscreen/navtype");
+        }
+        
+        if ($this->getVar("gallery/fullscreen/navdir")) {
+            $fsOptionItems['navdir'] = $this->getVar("gallery/fullscreen/navdir");
+        }
+        
+        if (is_bool($this->getVar("gallery/fullscreen/arrows"))) {
+            $fsOptionItems['arrows'] = $this->getVar("gallery/fullscreen/arrows");
+        }
+        
+        if (is_bool($this->getVar("gallery/fullscreen/navarrows"))) {
+            $fsOptionItems['navarrows'] = $this->getVar("gallery/fullscreen/navarrows");
+        }
+        
+        if (is_bool($this->getVar("gallery/fullscreen/caption"))) {
+            $fsOptionItems['showCaption'] = $this->getVar("gallery/fullscreen/caption");
+        }
+        
+        if ($this->getVar("gallery/fullscreen/transition/duration")) {
+            $fsOptionItems['transitionduration'] = (int)$this->getVar("gallery/fullscreen/transition/duration");
+        }
+        
+        if ($this->getVar("gallery/fullscreen/transition/effect")) {
+            $fsOptionItems['transition'] = $this->getVar("gallery/fullscreen/transition/effect");
+        }
+        
+        return json_encode($fsOptionItems);
+    }
+
+    /**
      * Retrieve gallery url
      *
      * @param null|\Magento\Framework\DataObject $image
