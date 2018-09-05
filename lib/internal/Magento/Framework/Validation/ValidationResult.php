@@ -29,6 +29,8 @@ class ValidationResult
     }
 
     /**
+     * Check error existence. If any return boolean true else false.
+     *
      * @return bool
      */
     public function isValid(): bool
@@ -37,6 +39,8 @@ class ValidationResult
     }
 
     /**
+     * Return list of errors.
+     *
      * @return array
      */
     public function getErrors(): array

@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var QuoteValidator
      */
@@ -23,161 +26,140 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->quoteValidator = Bootstrap::getObjectManager()->create(QuoteValidator::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->quoteValidator = $this->objectManager->create(QuoteValidator::class);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please check the shipping address information.
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitShippingAddressInvalid()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getShippingAddress()->setPostcode('');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitCountryIsNotAllowed()
     {
         /** @magentoConfigFixture does not allow to change the value for the website scope */
-        Bootstrap::getObjectManager()->get(
+        $this->objectManager->get(
             \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             'general/country/allow',
             'US',
             \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
         );
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getShippingAddress()->setCountryId('AF');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The shipping method is missing. Select the shipping method and try again.
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitShippingMethodInvalid()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getShippingAddress()->setShippingMethod('NONE');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please check the billing address information.
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitBillingAddressInvalid()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getBillingAddress()->setTelephone('');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Enter a valid payment method and try again.
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitPaymentMethodInvalid()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getPayment()->setMethod('');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @magentoConfigFixture current_store sales/minimum_order/active 1
      * @magentoConfigFixture current_store sales/minimum_order/amount 100
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitMinimumAmountInvalid()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getShippingAddress()
             ->setBaseSubtotal(0);
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     *
      * @return void
      */
     public function testValidateBeforeSubmitWithoutMinimumOrderAmount()
     {
-        $this->quoteValidator->validateBeforeSubmit($this->getQuote());
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
      * @magentoConfigFixture current_store sales/minimum_order/active 1
      * @magentoConfigFixture current_store sales/minimum_order/amount 100
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     *
+     * @return void
      */
     public function testValidateBeforeSubmitWithMinimumOrderAmount()
     {
-        $quote = $this->getQuote();
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
         $quote->getShippingAddress()
             ->setBaseSubtotal(200);
         $this->quoteValidator->validateBeforeSubmit($quote);
-    }
-
-    /**
-     * @return Quote
-     */
-    private function getQuote(): Quote
-    {
-        /** @var Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create(Quote::class);
-
-        /** @var AddressInterface $billingAddress */
-        $billingAddress = Bootstrap::getObjectManager()->create(AddressInterface::class);
-        $billingAddress->setFirstname('Joe')
-            ->setLastname('Doe')
-            ->setCountryId('US')
-            ->setRegion('TX')
-            ->setCity('Austin')
-            ->setStreet('1000 West Parmer Line')
-            ->setPostcode('11501')
-            ->setTelephone('123456789');
-        $quote->setBillingAddress($billingAddress);
-
-        /** @var AddressInterface $shippingAddress */
-        $shippingAddress = Bootstrap::getObjectManager()->create(AddressInterface::class);
-        $shippingAddress->setFirstname('Joe')
-        ->setLastname('Doe')
-        ->setCountryId('US')
-        ->setRegion('TX')
-        ->setCity('Austin')
-        ->setStreet('1000 West Parmer Line')
-        ->setPostcode('11501')
-        ->setTelephone('123456789');
-        $quote->setShippingAddress($shippingAddress);
-
-        $quote->getShippingAddress()
-            ->setShippingMethod('flatrate_flatrate')
-            ->setCollectShippingRates(1);
-        /** @var Rate $shippingRate */
-        $shippingRate = Bootstrap::getObjectManager()->create(Rate::class);
-        $shippingRate->setMethod('flatrate')
-            ->setCarrier('flatrate')
-            ->setPrice(5)
-            ->setCarrierTitle('Flat Rate')
-            ->setCode('flatrate_flatrate');
-        $quote->getShippingAddress()
-            ->addShippingRate($shippingRate);
-
-        $quote->getPayment()->setMethod('CC');
-
-        /** @var QuoteRepository $quoteRepository */
-        $quoteRepository = Bootstrap::getObjectManager()->create(QuoteRepository::class);
-        $quoteRepository->save($quote);
-
-        return $quote;
     }
 }
