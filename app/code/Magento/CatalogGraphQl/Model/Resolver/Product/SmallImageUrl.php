@@ -115,7 +115,7 @@ class SmallImageUrl implements ResolverInterface
     /**
      * Retrieves small image from the product gallery image
      *
-     * @param $productImages
+     * @param array $productImages
      * @return string|null
      */
     private function getSmallImageFromGallery(array $productImages)
