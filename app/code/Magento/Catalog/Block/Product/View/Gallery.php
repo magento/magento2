@@ -142,6 +142,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve gallery options in JSON format
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getGalleryOptionsJson()
     {
@@ -228,6 +230,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * Retrieve gallery fullscreen options in JSON format
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getGalleryFSOptionsJson()
     {
