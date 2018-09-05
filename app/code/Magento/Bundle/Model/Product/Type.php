@@ -556,7 +556,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int) $qty;
     }
 
     /**
