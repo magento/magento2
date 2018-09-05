@@ -100,7 +100,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getBreakpoints()
     {
-        return $this->jsonEncoder->encode($this->getVar('breakpoints'));
+        $breakpoints = $this->getVar('breakpoints');
+        array_walk_recursive($breakpoints, [$this, 'convertBooleans']);
+        return $this->jsonEncoder->encode($breakpoints);
     }
 
     /**
@@ -139,6 +141,23 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Convert string to booleans
+     *
+     * @param string $item
+     * @param string $key
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    private function convertBooleans(&$item, $key)
+    {
+        if (strtolower($item) == 'true') {
+            $item = true;
+        }
+        if (strtolower($item) == 'false') {
+            $item = false;
+        }
+    }
+
+    /**
      * Retrieve gallery options in JSON format
      *
      * @return string
@@ -148,81 +167,69 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryOptionsJson()
     {
         $optionItems = null;
-        
-        //Need to catch the special case that if gallery/nav is false, we need to output
-        //the string "false", and not the boolean false. Otherwise output string.
-        //True is not a valid option, but is left in incase someone sets it to true
-        //by accident.
-        if (is_bool($this->getVar("gallery/nav"))) {
-            $optionItems['nav'] = $this->getVar("gallery/nav") ? 'true' : 'false';
-        } elseif ($this->getVar("gallery/nav") != null) {
-            $optionItems['nav'] = $this->getVar("gallery/nav");
+
+        if ($this->getVar("gallery/nav")) {
+            $optionItems['nav'] = $this->escapeHtml($this->getVar("gallery/nav"));
         }
-        
-        if (is_bool($this->getVar("gallery/loop"))) {
-            $optionItems['loop'] = $this->getVar("gallery/loop");
+        if ($this->getVar("gallery/loop")) {
+            $optionItems['loop'] = filter_var($this->getVar("gallery/loop"), FILTER_VALIDATE_BOOLEAN);
         }
-        
-        if (is_bool($this->getVar("gallery/keyboard"))) {
-            $optionItems['keyboard'] = $this->getVar("gallery/keyboard");
+        if ($this->getVar("gallery/keyboard")) {
+            $optionItems['keyboard'] = filter_var($this->getVar("gallery/keyboard"), FILTER_VALIDATE_BOOLEAN);
         }
-        
-        if (is_bool($this->getVar("gallery/arrows"))) {
-            $optionItems['arrows'] = $this->getVar("gallery/arrows");
+        if ($this->getVar("gallery/arrows")) {
+            $optionItems['arrows'] = filter_var($this->getVar("gallery/arrows"), FILTER_VALIDATE_BOOLEAN);
         }
-        
-        if (is_bool($this->getVar("gallery/allowfullscreen"))) {
-            $optionItems['allowfullscreen'] = $this->getVar("gallery/allowfullscreen");
+        if ($this->getVar("gallery/caption")) {
+            $optionItems['showCaption'] = filter_var($this->getVar("gallery/caption"), FILTER_VALIDATE_BOOLEAN);
         }
-        
-        if (is_bool($this->getVar("gallery/caption"))) {
-            $optionItems['showCaption'] = $this->getVar("gallery/caption");
+        if ($this->getVar("gallery/allowfullscreen")) {
+            $optionItems['allowfullscreen'] = filter_var(
+                $this->getVar("gallery/allowfullscreen"),
+                FILTER_VALIDATE_BOOLEAN
+            );
         }
-        
-        $optionItems['width'] = (int)$this->escapeHtml(
-            $this->getImageAttribute('product_page_image_medium', 'width')
+        if ($this->getVar("gallery/navdir")) {
+            $optionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/navdir"));
+        }
+        if ($this->getVar("gallery/navarrows")) {
+            $optionItems['navarrows'] = filter_var($this->getVar("gallery/navarrows"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/navtype")) {
+            $optionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/navtype"));
+        }
+        if ($this->getVar("gallery/thumbmargin")) {
+            $optionItems['thumbmargin'] = filter_var($this->getVar("gallery/thumbmargin"), FILTER_VALIDATE_INT);
+        }
+        if ($this->getVar("gallery/transition/effect")) {
+            $optionItems['transition'] = $this->escapeHtml($this->getVar("gallery/transition/effect"));
+        }
+        if ($this->getVar("gallery/transition/duration")) {
+            $optionItems['transitionduration'] = filter_var(
+                $this->getVar("gallery/transition/duration"),
+                FILTER_VALIDATE_INT
+            );
+        }
+
+        $optionItems['width'] = filter_var(
+            $this->getImageAttribute('product_page_image_medium', 'width'),
+            FILTER_VALIDATE_INT
         );
-        
-        $optionItems['thumbwidth'] = (int)$this->escapeHtml(
-            $this->getImageAttribute('product_page_image_small', 'width')
+        $optionItems['thumbwidth'] = filter_var(
+            $this->getImageAttribute('product_page_image_small', 'width'),
+            FILTER_VALIDATE_INT
         );
-        
         $imgHeight = $this->getImageAttribute('product_page_image_medium', 'height')
             ?: $this->getImageAttribute('product_page_image_medium', 'width');
         if ($imgHeight) {
-            $optionItems['height'] = (int)$this->escapeHtml($imgHeight);
+            $optionItems['height'] = filter_var($imgHeight, FILTER_VALIDATE_INT);
         }
-        
         $thumbHeight = $this->getImageAttribute('product_page_image_small', 'height')
             ?: $this->getImageAttribute('product_page_image_small', 'width');
         if ($thumbHeight) {
-            $optionItems['thumbheight'] = (int)$this->escapeHtml($thumbHeight);
+            $optionItems['thumbheight'] = filter_var($thumbHeight, FILTER_VALIDATE_INT);
         }
-        
-        if ($this->getVar("gallery/thumbmargin")) {
-            $optionItems['thumbmargin'] = (int)$this->getVar("gallery/thumbmargin");
-        }
-        
-        if ($this->getVar("gallery/transition/duration")) {
-            $optionItems['transitionduration'] = (int)$this->getVar("gallery/transition/duration");
-        }
-        
-        if ($this->getVar("gallery/transition/effect")) {
-            $optionItems['transition'] = $this->getVar("gallery/transition/effect");
-        }
-        
-        if (is_bool($this->getVar("gallery/navarrows"))) {
-            $optionItems['navarrows'] = $this->getVar("gallery/navarrows");
-        }
-        
-        if ($this->getVar("gallery/navtype")) {
-            $optionItems['navtype'] = $this->getVar("gallery/navtype");
-        }
-        
-        if ($this->getVar("gallery/navdir")) {
-            $optionItems['navdir'] = $this->getVar("gallery/navdir");
-        }
-        
+
         return json_encode($optionItems);
     }
 
@@ -236,49 +243,44 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryFSOptionsJson()
     {
         $fsOptionItems = null;
-  
-        //Need to catch the special case that if gallery/nav is false, we need to output
-        //the string "false", and not the boolean false. Otherwise output string.
-        //True is not a valid option, but is left in incase someone sets it to true
-        //by accident.
-        if (is_bool($this->getVar("gallery/fullscreen/nav"))) {
-            $fsOptionItems['nav'] = $this->getVar("gallery/fullscreen/nav") ? 'true' : 'false';
-        } elseif ($this->getVar("gallery/fullscreen/nav") != null) {
-            $fsOptionItems['nav'] = $this->getVar("gallery/fullscreen/nav");
+
+        if ($this->getVar("gallery/fullscreen/nav")) {
+            $fsOptionItems['nav'] = $this->escapeHtml($this->getVar("gallery/fullscreen/nav"));
+        }
+        if ($this->getVar("gallery/fullscreen/loop")) {
+            $fsOptionItems['loop'] = filter_var($this->getVar("gallery/fullscreen/loop"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/fullscreen/arrows")) {
+            $fsOptionItems['arrows'] = filter_var($this->getVar("gallery/fullscreen/arrows"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/fullscreen/caption")) {
+            $fsOptionItems['showCaption'] = filter_var(
+                $this->getVar("gallery/fullscreen/caption"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/navdir")) {
+            $fsOptionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navdir"));
+        }
+        if ($this->getVar("gallery/fullscreen/navarrows")) {
+            $fsOptionItems['navarrows'] = filter_var(
+                $this->getVar("gallery/fullscreen/navarrows"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/navtype")) {
+            $fsOptionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navtype"));
+        }
+        if ($this->getVar("gallery/fullscreen/transition/effect")) {
+            $fsOptionItems['transition'] = $this->escapeHtml($this->getVar("gallery/fullscreen/transition/effect"));
+        }
+        if ($this->getVar("gallery/fullscreen/transition/duration")) {
+            $fsOptionItems['transitionduration'] = filter_var(
+                $this->getVar("gallery/fullscreen/transition/duration"),
+                FILTER_VALIDATE_INT
+            );
         }
 
-        if (is_bool($this->getVar("gallery/fullscreen/loop"))) {
-            $fsOptionItems['loop'] = $this->getVar("gallery/fullscreen/loop");
-        }
-        
-        if ($this->getVar("gallery/fullscreen/navtype")) {
-            $fsOptionItems['navtype'] = $this->getVar("gallery/fullscreen/navtype");
-        }
-        
-        if ($this->getVar("gallery/fullscreen/navdir")) {
-            $fsOptionItems['navdir'] = $this->getVar("gallery/fullscreen/navdir");
-        }
-        
-        if (is_bool($this->getVar("gallery/fullscreen/arrows"))) {
-            $fsOptionItems['arrows'] = $this->getVar("gallery/fullscreen/arrows");
-        }
-        
-        if (is_bool($this->getVar("gallery/fullscreen/navarrows"))) {
-            $fsOptionItems['navarrows'] = $this->getVar("gallery/fullscreen/navarrows");
-        }
-        
-        if (is_bool($this->getVar("gallery/fullscreen/caption"))) {
-            $fsOptionItems['showCaption'] = $this->getVar("gallery/fullscreen/caption");
-        }
-        
-        if ($this->getVar("gallery/fullscreen/transition/duration")) {
-            $fsOptionItems['transitionduration'] = (int)$this->getVar("gallery/fullscreen/transition/duration");
-        }
-        
-        if ($this->getVar("gallery/fullscreen/transition/effect")) {
-            $fsOptionItems['transition'] = $this->getVar("gallery/fullscreen/transition/effect");
-        }
-        
         return json_encode($fsOptionItems);
     }
 
