@@ -25,11 +25,11 @@ class UrlRewritesTest extends GraphQlAbstract
      */
     public function testProductWithNoCategoriesAssigned()
     {
-
+        $productSku = 'virtual-product';
         $query
             = <<<QUERY
 {
-    products (search:"Virtual Product") {
+    products (filter: {sku: {eq: "{$productSku}"}}) {
         items {
             name,
             sku,
@@ -79,11 +79,11 @@ QUERY;
      */
     public function testProductWithOneCategoryAssigned()
     {
-
+        $productSku = 'simple';
         $query
             = <<<QUERY
 {
-    products (search:"Simple Product") {
+    products (filter: {sku: {eq: "{$productSku}"}}) {
         items {
             name,
             sku,
