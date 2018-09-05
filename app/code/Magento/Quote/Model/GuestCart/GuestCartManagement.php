@@ -8,7 +8,6 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -58,7 +57,7 @@ class GuestCartManagement implements GuestCartManagementInterface
      */
     public function createEmptyCart()
     {
-        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+        /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create();
         $cartId = $this->quoteManagement->createEmptyCart();
         $quoteIdMask->setQuoteId($cartId)->save();

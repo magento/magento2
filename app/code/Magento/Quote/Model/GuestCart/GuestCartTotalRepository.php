@@ -8,7 +8,6 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
