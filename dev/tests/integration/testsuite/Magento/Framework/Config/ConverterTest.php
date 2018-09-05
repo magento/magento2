@@ -57,8 +57,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         <var name="str">some string</var>  
         <var name="int-1">1</var>        
         <var name="int-0">0</var>        
-        <var name="bool-true">true</var> 
-        <var name="bool-false">false</var> 
     </vars>
  </view>
 XML;
@@ -69,8 +67,7 @@ XML;
                     'str' => 'some string',
                     'int-1' => '1',
                     'int-0' => '0',
-                    'bool-true' => true,
-                    'bool-false' => false
+                    'nonexistent' => false
                 ]
             ]
         ];
