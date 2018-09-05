@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Setup\Patch\Data;
+namespace Magento\CatalogSearch\Setup\Patch\Data;
 
 class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
