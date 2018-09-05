@@ -106,7 +106,7 @@
         <click selector="{{AdminGridRow.checkboxByValue($$createSource1.source[name]$$)}}" stepKey="clickOnTheCheckboxForSource1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="clickOnDone2"/>
 
-        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource}}" userInput="{{ConfigurableMsiProduct.quantity}}" stepKey="fillTheQuantityField1"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSource($$createSource1.source[name]$$)}}" userInput="{{ConfigurableMsiProduct.quantity}}" stepKey="fillTheQuantityField1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNext3"/>
         <!--Generate products-->
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
