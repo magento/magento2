@@ -79,13 +79,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @param string $module
      * @param string $var
-     * @return string|false|array
+     * @return string|bool|null|array
      */
     public function getVarValue($module, $var)
     {
         $this->initData();
         if (!isset($this->data['vars'][$module])) {
-            return false;
+            return null;
         }
 
         $value = $this->data['vars'][$module];
@@ -93,7 +93,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             if (is_array($value) && isset($value[$node])) {
                 $value = $value[$node];
             } else {
-                return false;
+                return null;
             }
         }
 
