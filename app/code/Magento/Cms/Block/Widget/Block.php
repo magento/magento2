@@ -11,13 +11,14 @@ namespace Magento\Cms\Block\Widget;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Cms\Model\Block as CmsBlock;
+use Magento\Widget\Block\BlockInterface;
 
 /**
  * Cms Static Block Widget
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Block extends \Magento\Framework\View\Element\Template implements IdentityInterface
+class Block extends \Magento\Framework\View\Element\Template implements BlockInterface, IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
