@@ -17,7 +17,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
 /**
- * UrlRewrite field resolver, used for GraphQL request processing.
+ * The resolver returns the canonical URL for a specified product, category or CMS page
  */
 class EntityUrl implements ResolverInterface
 {
@@ -35,7 +35,7 @@ class EntityUrl implements ResolverInterface
      * @var ValueFactory
      */
     private $valueFactory;
-    
+
     /**
      * @var CustomUrlLocatorInterface
      */
@@ -72,7 +72,7 @@ class EntityUrl implements ResolverInterface
         $result = function () {
             return null;
         };
-        
+
         if (isset($args['url'])) {
             $url = $args['url'];
             if (substr($url, 0, 1) === '/' && $url !== '/') {
@@ -112,7 +112,7 @@ class EntityUrl implements ResolverInterface
         if (!$urlRewrite) {
             $urlRewrite = $this->findUrlFromTargetPath($requestPath);
         }
-        
+
         return $urlRewrite;
     }
 

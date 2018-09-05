@@ -17,7 +17,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
 
 /**
- * UrlRewrite field resolver, used for GraphQL request processing.
+ * Returns URL rewrites list for the specified product
  */
 class UrlRewrite implements ResolverInterface
 {
@@ -63,7 +63,7 @@ class UrlRewrite implements ResolverInterface
         /** @var AbstractModel $entity */
         $entity = $value['model'];
         $entityId = $entity->getEntityId();
-        
+
         $urlRewritesCollection = $this->urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $entityId]);
         $urlRewrites = [];
 

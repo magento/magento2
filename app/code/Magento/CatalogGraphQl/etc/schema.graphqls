@@ -280,7 +280,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
     canonical_url: String @doc(description: "Canonical URL") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
-    url_rewrites: [UrlRewrite] @doc(description: "URL rewrites list") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "PhysicalProductInterface contains attributes specific to tangible products") {
@@ -541,6 +540,6 @@ type SortField {
 }
 
 type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields") {
-    default: String @doc(description: "Default value of sort fields") 
+    default: String @doc(description: "Default value of sort fields")
     options: [SortField] @doc(description: "Available sort fields")
 }
