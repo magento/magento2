@@ -10,6 +10,10 @@ use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
 
+/**
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ */
 class Result extends \Magento\Framework\App\Action\Action
 {
     /**

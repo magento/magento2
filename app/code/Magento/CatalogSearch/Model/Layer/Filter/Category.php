@@ -10,6 +10,9 @@ use Magento\Catalog\Model\Layer\Filter\DataProvider\Category as CategoryDataProv
 
 /**
  * Layer category filter
+ *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Category extends AbstractFilter
 {

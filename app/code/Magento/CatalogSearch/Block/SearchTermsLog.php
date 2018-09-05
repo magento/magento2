@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Class for logging search terms on cached pages
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class SearchTermsLog implements ArgumentInterface
 {

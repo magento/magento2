@@ -16,6 +16,8 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.3
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class DataProvider
 {

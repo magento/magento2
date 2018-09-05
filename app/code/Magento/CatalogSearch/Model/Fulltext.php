@@ -21,6 +21,9 @@ use Magento\Search\Model\QueryFactory;
  * @method \Magento\CatalogSearch\Model\Fulltext setStoreId(int $value)
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
+ *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {

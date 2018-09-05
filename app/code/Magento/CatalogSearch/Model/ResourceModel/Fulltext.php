@@ -14,6 +14,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @api
  * @since 100.0.2
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

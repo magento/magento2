@@ -10,8 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Class Category
- * @package Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Category extends AbstractPlugin
 {

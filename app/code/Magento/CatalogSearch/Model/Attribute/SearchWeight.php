@@ -11,6 +11,9 @@ namespace Magento\CatalogSearch\Model\Attribute;
  * which is used to boost matches by specific attributes.
  *
  * This is part of search accuracy customization functionality.
+ *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class SearchWeight
 {

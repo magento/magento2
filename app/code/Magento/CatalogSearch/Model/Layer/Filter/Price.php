@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 /**
  * Layer price filter based on Search API
  *
+ * @deprecated
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends AbstractFilter
