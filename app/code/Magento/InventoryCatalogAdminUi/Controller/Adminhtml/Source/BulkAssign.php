@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Source;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\ProcessBulkPage;
+use Magento\InventoryCatalogAdminUi\Model\Bulk\BulkPageProcessor;
 
 /**
  * Mass assign sources to products.
@@ -23,17 +23,17 @@ class BulkAssign extends Action
     const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
-     * @var ProcessBulkPage
+     * @var BulkPageProcessor
      */
     private $processBulkPage;
 
     /**
      * @param Action\Context $context
-     * @param ProcessBulkPage $processBulkPage
+     * @param BulkPageProcessor $processBulkPage
      */
     public function __construct(
         Action\Context $context,
-        ProcessBulkPage $processBulkPage
+        BulkPageProcessor $processBulkPage
     ) {
         parent::__construct($context);
 
@@ -45,6 +45,6 @@ class BulkAssign extends Action
      */
     public function execute()
     {
-        return $this->processBulkPage->execute('Bulk source assignment');
+        return $this->processBulkPage->execute(__('Bulk source assignment'));
     }
 }

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk;
+namespace Magento\InventoryCatalogAdminUi\Model\Bulk;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ResponseInterface;
@@ -14,11 +14,12 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Framework\Phrase;
 
 /**
  * Bulk process page for assign, unassign and transfer sources.
  */
-class ProcessBulkPage
+class BulkPageProcessor
 {
     /**
      * @var Filter
@@ -68,10 +69,10 @@ class ProcessBulkPage
     }
 
     /**
-     * @param string $title
+     * @param Phrase $title
      * @return ResponseInterface|ResultInterface
      */
-    public function execute(string $title)
+    public function execute(Phrase $title)
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
@@ -84,7 +85,7 @@ class ProcessBulkPage
         $this->bulkSessionProductsStorage->setProductsSkus($collection->getColumnValues('sku'));
 
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__($title));
+        $resultPage->getConfig()->getTitle()->prepend($title);
 
         return $resultPage;
     }
