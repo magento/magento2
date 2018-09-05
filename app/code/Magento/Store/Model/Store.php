@@ -24,10 +24,7 @@ use Magento\Store\Api\Data\StoreInterface;
  *
  * @api
  * @method Store setGroupId($value)
- * @method int getSortOrder()
  * @method int getStoreId()
- * @method Store setSortOrder($value)
- * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -533,6 +530,38 @@ class Store extends AbstractExtensibleModel implements
     public function setName($name)
     {
         return $this->setData('name', $name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return (bool)$this->_getData('is_active');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData('is_active', $isActive);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSortOrder()
+    {
+        return $this->_getData('sort_order');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData('sort_order', $sortOrder);
     }
 
     /**
@@ -1225,7 +1254,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function isActive()
     {
-        return (bool)$this->_getData('is_active');
+        return $this->getIsActive();
     }
 
     /**

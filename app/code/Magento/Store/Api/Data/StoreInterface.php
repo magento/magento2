@@ -73,6 +73,28 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setStoreGroupId($storeGroupId);
 
     /**
+     * @return int
+     */
+    public function getSortOrder();
+
+    /**
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
+     * @return bool
+     */
+    public function getIsActive();
+
+    /**
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive);
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Store\Api\Data\StoreExtensionInterface|null
