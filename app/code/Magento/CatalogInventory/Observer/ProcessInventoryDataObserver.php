@@ -74,7 +74,6 @@ class ProcessInventoryDataObserver implements ObserverInterface
                 $this->setStockDataToProduct($product, $stockItem, $quantityAndStockStatus);
             }
         }
-        $product->unsetData('quantity_and_stock_status');
     }
 
     /**
