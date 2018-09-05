@@ -219,7 +219,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
