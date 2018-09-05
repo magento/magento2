@@ -256,6 +256,9 @@
         "tinymce/tinymce": "3.4.7",
         "magento/module-tinymce-3": "*"
     },
+    "conflict": {
+        "gene/bluefoot": "*"
+    },
     "extra": {
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
