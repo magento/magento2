@@ -43,7 +43,7 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
 
     /**
      * Set user type
-     * @param int $operationCount
+     * @param int $userType
      * @return $this
      */
     public function setUserType($userType);
