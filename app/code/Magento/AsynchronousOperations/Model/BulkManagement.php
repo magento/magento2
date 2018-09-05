@@ -102,7 +102,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         // save bulk summary and related operations
         $connection->beginTransaction();
         $userType = $this->userContext->getUserType();
-        if (is_null($userType)) {
+        if ($userType === null) {
             $userType = UserContextInterface::USER_TYPE_ADMIN;
         }
         try {
