@@ -7,60 +7,66 @@
 namespace Magento\Rule\Model\Condition\Sql;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogWidget\Model\RuleFactory;
+use Magento\CatalogWidget\Model\Rule\Condition\Combine as CombineCondition;
+use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductCondition;
 
+/**
+ * Test for Magento\Rule\Model\Condition\Sql\Builder
+ */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder
+     * @var Builder
      */
     private $model;
 
     protected function setUp()
     {
-        $this->model = Bootstrap::getObjectManager()->create(\Magento\Rule\Model\Condition\Sql\Builder::class);
+        $this->model = Bootstrap::getObjectManager()->create(Builder::class);
     }
 
-    public function testAttachConditionToCollection()
+    /**
+     * @return void
+     */
+    public function testAttachConditionToCollection(): void
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory */
-        $collectionFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
-        );
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        /** @var ProductCollectionFactory $collectionFactory */
+        $collectionFactory = Bootstrap::getObjectManager()->create(ProductCollectionFactory::class);
         $collection = $collectionFactory->create();
 
-        /** @var \Magento\CatalogWidget\Model\RuleFactory $ruleFactory */
-        $ruleFactory = Bootstrap::getObjectManager()->create(\Magento\CatalogWidget\Model\RuleFactory::class);
-        /** @var \Magento\CatalogWidget\Model\Rule $rule */
+        /** @var RuleFactory $ruleFactory */
+        $ruleFactory = Bootstrap::getObjectManager()->create(RuleFactory::class);
         $rule = $ruleFactory->create();
 
         $ruleConditionArray = [
             'conditions' => [
                 '1' => [
-                    'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
+                    'type' => CombineCondition::class,
                     'aggregator' => 'all',
                     'value' => '1',
-                    'new_child' => ''
+                    'new_child' => '',
                 ],
                 '1--1' => [
-                    'type' => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
+                    'type' => ProductCondition::class,
                     'attribute' => 'category_ids',
                     'operator' => '==',
-                    'value' => '3'
+                    'value' => '3',
                 ],
                 '1--2' => [
-                    'type' => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
+                    'type' => ProductCondition::class,
                     'attribute' => 'special_to_date',
                     'operator' => '==',
-                    'value' => '2017-09-15'
+                    'value' => '2017-09-15',
                 ],
-            ]
+            ],
         ];
 
         $rule->loadPost($ruleConditionArray);
         $this->model->attachConditionToCollection($collection, $rule->getConditions());
 
-        $whereString = 'WHERE (category_id IN (\'3\')))) AND(IFNULL(`e`.`entity_id`, 0) = \'2017-09-15\') ))';
-        $this->assertNotFalse(strpos($collection->getSelectSql(true), $whereString));
+        $whereString = "/\(category_id IN \('3'\).+\(IFNULL\(`e`\.`entity_id`,.+\) = '2017-09-15'\)/";
+        $this->assertNotFalse(preg_match($whereString, $collection->getSelectSql(true)));
     }
 }

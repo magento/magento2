@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ApplyCartRuleOnStorefrontActionGroup">
+        <arguments>
+            <argument name="Product" defaultValue="_defaultProduct"/>
+            <argument name="Coupon" defaultValue="SimpleSalesRuleCoupon"/>
+        </arguments>
+        <amOnPage url="{{Product.name}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
+        <waitForText userInput="You added {{Product.name}} to your shopping cart." stepKey="waitForAddedBtn"/>
+        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{Coupon.code}}" stepKey="fillCouponCode" />
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForText userInput="You used coupon code" stepKey="waitForText"/>
+        <see userInput="You used coupon code" stepKey="assertText"/>
+    </actionGroup>
+</actionGroups>

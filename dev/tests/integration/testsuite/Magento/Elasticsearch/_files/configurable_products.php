@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/select_attribute.php';
 require __DIR__ . '/multiselect_attribute.php';
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_attribute.php';
+require __DIR__ . '/configurable_attribute.php';
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -45,7 +45,7 @@ foreach ($options as $option) {
         ->setId($productId)
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
-        ->setName('Configurable Option' . $option->getLabel())
+        ->setName('Configurable Option Product' . str_replace(' ', '', $option->getLabel()))
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
         ->setTestConfigurable($option->getValue())

@@ -204,6 +204,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->resultForwardMock, $this->controller->execute());
     }
 
+    /**
+     * @param $orderId
+     * @param $shipmentId
+     * @param $shipment
+     * @param $tracking
+     * @param $comeFrom
+     * @param $returnShipment
+     */
     protected function loadShipment($orderId, $shipmentId, $shipment, $tracking, $comeFrom, $returnShipment)
     {
         $valueMap = [

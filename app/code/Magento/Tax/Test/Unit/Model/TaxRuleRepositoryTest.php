@@ -168,6 +168,9 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($rule);
     }
 
+    /**
+     * @return array
+     */
     public function saveExceptionsDataProvider()
     {
         return [

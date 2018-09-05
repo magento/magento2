@@ -1,8 +1,9 @@
 require([
     'jquery',
     'Magento_Customer/js/customer-data',
+    'underscore',
     'domReady!'
-], function ($, customerData) {
+], function ($, customerData, _) {
     'use strict';
 
     var selectors = {
@@ -41,7 +42,7 @@ require([
         if (!(data && data.items && data.items.length && productId)) {
             return;
         }
-        product = data.items.find(function (item) {
+        product = _.find(data.items, function (item) {
             if (item['item_id'] === itemId) {
                 return item['product_id'] === productId ||
                     item['item_id'] === productId;

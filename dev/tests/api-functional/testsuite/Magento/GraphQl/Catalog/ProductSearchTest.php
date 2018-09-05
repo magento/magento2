@@ -512,6 +512,15 @@ QUERY;
           page_size
           current_page
         }
+        sort_fields 
+        {
+          default
+          options 
+          {
+            value
+            label
+          }
+        }
     }
 }
 QUERY;
@@ -530,6 +539,13 @@ QUERY;
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
+        $this->assertArrayHasKey('sort_fields', $response['products']);
+        $this->assertArrayHasKey('options', $response['products']['sort_fields']);
+        $this->assertArrayHasKey('default', $response['products']['sort_fields']);
+        $this->assertEquals('position', $response['products']['sort_fields']['default']);
+        $this->assertArrayHasKey('value', $response['products']['sort_fields']['options'][0]);
+        $this->assertArrayHasKey('label', $response['products']['sort_fields']['options'][0]);
+        $this->assertEquals('position', $response['products']['sort_fields']['options'][0]['value']);
     }
 
     /**
@@ -663,7 +679,7 @@ QUERY;
   products(
         filter:
         {
-            category_ids:{eq:"{$queryCategoryId}"}
+            category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
             
@@ -1264,31 +1280,6 @@ QUERY;
                     'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
-            );
-        }
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields(array $actualResponse, array $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
             );
         }
     }

@@ -69,6 +69,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (isset($data['id'])) {
             $this->setId($data['id']);
         }
+        if (isset($data[self::EXTENSION_ATTRIBUTES_KEY]) && is_array($data[self::EXTENSION_ATTRIBUTES_KEY])) {
+            $this->populateExtensionAttributes($data[self::EXTENSION_ATTRIBUTES_KEY]);
+        }
     }
 
     /**
@@ -151,9 +154,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     public function getCustomAttribute($attributeCode)
     {
         $this->initializeCustomAttributes();
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
-            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
-            : null;
+        return $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] ?? null;
     }
 
     /**
@@ -338,7 +339,22 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     protected function _getExtensionAttributes()
     {
+        if (!$this->getData(self::EXTENSION_ATTRIBUTES_KEY)) {
+            $this->populateExtensionAttributes([]);
+        }
         return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * Instantiate extension attributes object and populate it with the provided data.
+     *
+     * @param array $extensionAttributesData
+     * @return void
+     */
+    private function populateExtensionAttributes(array $extensionAttributesData = [])
+    {
+        $extensionAttributes = $this->extensionAttributesFactory->create(get_class($this), $extensionAttributesData);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**

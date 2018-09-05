@@ -53,6 +53,10 @@ class Create implements ProcessorInterface
     /**
      * The event manager.
      *
+     * @deprecated logic moved inside of "afterSave" method
+     *             \Magento\Store\Model\Website::afterSave
+     *             \Magento\Store\Model\Group::afterSave
+     *             \Magento\Store\Model\Store::afterSave
      * @var ManagerInterface
      */
     private $eventManager;
@@ -182,8 +186,6 @@ class Create implements ProcessorInterface
                 $group->setDefaultStoreId($store->getStoreId());
                 $group->setWebsite($website);
                 $group->getResource()->save($group);
-
-                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
             });
         }
     }

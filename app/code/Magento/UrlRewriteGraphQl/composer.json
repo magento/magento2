@@ -7,7 +7,6 @@
         "magento/framework": "*",
         "magento/module-url-rewrite": "*",
         "magento/module-store": "*"
-
     },
     "suggest": {
         "magento/module-graph-ql": "*"

@@ -11,11 +11,14 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdvancedSampleTest">
         <annotations>
+            <features value="SampleTests"/>
             <title value=""/>
             <description value=""/>
             <severity value="CRITICAL"/>
             <testCaseId value="#"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SamplePerson" stepKey="beforeData"/>
