@@ -45,6 +45,7 @@ class Index extends Action
         ) {
             return;
         }
+            
         $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
         $this->getResponse()->setBody(
             $this->productMetadata->getName() . '/' .
