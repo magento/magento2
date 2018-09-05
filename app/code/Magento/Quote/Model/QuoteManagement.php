@@ -594,5 +594,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
         }
+
+        if (!$billing->getCustomerAddressId() && $shippingAddress) {
+            $billing->setCustomerAddressId($shippingAddress->getId());
+        }
+
     }
 }
