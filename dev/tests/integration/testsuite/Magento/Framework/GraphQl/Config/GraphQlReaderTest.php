@@ -196,7 +196,7 @@ QUERY;
                 'Missing type in the response'
             );
         }
-        //Checks to make sure that the the given description exists in the expectedOutput array
+        //Checks to make sure that the given description exists in the expectedOutput array
         $this->assertTrue(
             array_key_exists(
                 array_search(
