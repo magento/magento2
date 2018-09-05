@@ -40,6 +40,7 @@ QUERY;
 
         self::assertArrayHasKey('small_image_url', $response['products']['items'][0]);
         self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image_url']);
+        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image_url']));
     }
 
     /**
@@ -61,8 +62,24 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-
         self::assertArrayHasKey('small_image_url', $response['products']['items'][0]);
         self::assertContains('placeholder/small_image.jpg', $response['products']['items'][0]['small_image_url']);
+        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image_url']));
+    }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    private function checkImageExists(string $url): bool
+    {
+        $connection = curl_init($url);
+        curl_setopt($connection, CURLOPT_HEADER, true);
+        curl_setopt($connection, CURLOPT_NOBODY, true);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_exec($connection);
+        $responseStatus = curl_getinfo($connection, CURLINFO_HTTP_CODE);
+
+        return $responseStatus === 200 ? true : false;
     }
 }
