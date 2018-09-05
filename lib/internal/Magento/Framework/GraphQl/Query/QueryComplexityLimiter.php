@@ -16,6 +16,8 @@ use GraphQL\Validator\Rules\QueryComplexity;
  * Sets limits for query complexity. A single GraphQL query can potentially
  * generate thousands of database operations so, the very complex queries
  * should be filtered and rejected.
+ *
+ * https://github.com/webonyx/graphql-php/blob/master/docs/security.md#query-complexity-analysis
  */
 class QueryComplexityLimiter
 {
@@ -42,15 +44,15 @@ class QueryComplexityLimiter
     }
 
     /**
-     * @param bool $disableIntrospection
+     * @param bool $developerMode
      */
-    public function execute(bool $disableIntrospection = false): void
+    public function execute(bool $developerMode = false): void
     {
-        DocumentValidator::addRule(new QueryDepth($this->queryDepth));
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
 
-        if ($disableIntrospection) {
+        if (!$developerMode) {
             DocumentValidator::addRule(new DisableIntrospection());
+            DocumentValidator::addRule(new QueryDepth($this->queryDepth));
         }
     }
 }

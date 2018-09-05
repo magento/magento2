@@ -24,7 +24,7 @@ class QueryProcessor
     /**
      * @var QueryComplexityLimiter
      */
-    protected $queryComplexityLimiter;
+    private $queryComplexityLimiter;
 
     /**
      * @param ExceptionFormatter $exceptionFormatter
@@ -55,8 +55,8 @@ class QueryProcessor
         array $variableValues = null,
         string $operationName = null
     ) : array {
-        $disableIntrospection = !$this->exceptionFormatter->shouldShowDetail();
-        $this->queryComplexityLimiter->execute($disableIntrospection);
+        $developerMode = !$this->exceptionFormatter->shouldShowDetail();
+        $this->queryComplexityLimiter->execute($developerMode);
 
         $rootValue = null;
         return \GraphQL\GraphQL::executeQuery(
