@@ -15,4 +15,18 @@
             </skip>
         </annotations>
     </test>
+    <test name="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1597"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1597"/>
+            </skip>
+        </annotations>
+    </test>
 </tests>
