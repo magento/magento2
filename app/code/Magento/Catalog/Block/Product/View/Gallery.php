@@ -250,6 +250,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         if ($this->getVar("gallery/fullscreen/loop")) {
             $fsOptionItems['loop'] = filter_var($this->getVar("gallery/fullscreen/loop"), FILTER_VALIDATE_BOOLEAN);
         }
+        if ($this->getVar("gallery/fullscreen/keyboard")) {
+            $fsOptionItems['keyboard'] = filter_var($this->getVar("gallery/fullscreen/keyboard"), FILTER_VALIDATE_BOOLEAN);
+        }
         if ($this->getVar("gallery/fullscreen/arrows")) {
             $fsOptionItems['arrows'] = filter_var($this->getVar("gallery/fullscreen/arrows"), FILTER_VALIDATE_BOOLEAN);
         }
@@ -270,6 +273,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         if ($this->getVar("gallery/fullscreen/navtype")) {
             $fsOptionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navtype"));
+        }
+        if ($this->getVar("gallery/fullscreen/thumbmargin")) {
+            $fsOptionItems['thumbmargin'] = filter_var($this->getVar("gallery/fullscreen/thumbmargin"), FILTER_VALIDATE_INT);
         }
         if ($this->getVar("gallery/fullscreen/transition/effect")) {
             $fsOptionItems['transition'] = $this->escapeHtml($this->getVar("gallery/fullscreen/transition/effect"));

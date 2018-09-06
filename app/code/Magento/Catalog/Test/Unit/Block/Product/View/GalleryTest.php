@@ -374,11 +374,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $configMap = [
             ['Magento_Catalog', 'gallery/fullscreen/nav', 'false'],
             ['Magento_Catalog', 'gallery/fullscreen/loop', 'true'],
+            ['Magento_Catalog', 'gallery/fullscreen/keyboard', 'false'],
             ['Magento_Catalog', 'gallery/fullscreen/arrows', 'false'],
             ['Magento_Catalog', 'gallery/fullscreen/caption', 'true'],
             ['Magento_Catalog', 'gallery/fullscreen/navdir', 'vertical'],
             ['Magento_Catalog', 'gallery/fullscreen/navarrows', 'false'],
             ['Magento_Catalog', 'gallery/fullscreen/navtype', 'thumbs'],
+            ['Magento_Catalog', 'gallery/fullscreen/thumbmargin', '10'],
             ['Magento_Catalog', 'gallery/fullscreen/transition/effect', 'dissolve'],
             ['Magento_Catalog', 'gallery/fullscreen/transition/duration', '300']
         ];
@@ -396,9 +398,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         
         $this->assertEquals(true, $decodedJson['loop']);
         $this->assertEquals(false, $decodedJson['arrows']);
+        $this->assertEquals(false, $decodedJson['keyboard']);
         $this->assertEquals(true, $decodedJson['showCaption']);
         $this->assertEquals('vertical', $decodedJson['navdir']);
         $this->assertEquals(false, $decodedJson['navarrows']);
+        $this->assertEquals(10, $decodedJson['thumbmargin']);
         $this->assertEquals('thumbs', $decodedJson['navtype']);
         $this->assertEquals('dissolve', $decodedJson['transition']);
         $this->assertEquals(300, $decodedJson['transitionduration']);
