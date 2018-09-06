@@ -94,7 +94,7 @@ class FieldTypeTest extends \PHPUnit\Framework\TestCase
             ['attr1', 'static', 'select', 'integer'],
             ['attr1', 'static', 'text', 'text'],
             ['attr1', 'timestamp', 'select', 'date'],
-            ['attr1', 'datetime', 'text', 'date'],
+            ['attr1', 'datetime', 'text', 'text'],
             ['attr1', 'int', 'select', 'integer'],
             ['attr1', 'decimal', 'text', 'float'],
             ['attr1', 'varchar', 'select', 'text'],
