@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderItemsOrderedSection">
         <element name="itemProductName" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-title" parameterized="true"/>
         <element name="itemProductSku" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-sku-block" parameterized="true"/>

@@ -6,10 +6,11 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminApplyTierPriceToProductTest">
         <annotations>
-            <features value="Apply tier price to a product"/>
+            <features value="Catalog"/>
+            <stories value="Apply tier price to a product"/>
             <title value="You should be able to apply tier price to a product."/>
             <description value="You should be able to apply tier price to a product."/>
             <severity value="CRITICAL"/>
