@@ -8,7 +8,9 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
     .controller('installExtensionGridController', ['$scope', '$http', '$localStorage', 'authService', 'paginationService', 'multipleChoiceService',
         function ($scope, $http, $localStorage, authService, paginationService, multipleChoiceService) {
 
-            $http.get('index.php/installExtensionGrid/extensions').success(function(data) {
+            $http.get('index.php/installExtensionGrid/extensions').then(function successCallback(resp) {
+                var data = resp.data;
+
                 $scope.error = false;
                 $scope.errorMessage = '';
                 $scope.multipleChoiceService = multipleChoiceService;

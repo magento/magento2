@@ -9,7 +9,9 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
         function ($scope, $http, $localStorage, titleService, authService, paginationService, multipleChoiceService) {
             $scope.isHiddenSpinner = false;
 
-            $http.get('index.php/updateExtensionGrid/extensions').success(function(data) {
+            $http.get('index.php/updateExtensionGrid/extensions').then(function successCallback(resp) {
+                var data = resp.data;
+
                 $scope.error = false;
                 $scope.errorMessage = '';
                 $scope.extensionsVersions = {};
@@ -36,7 +38,7 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
 
             $scope.predicate = 'name';
             $scope.reverse = false;
-            $scope.order = function(predicate) {
+            $scope.order = function (predicate) {
                 $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                 $scope.predicate = predicate;
             };
