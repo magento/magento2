@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Block\Product\View\Options\View;
+namespace Magento\Catalog\Block\Product\View\Options\Type\Select;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Block\Product\View\Options\AbstractOptions;

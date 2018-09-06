@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Block\Product\View\Options\View;
+namespace Magento\Catalog\Block\Product\View\Options\Type\Select;
 
 use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
 use Magento\Catalog\Model\Product\Option;

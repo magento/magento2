@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Block\Product\View\Options\Type;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Block\Product\View\Options\View\CheckableFactory;
-use Magento\Catalog\Block\Product\View\Options\View\MultipleFactory;
+use Magento\Catalog\Block\Product\View\Options\Type\Select\CheckableFactory;
+use Magento\Catalog\Block\Product\View\Options\Type\Select\MultipleFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\Pricing\Helper\Data;
