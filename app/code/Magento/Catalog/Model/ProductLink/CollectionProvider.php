@@ -47,22 +47,20 @@ class CollectionProvider
 
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
-        $output = [];
         $sorterItems = [];
         foreach ($products as $item) {
-            $output[$item->getId()] = $converter->convert($item);
+            $itemId = $item->getId();
+            $sorterItems[$itemId] = $converter->convert($item);
+            $sorterItems[$itemId]['position'] = $sorterItems[$itemId]['position'] ?? 0;
         }
 
-        foreach ($output as $item) {
-            $itemPosition = $item['position'];
-            if (!isset($sorterItems[$itemPosition])) {
-                $sorterItems[$itemPosition] = $item;
-            } else {
-                $newPosition = $itemPosition + 1;
-                $sorterItems[$newPosition] = $item;
-            }
-        }
-        ksort($sorterItems);
+        usort($sorterItems, function ($itemA, $itemB) {
+            $posA = intval($itemA['position']);
+            $posB = intval($itemB['position']);
+
+            return $posA <=> $posB;
+        });
+
         return $sorterItems;
     }
 }
