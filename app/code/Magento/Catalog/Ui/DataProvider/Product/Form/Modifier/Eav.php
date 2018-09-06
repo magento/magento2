@@ -854,7 +854,7 @@ class Eav extends AbstractModifier
     {
         $valueMap = $this->formElementMapper->getMappings();
 
-        return isset($valueMap[$value]) ? $valueMap[$value] : $value;
+        return $valueMap[$value] ?? $value;
     }
 
     /**
