@@ -115,7 +115,7 @@
         <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logout"/>
 
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
