@@ -200,21 +200,10 @@ class ImageUploader
     {
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
-        
+
         $baseImagePath = $this->getFilePath($basePath, $imageName);
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
-        
-        $destinationFileAbsolutePath = $this->mediaDirectory->getAbsolutePath($baseImagePath);
-        $fileInfo = pathinfo($destinationFileAbsolutePath);
-        if (file_exists($destinationFileAbsolutePath)) {
-            $index = 1;
-            $imageName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $imageName)) {
-                $imageName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }            
-            $baseImagePath = $this->getFilePath($basePath, $imageName);
-        }           
+
         try {
             $this->coreFileStorageDatabase->copyFile(
                 $baseTmpImagePath,
@@ -233,7 +222,7 @@ class ImageUploader
         return $imageName;
     }
 
-        /**
+    /**
      * Checking file for save and save it to tmp dir
      *
      * @param string $fileId
@@ -244,7 +233,7 @@ class ImageUploader
      */
     public function saveFileToTmpDir($fileId)
     {
-        $baseTmpPath = $this->getBaseTmpPath();        
+        $baseTmpPath = $this->getBaseTmpPath();
 
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
@@ -252,8 +241,8 @@ class ImageUploader
         $uploader->setAllowRenameFiles(true);
         if (!$uploader->checkMimeType($this->allowedMimeTypes)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('File validation failed.'));
-        }                         
-        $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));              
+        }
+        $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
         unset($result['path']);
 
         if (!$result) {
