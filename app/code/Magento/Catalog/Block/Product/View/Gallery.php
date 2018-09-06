@@ -147,7 +147,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param string $key
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function convertBooleans(&$item, $key)
+    protected static function convertBooleans(&$item, $key)
     {
         if (strtolower($item) == 'true') {
             $item = true;
