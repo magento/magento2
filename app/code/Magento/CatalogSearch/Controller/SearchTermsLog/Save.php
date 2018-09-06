@@ -15,8 +15,8 @@ use Magento\Framework\Controller\Result\Json;
 
 /**
  * Controller for save search terms
- * @deprecated
- * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Save extends \Magento\Framework\App\Action\Action
 {

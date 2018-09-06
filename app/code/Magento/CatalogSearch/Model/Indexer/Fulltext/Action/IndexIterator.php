@@ -15,8 +15,8 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @api
  * @since 100.0.3
  *
- * @deprecated
- * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class IndexIterator implements \Iterator
 {

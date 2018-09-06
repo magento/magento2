@@ -12,8 +12,8 @@ use Magento\Framework\Search\Request\Dimension;
  * Implementation of IndexScopeResolverInterface which resolves index scope dynamically
  * depending on current scope state
  *
- * @deprecated
- * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {
