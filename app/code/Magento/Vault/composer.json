@@ -13,7 +13,7 @@
         "magento/module-theme": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.2.3",
+    "version": "100.2.4",
     "license": [
         "proprietary"
     ],
