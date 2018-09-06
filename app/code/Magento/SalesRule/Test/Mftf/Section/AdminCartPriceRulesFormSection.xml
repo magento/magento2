@@ -23,5 +23,8 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+
+        <!-- Manage Coupon Codes sub-form -->
+        <element name="successMessage" type="text" selector="div.message.message-success.success"/>
     </section>
 </sections>
