@@ -1,7 +1,5 @@
 <?php
 /**
- * Product initialization helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -38,8 +36,12 @@ class ProcessTaxAttribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitializeFromData(Helper $subject, Product $result, Product $product, array $productData)
-    {
+    public function afterInitializeFromData(
+        Helper $subject,
+        Product $result,
+        Product $product,
+        array $productData
+    ): Product {
         $attributes = $result->getAttributes();
         if (!empty($attributes)) {
             foreach ($attributes as $attribute) {
