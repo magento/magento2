@@ -141,7 +141,6 @@ class CustomAttributeFilter
     {
         return [
             sprintf('`%s`.`entity_id` = `%s`.`entity_id`', $mainTable, $joinTable),
-            sprintf('`%s`.`source_id` = `%s`.`source_id`', $mainTable, $joinTable),
             $this->conditionManager->generateCondition(
                 sprintf('%s.attribute_id', $joinTable),
                 '=',
