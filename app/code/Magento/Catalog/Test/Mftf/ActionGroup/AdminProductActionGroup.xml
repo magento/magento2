@@ -182,7 +182,7 @@
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad stepKey="waitForPageOpened1"/>
+        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
     </actionGroup>
 
     <actionGroup name="ProductSetAdvancedPricing">
@@ -205,7 +205,7 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <waitForPageLoad stepKey="WaitForProductSave"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
-        <waitForPageLoad stepKey="WaitForProductSave1"/>
+        <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 

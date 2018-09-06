@@ -12,7 +12,7 @@
             <argument name="product" defaultValue="product"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
+        <waitForPageLoad time="60" stepKey="waitForProductsPageToLoad"/>
         <click selector="{{AdminProductFiltersSection.filtersButton}}" stepKey="openFiltersSectionOnProductsPage"/>
         <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <fillField userInput="{{product.sku}}" selector="{{AdminProductFiltersSection.skuInput}}" stepKey="fillSkuFieldOnFiltersSection"/>
