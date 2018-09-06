@@ -31,7 +31,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id'])) {
                     if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
                         continue;
                     }
