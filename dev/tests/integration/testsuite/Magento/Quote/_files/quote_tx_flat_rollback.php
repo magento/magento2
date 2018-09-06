@@ -10,6 +10,8 @@ use Magento\Quote\Model\Quote;
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var Quote $quote */
-$quoteRepository = $objectManager->create(Quote::class);
-$quoteRepository->load('quote123', 'reserved_order_id');
-$quoteRepository->delete();
+$quote = $objectManager->create(Quote::class);
+$quote->load('quote123', 'reserved_order_id');
+if ($quote->getId()) {
+    $quote->delete();
+}

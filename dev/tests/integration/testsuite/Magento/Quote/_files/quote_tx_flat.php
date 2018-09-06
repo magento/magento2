@@ -11,7 +11,6 @@ use Magento\Quote\Model\QuoteRepository;
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
-/** @var \Magento\Quote\Model\Quote $quote */
 /** @var Quote $quote */
 $quote = $objectManager->create(Quote::class);
 
