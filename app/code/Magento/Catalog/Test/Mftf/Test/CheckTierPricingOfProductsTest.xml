@@ -34,9 +34,10 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
-        <!--Login as admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
         <!--Create website, Sore adn Store View-->
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
             <argument name="newWebsiteName" value="secondWebsite"/>
@@ -316,6 +317,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
                 <argument name="ruleName" value="ship"/>
             </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>
 </tests>
