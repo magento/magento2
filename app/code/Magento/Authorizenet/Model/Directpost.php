@@ -27,7 +27,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
+    protected $_infoBlockType = \Magento\Authorizenet\Block\Adminhtml\Order\View\Info\PaymentDetails::class;
 
     /**
      * Payment Method feature
@@ -626,6 +626,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $payment->setIsTransactionPending(true)
                 ->setIsFraudDetected(true);
         }
+
+        $additionalInformationKeys = explode(',', $this->getValue('paymentInfoKeys'));
+        foreach ($additionalInformationKeys as $paymentInfoKey) {
+            $paymentInfoValue = $response->getDataByKey($paymentInfoKey);
+            if($paymentInfoValue !== null) {
+                $payment->setAdditionalInformation($paymentInfoKey, $paymentInfoValue);
+            }
+        }
     }
 
     /**
@@ -918,7 +926,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $payment->setIsTransactionDenied(true);
         }
         $this->addStatusCommentOnUpdate($payment, $response, $transactionId);
-        return [];
+        return $response->getData();
     }
 
     /**

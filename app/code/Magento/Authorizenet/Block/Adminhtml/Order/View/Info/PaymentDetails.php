@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
+
+use Magento\Framework\Phrase;
+use Magento\Payment\Block\ConfigurableInfo;
+
+/**
+ * Payment information block for Authorize.net payment method
+ */
+class PaymentDetails extends ConfigurableInfo
+{
+    /**
+     * Returns localized label for payment info block
+     *
+     * @param string $field
+     * @return string | Phrase
+     */
+    protected function getLabel($field)
+    {
+        return __($field);
+    }
+}
