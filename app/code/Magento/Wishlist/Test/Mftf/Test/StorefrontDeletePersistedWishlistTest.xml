@@ -6,7 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontDeletePersistedWishlistTest">
         <annotations>
             <features value="Wishlist"/>
@@ -14,8 +14,11 @@
             <title value="Customer should be able to delete a persistent wishlist"/>
             <description value="Customer should be able to delete a persistent wishlist"/>
             <group value="wishlist"/>
-            <!-- MQE-1145 -->
             <group value="skip"/>
+            <skip>
+                <issueId value="MQE-1145"/>
+            </skip>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>
