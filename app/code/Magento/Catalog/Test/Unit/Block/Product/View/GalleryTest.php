@@ -360,7 +360,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('horizontal', $decodedJson['navdir']);
         $this->assertEquals(true, $decodedJson['navarrows']);
         $this->assertEquals('slides', $decodedJson['navtype']);
-        $this->assertEquals(5, $decodedJson['thumbmargin']);     
+        $this->assertEquals(5, $decodedJson['thumbmargin']);
         $this->assertEquals('slide', $decodedJson['transition']);
         $this->assertEquals(500, $decodedJson['transitionduration']);
         $this->assertEquals(100, $decodedJson['height']);
@@ -406,5 +406,5 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('thumbs', $decodedJson['navtype']);
         $this->assertEquals('dissolve', $decodedJson['transition']);
         $this->assertEquals(300, $decodedJson['transitionduration']);
-    }    
+    }
 }
