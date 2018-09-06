@@ -41,10 +41,10 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->addCountryRegions($setup, 'IN', $this->getDataForCroatia());
+            $this->addCountryRegions($setup, 'HR', $this->getDataForCroatia());
         }
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->addCountryRegions($setup, 'HR', $this->getDataForIndia());
+            $this->addCountryRegions($setup, 'IN', $this->getDataForIndia());
         }
     }
 
