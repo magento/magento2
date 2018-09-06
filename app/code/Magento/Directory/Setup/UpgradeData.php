@@ -148,5 +148,20 @@ class UpgradeData implements UpgradeDataInterface
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $name];
             $setup->getConnection()->insert($setup->getTable('directory_country_region_name'), $bind);
         }
+
+        /**
+         * Upgrade core_config_data general/region/state_required field.
+         */
+        $setup->getConnection()->update(
+            $setup->getTable('core_config_data'),
+            [
+                'value' => new \Zend_Db_Expr("CONCAT(value, '," . $countryId . "')")
+            ],
+            [
+                'scope="default"',
+                'scope_id=0',
+                'path=?' => Data::XML_PATH_STATES_REQUIRED
+            ]
+        );
     }
 }

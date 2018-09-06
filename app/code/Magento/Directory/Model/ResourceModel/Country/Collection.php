@@ -64,8 +64,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $allowedCountriesReader;
 
     /**
-     * @deprecated
-     *
      * @var string[]
      * @since 100.1.0
      */
