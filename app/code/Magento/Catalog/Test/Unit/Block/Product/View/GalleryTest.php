@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
