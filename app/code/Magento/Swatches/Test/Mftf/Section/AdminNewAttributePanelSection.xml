@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewAttributePanel">
         <element name="addVisualSwatchOption" type="button" selector="button#add_new_swatch_visual_option_button"/>
         <element name="addTextSwatchOption" type="button" selector="button#add_new_swatch_text_option_button"/>
