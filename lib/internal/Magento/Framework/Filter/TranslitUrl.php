@@ -23,6 +23,7 @@ class TranslitUrl extends Translit
         $string = preg_replace('#[^0-9a-z_\/]+#i', '-', parent::filter($string));
         $string = strtolower($string);
         $string = trim($string, '-');
+        $string = trim($string, '/');
 
         return $string;
     }
