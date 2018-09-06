@@ -6,12 +6,13 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add video in Admin Product page -->
     <actionGroup name="addProductVideo">
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="waitForAddVideoButtonVisible" time="30"/>
         <click selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="addVideo"/>
@@ -27,6 +28,7 @@
 
     <!-- Remove video in Admin Product page -->
     <actionGroup name="removeProductVideo">
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="waitForAddVideoButtonVisible" time="30"/>
         <click selector="{{AdminProductImagesSection.removeVideoButton}}" stepKey="removeVideo"/>
@@ -37,6 +39,7 @@
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeElement selector="{{AdminProductImagesSection.videoTitleText(video.videoShortTitle)}}" stepKey="seeVideoTitle"/>
@@ -48,6 +51,7 @@
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <dontSeeElement selector="{{AdminProductImagesSection.videoTitleText(video.videoShortTitle)}}" stepKey="seeVideoTitle"/>
