@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
