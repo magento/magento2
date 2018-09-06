@@ -44,8 +44,8 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
 
         $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' .
             $this->getUrl(
-                    '*/*/markAsRead/',
-                    ['_current' => true, 'id' => $row->getId()]
+                '*/*/markAsRead/',
+                ['_current' => true, 'id' => $row->getId()]
             ) . '">' . __(
                 'Mark as Read'
             ) . '</a>' : '';
@@ -55,14 +55,14 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
             '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
             $readDetailsHtml,
             $markAsReadHtml,
-                $this->getUrl(
-                    '*/*/remove/',
-                    [
-                        '_current' => true,
-                        'id' => $row->getId(),
-                        \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
-                    ]
-                ),
+            $this->getUrl(
+                '*/*/remove/',
+                [
+                    '_current' => true,
+                    'id' => $row->getId(),
+                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
+                ]
+            ),
             __('Are you sure?'),
             __('Remove')
         );
