@@ -414,7 +414,15 @@ define([
             };
 
         $(function () {
-            var editForm = $('#edit_form');
+            var editForm = $('#edit_form'),
+                swatchVisualPanel = $('#swatch-visual-options-panel'),
+                swatchTextPanel = $('#swatch-text-options-panel'),
+                activePanel,
+                formContent = $(),
+                optionTable;
+
+            activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
+            optionTable = activePanel.find('table');
 
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
@@ -430,16 +438,11 @@ define([
                 .collapsable()
                 .collapse('hide');
 
-            editForm.on('submit', function () {
-                var activePanel,
-                    swatchValues = [],
-                    swatchVisualPanel = $('#swatch-visual-options-panel'),
-                    swatchTextPanel = $('#swatch-text-options-panel');
+            editForm.on('beforeSubmit', function () {
+                var swatchValues = [];
 
-                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
-
-                activePanel
-                    .find('table input')
+                optionTable
+                    .find('input')
                     .each(function () {
                         swatchValues.push(this.name + '=' + $(this).val());
                     });
@@ -452,10 +455,16 @@ define([
                     .val(JSON.stringify(swatchValues))
                     .prependTo(editForm);
 
+                formContent = optionTable.clone(true);
+
                 [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
                     $(el).find('table')
                         .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
                 });
+            });
+
+            editForm.on('afterValidate.error', function () {
+                optionTable.replaceWith(formContent);
             });
         });
 

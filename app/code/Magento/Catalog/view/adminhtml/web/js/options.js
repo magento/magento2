@@ -145,7 +145,9 @@ define([
 
                     return optionDefaultInputType;
                 }
-            };
+            },
+            formContent = jQuery(),
+            optionTable = optionPanel.find('table');
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
@@ -180,7 +182,7 @@ define([
                 });
             });
         }
-        editForm.on('submit', function () {
+        editForm.on('beforeSubmit', function () {
             optionPanel.find('input')
                 .each(function () {
                     if (this.disabled) {
@@ -202,8 +204,12 @@ define([
                 })
                 .val(JSON.stringify(optionsValues))
                 .prependTo(editForm);
-            optionPanel.find('table')
+            formContent = optionTable.clone(true);
+            optionTable
                 .replaceWith(jQuery('<div>').text(jQuery.mage.__('Sending attribute values as package.')));
+        });
+        editForm.on('afterValidate.error', function () {
+            optionTable.replaceWith(formContent);
         });
         window.attributeOption = attributeOption;
         window.optionDefaultInputType = attributeOption.getOptionInputType();
