@@ -98,7 +98,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())
             ->method('getRegistry')
             ->willReturn($this->registry);
-        
+
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
@@ -111,7 +111,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->viewConfig->expects($this->any())
             ->method('getViewConfig')
             ->willReturn($this->configView);
@@ -305,7 +305,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
 
         return $collectionMock;
     }
-    
+
     public function testGalleryOptions()
     {
         $configMap = [
@@ -322,7 +322,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ['Magento_Catalog', 'gallery/transition/effect', 'slide'],
             ['Magento_Catalog', 'gallery/transition/duration', '500'],
         ];
-        
+
         $mediaAttributesMap = [
             [
                 'Magento_Catalog',
@@ -343,7 +343,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
         ];
-        
+
         $this->configView->expects($this->any())
             ->method('getVarValue')
             ->will($this->returnValueMap($configMap));
@@ -371,7 +371,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(300, $decodedJson['thumbheight']);
         $this->assertEquals(400, $decodedJson['thumbwidth']);
     }
-    
+
     public function testGalleryFSOptions()
     {
         $configMap = [
@@ -387,7 +387,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ['Magento_Catalog', 'gallery/fullscreen/transition/effect', 'dissolve'],
             ['Magento_Catalog', 'gallery/fullscreen/transition/duration', '300']
         ];
-        
+
         $this->configView->expects($this->any())
             ->method('getVarValue')
             ->will($this->returnValueMap($configMap));
@@ -398,7 +398,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         //Note, this tests the special case for nav variable set to false. It
         //Should not be converted to boolean.
         $this->assertEquals('false', $decodedJson['nav']);
-        
+
         $this->assertEquals(true, $decodedJson['loop']);
         $this->assertEquals(false, $decodedJson['arrows']);
         $this->assertEquals(false, $decodedJson['keyboard']);
