@@ -1053,6 +1053,21 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Processing object before save data
+     *
+     * @return $this
+     */
+    public function beforeSave() {
+        // Need to use attribute set or future updates can cause data loss
+        if (!$this->getAttributeSetId()) {
+            $this->setAttributeSetId(
+                CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+            );
+        }
+        return parent::beforeSave();
+    }
+
+    /**
      * Processing object after save data
      *
      * @return $this
