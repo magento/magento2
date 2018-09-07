@@ -62,6 +62,9 @@ class AnchorUrlRewriteGenerator
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
                     $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
+                    if ($anchorCategory->getParentId() == \Magento\Catalog\Model\Category::TREE_ROOT_ID) {
+                        continue;
+                    }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($product->getId())

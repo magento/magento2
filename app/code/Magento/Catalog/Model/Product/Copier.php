@@ -78,7 +78,8 @@ class Copier
             $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
-            $duplicate->setUrlKey($urlKey);
+            $duplicate->setUrlKey($urlKey)
+                ->setUrlPath(null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
