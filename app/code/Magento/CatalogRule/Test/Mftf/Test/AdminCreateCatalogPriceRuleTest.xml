@@ -102,6 +102,7 @@
             <description value="Admin should be able to create a catalog price rule adjust final price to this percentage (for simple product)"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-69"/>
+            <group value="CatalogRule"/>
             <skip>
                 <issueId value="DEVOPS-3618"/>
             </skip>
