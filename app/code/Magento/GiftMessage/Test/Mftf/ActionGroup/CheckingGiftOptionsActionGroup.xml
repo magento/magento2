@@ -7,11 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="CheckingGiftOptionsActionGroup">
-        <click stepKey="clickOnCheckoutWithMultipleAddresses" selector="{{StoreFrontShoppingCartSection.checkoutWithMultipleAddresses}}"/>
-        <waitForPageLoad stepKey="waitForShipToMultipleAddresses"/>
-        <click stepKey="goToShippingInformation" selector="{{StoreFrontShoppingCartSection.goToShippingInformation}}"/>
+        <click stepKey="clickOnCheckoutWithMultipleAddresses" selector="{{MultishippingSection.checkoutWithMultipleAddresses}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click stepKey="goToShippingInformation" selector="{{AdminShipmentAddressInformationSection.goToShippingInformation}}"/>
         <waitForPageLoad stepKey="waitForGiftOption"/>
         <click stepKey="thickAddGiftOptions" selector="{{GiftOptionsOnFrontSection.giftOptionCheckbox}}"/>
         <waitForPageLoad stepKey="waitForOptions"/>

@@ -7,15 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="ConfigAllowGiftWrappingForOrderItemsOnly" type="gift_options_config_state">
-        <requiredEntity type="wrapping_allow_order">wrappingAllowOrder</requiredEntity>
-        <requiredEntity type="allow_gift_receipt">allowGiftReceipt</requiredEntity>
-        <requiredEntity type="allow_printed_card">allowPrintedCard</requiredEntity>
-    </entity>
-    <entity name="wrappingAllowOrder" type="wrapping_allow_order">
-        <data key="value">0</data>
-    </entity>
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <entity name="allowGiftReceipt" type="allow_gift_receipt">
         <data key="value">0</data>
     </entity>
@@ -27,9 +19,6 @@
         <requiredEntity type="wrapping_allow_order">defaultWrappingAllowOrder</requiredEntity>
         <requiredEntity type="allow_gift_receipt">defaultAllowGiftReceipt</requiredEntity>
         <requiredEntity type="allow_printed_card">defaultAllowPrintedCard</requiredEntity>
-    </entity>
-    <entity name="defaultWrappingAllowOrder" type="wrapping_allow_order">
-        <data key="value">1</data>
     </entity>
     <entity name="defaultAllowGiftReceipt" type="allow_gift_receipt">
         <data key="value">1</data>

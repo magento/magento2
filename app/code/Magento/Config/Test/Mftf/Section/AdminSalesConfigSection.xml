@@ -10,18 +10,8 @@
         <element name="enableMAPUseSystemValue" type="checkbox" selector="#sales_msrp_enabled_inherit"/>
         <element name="enableMAPSelect" type="select" selector="#sales_msrp_enabled"/>
         <element name="giftOptions" type="select" selector="#sales_gift_options-head"/>
-        <element name="allowGiftWrappingOnOrderLevel" type="select" selector="#sales_gift_options_wrapping_allow_order"/>
-        <element name="levelNo" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_order']//option[text()='No']"/>
-        <element name="levelYes" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_order']//option[text()='Yes']"/>
-        <element name="allowGiftWrappingForOrderItems" type="select" selector="#sales_gift_options_wrapping_allow_items"/>
-        <element name="itemsNo" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_items']//option[text()='No']"/>
-        <element name="itemsYes" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_items']//option[text()='Yes']"/>
         <element name="allowGiftReceipt" type="select" selector="#sales_gift_options_allow_gift_receipt"/>
-        <element name="receiptNo" type="select" selector="//select[@id='sales_gift_options_allow_gift_receipt']//option[text()='No']"/>
-        <element name="receiptYes" type="select" selector="//select[@id='sales_gift_options_allow_gift_receipt']//option[text()='Yes']"/>
         <element name="allowPrintedCard" type="select" selector="#sales_gift_options_allow_printed_card"/>
-        <element name="printedCardNo" type="select" selector="//select[@id='sales_gift_options_allow_printed_card']//option[text()='No']"/>
-        <element name="printedCardYes" type="select" selector="//select[@id='sales_gift_options_allow_printed_card']//option[text()='Yes']"/>
         <element name="go" type="select" selector="//a[@id='sales_gift_options-head']/ancestor::div[@class='entry-edit-head admin__collapsible-block']"/>
     </section>
 </sections>
