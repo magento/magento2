@@ -2,5 +2,41 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    createEmptyCart: String @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+}
+
+type Cart {
+    items: [CartItemInterface]
+}
+
+input CartItemDetailsInput {
+    sku: String!
+    qty: Float!
+}
+
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolverComposite") {
+    id: String!
+    qty: Float!
+    product: ProductInterface!
+}
+
+type SelectedCustomizableOption {
+    id: Int!
+    label: String!
+    type: String!
+    values: [SelectedCustomizableOptionValue!]!
+    sort_order: Int!
+}
+
+type SelectedCustomizableOptionValue {
+    id: Int
+    label: String!
+    price: CartItemSelectedOptionValuePrice!
+    sort_order: Int!
+}
+
+type CartItemSelectedOptionValuePrice {
+    value: Float!
+    units: String!
+    type: PriceTypeEnum!
 }
