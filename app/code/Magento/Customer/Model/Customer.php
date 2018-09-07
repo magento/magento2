@@ -1057,7 +1057,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    public function beforeSave() {
+    public function beforeSave()
+    {
         // Need to use attribute set or future updates can cause data loss
         if (!$this->getAttributeSetId()) {
             $this->setAttributeSetId(
