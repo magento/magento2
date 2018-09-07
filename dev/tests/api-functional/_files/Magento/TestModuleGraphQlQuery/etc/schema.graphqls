@@ -5,7 +5,16 @@ type Query {
     testItem(id: Int!) : Item @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
 }
 
+type Mutation {
+    testItem(id: Int!) : MutationItem @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
+}
+
 type Item {
+    item_id: Int
+    name: String
+}
+
+type MutationItem {
     item_id: Int
     name: String
 }
