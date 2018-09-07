@@ -49,8 +49,6 @@ class PriceIndexUpdater
         $result,
         array $sourceItemIds
     ): void {
-        foreach ($this->productIdsBySourceItemIds->execute($sourceItemIds) as $productId) {
-            $this->priceIndexProcessor->reindexRow($productId);
-        }
+        $this->priceIndexProcessor->reindexList($this->productIdsBySourceItemIds->execute($sourceItemIds));
     }
 }

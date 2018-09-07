@@ -11,7 +11,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructur
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
@@ -36,11 +35,6 @@ class ModifySelectInProductPriceIndexFilter
     private $resourceConnection;
 
     /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
      * @var StockByWebsiteIdResolverInterface
      */
     private $stockByWebsiteIdResolver;
@@ -49,20 +43,17 @@ class ModifySelectInProductPriceIndexFilter
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param StockConfigurationInterface $stockConfiguration
      * @param ResourceConnection $resourceConnection
-     * @param DefaultStockProviderInterface $defaultStockProvider
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         StockConfigurationInterface $stockConfiguration,
         ResourceConnection $resourceConnection,
-        DefaultStockProviderInterface $defaultStockProvider,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->stockConfiguration = $stockConfiguration;
         $this->resourceConnection = $resourceConnection;
-        $this->defaultStockProvider = $defaultStockProvider;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
     }
 
@@ -85,59 +76,46 @@ class ModifySelectInProductPriceIndexFilter
             return;
         }
 
-        $tmpPriceTableName = $priceTable->getTableName();
-
-        foreach ($this->getWebsiteIdsFromTmpTable($tmpPriceTableName) as $websiteId) {
+        foreach ($this->getWebsiteIdsFromProducts($entityIds) as $websiteId) {
             $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
-            $stockId = (int)$stock->getStockId();
-            $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
-
+            $stockTable = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
             $connection = $this->resourceConnection->getConnection('indexer');
+            $priceEntityField = $priceTable->getEntityField();
             $select = $connection->select();
-            $select->from(['price_index' => $tmpPriceTableName], []);
-
-            if ($stockId === $this->defaultStockProvider->getId()) {
-                $select->joinLeft(
-                    ['stock_item' => $stockTable],
-                    'stock_item.product_id = price_index.' . $priceTable->getEntityField()
-                    . ' AND stock_item.stock_id = ' . $stockId,
-                    []
-                );
-            } else {
-                $select->joinInner(
-                    ['product_entity' => $connection->getTableName('catalog_product_entity')],
-                    'product_entity.entity_id = price_index.' . $priceTable->getEntityField(),
-                    []
-                )->joinLeft(
-                    ['stock_item' => $stockTable],
-                    'stock_item.sku = product_entity.sku',
-                    []
-                );
-            }
-
-            $select->where('stock_item.is_salable = 0 OR stock_item.is_salable IS NULL');
+            $select->from(['price_index' => $priceTable->getTableName()], []);
+            $select->joinInner(
+                ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                "product_entity.entity_id = price_index.{$priceEntityField}",
+                []
+            )->joinLeft(
+                ['inventory_stock' => $stockTable],
+                'inventory_stock.sku = product_entity.sku',
+                []
+            );
+            $select->where('inventory_stock.is_salable = 0 OR inventory_stock.is_salable IS NULL');
             $select->where('price_index.website_id = ?', $websiteId);
+            $select->where("price_index.{$priceEntityField} IN (?)", $entityIds);
             $query = $select->deleteFromSelect('price_index');
             $connection->query($query);
         }
     }
 
     /**
-     * Get all website ids from price temporary table.
+     * Get all website ids by product ids.
      *
-     * @param string $tmpPriceTableName
+     * @param array $entityIds
      * @return array
      */
-    private function getWebsiteIdsFromTmpTable(string $tmpPriceTableName): array
+    private function getWebsiteIdsFromProducts(array $entityIds): array
     {
         $result = [];
 
         $connection = $this->resourceConnection->getConnection('indexer');
         $select = $connection->select();
         $select->from(
-            ['price_index' => $tmpPriceTableName],
+            ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
             ['website_id']
-        )->distinct();
+        )->where('product_in_websites.product_id IN (?)', $entityIds)->distinct();
         foreach ($connection->fetchCol($select) as $websiteId) {
             $result[] = (int)$websiteId;
         }

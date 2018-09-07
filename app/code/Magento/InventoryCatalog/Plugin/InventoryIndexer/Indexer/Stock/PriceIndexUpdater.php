@@ -8,34 +8,26 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\Stock;
 
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
-use Magento\InventoryCatalog\Model\ResourceModel\GetProductIdsByStockIds;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
- * Reindex price after stock has reindexed.
+ * Invalidate price indexer after stock index.
  */
 class PriceIndexUpdater
 {
     /**
-     * @var Processor
+     * @var IndexerRegistry
      */
-    private $priceIndexProcessor;
+    private $indexerRegistry;
 
     /**
-     * @var GetProductIdsByStockIds
-     */
-    private $getProductIdsByStockIds;
-
-    /**
-     * @param Processor $priceIndexProcessor
-     * @param GetProductIdsByStockIds $getProductIdsByStockIds
+     * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        Processor $priceIndexProcessor,
-        GetProductIdsByStockIds $getProductIdsByStockIds
+        IndexerRegistry $indexerRegistry
     ) {
-        $this->priceIndexProcessor = $priceIndexProcessor;
-        $this->getProductIdsByStockIds = $getProductIdsByStockIds;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -49,8 +41,9 @@ class PriceIndexUpdater
         $result,
         array $stockIds
     ): void {
-        foreach ($this->getProductIdsByStockIds->execute($stockIds) as $productId) {
-            $this->priceIndexProcessor->reindexRow($productId);
+        $indexer = $this->indexerRegistry->get(Processor::INDEXER_ID);
+        if ($indexer->isValid()) {
+            $indexer->invalidate();
         }
     }
 }
