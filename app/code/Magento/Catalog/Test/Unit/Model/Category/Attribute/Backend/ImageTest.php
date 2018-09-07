@@ -67,7 +67,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->imageUploader = $this->createPartialMock(
             \Magento\Catalog\Model\ImageUploader::class,
-            ['moveFileFromTmp']
+            [
+                'moveFileFromTmp',
+                'getFinalImageName',
+            ]
         );
 
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
@@ -146,8 +149,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveAttributeFileName()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
+        $model = $this->setUpModelForBeforeSave();
         $model->setAttribute($this->attribute);
+
+        $this->imageUploader->expects($this->any())->method('getFinalImageName')->willReturn('test123.jpg');
 
         $object = new \Magento\Framework\DataObject([
             'test_attribute' => [
@@ -161,13 +166,40 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return \Magento\Catalog\Model\Category\Attribute\Backend\Image
+     */
+    private function setUpModelForBeforeSave()
+    {
+        $objectManagerMock = $this->createPartialMock(\Magento\Framework\App\ObjectManager::class, ['get']);
+
+        $imageUploaderMock = $this->imageUploader;
+
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
+                if ($class === "Magento\Catalog\CategoryImageUpload") {
+                    return $imageUploaderMock;
+                }
+
+                return $this->objectManager->get($class, $params);
+            }));
+
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
+            'objectManager' => $objectManagerMock,
+            'logger' => $this->logger,
+            'filesystem' => $this->filesystem
+        ]);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
+
+        return $model->setAttribute($this->attribute);
+    }
+
+    /**
      * Test beforeSaveAttributeFileNameOutsideOfCategoryDir.
      */
     public function testBeforeSaveAttributeFileNameOutsideOfCategoryDir()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
-            'filesystem' => $this->filesystem
-        ]);
+        $model = $this->setUpModelForBeforeSave();
 
         $model->setAttribute($this->attribute);
 
@@ -186,6 +218,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
+        $this->imageUploader->expects($this->any())->method('getFinalImageName')->willReturn('/pub/media/wysiwyg/test123.jpg');
+
         $model->beforeSave($object);
 
         $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
@@ -200,7 +234,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveTemporaryAttribute()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
+        $model = $this->setUpModelForBeforeSave();
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
@@ -208,6 +242,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
             ]
         ]);
+
+        $this->imageUploader->expects($this->any())->method('getFinalImageName')->willReturn(['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']);
 
         $model->beforeSave($object);
 
@@ -246,7 +282,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
-                if ($class == \Magento\Catalog\CategoryImageUpload::class) {
+                if ($class == "Magento\Catalog\CategoryImageUpload") {
                     return $imageUploaderMock;
                 }
 
