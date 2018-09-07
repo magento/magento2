@@ -80,7 +80,8 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
                 $this->_fileResponseFactory->create(
                     $info['title'],
                     ['value' => $info['quote_path'], 'type' => 'filename'],
-                    DirectoryList::ROOT
+                    DirectoryList::ROOT,
+                    $info['type']
                 );
             }
         } catch (\Exception $e) {
