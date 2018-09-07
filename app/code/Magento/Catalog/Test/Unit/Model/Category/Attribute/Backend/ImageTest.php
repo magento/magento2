@@ -282,7 +282,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
-                if ($class == "Magento\Catalog\CategoryImageUpload") {
+                if ($class === Magento\Catalog\CategoryImageUpload::class) {
                     return $imageUploaderMock;
                 }
 
