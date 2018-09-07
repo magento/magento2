@@ -192,7 +192,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDbIsolation enabled
      */
-    public function testAddAttributeToFilterAffectsGetSize(): void
+    public function testAddAttributeToFilterAffectsGetSize()
     {
         $this->assertEquals(10, $this->collection->getSize());
         $this->collection->addAttributeToFilter('sku', 'Product1');
