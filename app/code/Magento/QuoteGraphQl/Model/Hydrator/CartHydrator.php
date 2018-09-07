@@ -18,7 +18,6 @@ class CartHydrator
 {
     /**
      * @param CartInterface|Quote $cart
-     *
      * @return array
      */
     public function hydrate(CartInterface $cart): array
