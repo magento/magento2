@@ -1142,7 +1142,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $name variable name
      * @param string|null $module optional module name
-     * @return string|false|array
+     * @return string|false
      */
     public function getVar($name, $module = null)
     {

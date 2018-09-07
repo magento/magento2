@@ -100,9 +100,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getBreakpoints()
     {
-        $breakpoints = $this->getVar('breakpoints');
-        array_walk_recursive($breakpoints, [$this, 'convertBooleans']);
-        return $this->jsonEncoder->encode($breakpoints);
+        return $this->jsonEncoder->encode($this->getVar('breakpoints'));
     }
 
     /**
@@ -138,23 +136,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             ];
         }
         return json_encode($imagesItems);
-    }
-
-    /**
-     * Convert string to booleans
-     *
-     * @param string $item
-     * @param string $key
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected static function convertBooleans(&$item, $key)
-    {
-        if (strtolower($item) == 'true') {
-            $item = true;
-        }
-        if (strtolower($item) == 'false') {
-            $item = false;
-        }
     }
 
     /**
