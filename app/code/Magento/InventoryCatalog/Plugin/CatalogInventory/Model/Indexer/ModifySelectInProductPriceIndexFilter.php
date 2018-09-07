@@ -80,19 +80,23 @@ class ModifySelectInProductPriceIndexFilter
             $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
             $stockTable = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
             $connection = $this->resourceConnection->getConnection('indexer');
-            $priceEntityField = $priceTable->getEntityField();
             $select = $connection->select();
             $select->from(['price_index' => $priceTable->getTableName()], []);
-            $select->joinInner(
-                ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                "product_entity.entity_id = price_index.{$priceEntityField}",
-                []
-            )->joinLeft(
-                ['inventory_stock' => $stockTable],
-                'inventory_stock.sku = product_entity.sku',
-                []
-            );
-            $select->where('inventory_stock.is_salable = 0 OR inventory_stock.is_salable IS NULL');
+
+            if ($this->resourceConnection->getConnection()->isTableExists($stockTable)) {
+                $priceEntityField = $priceTable->getEntityField();
+                $select->joinInner(
+                    ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                    "product_entity.entity_id = price_index.{$priceEntityField}",
+                    []
+                )->joinLeft(
+                    ['inventory_stock' => $stockTable],
+                    'inventory_stock.sku = product_entity.sku',
+                    []
+                );
+                $select->where('inventory_stock.is_salable = 0 OR inventory_stock.is_salable IS NULL');
+            }
+
             $select->where('price_index.website_id = ?', $websiteId);
             $select->where("price_index.{$priceEntityField} IN (?)", $entityIds);
             $query = $select->deleteFromSelect('price_index');
