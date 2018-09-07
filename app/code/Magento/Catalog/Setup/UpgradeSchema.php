@@ -145,6 +145,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.2.6', '<')) {
             $this->addStoreIdFieldForWebsiteIndexTable($setup);
             $this->removeIndexFromPriceIndexTable($setup);
+            $this->addMediaGalleryValueCascadeDeleteMediaGallery($setup);
         }
 
         $setup->endSetup();
@@ -840,5 +841,30 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getTable('catalog_product_index_price_tmp'),
             $setup->getIdxName('catalog_product_index_price_tmp', ['min_price'])
         );
+    }
+
+    /**
+     * Add constraint to remove 'catalog_product_entity_media_gallery` rows with
+     * corresponding product pictures' paths when the product is deleted.
+     * 
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addMediaGalleryValueCascadeDeleteMediaGallery(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()
+            ->addForeignKey(
+                $setup->getFkName(
+                    Gallery::GALLERY_TABLE,
+                    'value_id',
+                    Gallery::GALLERY_VALUE_TABLE,
+                    'value_id'
+                ),
+                $setup->getTable(Gallery::GALLERY_TABLE),
+                'value_id',
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                'value_id',
+                Table::ACTION_CASCADE
+            );
     }
 }
