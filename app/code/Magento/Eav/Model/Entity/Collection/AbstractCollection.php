@@ -1670,7 +1670,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         return $this->removeAttributeToSelect();
     }
 
-
     /**
      * Invalidates "Total Records Count".
      * Invalidates saved "Total Records Count" attribute with last counting,
