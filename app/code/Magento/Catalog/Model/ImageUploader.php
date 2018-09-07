@@ -204,9 +204,9 @@ class ImageUploader
         $baseImagePath = $this->getFilePath($basePath, $imageName);
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
         
-        $destinationFileAbsolutePath = $this->mediaDirectory->getAbsolutePath($baseImagePath);
-        $fileInfo = pathinfo($destinationFileAbsolutePath);
-        if (file_exists($destinationFileAbsolutePath)) {
+        $destinationFile = $this->mediaDirectory->getAbsolutePath($baseImagePath);
+        $fileInfo = pathinfo($destinationFile);
+        if (file_exists($destinationFile)) {
             $index = 1;
             $imageName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
             while (file_exists($fileInfo['dirname'] . '/' . $imageName)) {
