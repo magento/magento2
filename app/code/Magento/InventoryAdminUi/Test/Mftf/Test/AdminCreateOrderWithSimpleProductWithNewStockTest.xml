@@ -19,7 +19,7 @@
             <group value="msi"/>
             <group value="multi_mode"/>
             <skip>
-                <testCaseId value="MSI-1597"/>
+                <issueId value="MSI-1597"/>
             </skip>
         </annotations>
 
