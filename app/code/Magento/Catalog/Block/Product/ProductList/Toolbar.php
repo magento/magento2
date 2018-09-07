@@ -274,7 +274,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $order = $defaultOrder;
         }
 
-        if ($order != $defaultOrder) {
+        if ($order != $defaultOrder && $this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::ORDER_PARAM_NAME, $order, $defaultOrder);
         }
 
@@ -300,7 +300,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $dir = $this->_direction;
         }
 
-        if ($dir != $this->_direction) {
+        if ($dir != $this->_direction && $this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::DIRECTION_PARAM_NAME, $dir, $this->_direction);
         }
 
@@ -442,7 +442,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $mode = $defaultMode;
         }
 
-        if ($mode != $defaultMode) {
+        if ($mode != $defaultMode && $this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::MODE_PARAM_NAME, $mode, $defaultMode);
         }
 
@@ -602,7 +602,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $limit = $defaultLimit;
         }
 
-        if ($limit != $defaultLimit) {
+        if ($limit != $defaultLimit && $this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::LIMIT_PARAM_NAME, $limit, $defaultLimit);
         }
 
@@ -711,15 +711,18 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     public function getWidgetOptionsJson(array $customOptions = [])
     {
         $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
+        $defaultDirection = $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION;
+        $isMemorizingAllowed = $this->toolbarMemorizer->isMemorizingAllowed();
         $options = [
             'mode' => ToolbarModel::MODE_PARAM_NAME,
             'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
             'order' => ToolbarModel::ORDER_PARAM_NAME,
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
-            'modeDefault' => $defaultMode,
-            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
-            'orderDefault' => $this->getOrderField(),
-            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'modeDefault' => $isMemorizingAllowed ? false : $defaultMode,
+            'directionDefault' => $isMemorizingAllowed ? false : $defaultDirection,
+            'orderDefault' => $isMemorizingAllowed ? false : $this->getOrderField(),
+            'limitDefault' => $isMemorizingAllowed ? false :
+                $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
         ];
         $options = array_replace_recursive($options, $customOptions);

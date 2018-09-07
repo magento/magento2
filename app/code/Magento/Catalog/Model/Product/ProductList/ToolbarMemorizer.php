@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\ProductList;
 
 use Magento\Catalog\Model\Session as CatalogSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class ToolbarMemorizer
@@ -14,6 +18,11 @@ use Magento\Catalog\Model\Session as CatalogSession;
  */
 class ToolbarMemorizer
 {
+    /**
+     * XML PATH to enable/disable saving toolbar parameters to session
+     */
+    const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
+
     /**
      * @var CatalogSession
      */
@@ -25,9 +34,9 @@ class ToolbarMemorizer
     private $toolbarModel;
 
     /**
-     * @var bool
+     * @var ScopeConfigInterface
      */
-    private $paramsMemorizeAllowed = true;
+    private $scopeConfig;
 
     /**
      * @var string|bool
@@ -52,13 +61,16 @@ class ToolbarMemorizer
     /**
      * @param Toolbar $toolbarModel
      * @param CatalogSession $catalogSession
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Toolbar $toolbarModel,
-        CatalogSession $catalogSession
+        CatalogSession $catalogSession,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->toolbarModel = $toolbarModel;
         $this->catalogSession = $catalogSession;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -118,27 +130,28 @@ class ToolbarMemorizer
     }
 
     /**
-     * Disable list state params memorizing
-     *
-     * @return $this
-     */
-    public function disableParamsMemorizing()
-    {
-        $this->paramsMemorizeAllowed = false;
-        return $this;
-    }
-
-    /**
      * Method to save all catalog parameters in catalog session
      *
      * @return void
      */
     public function memorizeParams()
     {
-        $this->memorizeParam(Toolbar::ORDER_PARAM_NAME, $this->getOrder())
-            ->memorizeParam(Toolbar::DIRECTION_PARAM_NAME, $this->getDirection())
-            ->memorizeParam(Toolbar::MODE_PARAM_NAME, $this->getMode())
-            ->memorizeParam(Toolbar::LIMIT_PARAM_NAME, $this->getLimit());
+        if (!$this->catalogSession->getParamsMemorizeDisabled() && $this->isMemorizingAllowed()) {
+            $this->memorizeParam(Toolbar::ORDER_PARAM_NAME, $this->getOrder())
+                ->memorizeParam(Toolbar::DIRECTION_PARAM_NAME, $this->getDirection())
+                ->memorizeParam(Toolbar::MODE_PARAM_NAME, $this->getMode())
+                ->memorizeParam(Toolbar::LIMIT_PARAM_NAME, $this->getLimit());
+        }
+    }
+
+    /**
+     * Check configuration for enabled/disabled toolbar memorizing
+     *
+     * @return bool
+     */
+    public function isMemorizingAllowed()
+    {
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_CATALOG_REMEMBER_PAGINATION);
     }
 
     /**
@@ -150,10 +163,7 @@ class ToolbarMemorizer
      */
     private function memorizeParam($param, $value)
     {
-        if ($value && $this->paramsMemorizeAllowed &&
-            !$this->catalogSession->getParamsMemorizeDisabled() &&
-            $this->catalogSession->getData($param) != $value
-        ) {
+        if ($value && $this->catalogSession->getData($param) != $value) {
             $this->catalogSession->setData($param, $value);
         }
         return $this;
