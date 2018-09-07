@@ -6,7 +6,7 @@
 
 namespace Magento\Captcha\Test\Constraint;
 
-use Magento\Contact\Test\Page\ContactIndexCaptcha as ContactIndex;
+use Magento\Captcha\Test\Page\ContactIndexCaptcha as ContactIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -20,7 +20,7 @@ class AssertCaptchaFieldOnContactUsForm extends AbstractConstraint
      * @param ContactIndex $contactIndex
      * @return void
      */
-    public function processAssertRegisterForm(ContactIndex $contactIndex)
+    public function processAssertRegisterForm(ContactIndexCaptcha $contactIndex)
     {
         \PHPUnit\Framework\Assert::assertTrue(
             $contactIndex->getContactUs()->isVisibleCaptcha(),
