@@ -12,6 +12,7 @@ use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
 use Magento\SalesRule\Model\ResourceModel\Rule\Customer;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Updates the coupon usages.
@@ -55,13 +56,13 @@ class UpdateCouponUsages
         CustomerFactory $ruleCustomerFactory,
         Coupon          $coupon,
         Usage           $couponUsage,
-        Customer        $customerRuleUsage
+        Customer        $customerRuleUsage = null
     ) {
         $this->ruleFactory         = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
         $this->coupon              = $coupon;
         $this->couponUsage         = $couponUsage;
-        $this->customerRuleUsage   = $customerRuleUsage;
+        $this->customerRuleUsage   = $customerRuleUsage ? : ObjectManager::getInstance()->get(Customer::class);
     }
 
     /**
