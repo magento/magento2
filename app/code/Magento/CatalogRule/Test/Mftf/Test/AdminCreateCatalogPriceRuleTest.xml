@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-65"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create the simple product and category that it will be in -->
@@ -74,6 +77,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-93"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -96,7 +102,9 @@
             <description value="Admin should be able to create a catalog price rule adjust final price to this percentage (for simple product)"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-69"/>
-            <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -120,6 +128,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-60"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -143,6 +154,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-71"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEVOPS-3618"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create a simple product and a category-->
