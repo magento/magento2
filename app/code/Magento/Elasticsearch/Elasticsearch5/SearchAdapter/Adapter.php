@@ -76,13 +76,27 @@ class Adapter implements AdapterInterface
     {
         $client = $this->connectionManager->getConnection();
         $aggregationBuilder = $this->aggregationBuilder;
-
         $query = $this->mapper->buildQuery($request);
         $aggregationBuilder->setQuery($this->queryContainerFactory->create(['query' => $query]));
-        $rawResponse = $client->query($query);
-
+        if ($client->indexExists($query['index'])) {
+            $rawResponse = $client->query($query);
+        } else {
+            $rawResponse = [
+                "hits" =>
+                    [
+                        "hits" => []
+                    ],
+                "aggregations" =>
+                    [
+                        "price_bucket" => [],
+                        "category_bucket" =>
+                            [
+                                "buckets" => []
+                            ]
+                    ]
+            ];
+        }
         $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
-
         $queryResponse = $this->responseFactory->create(
             [
                 'documents' => $rawDocuments,
