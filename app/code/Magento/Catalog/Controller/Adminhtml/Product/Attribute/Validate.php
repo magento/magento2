@@ -7,6 +7,8 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
@@ -29,6 +31,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private $multipleAttributeList;
 
     /**
+     * @var OptionsDataProvider|null
+     */
+    private $optionsDataProvider;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -38,6 +45,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
+     * @param OptionsDataProvider|null $optionsDataProvider
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,12 +54,15 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        array $multipleAttributeList = []
+        array $multipleAttributeList = [],
+        OptionsDataProvider $optionsDataProvider = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
+        $this->optionsDataProvider = $optionsDataProvider ?: ObjectManager::getInstance()
+            ->get(OptionsDataProvider::class);
     }
 
     /**
@@ -63,6 +74,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     {
         $response = new DataObject();
         $response->setError(false);
+        try {
+            $optionsData = $this->optionsDataProvider->getOptionsData($this->getRequest());
+        } catch (\InvalidArgumentException $e) {
+            $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
+                . "If the error persists, please try again later.");
+            $this->setMessageToResponse($response, [$message]);
+            $response->setError(true);
+        }
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
         $frontendLabel = $this->getRequest()->getParam('frontend_label');
@@ -102,10 +121,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         }
 
         $multipleOption = $this->getRequest()->getParam("frontend_input");
-        $multipleOption = null == $multipleOption ? 'select' : $multipleOption;
+        $multipleOption = (null === $multipleOption) ? 'select' : $multipleOption;
 
-        if (isset($this->multipleAttributeList[$multipleOption]) && !(null == ($multipleOption))) {
-            $options = $this->getRequest()->getParam($this->multipleAttributeList[$multipleOption]);
+        if (isset($this->multipleAttributeList[$multipleOption])) {
+            $options = $optionsData[$this->multipleAttributeList[$multipleOption]] ?? null;
             $this->checkUniqueOption(
                 $response,
                 $options

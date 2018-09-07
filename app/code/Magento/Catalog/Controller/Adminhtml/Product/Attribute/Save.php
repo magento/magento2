@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataProvider;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
@@ -76,6 +77,11 @@ class Save extends Attribute
     private $presentation;
 
     /**
+     * @var OptionsDataProvider|null
+     */
+    private $optionsDataProvider;
+
+    /**
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
      * @param Registry $coreRegistry
@@ -88,6 +94,7 @@ class Save extends Attribute
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
      * @param Presentation|null $presentation
+     * @param OptionsDataProvider|null $optionsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,7 +109,8 @@ class Save extends Attribute
         FilterManager $filterManager,
         Product $productHelper,
         LayoutFactory $layoutFactory,
-        Presentation $presentation = null
+        Presentation $presentation = null,
+        OptionsDataProvider $optionsDataProvider = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -113,6 +121,8 @@ class Save extends Attribute
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
         $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
+        $this->optionsDataProvider = $optionsDataProvider
+            ?: ObjectManager::getInstance()->get(OptionsDataProvider::class);
     }
 
     /**
@@ -123,7 +133,21 @@ class Save extends Attribute
      */
     public function execute()
     {
+        try {
+            $optionData = $this->optionsDataProvider->getOptionsData($this->getRequest());
+        } catch (\InvalidArgumentException $e) {
+            $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
+                . "If the error persists, please try again later.");
+            $this->messageManager->addErrorMessage($message);
+            return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
+        }
+
         $data = $this->getRequest()->getPostValue();
+        $data = array_merge_recursive(
+            $data,
+            $optionData
+        );
+
         if ($data) {
             $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
@@ -326,15 +350,7 @@ class Save extends Attribute
      */
     private function preprocessOptionsData(&$data)
     {
-        if (isset($data['serialized_options'])) {
-            $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
-            foreach ($serializedOptions as $serializedOption) {
-                $option = [];
-                parse_str($serializedOption, $option);
-                $data = array_replace_recursive($data, $option);
-            }
-        }
-        unset($data['serialized_options']);
+
     }
 
     /**
