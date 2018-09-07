@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ShopByButtonInMobile">
         <annotations>
             <features value="Layered Navigation"/>
@@ -35,6 +35,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
         </after>
         <!-- Go to default attribute set edit page and add the product attribute to the set -->
         <comment userInput="Go to default attribute set edit page and add the product attribute to the set" stepKey="commentAttributeSetEdit" />
