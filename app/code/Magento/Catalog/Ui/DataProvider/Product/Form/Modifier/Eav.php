@@ -32,6 +32,7 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+use \Magento\Catalog\Model\Product\Type as ProductType;
 
 /**
  * Class Eav
@@ -399,7 +400,11 @@ class Eav extends AbstractModifier
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
                     if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
-                        $attributeValue = $this->formatPrice($attributeValue);
+                        if ($this->locator->getProduct()->getTypeId() !== ProductType::TYPE_BUNDLE
+                            || $attribute->getAttributeCode() !== ProductAttributeInterface::CODE_SPECIAL_PRICE
+                        ) {
+                            $attributeValue = $this->formatPrice($attributeValue);
+                        }
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
