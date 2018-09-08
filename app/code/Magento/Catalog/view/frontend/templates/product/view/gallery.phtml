@@ -113,7 +113,7 @@
                         ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     "navdir": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/navdir")) ?>",
-                    <?php if (($block->getVar("gallery/transition/navarrows"))) : ?>
+                    <?php if ($block->getVar("gallery/fullscreen/navarrows")) : ?>
                         "navarrows": <?= /* @noEscape */
                         filter_var($block->getVar("gallery/fullscreen/navarrows"), FILTER_VALIDATE_BOOLEAN)
                         ? 'true' : 'false'; ?>,
