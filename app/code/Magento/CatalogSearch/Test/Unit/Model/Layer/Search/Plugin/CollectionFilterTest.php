@@ -53,7 +53,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Closure
      */
-    private $closure;
+    private $proceed;
 
     protected function setUp()
     {
@@ -82,7 +82,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
             CollectionFilterPlugin::class,
             ['queryFactory' => $this->queryFactoryMock]
         );
-        $this->closure = function (\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $collection, \Magento\Catalog\Model\Category $category) {
+        $this->proceed = function () {
             return null;
         };
     }
@@ -106,7 +106,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->plugin->aroundFilter(
             $this->collectionFilterMock,
-            $this->closure,
+            $this->proceed,
             $this->collectionMock,
             $this->categoryMock
         );
@@ -128,7 +128,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->plugin->aroundFilter(
             $this->collectionFilterMock,
-            $this->closure,
+            $this->proceed,
             $this->collectionMock,
             $this->categoryMock
         );
