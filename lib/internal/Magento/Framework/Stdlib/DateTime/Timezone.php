@@ -335,10 +335,22 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
+        $formatter = new \IntlDateFormatter(
+            $this->_localeResolver->getLocale(),
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::FULL,
+            'GMT',
+            \IntlDateFormatter::GREGORIAN,
+            'dd-MM-yyyy H:i:s'
+        );
+        $time = $formatter->parse($date);
+        $dateTime = new DateTime($this);
+
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
+                $date = $dateTime->gmtDate(null, $time);
                 $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
             }
         } else {
