@@ -47,13 +47,13 @@ class ScopeCodeResolver
         ) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
-            $scopeCode = $resolverScopeCode->getCode();
         } else {
             $resolverScopeCode = $scopeCode;
         }
 
         if ($resolverScopeCode instanceof \Magento\Framework\App\ScopeInterface) {
             $resolverScopeCode = $resolverScopeCode->getCode();
+            $scopeCode = $resolverScopeCode;
         }
 
         $this->resolvedScopeCodes[$scopeType][$scopeCode] = $resolverScopeCode;
