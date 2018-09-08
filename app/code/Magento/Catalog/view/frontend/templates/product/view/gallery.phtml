@@ -97,7 +97,7 @@
                         "transitionduration": <?= $block->escapeHtml($block->getVar("gallery/transition/duration")) ?>,
                     <?php endif; ?>
                     "transition": "<?= $block->escapeHtml($block->getVar("gallery/transition/effect")) ?>",
-                    <?php if ($block->getVar("gallery/navarrows")) : ?>
+                    <?php if (($block->getVar("gallery/navarrows"))) : ?>
                         "navarrows": <?= /* @noEscape */
                         filter_var($block->getVar("gallery/navarrows"), FILTER_VALIDATE_BOOLEAN)
                         ? 'true' : 'false'; ?>,
