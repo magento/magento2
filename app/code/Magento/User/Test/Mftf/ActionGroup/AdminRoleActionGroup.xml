@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateUserRoleActionGroup">
+        <arguments>
+            <argument name="roleName" type="string" defaultValue=""/>
+            <argument name="resourceAccess" type="string" defaultValue="All"/>
+            <argument name="resource" type="string" defaultValue="default"/>
+        </arguments>
+        <amOnPage url="{{AdminEditRolePage.url}}" stepKey="navigateRolesPage"/>
+        <waitForPageLoad time="30" stepKey="waitEditPage"/>
+        <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{roleName}}" stepKey="setRoleName" />
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="setPassword" />
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="openRoleResources"/>
+        <waitForPageLoad time="5" stepKey="waitForRoleResourcePage" />
+        <conditionalClick selector="{{AdminEditRoleInfoSection.resourceAccessOptionByLabel(resourceAccess)}}" dependentSelector="{{AdminEditRoleInfoSection.activeResourceAccessOptionByLabel(resourceAccess)}}" visible="false" stepKey="chooseResourceAccess"/>
+        <conditionalClick selector="{{AdminEditRoleInfoSection.resource(resource)}}" dependentSelector="{{AdminEditRoleInfoSection.resource(resource)}}" visible="true" stepKey="assignResource"/>
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRole"/>
+        <waitForPageLoad time="30" stepKey="waitRoleSave"/>
+        <see userInput="You saved the role." stepKey="seeSuccessMessage" />
+    </actionGroup>
+
+    <actionGroup name="AdminDeleteUserRoleActionGroup">
+        <arguments>
+            <argument name="roleName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid" />
+        <waitForPageLoad stepKey="waitForUserRolesGridLoad" />
+        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="enterRoleName" />
+        <click selector="{{AdminRoleGridSection.searchButton}}" stepKey="clickSearch" />
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <see selector="{{AdminRoleGridSection.roleNameInFirstRow}}" userInput="{{roleName}}" stepKey="seeUserRole" />
+        <click selector="{{AdminRoleGridSection.searchResultFirstRow}}" stepKey="openRoleEditPage"/>
+        <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <click selector="{{AdminEditRoleInfoSection.deleteButton}}" stepKey="deleteUserRole"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForSave" />
+        <see userInput="You deleted the role." stepKey="seeUserRoleDeleteMessage"/>
+    </actionGroup>
+</actionGroups>
