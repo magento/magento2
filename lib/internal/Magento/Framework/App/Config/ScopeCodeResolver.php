@@ -47,9 +47,7 @@ class ScopeCodeResolver
         ) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
-            if ($scopeCode === null) {
-                $scopeCode = $resolverScopeCode->getCode();
-            }
+            $scopeCode = $resolverScopeCode->getCode();
         } else {
             $resolverScopeCode = $scopeCode;
         }
