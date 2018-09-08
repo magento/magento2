@@ -99,9 +99,9 @@ class Configurable
         $product->setNewVariationsAttributeSetId($setId);
 
         $configurableOptions = [];
-        if (!empty($productData['configurable_attributes_data'])) {
+        if (!empty($productData['configurable_attributes_data_serialized'])) {
             $configurableOptions = $this->optionsFactory->create(
-                (array) $productData['configurable_attributes_data']
+                json_decode($productData['configurable_attributes_data_serialized'], true)
             );
         }
 
@@ -128,7 +128,7 @@ class Configurable
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids_serialized', '[]');
-        if ($associatedProductIds != null && !empty($associatedProductIds)) {
+        if (!empty($associatedProductIds)) {
             $associatedProductIds = json_decode($associatedProductIds, true);
         }
 

@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
             ['associated_product_ids_serialized', '[]', []],
-            ['product', [], ['configurable_attributes_data' => $attributes]],
+            ['product', [], ['configurable_attributes_data_serialized' => json_encode($attributes)]],
         ];
         $simpleProductsIds = [1, 2, 3];
         $simpleProducts = [
@@ -213,7 +213,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
             ['associated_product_ids_serialized', "[]", "[]"],
-            ['product', [], ['configurable_attributes_data' => $attributes]],
+            ['product', [], ['configurable_attributes_data_serialized' => json_encode($attributes)]],
         ];
         $paramValueMap = [
             ['configurable-matrix-serialized', "[]", "[]"],
