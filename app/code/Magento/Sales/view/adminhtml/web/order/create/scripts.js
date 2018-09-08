@@ -1171,8 +1171,10 @@ define([
 
         submit : function()
         {
-            jQuery('#edit_form').trigger('processStart');
-            jQuery('#edit_form').trigger('submitOrder');
+            if(jQuery('#edit_form').valid()) {
+                jQuery('#edit_form').trigger('processStart');
+                jQuery('#edit_form').trigger('submitOrder');
+            }
         },
 
         _realSubmit: function () {
