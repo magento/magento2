@@ -59,12 +59,16 @@ class GenerateCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ): Value {
-
-        $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
-        //TODO: exception
-        $result = function () use ($token) {
-            return !empty($token) ? $token : '';
-        };
-        return $this->valueFactory->create($result);
+        try {
+            $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
+            $result = function () use ($token) {
+                return !empty($token) ? $token : '';
+            };
+            return $this->valueFactory->create($result);
+        }catch (\Magento\Framework\Exception\AuthenticationException $e){
+            throw new GraphQlAuthorizationException(
+                __($e->getMessage())
+            );
+        }
     }
 }
