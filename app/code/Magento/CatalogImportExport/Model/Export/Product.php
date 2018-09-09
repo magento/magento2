@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\ImportExport\Model\Import;
@@ -122,6 +123,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var array
      */
     protected $_websiteIdToCode = [];
+
+    /**
+     * Website store views
+     *
+     * @var array
+     */
+    private $_websiteStoreViews = [];
 
     /**
      * Attribute types
@@ -502,6 +510,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         /** @var $website \Magento\Store\Model\Website */
         foreach ($this->_storeManager->getWebsites() as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
+            foreach ($website->getStores() as $store) {
+                /** @var \Magento\Store\Model\Store $store */
+                $this->_websiteStoreViews[$website->getId()][$store->getId()] = $store->getCode();
+            }
         }
         return $this;
     }
@@ -1183,11 +1195,20 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
                 $websiteCodes = [];
+                $websiteStoreViewCodes = [];
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
+                    if (isset($this->_websiteStoreViews[$productWebsite])) {
+                        $websiteStoreViewCodes = array_merge(
+                            $websiteStoreViewCodes,
+                            $this->_websiteStoreViews[$productWebsite]
+                        );
+                    }
                 }
                 $dataRow[self::COL_PRODUCT_WEBSITES] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
+                $dataRow[self::COL_STORE] =
+                    implode(IMPORT::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteStoreViewCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
             if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
