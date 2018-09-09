@@ -20,25 +20,21 @@ $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterfa
 /** @var CartManagementInterface $cartManagement */
 $cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::class);
 
-$itemsToBuy = [
-    'VIRT-1' => 5,
-    'VIRT-2' => 6,
-];
-
 $searchCriteria = $searchCriteriaBuilder
     ->addFilter('reserved_order_id', 'created_order_for_test')
     ->create();
 $cart = current($cartRepository->getList($searchCriteria)->getItems());
 
-foreach ($itemsToBuy as $sku => $qty) {
-    $product = $productRepository->get($sku);
-    $requestData = [
-        'product'           => $product->getProductId(),
-        'qty'               => $qty
-    ];
-    $request = new \Magento\Framework\DataObject($requestData);
-    $cart->addProduct($product, $request);
-}
+$product = $productRepository->get('configurable');
+$configurableOptions = $product->getTypeInstance()->getConfigurableOptions($product);
+$option = current(current($configurableOptions));
+$requestData = [
+    'product' => $option['product_id'],
+    'super_attribute' => [key($configurableOptions) => $option['value_index']],
+    'qty' => 3
+];
+$request = new \Magento\Framework\DataObject($requestData);
+$cart->addProduct($product, $request);
 
 $cartRepository->save($cart);
 $cartManagement->placeOrder($cart->getId());
