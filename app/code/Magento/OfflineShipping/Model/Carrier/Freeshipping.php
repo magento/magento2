@@ -109,10 +109,8 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
                     'Sorry, but we can\'t deliver to the destination country with this shipping module.'
                 )
             );
-
             return $error;
-        }
-
+        } 
         return $result;
     }
 
