@@ -9,7 +9,7 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="event" type="eventDeclaration" minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="event" type="eventDeclaration" minOccurs="0" maxOccurs="unbounded">
                     <xs:unique name="uniqueObserverName">
                         <xs:annotation>
                             <xs:documentation>
