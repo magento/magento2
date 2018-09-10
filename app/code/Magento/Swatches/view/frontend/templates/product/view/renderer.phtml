@@ -18,7 +18,8 @@
                     echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
                 "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
-                    'Magento_ConfigurableProduct') ?: 'replace'; ?>"
+                    'Magento_ConfigurableProduct') ?: 'replace'; ?>",
+                "jsonSwatchImageSizeConfig": <?php /* @noEscape */ echo $block->getJsonSwatchSizeConfig() ?>
             }
         },
         "*" : {
