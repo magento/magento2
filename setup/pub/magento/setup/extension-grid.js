@@ -39,7 +39,7 @@ angular.module('extension-grid', ['ngStorage'])
                 }
                 $scope.availableUpdatePackages = data.lastSyncData.packages;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $rootScope.extensionsProcessed = true;
             });

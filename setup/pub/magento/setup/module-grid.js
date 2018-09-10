@@ -14,7 +14,7 @@ angular.module('module-grid', ['ngStorage'])
                 $scope.modules = data.modules;
                 $scope.total = data.total;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
                 $rootScope.modulesProcessed = true;
             });

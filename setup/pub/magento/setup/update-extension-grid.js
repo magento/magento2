@@ -28,7 +28,7 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $scope.isHiddenSpinner = true;
                 $localStorage.extensionsVersions = $scope.extensionsVersions;

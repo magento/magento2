@@ -114,7 +114,7 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.totalForGrid = data.total;
                                 $scope.total = data.total;
                                 $scope.currentPage = 1;
-                                $scope.rowLimit = 20;
+                                $scope.rowLimit = '20';
                                 $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({
