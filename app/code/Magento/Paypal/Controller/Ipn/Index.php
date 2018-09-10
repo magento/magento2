@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
-Use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\OrderFactory;
 
 /**
  * Unified IPN controller for all supported PayPal methods
