@@ -9,8 +9,9 @@ namespace Magento\Newsletter\Controller\Subscriber;
 class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
-     * Unsubscribe newsletter
-     * @return void
+     * Unsubscribe newsletter.
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -27,6 +28,9 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
                 $this->messageManager->addException($e, __('Something went wrong while unsubscribing you.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var \Magento\Backend\Model\View\Result\Redirect $redirect */
+        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
     }
 }
