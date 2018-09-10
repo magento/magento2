@@ -418,6 +418,7 @@ define([
                     JSON.stringify(this.source.data['associated_product_ids']);
                 delete this.source.data['associated_product_ids'];
             }
+            
             if (this.source.data.product['configurable_attributes_data']) {
                 this.source.data.product['configurable_attributes_data_serialized'] =
                     JSON.stringify(this.source.data.product['configurable_attributes_data']);
