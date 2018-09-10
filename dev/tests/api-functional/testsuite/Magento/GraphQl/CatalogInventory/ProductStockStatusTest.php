@@ -55,7 +55,6 @@ QUERY;
      */
     public function testQueryProductStockStatusOutOfStock()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $productSku = 'simple';
 
         $query = <<<QUERY

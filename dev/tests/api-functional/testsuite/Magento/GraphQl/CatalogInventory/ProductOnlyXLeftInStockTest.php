@@ -42,7 +42,6 @@ QUERY;
      */
     public function testQueryProductOnlyXLeftInStockEnabled()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $productSku = 'simple';
 
         $query = <<<QUERY

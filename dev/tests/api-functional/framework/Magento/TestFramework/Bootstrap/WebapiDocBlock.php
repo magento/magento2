@@ -7,10 +7,18 @@
  */
 namespace Magento\TestFramework\Bootstrap;
 
+use Magento\TestFramework\Annotation\ConfigFixture;
+
+/**
+ * @inheritdoc
+ */
 class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
 {
     /**
-     * Get list of subscribers. In addition, register <b>magentoApiDataFixture</b> annotation processing.
+     * Get list of subscribers.
+     *
+     * In addition, register magentoApiDataFixture and magentoApiConfigFixture
+     * annotation processors
      *
      * @param \Magento\TestFramework\Application $application
      * @return array
@@ -19,6 +27,7 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
     {
         $subscribers = parent::_getSubscribers($application);
         $subscribers[] = new \Magento\TestFramework\Annotation\ApiDataFixture($this->_fixturesBaseDir);
+        $subscribers[] = new ConfigFixture();
         return $subscribers;
     }
 }
