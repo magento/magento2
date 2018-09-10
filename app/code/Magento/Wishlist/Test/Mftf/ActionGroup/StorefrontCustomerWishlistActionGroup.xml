@@ -25,6 +25,7 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="WaitForWishList"/>
         <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="addProductToWishlistClickAddToWishlist" />
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
