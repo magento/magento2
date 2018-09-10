@@ -810,7 +810,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                foreach ($websiteIds as $websiteId) {
+                foreach ($websiteIds as $websiteId => $selectedId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
                     $storeIds = array_merge($storeIds, $websiteStores);
                 }
