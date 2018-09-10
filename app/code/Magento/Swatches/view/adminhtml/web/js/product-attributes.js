@@ -417,12 +417,9 @@ define([
             var editForm = $('#edit_form'),
                 swatchVisualPanel = $('#swatch-visual-options-panel'),
                 swatchTextPanel = $('#swatch-text-options-panel'),
-                activePanel,
-                formContent = $(),
-                optionTable;
-
-            activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
-            optionTable = activePanel.find('table');
+                optionsTableContent = $(),
+                optionContainer = $(),
+                activePanel = $();
 
             $('#frontend_input').bind('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
@@ -441,22 +438,26 @@ define([
             editForm.on('beforeSubmit', function () {
                 var swatchValues = [];
 
-                optionTable
-                    .find('input')
-                    .each(function () {
-                        swatchValues.push(this.name + '=' + $(this).val());
-                    });
+                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
+                optionContainer = activePanel.find('table tbody');
 
-                $('<input>')
-                    .attr({
-                        type: 'hidden',
-                        name: 'serialized_swatch_values'
-                    })
-                    .val(JSON.stringify(swatchValues))
-                    .prependTo(editForm);
+                if (activePanel.is(':visible')) {
+                    optionContainer
+                        .find('input')
+                        .each(function () {
+                            swatchValues.push(this.name + '=' + $(this).val());
+                        });
 
-                formContent = optionTable.clone(true);
+                    $('<input>')
+                        .attr({
+                            type: 'hidden',
+                            name: 'serialized_options'
+                        })
+                        .val(JSON.stringify(swatchValues))
+                        .prependTo(editForm);
+                }
 
+                optionsTableContent = optionContainer.clone(true);
                 [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
                     $(el).find('table')
                         .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
@@ -464,7 +465,9 @@ define([
             });
 
             editForm.on('afterValidate.error', function () {
-                optionTable.replaceWith(formContent);
+                if (activePanel.is(':visible')) {
+                    optionContainer.replaceWith(optionsTableContent);
+                }
             });
         });
 
