@@ -13,12 +13,10 @@
  */
 ?>
 
-<?php $images = $block->getGalleryImages()->toArray()['items'] ?>
-
 <div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
     <img
         class="gallery-placeholder__image"
-        src="<?= $images[0]['medium_image_url'] ?>"
+        src="<?= /* @escapeNotVerified */ $block->getMainProductImage() ?>"
     />
 </div>
 
