@@ -20,7 +20,7 @@ $cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::cl
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter('reserved_order_id', 'test_order_virt_1')
+    ->addFilter('reserved_order_id', 'created_order_for_test')
     ->create();
 
 $registry->unregister('isSecureArea');

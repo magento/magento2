@@ -18,9 +18,6 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
-            <skip>
-                <issueId value="MSI-1597"/>
-            </skip>
         </annotations>
 
         <before>
