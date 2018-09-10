@@ -218,7 +218,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->imageUploader->expects($this->any())->method('getFinalImageName')->willReturn('/pub/media/wysiwyg/test123.jpg');
+        $this->imageUploader->expects($this->any())->method('getFinalImageName')
+            ->willReturn('/pub/media/wysiwyg/test123.jpg');
 
         $model->beforeSave($object);
 
@@ -243,7 +244,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->imageUploader->expects($this->any())->method('getFinalImageName')->willReturn(['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']);
+        $this->imageUploader->expects($this->any())->method('getFinalImageName')
+            ->willReturn(
+                ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
+            );
 
         $model->beforeSave($object);
 
