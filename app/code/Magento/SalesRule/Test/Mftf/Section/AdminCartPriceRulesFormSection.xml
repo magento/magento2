@@ -25,6 +25,11 @@
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
+        <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
+        <element name="childAttribute" type="select" selector="//select[contains(@name, 'new_child')]"/>
+        <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
+        <element name="operator" type="select" selector="//select[contains(@name, '[operator]')]"/>
+        <element name="option" type="select" selector="//ul[@class='rule-param-children']//select[contains(@name, '[value]')]"/>
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
