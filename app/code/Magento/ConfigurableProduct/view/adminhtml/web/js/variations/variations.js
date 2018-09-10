@@ -22,6 +22,7 @@ define([
         this.message = message;
         this.name = 'UserException';
     }
+
     UserException.prototype = Object.create(Error.prototype);
 
     return Component.extend({
@@ -193,12 +194,12 @@ define([
 
             _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
-                    var attribute = {};
+                        var attribute = {};
 
-                    attribute[option['attribute_code']] = option.value;
+                        attribute[option['attribute_code']] = option.value;
 
-                    return _.extend(memo, attribute);
-                }, {}),
+                        return _.extend(memo, attribute);
+                    }, {}),
                     gallery = {
                         images: {}
                     },
@@ -418,7 +419,7 @@ define([
                     JSON.stringify(this.source.data['associated_product_ids']);
                 delete this.source.data['associated_product_ids'];
             }
-            
+
             if (this.source.data.product['configurable_attributes_data']) {
                 this.source.data.product['configurable_attributes_data_serialized'] =
                     JSON.stringify(this.source.data.product['configurable_attributes_data']);
