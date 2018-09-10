@@ -26,7 +26,7 @@ class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
     {
         $this->_objectManager->get(\Magento\Framework\App\State\CleanupFiles::class)->clearMaterializedViewFiles();
         $this->_eventManager->dispatch('clean_static_files_cache_after');
-        $this->messageManager->addSuccess(__('The static files cache has been cleaned.'));
+        $this->messageManager->addSuccessMessage(__('The static files cache has been cleaned.'));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

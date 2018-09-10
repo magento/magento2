@@ -7,9 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductGridFilteringByDateAttributeTest">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Filter products"/>
             <title value="Verify Set Product as new Filter input on Product Grid doesn't getreset to currentDate"/>
             <description value="Data input in the new from date filter field should not change"/>
             <severity value="MAJOR"/>

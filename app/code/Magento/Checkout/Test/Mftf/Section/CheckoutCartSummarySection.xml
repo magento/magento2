@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
         <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
         <element name="shippingMethod" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//th//span[@class='value']"/>
@@ -19,6 +19,7 @@
         <element name="postcode" type="input" selector="input[name='postcode']" timeout="10"/>
         <element name="stateProvince" type="select" selector="select[name='region_id']" timeout="10"/>
         <element name="country" type="select" selector="select[name='country_id']" timeout="10"/>
+        <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
         <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
     </section>
