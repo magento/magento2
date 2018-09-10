@@ -50,6 +50,6 @@ class ShipmentLabelGetTest extends WebapiAbstract
             ],
         ];
         $result = $this->_webApiCall($serviceInfo, ['id' => $shipment->getId()]);
-        $this->assertEquals($result, 'test_shipping_label');
+        $this->assertEquals($result, base64_encode('test_shipping_label'));
     }
 }

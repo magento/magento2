@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="TinyMCESection">
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
@@ -74,11 +74,12 @@
     </section>
     <section name="WidgetSection">
         <element name="InsertWidgetTitle" type="text" selector="//h1[contains(text(),'Insert Widget')]"/>
+        <element name="DisplayType" type="select" selector="select[name='parameters[display_type]']"/>
         <element name="SelectCategoryTitle" type="text" selector="//h1[contains(text(),'Select Category')]"/>
         <element name="SelectProductTitle" type="text" selector="//h1[contains(text(),'Select Product')]"/>
         <element name="SelectPageTitle" type="text" selector="//h1[contains(text(),'Select Page')]"/>
         <element name="SelectBlockTitle" type="text" selector="//h1[contains(text(),'Select Block')]"/>
-        <element name="InsertWidget" type="button" selector="#insert_button"/>
+        <element name="InsertWidget" type="button" selector="#insert_button" timeout="30"/>
         <element name="InsertWidgetBtnDisabled" type="button" selector="//button[@id='insert_button' and contains(@class,'disabled')]"/>
         <element name="InsertWidgetBtnEnabled" type="button" selector="//button[@id='insert_button' and not(contains(@class,'disabled'))]"/>
         <element name="CancelBtnEnabled" type="button" selector="//button[@id='reset' and not(contains(@class,'disabled'))]"/>
@@ -103,6 +104,5 @@
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>
         <element name="ClearCompare" type="button" selector="#compare-clear-all"/>
         <element name="AcceptClear" type="button" selector=".action-primary.action-accept" />
-
     </section>
 </sections>
