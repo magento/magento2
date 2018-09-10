@@ -502,7 +502,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         )->setExpirationDate(
             $this->getToDate()
         )->setType(
-        \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
