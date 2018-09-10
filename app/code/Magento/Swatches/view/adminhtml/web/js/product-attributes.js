@@ -417,8 +417,7 @@ define([
             var editForm = $('#edit_form'),
                 swatchVisualPanel = $('#swatch-visual-options-panel'),
                 swatchTextPanel = $('#swatch-text-options-panel'),
-                optionsTableContent = $(),
-                optionContainer = $(),
+                tableBody = $(),
                 activePanel = $();
 
             $('#frontend_input').bind('change', function () {
@@ -436,7 +435,8 @@ define([
                 .collapse('hide');
 
             editForm.on('beforeSubmit', function () {
-                var swatchValues = [];
+                var swatchValues = [],
+                    optionContainer;
 
                 activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
                 optionContainer = activePanel.find('table tbody');
@@ -457,16 +457,13 @@ define([
                         .prependTo(editForm);
                 }
 
-                optionsTableContent = optionContainer.clone(true);
-                [swatchVisualPanel, swatchTextPanel].forEach(function (el) {
-                    $(el).find('table')
-                        .replaceWith($('<div>').text($.mage.__('Sending swatch values as package.')));
-                });
+                tableBody = optionContainer.detach();
             });
 
             editForm.on('afterValidate.error', function () {
                 if (activePanel.is(':visible')) {
-                    optionContainer.replaceWith(optionsTableContent);
+                    activePanel.find('table').append(tableBody);
+                    $('input[name="serialized_options"]').remove();
                 }
             });
         });

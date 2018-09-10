@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataProvider;
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
@@ -31,9 +31,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private $multipleAttributeList;
 
     /**
-     * @var OptionsDataProvider|null
+     * @var OptionsDataResolver|null
      */
-    private $optionsDataProvider;
+    private $optionsDataResolver;
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
-     * @param OptionsDataProvider|null $optionsDataProvider
+     * @param OptionsDataResolver|null $optionsDataResolver
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -55,14 +55,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        OptionsDataProvider $optionsDataProvider = null
+        OptionsDataResolver $optionsDataResolver = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
-        $this->optionsDataProvider = $optionsDataProvider ?: ObjectManager::getInstance()
-            ->get(OptionsDataProvider::class);
+        $this->optionsDataResolver = $optionsDataResolver ?: ObjectManager::getInstance()
+            ->get(OptionsDataResolver::class);
     }
 
     /**
@@ -75,9 +75,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $response = new DataObject();
         $response->setError(false);
         try {
-            $optionsData = $this->optionsDataProvider->getOptionsData($this->getRequest());
+            $optionsData = $this->optionsDataResolver->getOptionsData($this->getRequest());
         } catch (\InvalidArgumentException $e) {
-            $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
+            $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
                 . "If the error persists, please try again later.");
             $this->setMessageToResponse($response, [$message]);
             $response->setError(true);

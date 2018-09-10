@@ -8,9 +8,14 @@ namespace Magento\Catalog\Model\Product\Attribute\Option;
 
 use Magento\Framework\App\RequestInterface;
 
-class OptionsDataProvider
+/**
+ * Attribute options data resolver.
+ */
+class OptionsDataResolver
 {
     /**
+     * Provides attribute options data from the request.
+     *
      * @param RequestInterface $request
      * @return array
      * @throws \InvalidArgumentException

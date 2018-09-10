@@ -20,7 +20,6 @@ define([
 
     return function (config) {
         var optionPanel = jQuery('#manage-options-panel'),
-            optionsValues = [],
             editForm = jQuery('#edit_form'),
             attributeOption = {
                 table: $('attribute-options-table'),
@@ -146,8 +145,7 @@ define([
                     return optionDefaultInputType;
                 }
             },
-            optionsTableContent = jQuery(),
-            optionContainer = optionPanel.find('table tbody');
+            tableBody = jQuery();
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
@@ -183,6 +181,9 @@ define([
             });
         }
         editForm.on('beforeSubmit', function () {
+            var optionsValues = [],
+                optionContainer = optionPanel.find('table tbody');
+
             if (optionPanel.is(':visible')) {
                 optionContainer.find('input')
                     .each(function () {
@@ -206,13 +207,12 @@ define([
                     .val(JSON.stringify(optionsValues))
                     .prependTo(editForm);
             }
-            optionsTableContent = optionContainer.clone(true);
-            optionContainer
-                .replaceWith(jQuery('<div>').text(jQuery.mage.__('Sending attribute values as package.')));
+            tableBody = optionContainer.detach();
         });
         editForm.on('afterValidate.error', function () {
             if (optionPanel.is(':visible')) {
-                optionContainer.replaceWith(optionsTableContent);
+                optionPanel.find('table').append(tableBody);
+                jQuery('input[name="serialized_options"]').remove();
             }
         });
         window.attributeOption = attributeOption;
