@@ -290,7 +290,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -401,7 +401,7 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -944,6 +944,9 @@ class Eav extends AbstractModifier
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
         $product = $this->locator->getProduct();
+        if ($product->isLockedAttribute($attributeCode)) {
+            return false;
+        }
 
         if (isset($this->canDisplayUseDefault[$attributeCode])) {
             return $this->canDisplayUseDefault[$attributeCode];

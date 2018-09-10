@@ -768,7 +768,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -819,6 +819,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         foreach ($this as $product) {
             if (isset($productWebsites[$product->getId()])) {
                 $product->setData('websites', $productWebsites[$product->getId()]);
+                $product->setData('website_ids', $productWebsites[$product->getId()]);
             }
         }
         return $this;
@@ -1115,11 +1116,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get SQL for get record count
      *
-     * @param null $select
+     * @param Select $select
      * @param bool $resetLeftJoins
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
-    protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
+    protected function _getSelectCountSql(?Select $select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
         $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
@@ -1581,7 +1582,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
