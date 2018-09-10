@@ -331,6 +331,7 @@ define([
          */
         reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+                $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
         },
