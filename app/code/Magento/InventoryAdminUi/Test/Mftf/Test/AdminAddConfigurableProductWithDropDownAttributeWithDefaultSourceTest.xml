@@ -76,6 +76,7 @@
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
 
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
         <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear1" />
         <waitForPageLoad stepKey="waitUntilPageIsReady1" />
 
