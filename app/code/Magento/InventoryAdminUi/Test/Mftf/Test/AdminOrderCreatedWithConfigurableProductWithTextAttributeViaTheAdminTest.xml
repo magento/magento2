@@ -154,11 +154,11 @@
         <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad17"/>
 
-        <click selector="tbody tr .col-sku" stepKey="clickOnSku1"/>
+        <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad18"/>
 
-        <fillField selector="tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
-        <click selector=".action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
+        <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
+        <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad19"/>
 
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
