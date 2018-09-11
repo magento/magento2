@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 
 /**
  * Unit tests for \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\SaveHandler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
