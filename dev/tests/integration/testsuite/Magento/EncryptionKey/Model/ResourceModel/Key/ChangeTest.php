@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
 
 class ChangeTest extends \PHPUnit\Framework\TestCase
@@ -79,7 +81,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->assertNotContains($testValue, $values1);
-        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9]+:)([a-zA-Z0-9+/]+=)|', current($values1));
+        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values1));
 
         // Verify that the credit card number has been encrypted
         $values2 = $connection->fetchPairs(
@@ -89,7 +91,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->assertNotContains('1111111111', $values2);
-        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9]+:)([a-zA-Z0-9+/]+=)|', current($values1));
+        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values2));
 
         /** clean up */
         $select = $connection->select()->from($configModel->getMainTable())->where('path=?', $testPath);
