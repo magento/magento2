@@ -12,6 +12,9 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectAttri
 /**
  * Class StrategyMapper
  * This class is responsible for deciding which BaseSelectStrategyInterface should be used for passed SelectContainer
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class StrategyMapper
 {
