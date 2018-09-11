@@ -236,9 +236,9 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton5"/>
+        <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="(//tr//button[@data-action='remove_row'])[2]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton6"/>
