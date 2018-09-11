@@ -9,8 +9,8 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -34,18 +34,26 @@ class AdaptAssignStatusToProductPlugin
     private $defaultStockProvider;
 
     /**
+     * @var Product
+     */
+    private $product;
+
+    /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param IsProductSalableInterface $isProductSalable
      * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param Product $product
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider,
+        Product $product
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
         $this->defaultStockProvider = $defaultStockProvider;
+        $this->product = $product;
     }
 
     /**
@@ -63,7 +71,9 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
-        if (null === $product->getSku()) {
+        if (null === $product->getSku()
+            || false === $this->product->getIdBySku($product->getSku())
+        ) {
             return;
         }
 
