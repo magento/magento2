@@ -689,7 +689,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->getCacheKey(
                     [
                         false,
-                        $product->hasData(\Magento\Catalog\Model\Product::STORE_ID) ? $product->getStoreId() : null
+                        $product->getStoreId()
                     ]
                 ),
                 $product
