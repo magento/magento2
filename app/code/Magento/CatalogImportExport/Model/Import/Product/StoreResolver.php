@@ -75,7 +75,7 @@ class StoreResolver
             $this->_initWebsites();
         }
         if ($code) {
-            return isset($this->websiteCodeToId[$code]) ? $this->websiteCodeToId[$code] : null;
+            return $this->websiteCodeToId[$code] ?? null;
         }
         return $this->websiteCodeToId;
     }
@@ -90,7 +90,7 @@ class StoreResolver
             $this->_initWebsites();
         }
         if ($code) {
-            return isset($this->websiteCodeToStoreIds[$code]) ? $this->websiteCodeToStoreIds[$code] : null;
+            return $this->websiteCodeToStoreIds[$code] ?? null;
         }
         return $this->websiteCodeToStoreIds;
     }
@@ -119,7 +119,7 @@ class StoreResolver
             $this->_initStores();
         }
         if ($code) {
-            return isset($this->storeCodeToId[$code]) ? $this->storeCodeToId[$code] : null;
+            return $this->storeCodeToId[$code] ??  null;
         }
         return $this->storeCodeToId;
     }
@@ -134,7 +134,7 @@ class StoreResolver
             $this->_initStores();
         }
         if ($code) {
-            return isset($this->storeIdToWebsiteStoreIds[$code]) ? $this->storeIdToWebsiteStoreIds[$code] : null;
+            return $this->storeIdToWebsiteStoreIds[$code] ?? null;
         }
         return $this->storeIdToWebsiteStoreIds;
     }
