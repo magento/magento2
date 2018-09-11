@@ -20,7 +20,6 @@ try {
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
 } catch (\Magento\Framework\Exception\StateException $exception) {
-
 }
 
 $registry->unregister('isSecureArea');
