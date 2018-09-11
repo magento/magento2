@@ -7,26 +7,26 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsSection">
         <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
         <element name="useDefaultOptionTitle" type="text" selector="[data-index='options'] tr.data-row [data-index='title'] [name^='options_use_default']"/>
         <element name="useDefaultOptionTitleByIndex" type="text" selector="[data-index='options'] [data-index='values'] tr[data-repeat-index='{{var1}}'] [name^='options_use_default']" parameterized="true"/>
         <element name="addOptionBtn" type="button" selector="button[data-index='button_add']"/>
-        <element name="fillOptionTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//label[text()='Option Title']/parent::span/parent::div//input[@class='admin__control-text']" parameterized="true"/>
+        <element name="fillOptionTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Title']/parent::label/parent::div/parent::div//input[@class='admin__control-text']" parameterized="true"/>
         <element name="optionTitleInput" type="input" selector="input[name='product[options][0][title]']"/>
         <element name="optionTypeOpenDropDown" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-select"/>
         <element name="optionTypeTextField" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li li"/>
         <element name="maxCharactersInput" type="input" selector="input[name='product[options][0][max_characters]']"/>
 
-        <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//label[text()='Option Type']/parent::span/parent::div//div[@data-role='selected-option']" parameterized="true"/>
-        <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::span/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
+        <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
+        <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
         <element name="clickAddValue" type="button" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tfoot//button" parameterized="true"/>
-        <element name="fillOptionValueTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//label[text()='Title']/parent::span/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
+        <element name="fillOptionValueTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='Title']/parent::label/parent::div/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
         <element name="fillOptionValuePrice" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='Price']/parent::label/parent::div//div[@class='admin__control-addon']/input" parameterized="true"/>
-        <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//label[text()='Price Type']/parent::span/parent::div//select" parameterized="true"/>
-        <element name="checkboxUseDefaultTitle" type="checkbox" selector="//span[text()='Option Title']/parent::label/parent::div/div//input[@type='checkbox']"/>
+        <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//span[text()='Price Type']/parent::label/parent::div/parent::div//select" parameterized="true"/>
+        <element name="checkboxUseDefaultTitle" type="checkbox" selector="//span[text()='Option Title']/parent::label/parent::div/parent::div/div//input[@type='checkbox']"/>
         <element name="checkboxUseDefaultOption" type="checkbox" selector="//table[@data-index='values']//tbody//tr[@data-repeat-index='{{var1}}']//div[@class='admin__field-control']//input[@type='checkbox']" parameterized="true"/>
 
         <!-- Elements that make it easier to select the most recently added element -->
