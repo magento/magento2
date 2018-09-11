@@ -9,9 +9,9 @@ namespace Magento\InventoryCatalogAdminUi\Model;
 
 /**
  * Mass assign session storage
- * @see \Magento\InventoryAdminUi\Controller\Adminhtml\Source\BulkAssign
- * @see \Magento\InventoryAdminUi\Controller\Adminhtml\Source\BulkUnassign
- * @see \Magento\InventoryAdminUi\Controller\Adminhtml\Stock\BulkTransfer
+ * @see \Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Source\BulkAssign
+ * @see \Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Source\BulkUnassign
+ * @see \Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Inventory\BulkTransfer
  */
 class BulkSessionProductsStorage
 {
