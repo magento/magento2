@@ -13,6 +13,9 @@ use Magento\Paypal\Model\IpnInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Index */
