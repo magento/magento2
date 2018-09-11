@@ -64,6 +64,8 @@ QUERY;
 
     /**
      * Verify the message when CMS Block is disabled
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/block.php
      */
     public function testGetDisabledCmsBlockByIdentifiers()
     {
