@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Attribute\Option;
 
 use Magento\Framework\App\RequestInterface;
@@ -26,7 +28,7 @@ class OptionsDataResolver
         $optionsData = [];
 
         if ($serializedOptions) {
-            $encodedOptions = json_decode($serializedOptions, JSON_OBJECT_AS_ARRAY);
+            $encodedOptions = json_decode($serializedOptions, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \InvalidArgumentException('Unable to unserialize options data.');
