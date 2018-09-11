@@ -75,15 +75,22 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
+     * @var ConfigInterface
+     */
+    private $routeConfig;
+
+    /**
      * @param Template\Context $context
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param array $data
      * @param MenuItemChecker|null $menuItemChecker
      * @param AnchorRenderer|null $anchorRenderer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -94,7 +101,8 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = [],
         MenuItemChecker $menuItemChecker = null,
-        AnchorRenderer $anchorRenderer = null
+        AnchorRenderer $anchorRenderer = null,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig = null
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;
@@ -103,6 +111,9 @@ class Menu extends \Magento\Backend\Block\Template
         $this->_localeResolver = $localeResolver;
         $this->menuItemChecker =  $menuItemChecker;
         $this->anchorRenderer = $anchorRenderer;
+        $this->routeConfig = $routeConfig ?:
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Route\ConfigInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -203,8 +214,9 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _callbackSecretKey($match)
     {
+        $routeId = $this->routeConfig->getRouteByFrontName($match[1]);
         return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
-            $match[1],
+            $routeId,
             $match[2],
             $match[3]
         );
