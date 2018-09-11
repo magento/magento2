@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
@@ -49,7 +50,7 @@ class QuoteIdToMaskedQuoteIdTest extends \PHPUnit\Framework\TestCase
 
     public function testMaskedQuoteIdWithNonExistentQuoteId()
     {
-        self::expectException('Magento\Framework\Exception\NoSuchEntityException');
+        self::expectException(NoSuchEntityException::class);
 
         $this->quoteIdToMaskedQuoteId->execute(0);
     }

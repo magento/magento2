@@ -7,6 +7,7 @@ namespace Magento\Framework\Filesystem\Io;
 
 /**
  * Input/output client interface
+ * @api
  */
 interface IoInterface
 {
