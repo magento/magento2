@@ -19,6 +19,5 @@
         <element name="productQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
         <element name="productUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
         <element name="productAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
-        <element name="productSuccessUpdateMessage" type="text" selector="//div[1]/div[2]/div/div/div"/>
     </section>
 </sections>

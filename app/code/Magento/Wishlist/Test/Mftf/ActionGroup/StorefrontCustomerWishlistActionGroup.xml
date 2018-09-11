@@ -85,6 +85,6 @@
         <fillField selector="{{StorefrontCustomerWishlistProductSection.productQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="submitUpdateWishlist"/>
-        <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessUpdateMessage}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
     </actionGroup>
 </actionGroups>
