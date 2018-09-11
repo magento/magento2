@@ -1195,12 +1195,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
                 $websiteCodes = [];
-                $websiteStoreViewCodes = [];
+                $storeViewCodes = [];
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
                     if (isset($this->_websiteStoreViews[$productWebsite])) {
-                        $websiteStoreViewCodes = array_merge(
-                            $websiteStoreViewCodes,
+                        $storeViewCodes = array_merge(
+                            $storeViewCodes,
                             $this->_websiteStoreViews[$productWebsite]
                         );
                     }
@@ -1208,7 +1208,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $dataRow[self::COL_PRODUCT_WEBSITES] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $dataRow[self::COL_STORE] =
-                    implode(IMPORT::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteStoreViewCodes);
+                    implode(IMPORT::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $storeViewCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
             if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
