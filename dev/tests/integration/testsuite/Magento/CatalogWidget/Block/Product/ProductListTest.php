@@ -78,4 +78,57 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             "Product collection was not filtered according to the widget condition."
         );
     }
+
+    /**
+     * Test product list widget can process condition with dropdown type of attribute
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_dropdown_attribute.php
+     */
+    public function testCreateCollectionWithDropdownAttribute()
+    {
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+        );
+        $attribute->load('dropdown_attribute', 'attribute_code');
+        $dropdownAttributeOptionIds = [];
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getValue()) {
+                $dropdownAttributeOptionIds[] = $option->getValue();
+            }
+        }
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,' .
+            '`aggregator`:`any`,`value`:`1`,`new_child`:``^],`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[0] . '`^],`1--2`:^[`type`:`Magento||CatalogWidget||Model||Rule|' .
+            '|Condition||Product`,`attribute`:`dropdown_attribute`,`operator`:`==`,`value`:`'
+            . $dropdownAttributeOptionIds[1] . '`^]^]';
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->performAssertions(2);
+        $attribute->setUsedInProductListing(0);
+        $attribute->save();
+        $this->performAssertions(2);
+        $attribute->setIsGlobal(1);
+        $attribute->save();
+        $this->performAssertions(2);
+    }
+
+    /**
+     * Check product collection includes correct amount of products.
+     *
+     * @param int $count
+     * @return void
+     */
+    private function performAssertions(int $count)
+    {
+        // Load products collection filtered using specified conditions and perform assertions.
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+        $this->assertEquals(
+            $count,
+            $productCollection->count(),
+            "Product collection was not filtered according to the widget condition."
+        );
+    }
 }
