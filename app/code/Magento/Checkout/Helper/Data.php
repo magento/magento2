@@ -164,7 +164,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
@@ -191,7 +191,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
