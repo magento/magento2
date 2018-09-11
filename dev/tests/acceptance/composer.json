@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "codeception/codeception": "~2.3.4",
+        "codeception/codeception": "~2.3.4 || ~2.4.0",
         "consolidation/robo": "^1.0.0",
         "vlucas/phpdotenv": "^2.4"
     },

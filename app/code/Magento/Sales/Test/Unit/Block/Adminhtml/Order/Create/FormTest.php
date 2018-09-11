@@ -118,6 +118,7 @@ class FormTest extends TestCase
     {
         $customerId = 1;
         $storeId = 1;
+        $quoteId = 2;
         $expected = [
             'customer_id' => $customerId,
             'addresses' => [],
@@ -125,6 +126,7 @@ class FormTest extends TestCase
             'currency_symbol' => '$',
             'shipping_method_reseted' => false,
             'payment_method' => 'free',
+            'quote_id' => $quoteId
         ];
 
         $this->storeManager->method('setCurrentStore')
@@ -133,6 +135,8 @@ class FormTest extends TestCase
             ->willReturn($customerId);
         $this->quoteSession->method('getStoreId')
             ->willReturn($storeId);
+        $this->quoteSession->method('getQuoteId')
+            ->willReturn($quoteId);
 
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()

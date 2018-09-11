@@ -108,6 +108,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * Test for \Magento\Checkout\Controller\Cart::configureAction() with bundle product
      *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testConfigureActionWithBundleProduct()
     {
@@ -238,7 +239,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
      * @param \Magento\Quote\Model\Quote $quote
-     * @param $productId
+     * @param int $productId
      * @return \Magento\Quote\Model\Quote\Item|null
      */
     private function _getQuoteItemIdByProductId($quote, $productId)

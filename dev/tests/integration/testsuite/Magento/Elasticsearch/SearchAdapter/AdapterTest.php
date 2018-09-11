@@ -314,7 +314,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
-        $this->markTestSkipped('Filter of composite products with Out of Stock child not supported till MAGETWO-59305');
         parent::testAdvancedSearchCompositeProductWithOutOfStockOption();
     }
 
@@ -326,7 +325,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
-        $this->markTestSkipped('Filter of composite products with Out of Stock child not supported till MAGETWO-59305');
         // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed
         $this->reindexAll();
         parent::testAdvancedSearchCompositeProductWithDisabledChild();
