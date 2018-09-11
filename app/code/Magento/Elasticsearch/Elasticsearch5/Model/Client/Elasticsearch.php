@@ -268,7 +268,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping_type' => 'string',
                                 'mapping' => $this->prepareFieldInfo([
                                     'type' => 'text',
-                                    'index' => 'no',
+                                    'index' => false,
                                 ]),
                             ],
                         ],

@@ -135,7 +135,7 @@ class ProductFieldMapper implements FieldMapperInterface
                 if ($attribute->getIsFilterable() || $attribute->getIsFilterableInSearch()) {
                     $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
                 } else if ($allAttributes[$attributeCode]['type'] === FieldType::ES_DATA_TYPE_TEXT) {
-                    $allAttributes[$attributeCode]['index'] = 'no';
+                    $allAttributes[$attributeCode]['index'] = false;
                 }
             } else if ($attributeCode == "category_ids") {
                 $allAttributes[$attributeCode] = [
@@ -179,6 +179,7 @@ class ProductFieldMapper implements FieldMapperInterface
     {
         switch ($frontendInput) {
             case 'select':
+            case 'multiselect':
                 return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
             case 'boolean':
                 return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
