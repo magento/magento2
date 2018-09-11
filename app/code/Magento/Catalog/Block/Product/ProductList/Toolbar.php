@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product list toolbar
@@ -133,6 +134,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     private $httpContext;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey
+     */
+    private $formKey;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
@@ -142,6 +148,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param ToolbarMemorizer|null $toolbarMemorizer
      * @param \Magento\Framework\App\Http\Context|null $httpContext
+     * @param \Magento\Framework\Data\Form\FormKey|null $formKey
      * @param array $data
      */
     public function __construct(
@@ -154,6 +161,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         ToolbarMemorizer $toolbarMemorizer = null,
         \Magento\Framework\App\Http\Context $httpContext = null,
+        \Magento\Framework\Data\Form\FormKey $formKey = null,
         array $data = []
     ) {
         $this->_catalogSession = $catalogSession;
@@ -162,11 +170,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         $this->urlEncoder = $urlEncoder;
         $this->_productListHelper = $productListHelper;
         $this->_postDataHelper = $postDataHelper;
-        $this->toolbarMemorizer = $toolbarMemorizer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(
             ToolbarMemorizer::class
         );
-        $this->httpContext = $httpContext ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->httpContext = $httpContext ?: ObjectManager::getInstance()->get(
             \Magento\Framework\App\Http\Context::class
+        );
+        $this->formKey = $formKey ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Data\Form\FormKey::class
         );
         parent::__construct($context, $data);
     }
@@ -711,19 +722,19 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     public function getWidgetOptionsJson(array $customOptions = [])
     {
         $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
-        $defaultDirection = $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION;
-        $isMemorizingAllowed = $this->toolbarMemorizer->isMemorizingAllowed();
         $options = [
             'mode' => ToolbarModel::MODE_PARAM_NAME,
             'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
             'order' => ToolbarModel::ORDER_PARAM_NAME,
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
-            'modeDefault' => $isMemorizingAllowed ? false : $defaultMode,
-            'directionDefault' => $isMemorizingAllowed ? false : $defaultDirection,
-            'orderDefault' => $isMemorizingAllowed ? false : $this->getOrderField(),
-            'limitDefault' => $isMemorizingAllowed ? false :
-                $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'modeDefault' => $defaultMode,
+            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
+            'orderDefault' => $this->getOrderField(),
+            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
+            'formKey' => $this->formKey->getFormKey(),
+            'pageParam' => ToolbarModel::PAGE_PARM_NAME,
+            'post' => $this->toolbarMemorizer->isMemorizingAllowed() ? true : false
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);

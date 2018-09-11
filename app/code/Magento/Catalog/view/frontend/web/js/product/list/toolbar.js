@@ -27,7 +27,10 @@ define([
             directionDefault: 'asc',
             orderDefault: 'position',
             limitDefault: '9',
-            url: ''
+            url: '',
+            formKey: '',
+            pageParam: 'p',
+            post: false
         },
 
         /** @inheritdoc */
@@ -99,12 +102,38 @@ define([
             }
             paramData[paramName] = paramValue;
 
-            if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
-                delete paramData[paramName];
-            }
-            paramData = $.param(paramData);
+            if (this.options.post) {
+                var form = document.createElement('form');
 
-            location.href = baseUrl + (paramData.length ? '?' + paramData : '');
+                var params = [this.options.mode, this.options.direction, this.options.order, this.options.limit];
+                for (var key in paramData) {
+                    if (params.indexOf(key) !== -1) {
+                        var input = document.createElement('input');
+                        input.name = key;
+                        input.value = paramData[key];
+                        form.appendChild(input);
+                        delete paramData[key];
+                    }
+                }
+                var formKey = document.createElement('input');
+                formKey.name = 'form_key';
+                formKey.value = this.options.formKey;
+                form.appendChild(formKey);
+
+                paramData = $.param(paramData);
+                baseUrl = baseUrl + (paramData.length ? '?' + paramData : '');
+
+                form.action = baseUrl;
+                form.method = 'POST';
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
+                    delete paramData[paramName];
+                }
+                paramData = $.param(paramData);
+                location.href = baseUrl + (paramData.length ? '?' + paramData : '');
+            }
         }
     });
 
