@@ -361,7 +361,8 @@ class General extends AbstractModifier
             $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'autoImportIfEmpty' => true
+                'autoImportIfEmpty' => true,
+                'validation' => ['no-marginal-whitespace' => true]
             ]
         );
 
