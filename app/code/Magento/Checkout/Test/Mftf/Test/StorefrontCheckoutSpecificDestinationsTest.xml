@@ -7,10 +7,10 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="CheckoutSpecificDestinationsTest">
+    <test name="StorefrontCheckoutSpecificDestinationsTest">
         <annotations>
             <title value="Check that top destinations can be removed after a selection was previously saved"/>
-            <stories value="MAGETWO-91511: Top destinations cannot be removed after a selection was previously saved"/>
+            <stories value="MAGETWO-87971: Top destinations cannot be removed after a selection was previously saved"/>
             <description value="Check that top destinations can be removed after a selection was previously saved"/>
             <features value="Checkout"/>
             <severity value="AVERAGE"/>
@@ -19,9 +19,9 @@
         </annotations>
 
         <before>
-            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
-            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
-                <requiredEntity createDataKey="defaultCategory"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -65,8 +65,8 @@
 
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="defaultCategory" stepKey="deleteDefaultCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteCategory"/>
         </after>
     </test>
 </tests>
