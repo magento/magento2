@@ -274,7 +274,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $order = $defaultOrder;
         }
 
-        if ($order != $defaultOrder && $this->toolbarMemorizer->isMemorizingAllowed()) {
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::ORDER_PARAM_NAME, $order, $defaultOrder);
         }
 
@@ -300,7 +300,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $dir = $this->_direction;
         }
 
-        if ($dir != $this->_direction && $this->toolbarMemorizer->isMemorizingAllowed()) {
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::DIRECTION_PARAM_NAME, $dir, $this->_direction);
         }
 
@@ -442,7 +442,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $mode = $defaultMode;
         }
 
-        if ($mode != $defaultMode && $this->toolbarMemorizer->isMemorizingAllowed()) {
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::MODE_PARAM_NAME, $mode, $defaultMode);
         }
 
@@ -602,7 +602,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $limit = $defaultLimit;
         }
 
-        if ($limit != $defaultLimit && $this->toolbarMemorizer->isMemorizingAllowed()) {
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
             $this->httpContext->setValue(ToolbarModel::LIMIT_PARAM_NAME, $limit, $defaultLimit);
         }
 
