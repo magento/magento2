@@ -138,12 +138,12 @@ class Uploader
     /**
      * Max Image Width resolution in pixels. For image resizing on client side
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    const MAX_IMAGE_WIDTH = 4096;
 
     /**
      * Max Image Height resolution in pixels. For image resizing on client side
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    const MAX_IMAGE_HEIGHT = 2160;
 
     /**
      * Resulting of uploaded file
