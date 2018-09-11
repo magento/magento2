@@ -89,8 +89,7 @@ class Adapter implements AdapterInterface
         AggregationBuilder $aggregationBuilder,
         \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory $queryContainerFactory,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
@@ -110,6 +109,7 @@ class Adapter implements AdapterInterface
         $aggregationBuilder = $this->aggregationBuilder;
         $query = $this->mapper->buildQuery($request);
         $aggregationBuilder->setQuery($this->queryContainerFactory->create(['query' => $query]));
+
         try {
             $rawResponse = $client->query($query);
         } catch (\Exception $e) {
@@ -117,6 +117,7 @@ class Adapter implements AdapterInterface
             // return empty search result in case an exception is thrown from Elasticsearch
             $rawResponse = self::$emptyRawResponse;
         }
+
         $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
         $queryResponse = $this->responseFactory->create(
             [
