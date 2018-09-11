@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigureTaxSection">
         <!-- on page /admin/admin/system_config/edit/section/tax/ -->
         <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
@@ -50,5 +50,6 @@
         <element name="dropdownDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary select"/>
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
+        <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
     </section>
 </sections>
