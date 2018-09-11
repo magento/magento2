@@ -20,14 +20,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class CategoryProcessUrlRewriteMovingObserverTest
  *
  * @covers \Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteMovingObserver
  */
-class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
+class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoryProcessUrlRewriteMovingObserver
@@ -55,11 +54,6 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
     private $urlRewriteHandlerMock;
 
     /**
-     * @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $urlRewriteBunchReplacerMock;
-
-    /**
      * @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $databaseMapPoolMock;
@@ -73,7 +67,8 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
         $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->urlRewriteHandlerMock = $this->createMock(UrlRewriteHandler::class);
-        $this->urlRewriteBunchReplacerMock = $this->createPartialMock(
+        /** @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject $urlRewriteBunchReplacerMock */
+        $urlRewriteBunchReplacerMock = $this->createPartialMock(
             UrlRewriteBunchReplacer::class,
             ['doBunchReplace']
         );
@@ -84,7 +79,7 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
             $this->urlPersistMock,
             $this->scopeConfigMock,
             $this->urlRewriteHandlerMock,
-            $this->urlRewriteBunchReplacerMock,
+            $urlRewriteBunchReplacerMock,
             $this->databaseMapPoolMock,
             [
                 DataCategoryUrlRewriteDatabaseMap::class,
