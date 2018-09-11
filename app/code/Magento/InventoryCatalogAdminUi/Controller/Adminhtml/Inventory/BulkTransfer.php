@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Inventory;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\InventoryCatalogAdminUi\Model\Bulk\BulkPageProcessor;
+use Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\BulkPageProcessor;
 
 /**
  * Mass transfer sources between products.

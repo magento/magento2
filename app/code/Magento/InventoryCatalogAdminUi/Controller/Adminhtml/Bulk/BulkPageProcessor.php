@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogAdminUi\Model\Bulk;
+namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ResponseInterface;
