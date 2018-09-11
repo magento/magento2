@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 
 use Magento\Framework\App\ObjectManager;
