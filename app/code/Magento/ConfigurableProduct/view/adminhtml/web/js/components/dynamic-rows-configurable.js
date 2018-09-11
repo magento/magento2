@@ -218,8 +218,8 @@ define([
 
             _.each(tmpData, function (row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
-                row.attributes = $('<i></i>').text(row.attributes).html();
-                row.sku = $('<i></i>').text(row.sku).html();
+                row.attributes = $('<i></i>').text(row.attributes).text();
+                row.sku = $('<i></i>').text(row.sku).text();
                 this.source.set(path, row);
             }, this);
 
@@ -379,8 +379,8 @@ define([
                 product = {
                     'id': row.productId,
                     'product_link': row.productUrl,
-                    'name': $('<i></i>').text(row.name).html(),
-                    'sku': $('<i></i>').text(row.sku).html(),
+                    'name': $('<i></i>').text(row.name).text(),
+                    'sku': $('<i></i>').text(row.sku).text(),
                     'status': row.status,
                     'price': row.price,
                     'price_currency': row.priceCurrency,
