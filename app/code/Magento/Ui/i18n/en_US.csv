@@ -180,7 +180,7 @@ CSV,CSV
 "Please enter a valid value from list","Please enter a valid value from list"
 "Please enter valid SKU key.","Please enter valid SKU key."
 "Please enter a valid number.","Please enter a valid number."
-"Admin is a required field in the each row.","Admin is a required field in the each row."
+"Admin is a required field in each row.","Admin is a required field in each row."
 "Please fix this field.","Please fix this field."
 "Please enter a valid date (ISO).","Please enter a valid date (ISO)."
 "Please enter only digits.","Please enter only digits."
