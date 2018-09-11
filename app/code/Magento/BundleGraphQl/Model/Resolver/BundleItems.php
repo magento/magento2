@@ -39,16 +39,16 @@ class BundleItems implements ResolverInterface
     /**
      * @param Collection $bundleOptionCollection
      * @param ValueFactory $valueFactory
-     * @param MetadataPool $metdataPool
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Collection $bundleOptionCollection,
         ValueFactory $valueFactory,
-        MetadataPool $metdataPool
+        MetadataPool $metadataPool
     ) {
         $this->bundleOptionCollection = $bundleOptionCollection;
         $this->valueFactory = $valueFactory;
-        $this->metdataPool = $metdataPool;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
