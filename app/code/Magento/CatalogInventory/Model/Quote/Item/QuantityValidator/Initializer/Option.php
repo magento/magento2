@@ -67,10 +67,6 @@ class Option
          * define that stock item is child for composite product
          */
         $stockItem->setIsChildItem(true);
-        /**
-         * don't check qty increments value for option product
-         */
-        $stockItem->setSuppressCheckQtyIncrements(true);
 
         return $stockItem;
     }
