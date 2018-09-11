@@ -707,15 +707,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function addExtensionAttributes(Collection $collection) : Collection
     {
-        $ids = array_keys($collection->getItems());
-        if (empty($ids)) {
-            return $collection;
-        }
-
         foreach ($collection->getItems() as $item) {
             $this->readExtensions->execute($item);
         }
-
         return $collection;
     }
 
