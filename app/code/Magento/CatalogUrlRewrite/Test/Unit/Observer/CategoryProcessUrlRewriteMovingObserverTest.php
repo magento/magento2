@@ -67,11 +67,8 @@ class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\Tes
         $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->urlRewriteHandlerMock = $this->createMock(UrlRewriteHandler::class);
-        /** @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject $urlRewriteBunchReplacerMock */
-        $urlRewriteBunchReplacerMock = $this->createPartialMock(
-            UrlRewriteBunchReplacer::class,
-            ['doBunchReplace']
-        );
+        /** @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject $urlRewriteMock */
+        $urlRewriteMock = $this->createMock(UrlRewriteBunchReplacer::class);
         $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
 
         $this->observer = new CategoryProcessUrlRewriteMovingObserver(
@@ -79,7 +76,7 @@ class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\Tes
             $this->urlPersistMock,
             $this->scopeConfigMock,
             $this->urlRewriteHandlerMock,
-            $urlRewriteBunchReplacerMock,
+            $urlRewriteMock,
             $this->databaseMapPoolMock,
             [
                 DataCategoryUrlRewriteDatabaseMap::class,
