@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.2.0
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class UnknownStateException extends LocalizedException
 {
