@@ -11,6 +11,9 @@ use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     const DEFAULT_MESSAGE_KEY = 'message';
