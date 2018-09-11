@@ -904,14 +904,16 @@ class Checkout
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
-        // Exported data is more priority if we came from Express Checkout button
-        $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
+        // Exported data is more priority if require billing address setting is yes
+        $requireBillingAddress = $this->_config->getValue(
+            'requireBillingAddress'
+        ) == \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         // Since country is required field for billing and shipping address,
         // we consider the address information to be empty if country is empty.
         $isEmptyAddress = ($address->getCountryId() === null);
 
-        if (!$isButton && !$isEmptyAddress) {
+        if (!$requireBillingAddress && !$isEmptyAddress) {
             return;
         }
 
