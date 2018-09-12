@@ -5,18 +5,49 @@
 
 /*eslint max-nested-callbacks: 0*/
 define([
-    'Magento_Ui/js/form/element/select'
-], function (SelectElement) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/select', function () {
-        var params, model;
-
-        beforeEach(function () {
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    options: jasmine.createSpy(),
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy(),
+                'Magento_Ui/js/core/renderer/layout': jasmine.createSpy()
+            },
+            dataScope = 'select',
             params = {
-                dataScope: 'select'
-            };
-            model = new SelectElement(params);
+                provider: 'provName',
+                name: '',
+                index: '',
+                dataScope: dataScope
+            },
+            model;
+
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/select',
+                'knockoutjs/knockout-es5',
+                'Magento_Ui/js/lib/knockout/extender/observable_array'
+            ], function (Constr) {
+                model = new Constr(params);
+
+                done();
+            });
         });
 
         describe('initialize method', function () {
@@ -24,26 +55,20 @@ define([
                 expect(model).toBeDefined();
             });
             it('check for chainable', function () {
-                spyOn(model, 'initInput');
                 spyOn(model, 'initFilter');
                 expect(model.initialize(params)).toEqual(model);
-                expect(model.initInput).not.toHaveBeenCalled();
                 expect(model.initFilter).not.toHaveBeenCalled();
             });
             it('check for call initInput', function () {
-                spyOn(model, 'initInput');
                 spyOn(model, 'initFilter');
                 model.customEntry = true;
                 expect(model.initialize(params)).toEqual(model);
-                expect(model.initInput).toHaveBeenCalled();
                 expect(model.initFilter).not.toHaveBeenCalled();
             });
             it('check for call initFilter', function () {
-                spyOn(model, 'initInput');
                 spyOn(model, 'initFilter');
                 model.filterBy = true;
                 expect(model.initialize(params)).toEqual(model);
-                expect(model.initInput).not.toHaveBeenCalled();
                 expect(model.initFilter).toHaveBeenCalled();
             });
         });
