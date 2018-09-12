@@ -652,7 +652,7 @@ class Checkout
 
         // import billing address
         $requireBillingAddress = $this->_config->getValue(
-                'requireBillingAddress'
+            'requireBillingAddress'
         ) == \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
