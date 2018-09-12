@@ -51,10 +51,6 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="{{SimpleMsiProduct.sku}}"/>
         </actionGroup>
-
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
-
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeNameInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSkuInFirstRow1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seePriceInFirstRow1"/>

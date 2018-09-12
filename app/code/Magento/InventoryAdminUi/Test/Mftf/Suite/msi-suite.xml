@@ -10,7 +10,8 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
     <suite name="MSI_Single_Mode">
         <before>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
         </before>
         <include>
             <group name="single_mode"/>
@@ -20,12 +21,12 @@
             <group name="multi_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
         </after>
     </suite>
     <suite name="MSI_Multi_Mode">
         <before>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
         </before>
         <include>
             <group name="multi_mode"/>
@@ -35,12 +36,12 @@
             <group name="single_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
         </after>
     </suite>
     <suite name="MSI_Sort_Order_Tests">
         <before>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
         </before>
         <include>
             <group name="sort_order_test"/>
@@ -51,7 +52,7 @@
             <group name="multi_mode"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled"/>
         </after>
     </suite>
 </suites>
