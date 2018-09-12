@@ -12,6 +12,9 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Class SelectContainer
  * This class is a container for all data that is required for creating select query by search request
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class SelectContainer
 {
