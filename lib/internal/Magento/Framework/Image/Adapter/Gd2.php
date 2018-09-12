@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
