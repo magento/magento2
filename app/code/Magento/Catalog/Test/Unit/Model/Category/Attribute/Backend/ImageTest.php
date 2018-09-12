@@ -67,7 +67,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->imageUploader = $this->createPartialMock(
             \Magento\Catalog\Model\ImageUploader::class,
-            [   
+            [
                 'moveFileFromTmp',
                 'getNewFileName',
             ]
@@ -188,8 +188,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
         return $model->setAttribute($this->attribute);
     }
-    
-    
+
+
     /**
      * Test beforeSaveAttributeFileNameOutsideOfCategoryDir.
      */
