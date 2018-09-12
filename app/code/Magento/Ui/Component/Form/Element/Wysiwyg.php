@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
+ * WYSIWYG form element
+ *
  * @api
  * @since 100.1.0
  */
