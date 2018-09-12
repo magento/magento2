@@ -312,7 +312,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         self::COL_MEDIA_IMAGE => 'additional_images',
         '_media_image_label' => 'additional_image_labels',
         '_media_is_disabled' => 'hide_from_product_page',
-        '_media_is_enabled' => 'show_on_product_page',
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
@@ -1945,8 +1944,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $statesArray = [];
         $mappingArray = [
-            '_media_is_disabled' => '1',
-            '_media_is_enabled' => '0'
+            '_media_is_disabled' => '1'
         ];
 
         foreach ($mappingArray as $key => $value) {

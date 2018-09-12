@@ -734,7 +734,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     'additional_images',
                     'additional_image_labels',
                     'hide_from_product_page',
-                    'show_on_product_page',
                     'custom_options'
                 ]
             );
@@ -1199,7 +1198,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $additionalImages = [];
                 $additionalImageLabels = [];
                 $additionalImageIsDisabled = [];
-                $additionalImageIsEnabled = [];
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
                     if ((int)$mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
                         $additionalImages[] = $mediaItem['_media_image'];
@@ -1207,8 +1205,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                         if ($mediaItem['_media_is_disabled'] == true) {
                             $additionalImageIsDisabled[] = $mediaItem['_media_image'];
-                        } else {
-                            $additionalImageIsEnabled[] = $mediaItem['_media_image'];
                         }
                     }
                 }
@@ -1218,8 +1214,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
                 $dataRow['hide_from_product_page'] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
-                $dataRow['show_on_product_page'] =
-                    implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsEnabled);
                 $multiRawData['mediaGalery'][$productLinkId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
@@ -1253,8 +1247,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     if ((int)$mediaItem['_media_store_id'] === $storeId) {
                         if ($mediaItem['_media_is_disabled'] == true) {
                             $additionalImageIsDisabled[] = $mediaItem['_media_image'];
-                        } else {
-                            $additionalImageIsEnabled[] = $mediaItem['_media_image'];
                         }
                     }
                 }
@@ -1262,10 +1254,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($additionalImageIsDisabled) {
                 $dataRow['hide_from_product_page'] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
-            }
-            if ($additionalImageIsEnabled) {
-                $dataRow['show_on_product_page'] =
-                    implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsEnabled);
             }
         }
 
