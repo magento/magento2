@@ -1726,7 +1726,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     : Store::DEFAULT_STORE_ID;
                 $imageHiddenStates = $this->getImagesHiddenStates($rowData);
                 foreach (array_keys($imageHiddenStates) as $image) {
-                    if (array_key_exists($image, $existingImages[$rowSku])) {
+                    if (array_key_exists($rowSku, $existingImages)
+                        && array_key_exists($image, $existingImages[$rowSku])
+                    ) {
                         $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                         $uploadedImages[$image] = $image;
                     }
