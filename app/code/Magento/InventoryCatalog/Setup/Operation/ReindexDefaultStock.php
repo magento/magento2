@@ -44,6 +44,6 @@ class ReindexDefaultStock
      */
     public function execute()
     {
-        $this->stockIndexer->executeRow($this->defaultStockProvider->getId());
+        //$this->stockIndexer->executeRow($this->defaultStockProvider->getId());
     }
 }
