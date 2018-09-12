@@ -29,7 +29,6 @@ define([
             limitDefault: '9',
             url: '',
             formKey: '',
-            pageParam: 'p',
             post: false
         },
 
