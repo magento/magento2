@@ -616,14 +616,14 @@ class Checkout
 
         $this->ignoreAddressValidation();
 
+        $isButton = $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1;
+
         // import shipping address
         $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
         if (!$quote->getIsVirtual()) {
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress) {
-                if ($exportedShippingAddress
-                    && $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
-                ) {
+                if ($exportedShippingAddress && $isButton) {
                     $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
                     // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
                     $shippingAddress->setPrefix(null);
@@ -651,12 +651,11 @@ class Checkout
         }
 
         // import billing address
-        $portBillingFromShipping = $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
-            && $this->_config->getValue(
+        $requireBillingAddress = $this->_config->getValue(
                 'requireBillingAddress'
-            ) != \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL
-            && !$quote->isVirtual();
-        if ($portBillingFromShipping) {
+        ) == \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
+
+        if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
             $billingAddress = clone $shippingAddress;
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
@@ -664,11 +663,17 @@ class Checkout
             $quote->getBillingAddress()->addData($data);
             $quote->getShippingAddress()->setSameAsBilling(1);
         } else {
-            $billingAddress = $quote->getBillingAddress();
+            $billingAddress = $quote->getBillingAddress()->setCustomerAddressId(null);
         }
         $exportedBillingAddress = $this->_getApi()->getExportedBillingAddress();
 
-        $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        // Since country is required field for billing and shipping address,
+        // we consider the address information to be empty if country is empty.
+        $isEmptyAddress = ($billingAddress->getCountryId() === null);
+
+        if ($requireBillingAddress || $isEmptyAddress) {
+            $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        }
         $billingAddress->setCustomerNote($exportedBillingAddress->getData('note'));
         $quote->setBillingAddress($billingAddress);
         $quote->setCheckoutMethod($this->getCheckoutMethod());
@@ -904,19 +909,6 @@ class Checkout
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
-        // Exported data is more priority if require billing address setting is yes
-        $requireBillingAddress = $this->_config->getValue(
-            'requireBillingAddress'
-        ) == \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
-
-        // Since country is required field for billing and shipping address,
-        // we consider the address information to be empty if country is empty.
-        $isEmptyAddress = ($address->getCountryId() === null);
-
-        if (!$requireBillingAddress && !$isEmptyAddress) {
-            return;
-        }
-
         foreach ($exportedAddress->getExportedKeys() as $key) {
             $data = $exportedAddress->getData($key);
             if (!empty($data)) {
