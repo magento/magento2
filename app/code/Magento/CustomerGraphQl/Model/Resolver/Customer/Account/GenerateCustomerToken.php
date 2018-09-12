@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Customer\Account;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -19,10 +18,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 class GenerateCustomerToken implements ResolverInterface
 {
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -35,18 +30,15 @@ class GenerateCustomerToken implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @param UserContextInterface          $userContext
      * @param CustomerTokenServiceInterface $customerTokenService
-     * @param ValueFactory                  $valueFactory
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        UserContextInterface $userContext,
         CustomerTokenServiceInterface $customerTokenService,
         ValueFactory $valueFactory
     ) {
-        $this->userContext          = $userContext;
         $this->customerTokenService = $customerTokenService;
-        $this->valueFactory         = $valueFactory;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -65,7 +57,7 @@ class GenerateCustomerToken implements ResolverInterface
                 return !empty($token) ? $token : '';
             };
             return $this->valueFactory->create($result);
-        }catch (\Magento\Framework\Exception\AuthenticationException $e){
+        } catch (AuthenticationException $e) {
             throw new GraphQlAuthorizationException(
                 __($e->getMessage())
             );

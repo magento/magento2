@@ -59,8 +59,8 @@ mutation {
 MUTATION;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: ' .
-            'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.');
+        $this->expectExceptionMessage('GraphQL response contains errors: The account sign-in' . ' ' .
+            'was incorrect or your account is disabled temporarily. Please wait and try again later.');
         $this->graphQlQuery($mutation);
     }
 }
