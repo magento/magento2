@@ -29,11 +29,13 @@ define([
             }
             shippingMethod = quote.shippingMethod();
 
-            if (typeof (shippingMethod['method_title']) !== 'undefined') {
+            if (typeof shippingMethod['method_title'] !== 'undefined') {
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
-            return shippingMethod ? shippingMethod['carrier_title'] + shippingMethodTitle : shippingMethod['carrier_title'];
+            return shippingMethod ?
+                shippingMethod['carrier_title'] + shippingMethodTitle :
+                shippingMethod['carrier_title'];
         },
 
         /**
