@@ -105,6 +105,24 @@
         <data key="file">magento-logo.png</data>
         <data key="fileName">magento-logo</data>
     </entity>
+    <entity name="MagentoLogo" type="image">
+        <data key="title" unique="suffix">MagentoLogo</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento-logo.png</data>
+        <data key="filename">magento-logo</data>
+        <data key="file_extension">png</data>
+    </entity>
+    <entity name="TestImageNew" type="image">
+        <data key="title" unique="suffix">magento-again</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento-again.jpg</data>
+        <data key="filename">magento-again</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="productWithDescription" type="product">
         <data key="sku" unique="suffix">testProductWithDescriptionSku</data>
         <data key="type_id">simple</data>
@@ -200,5 +218,9 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ProductWithOptions2" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
 </entities>
