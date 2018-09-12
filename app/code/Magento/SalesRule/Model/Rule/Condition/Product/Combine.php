@@ -100,22 +100,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
         foreach ($this->getConditions() as $cond) {
             if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
-                $attributeScope = $cond->getAttributeScope();
-                if ($attributeScope === 'parent') {
-                    $validateEntities = [$entity];
-                } elseif ($attributeScope === 'children') {
-                    $validateEntities = $entity->getChildren() ?: [$entity];
-                } else {
-                    $validateEntities = $entity->getChildren() ?: [];
-                    $validateEntities[] = $entity;
-                }
-                $validated = !$true;
-                foreach ($validateEntities as $validateEntity) {
-                    $validated = $cond->validate($validateEntity);
-                    if ($validated === $true) {
-                        break;
-                    }
-                }
+                $validated = $this->validateEntity($cond, $entity);
             } else {
                 $validated = $cond->validateByEntityId($entity);
             }
@@ -126,5 +111,45 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             }
         }
         return $all ? true : false;
+    }
+
+    /**
+     * @param object $cond
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @return bool
+     */
+    private function validateEntity($cond, \Magento\Framework\Model\AbstractModel $entity)
+    {
+        $true = (bool)$this->getValue();
+        $validated = !$true;
+        foreach ($this->retrieveValidateEntities($cond->getAttributeScope(), $entity) as $validateEntity) {
+            $validated = $cond->validate($validateEntity);
+            if ($validated === $true) {
+                break;
+            }
+        }
+
+        return $validated;
+    }
+
+    /**
+     * Retrieve entities for validation by attribute scope
+     *
+     * @param $attributeScope
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @return \Magento\Framework\Model\AbstractModel[]
+     */
+    private function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
+    {
+        if ($attributeScope === 'parent') {
+            $validateEntities = [$entity];
+        } elseif ($attributeScope === 'children') {
+            $validateEntities = $entity->getChildren() ?: [$entity];
+        } else {
+            $validateEntities = $entity->getChildren() ?: [];
+            $validateEntities[] = $entity;
+        }
+
+        return $validateEntities;
     }
 }
