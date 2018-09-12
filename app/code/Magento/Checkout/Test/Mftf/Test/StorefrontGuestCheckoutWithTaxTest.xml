@@ -66,6 +66,7 @@
         <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{US_Address_NY.state}}" stepKey="selectRegion"/>
         <!--  Step 9: Go Next -->
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForNextButtonToBeClear"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForPagePlaceOrder"/>
         <see userInput="$0.84" selector="{{CheckoutPaymentSection.tax}}" stepKey="seeTaxInf"/>
