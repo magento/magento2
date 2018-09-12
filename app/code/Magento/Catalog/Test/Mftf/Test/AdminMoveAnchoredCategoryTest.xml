@@ -6,10 +6,11 @@
  */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMoveAnchoredCategoryTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Edit categories"/>
             <title value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
             <description value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
             <severity value="CRITICAL"/>

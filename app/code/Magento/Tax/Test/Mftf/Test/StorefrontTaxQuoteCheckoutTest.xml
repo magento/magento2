@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxQuoteCheckoutGuestVirtual">
         <annotations>
             <features value="Tax"/>
@@ -313,7 +313,7 @@
         </actionGroup>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
-        <see stepKey="seeShipTo" selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{SimpleTaxCA.state}}"/>
+        <see stepKey="seeShipTo" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxCA.state}}"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
@@ -329,7 +329,7 @@
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <click stepKey="clickNext2" selector="{{CheckoutShippingSection.next}}"/>
-        <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{SimpleTaxNY.state}}"/>
+        <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
         <waitForElementVisible stepKey="waitForOverviewVisible2" selector="{{CheckoutPaymentSection.tax}}"/>
