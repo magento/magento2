@@ -124,7 +124,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function isAvailable()
+    public function isAvailable($dimensions = [])
     {
         return $this->adapter->ping();
     }

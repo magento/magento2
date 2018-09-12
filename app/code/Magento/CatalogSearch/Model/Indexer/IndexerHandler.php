@@ -124,9 +124,13 @@ class IndexerHandler implements IndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function isAvailable()
+    public function isAvailable($dimensions = [])
     {
-        return true;
+        if (empty($dimensions)) {
+            return true;
+        }
+
+        return $this->resource->getConnection()->isTableExists($this->getTableName($dimensions));
     }
 
     /**
