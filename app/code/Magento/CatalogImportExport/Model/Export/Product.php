@@ -1241,7 +1241,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
         } else {
             $additionalImageIsDisabled = [];
-            $additionalImageIsEnabled = [];
             if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
                     if ((int)$mediaItem['_media_store_id'] === $storeId) {
