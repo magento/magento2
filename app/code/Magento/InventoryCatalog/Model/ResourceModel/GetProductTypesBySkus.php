@@ -68,7 +68,7 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
     {
         $key = array_search(strtolower($sku), array_map('strtolower', $productSkuList));
         if ($key !== false) {
-            $sku = $productSkuList[$key];
+            $sku = (string)$productSkuList[$key];
         }
         return $sku;
     }

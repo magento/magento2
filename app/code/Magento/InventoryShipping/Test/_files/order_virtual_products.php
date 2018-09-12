@@ -26,7 +26,7 @@ $itemsToBuy = [
 ];
 
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter('reserved_order_id', 'test_order_virt_1')
+    ->addFilter('reserved_order_id', 'created_order_for_test')
     ->create();
 $cart = current($cartRepository->getList($searchCriteria)->getItems());
 

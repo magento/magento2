@@ -186,10 +186,10 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
                     $withOutOfStock
                         ? ''
                         : $this->conditionManager->generateCondition(
-                            'stock_index.stock_status',
-                            '=',
-                            Stock::STOCK_IN_STOCK
-                        ),
+                        'stock_index.stock_status',
+                        '=',
+                        Stock::STOCK_IN_STOCK
+                    ),
                     $this->conditionManager->generateCondition(
                         'stock_index.stock_id',
                         '=',
@@ -224,10 +224,10 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
                     $withOutOfStock
                         ? ''
                         : $this->conditionManager->generateCondition(
-                            'sub_products_stock_index.stock_status',
-                            '=',
-                            Stock::STOCK_IN_STOCK
-                        ),
+                        'sub_products_stock_index.stock_status',
+                        '=',
+                        Stock::STOCK_IN_STOCK
+                    ),
                     $this->conditionManager->generateCondition(
                         'sub_products_stock_index.stock_id',
                         '=',
