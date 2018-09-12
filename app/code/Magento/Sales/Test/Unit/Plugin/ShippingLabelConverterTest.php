@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Plugin;
+
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentSearchResultInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
