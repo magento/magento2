@@ -1,6 +1,6 @@
 {
     "name": "magento/module-catalog-search",
-    "description": "N/A",
+    "description": "[Deprecated] CatalogSearch will be removed in 2.4, and ElasticSearch will replace it as the default search engine.",
     "config": {
         "sort-packages": true
     },
