@@ -319,4 +319,42 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($url, $this->configurable->getMediaCallback());
     }
+
+    /**
+     * @return void
+     */
+    public function testGetJsonSwatchSizeConfig()
+    {
+        $imageConfig = [
+            Swatch::SWATCH_IMAGE_NAME => [
+                'width' => 30,
+                'height' => 30,
+            ],
+            Swatch::SWATCH_THUMBNAIL_NAME => [
+                'width' => 50,
+                'height' => 50,
+            ],
+        ];
+        $sizeConfig = [
+            Configurable::SWATCH_IMAGE_NAME => [
+                'width' => 30,
+                'height' => 30,
+            ],
+            Configurable::SWATCH_THUMBNAIL_NAME => [
+                'width' => 50,
+                'height' => 50,
+            ],
+        ];
+        $encodedSizeConfig = '{"swatchImage":{"width":30,"height":20},"swatchThumb":{"height":90,"width":110}}';
+
+        $this->swatchMediaHelper->expects($this->once())
+            ->method('getImageConfig')
+            ->willReturn($imageConfig);
+        $this->jsonEncoder->expects($this->once())
+            ->method('encode')
+            ->with($sizeConfig)
+            ->willReturn($encodedSizeConfig);
+
+        $this->assertEquals($encodedSizeConfig, $this->configurable->getJsonSwatchSizeConfig());
+    }
 }
