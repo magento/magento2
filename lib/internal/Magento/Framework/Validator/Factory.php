@@ -11,6 +11,8 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\FileIteratorFactory;
 
 class Factory
 {
@@ -45,20 +47,36 @@ class Factory
     private $cache;
 
     /**
+     * @var string
+     */
+    private $applicationRoot;
+
+    /**
+     * @var FileIteratorFactory
+     */
+    private $fileIteratorFactory;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FrontendInterface $cache
+     * @param DirectoryList $directoryList
+     * @param FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        FrontendInterface $cache
+        FrontendInterface $cache,
+        DirectoryList $directoryList,
+        FileIteratorFactory $fileIteratorFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->moduleReader = $moduleReader;
         $this->cache = $cache;
+        $this->applicationRoot = rtrim($directoryList->getRoot(), '/') . '/';
+        $this->fileIteratorFactory = $fileIteratorFactory;
     }
 
     /**
@@ -67,14 +85,43 @@ class Factory
     protected function _initializeConfigList()
     {
         if (!$this->_configFiles) {
-            $this->_configFiles = $this->cache->load(self::CACHE_KEY);
-            if (!$this->_configFiles) {
+            $serializedFilePaths = $this->cache->load(self::CACHE_KEY);
+            if (!$serializedFilePaths) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save(serialize($this->_configFiles), self::CACHE_KEY);
+                $relativeFilePaths = $this->getRelativeFilePathsForConfigFiles();
+                $this->cache->save(serialize($relativeFilePaths), self::CACHE_KEY);
             } else {
-                $this->_configFiles = unserialize($this->_configFiles);
+                $absolutePaths = $this->buildAbsolutePathsForConfigFiles($serializedFilePaths);
+                $this->_configFiles = $this->fileIteratorFactory->create($absolutePaths);
             }
         }
+    }
+
+    /**
+     * @param $serializedFilePaths
+     * @return array
+     */
+    private function buildAbsolutePathsForConfigFiles($serializedFilePaths)
+    {
+        $absolutePaths = [];
+        /** @var array $serializedFilePaths */
+        foreach ($serializedFilePaths as $relativePath) {
+            $absolutePaths[] = $relativePath[0] === '/' ? $relativePath : $this->applicationRoot . $relativePath;
+        }
+        return $absolutePaths;
+    }
+
+    /**
+     * @return array
+     */
+    private function getRelativeFilePathsForConfigFiles()
+    {
+        $relativeFilePaths = [];
+        $appRootLength = \strlen($this->applicationRoot);
+        foreach ($this->_configFiles as $configFile => $fileContent) {
+            $relativeFilePaths[] = strpos($configFile, $this->applicationRoot) === 0 ? substr($configFile, $appRootLength) : $configFile;
+        }
+        return $relativeFilePaths;
     }
 
     /**
