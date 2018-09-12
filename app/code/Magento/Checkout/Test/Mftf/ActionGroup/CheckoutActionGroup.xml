@@ -32,6 +32,7 @@
             <argument name="country" type="string"/>
             <argument name="placeNumber"/>
         </arguments>
+        <waitForElement selector="{{StorefrontCheckoutCartSummarySection.blockSummary}}" stepKey="waitBlockSummaryLoaded"/>
         <conditionalClick selector="{{StorefrontCheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
         <see selector="{{StorefrontCheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
     </actionGroup>

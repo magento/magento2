@@ -18,5 +18,6 @@
         <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
+        <element name="blockSummary" type="button" selector="#block-summary"/>
     </section>
 </sections>

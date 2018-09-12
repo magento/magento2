@@ -42,6 +42,7 @@
 
         <!--Go to shopping cart-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
 
         <!--Verify country options in checkout top destination section-->
         <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
@@ -56,6 +57,7 @@
 
         <!--Go to shopping cart-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
 
         <!--Verify country options is shown by default-->
         <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
