@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFreeShippingNotAvailableIfMinimumOrderAmountNotMatchOrderTotalTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin create order"/>
+            <title value="Free Shipping is not available in Admin if Minimum Order Amount does not match Order total"/>
+            <description value="Admin should not be able place order with Free Shipping method if Minimum Order Amount does not match Order total"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-61001"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DisableFlatRate" stepKey="disableFlatRate"/>
+            <actionGroup ref="EnableFreeShipping" stepKey="enableFreeShipping">
+                <argument name="orderAmount" value="101"/>
+            </actionGroup>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheBefore"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="EnableFlatRate" stepKey="enableFlatRate"/>
+            <actionGroup ref="DisableFreeShipping" stepKey="disableFreeShipping"/>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!--Admin creates order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeAbsentFreeShipping"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+
+        <dontSeeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>
+    </test>
+</tests>
