@@ -19,4 +19,9 @@
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
         <waitForPageLoad stepKey="pageLoadAfterLogin"/>
     </actionGroup>
+
+    <actionGroup name="CustomerLogoutStorefrontActionGroup">
+        <amOnPage url="customer/account/logout/" stepKey="storefrontSignOut"/>
+        <waitForPageLoad time="30" stepKey="waitForLogOut"/>
+    </actionGroup>
 </actionGroups>
