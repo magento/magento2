@@ -112,10 +112,10 @@ class NewAction extends \Magento\Backend\App\Action
             $resultPage->getConfig()->getTitle()->prepend(__('New Invoice'));
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->messageManager->addError($exception->getMessage());
+            $this->messageManager->addErrorMessage($exception->getMessage());
             return $this->_redirectToOrder($orderId);
         } catch (\Exception $exception) {
-            $this->messageManager->addException($exception, 'Cannot create an invoice.');
+            $this->messageManager->addExceptionMessage($exception, 'Cannot create an invoice.');
             return $this->_redirectToOrder($orderId);
         }
     }

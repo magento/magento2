@@ -1269,7 +1269,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $helper = new ObjectManager($this);
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->setMethods(['getRequestParam'])
-            ->getMockforAbstractClass();
+            ->getMockForAbstractClass();
         $context->expects($this->any())
             ->method('getRequestParam')
             ->with('request-field-name')

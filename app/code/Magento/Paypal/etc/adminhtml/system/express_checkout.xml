@@ -162,7 +162,7 @@
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
-                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
                 </comment>
                 <config_path>payment/paypal_express_bml/active</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -184,12 +184,12 @@
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
                 <label>Advertise PayPal Credit</label>
                 <comment>
-                    <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                    <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
                         <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                         from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                         Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                         The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                        or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
                 <field id="bml_publisher_id" translate="label comment tooltip" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Publisher ID</label>
@@ -198,9 +198,8 @@
                     <attribute type="shared">1</attribute>
                 </field>
                 <field id="bml_wizard" translate="button_label" sortOrder="15" showInDefault="1" showInWebsite="1">
-                    <label></label>
                     <button_label>Get Publisher ID from PayPal</button_label>
-                    <button_url><![CDATA[https:/financing.paypal.com/ppfinportal/cart/index?dcp=4eff8563b9cc505e0b9afaff3256705081553c79]]></button_url>
+                    <button_url><![CDATA[https://financing.paypal.com/ppfinportal/cart/index?dcp=4eff8563b9cc505e0b9afaff3256705081553c79]]></button_url>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard</frontend_model>
                 </field>
                 <group id="settings_bml_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">

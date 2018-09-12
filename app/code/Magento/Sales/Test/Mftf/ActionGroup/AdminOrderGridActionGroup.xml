@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Filter order grid by order id field-->
     <actionGroup name="filterOrderGridById">
         <arguments>
@@ -67,5 +67,11 @@
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
         <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{status}}" stepKey="fillOrderStatusFilter"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+
+    <actionGroup name="AdminOrdersGridClearFiltersActionGroup">
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
 </actionGroups>

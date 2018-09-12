@@ -92,7 +92,7 @@
                         </select>
                     </formElements>
                 </field>
-                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="50">
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="fit" xsi:type="boolean">false</item>
