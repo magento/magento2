@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridPage"/>

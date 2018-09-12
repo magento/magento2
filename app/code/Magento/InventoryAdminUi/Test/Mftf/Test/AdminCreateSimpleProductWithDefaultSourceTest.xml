@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
             <createData entity="_defaultCategory" stepKey="createPreReqCategory1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
