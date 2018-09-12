@@ -136,7 +136,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         string $columnLabel,
         string $columnActionsName = 'actions_name',
         string $columnActionsLabel = 'actions_label'
-    ): UiComponentInterface {
+    ) {
         /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
         $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
@@ -198,6 +198,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @param array $fields
      * @param array $options
      * @param array $expected
+     * @return  void
      * @dataProvider getRowDataProvider
      */
     public function testGetRowData(string $key, array $fields, array $options, array $expected)
@@ -269,6 +270,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      * @param string $filter
      * @param array $options
      * @param array $expected
+     * @return void
      * @dataProvider getOptionsDataProvider
      */
     public function testGetOptions(string $filter, array $options, array $expected)
@@ -388,6 +390,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $fieldValue
      * @param string $expected
+     * @return void
      * @dataProvider convertDateProvider
      * @covers \Magento\Ui\Model\Export\MetadataProvider::convertDate()
      */
