@@ -79,4 +79,16 @@
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
     </actionGroup>
+    <actionGroup name="chooseOrderCustomer">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <click selector="{{AdminOrderCustomersGridSection.resetButton}}" stepKey="resetCustomersGrid"/>
+        <waitForPageLoad stepKey="waitCustomersGridReload"/>
+        <fillField selector="{{AdminOrderCustomersGridSection.emailFilter}}" userInput="{{customer.email}}" stepKey="fillEmailFilter"/>
+        <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="searchCustomer"/>
+        <waitForPageLoad stepKey="waitCustomersSearch"/>
+        <click selector="{{AdminOrderCustomersGridSection.customerRowByEmail(customer.email)}}" stepKey="chooseCustomer"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+    </actionGroup>
 </actionGroups>

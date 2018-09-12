@@ -11,5 +11,10 @@
     <page name="AdminCategoryEditPage" url="catalog/category/edit/id/{{categoryId}}/" area="admin" module="Magento_Catalog" parameterized="true">
         <section name="AdminCategoryMainActionsSection"/>
         <section name="AdminCategoryProductsSection"/>
+        <section name="AdminCategorySidebarActionSection"/>
+        <section name="AdminCategorySidebarTreeSection"/>
+        <section name="AdminCategoryBasicFieldSection"/>
+        <section name="AdminCategorySEOSection"/>
+        <section name="AdminCategoryModalSection"/>
     </page>
 </pages>

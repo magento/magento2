@@ -78,4 +78,13 @@
         <conditionalClick selector="{{AdminCategoryProductsSection.sectionHeader}}" dependentSelector="{{AdminCategoryProductsSection.tabProductClosed}}" visible="true" stepKey="openProductsInCategory"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
     </actionGroup>
+
+    <actionGroup name="SeeProductInProductCategoryGridForCurrentCategory">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <see selector="{{AdminCategoryProductsGridSection.nameColumn}}" userInput="{{product.name}}" stepKey="seeProductNameInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+        <see selector="{{AdminCategoryProductsGridSection.priceColumn}}" userInput="{{product.price}}" stepKey="seeProductPriceInGrid"/>
+    </actionGroup>
 </actionGroups>

@@ -15,7 +15,7 @@
         </arguments>
         <amOnPage url="/{{categoryEntity.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{categoryEntity.name_lwr}}" stepKey="assertCategoryOnStorefront"/>
+        <see selector="{{StorefrontCategoryMainSection.categoryTitle}}" userInput="{{categoryEntity.name_lwr}}" stepKey="assertCategoryOnStorefront"/>
         <seeInTitle userInput="{{categoryEntity.name}}" stepKey="seeCategoryNameInTitle"/>
     </actionGroup>
 </actionGroups>
