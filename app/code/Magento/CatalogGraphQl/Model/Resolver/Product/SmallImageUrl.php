@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Catalog\Helper\Image as CatalogImageHelper;
+use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\GalleryFactory as GalleryResourceFactory;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\AreaList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -30,14 +29,9 @@ class SmallImageUrl implements ResolverInterface
     private $galleryResourceFactory;
 
     /**
-     * @var AreaList
+     * @var CatalogImageHelperFactory
      */
-    private $areaList;
-
-    /**
-     * @var CatalogImageHelper
-     */
-    private $catalogImageHelper;
+    private $catalogImageHelperFactory;
 
     /**
      * @var ValueFactory
@@ -51,21 +45,18 @@ class SmallImageUrl implements ResolverInterface
 
     /**
      * @param ValueFactory $valueFactory
-     * @param CatalogImageHelper $catalogImageHelper
-     * @param AreaList $areaList
+     * @param CatalogImageHelperFactory $catalogImageHelperFactory
      * @param GalleryResourceFactory $galleryResourceFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ValueFactory $valueFactory,
-        CatalogImageHelper $catalogImageHelper,
-        AreaList $areaList,
+        CatalogImageHelperFactory $catalogImageHelperFactory,
         GalleryResourceFactory $galleryResourceFactory,
         StoreManagerInterface $storeManager
     ) {
         $this->valueFactory = $valueFactory;
-        $this->catalogImageHelper = $catalogImageHelper;
-        $this->areaList = $areaList;
+        $this->catalogImageHelperFactory = $catalogImageHelperFactory;
         $this->galleryResourceFactory = $galleryResourceFactory;
         $this->storeManager = $storeManager;
     }
@@ -92,18 +83,21 @@ class SmallImageUrl implements ResolverInterface
         /* If small_image is not loaded for product, need to load it separately */
         if (!$product->getSmallImage()) {
             $galleryResource = $this->galleryResourceFactory->create();
-            $currentStoreId =$this->storeManager->getStore()->getId();
-            $productImages = $galleryResource->getProductImages($product, [$currentStoreId]);
+            $storeIds = [
+                Store::DEFAULT_STORE_ID,
+                $this->storeManager->getStore()->getId()
+            ];
+            $productImages = $galleryResource->getProductImages($product, $storeIds);
             $productSmallImage = $this->getSmallImageFromGallery($productImages);
             $product->setSmallImage($productSmallImage);
         }
 
-        /* Design area is necessary to return the correct storefront image URL (or a placeholder) */
-        $area = $this->areaList->getArea(Area::AREA_FRONTEND);
-        $area->load(Area::PART_DESIGN);
-
-        $smallImageURL = $this->catalogImageHelper->init($product, 'product_small_image')->getUrl();
-        $product->getMediaAttributes();
+        $catalogImageHelper = $this->catalogImageHelperFactory->create();
+        $smallImageURL = $catalogImageHelper->init(
+            $product,
+            'product_small_image',
+            ['type' => 'small_image']
+        )->getUrl();
 
         $result = function () use ($smallImageURL) {
             return $smallImageURL;
