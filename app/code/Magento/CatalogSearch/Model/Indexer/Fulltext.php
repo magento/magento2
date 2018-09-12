@@ -147,8 +147,10 @@ class Fulltext implements
             $productIds = array_unique(
                 array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
             );
-            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            if ($saveHandler->isAvailable($dimensions)) {
+                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            }
         }
     }
 
