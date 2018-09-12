@@ -188,8 +188,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
         return $model->setAttribute($this->attribute);
     }
-
-
+    
     /**
      * Test beforeSaveAttributeFileNameOutsideOfCategoryDir.
      */
