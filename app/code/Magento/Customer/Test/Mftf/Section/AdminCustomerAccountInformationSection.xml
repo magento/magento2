@@ -15,6 +15,7 @@
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
+        <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
         <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
