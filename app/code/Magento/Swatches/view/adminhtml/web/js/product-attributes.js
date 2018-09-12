@@ -16,7 +16,8 @@ define([
     'use strict';
 
     return function (optionConfig) {
-        var swatchProductAttributes = {
+        var activePanelClass = 'selected-type-options',
+            swatchProductAttributes = {
                 frontendInput: $('#frontend_input'),
                 isFilterable: $('#is_filterable'),
                 isFilterableInSearch: $('#is_filterable_in_search'),
@@ -338,6 +339,7 @@ define([
                  */
                 _showPanel: function (el) {
                     el.closest('.fieldset').show();
+                    el.addClass(activePanelClass);
                     this._render(el.attr('id'));
                 },
 
@@ -347,6 +349,7 @@ define([
                  */
                 _hidePanel: function (el) {
                     el.closest('.fieldset').hide();
+                    el.removeClass(activePanelClass);
                 },
 
                 /**
@@ -438,10 +441,10 @@ define([
                 var swatchValues = [],
                     optionContainer;
 
-                activePanel = swatchTextPanel.is(':visible') ? swatchTextPanel : swatchVisualPanel;
+                activePanel = swatchTextPanel.hasClass(this.activePanelClass) ? swatchTextPanel : swatchVisualPanel;
                 optionContainer = activePanel.find('table tbody');
 
-                if (activePanel.is(':visible')) {
+                if (activePanel.hasClass(activePanelClass)) {
                     optionContainer
                         .find('input')
                         .each(function () {
@@ -461,7 +464,7 @@ define([
             });
 
             editForm.on('afterValidate.error', function () {
-                if (activePanel.is(':visible')) {
+                if (activePanel.hasClass(activePanelClass)) {
                     activePanel.find('table').append(tableBody);
                     $('input[name="serialized_options"]').remove();
                 }

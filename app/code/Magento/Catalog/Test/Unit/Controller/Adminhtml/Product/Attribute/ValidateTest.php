@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataResolver;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
@@ -61,6 +62,11 @@ class ValidateTest extends AttributeTest
      */
     protected $layoutMock;
 
+    /**
+     * @var OptionsDataResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $optionsDataResolverMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -86,6 +92,8 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
+        $this->optionsDataResolverMock = $this->getMockBuilder(OptionsDataResolver::class)
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -100,13 +108,14 @@ class ValidateTest extends AttributeTest
         return $this->objectManager->getObject(
             Validate::class,
             [
-            'context' => $this->contextMock,
-            'attributeLabelCache' => $this->attributeLabelCacheMock,
-            'coreRegistry' => $this->coreRegistryMock,
-            'resultPageFactory' => $this->resultPageFactoryMock,
-            'resultJsonFactory' => $this->resultJsonFactoryMock,
-            'layoutFactory' => $this->layoutFactoryMock,
-            'multipleAttributeList' => ['select' => 'option']
+                'context' => $this->contextMock,
+                'attributeLabelCache' => $this->attributeLabelCacheMock,
+                'coreRegistry' => $this->coreRegistryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'layoutFactory' => $this->layoutFactoryMock,
+                'multipleAttributeList' => ['select' => 'option'],
+                'optionsDataResolver' => $this->optionsDataResolverMock,
             ]
         );
     }
@@ -160,16 +169,21 @@ class ValidateTest extends AttributeTest
      */
     public function testUniqueValidation(array $options, $isError)
     {
-        $countFunctionCalls = ($isError) ? 6 : 5;
+        $countFunctionCalls = ($isError) ? 5 : 4;
         $this->requestMock->expects($this->exactly($countFunctionCalls))
             ->method('getParam')
             ->willReturnMap([
                 ['frontend_label', null, null],
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['option', null, $options],
                 ['message_key', null, Validate::DEFAULT_MESSAGE_KEY]
             ]);
+
+        $this->optionsDataResolverMock
+            ->expects($this->once())
+            ->method('getOptionsData')
+            ->with($this->requestMock)
+            ->willReturn($options);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -203,67 +217,77 @@ class ValidateTest extends AttributeTest
         return [
             'no values' => [
                 [
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
+                    'option' => [
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
+                    ],
                 ], false
             ],
             'valid options' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [2, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [2, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
                 ], false
             ],
             'duplicate options' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [1, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [1, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "",
-                    ]
                 ], true
             ],
             'duplicate and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [1, 0],
-                        "option_2" => [3, 0],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [1, 0],
+                            "option_2" => [3, 0],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "1",
+                            "option_2" => "",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "1",
-                        "option_2" => "",
-                    ]
                 ], false
             ],
             'empty and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [1, 0],
-                        "option_1" => [2, 0],
-                        "option_2" => ["", ""],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [1, 0],
+                            "option_1" => [2, 0],
+                            "option_2" => ["", ""],
+                        ],
+                        'delete' => [
+                            "option_0" => "",
+                            "option_1" => "",
+                            "option_2" => "1",
+                        ],
                     ],
-                    'delete' => [
-                        "option_0" => "",
-                        "option_1" => "",
-                        "option_2" => "1",
-                    ]
                 ], false
             ],
         ];
@@ -285,9 +309,14 @@ class ValidateTest extends AttributeTest
                 ['frontend_input', 'select', 'multipleselect'],
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['option', null, $options],
                 ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
             ]);
+
+        $this->optionsDataResolverMock
+            ->expects($this->once())
+            ->method('getOptionsData')
+            ->with($this->requestMock)
+            ->willReturn($options);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -320,8 +349,10 @@ class ValidateTest extends AttributeTest
         return [
             'empty admin scope options' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
                     ],
                 ],
                 (object) [
@@ -331,8 +362,10 @@ class ValidateTest extends AttributeTest
             ],
             'not empty admin scope options' => [
                 [
-                    'value' => [
-                        "option_0" => ['asdads'],
+                    'option' => [
+                        'value' => [
+                            "option_0" => ['asdads'],
+                        ],
                     ],
                 ],
                 (object) [
@@ -341,11 +374,13 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
-                    ],
-                    'delete' => [
-                        'option_0' => '1',
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
+                        'delete' => [
+                            'option_0' => '1',
+                        ],
                     ],
                 ],
                 (object) [
@@ -354,11 +389,13 @@ class ValidateTest extends AttributeTest
             ],
             'empty admin scope options and not deleted' => [
                 [
-                    'value' => [
-                        "option_0" => [''],
-                    ],
-                    'delete' => [
-                        'option_0' => '0',
+                    'option' => [
+                        'value' => [
+                            "option_0" => [''],
+                        ],
+                        'delete' => [
+                            'option_0' => '0',
+                        ],
                     ],
                 ],
                 (object) [

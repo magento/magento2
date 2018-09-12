@@ -47,14 +47,8 @@
                    userInput="{{visualSwatchAttribute.attribute_code}}"
                    stepKey="fillAttributeCode"/>
 
-        <!-- Add an empty swatch option -->
+        <!-- Add new swatch option without label -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
-
-        <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave1"/>
-        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForError"/>
-
-        <!-- Fill options data -->
         <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
             <argument name="index" value="0"/>
         </actionGroup>
@@ -63,6 +57,12 @@
             <argument name="nthColorPicker" value="1"/>
             <argument name="hexColor" value="ff0000"/>
         </actionGroup>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForError"/>
+
+        <!-- Fill options data -->
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}"
                    userInput="red" stepKey="fillAdmin1"/>
 

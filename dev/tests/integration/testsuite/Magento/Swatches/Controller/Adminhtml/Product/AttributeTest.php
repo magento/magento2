@@ -48,12 +48,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionsData []= "optionvisual[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
             $optionsData []= "optionvisual[delete][option_{$i}]=";
         }
-        $optionsData []= "visual_swatch_validation=";
-        $optionsData []= "visual_swatch_validation_unique=";
         return [
             'attribute_data' => array_merge_recursive(
                 [
-                    'serialized_swatch_values' => json_encode($optionsData),
+                    'serialized_options' => json_encode($optionsData),
+                ],
+                [
+                    'visual_swatch_validation' => '',
+                    'visual_swatch_validation_unique' => '',
                 ],
                 $this->getAttributePreset(),
                 [
@@ -86,12 +88,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionsData []= "optiontext[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
             $optionsData []= "optiontext[delete][option_{$i}]=";
         }
-        $optionsData []= "text_swatch_validation=";
-        $optionsData []= "text_swatch_validation_unique=";
         return [
             'attribute_data' => array_merge_recursive(
                 [
-                    'serialized_swatch_values' => json_encode($optionsData),
+                    'serialized_options' => json_encode($optionsData),
+                ],
+                [
+                    'text_swatch_validation' => '',
+                    'text_swatch_validation_unique' => '',
                 ],
                 $this->getAttributePreset(),
                 [
@@ -111,7 +115,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     private function getAttributePreset() : array
     {
         return [
-            'serialized_options' => '[]',
             'form_key' => 'XxtpPYjm2YPYUlAt',
             'frontend_label' => [
                 0 => 'asdasd',

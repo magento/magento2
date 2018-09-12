@@ -145,7 +145,8 @@ define([
                     return optionDefaultInputType;
                 }
             },
-            tableBody = jQuery();
+            tableBody = jQuery(),
+            activePanelClass = 'selected-type-options';
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
@@ -184,7 +185,7 @@ define([
             var optionsValues = [],
                 optionContainer = optionPanel.find('table tbody');
 
-            if (optionPanel.is(':visible')) {
+            if (optionPanel.hasClass(activePanelClass)) {
                 optionContainer.find('input')
                     .each(function () {
                         if (this.disabled) {
@@ -210,7 +211,7 @@ define([
             tableBody = optionContainer.detach();
         });
         editForm.on('afterValidate.error', function () {
-            if (optionPanel.is(':visible')) {
+            if (optionPanel.hasClass(activePanelClass)) {
                 optionPanel.find('table').append(tableBody);
                 jQuery('input[name="serialized_options"]').remove();
             }
