@@ -298,12 +298,10 @@ class ImageUploader
             while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
                 $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
                 $index++;
-            }
-            $destFileName = $baseName;
-        } else {
-            return $fileInfo['basename'];
-        }
-
-        return $destFileName;
+            }            
+            return $baseName;
+        } 
+        
+        return $fileInfo['basename'];               
     }
 }
