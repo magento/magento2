@@ -17,7 +17,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Returns product's small image. If the small image is not set, returns a placeholder
+ * Returns product's  image. If the image is not set, returns a placeholder
  */
 class SmallImage implements ResolverInterface
 {
