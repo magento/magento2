@@ -23,6 +23,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

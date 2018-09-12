@@ -26,6 +26,8 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 /**
  * Build base Query for Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class IndexBuilder implements IndexBuilderInterface
 {
