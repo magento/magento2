@@ -69,7 +69,7 @@ class CartItemProcessor implements CartItemProcessorInterface
             if (is_array($options)) {
                 $requestData = [];
                 foreach ($options as $option) {
-                    $requestData['super_attribute'][$option->getOptionId()] = $option->getOptionValue();
+                    $requestData['super_attribute'][$option->getOptionId()] = (string) $option->getOptionValue();
                 }
                 return $this->objectFactory->create($requestData);
             }

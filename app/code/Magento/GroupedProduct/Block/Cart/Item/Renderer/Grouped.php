@@ -19,6 +19,8 @@ class Grouped extends Renderer implements IdentityInterface
 {
     /**
      * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
+     * @deprecated moved to model because of class refactoring
+     * @see \Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver::CONFIG_THUMBNAIL_SOURCE
      */
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/grouped_product_image';
 
@@ -34,28 +36,6 @@ class Grouped extends Renderer implements IdentityInterface
             return $option->getProduct();
         }
         return $this->getProduct();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProductForThumbnail()
-    {
-        /**
-         * Show grouped product thumbnail if it must be always shown according to the related setting in system config
-         * or if child product thumbnail is not available
-         */
-        if ($this->_scopeConfig->getValue(
-            self::CONFIG_THUMBNAIL_SOURCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
-            !($this->getProduct()->getThumbnail() && $this->getProduct()->getThumbnail() != 'no_selection')
-        ) {
-            $product = $this->getGroupedProduct();
-        } else {
-            $product = $this->getProduct();
-        }
-        return $product;
     }
 
     /**
