@@ -35,6 +35,7 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <createData entity="DefaultBraintreeConfig" stepKey="DefaultBraintreeConfig"/>
             <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="RollBackCustomBraintreeConfigurationData"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
         </after>
         <!--Go to storefront-->
         <amOnPage url="" stepKey="DoToStorefront"/>
