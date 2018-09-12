@@ -74,6 +74,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             $tableExists = $this->_isFlatTableExists($store->getId());
             if ($tableExists) {
                 $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
+                $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
             }
             if (isset($ids[0])) {
                 if (!$tableExists) {
