@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add Product to Cart from the category page and check message and product count in Minicart -->
     <actionGroup name="StorefrontAddCategoryProductToCartActionGroup">
         <arguments>
@@ -102,7 +102,7 @@
         </arguments>
         <conditionalClick stepKey="openShippingDetails" selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false"/>
         <selectOption stepKey="selectCountry" selector="{{CheckoutCartSummarySection.country}}" userInput="{{taxCode.country}}"/>
-        <selectOption stepKey="selectStateProvince" selector="{{CheckoutCartSummarySection.country}}" userInput="{{taxCode.country}}"/>
+        <selectOption stepKey="selectStateProvince" selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{taxCode.state}}"/>
         <fillField stepKey="fillZip" selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{taxCode.zip}}"/>
         <waitForPageLoad stepKey="waitForFormUpdate"/>
     </actionGroup>

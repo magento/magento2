@@ -6,7 +6,7 @@
   */
 -->
 <!-- Test XML Example -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
         <test name="AdminCreateStoreViewTest">
             <annotations>
                 <features value="Store"/>
@@ -14,6 +14,7 @@
                 <title value="Admin should be able to create a store view"/>
                 <description value="Admin should be able to create a store view"/>
                 <group value="storeView"/>
+                <severity value="AVERAGE"/>
             </annotations>
             <before>
                 <actionGroup ref="LoginActionGroup" stepKey="login"/>

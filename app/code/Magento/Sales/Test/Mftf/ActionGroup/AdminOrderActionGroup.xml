@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Navigate to create order page (New Order -> Create New Customer)-->
     <actionGroup name="navigateToNewOrderPageNewCustomer">
         <arguments>
@@ -19,6 +19,19 @@
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectDefaultStoreView"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+
+    <!--Navigate to create order page (New Order -> Create New Customer)-->
+    <actionGroup name="navigateToNewOrderPageNewCustomerSingleStore">
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
@@ -100,6 +113,28 @@
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+
+    <!--Add configurable product to order -->
+    <actionGroup name="addConfigurableProductToOrderFromAdmin" extends="addConfigurableProductToOrder">
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
+                      userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
+    </actionGroup>
+
+    <actionGroup name="configureOrderedConfigurableProduct">
+        <arguments>
+            <argument name="attribute"/>
+            <argument name="option"/>
+            <argument name="quantity" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
+        <wait time="2" stepKey="waitForOptionsToLoad"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}"
+                      userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
+        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
     </actionGroup>
 
     <!--Add bundle product to order -->
@@ -187,7 +222,6 @@
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>
     </actionGroup>
-
     <!--Check that customer information is correct in order-->
     <actionGroup name="verifyBasicOrderInformation">
         <arguments>
@@ -207,6 +241,14 @@
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.city}}" stepKey="seeShippingAddressCity"/>
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country_id}}" stepKey="seeShippingAddressCountry"/>
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
+    </actionGroup>
+
+    <!--Verify order information-->
+    <actionGroup name="verifyCreatedOrderInformation">
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" after="seeOrderPendingStatus"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
     </actionGroup>
 
     <!--Check for product in order items list-->

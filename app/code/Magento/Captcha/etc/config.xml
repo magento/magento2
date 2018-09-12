@@ -53,8 +53,6 @@
                 <always_for>
                     <user_create>1</user_create>
                     <user_forgotpassword>1</user_forgotpassword>
-                    <guest_checkout>1</guest_checkout>
-                    <register_during_checkout>1</register_during_checkout>
                     <contact_us>1</contact_us>
                 </always_for>
             </captcha>
@@ -77,12 +75,6 @@
                     <user_forgotpassword>
                         <label>Forgot password</label>
                     </user_forgotpassword>
-                    <guest_checkout>
-                        <label>Check Out as Guest</label>
-                    </guest_checkout>
-                    <register_during_checkout>
-                        <label>Register during Checkout</label>
-                    </register_during_checkout>
                     <contact_us>
                         <label>Contact Us</label>
                     </contact_us>
