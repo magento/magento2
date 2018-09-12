@@ -11,6 +11,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 /**
  * @api
  * @since 100.1.6
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 interface GeneratorInterface
 {
