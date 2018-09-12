@@ -31,16 +31,18 @@ class MediaGalleryTest extends GraphQlAbstract
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
-   		small_image_url
+   		small_image {
+   		    url
+   		}
     }
   }    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('small_image_url', $response['products']['items'][0]);
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image_url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image_url']));
+        self::assertArrayHasKey('url', $response['products']['items'][0]['small_image']);
+        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
     }
 
     /**
@@ -56,15 +58,19 @@ QUERY;
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
-   		small_image_url
+   		small_image {
+   		    url
+   		}
     }
   }    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        self::assertArrayHasKey('small_image_url', $response['products']['items'][0]);
-        self::assertContains('placeholder/small_image.jpg', $response['products']['items'][0]['small_image_url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image_url']));
+
+        var_dump($response['products']['items'][0]);
+        self::assertArrayHasKey('small_image', $response['products']['items'][0]);
+        self::assertContains('placeholder/small_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
     }
 
     /**
