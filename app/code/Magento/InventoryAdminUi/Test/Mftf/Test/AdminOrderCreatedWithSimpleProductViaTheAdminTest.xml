@@ -18,6 +18,9 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
         </annotations>
         
         <before>
@@ -96,11 +99,11 @@
         <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
-        <click selector="tbody tr .col-sku" stepKey="clickOnSku1"/>
+        <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
 
-        <fillField selector="tr .qty" userInput="5" stepKey="fillProductQuantity1"/>
-        <click selector=".action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
+        <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity1"/>
+        <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
 
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">

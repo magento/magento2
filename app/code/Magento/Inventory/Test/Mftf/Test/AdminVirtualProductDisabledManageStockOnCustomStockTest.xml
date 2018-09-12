@@ -18,6 +18,9 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
         </annotations>
         
         <before>
@@ -37,9 +40,8 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage1"/>

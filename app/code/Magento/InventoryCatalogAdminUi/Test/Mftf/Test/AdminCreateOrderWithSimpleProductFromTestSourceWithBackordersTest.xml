@@ -19,10 +19,13 @@
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
+
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="_minimalSource" stepKey="customSource"/>
-            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
             <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
                 <requiredEntity createDataKey="customStock"/>
                 <requiredEntity createDataKey="customSource"/>
@@ -112,7 +115,7 @@
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForGuestCheckoutPageLoad"/>
+        <waitForPageLoad time="60" stepKey="waitForGuestCheckoutPageLoad"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
