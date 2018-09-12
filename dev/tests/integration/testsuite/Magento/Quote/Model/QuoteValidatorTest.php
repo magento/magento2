@@ -57,7 +57,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         )->setValue(
             'general/country/allow',
             'US',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setCountryId('AF');
@@ -139,6 +139,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
      * for the another website with different country restrictions.
      *
      * @magentoDataFixture Magento/Quote/Fixtures/quote_sec_website.php
+     * @magentoDbIsolation disabled
      */
     public function testValidateBeforeSubmit()
     {
