@@ -1732,6 +1732,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                         $uploadedImages[$image] = $image;
                     }
+
+                    if (empty($rowImages)) {
+                        $rowImages[self::COL_MEDIA_IMAGE][] = $image;
+                    }
                 }
 
                 $rowData[self::COL_MEDIA_IMAGE] = [];
