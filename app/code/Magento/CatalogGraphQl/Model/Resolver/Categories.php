@@ -101,7 +101,7 @@ class Categories implements ResolverInterface
             }
 
             if (!$this->collection->isLoaded()) {
-                $that->attributesJoiner->join($info->fieldASTs[0], $this->collection);
+                $that->attributesJoiner->join($info->fieldNodes[0], $this->collection);
                 $this->collection->addIdFilter($this->categoryIds);
             }
             /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
