@@ -201,20 +201,11 @@ class ImageUploader
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
         
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $destinationImageName = $this->getNewFileName($imageName);
+
+        $baseImagePath = $this->getFilePath($basePath, $destinationImageName);
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
-        
-        $destinationFile = $this->mediaDirectory->getAbsolutePath($baseImagePath);
-        $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
-            $index = 1;
-            $imageName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $imageName)) {
-                $imageName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }            
-            $baseImagePath = $this->getFilePath($basePath, $imageName);
-        }           
+       
         try {
             $this->coreFileStorageDatabase->copyFile(
                 $baseTmpImagePath,
@@ -286,5 +277,33 @@ class ImageUploader
         }
 
         return $result;
+    }
+    
+    /**
+     * Get new file name if the same is already exists
+     *
+     * @param string $imageName
+     * @return string
+     */
+    
+    public function getNewFileName($imageName)
+    {
+        $basePath = $this->getBasePath();
+        $destinationFile = $this->mediaDirectory->getAbsolutePath($this->getFilePath($basePath, $imageName));
+        
+        $fileInfo = pathinfo($destinationFile);
+        if (file_exists($destinationFile)) {
+            $index = 1;
+            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
+            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
+                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
+                $index++;
+            }
+            $destFileName = $baseName;
+        } else {
+            return $fileInfo['basename'];
+        }
+
+        return $destFileName;
     }
 }

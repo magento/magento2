@@ -83,6 +83,20 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         return '';
     }
+    
+    /**
+     * Get the destination image name which prevents overwriting existing images with the same name
+     *
+     * @param array $value Attribute value
+     * @return string
+     */
+    private function getFinalImageName($value)
+    {
+        if (is_array($value) && isset($value[0]['name'])) {
+            return $this->getImageUploader()->getNewFileName($value[0]['name']);
+        }
+        return '';
+    }
 
     /**
      * Avoiding saving potential upload data to DB
@@ -102,7 +116,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $value[0]['name'] = $value[0]['url'];
         }
 
-        if ($imageName = $this->getUploadedImageName($value)) {
+        if ($imageName = $this->getFinalImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -126,7 +140,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         return $this->imageUploader;
     }
-
+    
     /**
      * Check if temporary file is available for new image upload.
      *
@@ -167,15 +181,10 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function afterSave($object)
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
-               
+        
         if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
-                $newImageName = $this->getImageUploader()->moveFileFromTmp($imageName);
-                if($newImageName!==$imageName){
-                    $attributeName = $this->getAttribute()->getName();
-                    $object->setData($attributeName, $newImageName);
-                    $this->getAttribute()->getEntity()->saveAttribute($object, $attributeName);
-                }
+                $this->getImageUploader()->moveFileFromTmp($imageName);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
