@@ -130,7 +130,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $topicName,
                     $serviceMethod[ConfigParser::TYPE_NAME],
                     $serviceMethod[ConfigParser::METHOD_NAME],
-                    $handlers
+                    $handlers,
+                    $isSynchronous
                 );
             } elseif ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
@@ -138,7 +139,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous ?? true,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
-                    Config::TOPIC_RESPONSE => $responseSchema,
+                    Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema: null,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
             } elseif ($requestSchema) {

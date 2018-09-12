@@ -81,6 +81,8 @@ class ReflectionGenerator
         $returnType = ($returnType != 'void' && $returnType != 'null') ? $returnType : null;
         if (!isset($isSynchronous)) {
             $isSynchronous = $returnType ? true : false;
+        } else {
+            $returnType = ($isSynchronous) ? $returnType : null;
         }
         return [
             Config::TOPIC_NAME => $topicName,
@@ -89,12 +91,13 @@ class ReflectionGenerator
             Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_METHOD,
             Config::TOPIC_RESPONSE => $returnType,
             Config::TOPIC_HANDLERS => $handlers
-                ? : [self::DEFAULT_HANDLER => $methodMetadata[Config::SCHEMA_METHOD_HANDLER]]
+                ?: [self::DEFAULT_HANDLER => $methodMetadata[Config::SCHEMA_METHOD_HANDLER]]
         ];
     }
 
     /**
      * Generate topic name based on service type and method name.
+     *
      * Perform the following conversion:
      * \Magento\Customer\Api\RepositoryInterface + getById =>
      * magento.customer.api.repositoryInterface.getById
