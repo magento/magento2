@@ -409,6 +409,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Adds custom filter to resource collection
+     *
      * Can be overridden in child classes if custom filter needed
      *
      * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
