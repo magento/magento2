@@ -91,7 +91,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
             throw new AuthenticationException(
                 __('You did not sign in correctly or your account is temporarily disabled.')
             );
-        }       
+        }
         $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();

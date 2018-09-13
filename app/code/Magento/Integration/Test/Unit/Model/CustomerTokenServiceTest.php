@@ -71,7 +71,7 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
 
         $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        
+
         $this->_tokenService = new \Magento\Integration\Model\CustomerTokenService(
             $this->_tokenFactoryMock,
             $this->_accountManagementMock,
