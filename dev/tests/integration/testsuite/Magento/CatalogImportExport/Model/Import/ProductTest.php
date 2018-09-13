@@ -1568,20 +1568,19 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
     {
         /**
          * Products `simple1` and `simple2` are created by fixture so already
-         * have a URL Key, whereas `simple3` is new so will use the product
-         * name provided in the CSV import for its URL Key.
+         * have a URL Key, whereas `simple3` is a new product so won't have one.
          */
         $products = [
             'simple1' => 'url-key',
             'simple2' => 'url-key2',
-            'simple3' => 'simple-3'
+            'simple3' => 'simple-3',
         ];
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
