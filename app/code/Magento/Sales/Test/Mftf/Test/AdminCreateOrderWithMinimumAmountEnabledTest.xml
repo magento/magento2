@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithMinimumAmountEnabledTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin create order"/>
+            <title value="Admin order is not restricted by 'Minimum Order Amount' configuration."/>
+            <description value="Admin should be able to create an order regardless of the minimum order amount."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92925"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
+            <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheBefore"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Admin creates order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrder"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="navigateToNewOrderPage"/>
+
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!--Fill customer group information-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectGroup"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmail"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
+
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <assertNotEmpty actual="$orderId" stepKey="assertOrderIdIsNotEmpty"/>
+        <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeSimpleProductInItemsOrdered">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+    </test>
+</tests>

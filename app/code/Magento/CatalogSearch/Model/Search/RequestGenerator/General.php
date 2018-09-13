@@ -10,6 +10,10 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class General implements GeneratorInterface
 {
     /**
