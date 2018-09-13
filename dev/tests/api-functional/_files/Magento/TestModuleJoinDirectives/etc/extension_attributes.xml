@@ -40,6 +40,7 @@
             <field>firstname</field>
             <field>lastname</field>
             <field>email</field>
+        </join>
       </attribute>
     </extension_attributes>
 </config>
