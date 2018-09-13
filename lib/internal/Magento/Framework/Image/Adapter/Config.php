@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Image config provider.
+ */
 class Config implements ConfigInterface, UploadConfigInterface
 {
     const XML_PATH_IMAGE_ADAPTER = 'dev/image/default_adapter';

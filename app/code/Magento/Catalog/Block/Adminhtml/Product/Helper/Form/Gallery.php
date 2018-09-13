@@ -18,6 +18,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Adminhtml gallery block
+ */
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
@@ -79,6 +82,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      * @param Registry $registry
      * @param \Magento\Framework\Data\Form $form
      * @param array $data
+     * @param DataPersistorInterface|null $dataPersistor
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
@@ -96,6 +100,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns element html.
+     *
      * @return string
      */
     public function getElementHtml()
@@ -148,6 +154,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns html id
+     *
      * @return string
      */
     protected function getHtmlId()
@@ -156,6 +164,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns name
+     *
      * @return string
      */
     public function getName()
@@ -164,6 +174,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns suffix for field name
+     *
      * @return string
      */
     public function getFieldNameSuffix()
@@ -172,6 +184,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns data scope html id
+     *
      * @return string
      */
     public function getDataScopeHtmlId()
@@ -256,7 +270,6 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Retrieve attribute field name
      *
-     *
      * @param Attribute $attribute
      * @return string
      */
@@ -270,6 +283,8 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
     }
 
     /**
+     * Returns html content of the block
+     *
      * @return string
      */
     public function toHtml()

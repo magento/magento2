@@ -65,6 +65,8 @@ class Uploader extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Initialize block.
+     *
      * @return void
      */
     protected function _construct()

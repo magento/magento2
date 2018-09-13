@@ -189,6 +189,8 @@ class Config
     }
 
     /**
+     * Set builder.
+     *
      * @param View\Layout\BuilderInterface $builder
      * @return $this
      */
@@ -200,6 +202,7 @@ class Config
 
     /**
      * Build page config from page configurations
+     *
      * @return void
      */
     protected function build()
@@ -210,7 +213,10 @@ class Config
     }
 
     /**
+     * Public build action
+     *
      * TODO Will be eliminated in MAGETWO-28359
+     *
      * @return void
      */
     public function publicBuild()
@@ -230,6 +236,8 @@ class Config
     }
 
     /**
+     * Set metadata.
+     *
      * @param string $name
      * @param string $content
      * @return void
@@ -241,6 +249,8 @@ class Config
     }
 
     /**
+     * Returns metadata
+     *
      * @return array
      */
     public function getMetadata()
@@ -250,6 +260,8 @@ class Config
     }
 
     /**
+     * Set content type
+     *
      * @param string $contentType
      * @return void
      */
@@ -273,6 +285,8 @@ class Config
     }
 
     /**
+     * Set media type
+     *
      * @param string $mediaType
      * @return void
      */
@@ -299,6 +313,8 @@ class Config
     }
 
     /**
+     * Set charset
+     *
      * @param string $charset
      * @return void
      */
@@ -325,6 +341,8 @@ class Config
     }
 
     /**
+     * Set description
+     *
      * @param string $description
      * @return void
      */
@@ -351,6 +369,8 @@ class Config
     }
 
     /**
+     * Set meta title
+     *
      * @param string $title
      */
     public function setMetaTitle($title)
@@ -374,6 +394,8 @@ class Config
     }
 
     /**
+     * Set keywords
+     *
      * @param string $keywords
      * @return void
      */
@@ -400,6 +422,8 @@ class Config
     }
 
     /**
+     * Set robots content
+     *
      * @param string $robots
      * @return void
      */
@@ -430,6 +454,8 @@ class Config
     }
 
     /**
+     * Returns collection of the assets
+     *
      * @return \Magento\Framework\View\Asset\GroupedCollection
      */
     public function getAssetCollection()
@@ -439,6 +465,8 @@ class Config
     }
 
     /**
+     * Add asset to page content
+     *
      * @param string $file
      * @param array $properties
      * @param string|null $name
@@ -546,6 +574,8 @@ class Config
     }
 
     /**
+     * Returns element attributes
+     *
      * @param string $elementType
      * @return string[]
      */
@@ -578,6 +608,8 @@ class Config
     }
 
     /**
+     * Returns favicon file
+     *
      * @return string
      */
     public function getFaviconFile()
@@ -586,6 +618,8 @@ class Config
     }
 
     /**
+     * Returns default favicon
+     *
      * @return string
      */
     public function getDefaultFavicon()
