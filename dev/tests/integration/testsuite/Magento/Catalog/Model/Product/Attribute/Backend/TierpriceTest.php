@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -11,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice.
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TierpriceTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,6 +26,11 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Model\ProductRepository
      */
     protected $productRepository;
+
+    /**
+     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
+     */
+    private $tierPriceFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice
@@ -40,6 +48,9 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->metadataPool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\EntityManager\MetadataPool::class
         );
+        $this->tierPriceFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
+
         $this->_model->setAttribute(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Eav\Model\Config::class
@@ -141,83 +152,153 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @param array $tierPrice
-     * @param bool $isChanged
-     * @param int $tierPriceCtr
-     * @dataProvider afterSaveDataProvider
+     * @dataProvider saveExistingProductDataProvider
+     * @param array $tierPricesData
+     * @param int $tierPriceCount
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
      */
-    public function testAfterSave($tierPrice, $isChanged, $tierPriceCtr)
+    public function testSaveExistingProduct(array $tierPricesData, int $tierPriceCount): void
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $product->load($this->productRepository->get('simple')->getId());
-        $product->unlockAttributes();
-        // Added tier price
-        $product->setTierPrice($tierPrice);
-
-        $this->_model->afterSave($product);
-        $this->assertEquals($isChanged, $product->getData('tier_price_changed'));
-
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $fixtureProduct = $this->productRepository->get('simple');
-        $product->setId($fixtureProduct->getId());
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $product->setData($linkField, $fixtureProduct->getData($linkField));
-        $this->_model->afterLoad($product);
-        $this->assertEquals($tierPriceCtr, count($product->getTierPrice()));
+        $product = $this->productRepository->get('simple', true);
+        $tierPrices = [];
+        foreach ($tierPricesData as $tierPrice) {
+            $tierPrices[] = $this->tierPriceFactory->create([
+                'data' => $tierPrice
+            ]);
+        }
+        $product->setTierPrices($tierPrices);
+        $product = $this->productRepository->save($product);
+        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
         $this->assertEquals(0, $product->getData('tier_price_changed'));
     }
 
-    public function afterSaveDataProvider()
+    /**
+     * @return array
+     */
+    public function saveExistingProductDataProvider(): array
     {
         return [
             'same' => [
                 [
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 8],
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 10, 'percentage_value' => 50],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
                 ],
-                0,
                 4,
             ],
             'update one' => [
                 [
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 8],
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 10, 'percentage_value' => 10],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 10])
+                    ],
                 ],
-                1,
                 4,
             ],
             'delete one' => [
                 [
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 8, 'delete' => true],
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 10, 'percentage_value' => 50],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
                 ],
-                1,
                 3,
             ],
             'add one' => [
                 [
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 8],
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 20, 'percentage_value' => 90],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 5],
-                    ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 10, 'percentage_value' => 50],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 32000,
+                        'qty' => 20,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 90])
+                    ],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
                 ],
-                1,
                 5,
             ],
-            'delete all' => [[], 1, 0,],
+            'delete all' => [[], 0,],
+        ];
+    }
+
+    /**
+     * @dataProvider saveNewProductDataProvider
+     * @param array $tierPricesData
+     * @param int $tierPriceCount
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testSaveNewProduct(array $tierPricesData, int $tierPriceCount): void
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Product::class);
+        $product->isObjectNew(true);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+            ->setAttributeSetId(4)
+            ->setName('Simple Product New')
+            ->setSku('simple product new')
+            ->setPrice(10);
+        $tierPrices = [];
+        foreach ($tierPricesData as $tierPrice) {
+            $tierPrices[] = $this->tierPriceFactory->create([
+                'data' => $tierPrice
+            ]);
+        }
+        $product->setTierPrices($tierPrices);
+        $product = $this->productRepository->save($product);
+        $this->assertEquals($tierPriceCount, count($product->getTierPrice()));
+        $this->assertEquals(0, $product->getData('tier_price_changed'));
+    }
+
+    /**
+     * @return array
+     */
+    public function saveNewProductDataProvider(): array
+    {
+        return [
+            [
+                [
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 2, 'value' => 8],
+                    ['website_id' => 0, 'customer_group_id' => 32000, 'qty' => 5, 'value' => 5],
+                    ['website_id' => 0, 'customer_group_id' => 0, 'qty' => 3, 'value' => 5],
+                    [
+                        'website_id' => 0,
+                        'customer_group_id' => 0,
+                        'qty' => 10,
+                        'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
+                    ],
+                ],
+                4,
+            ],
         ];
     }
 }
