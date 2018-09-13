@@ -90,7 +90,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCurrentStoreId()
     {

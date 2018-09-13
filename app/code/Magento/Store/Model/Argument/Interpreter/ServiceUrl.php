@@ -76,6 +76,7 @@ class ServiceUrl implements InterpreterInterface
     /**
      * Compute and return effective value of an argument
      *
+     * @param array $data
      * @return string
      * @throws \InvalidArgumentException
      */

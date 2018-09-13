@@ -51,10 +51,10 @@ class StoresData
      * Get stores data
      *
      * @param string $runMode
-     * @param string $scopeCode
+     * @param string|null $scopeCode
      * @return array
      */
-    public function getStoresData(string $runMode, string $scopeCode) : array
+    public function getStoresData(string $runMode, string $scopeCode = null) : array
     {
         $cacheKey = 'resolved_stores_' . md5($runMode . $scopeCode);
         $cacheData = $this->cache->load($cacheKey);

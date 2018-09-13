@@ -17,6 +17,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
+ * Switcher block
+ *
  * @api
  * @since 100.0.2
  */
