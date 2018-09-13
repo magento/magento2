@@ -114,4 +114,11 @@
             </skip>
         </annotations>
     </test>
+    <test name="StorefrontTaxQuoteCheckoutLoggedInSimple">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
 </tests>
