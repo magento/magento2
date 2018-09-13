@@ -138,12 +138,12 @@ class Uploader
     /**
      * Max Image Width resolution in pixels. For image resizing on client side
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    const MAX_IMAGE_WIDTH = 4096;
 
     /**
      * Max Image Height resolution in pixels. For image resizing on client side
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    const MAX_IMAGE_HEIGHT = 2160;
 
     /**
      * Resulting of uploaded file
@@ -187,8 +187,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with
-     * original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -265,6 +264,8 @@ class Uploader
     }
 
     /**
+     * Set access permissions to file.
+     *
      * @param string $file
      * @return void
      *
