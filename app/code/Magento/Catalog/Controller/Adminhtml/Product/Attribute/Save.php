@@ -13,7 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataResolver;
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
@@ -77,9 +77,9 @@ class Save extends Attribute
     private $presentation;
 
     /**
-     * @var OptionsDataResolver|null
+     * @var OptionsDataSerializer|null
      */
-    private $optionsDataResolver;
+    private $optionsDataSerializer;
 
     /**
      * @param Context $context
@@ -94,7 +94,7 @@ class Save extends Attribute
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
      * @param Presentation|null $presentation
-     * @param OptionsDataResolver|null $optionsDataResolver
+     * @param OptionsDataSerializer|null $optionsDataSerializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -110,7 +110,7 @@ class Save extends Attribute
         Product $productHelper,
         LayoutFactory $layoutFactory,
         Presentation $presentation = null,
-        OptionsDataResolver $optionsDataResolver = null
+        OptionsDataSerializer $optionsDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -121,8 +121,8 @@ class Save extends Attribute
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
         $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
-        $this->optionsDataResolver = $optionsDataResolver
-            ?: ObjectManager::getInstance()->get(OptionsDataResolver::class);
+        $this->optionsDataSerializer = $optionsDataSerializer
+            ?: ObjectManager::getInstance()->get(OptionsDataSerializer::class);
     }
 
     /**
@@ -134,7 +134,8 @@ class Save extends Attribute
     public function execute()
     {
         try {
-            $optionData = $this->optionsDataResolver->getOptionsData($this->getRequest());
+            $optionData = $this->optionsDataSerializer
+                ->unserialize($this->getRequest()->getParam('serialized_options'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
                 . "If the error persists, please try again later.");

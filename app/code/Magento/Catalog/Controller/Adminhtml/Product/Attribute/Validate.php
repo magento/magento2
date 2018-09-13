@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataResolver;
+use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
@@ -34,9 +34,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private $multipleAttributeList;
 
     /**
-     * @var OptionsDataResolver|null
+     * @var OptionsDataSerializer|null
      */
-    private $optionsDataResolver;
+    private $optionsDataSerializer;
 
     /**
      * Constructor
@@ -48,7 +48,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
-     * @param OptionsDataResolver|null $optionsDataResolver
+     * @param OptionsDataSerializer|null $optionsDataSerializer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -58,14 +58,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        OptionsDataResolver $optionsDataResolver = null
+        OptionsDataSerializer $optionsDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
-        $this->optionsDataResolver = $optionsDataResolver ?: ObjectManager::getInstance()
-            ->get(OptionsDataResolver::class);
+        $this->optionsDataSerializer = $optionsDataSerializer ?: ObjectManager::getInstance()
+            ->get(OptionsDataSerializer::class);
     }
 
     /**
@@ -78,7 +78,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $response = new DataObject();
         $response->setError(false);
         try {
-            $optionsData = $this->optionsDataResolver->getOptionsData($this->getRequest());
+            $optionsData = $this->optionsDataSerializer
+                ->unserialize($this->getRequest()->getParam('serialized_options'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
                 . "If the error persists, please try again later.");

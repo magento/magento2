@@ -441,7 +441,7 @@ define([
                 var swatchValues = [],
                     optionContainer;
 
-                activePanel = swatchTextPanel.hasClass(this.activePanelClass) ? swatchTextPanel : swatchVisualPanel;
+                activePanel = swatchTextPanel.hasClass(activePanelClass) ? swatchTextPanel : swatchVisualPanel;
                 optionContainer = activePanel.find('table tbody');
 
                 if (activePanel.hasClass(activePanelClass)) {
