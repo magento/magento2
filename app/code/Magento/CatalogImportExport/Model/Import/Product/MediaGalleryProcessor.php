@@ -103,7 +103,7 @@ class MediaGalleryProcessor
     /**
      * Save product media gallery.
      *
-     * @param $mediaGalleryData
+     * @param array $mediaGalleryData
      * @return void
      */
     public function saveMediaGallery(array $mediaGalleryData)
@@ -159,7 +159,7 @@ class MediaGalleryProcessor
     /**
      * Update 'disabled' field for media gallery entity
      *
-     * @param array $labels
+     * @param array $images
      * @return void
      */
     public function updateMediaGalleryVisibility(array $images)
@@ -287,7 +287,7 @@ class MediaGalleryProcessor
     /**
      * Save media gallery data per store.
      *
-     * @param $storeId
+     * @param int $storeId
      * @param array $mediaGalleryData
      * @param array $newMediaValues
      * @param array $valueToProductId
@@ -363,6 +363,8 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Get resource.
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel
      */
     private function getResource()

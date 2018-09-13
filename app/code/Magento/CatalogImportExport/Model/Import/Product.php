@@ -898,8 +898,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     *
      * Multiple value separator getter.
+     *
      * @return string
      */
     public function getMultipleValueSeparator()
@@ -949,6 +949,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Get product by type name.
+     *
      * @param string $name
      * @return Product\Type\AbstractType
      */
@@ -1189,8 +1191,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Set valid attribute set and product type to rows with all scopes
-     * to ensure that existing products doesn't changed.
+     * Set valid attribute set and product type to rows.
+     *
+     * Set valid attribute set and product type to rows with all
+     * scopes to ensure that existing products doesn't changed.
      *
      * @param array $rowData
      * @return array
@@ -1220,6 +1224,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Gather and save information about product links.
+     *
      * Must be called after ALL products saving done.
      *
      * @return $this
@@ -1468,6 +1473,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Return additional data, needed to select.
+     *
      * @return array
      */
     private function getOldSkuFieldsForSelect()
@@ -1477,6 +1483,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Adds newly created products to _oldSku
+     *
      * @param array $newProducts
      * @return void
      */
@@ -1514,6 +1521,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Init media gallery resources
+     *
      * @return void
      * @since 100.0.4
      * @deprecated
@@ -1544,6 +1552,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieve image from row.
+     *
      * @param array $rowData
      * @return array
      */
@@ -1937,6 +1947,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Prepare array with image states (visible or hidden from product page)
+     *
      * @param array $rowData
      * @return array
      */
@@ -1961,6 +1972,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Process row categories.
+     *
      * @param array $rowData
      * @return array
      */
@@ -1988,6 +2001,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Get product websites.
+     *
      * @param string $productSku
      * @return array
      */
@@ -1997,6 +2012,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieve product categories.
+     * 
      * @param string $productSku
      * @return array
      */
@@ -2006,6 +2023,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Get store id by code.
+     * 
      * @param string $storeCode
      * @return array|int|null|string
      */
@@ -2097,6 +2116,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieve uploader.
+     *
      * @return Uploader
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -2107,6 +2128,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Uploading files into the "catalog/product" media folder.
+     *
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
@@ -2301,7 +2323,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns array of new products data with SKU as key. All SKU keys are in lowercase for avoiding creation of
      * new products with the same SKU in different letter cases.
      *
-     * @var string $sku
+     * @param string $sku
      * @return array
      */
     public function getNewSku($sku = null)
@@ -2494,6 +2516,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Check if need to validate url key.
+     *
      * @param array $rowData
      * @return bool
      */
@@ -2805,8 +2829,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Get url key.
+     *
      * @param array $rowData
      * @return string
+     *
      * @since 100.0.3
      */
     protected function getUrlKey($rowData)
@@ -2823,7 +2850,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieve resource.
+     *
      * @return Proxy\Product\ResourceModel
+     *
      * @since 100.0.3
      */
     protected function getResource()
