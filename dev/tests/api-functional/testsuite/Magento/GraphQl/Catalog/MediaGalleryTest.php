@@ -67,7 +67,6 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        var_dump($response['products']['items'][0]);
         self::assertArrayHasKey('small_image', $response['products']['items'][0]);
         self::assertContains('placeholder/small_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
