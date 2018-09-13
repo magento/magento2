@@ -276,7 +276,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * self::setOrder() alias
+     * Sets order and direction.
      *
      * @param string $field
      * @param string $direction
@@ -365,6 +365,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * Hook for operations before rendering filters
+     *
      * @return void
      */
     protected function _renderFiltersBefore()
@@ -602,6 +603,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
+     * Returns an items collection.
      * Returns a collection item that corresponds to the fetched row
      * and moves the internal data pointer ahead
      *

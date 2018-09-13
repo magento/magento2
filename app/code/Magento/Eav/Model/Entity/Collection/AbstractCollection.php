@@ -653,7 +653,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $bind attribute of the main entity to link with joined $filter
      * @param string $filter primary key for the joined entity (entity_id default)
      * @param string $joinType inner|left
-     * @param null $storeId
+     * @param int|null $storeId
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -947,8 +947,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Clone and reset collection
      *
-     * @param null $limit
-     * @param null $offset
+     * @param int|null $limit
+     * @param int|null $offset
      * @return Select
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
@@ -1620,6 +1620,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * Clear collection
+     *
      * @return $this
      */
     public function clear()
@@ -1630,6 +1631,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
     /**
      * Remove all items from collection
+     *
      * @return $this
      */
     public function removeAllItems()
@@ -1653,6 +1655,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * Returns main table.
      * Returns main table name - extracted from "module/table" style and
      * validated by db adapter
      *
