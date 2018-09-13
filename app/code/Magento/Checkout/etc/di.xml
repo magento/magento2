@@ -52,10 +52,4 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
     </type>
-    <type name="Magento\Checkout\Block\Onepage">
-        <plugin name="deserialize_config_and_add_label_to_custom_options" type="Magento\Checkout\Plugin\Block\ResetCheckoutConfigOnOnePage"/>
-    </type>
-    <type name="Magento\Checkout\Block\Cart\Shipping">
-        <plugin name="deserialize_config_and_add_label_to_custom_options_shipping" type="Magento\Checkout\Plugin\Block\Cart\ResetCheckoutConfigOnCartShipping"/>
-    </type>
 </config>
