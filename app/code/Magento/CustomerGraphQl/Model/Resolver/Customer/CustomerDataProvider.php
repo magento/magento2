@@ -13,11 +13,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
-use Magento\Store\Api\StoreResolverInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
 /**
  * Customer field data provider, used for GraphQL request processing.
@@ -33,16 +30,6 @@ class CustomerDataProvider
      * @var ServiceOutputProcessor
      */
     private $serviceOutputProcessor;
-
-    /**
-     * @var StoreResolverInterface
-     */
-    private $storeResolver;
-
-    /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory
-     */
-    protected $subscriberFactory;
 
     /**
      * @var CustomerRegistry
@@ -68,31 +55,14 @@ class CustomerDataProvider
         CustomerRepositoryInterface $customerRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
         SerializerInterface $jsonSerializer,
-        SubscriberFactory $subscriberFactory,
         CustomerRegistry $customerRegistry,
-        Encryptor $encryptor,
-        StoreResolverInterface $storeResolver
+        Encryptor $encryptor
     ) {
         $this->customerRepository = $customerRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->jsonSerializer = $jsonSerializer;
-        $this->subscriberFactory = $subscriberFactory;
         $this->customerRegistry = $customerRegistry;
         $this->encryptor = $encryptor;
-        $this->storeResolver = $storeResolver;
-    }
-
-    /**
-     * Load customer object
-     *
-     * @param int $customerId
-     * @return CustomerInterface
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    public function loadCustomerById(int $customerId): CustomerInterface
-    {
-        return $this->customerRepository->getById($customerId);
     }
 
     /**
@@ -158,82 +128,14 @@ class CustomerDataProvider
     }
 
     /**
-     * Check if customer is subscribed to Newsletter
-     *
+     * @param string $password
      * @param int $customerId
      * @return bool
-     */
-    public function isSubscribed(int $customerId): bool
-    {
-        $checkSubscriber = $this->subscriberFactory->create()->loadByCustomerId($customerId);
-        return $checkSubscriber->isSubscribed();
-    }
-
-    /**
-     * Manage customer subscription. Subscribe OR unsubscribe if required
-     *
-     * @param int $customerId
-     * @param $newSubscriptionStatus
-     * @return bool
-     */
-    public function manageSubscription(int $customerId, bool $newSubscriptionStatus): bool
-    {
-        $checkSubscriber = $this->subscriberFactory->create()->loadByCustomerId($customerId);
-        $isSubscribed = $this->isSubscribed($customerId);
-
-        if ($newSubscriptionStatus === true && !$isSubscribed) {
-            $this->subscriberFactory->create()->subscribeCustomerById($customerId);
-        } elseif ($newSubscriptionStatus === false && $checkSubscriber->isSubscribed()) {
-            $this->subscriberFactory->create()->unsubscribeCustomerById($customerId);
-        }
-        return true;
-    }
-
-    /**
-     * @param int $customerId
-     * @param array $customerData
-     * @return CustomerInterface
-     * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
-    public function updateAccountInformation(int $customerId, array $customerData): CustomerInterface
+    public function isPasswordCorrect(string $password, int $customerId)
     {
-
-        $customer = $this->loadCustomerById($customerId);
-
-        if (isset($customerData['email'])
-            && $customer->getEmail() !== $customerData['email']
-            && isset($customerData['password'])) {
-            if ($this->isPasswordCorrect($customerData['password'], $customerId)) {
-                $customer->setEmail($customerData['email']);
-            } else {
-                throw new GraphQlAuthorizationException(__('Invalid current user password.'));
-            }
-        }
-
-        if (isset($customerData['firstname'])) {
-            $customer->setFirstname($customerData['firstname']);
-        }
-        if (isset($customerData['lastname'])) {
-            $customer->setLastname($customerData['lastname']);
-        }
-
-        $customer->setStoreId($this->storeResolver->getCurrentStoreId());
-        $this->customerRepository->save($customer);
-
-        return $customer;
-    }
-
-    private function isPasswordCorrect(string $password, int $customerId)
-    {
-
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            return false;
-        }
-        return true;
+        $hash = $this->customerRegistry->retrieveSecureData($customerId)->getPasswordHash();
+        return $this->encryptor->validateHash($password, $hash);
     }
 }

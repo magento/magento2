@@ -10,6 +10,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
+use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataUpdater;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -26,6 +27,11 @@ class CustomerUpdate implements ResolverInterface
      * @var CustomerDataProvider
      */
     private $customerResolver;
+
+    /**
+     * @var CustomerDataUpdater
+     */
+    private $customerUpdater;
 
     /**
      * @var ValueFactory
@@ -48,12 +54,14 @@ class CustomerUpdate implements ResolverInterface
      */
     public function __construct(
         CustomerDataProvider $customerResolver,
+        CustomerDataUpdater $customerUpdater,
         ValueFactory $valueFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
         $this->customerResolver = $customerResolver;
         $this->valueFactory = $valueFactory;
         $this->subscriberFactory = $subscriberFactory;
+        $this->customerUpdater = $customerUpdater;
     }
 
     /**
@@ -77,13 +85,14 @@ class CustomerUpdate implements ResolverInterface
             );
         }
 
-        $this->customerResolver->updateAccountInformation($context->getUserId(), $args);
+        $customerId = $context->getUserId();
+        $this->customerUpdater->updateAccountInformation($customerId, $args);
+        $data = $this->customerResolver->getCustomerById($customerId);
 
         if (isset($args['is_subscribed'])) {
-            $this->customerResolver->manageSubscription($context->getUserId(), $args['is_subscribed']);
+            $data['is_subscribed'] = $this->customerUpdater->manageSubscription($customerId, $args['is_subscribed']);
         }
 
-        $data = $args;
         $result = function () use ($data) {
             return !empty($data) ? $data : [];
         };
