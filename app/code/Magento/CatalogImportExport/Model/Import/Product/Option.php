@@ -1122,6 +1122,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Process option row.
+     *
      * @param string $name
      * @param array $optionRow
      * @return array
@@ -1203,6 +1205,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Import data rows.
+     *
      * Additional store view data (option titles) will be sought in store view specified import file rows
      *
      * @return boolean
@@ -1309,6 +1312,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Check options titles.
+     *
      * If products were split up between bunches,
      * this function will add needed option for option titles
      *
@@ -1364,6 +1369,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Remove existing options.
+     *
      * Remove all existing options if import behaviour is APPEND
      * in other case remove options for products with empty "custom_options" row only.
      *
@@ -1617,6 +1624,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Rarse required data.
+     *
      * Parse required data from current row and store to class internal variables some data
      * for underlying dependent rows
      *
