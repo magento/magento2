@@ -2013,7 +2013,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Retrieve product categories.
-     * 
+     *
      * @param string $productSku
      * @return array
      */
@@ -2024,7 +2024,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Get store id by code.
-     * 
+     *
      * @param string $storeCode
      * @return array|int|null|string
      */
