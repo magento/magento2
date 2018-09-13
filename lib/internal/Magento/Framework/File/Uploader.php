@@ -136,12 +136,16 @@ class Uploader
     const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
     const MAX_IMAGE_WIDTH = 4096;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated
+     * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
     const MAX_IMAGE_HEIGHT = 2160;
 
