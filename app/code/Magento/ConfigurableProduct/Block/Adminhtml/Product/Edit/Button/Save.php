@@ -154,6 +154,7 @@ class Save extends Generic
 
     /**
      * Is configurable product.
+     *
      * @return boolean
      */
     protected function isConfigurableProduct()
