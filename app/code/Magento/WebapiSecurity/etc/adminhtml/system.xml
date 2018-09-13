@@ -8,7 +8,7 @@
         <section id="webapi" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
             <group id="webapisecurity" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Web API Security</label>
-                <field id="allow_insecure" translate="label" type="select comment" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="allow_insecure" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Allow Anonymous Guest Access</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>This feature applies only to CMS, Catalog and Store APIs. Please consult your developers for details on potential security risks.</comment>
