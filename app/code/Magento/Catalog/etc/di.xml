@@ -657,12 +657,14 @@
                         <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceCreator" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
                         <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
                         <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceUpdater" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler</item>
                     </item>
                 </item>
             </argument>
