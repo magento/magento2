@@ -1573,9 +1573,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testImportWithoutUrlKeys()
     {
+        /**
+         * Products `simple1` and `simple2` are created by fixture so already
+         * have a URL Key, whereas `simple3` is new so will use the product
+         * name provided in the CSV import for its URL Key.
+         */
         $products = [
-            'simple1' => 'simple-1',
-            'simple2' => 'simple-2',
+            'simple1' => 'url-key',
+            'simple2' => 'url-key2',
             'simple3' => 'simple-3'
         ];
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
