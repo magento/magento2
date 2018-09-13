@@ -86,4 +86,46 @@
             </skip>
         </annotations>
     </test>
+    <test name="StorefrontConfigurableProductChildSearchTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="StorefrontProductNameWithHTMLEntities">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="ShopByButtonInMobile">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="StorefrontUpdateWishlistTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="StorefrontTaxQuoteCheckoutLoggedInSimple">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
+    <test name="AdminAddDefaultImageDownloadableProductTest">
+        <annotations>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
+        </annotations>
+    </test>
 </tests>

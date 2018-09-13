@@ -61,8 +61,6 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$groupedProduct.sku$$"/>
         </actionGroup>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumnsForGroupedProduct"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumnsGroupedProduct"/>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openGroupedProductEditPage"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
