@@ -30,7 +30,7 @@
         <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
 
         <!-- change the options for orders, invoices, credit memos display to show tax -->
-        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.taxSalesDisplay}}" visible="false"/>
         <uncheckOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
         <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
         <uncheckOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
@@ -66,7 +66,7 @@
         <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
 
         <!-- change the options for orders, invoices, credit memos display to not show tax -->
-        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.taxSalesDisplay}}" visible="false"/>
         <checkOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
         <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
         <checkOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
