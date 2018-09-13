@@ -146,8 +146,8 @@
     <!--Verify order information-->
     <actionGroup name="verifyCreatedOrderInformation">
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" before="seeOrderPendingStatus"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" before="getOrderId"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" after="seeSuccessMessage" stepKey="seeOrderPendingStatus"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" before="seeOrderPendingStatus" stepKey="getOrderId"/>
+        <assertNotEmpty actual="$getOrderId" before="getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
     </actionGroup>
 </actionGroups>

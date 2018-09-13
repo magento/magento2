@@ -21,7 +21,7 @@
             <!--Set default flat rate shipping method settings-->
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <!--Create simple customer-->
-            <createData entity="Simple_US_CA_Customer" stepKey="simpleCustomer"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="createSimpleCustomer"/>
             <!-- Create the category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Create the configurable product and add it to the category -->
@@ -76,7 +76,7 @@
         </before>
         <!--Create new customer order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
-            <argument name="customer" value="$$simpleCustomer$$"/>
+            <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
         <!--Add configurable product to order-->
         <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">
@@ -98,7 +98,7 @@
         <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
-            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
