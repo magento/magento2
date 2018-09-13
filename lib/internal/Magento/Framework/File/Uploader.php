@@ -140,14 +140,14 @@ class Uploader
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    const MAX_IMAGE_WIDTH = 4096;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    const MAX_IMAGE_HEIGHT = 2160;
 
     /**
      * Resulting of uploaded file
@@ -191,7 +191,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -268,7 +268,7 @@ class Uploader
     }
 
     /**
-     * Set 0777 rights for the file.
+     * Set access permissions to file.
      *
      * @param string $file
      * @return void
