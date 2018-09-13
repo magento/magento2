@@ -56,8 +56,7 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     }
 
     /**
-     * @param Select $select
-     * @return Select
+     * @inheritdoc
      */
     public function process(Select $select)
     {

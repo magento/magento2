@@ -81,6 +81,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
+     * Get address attributes.
+     *
      * @return array
      */
     private function getAddressAttributes()
@@ -210,6 +212,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
     /**
      * Appends billing address form component to payment layout
+     *
      * @param array $paymentLayout
      * @param array $elements
      * @return array

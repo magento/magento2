@@ -5,6 +5,9 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
+/**
+ * Url builder class used to compose dynamic urls.
+ */
 class UrlBuilder
 {
     /**

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Model;
 
 /**
- * Class that computes and stores into cache the active store ids
+ * Class that computes and stores into cache the active store ids.
  */
 class StoresData
 {
@@ -50,9 +50,11 @@ class StoresData
     /**
      * Get stores data
      *
+     * @param string $runMode
+     * @param string $scopeCode
      * @return array
      */
-    public function getStoresData($runMode, $scopeCode) : array
+    public function getStoresData(string $runMode, string $scopeCode) : array
     {
         $cacheKey = 'resolved_stores_' . md5($runMode . $scopeCode);
         $cacheData = $this->cache->load($cacheKey);

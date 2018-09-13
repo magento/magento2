@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Robots Block Class.
+ *
  * Prepares base content for robots.txt and implements Page Cache functionality.
  *
  * @api

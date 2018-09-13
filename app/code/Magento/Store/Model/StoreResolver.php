@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Model;
 
 /**
- * Class used to resolve store from url path or get parameters or cookie
+ * Class used to resolve store from url path or get parameters or cookie.
  */
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
@@ -75,8 +75,8 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
         \Magento\Store\Model\StoresData $storesData,
+        \Magento\Store\App\Request\StorePathInfoValidator $storePathInfoValidator,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {

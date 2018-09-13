@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
+/**
+ * Reader implementation for website.
+ */
 class Website implements ReaderInterface
 {
     /**
@@ -38,7 +41,7 @@ class Website implements ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllowedStoreIds($scopeCode)
     {
@@ -56,7 +59,7 @@ class Website implements ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultStoreId($scopeCode)
     {

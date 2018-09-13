@@ -7,6 +7,9 @@
  */
 namespace Magento\Store\App\Response;
 
+/**
+ * Class Redirect computes redirect urls responses.
+ */
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
@@ -74,6 +77,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
+     * Get the referrer url.
+     *
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -162,10 +167,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param array $arguments
-     * @return array
+     * @inheritdoc
      */
     public function updatePathParams(array $arguments)
     {

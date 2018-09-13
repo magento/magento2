@@ -36,6 +36,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
 
     /**
      * Process path info and remove store from pathInfo.
+     *
      * This method also sets request to no route if store is not valid and store is present in url config is enabled
      *
      * @param \Magento\Framework\App\RequestInterface $request

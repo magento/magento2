@@ -18,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Backend model for design/search_engine_robots/custom_instructions configuration value.
+ *
  * Required to implement Page Cache functionality.
  *
  * @api

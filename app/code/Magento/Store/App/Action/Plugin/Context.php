@@ -104,7 +104,7 @@ class Context
     /**
      * Take action in case of invalid store requested.
      *
-     * @param \Throwable|null  $previousException
+     * @param \Throwable|null $previousException
      * @return void
      * @throws NotFoundException
      */

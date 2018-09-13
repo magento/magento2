@@ -21,6 +21,7 @@ use Magento\Store\Model\StoreSwitcherInterface;
 
 /**
  * Handles store switching url and makes redirect.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitchAction extends Action
@@ -80,6 +81,8 @@ class SwitchAction extends Action
     }
 
     /**
+     * Execute action
+     *
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
      */

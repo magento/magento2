@@ -74,7 +74,8 @@ class ServiceUrl implements InterpreterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Compute and return effective value of an argument
+     *
      * @return string
      * @throws \InvalidArgumentException
      */

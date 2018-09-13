@@ -38,8 +38,6 @@ class Switcher extends \Magento\Framework\View\Element\Template
     private $urlHelper;
 
     /**
-     * Constructs
-     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
@@ -57,6 +55,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current website Id.
+     *
      * @return int|null|string
      */
     public function getCurrentWebsiteId()
@@ -65,6 +65,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current group Id.
+     *
      * @return int|null|string
      */
     public function getCurrentGroupId()
@@ -73,6 +75,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current Store Id.
+     *
      * @return int
      */
     public function getCurrentStoreId()
@@ -81,6 +85,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get raw groups.
+     *
      * @return array
      */
     public function getRawGroups()
@@ -98,6 +104,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get raw stores.
+     *
      * @return array
      */
     public function getRawStores()
@@ -169,6 +177,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get stores.
+     *
      * @return \Magento\Store\Model\Store[]
      */
     public function getStores()
@@ -188,6 +198,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current store code.
+     *
      * @return string
      */
     public function getCurrentStoreCode()
@@ -196,6 +208,8 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Is store in url.
+     *
      * @return bool
      */
     public function isStoreInUrl()
@@ -207,7 +221,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get store code
+     * Get store code.
      *
      * @return string
      */
@@ -217,7 +231,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get store name
+     * Get store name.
      *
      * @return null|string
      */
@@ -227,7 +241,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns target store post data
+     * Returns target store post data.
      *
      * @param Store $store
      * @param array $data

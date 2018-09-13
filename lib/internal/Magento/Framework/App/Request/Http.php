@@ -165,8 +165,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * Set the PATH_INFO string
-     * Set the ORIGINAL_PATH_INFO string
+     * Set the PATH_INFO string.
+     *
+     * Set the ORIGINAL_PATH_INFO string.
      *
      * @param string|null $pathInfo
      * @return $this
@@ -178,8 +179,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * Check if code declared as direct access frontend name
-     * this mean what this url can be used without store code
+     * Check if code declared as direct access frontend name.
+     *
+     * This means what this url can be used without store code.
      *
      * @param   string $code
      * @return  bool
@@ -265,8 +267,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * Collect properties changed by _forward in protected storage
-     * before _forward was called first time.
+     * Collect properties changed by _forward in protected storage before _forward was called first time.
      *
      * @return $this
      */
@@ -408,6 +409,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
+     * Sleep
+     *
      * @return array
      */
     public function __sleep()
@@ -416,7 +419,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSafeMethod()
     {
