@@ -53,7 +53,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
             }
             $formValue = isset($formData[$key]) ? $formData[$key] : null;
             if (is_numeric($formValue)) {
-                $formValue = floatval($formValue);
+                $formValue = (float)$formValue;
             }
 
             if (null === $formValue) {
