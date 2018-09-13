@@ -17,6 +17,7 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Address\Form;
+use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -57,6 +58,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $sessionQuote;
 
+    /**
+     * @var Create|MockObject
+     */
+    private $orderCreate;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -72,6 +78,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStoreId', 'getStore'])
             ->getMock();
 
+        $this->orderCreate = $this->getMockBuilder(Create::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderCreate->method('getSession')
+            ->willReturn($this->sessionQuote);
+
         $this->addressBlock = $objectManager->getObject(
             Form::class,
             [
@@ -79,7 +91,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 '_customerFormFactory' => $this->customerFormFactory,
                 '_coreRegistry' => $this->coreRegistry,
                 'countriesCollection' => $this->countriesCollection,
-                'sessionQuote' => $this->sessionQuote
+                'sessionQuote' => $this->sessionQuote,
+                '_orderCreate' => $this->orderCreate
             ]
         );
     }

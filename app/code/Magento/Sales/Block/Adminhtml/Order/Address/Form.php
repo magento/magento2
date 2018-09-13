@@ -106,14 +106,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      */
     protected function _prepareForm()
     {
-        $address = $this->_getAddress();
-        if ($address !== null) {
-            $storeId = $this->_getAddress()
-                ->getOrder()
-                ->getStoreId();
-            $this->_storeManager->setCurrentStore($storeId);
-        }
-
         parent::_prepareForm();
         $this->_form->setId('edit_form');
         $this->_form->setMethod('post');
