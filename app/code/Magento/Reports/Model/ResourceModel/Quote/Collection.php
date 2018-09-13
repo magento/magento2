@@ -5,6 +5,8 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Quote;
 
+use Magento\Store\Model\Store;
+
 /**
  * @api
  * @since 100.0.2
@@ -46,6 +48,24 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
             $resource
         );
         $this->customerResource = $customerResource;
+    }
+
+    /**
+     * Filter collections by stores.
+     *
+     * @param array $storeIds
+     * @param bool $withAdmin
+     * @return $this
+     */
+    public function addStoreFilter(array $storeIds, $withAdmin = true)
+    {
+        if ($withAdmin) {
+            $storeIds[] = Store::DEFAULT_STORE_ID;
+        }
+
+        $this->addFieldToFilter('store_id', ['in' => $storeIds]);
+
+        return $this;
     }
 
     /**
