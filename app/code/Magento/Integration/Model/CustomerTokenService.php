@@ -94,7 +94,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                     . 'Please wait and try again later.'
                 )
             );
-        }       
+        }
         $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
