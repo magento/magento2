@@ -12,6 +12,9 @@ class DateTest extends AbstractFormTestCase
     /** @var \Magento\Customer\Model\Metadata\Form\Date */
     protected $date;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -46,6 +49,9 @@ class DateTest extends AbstractFormTestCase
         );
     }
 
+    /**
+     * Test extractValue
+     */
     public function testExtractValue()
     {
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
@@ -174,7 +180,7 @@ class DateTest extends AbstractFormTestCase
         return [
             [1, 1],
             [false, false],
-            ['', null],
+            [null, null],
             ['test', 'test'],
             [['element1', 'element2'], ['element1', 'element2']]
         ];
@@ -191,6 +197,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->restoreValue($value));
     }
 
+    /**
+     * Test outputValue
+     */
     public function testOutputValue()
     {
         $this->assertEquals(null, $this->date->outputValue());
