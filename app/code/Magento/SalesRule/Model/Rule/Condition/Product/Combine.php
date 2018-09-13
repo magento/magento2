@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model\Rule\Condition\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
+ * Combine conditions for product.
  * @api
  * @since 100.0.2
  */
@@ -114,6 +115,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Validate entity.
+     *
      * @param object $cond
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return bool
@@ -135,7 +138,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * Retrieve entities for validation by attribute scope
      *
-     * @param $attributeScope
+     * @param string $attributeScope
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Framework\Model\AbstractModel[]
      */

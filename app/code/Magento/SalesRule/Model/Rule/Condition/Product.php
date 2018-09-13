@@ -118,7 +118,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Set attribute value
      *
-     * @param $value
+     * @param string $value
      */
     public function setAttribute($value)
     {
@@ -213,6 +213,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Get formatted price.
+     *
      * @param string $value
      * @return float|null
      */
