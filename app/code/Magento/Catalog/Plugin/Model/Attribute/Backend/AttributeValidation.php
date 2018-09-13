@@ -7,6 +7,9 @@ namespace Magento\Catalog\Plugin\Model\Attribute\Backend;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Attribute validation
+ */
 class AttributeValidation
 {
     /**
@@ -32,6 +35,8 @@ class AttributeValidation
     }
 
     /**
+     * Around validate
+     *
      * @param \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\DataObject $entity
