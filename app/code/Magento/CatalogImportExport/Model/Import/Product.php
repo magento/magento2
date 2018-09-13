@@ -949,7 +949,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Get product by type name.
+     * Retrieve product type by name.
      *
      * @param string $name
      * @return Product\Type\AbstractType
@@ -1972,7 +1972,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Process row categories.
+     * Resolve valid category ids from provided row data.
      *
      * @param array $rowData
      * @return array
@@ -2829,7 +2829,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Get url key.
+     * Retrieve url key from provided row data.
      *
      * @param array $rowData
      * @return string
