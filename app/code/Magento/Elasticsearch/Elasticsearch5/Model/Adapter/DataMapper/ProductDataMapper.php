@@ -364,9 +364,11 @@ class ProductDataMapper implements DataMapperInterface
         $result = [];
         if (array_key_exists($productId, $priceIndexData)) {
             $productPriceIndexData = $priceIndexData[$productId];
-            $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             foreach ($productPriceIndexData as $customerGroupId => $price) {
-                $fieldName = 'price_' . $customerGroupId . '_' . $websiteId;
+                $fieldName = $this->fieldMapper->getFieldName(
+                    'price',
+                    ['customerGroupId' => $customerGroupId]
+                );
                 $result[$fieldName] = sprintf('%F', $price);
             }
         }
@@ -398,8 +400,10 @@ class ProductDataMapper implements DataMapperInterface
             if (count($categoryIds)) {
                 $result = ['category_ids' => implode(' ', $categoryIds)];
                 foreach ($indexData as $data) {
-                    $result['position_category_' . $data['id']] = $data['position'];
-                    $result['name_category_' . $data['id']] = $data['name'];
+                    $categoryPositionKey = $this->fieldMapper->getFieldName('position', ['categoryId' => $data['id']]);
+                    $categoryNameKey = $this->fieldMapper->getFieldName('category_name', ['categoryId' => $data['id']]);
+                    $result[$categoryPositionKey] = $data['position'];
+                    $result[$categoryNameKey] = $data['name'];
                 }
             }
         }

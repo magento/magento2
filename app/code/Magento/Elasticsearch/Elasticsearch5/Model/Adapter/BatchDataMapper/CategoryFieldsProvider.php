@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper;
 
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * Provide data mapping for categories fields
@@ -19,11 +20,18 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
     private $resourceIndex;
 
     /**
-     * @param Index $resourceIndex
+     * @var FieldMapperInterface
      */
-    public function __construct(Index $resourceIndex)
+    private $fieldMapper;
+
+    /**
+     * @param Index $resourceIndex
+     * @param FieldMapperInterface $fieldMapper
+     */
+    public function __construct(Index $resourceIndex, FieldMapperInterface $fieldMapper)
     {
         $this->resourceIndex = $resourceIndex;
+        $this->fieldMapper = $fieldMapper;
     }
 
     /**
@@ -59,8 +67,10 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
             if (count($categoryIds)) {
                 $result = ['category_ids' => $categoryIds];
                 foreach ($indexData as $data) {
-                    $result['position_category_' . $data['id']] = $data['position'];
-                    $result['name_category_' . $data['id']] = $data['name'];
+                    $categoryPositionKey = $this->fieldMapper->getFieldName('position', ['categoryId' => $data['id']]);
+                    $categoryNameKey = $this->fieldMapper->getFieldName('category_name', ['categoryId' => $data['id']]);
+                    $result[$categoryPositionKey] = $data['position'];
+                    $result[$categoryNameKey] = $data['name'];
                 }
             }
         }

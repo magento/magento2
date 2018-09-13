@@ -347,9 +347,12 @@ class Elasticsearch
     protected function prepareIndex($storeId, $indexName, $mappedIndexerId)
     {
         $this->indexBuilder->setStoreId($storeId);
-        $this->client->createIndex($indexName, ['settings' => $this->indexBuilder->build()]);
+        $settings = $this->indexBuilder->build();
+        $allAttributeTypes = $this->fieldMapper->getAllAttributesTypes(['entityType' => $mappedIndexerId]);
+        $settings['index']['mapping']['total_fields']['limit'] = count($allAttributeTypes);
+        $this->client->createIndex($indexName, ['settings' => $settings]);
         $this->client->addFieldsMapping(
-            $this->fieldMapper->getAllAttributesTypes(['entityType' => $mappedIndexerId]),
+            $allAttributeTypes,
             $indexName,
             $this->clientConfig->getEntityType()
         );

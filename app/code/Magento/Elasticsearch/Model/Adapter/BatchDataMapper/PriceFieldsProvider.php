@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
@@ -31,18 +32,26 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
     private $storeManager;
 
     /**
+     * @var FieldMapperInterface
+     */
+    private $fieldMapper;
+
+    /**
      * @param Index $resourceIndex
      * @param DataProvider $dataProvider
      * @param StoreManagerInterface $storeManager
+     * @param FieldMapperInterface $fieldMapper
      */
     public function __construct(
         Index $resourceIndex,
         DataProvider $dataProvider,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        FieldMapperInterface $fieldMapper
     ) {
         $this->resourceIndex = $resourceIndex;
         $this->dataProvider = $dataProvider;
         $this->storeManager = $storeManager;
+        $this->fieldMapper = $fieldMapper;
     }
 
     /**
@@ -56,7 +65,7 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
 
         $fields = [];
         foreach ($productIds as $productId) {
-            $fields[$productId] = $this->getProductPriceData($productId, $storeId, $priceData);
+            $fields[$productId] = $this->getProductPriceData($productId, $priceData);
         }
 
         return $fields;
@@ -66,17 +75,19 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
      * Prepare price index for product
      *
      * @param int $productId
-     * @param int $websiteId
      * @param array $priceIndexData
      * @return array
      */
-    private function getProductPriceData($productId, $websiteId, array $priceIndexData)
+    private function getProductPriceData($productId, array $priceIndexData)
     {
         $result = [];
         if (array_key_exists($productId, $priceIndexData)) {
             $productPriceIndexData = $priceIndexData[$productId];
             foreach ($productPriceIndexData as $customerGroupId => $price) {
-                $fieldName = 'price_' . $customerGroupId . '_' . $websiteId;
+                $fieldName = $this->fieldMapper->getFieldName(
+                    'price',
+                    ['customerGroupId' => $customerGroupId]
+                );
                 $result[$fieldName] = sprintf('%F', $price);
             }
         }

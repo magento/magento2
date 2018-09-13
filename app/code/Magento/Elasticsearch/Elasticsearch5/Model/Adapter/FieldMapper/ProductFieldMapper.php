@@ -5,13 +5,14 @@
  */
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper;
 
+use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldNameResolverPoolInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
-use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use \Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class ProductFieldMapper
@@ -29,43 +30,50 @@ class ProductFieldMapper implements FieldMapperInterface
     protected $fieldType;
 
     /**
-     * @var CustomerSession
+     * Category list.
+     *
+     * @var CategoryListInterface
      */
-    protected $customerSession;
+    private $categoryList;
 
     /**
-     * Store manager
+     * Customer group repository.
      *
-     * @var StoreManager
+     * @var GroupRepositoryInterface
      */
-    protected $storeManager;
+    private $groupRepository;
 
     /**
-     * Core registry
+     * Search criteria builder.
      *
-     * @var Registry
+     * @var SearchCriteriaBuilder
      */
-    protected $coreRegistry;
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FieldNameResolverPoolInterface
+     */
+    private $fieldNameResolverPool;
 
     /**
      * @param Config $eavConfig
      * @param FieldType $fieldType
-     * @param CustomerSession $customerSession
-     * @param StoreManager $storeManager
-     * @param Registry $coreRegistry
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FieldNameResolverPoolInterface $fieldNameResolverPool
      */
     public function __construct(
         Config $eavConfig,
         FieldType $fieldType,
-        CustomerSession $customerSession,
-        StoreManager $storeManager,
-        Registry $coreRegistry
+        GroupRepositoryInterface $groupRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FieldNameResolverPoolInterface $fieldNameResolverPool
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
-        $this->customerSession = $customerSession;
-        $this->storeManager = $storeManager;
-        $this->coreRegistry = $coreRegistry;
+        $this->groupRepository = $groupRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->fieldNameResolverPool = $fieldNameResolverPool;
     }
 
     /**
@@ -77,35 +85,7 @@ class ProductFieldMapper implements FieldMapperInterface
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-        if (!$attribute || in_array($attributeCode, ['id', 'sku', 'store_id', 'visibility'], true)) {
-            return $attributeCode;
-        }
-        if ($attributeCode === 'price') {
-            return $this->getPriceFieldName($context);
-        }
-        if ($attributeCode === 'position') {
-            return $this->getPositionFiledName($context);
-        }
-        $fieldType = $this->fieldType->getFieldType($attribute);
-        $frontendInput = $attribute->getFrontendInput();
-        if (empty($context['type'])) {
-            $fieldName = $attributeCode;
-        } elseif ($context['type'] === FieldMapperInterface::TYPE_FILTER) {
-            if ($fieldType === FieldType::ES_DATA_TYPE_TEXT) {
-                return $this->getFieldName(
-                    $attributeCode,
-                    array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
-                );
-            }
-            $fieldName = $attributeCode;
-        } elseif ($context['type'] === FieldMapperInterface::TYPE_QUERY) {
-            $fieldName = $this->getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode);
-        } else {
-            $fieldName = 'sort_' . $attributeCode;
-        }
-
-        return $fieldName;
+        return $this->fieldNameResolverPool->getResolver($attributeCode)->getFieldName($attributeCode, $context);
     }
 
     /**
@@ -113,10 +93,33 @@ class ProductFieldMapper implements FieldMapperInterface
      *
      * @param array $context
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllAttributesTypes($context = [])
+    {
+        return array_merge(
+            $this->getAllStaticAttributesTypes(),
+            $this->getAllDynamicAttributesTypes()
+        );
+    }
+
+    /**
+     * @param Object $attribute
+     * @return bool
+     */
+    protected function isAttributeUsedInAdvancedSearch($attribute)
+    {
+        return $attribute->getIsVisibleInAdvancedSearch()
+        || $attribute->getIsFilterable()
+        || $attribute->getIsFilterableInSearch();
+    }
+
+    /**
+     * Prepare mapping data for static attributes.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return array
+     */
+    private function getAllStaticAttributesTypes()
     {
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];
@@ -163,89 +166,37 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * Is attribute used in advanced search.
+     * Prepare mapping data for dynamic attributes.
      *
-     * @param Object $attribute
-     * @return bool
+     * @return array
      */
-    protected function isAttributeUsedInAdvancedSearch($attribute)
+    private function getAllDynamicAttributesTypes()
     {
-        return $attribute->getIsVisibleInAdvancedSearch()
-        || $attribute->getIsFilterable()
-        || $attribute->getIsFilterableInSearch();
-    }
-
-    /**
-     * Get refined field name.
-     *
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        switch ($frontendInput) {
-            case 'select':
-            case 'multiselect':
-                return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
-            case 'boolean':
-                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
-            default:
-                return $attributeCode;
+        $allAttributes = [];
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $categories = $this->categoryList->getList($searchCriteria)->getItems();
+        foreach ($categories as $category) {
+            $categoryPositionKey = $this->getFieldName('position', ['categoryId' => $category->getId()]);
+            $categoryNameKey = $this->getFieldName('category_name', ['categoryId' => $category->getId()]);
+            $allAttributes[$categoryPositionKey] = [
+                'type' => FieldType::ES_DATA_TYPE_TEXT,
+                'index' => false
+            ];
+            $allAttributes[$categoryNameKey] = [
+                'type' => FieldType::ES_DATA_TYPE_TEXT,
+                'index' => false
+            ];
         }
-    }
 
-    /**
-     * Get query type field name.
-     *
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        if ($attributeCode === '*') {
-            $fieldName = '_all';
-        } else {
-            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
+        $groups = $this->groupRepository->getList($searchCriteria)->getItems();
+        foreach ($groups as $group) {
+            $groupPriceKey = $this->getFieldName('price', ['customerGroupId' => $group->getId()]);
+            $allAttributes[$groupPriceKey] = [
+                'type' => FieldType::ES_DATA_TYPE_FLOAT,
+                'store' => true
+            ];
         }
-        return $fieldName;
-    }
 
-    /**
-     * Get "position" field name
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPositionFiledName($context)
-    {
-        if (isset($context['categoryId'])) {
-            $category = $context['categoryId'];
-        } else {
-            $category = $this->coreRegistry->registry('current_category')
-                ? $this->coreRegistry->registry('current_category')->getId()
-                : $this->storeManager->getStore()->getRootCategoryId();
-        }
-        return 'position_category_' . $category;
-    }
-
-    /**
-     * Prepare price field name for search engine
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPriceFieldName($context)
-    {
-        $customerGroupId = !empty($context['customerGroupId'])
-            ? $context['customerGroupId']
-            : $this->customerSession->getCustomerGroupId();
-        $websiteId = !empty($context['websiteId'])
-            ? $context['websiteId']
-            : $this->storeManager->getStore()->getWebsiteId();
-        return 'price_' . $customerGroupId . '_' . $websiteId;
+        return $allAttributes;
     }
 }
