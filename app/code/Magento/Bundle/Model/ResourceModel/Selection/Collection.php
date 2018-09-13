@@ -261,7 +261,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get Catalog Rule Processor.
+     *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     *
      * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
