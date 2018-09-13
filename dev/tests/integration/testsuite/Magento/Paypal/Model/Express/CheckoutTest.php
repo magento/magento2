@@ -310,19 +310,18 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $shippingAddress = $quote->getShippingAddress();
         $billingAddress = $quote->getBillingAddress();
         $exportedShippingData = $this->getExportedData()['shipping'];
-        $prefix = '';
 
-        $this->assertEquals([$prefix . $exportedShippingData['street']], $shippingAddress->getStreet());
-        $this->assertEquals($prefix . $exportedShippingData['firstname'], $shippingAddress->getFirstname());
-        $this->assertEquals($prefix . $exportedShippingData['city'], $shippingAddress->getCity());
-        $this->assertEquals($prefix . $exportedShippingData['telephone'], $shippingAddress->getTelephone());
-        $this->assertEquals($prefix . $exportedShippingData['email'], $shippingAddress->getEmail());
+        $this->assertEquals([$exportedShippingData['street']], $shippingAddress->getStreet());
+        $this->assertEquals($exportedShippingData['firstname'], $shippingAddress->getFirstname());
+        $this->assertEquals($exportedShippingData['city'], $shippingAddress->getCity());
+        $this->assertEquals($exportedShippingData['telephone'], $shippingAddress->getTelephone());
+        $this->assertEquals($exportedShippingData['email'], $shippingAddress->getEmail());
 
-        $this->assertEquals([$prefix . $exportedShippingData['street']], $billingAddress->getStreet());
-        $this->assertEquals($prefix . $exportedShippingData['firstname'], $billingAddress->getFirstname());
-        $this->assertEquals($prefix . $exportedShippingData['city'], $billingAddress->getCity());
-        $this->assertEquals($prefix . $exportedShippingData['telephone'], $billingAddress->getTelephone());
-        $this->assertEquals($prefix . $exportedShippingData['email'], $billingAddress->getEmail());
+        $this->assertEquals([$exportedShippingData['street']], $billingAddress->getStreet());
+        $this->assertEquals($exportedShippingData['firstname'], $billingAddress->getFirstname());
+        $this->assertEquals($exportedShippingData['city'], $billingAddress->getCity());
+        $this->assertEquals($exportedShippingData['telephone'], $billingAddress->getTelephone());
+        $this->assertEquals($exportedShippingData['email'], $billingAddress->getEmail());
     }
 
     /**
@@ -350,19 +349,18 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $billingAddress = $quote->getBillingAddress();
         $exportedBillingData = $this->getExportedData()['billing'];
         $exportedShippingData = $this->getExportedData()['shipping'];
-        $prefix = '';
 
-        $this->assertEquals([$prefix . $exportedShippingData['street']], $shippingAddress->getStreet());
-        $this->assertEquals($prefix . $exportedShippingData['firstname'], $shippingAddress->getFirstname());
-        $this->assertEquals($prefix . $exportedShippingData['city'], $shippingAddress->getCity());
-        $this->assertEquals($prefix . $exportedShippingData['telephone'], $shippingAddress->getTelephone());
-        $this->assertEquals($prefix . $exportedShippingData['email'], $shippingAddress->getEmail());
+        $this->assertEquals([$exportedShippingData['street']], $shippingAddress->getStreet());
+        $this->assertEquals($exportedShippingData['firstname'], $shippingAddress->getFirstname());
+        $this->assertEquals($exportedShippingData['city'], $shippingAddress->getCity());
+        $this->assertEquals($exportedShippingData['telephone'], $shippingAddress->getTelephone());
+        $this->assertEquals($exportedShippingData['email'], $shippingAddress->getEmail());
 
-        $this->assertEquals([$prefix . $exportedBillingData['street']], $billingAddress->getStreet());
-        $this->assertEquals($prefix . $exportedBillingData['firstname'], $billingAddress->getFirstname());
-        $this->assertEquals($prefix . $exportedBillingData['city'], $billingAddress->getCity());
-        $this->assertEquals($prefix . $exportedBillingData['telephone'], $billingAddress->getTelephone());
-        $this->assertEquals($prefix . $exportedBillingData['email'], $billingAddress->getEmail());
+        $this->assertEquals([$exportedBillingData['street']], $billingAddress->getStreet());
+        $this->assertEquals($exportedBillingData['firstname'], $billingAddress->getFirstname());
+        $this->assertEquals($exportedBillingData['city'], $billingAddress->getCity());
+        $this->assertEquals($exportedBillingData['telephone'], $billingAddress->getTelephone());
+        $this->assertEquals($exportedBillingData['email'], $billingAddress->getEmail());
     }
 
     /**

@@ -616,7 +616,8 @@ class Checkout
 
         $this->ignoreAddressValidation();
 
-        $isButton = $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1;
+        // check if we came from the Express Checkout button
+        $isButton = (bool)$quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
 
         // import shipping address
         $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
@@ -651,9 +652,9 @@ class Checkout
         }
 
         // import billing address
-        $requireBillingAddress = $this->_config->getValue(
+        $requireBillingAddress = (int)$this->_config->getValue(
             'requireBillingAddress'
-        ) == \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
+        ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
             $billingAddress = clone $shippingAddress;

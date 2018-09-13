@@ -63,7 +63,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'skipOrderReview' => $this->config->isSkipOrderReview(),
                     'paymentIcon' => $this->config->getPayPalIcon(),
                     'isRequiredBillingAddress' =>
-                        $this->config->isRequiredBillingAddress() == $requireBillingAddressAll
+                        (int)$this->config->isRequiredBillingAddress() === $requireBillingAddressAll
                 ]
             ]
         ];
