@@ -131,7 +131,7 @@ class Config
     public function getValue($key)
     {
         $this->load();
-        return isset($this->data[$key]) ? $this->data[$key] : null;
+        return $this->data[$key] ?? null;
     }
 
     /**
