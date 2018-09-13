@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -20,19 +19,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  */
 class Options implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param ValueFactory $valueFactory
-     */
-    public function __construct(ValueFactory $valueFactory)
-    {
-        $this->valueFactory = $valueFactory;
-    }
-
     /**
      * Format product's option data to conform to GraphQL schema
      *
@@ -44,12 +30,9 @@ class Options implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -80,10 +63,6 @@ class Options implements ResolverInterface
             }
         }
 
-        $result = function () use ($options) {
-            return $options;
-        };
-
-        return $this->valueFactory->create($result);
+        return $options;
     }
 }
