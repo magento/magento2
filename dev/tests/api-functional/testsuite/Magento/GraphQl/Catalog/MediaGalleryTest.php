@@ -46,33 +46,6 @@ QUERY;
     }
 
     /**
-     * small_image_url should contain a placeholder when there's no small image assigned
-     * to the product
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testProductSmallImageUrlWithNoImage()
-    {
-        $productSku = 'simple';
-        $query = <<<QUERY
-{
-  products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {
-   		small_image {
-   		    url
-   		}
-    }
-  }    
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-
-        self::assertArrayHasKey('small_image', $response['products']['items'][0]);
-        self::assertContains('placeholder/small_image.jpg', $response['products']['items'][0]['small_image']['url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
-    }
-
-    /**
      * @param string $url
      * @return bool
      */
