@@ -66,15 +66,15 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
-        TokenCollectionFactory $tokenModelCollectionFactory,      
+        TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
         ManagerInterface $eventManager
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
-        $this->eventManager = $eventManager;
         $this->validatorHelper = $validatorHelper;
+        $this->eventManager = $eventManager;
     }
 
     /**
