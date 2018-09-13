@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            captcha: 'Magento_Captcha/captcha'
+            captcha: 'Magento_Captcha/js/captcha'
         }
     }
 };
