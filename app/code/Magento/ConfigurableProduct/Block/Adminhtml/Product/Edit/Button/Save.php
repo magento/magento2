@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableT
 class Save extends Generic
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {
@@ -125,7 +125,8 @@ class Save extends Generic
     }
 
     /**
-     * Retrieve target for button
+     * Retrieve target for button.
+     *
      * @return string
      */
     protected function getSaveTarget()
@@ -138,7 +139,8 @@ class Save extends Generic
     }
 
     /**
-     * Retrieve action for button
+     * Retrieve action for button.
+     *
      * @return string
      */
     protected function getSaveAction()
@@ -151,6 +153,8 @@ class Save extends Generic
     }
 
     /**
+     * Is configurable product.
+     *
      * @return boolean
      */
     protected function isConfigurableProduct()
