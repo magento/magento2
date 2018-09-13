@@ -6,6 +6,9 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestSafetyInterface;
+
 /**
  * Class Visitor
  * @package Magento\Customer\Model
@@ -66,6 +69,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $indexerRegistry;
 
     /**
+     * @var RequestSafetyInterface
+     */
+    private $requestSafety;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -93,7 +101,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
-        array $data = []
+        array $data = [],
+        RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -103,6 +112,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
+        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
     /**
@@ -156,6 +166,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->requestSafety->isSafeMethod()) {
+            return $this;
+        }
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -175,7 +189,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 

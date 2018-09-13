@@ -34,7 +34,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
         }
 
         $websiteModel->save();
-        $this->messageManager->addSuccess(__('You saved the website.'));
+        $this->messageManager->addSuccessMessage(__('You saved the website.'));
 
         return $postData;
     }
@@ -70,7 +70,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             );
         }
         $storeModel->save();
-        $this->messageManager->addSuccess(__('You saved the store view.'));
+        $this->messageManager->addSuccessMessage(__('You saved the store view.'));
 
         return $postData;
     }
@@ -100,7 +100,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             );
         }
         $groupModel->save();
-        $this->messageManager->addSuccess(__('You saved the store.'));
+        $this->messageManager->addSuccessMessage(__('You saved the store.'));
 
         return $postData;
     }
@@ -136,10 +136,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while saving. Please review the error log.')
                 );
