@@ -6,6 +6,9 @@
 
 /**
  * Catalog Search engine provider
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 

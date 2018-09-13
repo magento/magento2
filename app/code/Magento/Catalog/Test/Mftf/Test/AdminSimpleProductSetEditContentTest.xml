@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductSetEditContentTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/edit simple product"/>
+            <title value="Admin should be able to set/edit product Content when editing a simple product"/>
+            <description value="Admin should be able to set/edit product Content when editing a simple product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3422"/>
+            <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!--Admin Login-->
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <!--Admin Logout-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!--Add content-->
+        <!--A generic scroll scrolls past this element, in doing this it fails to execute certain actions on the element and others below it. By scrolling slightly above it it resolves this issue.-->
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollTo"/>
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openDescriptionDropDown"/>
+        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="This is the long description" stepKey="fillLongDescription"/>
+        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="This is the short description" stepKey="fillShortDescription"/>
+
+        <!--save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Edit content-->
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openDescriptionDropDownEdit"/>
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" stepKey="scrollToEdit"/>
+        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="EDIT ~ This is the long description ~ EDIT" stepKey="editLongDescription"/>
+        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="EDIT ~ This is the short description ~ EDIT" stepKey="editShortDescription"/>
+
+        <!--save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAfterEdit"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+
+        <!--Checking content admin-->
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openDescriptionDropDownAgain"/>
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" stepKey="scrollToAgain"/>
+        <seeInField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="EDIT ~ This is the long description ~ EDIT" stepKey="seeLongDescriptionAdmin"/>
+        <seeInField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="EDIT ~ This is the short description ~ EDIT" stepKey="seeShortDescriptionAdmin"/>
+
+        <!--Checking content storefront-->
+        <amOnPage url="{{SimpleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="EDIT ~ This is the long description ~ EDIT" stepKey="seeLongDescriptionStorefront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productShortDescription}}" userInput="EDIT ~ This is the short description ~ EDIT" stepKey="seeShortDescriptionStorefront"/>
+    </test>
+</tests>
