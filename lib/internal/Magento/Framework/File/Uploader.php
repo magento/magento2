@@ -187,8 +187,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with
-     * original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -265,6 +264,8 @@ class Uploader
     }
 
     /**
+     * Set access permissions to file.
+     *
      * @param string $file
      * @return void
      *

@@ -42,6 +42,8 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
+     * Get field name.
+     *
      * @param string $attributeCode
      * @param array $context
      * @return string
@@ -80,6 +82,8 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
+     * Get all attributes types.
+     *
      * @param array $context
      * @return array
      */
@@ -120,6 +124,8 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
+     * Get refined field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode

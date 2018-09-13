@@ -97,6 +97,8 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get report absolute path.
+     *
      * @param string $fileName
      * @return string
      */

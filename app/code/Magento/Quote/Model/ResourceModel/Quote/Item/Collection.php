@@ -138,8 +138,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Reset the collection and inner join it to quotes table
-     * Optionally can select items with specified product id only
+     * Reset the collection and join it to quotes table. Optionally can select items with specified product id only.
      *
      * @param string $quotesTableName
      * @param int $productId

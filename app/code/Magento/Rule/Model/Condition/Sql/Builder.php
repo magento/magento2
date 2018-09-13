@@ -178,6 +178,8 @@ class Builder
     }
 
     /**
+     * Get mapped sql combination.
+     *
      * @param Combine $combine
      * @param string $value
      * @param bool $isDefaultStoreUsed

@@ -98,7 +98,12 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Map index data for using in search engine metadata
+     *
+     * @param array $documentData
+     * @param int $storeId
+     * @param array $context
+     * @return array
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
@@ -137,8 +142,7 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
-     * Convert raw data retrieved from source tables to human-readable format
-     * E.g. [42 => [1 => 2]] will be converted to ['color' => '2', 'color_value' => 'red']
+     * Convert raw data retrieved from source tables to human-readable format.
      *
      * @param int $productId
      * @param array $indexData
@@ -173,8 +177,7 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
-     * Convert data for attribute: 1) add new value {attribute_code}_value for select and multiselect searchable
-     * attributes, that will contain actual value 2) add child products data to composite products
+     * Convert data for attribute, add {attribute_code}_value for searchable attributes, that contain actual value.
      *
      * @param Attribute $attribute
      * @param array $attributeValues
@@ -201,6 +204,8 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
+     * Prepare attribute values.
+     *
      * @param int $productId
      * @param Attribute $attribute
      * @param array $attributeValues
@@ -233,6 +238,8 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
+     * Prepare multiselect values.
+     *
      * @param array $values
      * @return array
      */
@@ -244,6 +251,8 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
+     * Is attribute date.
+     *
      * @param Attribute $attribute
      * @return bool
      */
@@ -254,6 +263,8 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
+     * Get values labels.
+     *
      * @param Attribute $attribute
      * @param array $attributeValues
      * @return array

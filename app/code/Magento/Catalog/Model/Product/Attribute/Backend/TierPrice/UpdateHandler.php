@@ -67,6 +67,8 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Perform action on relation/extension attribute.
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface|object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
@@ -264,6 +266,8 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Prepare original data to compare.
+     *
      * @param array|null $origPrices
      * @param bool $isGlobal
      * @return array
@@ -284,6 +288,8 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Prepare new data for save.
+     *
      * @param array $priceRows
      * @param bool $isGlobal
      * @return array

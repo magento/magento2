@@ -69,6 +69,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get field name.
+     *
      * @param string $attributeCode
      * @param array $context
      * @return string
@@ -107,6 +109,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get all attributes types.
+     *
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -159,6 +163,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Is attribute used in advanced search.
+     *
      * @param Object $attribute
      * @return bool
      */
@@ -170,6 +176,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get refined field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
@@ -189,6 +197,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get query type field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
