@@ -9,8 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Request;
 
 /**
- * Map of HTTP methods and interfaces that an action implements
- * in order to process them.
+ * Map of HTTP methods and interfaces that an action implements in order to process them.
  */
 class HttpMethodMap
 {
@@ -28,6 +27,8 @@ class HttpMethodMap
     }
 
     /**
+     * Filter given map.
+     *
      * @param array $map
      * @throws \InvalidArgumentException
      *

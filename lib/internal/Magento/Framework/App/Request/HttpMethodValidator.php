@@ -43,6 +43,8 @@ class HttpMethodValidator implements ValidatorInterface
     }
 
     /**
+     * Create exception when invalid HTTP method used.
+     *
      * @param Http $request
      * @param ActionInterface $action
      * @throws InvalidRequestException
