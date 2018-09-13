@@ -9,7 +9,6 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
-use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Filesystem\Driver\File;
@@ -74,7 +73,6 @@ class Cli extends Console\Application
 
             $this->assertCompilerPreparation();
             $this->initObjectManager();
-            $this->assertGenerationPermissions();
         } catch (\Exception $exception) {
             $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
@@ -165,33 +163,6 @@ class Cli extends Console\Application
         /** @var ObjectManagerProvider $omProvider */
         $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
         $omProvider->setObjectManager($this->objectManager);
-    }
-
-    /**
-     * Checks whether generation directory is read-only.
-     * Depends on the current mode:
-     *      production - application will proceed
-     *      default - application will be terminated
-     *      developer - application will be terminated
-     *
-     * @return void
-     * @throws GenerationDirectoryAccessException If generation directory is read-only in developer mode
-     */
-    private function assertGenerationPermissions()
-    {
-        /** @var GenerationDirectoryAccess $generationDirectoryAccess */
-        $generationDirectoryAccess = $this->objectManager->create(
-            GenerationDirectoryAccess::class,
-            ['serviceManager' => $this->serviceManager]
-        );
-        /** @var State $state */
-        $state = $this->objectManager->get(State::class);
-
-        if ($state->getMode() !== State::MODE_PRODUCTION
-            && !$generationDirectoryAccess->check()
-        ) {
-            throw new GenerationDirectoryAccessException();
-        }
     }
 
     /**
