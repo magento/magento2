@@ -62,12 +62,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      *
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
-     * @param JoinProcessorInterface $joinProcessor
+     * @param JoinProcessorInterface|null $joinProcessor
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        JoinProcessorInterface $joinProcessor
+        JoinProcessorInterface $joinProcessor = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
