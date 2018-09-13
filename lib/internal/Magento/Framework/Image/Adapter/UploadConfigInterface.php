@@ -13,11 +13,15 @@ namespace Magento\Framework\Image\Adapter;
 interface UploadConfigInterface
 {
     /**
+     * Get maximum image width.
+     *
      * @return int
      */
     public function getMaxWidth(): int;
 
     /**
+     * Get maximum image height.
+     *
      * @return int
      */
     public function getMaxHeight(): int;

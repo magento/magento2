@@ -188,6 +188,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * Notify customer when image was not deleted in specific case.
+     *
      * TODO: temporary workaround must be eliminated in MAGETWO-45306
      *
      * @param array $postData
@@ -252,6 +253,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
+     * Get categoryLinkManagement in a backward compatible way.
+     *
      * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
      */
     private function getCategoryLinkManagement()
@@ -264,6 +267,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
+     * Get storeManager in a backward compatible way.
+     *
      * @return StoreManagerInterface
      * @deprecated 101.0.0
      */

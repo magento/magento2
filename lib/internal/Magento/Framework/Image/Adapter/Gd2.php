@@ -6,6 +6,8 @@
 namespace Magento\Framework\Image\Adapter;
 
 /**
+ * Gd2 adapter.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
@@ -125,6 +127,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Converts memory value (e.g. 64M, 129K) to bytes.
+     *
      * Case insensitive value might be used.
      *
      * @param string $memoryValue
@@ -145,6 +148,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
@@ -201,7 +205,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
+     * Render image and return its binary contents.
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
+     *
      * @return string
      */
     public function getImage()
@@ -236,6 +243,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Fill image with main background color.
+     *
      * Returns a color identifier.
      *
      * @param resource &$imageResourceTo
@@ -741,6 +749,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
     /**
      * Create Image using ttf font
+     *
      * Note: This function requires both the GD library and the FreeType library
      *
      * @param string $text
