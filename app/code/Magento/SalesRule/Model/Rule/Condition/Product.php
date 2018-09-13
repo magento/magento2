@@ -213,7 +213,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * Get formatted price.
+     * Get locale-based formatted price.
      *
      * @param string $value
      * @return float|null
