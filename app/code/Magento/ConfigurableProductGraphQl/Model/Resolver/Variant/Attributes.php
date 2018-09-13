@@ -9,8 +9,6 @@ namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -18,19 +16,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  */
 class Attributes implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param ValueFactory $valueFactory
-     */
-    public function __construct(ValueFactory $valueFactory)
-    {
-        $this->valueFactory = $valueFactory;
-    }
-
     /**
      * Format product's option data to conform to GraphQL schema
      *
@@ -42,38 +27,30 @@ class Attributes implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['options']) || !isset($value['product'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            return null;
         }
 
-        $result = function () use ($value) {
-            $data = [];
-            foreach ($value['options'] as $option) {
-                $code = $option['attribute_code'];
-                if (!isset($value['product'][$code])) {
-                    continue;
-                }
-
-                foreach ($option['values'] as $optionValue) {
-                    if ($optionValue['value_index'] != $value['product'][$code]) {
-                        continue;
-                    }
-                    $data[] = [
-                        'label' => $optionValue['label'],
-                        'code' => $code,
-                        'use_default_value' => $optionValue['use_default_value'],
-                        'value_index' => $optionValue['value_index']
-                    ];
-                }
+        $data = [];
+        foreach ($value['options'] as $option) {
+            $code = $option['attribute_code'];
+            if (!isset($value['product'][$code])) {
+                continue;
             }
 
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+            foreach ($option['values'] as $optionValue) {
+                if ($optionValue['value_index'] != $value['product'][$code]) {
+                    continue;
+                }
+                $data[] = [
+                    'label' => $optionValue['label'],
+                    'code' => $code,
+                    'use_default_value' => $optionValue['use_default_value'],
+                    'value_index' => $optionValue['value_index']
+                ];
+            }
+        }
+        return $data;
     }
 }

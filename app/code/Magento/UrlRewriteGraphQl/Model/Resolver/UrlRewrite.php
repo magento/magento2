@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -32,11 +31,6 @@ class UrlRewrite implements ResolverInterface
     private $storeManager;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-    
-    /**
      * @var CustomUrlLocatorInterface
      */
     private $customUrlLocator;
@@ -44,23 +38,20 @@ class UrlRewrite implements ResolverInterface
     /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
-     * @param ValueFactory $valueFactory
      * @param CustomUrlLocatorInterface $customUrlLocator
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         StoreManagerInterface $storeManager,
-        ValueFactory $valueFactory,
         CustomUrlLocatorInterface $customUrlLocator
     ) {
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
-        $this->valueFactory = $valueFactory;
         $this->customUrlLocator = $customUrlLocator;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -68,31 +59,27 @@ class UrlRewrite implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
-        $result = function () {
-            return null;
-        };
-        
-        if (isset($args['url'])) {
-            $url = $args['url'];
-            if (substr($url, 0, 1) === '/' && $url !== '/') {
-                $url = ltrim($url, '/');
-            }
-            $customUrl = $this->customUrlLocator->locateUrl($url);
-            $url = $customUrl ?: $url;
-            $urlRewrite = $this->findCanonicalUrl($url);
-            if ($urlRewrite) {
-                $urlRewriteReturnArray = [
-                    'id' => $urlRewrite->getEntityId(),
-                    'canonical_url' => $urlRewrite->getTargetPath(),
-                    'type' => $this->sanitizeType($urlRewrite->getEntityType())
-                ];
-                $result = function () use ($urlRewriteReturnArray) {
-                    return $urlRewriteReturnArray;
-                };
-            }
+    ) {
+        if (!isset($args['url']) || empty(trim($args['url']))) {
+            throw new GraphQlInputException(__('"url" argument should be specified and not empty'));
         }
-        return $this->valueFactory->create($result);
+
+        $result = null;
+        $url = $args['url'];
+        if (substr($url, 0, 1) === '/' && $url !== '/') {
+            $url = ltrim($url, '/');
+        }
+        $customUrl = $this->customUrlLocator->locateUrl($url);
+        $url = $customUrl ?: $url;
+        $urlRewrite = $this->findCanonicalUrl($url);
+        if ($urlRewrite) {
+            $result = [
+                'id' => $urlRewrite->getEntityId(),
+                'canonical_url' => $urlRewrite->getTargetPath(),
+                'type' => $this->sanitizeType($urlRewrite->getEntityType())
+            ];
+        }
+        return $result;
     }
 
     /**
