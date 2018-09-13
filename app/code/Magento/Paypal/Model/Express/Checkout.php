@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
- * Use current Paypal Express method instance
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,6 +26,7 @@ class Checkout
 {
     /**
      * Cache ID prefix for "pal" lookup
+     *
      * @var string
      */
     const PAL_CACHE_ID = 'paypal_express_checkout_pal';
@@ -367,6 +368,7 @@ class Checkout
 
     /**
      * Checkout with PayPal image URL getter
+     *
      * Spares API calls of getting "pal" variable, by putting it into cache per store view
      *
      * @return string
@@ -599,8 +601,8 @@ class Checkout
 
     /**
      * Update quote when returned from PayPal
-     * rewrite billing address by paypal
-     * save old billing address for new customer
+     *
+     * Rewrite billing address by paypal, save old billing address for new customer, and
      * export shipping address in case address absence
      *
      * @param string $token
@@ -946,6 +948,8 @@ class Checkout
     }
 
     /**
+     * Get api
+     *
      * @return \Magento\Paypal\Model\Api\Nvp
      */
     protected function _getApi()
@@ -958,8 +962,9 @@ class Checkout
 
     /**
      * Attempt to collect address shipping rates and return them for further usage in instant update API
-     * Returns empty array if it was impossible to obtain any shipping rate
-     * If there are shipping rates obtained, the method must return one of them as default.
+     *
+     * Returns empty array if it was impossible to obtain any shipping rate and
+     * if there are shipping rates obtained, the method must return one of them as default.
      *
      * @param Address $address
      * @param bool $mayReturnEmpty
@@ -1043,8 +1048,8 @@ class Checkout
      * Compare two shipping options based on their amounts
      *
      * This function is used as a callback comparison function in shipping options sorting process
-     * @see self::_prepareShippingOptions()
      *
+     * @see self::_prepareShippingOptions()
      * @param \Magento\Framework\DataObject $option1
      * @param \Magento\Framework\DataObject $option2
      * @return int
@@ -1059,6 +1064,7 @@ class Checkout
 
     /**
      * Try to find whether the code provided by PayPal corresponds to any of possible shipping rates
+     *
      * This method was created only because PayPal has issues with returning the selected code.
      * If in future the issue is fixed, we don't need to attempt to match it. It would be enough to set the method code
      * before collecting shipping rates
@@ -1084,6 +1090,7 @@ class Checkout
 
     /**
      * Create payment redirect url
+     *
      * @param bool|null $button
      * @param string $token
      * @return void
@@ -1107,6 +1114,7 @@ class Checkout
 
     /**
      * Set shipping options to api
+     *
      * @param \Magento\Paypal\Model\Cart $cart
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
