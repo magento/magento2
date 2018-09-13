@@ -13,12 +13,12 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 class CustomAttributesFlattener
 {
     /**
-     * Graphql is waiting for flat array
+     * Flatten custom attributes within its enclosing array to normalize key-value pairs.
      *
      * @param array $categoryData
      * @return array
      */
-    public function flaternize(array $categoryData) : array
+    public function flatten(array $categoryData) : array
     {
         if (!isset($categoryData['custom_attributes'])) {
             return $categoryData;

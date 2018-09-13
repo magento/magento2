@@ -5,6 +5,14 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\SalesRule\Model\DeltaPriceRound;
+use Magento\SalesRule\Model\Validator;
+
+/**
+ * Calculates discount for cart item if fixed discount applied on whole cart.
+ */
 class CartFixed extends AbstractDiscount
 {
     /**
@@ -13,6 +21,33 @@ class CartFixed extends AbstractDiscount
      * @var int[]
      */
     protected $_cartFixedRuleUsedForAddress = [];
+
+    /**
+     * @var DeltaPriceRound
+     */
+    private $deltaPriceRound;
+
+    /**
+     * @var string
+     */
+    private static $discountType = 'CartFixed';
+
+    /**
+     * @param Validator $validator
+     * @param DataFactory $discountDataFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param DeltaPriceRound $deltaPriceRound
+     */
+    public function __construct(
+        Validator $validator,
+        DataFactory $discountDataFactory,
+        PriceCurrencyInterface $priceCurrency,
+        DeltaPriceRound $deltaPriceRound
+    ) {
+        $this->deltaPriceRound = $deltaPriceRound;
+
+        parent::__construct($validator, $discountDataFactory, $priceCurrency);
+    }
 
     /**
      * @param \Magento\SalesRule\Model\Rule $rule
@@ -51,14 +86,22 @@ class CartFixed extends AbstractDiscount
             $cartRules[$rule->getId()] = $rule->getDiscountAmount();
         }
 
-        if ($cartRules[$rule->getId()] > 0) {
+        $availableDiscountAmount = (float)$cartRules[$rule->getId()];
+        $discountType = self::$discountType . $rule->getId();
+
+        if ($availableDiscountAmount > 0) {
             $store = $quote->getStore();
             if ($ruleTotals['items_count'] <= 1) {
-                $quoteAmount = $this->priceCurrency->convert($cartRules[$rule->getId()], $store);
-                $baseDiscountAmount = min($baseItemPrice * $qty, $cartRules[$rule->getId()]);
+                $quoteAmount = $this->priceCurrency->convert($availableDiscountAmount, $store);
+                $baseDiscountAmount = min($baseItemPrice * $qty, $availableDiscountAmount);
+                $this->deltaPriceRound->reset($discountType);
             } else {
-                $discountRate = $baseItemPrice * $qty / $ruleTotals['base_items_price'];
-                $maximumItemDiscount = $rule->getDiscountAmount() * $discountRate;
+                $ratio = $baseItemPrice * $qty / $ruleTotals['base_items_price'];
+                $maximumItemDiscount = $this->deltaPriceRound->round(
+                    $rule->getDiscountAmount() * $ratio,
+                    $discountType
+                );
+
                 $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
 
                 $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
@@ -67,7 +110,11 @@ class CartFixed extends AbstractDiscount
 
             $baseDiscountAmount = $this->priceCurrency->round($baseDiscountAmount);
 
-            $cartRules[$rule->getId()] -= $baseDiscountAmount;
+            $availableDiscountAmount -= $baseDiscountAmount;
+            $cartRules[$rule->getId()] = $availableDiscountAmount;
+            if ($availableDiscountAmount <= 0) {
+                $this->deltaPriceRound->reset($discountType);
+            }
 
             $discountData->setAmount($this->priceCurrency->round(min($itemPrice * $qty, $quoteAmount)));
             $discountData->setBaseAmount($baseDiscountAmount);

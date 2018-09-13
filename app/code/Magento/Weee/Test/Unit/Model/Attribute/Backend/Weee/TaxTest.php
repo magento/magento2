@@ -80,7 +80,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($taxes));
 
         // Exception caught
-        $this->expectException('Exception', $expected);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($expected);
         $modelMock->validate($productMock);
     }
 
@@ -267,5 +268,32 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         );
 
         $model->getTable();
+    }
+
+    /**
+     * Test method GetEntityIdField.
+     *
+     * @return void
+     */
+    public function testGetEntityIdField() : void
+    {
+        $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
+            ->setMethods(['getIdFieldName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $attributeTaxMock
+            ->expects($this->once())
+            ->method('getIdFieldName')
+            ->willReturn(null);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
+            [
+                'attributeTax' => $attributeTaxMock,
+            ]
+        );
+
+        $model->getEntityIdField();
     }
 }

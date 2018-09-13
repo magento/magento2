@@ -38,7 +38,7 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testTierPrice()

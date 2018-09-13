@@ -100,10 +100,8 @@ class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
-        $this->expectException(
-            NoSuchEntityException::class,
-            "No such entity with customerId = {$fixtureCustomerId}"
-        );
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage("No such entity with customerId = {$fixtureCustomerId}");
         $customerRepository->getById($fixtureCustomerId);
     }
 

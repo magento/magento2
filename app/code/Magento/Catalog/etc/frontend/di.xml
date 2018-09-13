@@ -79,6 +79,18 @@
             <argument name="typeId" xsi:type="string">recently_compared_product</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addCompareSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Catalog::messages/addCompareSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Product\View\Gallery">
         <arguments>
             <argument name="galleryImagesConfig" xsi:type="array">
@@ -99,5 +111,9 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
+        <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
     </type>
 </config>

@@ -187,6 +187,9 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $this->service->deploy($options));
     }
 
+    /**
+     * @return array
+     */
     public function deployDataProvider()
     {
         return [

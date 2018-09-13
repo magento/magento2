@@ -167,11 +167,11 @@
     .column.main {
         .product {
             &-items {
-                margin-left: -@indent__base;
+                margin-left: 0;
             }
 
             &-item {
-                padding-left: @indent__base;
+                padding-left: 0;
             }
         }
     }
@@ -277,8 +277,8 @@
                 }
                 .sidebar & {
                     .product-item-photo {
-                        top: 9px;
                         left: 9px;
+                        top: 9px;
                     }
                 }
             }
@@ -310,8 +310,8 @@
         .actions-primary + .actions-secondary {
             display: table-cell;
             padding-left: 10px;
-            width: 50%;
             vertical-align: middle;
+            width: 50%;
 
             > .action {
                 margin-right: 10px;
@@ -443,7 +443,7 @@
 
             .product-item {
                 margin-left: calc(~'(100% - 4 * 24.439%) / 3');
-                padding: 0;
+                padding: 5px;
                 width: 24.439%;
 
                 &:nth-child(4n + 1) {

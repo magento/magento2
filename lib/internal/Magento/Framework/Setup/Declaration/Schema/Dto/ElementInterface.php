@@ -10,6 +10,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
  *
  * Is parent interface for all various schema structural elements:
  * table, column, constraint, index.
+ * @api
  */
 interface ElementInterface
 {

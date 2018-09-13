@@ -34,6 +34,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceInfoIfChildHasSpecialPrice()
     {
@@ -56,6 +57,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
+     * @magentoDbIsolation disabled
      */
     public function testSortingOfProductsIfChildHasNotSpecialPrice()
     {
@@ -82,6 +84,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
+     * @magentoDbIsolation disabled
      */
     public function testSortingOfProductsIfChildHasSpecialPrice()
     {

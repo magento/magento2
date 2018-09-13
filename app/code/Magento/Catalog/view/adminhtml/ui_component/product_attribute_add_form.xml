@@ -152,7 +152,6 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">container</item>
-                        <item name="positionProvider" xsi:type="string">attribute_options.position</item>
                     </item>
                 </argument>
                 <field name="is_default" component="Magento_Catalog/js/form/element/checkbox" sortOrder="0" formElement="checkbox">
@@ -189,12 +188,8 @@
                         </item>
                     </argument>
                     <settings>
-                        <additionalClasses>
-                            <class name="_hidden">true</class>
-                        </additionalClasses>
                         <dataType>text</dataType>
                         <visible>false</visible>
-                        <dataScope>position</dataScope>
                     </settings>
                 </field>
             </container>

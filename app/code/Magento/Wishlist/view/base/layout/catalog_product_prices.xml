@@ -16,6 +16,20 @@
                     </item>
                 </item>
             </argument>
+            <argument name="configurable" xsi:type="array">
+                <item name="prices" xsi:type="array">
+                    <item name="wishlist_configured_price" xsi:type="array">
+                        <item name="render_template" xsi:type="string">Magento_Wishlist::product/price/configurable/configured_price.phtml</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="bundle" xsi:type="array">
+                <item name="prices" xsi:type="array">
+                    <item name="wishlist_configured_price" xsi:type="array">
+                        <item name="render_template" xsi:type="string">Magento_Wishlist::product/price/bundle/configured_price.phtml</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </referenceBlock>
 </layout>

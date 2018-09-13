@@ -6,6 +6,8 @@
 namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
@@ -55,20 +57,27 @@ class Config implements ClientOptionsInterface
     private $clientResolver;
 
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @param ClientResolver $clientResolver
-     * @param string $prefix
+     * @param ClientResolver|null $clientResolver
+     * @param EngineResolverInterface|null $engineResolver
+     * @param string|null $prefix
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ClientResolver $clientResolver = null,
+        EngineResolverInterface $engineResolver = null,
         $prefix = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->clientResolver = $clientResolver ?:
-            ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
     }
 
@@ -126,7 +135,7 @@ class Config implements ClientOptionsInterface
      */
     public function isElasticsearchEnabled()
     {
-        return $this->getSearchConfigData('engine') == self::ENGINE_NAME;
+        return $this->engineResolver->getCurrentSearchEngine() === self::ENGINE_NAME;
     }
 
     /**

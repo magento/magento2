@@ -82,7 +82,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->expectException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $this->validator->validate($configData);
     }
 
@@ -173,7 +174,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedExceptionMessage = 'Service method specified as handler for of consumer "consumer1" is not available.'
         . ' Given "handlerClassOne::handlerMethodOne"';
-        $this->expectException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->methodsMap->expects($this->once())
             ->method('getMethodParams')

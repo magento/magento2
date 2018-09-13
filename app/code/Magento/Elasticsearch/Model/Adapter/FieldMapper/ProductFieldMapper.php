@@ -42,7 +42,11 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
-     * {@inheritdoc}
+     * Get field name.
+     *
+     * @param string $attributeCode
+     * @param array $context
+     * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -78,7 +82,10 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
     }
 
     /**
-     * {@inheritdoc}
+     * Get all attributes types.
+     *
+     * @param array $context
+     * @return array
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -114,5 +121,26 @@ class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements Fie
         }
 
         return $allAttributes;
+    }
+
+    /**
+     * Get refined field name.
+     *
+     * @param string $frontendInput
+     * @param string $fieldType
+     * @param string $attributeCode
+     * @return string
+     */
+    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
+    {
+        switch ($frontendInput) {
+            case 'select':
+            case 'multiselect':
+                return in_array($fieldType, ['string','integer'], true) ? $attributeCode . '_value' : $attributeCode;
+            case 'boolean':
+                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
+            default:
+                return $attributeCode;
+        }
     }
 }

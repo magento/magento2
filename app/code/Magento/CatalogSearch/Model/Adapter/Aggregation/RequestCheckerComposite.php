@@ -9,6 +9,10 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class RequestCheckerComposite implements RequestCheckerInterface
 {
     /**

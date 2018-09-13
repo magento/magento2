@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Setup\Declaration\Schema\TableNameResolver;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
@@ -67,6 +69,11 @@ class SchemaBuilder
     private $resourceConnection;
 
     /**
+     * @var TableNameResolver
+     */
+    private $tableNameResolver;
+
+    /**
      * SchemaBuilder constructor.
      *
      * @param    ElementFactory $elementFactory
@@ -74,6 +81,7 @@ class SchemaBuilder
      * @param    Sharding $sharding
      * @param    ValidationComposite $validationComposite
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param TableNameResolver $tableNameResolver
      * @internal param array $tablesData
      */
     public function __construct(
@@ -81,13 +89,15 @@ class SchemaBuilder
         BooleanUtils $booleanUtils,
         Sharding $sharding,
         ValidationComposite $validationComposite,
-        \Magento\Framework\App\ResourceConnection $resourceConnection
+        \Magento\Framework\App\ResourceConnection $resourceConnection,
+        TableNameResolver $tableNameResolver
     ) {
         $this->sharding = $sharding;
         $this->elementFactory = $elementFactory;
         $this->booleanUtils = $booleanUtils;
         $this->validationComposite = $validationComposite;
         $this->resourceConnection = $resourceConnection;
+        $this->tableNameResolver = $tableNameResolver;
     }
 
     /**
@@ -223,14 +233,10 @@ class SchemaBuilder
     {
         if (!$schema->getTableByName($tableData['name'])) {
             $resource = $this->getStructuralElementResource($tableData);
-            $tableParams = [
-                'name' => $tableData['name'],
-                'resource' => $resource,
-                'engine' => $tableData['engine'] ?? null,
-                'comment' => $tableData['comment'] ?? null
-            ];
+            $tableData['resource'] = $resource;
+            $tableData['comment'] = $tableData['comment'] ?? null;
             /** @var Table $table */
-            $table = $this->elementFactory->create('table', $tableParams);
+            $table = $this->elementFactory->create('table', $tableData);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
             //Add indexes to table
@@ -280,6 +286,35 @@ class SchemaBuilder
     }
 
     /**
+     * Provides the full index name based on the prefix value.
+     *
+     * @param string $name
+     * @param Table $table
+     * @param array $columns
+     * @param string $type
+     * @return string
+     */
+    private function getFullIndexName(
+        string $name,
+        Table $table,
+        array $columns,
+        string $type = AdapterInterface::INDEX_TYPE_INDEX
+    ) {
+        if (AdapterInterface::INDEX_TYPE_PRIMARY === $type) {
+            return $name;
+        }
+
+        $tableName = $this->tableNameResolver->getNameOfOriginTable($table->getName());
+
+        return $this->resourceConnection
+            ->getIdxName(
+                $tableName,
+                $columns,
+                $type
+            );
+    }
+
+    /**
      * Convert and instantiate index objects.
      *
      * @param  array    $tableData
@@ -300,6 +335,21 @@ class SchemaBuilder
                 continue;
             }
 
+            /**
+             * Temporary solution.
+             * @see MAGETWO-91365
+             */
+            $indexType = AdapterInterface::INDEX_TYPE_INDEX;
+            if (isset($indexData['indexType']) && $indexData['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
+                $indexType = $indexData['indexType'];
+            }
+
+            $indexData['name'] = $this->getFullIndexName(
+                $indexData['name'],
+                $table,
+                $indexData['column'],
+                $indexType
+            );
             $indexData = $this->processGenericData($indexData, $resource, $table);
             $indexData['columns'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
             $index = $this->elementFactory->create('index', $indexData);
@@ -358,9 +408,25 @@ class SchemaBuilder
                     $constraintData['referenceColumn'],
                     $constraintData['referenceTable']
                 );
+                /**
+                 * Calculation of the full name of Foreign Key based on the prefix value.
+                 */
+                $constraintData['name'] = $this->resourceConnection
+                    ->getFkName(
+                        $this->tableNameResolver->getNameOfOriginTable($table->getName()),
+                        $constraintData['column']->getName(),
+                        $constraintData['referenceTable']->getName(),
+                        $constraintData['referenceColumn']->getName()
+                    );
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;
             } else {
+                $constraintData['name'] = $this->getFullIndexName(
+                    $constraintData['name'],
+                    $table,
+                    $constraintData['column'],
+                    $constraintData['type']
+                );
                 $constraintData['columns'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;

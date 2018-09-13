@@ -120,6 +120,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * @var FrontendLabelFactory
+     */
+    private $frontendLabelFactory;
+
+    /**
      * Serializer Instance.
      *
      * @var Json
@@ -142,6 +147,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     ];
 
     /**
+     * @var \Magento\Eav\Api\Data\AttributeExtensionFactory
+     */
+    private $eavExtensionFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -157,6 +167,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavExtensionFactory
+     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -175,7 +187,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
+        FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -194,6 +208,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->eavExtensionFactory = $eavExtensionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
+        $this->frontendLabelFactory = $frontendLabelFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FrontendLabelFactory::class);
     }
 
     /**
@@ -1225,6 +1243,19 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getFrontendLabels()
     {
+        if ($this->getData(self::FRONTEND_LABELS) == null) {
+            $attributeId = $this->getAttributeId();
+            $storeLabels = $this->_getResource()->getStoreLabelsByAttributeId($attributeId);
+
+            $resultFrontedLabels = [];
+            foreach ($storeLabels as $i => $label) {
+                $frontendLabel = $this->frontendLabelFactory->create();
+                $frontendLabel->setStoreId($i);
+                $frontendLabel->setLabel($label);
+                $resultFrontedLabels[] = $frontendLabel;
+            }
+            $this->setData(self::FRONTEND_LABELS, $resultFrontedLabels);
+        }
         return $this->_getData(self::FRONTEND_LABELS);
     }
 
@@ -1314,7 +1345,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!($extensionAttributes instanceof \Magento\Eav\Api\Data\AttributeExtensionInterface)) {
+            /** @var \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->eavExtensionFactory->create();
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 
     /**

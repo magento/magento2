@@ -20,7 +20,8 @@ class DummyTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTagsWithScalar()
     {
-        $this->expectException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided argument is not an object');
         $this->model->getTags('scalar');
     }
 

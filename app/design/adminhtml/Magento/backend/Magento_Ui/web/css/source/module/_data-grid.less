@@ -59,18 +59,6 @@
         margin-top: -(@data-grid-spinner__size / 2);
         position: absolute;
         top: 50%;
-
-        .ie9 & {
-            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
-            bottom: 0;
-            height: 149px;
-            left: 0;
-            margin: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 218px;
-        }
     }
 }
 
@@ -236,7 +224,7 @@ body._in-resize {
 
     th,
     td {
-        font-size: @data-grid__font-size; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+        font-size: @data-grid__font-size; // Rewrite old styles. Should be deleted afterwards
         line-height: @line-height__base;
         transition: @smooth__background-color;
         vertical-align: top;
@@ -304,7 +292,7 @@ body._in-resize {
         .action-menu {
             left: auto;
             min-width: 10rem;
-            right: auto;
+            right: 0;
             text-align: left;
             top: auto;
             z-index: 1;
@@ -999,10 +987,6 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
-
-                .ie9 & {
-                    display: none;
-                }
             }
         }
     }

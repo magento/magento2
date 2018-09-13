@@ -133,7 +133,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                             'type' => 'primary',
                             'column' => [
                                 'first_column'
-                            ]
+                            ],
+                            'nameWithoutPrefix' => 'PRIMARY',
                         ]
                     ]
                 ],
@@ -141,9 +142,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                     'second_table' => [
                         'FIRST_INDEX' => [
                             'name' => 'FIRST_INDEX',
+                            'nameWithoutPrefix' => 'FIRST_INDEX',
                             'column' => [
                                 'ref_column'
-                            ]
+                            ],
                         ]
                     ]
                 ]
@@ -164,7 +166,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             $name,
             'table',
             'default',
-            'resource'
+            'resource',
+            'utf-8',
+            'utf-8',
+            ''
         );
     }
 
@@ -218,6 +223,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'PRIMARY',
             'primary',
             $table,
+            'PRIMARY',
             $columns
         );
     }
@@ -237,7 +243,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'index',
             $table,
             $columns,
-            'btree'
+            'btree',
+            $indexName
         );
     }
 
@@ -273,6 +280,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $resourceConnectionMock->expects(self::any())
+            ->method('getTableName')
+            ->willReturnArgument(0);
         /** @var Schema $schema */
         $schema = $this->objectManagerHelper->getObject(
             Schema::class,
@@ -331,8 +341,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getTableOptions')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls(
-                ['Engine' => 'innodb', 'Comment' => ''],
-                ['Engine' => 'innodb', 'Comment' => 'Not null comment']
+                ['engine' => 'innodb', 'comment' => '', 'charset' => 'utf-8', 'collation' => 'utf-8'],
+                ['engine' => 'innodb', 'comment' => 'Not null comment', 'charset' => 'utf-8', 'collation' => 'utf-8']
             );
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readColumns')
@@ -364,6 +374,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'some_foreign_key',
             'foreign',
             $table,
+            'some_foreign_key',
             $foreignColumn,
             $refTable,
             $refColumn,
@@ -380,7 +391,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'first_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => null
+                        'comment' => null,
+                        'charset' => 'utf-8',
+                        'collation' => 'utf-8'
                     ]
                 ],
                 [
@@ -421,6 +434,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'type' => 'primary',
                         'columns' => [$firstColumn],
                         'table' => $table,
+                        'nameWithoutPrefix' => 'PRIMARY',
                         'column' => ['first_column'],
                     ]
                 ],
@@ -430,7 +444,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'name' =>'second_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
-                        'comment' => 'Not null comment'
+                        'comment' => 'Not null comment',
+                        'charset' => 'utf-8',
+                        'collation' => 'utf-8'
                     ]
                 ],
                 [
@@ -450,6 +466,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                         'table' => $refTable,
                         'column' => ['ref_column'],
                         'columns' => [$refColumn],
+                        'nameWithoutPrefix' => 'FIRST_INDEX',
                     ]
                 ],
                 [

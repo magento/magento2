@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryMainSection">
+        <element name="modeListButton" type="button" selector="#mode-list"/>
+        <element name="CategoryTitle" type="text" selector="#page-title-heading span"/>
+        <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
+        <element name="specifiedProductItemInfo" type="button" selector="//a[@class='product-item-link'][contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="SuccessMsg" type="button" selector="div.message-success"/>
+        <element name="productCount" type="text" selector="#toolbar-amount"/>
+        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
+        <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
+        <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="productImage" type="text" selector="img.product-image-photo"/>
+        <element name="productLink" type="text" selector="a.product-item-link"/>
+        <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
+        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="categoryImage" type="text" selector=".category-image"/>
+        <element name="emptyProductMessage" type="block" selector=".message.info.empty>div"/>
+        <element name="lineProductName" type="text" selector=".products.list.items.product-items li:nth-of-type({{line}}) .product-item-link" timeout="30" parameterized="true"/>
+    </section>
+</sections>

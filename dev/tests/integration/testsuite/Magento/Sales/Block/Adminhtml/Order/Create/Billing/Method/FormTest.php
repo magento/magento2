@@ -47,9 +47,5 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $html = $block->toHtml();
         $this->assertContains('mage.apply()', $html);
-        $this->assertContains(
-            "order.setPaymentMethod('" . $block->escapeHtml($block->getSelectedMethodCode()) . "')",
-            $html
-        );
     }
 }

@@ -6,7 +6,10 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Handler for applying reinstallMagento annotation.
@@ -30,6 +33,11 @@ class ReinstallInstance
 
     public function startTest()
     {
+        /** @var ObjectManager $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        $resourceConnection = $objectManager->create(ResourceConnection::class);
+        $objectManager->removeSharedInstance(ResourceConnection::class);
+        $objectManager->addSharedInstance($resourceConnection, ResourceConnection::class);
         $this->application->reinitialize();
     }
 

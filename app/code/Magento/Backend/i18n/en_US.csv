@@ -405,9 +405,9 @@ Web,Web
 "Url Options","Url Options"
 "Add Store Code to Urls","Add Store Code to Urls"
 "
-                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).
+                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
                     ","
-                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).
+                        <strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
                     "
 "Auto-redirect to Base URL","Auto-redirect to Base URL"
 "Search Engine Optimization","Search Engine Optimization"
@@ -447,7 +447,7 @@ Tags,Tags
 "<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>","<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>"
 "Community Edition","Community Edition"
 "Default Theme","Default Theme"
-"If no value is specified, the system default is used. The system default may be modified by third party extensions.","If no value is specified, the system default is used. The system default may be modified by third party extensions."
+"If no value is specified, the system default is used. The system default may be modified by third-party extensions.","If no value is specified, the system default is used. The system default may be modified by third-party extensions."
 "Applied Theme","Applied Theme"
 "Design Rule","Design Rule"
 "User Agent Rules","User Agent Rules"

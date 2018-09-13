@@ -12,7 +12,15 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class DataProvider
 {
     /**
@@ -33,19 +41,27 @@ class DataProvider
     protected $categoryFactory;
 
     /**
+     * @var TableResolver
+     */
+    private $tableResolver;
+
+    /**
      * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver
+     * @param TableResolver|null $tableResolver
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Resolver $layerResolver
+        Resolver $layerResolver,
+        TableResolver $tableResolver = null
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
         $this->layer = $layerResolver->get();
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
     }
 
     /**
@@ -69,9 +85,18 @@ class DataProvider
             $currentScopeId = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
             $currentCategory = $this->layer->getCurrentCategory();
 
+            $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $currentScopeId);
+
+            $catalogCategoryProductTableName = $this->tableResolver->resolve(
+                AbstractAction::MAIN_INDEX_TABLE,
+                [
+                    $catalogCategoryProductDimension
+                ]
+            );
+
             $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
-                ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
+                ['main_table' => $catalogCategoryProductTableName],
                 [
                     'value' => 'category_id'
                 ]

@@ -3,8 +3,8 @@
         "sort-packages": true
     },
     "require": {
-        "php": "7.0.2|~7.0.6|~7.1.0|~7.2.0",
-        "magento/mtf": "1.0.0-rc60",
+        "php": "~7.1.3||~7.2.0",
+        "magento/mtf": "1.0.0-rc61",
         "allure-framework/allure-phpunit": "~1.2.0",
         "doctrine/annotations": "1.4.*",
         "phpunit/phpunit": "~6.5.0",

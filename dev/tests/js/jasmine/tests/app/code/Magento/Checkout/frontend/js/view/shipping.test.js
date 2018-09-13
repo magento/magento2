@@ -77,6 +77,13 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/view/shipping', function () {
         describe('"navigate" method', function () {
             it('Check for return value.', function () {

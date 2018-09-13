@@ -9,8 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {

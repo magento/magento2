@@ -102,7 +102,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getImages()
     {
-        return $this->registry->registry('current_product')->getData('media_gallery') ?: null;
+        return $this->getDataObject()->getData('media_gallery') ?: null;
     }
 
     /**
@@ -117,7 +117,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
         $content->setId($this->getHtmlId() . '_content')->setElement($this);
         $content->setFormName($this->formName);
         $galleryJs = $content->getJsObjectName();
-        $content->getUploader()->getConfig()->setMegiaGallery($galleryJs);
+        $content->getUploader()->getConfig()->setMediaGallery($galleryJs);
         return $content->toHtml();
     }
 

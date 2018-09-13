@@ -11,6 +11,16 @@ define([
 ], function (ko, $, renderer, spectrum, tinycolor) {
     'use strict';
 
+    /**
+     * Change color picker status to be enabled or disabled
+     *
+     * @param {HTMLElement} element - Element to apply colorpicker enable/disable status to.
+     * @param {Object} viewModel - Object, which represents view model binded to el.
+     */
+    function changeColorPickerStateBasedOnViewModel(element, viewModel) {
+        $(element).spectrum(viewModel.disabled() ? 'disable' : 'enable');
+    }
+
     ko.bindingHandlers.colorPicker = {
         /**
          * Binding init callback.
@@ -31,35 +41,34 @@ define([
                     config.value(value.toString());
                 };
 
-            if (!viewModel.disabled()) {
-                config.change = changeValue;
+            config.change = changeValue;
 
-                config.hide = changeValue;
+            config.hide = changeValue;
 
-                /** show value */
-                config.show = function () {
-                    if (!viewModel.focused()) {
-                        viewModel.focused(true);
-                    }
+            /** show value */
+            config.show = function () {
+                if (!viewModel.focused()) {
+                    viewModel.focused(true);
+                }
 
-                    return true;
-                };
-                $(element).spectrum(config);
-            } else {
-                $(element).spectrum({
-                    disabled: true
-                });
-            }
+                return true;
+            };
+
+            $(element).spectrum(config);
+
+            changeColorPickerStateBasedOnViewModel(element, viewModel);
         },
 
         /**
          * Reads params passed to binding, parses component declarations.
          * Fetches for those found and attaches them to the new context.
          *
-         * @param {HTMLElement} element
-         * @param {Function} valueAccessor
+         * @param {HTMLElement} element - Element to apply bindings to.
+         * @param {Function} valueAccessor - Function that returns value, passed to binding.
+         * @param {Object} allBindings - Object, which represents all bindings applied to element.
+         * @param {Object} viewModel - Object, which represents view model binded to element.
          */
-        update: function (element, valueAccessor) {
+        update: function (element, valueAccessor, allBindings, viewModel) {
             var config = valueAccessor();
 
             if (tinycolor(config.value()).isValid() || config.value() === '') {
@@ -69,6 +78,8 @@ define([
                     config.value($(element).spectrum('get').toString());
                 }
             }
+
+            changeColorPickerStateBasedOnViewModel(element, viewModel);
         }
     };
 

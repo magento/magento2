@@ -7,6 +7,8 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Mail\Template\SenderResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Customer\Helper\View as CustomerViewHelper;
@@ -92,12 +94,18 @@ class EmailNotification implements EmailNotificationInterface
     private $scopeConfig;
 
     /**
+     * @var SenderResolverInterface
+     */
+    private $senderResolver;
+
+    /**
      * @param CustomerRegistry $customerRegistry
      * @param StoreManagerInterface $storeManager
      * @param TransportBuilder $transportBuilder
      * @param CustomerViewHelper $customerViewHelper
      * @param DataObjectProcessor $dataProcessor
      * @param ScopeConfigInterface $scopeConfig
+     * @param SenderResolverInterface|null $senderResolver
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -105,7 +113,8 @@ class EmailNotification implements EmailNotificationInterface
         TransportBuilder $transportBuilder,
         CustomerViewHelper $customerViewHelper,
         DataObjectProcessor $dataProcessor,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SenderResolverInterface $senderResolver = null
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->storeManager = $storeManager;
@@ -113,6 +122,7 @@ class EmailNotification implements EmailNotificationInterface
         $this->customerViewHelper = $customerViewHelper;
         $this->dataProcessor = $dataProcessor;
         $this->scopeConfig = $scopeConfig;
+        $this->senderResolver = $senderResolver ?: ObjectManager::getInstance()->get(SenderResolverInterface::class);
     }
 
     /**
@@ -231,6 +241,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param int|null $storeId
      * @param string $email
      * @return void
+     * @throws \Magento\Framework\Exception\MailException
      */
     private function sendEmailTemplate(
         $customer,
@@ -244,10 +255,17 @@ class EmailNotification implements EmailNotificationInterface
         if ($email === null) {
             $email = $customer->getEmail();
         }
+
+        /** @var array $from */
+        $from = $this->senderResolver->resolve(
+            $this->scopeConfig->getValue($sender, 'store', $storeId),
+            $storeId
+        );
+
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)
-            ->setFrom($this->scopeConfig->getValue($sender, 'store', $storeId))
+            ->setFrom($from)
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
@@ -296,9 +314,9 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordReminder(CustomerInterface $customer)
     {
-        $storeId = $this->getWebsiteStoreId($customer);
+        $storeId = $customer->getStoreId();
         if (!$storeId) {
-            $storeId = $this->storeManager->getStore()->getId();
+            $storeId = $this->getWebsiteStoreId($customer);
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
