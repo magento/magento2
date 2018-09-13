@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
+use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
 
 /**
  * @api
@@ -34,19 +35,28 @@ class QuoteValidator
     private $minimumAmountMessage;
 
     /**
+     * @var QuoteValidationRuleInterface
+     */
+    private $quoteValidationRule;
+
+    /**
      * QuoteValidator constructor.
      *
      * @param AllowedCountries|null $allowedCountryReader
      * @param OrderAmountValidationMessage|null $minimumAmountMessage
+     * @param QuoteValidationRuleInterface|null $quoteValidationRule
      */
     public function __construct(
         AllowedCountries $allowedCountryReader = null,
-        OrderAmountValidationMessage $minimumAmountMessage = null
+        OrderAmountValidationMessage $minimumAmountMessage = null,
+        QuoteValidationRuleInterface $quoteValidationRule = null
     ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
         $this->minimumAmountMessage = $minimumAmountMessage ?: ObjectManager::getInstance()
             ->get(OrderAmountValidationMessage::class);
+        $this->quoteValidationRule = $quoteValidationRule ?: ObjectManager::getInstance()
+            ->get(QuoteValidationRuleInterface::class);
     }
 
     /**
@@ -74,49 +84,19 @@ class QuoteValidator
      */
     public function validateBeforeSubmit(QuoteEntity $quote)
     {
-        if (!$quote->isVirtual()) {
-            if ($quote->getShippingAddress()->validate() !== true) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __(
-                        'Please check the shipping address information. %1',
-                        implode(' ', $quote->getShippingAddress()->validate())
-                    )
-                );
+        foreach ($this->quoteValidationRule->validate($quote) as $validationResult) {
+            if ($validationResult->isValid()) {
+                continue;
             }
 
-            // Checks if country id present in the allowed countries list.
-            if (!in_array(
-                $quote->getShippingAddress()->getCountryId(),
-                $this->allowedCountryReader->getAllowedCountries()
-            )) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Some addresses can't be used due to the configurations for specific countries.")
-                );
+            $messages = $validationResult->getErrors();
+            $defaultMessage = array_shift($messages);
+            if ($defaultMessage && !empty($messages)) {
+                $defaultMessage .= ' %1';
             }
-
-            $method = $quote->getShippingAddress()->getShippingMethod();
-            $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
-            if (!$method || !$rate) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The shipping method is missing. Select the shipping method and try again.')
-                );
+            if ($defaultMessage) {
+                throw new LocalizedException(__($defaultMessage, implode(' ', $messages)));
             }
-        }
-        if ($quote->getBillingAddress()->validate() !== true) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    'Please check the billing address information. %1',
-                    implode(' ', $quote->getBillingAddress()->validate())
-                )
-            );
-        }
-        if (!$quote->getPayment()->getMethod()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Enter a valid payment method and try again. ')
-            );
-        }
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new LocalizedException($this->minimumAmountMessage->getMessage());
         }
 
         return $this;

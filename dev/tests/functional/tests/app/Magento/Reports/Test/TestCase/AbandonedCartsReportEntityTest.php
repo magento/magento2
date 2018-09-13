@@ -34,7 +34,7 @@ class AbandonedCartsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const STABLE = 'no';
+    const STABLE = 'yes';
     /* end tags */
 
     /**

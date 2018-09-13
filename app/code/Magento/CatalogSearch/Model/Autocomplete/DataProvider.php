@@ -13,6 +13,10 @@ use Magento\Search\Model\Autocomplete\ItemFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class DataProvider implements DataProviderInterface
 {
     /**
