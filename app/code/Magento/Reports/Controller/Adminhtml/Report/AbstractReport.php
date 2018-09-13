@@ -16,6 +16,8 @@ use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
+ * Reports api controller
+ *
  * @api
  * @since 100.0.2
  */

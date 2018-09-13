@@ -6,6 +6,9 @@
 
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
+/**
+ * Backend reports grid
+ */
 class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -91,9 +94,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get resource collection name
      *
-     * @codeCoverageIgnore
-     *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getResourceCollectionName()
     {
@@ -101,6 +103,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return reports collection
+     *
      * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
@@ -112,6 +116,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve array of columns that should be aggregated
+     *
      * @return array
      */
     protected function _getAggregatedColumns()
@@ -187,6 +193,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Apply sorting and filtering to collection
+     *
      * @return $this|\Magento\Backend\Block\Widget\Grid
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -276,6 +284,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return count totals
+     *
      * @return array
      */
     public function getCountTotals()
@@ -315,6 +325,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve subtotal items
+     *
      * @return array
      */
     public function getSubTotals()
@@ -356,6 +368,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return current currency code
+     *
      * @return string|\Magento\Directory\Model\Currency $currencyCode
      */
     public function getCurrentCurrencyCode()
@@ -409,6 +423,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return stores by website, group and store id
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
