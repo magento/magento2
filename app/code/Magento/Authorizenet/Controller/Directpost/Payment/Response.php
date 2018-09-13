@@ -6,8 +6,29 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
-class Response extends \Magento\Authorizenet\Controller\Directpost\Payment
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
+class Response extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
 {
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
     /**
      * Response action.
      * Action for Authorize.net SIM Relay Request.
