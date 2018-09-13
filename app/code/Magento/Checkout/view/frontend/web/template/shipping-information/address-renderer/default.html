@@ -23,9 +23,9 @@
                         <text args="element[attribute].value"/>
                     </if>
                 </ifnot>
-                <if args="typeof element[attribute] === 'string'">
-                    <text args="element[attribute]"/>
-                </if>
+            </if>
+            <if args="typeof element[attribute] === 'string'">
+                <text args="element[attribute]"/>
             </if><br/>
         </each>
     </each>
