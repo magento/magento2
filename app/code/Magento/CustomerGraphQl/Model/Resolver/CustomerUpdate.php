@@ -19,7 +19,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Customers field resolver, used for GraphQL request processing.
+ * Customers Update resolver
  */
 class CustomerUpdate implements ResolverInterface
 {

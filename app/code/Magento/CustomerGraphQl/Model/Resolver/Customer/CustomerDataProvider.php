@@ -132,6 +132,8 @@ class CustomerDataProvider
     }
 
     /**
+     * Checking if password for customer is correct
+     *
      * @param string $password
      * @param int $customerId
      * @return bool
@@ -143,3 +145,4 @@ class CustomerDataProvider
         return $this->encryptor->validateHash($password, $hash);
     }
 }
+
