@@ -43,6 +43,13 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_collection;
 
     /**
+     * Collection object
+     *
+     * @var \Magento\Framework\Data\Collection
+     */
+    protected $_unloadedCollection;
+
+    /**
      * Export flag
      *
      * @var bool
@@ -477,6 +484,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             parent::_prepareCollection();
 
             if (!$this->_isExport) {
+                $this->_unloadedCollection = clone $this->getCollection();
                 $this->getCollection()->load();
                 $this->_afterLoadCollection();
             }
@@ -1250,6 +1258,16 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     public function getCollection()
     {
         return $this->_collection;
+    }
+
+    /**
+     * get collection object
+     *
+     * @return \Magento\Framework\Data\Collection
+     */
+    public function getUnloadedCollection()
+    {
+        return $this->_unloadedCollection;
     }
 
     /**
