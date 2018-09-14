@@ -31,14 +31,13 @@ class ProductImage implements ResolverInterface
     private $storeManager;
 
     /**
-     * @param CatalogImageHelperFactory $catalogImageHelperFactory,
-     * @param StoreManagerInterface    $storeManager
+     * @param CatalogImageHelperFactory $catalogImageHelperFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CatalogImageHelperFactory $catalogImageHelperFactory,
         StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         $this->catalogImageHelperFactory = $catalogImageHelperFactory;
         $this->storeManager = $storeManager;
     }
@@ -46,7 +45,7 @@ class ProductImage implements ResolverInterface
     /**
      * Get product's image by type.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -62,6 +61,7 @@ class ProductImage implements ResolverInterface
         $product = $value['model'];
         $imageType = $field->getName();
 
+        /** @var \Magento\Catalog\Helper\Image $catalogImageHelper */
         $catalogImageHelper = $this->catalogImageHelperFactory->create();
 
         $imageUrl = $catalogImageHelper->init(
