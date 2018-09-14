@@ -49,7 +49,5 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
             $this->_redirect('adminhtml/*/edit', ['_current' => true]);
             return;
         }
-        $this->_redirect('adminhtml/*/');
-        return;
     }
 }

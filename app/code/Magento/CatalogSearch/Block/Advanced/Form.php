@@ -23,6 +23,8 @@ use Magento\Framework\View\Element\Template\Context;
 /**
  * @api
  * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Form extends Template
 {
@@ -177,19 +179,11 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCurrency($attribute)
     {
         return $this->_storeManager->getStore()->getCurrentCurrencyCode();
-
-        $baseCurrency = $this->_storeManager->getStore()->getBaseCurrency()->getCurrencyCode();
-        return $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) ? $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) : $baseCurrency;
     }
 
     /**

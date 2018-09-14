@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRemoveDefaultImageSimpleProductTest">
         <annotations>
             <features value="Catalog"/>
@@ -46,9 +46,7 @@
         <!-- Remove image from product -->
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
 
-        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
-        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
         <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>

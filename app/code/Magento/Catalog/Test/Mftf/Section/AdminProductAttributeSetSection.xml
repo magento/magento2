@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductAttributeSetSection">
         <element name="name" type="input" selector="#attribute_set_name"/>
         <element name="basedOn" type="select" selector="#skeleton_set"/>
@@ -29,6 +29,6 @@
     </section>
     <section name="ModifyAttributes">
         <!-- Parameter is the attribute name -->
-        <element name="nthExistingAttribute" type="select" selector="//*[text()='{{attributeName}}']/../..//select" parameterized="true"/>
+        <element name="nthExistingAttribute" type="select" selector="//*[text()='{{attributeName}}']/../../..//select" parameterized="true"/>
     </section>
 </sections>

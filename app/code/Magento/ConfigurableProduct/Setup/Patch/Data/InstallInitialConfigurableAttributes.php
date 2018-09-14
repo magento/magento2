@@ -51,6 +51,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $attributes = [
             'country_of_manufacture',
+            'manufacturer',
             'minimal_price',
             'msrp',
             'msrp_display_actual_price_type',

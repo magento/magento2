@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to checkout from minicart -->
     <actionGroup name="GoToCheckoutFromMinicartActionGroup">
         <wait stepKey="wait" time="10" />
@@ -93,13 +93,13 @@
             <argument name="customerAddressVar"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationFirstName"/>
-        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationLastName"/>
-        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationStreet"/>
-        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationCity"/>
-        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationState"/>
-        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationPostcode"/>
-        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationTelephone"/>
+        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationFirstName"/>
+        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationTelephone"/>
     </actionGroup>
 
     <!-- Check shipping method in checkout -->
@@ -108,7 +108,7 @@
             <argument name="shippingMethod"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInfomation}}" stepKey="assertshippingMethodInfomation"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
     </actionGroup>
 
     <!-- Checkout select Check/Money Order payment -->
@@ -143,6 +143,22 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
+    </actionGroup>
+
+    <!--Verify country options in checkout top destination section-->
+    <actionGroup name="VerifyTopDestinationsCountry">
+        <arguments>
+            <argument name="country" type="string"/>
+            <argument name="placeNumber"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
+        <see selector="{{CheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
+    </actionGroup>
+    <actionGroup name="StorefrontSignOutActionGroup">
+        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
+        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You are signed out" stepKey="signOut"/>
     </actionGroup>
 
 </actionGroups>

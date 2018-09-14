@@ -54,7 +54,6 @@
 .search-global-field .mage-suggest {
     position: static;
     display: block;
-    vertical-align: baseline;
     width: auto;
     background-color: transparent;
     border: none;
@@ -121,7 +120,7 @@
         }
 
         .mage-suggest-selected > a {
-            color: #000;
+            color: @color-black;
             background: #F1FFEB;
         }
     }
@@ -177,7 +176,7 @@
         }
 
         &:before {
-            display: inline-block;
+            display: block;
             float: right;
             margin-left: 4px;
             font-size: 13px;

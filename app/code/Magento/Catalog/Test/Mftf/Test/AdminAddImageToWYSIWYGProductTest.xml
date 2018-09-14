@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddImageToWYSIWYGProductTest">
         <annotations>
             <features value="Catalog"/>
@@ -16,6 +16,9 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
+            <skip>
+                <issueId value="MAGETWO-94438"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -39,7 +42,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
-        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" userInput="Add Selected" stepKey="seeAddSelectedBtn1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="createFolder1"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" stepKey="waitForPopUp1" />
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
@@ -78,7 +80,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading8" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
-        <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" userInput="Add Selected" stepKey="seeAddSelectedBtn2" />
+        <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn2" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
         <waitForElementVisible  selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage3" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
