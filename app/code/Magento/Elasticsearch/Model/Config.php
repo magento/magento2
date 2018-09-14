@@ -84,7 +84,8 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function prepareClientOptions($options = [])
@@ -152,7 +153,7 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * get Elasticsearch entity type
+     * Get Elasticsearch entity type
      *
      * @return string
      * @since 100.1.0

@@ -532,7 +532,7 @@ class Eav extends AbstractModifier
     /**
      * Loads attributes for specified groups at once
      *
-     * @param AttributeGroupInterface[] ...$groups
+     * @param AttributeGroupInterface[] $groups
      * @return @return ProductAttributeInterface[]
      */
     private function loadAttributesForGroups(array $groups)
@@ -707,7 +707,8 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Returns attribute default value, based on db setting or setting in the system configuration
+     * Returns attribute default value, based on db setting or setting in the system configuration.
+     *
      * @param ProductAttributeInterface $attribute
      * @return null|string
      */
@@ -742,6 +743,8 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Adds 'use default value' checkbox.
+     *
      * @param ProductAttributeInterface $attribute
      * @param array $meta
      * @return array

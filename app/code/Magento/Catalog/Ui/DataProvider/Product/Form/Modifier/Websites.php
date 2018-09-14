@@ -333,6 +333,8 @@ class Websites extends AbstractModifier
     }
 
     /**
+     * Returns websites options list.
+     *
      * @return array
      * @since 101.0.0
      */

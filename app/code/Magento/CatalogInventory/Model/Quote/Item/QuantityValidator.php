@@ -20,6 +20,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Item;
 
 /**
+ * Quote item quantity validator.
+ *
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,7 +72,6 @@ class QuantityValidator
      *
      * @param \Magento\Framework\DataObject $result
      * @param Item $quoteItem
-     * @param bool $removeError
      * @return void
      */
     private function addErrorInfoToQuote($result, $quoteItem)
