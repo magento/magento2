@@ -10,7 +10,12 @@ declare(strict_types=1);
 namespace Magento\Sitemap\Api;
 
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sitemap\Api\Data\SitemapInterface;
+use Magento\Sitemap\Api\Data\SitemapSearchResultsInterface;
 
 /**
  * Interface SitemapRepositoryInterface
@@ -19,25 +24,37 @@ use Magento\Sitemap\Api\Data\SitemapInterface;
 interface SitemapRepositoryInterface
 {
     /**
-     * @param $sitemapId
+     * Get single sitemap by id
+     *
+     * @param int $sitemapId
      * @return SitemapInterface
      */
     public function getById($sitemapId): SitemapInterface;
 
     /**
-     * @return array
+     * Fetch list of sitemaps according to search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @throws NoSuchEntityException
+     * @return SitemapSearchResultsInterface
      */
-    public function getList(): array;
+    public function getList(SearchCriteriaInterface $searchCriteria): SitemapSearchResultsInterface;
 
     /**
+     * Save sitemap instance
+     *
      * @param SitemapInterface $sitemap
-     * @return mixed
+     * @throws CouldNotSaveException
+     * @return int
      */
-    public function save(SitemapInterface $sitemap);
+    public function save(SitemapInterface $sitemap): int;
 
     /**
+     * Delete passed sitemap
+     *
      * @param SitemapInterface $sitemap
-     * @return mixed
+     * @throws CouldNotDeleteException
+     * @return boolean
      */
     public function delete(SitemapInterface $sitemap);
 }

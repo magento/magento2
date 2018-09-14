@@ -9,11 +9,16 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Model\ResourceModel;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sitemap\Api\Data\SitemapSearchResultsInterface;
 use Magento\Sitemap\Api\SitemapRepositoryInterface;
 use Magento\Sitemap\Api\Data\SitemapInterface;
+use Magento\Sitemap\Model\SitemapFactory;
 
 class SitemapRepository implements SitemapRepositoryInterface
 {
@@ -26,17 +31,31 @@ class SitemapRepository implements SitemapRepositoryInterface
      * @var SitemapFactory
      */
     private $sitemapFactory;
+    /**
+     * @var \Magento\Sitemap\Api\Data\SitemapSearchResultsInterfaceFactory
+     */
+    private $searchResultsFactory;
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
 
     /**
      * SitemapRepository constructor.
      * @param Sitemap $sitemapResource
      * @param SitemapFactory $sitemapFactory
      */
-    public function __construct(Sitemap $sitemapResource, \Magento\Sitemap\Model\SitemapFactory $sitemapFactory)
-    {
+    public function __construct(
+        Sitemap $sitemapResource,
+        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory,
+        \Magento\Sitemap\Api\Data\SitemapSearchResultsInterfaceFactory $searchResultsFactory,
+        CollectionProcessorInterface $collectionProcessor
+    ) {
 
         $this->sitemapResource = $sitemapResource;
         $this->sitemapFactory = $sitemapFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -57,15 +76,32 @@ class SitemapRepository implements SitemapRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(): array
+    public function getList(SearchCriteriaInterface $searchCriteria): SitemapSearchResultsInterface
     {
-        // TODO: Implement getList() method.
+        /** @var SitemapSearchResultsInterface $searchResults */
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
+
+        /** @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection $collection */
+        $collection = $this->sitemapFactory->create()->getCollection();
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $searchResults->setTotalCount($collection->getSize());
+
+        $sitemaps = [];
+        /** @var SitemapInterface $sitemap */
+        foreach ($collection->getItems() as $sitemap) {
+            $sitemaps[] = $this->getById($sitemap->getId());
+        }
+        $searchResults->setItems($sitemaps);
+
+        return $searchResults;
+
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save(SitemapInterface $sitemap)
+    public function save(SitemapInterface $sitemap): int
     {
         try {
             $this->sitemapResource->save($sitemap);
