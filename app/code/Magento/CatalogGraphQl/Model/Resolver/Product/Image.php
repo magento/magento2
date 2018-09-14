@@ -14,12 +14,11 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Returns product's  image. If the image is not set, returns a placeholder
+ * Returns product's image. If the image is not set, returns a placeholder
  */
-class SmallImage implements ResolverInterface
+class Image implements ResolverInterface
 {
     /**
      * @var CatalogImageHelperFactory
@@ -34,16 +33,13 @@ class SmallImage implements ResolverInterface
     /**
      * @param ValueFactory $valueFactory
      * @param CatalogImageHelperFactory $catalogImageHelperFactory
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ValueFactory $valueFactory,
-        CatalogImageHelperFactory $catalogImageHelperFactory,
-        StoreManagerInterface $storeManager
+        CatalogImageHelperFactory $catalogImageHelperFactory
     ) {
         $this->valueFactory = $valueFactory;
         $this->catalogImageHelperFactory = $catalogImageHelperFactory;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -57,10 +53,7 @@ class SmallImage implements ResolverInterface
         array $args = null
     ): Value {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new \LogicException(__("Cannot resolve entity model"));
         }
         /** @var Product $product */
         $product = $value['model'];
