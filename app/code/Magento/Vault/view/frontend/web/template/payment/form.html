@@ -32,6 +32,11 @@
 
     <div class="payment-method-content">
         <each args="getRegion('messages')" render=""></each>
+        <div class="payment-method-billing-address">
+            <each args="data: $parent.getRegion(getBillingAddressFormName()), as: '$item'">
+                <render args="$item.getTemplate()"/>
+            </each>
+        </div>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
             <!-- ko template: getTemplate() --><!-- /ko -->

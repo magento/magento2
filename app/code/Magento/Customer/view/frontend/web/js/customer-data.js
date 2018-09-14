@@ -199,7 +199,8 @@ define([
                 privateContent = $.cookieStorage.get(privateContentVersion),
                 localPrivateContent = $.localStorage.get(privateContentVersion),
                 needVersion = 'need_version',
-                expiredSectionNames = this.getExpiredSectionNames();
+                expiredSectionNames = this.getExpiredSectionNames(),
+                isLoading = false;
 
             if (privateContent &&
                 !$.cookieStorage.isSet(privateContentVersion) &&
@@ -208,6 +209,7 @@ define([
                 $.cookieStorage.set(privateContentVersion, needVersion);
                 $.localStorage.set(privateContentVersion, needVersion);
                 this.reload([], false);
+                isLoading = true;
             } else if (localPrivateContent !== privateContent) {
                 if (!$.cookieStorage.isSet(privateContentVersion)) {
                     privateContent = needVersion;
@@ -215,6 +217,7 @@ define([
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
                 this.reload([], false);
+                isLoading = true;
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -233,7 +236,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 
-                if (_.isEmpty(countryData())) {
+                if (_.isEmpty(countryData()) && !isLoading) {
                     customerData.reload(['directory-data'], false);
                 }
             }

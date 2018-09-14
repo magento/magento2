@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -122,7 +123,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 $productTypeId = $product->getTypeId();
 
                 $this->copyToStores($data, $productId);
-
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
@@ -150,11 +150,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addExceptionMessage($e);
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
@@ -187,6 +189,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
 
     /**
      * Notify customer when image was not deleted in specific case.
+     *
      * TODO: temporary workaround must be eliminated in MAGETWO-45306
      *
      * @param array $postData
@@ -251,6 +254,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     }
 
     /**
+     * Get categoryLinkManagement in a backward compatible way.
+     *
      * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
      */
     private function getCategoryLinkManagement()
@@ -263,6 +268,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     }
 
     /**
+     * Get storeManager in a backward compatible way.
+     *
      * @return StoreManagerInterface
      * @deprecated 101.0.0
      */
@@ -288,5 +295,37 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         }
 
         return $this->dataPersistor;
+    }
+
+    /**
+     * Persist media gallery on error, in order to show already saved images on next run.
+     *
+     * @param ProductInterface $product
+     * @param array $data
+     * @return array
+     */
+    private function persistMediaData(ProductInterface $product, array $data)
+    {
+        $mediaGallery = $product->getData('media_gallery');
+        if (!empty($mediaGallery['images'])) {
+            foreach ($mediaGallery['images'] as $key => $image) {
+                if (!isset($image['new_file'])) {
+                    //Remove duplicates.
+                    unset($mediaGallery['images'][$key]);
+                }
+            }
+            $data['product']['media_gallery'] = $mediaGallery;
+            $fields = [
+                'image',
+                'small_image',
+                'thumbnail',
+                'swatch_image',
+            ];
+            foreach ($fields as $field) {
+                $data['product'][$field] = $product->getData($field);
+            }
+        }
+
+        return $data;
     }
 }
