@@ -89,9 +89,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->productRepository = $productRepository;
+        parent::__construct($context, $productBuilder);
         $this->escaper = $escaper ?? $this->_objectManager->get(\Magento\Framework\Escaper::class);
         $this->logger = $logger ?? $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
-        parent::__construct($context, $productBuilder);
     }
 
     /**
