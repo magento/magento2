@@ -47,7 +47,8 @@ interface IndexerInterface
     /**
      * Define if engine is available
      *
+     * @param Dimension[] $dimensions
      * @return bool
      */
-    public function isAvailable();
+    public function isAvailable($dimensions = []);
 }
