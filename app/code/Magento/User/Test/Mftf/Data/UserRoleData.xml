@@ -30,4 +30,8 @@
             <item>Magento_Catalog::products</item>
         </array>
     </entity>
+    <entity name="RoleTest" type="user_role">
+        <data key="rolename" unique="suffix">RoleTest</data>
+        <data key="current_password">123123q</data>
+    </entity>
 </entities>
