@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigSection">
-        <element name="advancedReportingMenuItem" type="text" selector="//a[contains(concat(' ',normalize-space(@class),' '),'item-nav')]/span[text()='Advanced Reporting']"/>
+        <element name="advancedReportingMenuItem" type="text" selector="//*[@id='system_config_tabs']/div[1]//span[text()='Advanced Reporting']"/>
         <element name="advancedReportingService" type="select" selector="#analytics_general_enabled"/>
         <element name="advancedReportingServiceLabel" type="text" selector="#row_analytics_general_enabled>td.label>label>span"/>
         <element name="advancedReportingServiceStatus" type="text" selector="#row_analytics_general_enabled>td.value>p>span"/>
