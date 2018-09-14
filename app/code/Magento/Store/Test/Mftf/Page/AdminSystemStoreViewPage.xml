@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminSystemStoreViewPage" url="admin/system_store/newStore" module="Magento_Store" area="admin">
+        <section name="AdminNewStoreViewMainActionsSection"/>
+        <section name="AdminNewStoreSection"/>
+    </page>
+</pages>

@@ -336,6 +336,11 @@
                 .lib-css(margin-top, @indent__xs);
             }
         }
+        .field {
+            .note.mage-error {
+                color: @error__color;
+            }
+        }
     }
 
     .product-options-bottom .price-box,
@@ -742,6 +747,16 @@
             }
         }
     }
+
+    //
+    //  Category page 1 column layout
+    //  ---------------------------------------------
+
+    .catalog-category-view.page-layout-1column {
+        .column.main {
+            min-height: inherit;
+        }
+    }
 }
 
 //
@@ -789,7 +804,7 @@
         clear: both;
         max-width: 100%;
         overflow-x: auto;
-        position: relative; // Needed for Safari(iOS) to properly render "overflow-x" rule.
+        position: relative; // Needed for Safari(iOS) to properly render 'overflow-x' rule.
 
         .table-comparison > tbody > tr {
             > th,

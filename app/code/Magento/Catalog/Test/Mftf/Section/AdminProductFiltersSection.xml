@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFiltersSection">
+        <element name="filtersButton" type="button" selector="#container > div > div.admin__data-grid-header > div:nth-child(1) > div.data-grid-filters-actions-wrap > div > button"/>
+        <element name="clearFiltersButton" type="button" selector="//div[@class='admin__data-grid-header']//button[@class='action-tertiary action-clear']" timeout="10"/>
+        <element name="nameInput" type="input" selector="input[name=name]"/>
+        <element name="skuInput" type="input" selector="input[name=sku]"/>
+        <element name="apply" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="filter" type="button" selector="//div[@class='data-grid-filters-action-wrap']/button" timeout="30"/>
+        <element name="typeDropDown" type="multiselect"  selector="//select[@name='type_id']" timeout="30"/>
+        <element name="bundleOption" type="multiselect" selector="//select[@name='type_id']/option[4]" timeout="30"/>
+        <element name="applyFilters" type="button" selector="//button[@class='action-secondary']" timeout="30"/>
+        <element name="allCheckbox" type="checkbox" selector="//div[@data-role='grid-wrapper']//label[@data-bind='attr: {for: ko.uid}']" timeout="30"/>
+        <element name="actions" type="button" selector="//div[@class='action-select-wrap']/button" timeout="30"/>
+        <element name="changeStatus" type="multiselect" selector="//div[@class='action-menu-items']//li[2]" timeout="30"/>
+        <element name="delete" type="multiselect" selector="//div[@class='action-menu-items']//li[1]" timeout="30"/>
+        <element name="disable" type="multiselect" selector="//div[@class='action-menu-items']//ul[@class='action-submenu _active']//li[span='Disable']" timeout="30"/>
+        <element name="enable" type="multiselect" selector="//div[@class='action-menu-items']//ul[@class='action-submenu _active']//li[span='Enable']" timeout="30"/>
+        <element name="filtersClear" type="button" selector="//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset']" timeout="30"/>
+        <element name="productType" type="text" selector="//tr[@data-repeat-index='{{var1}}']//td[5]//div[@class='data-grid-cell-content']" parameterized="true"/>
+        <element name="priceOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
+        <element name="AllProductsNotOfBundleType" type="text" selector="//td[5]/div[text() != 'Bundle Product']"/>
+        <element name="attributeSetOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
+    </section>
+</sections>

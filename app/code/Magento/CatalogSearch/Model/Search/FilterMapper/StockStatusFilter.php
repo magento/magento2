@@ -15,6 +15,9 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 /**
  * Class StockStatusFilter
  * Adds filter by stock status to base select
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class StockStatusFilter
 {

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateRootCategoryAndSubcategoriesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create categories"/>
+            <title value="Admin should be able to create a Root Category and a Subcategory"/>
+            <description value="Admin should be able to create a Root Category and a Subcategory"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-46142"/>
+            <group value="category"/>
+        </annotations>
+        <!--Delete all created data during the test execution and assign Default Root Category to Store-->
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+            <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
+            <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
+            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
+            <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
+            <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
+            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad1" />
+            <selectOption userInput="Default Category" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionDefaultCategory"/>
+            <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog2"/>
+            <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
+                <argument name="categoryEntity" value="NewRootCategory"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout2"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Create new root category-->
+        <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
+            <argument name="categoryEntity" value="NewRootCategory"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+        <!--Create subcategory-->
+        <actionGroup ref="CreateCategory" stepKey="createSubcategory1">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name)}}" stepKey="clickOnCreatedNewRootCategory1"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
+        <!--Create another subcategory-->
+        <actionGroup ref="CreateCategory" stepKey="createSubcategory2">
+            <argument name="categoryEntity" value="SubCategoryWithParent"/>
+        </actionGroup>
+        <!--Assign new created root category to store-->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
+        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
+        <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickOnstoreGrpNameInFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageAdminStoresGroupEditLoad" />
+        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectOptionCreatedNewRootCategory"/>
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>
+        <actionGroup ref="logout" stepKey="logout1"/>
+        <!--Go to storefront and verify created subcategory on frontend-->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>
+        <actionGroup ref="CheckCategoryOnStorefront" stepKey="checkCreatedSubcategory1OnFrontend">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <actionGroup ref="CheckCategoryOnStorefront" stepKey="checkCreatedSubcategory2OnFrontend">
+            <argument name="categoryEntity" value="SubCategoryWithParent"/>
+        </actionGroup>
+    </test>
+</tests>

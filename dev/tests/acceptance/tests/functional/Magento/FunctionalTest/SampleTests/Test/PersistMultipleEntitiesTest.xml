@@ -10,7 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="PersistMultipleEntitiesTest">
         <annotations>
-            <group value="skip"/>
+            <features value="SampleTests"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="simplesubcategory" stepKey="simplecategory"/>

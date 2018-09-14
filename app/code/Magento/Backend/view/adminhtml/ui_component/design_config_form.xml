@@ -12,7 +12,7 @@
         </settings>
         <field name="theme_theme_id" sortOrder="10" formElement="select">
             <settings>
-                <notice translate="true">If no value is specified, the system default is used. The system default may be modified by third party extensions.</notice>
+                <notice translate="true">If no value is specified, the system default is used. The system default may be modified by third-party extensions.</notice>
                 <dataType>text</dataType>
                 <label translate="true">Applied Theme</label>
                 <dataScope>theme_theme_id</dataScope>
@@ -92,7 +92,7 @@
                         </select>
                     </formElements>
                 </field>
-                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="50">
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="fit" xsi:type="boolean">false</item>

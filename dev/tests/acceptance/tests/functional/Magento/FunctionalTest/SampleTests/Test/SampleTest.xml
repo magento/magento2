@@ -22,6 +22,7 @@
     </test>
     <test name="AllCodeceptionMethodsTest">
         <annotations>
+            <features value="SampleTests"/>
             <title value="Create all Codeception methods"/>
             <description value="Exercises the Generator to make sure it creates every Codeception method correctly."/>
             <severity value="CRITICAL"/>
@@ -202,6 +203,7 @@
     </test>
     <test name="AllVariableMethodsTest">
         <annotations>
+            <features value="SampleTests"/>
             <title value="Create all Methods that support Variables."/>
             <description value="Exercises the Generator to make sure it creates every Method that supports a Variable."/>
             <severity value="CRITICAL"/>
@@ -255,6 +257,7 @@
     </test>
     <test name="AllReplacementTest">
         <annotations>
+            <features value="SampleTests"/>
             <title value="Exercise reference replacement."/>
             <description value="Exercises {{foo}}, $foo$, and $$foo$$ replacement."/>
             <severity value="CRITICAL"/>

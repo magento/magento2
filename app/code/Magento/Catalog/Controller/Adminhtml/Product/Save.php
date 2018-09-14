@@ -8,6 +8,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -121,7 +122,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productTypeId = $product->getTypeId();
 
                 $this->copyToStores($data, $productId);
-
                 $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
@@ -149,11 +149,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addExceptionMessage($e);
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
+                $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
@@ -186,6 +188,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * Notify customer when image was not deleted in specific case.
+     *
      * TODO: temporary workaround must be eliminated in MAGETWO-45306
      *
      * @param array $postData
@@ -204,7 +207,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
-                if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
+                $images = $product->getMediaGallery('images');
+                if (is_array($images) && $expectedImagesAmount != count($images)) {
                     $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
@@ -215,6 +219,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * Do copying data to stores
+     *
+     * If the 'copy_from' field is not specified in the input data,
+     * the store fallback mechanism will automatically take the admin store's default value.
      *
      * @param array $data
      * @param int $productId
@@ -227,15 +234,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 if (isset($data['product']['website_ids'][$websiteId])
                     && (bool)$data['product']['website_ids'][$websiteId]) {
                     foreach ($group as $store) {
-                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
-                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
-                        if ($copyTo) {
-                            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
-                                ->setStoreId($copyFrom)
-                                ->load($productId)
-                                ->setStoreId($copyTo)
-                                ->setCopyFromView(true)
-                                ->save();
+                        if (isset($store['copy_from'])) {
+                            $copyFrom = $store['copy_from'];
+                            $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                            if ($copyTo) {
+                                $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
+                                    ->setStoreId($copyFrom)
+                                    ->load($productId)
+                                    ->setStoreId($copyTo)
+                                    ->setCopyFromView(true)
+                                    ->save();
+                            }
                         }
                     }
                 }
@@ -244,6 +253,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
+     * Get categoryLinkManagement in a backward compatible way.
+     *
      * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
      */
     private function getCategoryLinkManagement()
@@ -256,6 +267,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
+     * Get storeManager in a backward compatible way.
+     *
      * @return StoreManagerInterface
      * @deprecated 101.0.0
      */
@@ -281,5 +294,37 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $this->dataPersistor;
+    }
+
+    /**
+     * Persist media gallery on error, in order to show already saved images on next run.
+     *
+     * @param ProductInterface $product
+     * @param array $data
+     * @return array
+     */
+    private function persistMediaData(ProductInterface $product, array $data)
+    {
+        $mediaGallery = $product->getData('media_gallery');
+        if (!empty($mediaGallery['images'])) {
+            foreach ($mediaGallery['images'] as $key => $image) {
+                if (!isset($image['new_file'])) {
+                    //Remove duplicates.
+                    unset($mediaGallery['images'][$key]);
+                }
+            }
+            $data['product']['media_gallery'] = $mediaGallery;
+            $fields = [
+                'image',
+                'small_image',
+                'thumbnail',
+                'swatch_image',
+            ];
+            foreach ($fields as $field) {
+                $data['product'][$field] = $product->getData($field);
+            }
+        }
+
+        return $data;
     }
 }
