@@ -11,6 +11,8 @@
     <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
     <preference for="Magento\Quote\Model\ShippingAddressManagementInterface" type="Magento\Quote\Model\ShippingAddressManagement" />
+    <preference for="Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface" type="Magento\Quote\Model\MaskedQuoteIdToQuoteId" />
+    <preference for="Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface" type="Magento\Quote\Model\QuoteIdToMaskedQuoteId" />
     <preference for="Magento\Quote\Api\Data\AddressInterface" type="Magento\Quote\Model\Quote\Address" />
     <preference for="Magento\Quote\Api\Data\CartItemInterface" type="Magento\Quote\Model\Quote\Item" />
     <preference for="Magento\Quote\Api\Data\CartInterface" type="Magento\Quote\Model\Quote" />

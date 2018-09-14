@@ -47,6 +47,7 @@
         <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
         <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
         <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
