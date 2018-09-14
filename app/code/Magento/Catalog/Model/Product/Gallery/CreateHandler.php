@@ -102,6 +102,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Execute create handler
+     *
      * @param object $product
      * @param array $arguments
      * @return object
@@ -204,6 +206,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns media gallery atribute instance
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -219,6 +223,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process delete images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -230,6 +236,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -292,6 +300,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @since 101.0.0
@@ -360,6 +370,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns file name according to tmp name
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -447,8 +459,10 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process media attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
-     * @param $mediaAttrCode
+     * @param string $mediaAttrCode
      * @param array $clearImages
      * @param array $newImages
      */
@@ -476,8 +490,10 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process media attribute label
+     *
      * @param \Magento\Catalog\Model\Product $product
-     * @param $mediaAttrCode
+     * @param string $mediaAttrCode
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages

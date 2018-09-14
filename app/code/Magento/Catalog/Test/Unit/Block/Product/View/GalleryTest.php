@@ -147,6 +147,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->with('product')
             ->willReturn($productMock);
 
+        $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            ->setMethods(['init', 'setImageFile', 'getUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->imageHelper->expects($this->any())
             ->method('init')
             ->willReturnMap([
@@ -159,13 +164,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->method('setImageFile')
             ->with('test_file')
             ->willReturnSelf();
-        $this->imageHelper->expects($this->at(2))
+        $this->urlBuilder->expects($this->at(0))
             ->method('getUrl')
             ->willReturn('product_page_image_small_url');
-        $this->imageHelper->expects($this->at(5))
+        $this->urlBuilder->expects($this->at(1))
             ->method('getUrl')
             ->willReturn('product_page_image_medium_url');
-        $this->imageHelper->expects($this->at(8))
+        $this->urlBuilder->expects($this->at(2))
             ->method('getUrl')
             ->willReturn('product_page_image_large_url');
 

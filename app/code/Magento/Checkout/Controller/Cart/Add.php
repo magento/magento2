@@ -11,6 +11,8 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
+ * Controller for processing add to cart action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Add extends \Magento\Checkout\Controller\Cart
@@ -205,6 +207,8 @@ class Add extends \Magento\Checkout\Controller\Cart
     }
 
     /**
+     * Returns cart url
+     *
      * @return string
      */
     private function getCartUrl()
@@ -213,6 +217,8 @@ class Add extends \Magento\Checkout\Controller\Cart
     }
 
     /**
+     * Is redirect should be performed after the product was added to cart.
+     *
      * @return bool
      */
     private function shouldRedirectToCart()

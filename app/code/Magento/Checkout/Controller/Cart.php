@@ -106,8 +106,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     /**
      * Get resolved back url
      *
-     * @param null $defaultUrl
-     *
+     * @param string|null $defaultUrl
      * @return mixed|null|string
      */
     protected function getBackUrl($defaultUrl = null)
@@ -129,6 +128,8 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     }
 
     /**
+     * Is redirect should be performed after the product was added to cart.
+     *
      * @return bool
      */
     private function shouldRedirectToCart()

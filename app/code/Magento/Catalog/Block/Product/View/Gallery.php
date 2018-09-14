@@ -23,6 +23,8 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
+ * Product gallery block
+ *
  * @api
  * @since 100.0.2
  */
@@ -196,6 +198,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image attribute
+     *
      * @param string $imageId
      * @param string $attributeName
      * @param string $default
@@ -222,6 +226,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image gallery config object
+     *
      * @return Collection
      */
     private function getGalleryImagesConfig()
