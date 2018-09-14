@@ -9,6 +9,9 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Subscriber model
@@ -128,6 +131,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $inlineTranslation;
 
     /**
+     * @var CustomerInterfaceFactory
+     */
+    private $customerFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -144,6 +157,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+     * @param CustomerInterfaceFactory|null $customerFactory
+     * @param DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -160,7 +175,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null,
+        CustomerInterfaceFactory $customerFactory = null,
+        DataObjectHelper $dataObjectHelper = null
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
@@ -170,6 +187,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Stdlib\DateTime\DateTime::class
         );
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()
+            ->get(CustomerInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
+            ->get(DataObjectHelper::class);
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -346,7 +367,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function loadByEmail($subscriberEmail)
     {
-        $this->addData($this->getResource()->loadByEmail($subscriberEmail));
+        $storeId = $this->_storeManager->getStore()->getId();
+        $customerData = ['store_id' => $storeId, 'email'=> $subscriberEmail];
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $this->addData($this->getResource()->loadByCustomerData($customer));
         return $this;
     }
 
@@ -497,7 +528,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * unsubscribe the customer with the id provided
+     * Unsubscribe the customer with the id provided
      *
      * @param int $customerId
      * @return $this
