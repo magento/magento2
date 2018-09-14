@@ -188,7 +188,7 @@ define([
                 expect(model.setVisible).toHaveBeenCalled();
                 expect(model.toggleInput).toHaveBeenCalled();
             });
-			 it('Check call "parseOptions" method without predefined "captionValue" property', function () {
+            it('Check call "parseOptions" method without predefined "captionValue" property', function () {
                 var data = [{
                         value: null,
                         label: 'label'
