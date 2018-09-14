@@ -59,6 +59,11 @@ class ToolbarMemorizer
     private $limit;
 
     /**
+     * @var bool
+     */
+    private $isMemorizingAllowed;
+
+    /**
      * @param Toolbar $toolbarModel
      * @param CatalogSession $catalogSession
      * @param ScopeConfigInterface $scopeConfig
@@ -82,7 +87,7 @@ class ToolbarMemorizer
     {
         if ($this->order === null) {
             $this->order = $this->toolbarModel->getOrder() ??
-                $this->catalogSession->getData(Toolbar::ORDER_PARAM_NAME);
+                ($this->isMemorizingAllowed() ? $this->catalogSession->getData(Toolbar::ORDER_PARAM_NAME) : null);
         }
         return $this->order;
     }
@@ -96,7 +101,7 @@ class ToolbarMemorizer
     {
         if ($this->direction === null) {
             $this->direction = $this->toolbarModel->getDirection() ??
-                $this->catalogSession->getData(Toolbar::DIRECTION_PARAM_NAME);
+                ($this->isMemorizingAllowed() ? $this->catalogSession->getData(Toolbar::DIRECTION_PARAM_NAME) : null);
         }
         return $this->direction;
     }
@@ -110,7 +115,7 @@ class ToolbarMemorizer
     {
         if ($this->mode === null) {
             $this->mode = $this->toolbarModel->getMode() ??
-                $this->catalogSession->getData(Toolbar::MODE_PARAM_NAME);
+                ($this->isMemorizingAllowed() ? $this->catalogSession->getData(Toolbar::MODE_PARAM_NAME) : null);
         }
         return $this->mode;
     }
@@ -124,7 +129,7 @@ class ToolbarMemorizer
     {
         if ($this->limit === null) {
             $this->limit = $this->toolbarModel->getLimit() ??
-                $this->catalogSession->getData(Toolbar::LIMIT_PARAM_NAME);
+                ($this->isMemorizingAllowed() ? $this->catalogSession->getData(Toolbar::LIMIT_PARAM_NAME) : null);
         }
         return $this->limit;
     }
@@ -151,7 +156,10 @@ class ToolbarMemorizer
      */
     public function isMemorizingAllowed()
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_CATALOG_REMEMBER_PAGINATION);
+        if ($this->isMemorizingAllowed === null) {
+            $this->isMemorizingAllowed = $this->scopeConfig->isSetFlag(self::XML_PATH_CATALOG_REMEMBER_PAGINATION);
+        }
+        return $this->isMemorizingAllowed;
     }
 
     /**
