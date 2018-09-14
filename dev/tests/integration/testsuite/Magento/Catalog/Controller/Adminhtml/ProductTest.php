@@ -6,10 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\Manager;
-use Magento\TestFramework\Helper\Bootstrap;
-
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
@@ -183,6 +180,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $messageManager = $this->_objectManager->get(Manager::class);
         $messages = $messageManager->getMessages();
         $errors = $messages->getItemsByType('error');
+        $this->assertNotEmpty($errors);
         $message = array_shift($errors);
         $this->assertSame('URL key for specified store already exists.', $message->getText());
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
@@ -250,7 +248,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                             'thumbnail' => '/m/a//magento_image.jpg.tmp',
                             'swatch_image' => '/m/a//magento_image.jpg.tmp',
                         ],
-                    'form_key' => Bootstrap::getObjectManager()->get(FormKey::class)->getFormKey(),
                 ]
             ]
         ];
