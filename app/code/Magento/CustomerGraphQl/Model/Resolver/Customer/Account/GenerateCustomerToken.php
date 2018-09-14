@@ -29,7 +29,6 @@ class GenerateCustomerToken implements ResolverInterface
      */
     public function __construct(
         CustomerTokenServiceInterface $customerTokenService
-
     ) {
         $this->customerTokenService = $customerTokenService;
     }
@@ -45,6 +44,12 @@ class GenerateCustomerToken implements ResolverInterface
         array $args = null
     ) {
         try {
+            if (!isset($args['email'])) {
+                throw new GraphQlInputException(__('"email" value should be specified'));
+            }
+            if (!isset($args['password'])) {
+                throw new GraphQlInputException(__('"password" value should be specified'));
+            }
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
             return ['token' => $token];
         } catch (AuthenticationException $e) {
