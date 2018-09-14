@@ -52,13 +52,10 @@ class GenerateCustomerToken implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         try {
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
-            $result = function () use ($token) {
-                return !empty($token) ? ['token' => $token] : '';
-            };
-            return $this->valueFactory->create($result);
+            return !empty($token) ? ['token' => $token] : '';
         } catch (AuthenticationException $e) {
             throw new GraphQlAuthorizationException(
                 __($e->getMessage())
