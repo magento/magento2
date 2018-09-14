@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
@@ -11,26 +12,15 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
+use Magento\Sitemap\Api\Data\SitemapInterface;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 
 /**
- * @method string getSitemapType()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
- * @method string getSitemapFilename()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapFilename(string $value)
- * @method string getSitemapPath()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapPath(string $value)
- * @method string getSitemapTime()
- * @method \Magento\Sitemap\Model\Sitemap setSitemapTime(string $value)
- * @method int getStoreId()
- * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
- * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
  */
-class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface, SitemapInterface
 {
     const OPEN_TAG_KEY = 'start';
 
@@ -278,14 +268,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         }
     }
 
-    /**
-     * Add a sitemap item to the array of sitemap items
-     *
-     * @param DataObject $sitemapItem
-     * @return $this
-     * @deprecated 100.2.0
-     * @see ItemProviderInterface
-     */
+    public function getId()
+    {
+        return $this->getData($this->getIdFieldName());
+    }
+
+    public function setId($value)
+    {
+        return $this->setData($this->getIdFieldName());
+    }
+
     public function addSitemapItem(DataObject $sitemapItem)
     {
         $this->_sitemapItems[] = $sitemapItem;
@@ -294,11 +286,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
-     * Collect all sitemap items
-     *
-     * @return void
-     * @deprecated 100.2.0
-     * @see ItemProviderInterface
+     * {@inheritdoc}
      */
     public function collectSitemapItems()
     {
@@ -362,12 +350,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         ];
     }
 
-    /**
-     * Check sitemap file location and permissions
-     *
-     * @return \Magento\Framework\Model\AbstractModel
-     * @throws LocalizedException
-     */
     public function beforeSave()
     {
         $path = $this->getSitemapPath();
@@ -416,11 +398,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
-     * Generate XML file
-     *
-     * @see http://www.sitemaps.org/protocol.html
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function generateXml()
     {
@@ -455,11 +433,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         if ($this->_sitemapIncrement == 1) {
             // In case when only one increment file was created use it as default sitemap
             $path = rtrim(
-                $this->getSitemapPath(),
-                '/'
-            ) . '/' . $this->_getCurrentSitemapFilename(
-                $this->_sitemapIncrement
-            );
+                    $this->getSitemapPath(),
+                    '/'
+                ) . '/' . $this->_getCurrentSitemapFilename(
+                    $this->_sitemapIncrement
+                );
             $destination = rtrim($this->getSitemapPath(), '/') . '/' . $this->getSitemapFilename();
 
             $this->_directory->renameFile($path, $destination);
@@ -750,11 +728,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
-     * Get sitemap.xml URL according to all config options
-     *
-     * @param string $sitemapPath
-     * @param string $sitemapFileName
-     * @return string
+     * {@inheritdoc}
      */
     public function getSitemapUrl($sitemapPath, $sitemapFileName)
     {
@@ -854,5 +828,85 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         return [
             Value::CACHE_TAG . '_' . $this->getStoreId(),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitemapType()
+    {
+        return $this->getData(self::SITEMAP_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSitemapType(string $type): SitemapInterface
+    {
+        return $this->setData(self::SITEMAP_TYPE, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitemapFilename()
+    {
+        return $this->getData(self::SITEMAP_FILENAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSitemapFilename(string $filename): SitemapInterface
+    {
+        return $this->setData(self::SITEMAP_FILENAME, $filename);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitemapPath()
+    {
+        return $this->getData(self::SITEMAP_PATH);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSitemapPath(string $path): SitemapInterface
+    {
+        return $this->setData(self::SITEMAP_PATH, $path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitemapTime()
+    {
+        return $this->getData(self::SITEMAP_TIME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSitemapTime(string $datetime): SitemapInterface
+    {
+        return $this->setData(self::SITEMAP_TIME, $datetime);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStoreId(): int
+    {
+        return $this->getData(self::STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId(int $id): SitemapInterface
+    {
+        return $this->setData(self::STORE_ID, $id);
     }
 }
