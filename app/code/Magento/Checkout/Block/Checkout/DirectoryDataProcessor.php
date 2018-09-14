@@ -77,10 +77,6 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
                 'country_id' => $this->getCountryOptions(),
                 'region_id' => $this->getRegionOptions(),
             ];
-			$layoutdata = $jsLayout['components']['checkoutProvider']['dictionaries']['country_id'];
-			if(count( $layoutdata )==2 &&  $layoutdata[0]['value']==''){
-				unset($jsLayout['components']['checkoutProvider']['dictionaries']['country_id'][0] );
-			}
         }
 
         return $jsLayout;
