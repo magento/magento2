@@ -52,7 +52,7 @@ class StatePlugin
      * Set separate appname
      *
      * @param State $subject
-     * @param null $result
+     * @param mixed $result
      * @return mixed
      */
     public function afterSetAreaCode(State $subject, $result)
@@ -72,6 +72,8 @@ class StatePlugin
     }
 
     /**
+     * Format appName.
+     *
      * @param State $state
      * @return string
      * @throws LocalizedException
