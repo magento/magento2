@@ -58,7 +58,7 @@ class FileFactory
         $contentType = 'application/octet-stream',
         $contentLength = null
     ) {
-        return $this->createWithDispositionType($fileName, $content, $baseDir, $contentType, $contentLength);
+        return $this->createWithParameters($fileName, $content, $baseDir, $contentType, $contentLength);
     }
 
     /**
@@ -79,7 +79,7 @@ class FileFactory
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function createWithDispositionType(
+    public function createWithParameters(
         $fileName,
         $content,
         $baseDir = DirectoryList::ROOT,

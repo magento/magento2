@@ -107,7 +107,7 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
         $contentType = 'application/octet-stream',
         $contentLength = null
     ) {
-        return $this->createWithDispositionType($fileName, $content, $baseDir, $contentType, $contentLength);
+        return $this->createWithParameters($fileName, $content, $baseDir, $contentType, $contentLength);
     }
 
     /**
@@ -123,7 +123,7 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Exception
      */
-    public function createWithDispositionType(
+    public function createWithParameters(
         $fileName,
         $content,
         $baseDir = DirectoryList::ROOT,
@@ -134,7 +134,7 @@ class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::createWithDispositionType(
+        return parent::createWithParameters(
             $fileName,
             $content,
             $baseDir,
