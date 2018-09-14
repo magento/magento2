@@ -83,6 +83,7 @@
         <waitForElementNotVisible selector="{{AdminNewAttributePanel.container}}" time="30" stepKey="waitForNewAttributePanelClose"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSaveAttributeLoadingMask"/>
         <!--Find new attribute in grid and select-->
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="openFilterPanel"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeLabel}}" userInput="{{textSwatchProductAttribute.default_label}}" stepKey="fillAttributeLabelFilter"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersAttribute"/>
@@ -95,7 +96,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku1"/>
         <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources2"/>
 
-        <conditionalClick selector="//div[@class=admin__data-grid-header]/button[@data-action='grid-filter-reset']" dependentSelector="//div[@class=admin__data-grid-header]/button[@data-action='grid-filter-reset']" visible="true" stepKey="clickClearFilters1"/>
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" dependentSelector="(//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset'])[last()]" visible="true" stepKey="clickClearFilters2"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
         <fillField userInput="$$createSource1.source[source_code]$$" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillCodeField2"/>

@@ -17,8 +17,7 @@
             <testCaseId value="1317"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="multi_mode"/>
-            <group value="skip" />
+            <group value="single_mode"/>
         </annotations>
 
         <before>
@@ -34,7 +33,6 @@
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
-            <actionGroup ref="ChangeAllSourcesStatusActionGroup" stepKey="disableAllSourcesBeforeTest"/>
         </before>
 
         <after>
@@ -63,8 +61,6 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$groupedProduct.sku$$"/>
         </actionGroup>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumnsForGroupedProduct"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumnsGroupedProduct"/>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openGroupedProductEditPage"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
@@ -92,10 +88,12 @@
         <comment userInput="Go to category, add grouped product to cart and go to checkout" stepKey="addGroupedProductToCartAndGoToCheckout"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontCategoryPageLoad"/>
-        <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="addGroupedProductToCart">
-            <argument name="product" value="$$groupedProduct$$"/>
-            <argument name="productCount" value="4"/>
-        </actionGroup>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$groupedProduct.name$$)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$groupedProduct.name$$)}}" stepKey="clickAddToCart" />
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$groupedProduct.name$$)}}" time="30" stepKey="assertMessage"/>
+        <waitForText userInput="4" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct.name$$)}}" stepKey="seeSimpleProductQty"/>
