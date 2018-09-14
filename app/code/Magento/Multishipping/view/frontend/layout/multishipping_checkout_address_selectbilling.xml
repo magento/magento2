@@ -14,7 +14,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="checkout/address/select.phtml" cacheable="false"/>
+            <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="Magento_Multishipping::checkout/address/select.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

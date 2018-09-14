@@ -13,12 +13,12 @@
         "magento/module-media-storage": "100.1.*",
         "magento/module-ui": "100.1.*",
         "magento/framework": "100.1.*",
-        "magento/module-require-js": "100.1.*",
-        "magento/module-directory": "100.1.*"
+        "magento/module-require-js": "100.1.*"
     },
     "suggest": {
         "magento/module-translation": "100.1.*",
-        "magento/module-theme-sample-data": "Sample Data version:100.1.*"
+        "magento/module-theme-sample-data": "Sample Data version:100.1.*",
+        "magento/module-directory": "100.1.*"
     },
     "type": "magento2-module",
     "version": "100.1.11",

@@ -17,7 +17,7 @@
         <attribute name="id" value="html-body"/>
         <block name="require.js" class="Magento\Backend\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml"/>
         <referenceContainer name="global.notices">
-            <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
+            <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="Magento_Backend::page/notices.phtml"/>
         </referenceContainer>
         <referenceContainer name="header">
             <block class="Magento\Backend\Block\Page\Header" name="logo" before="-">
@@ -44,7 +44,7 @@
             <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
         </referenceContainer>
         <referenceContainer name="main.top">
-            <block class="Magento\Theme\Block\Html\Title" name="page.title" template="title.phtml"/>
+            <block class="Magento\Theme\Block\Html\Title" name="page.title" template="Magento_Theme::title.phtml"/>
         </referenceContainer>
         <referenceContainer name="page.messages">
             <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
