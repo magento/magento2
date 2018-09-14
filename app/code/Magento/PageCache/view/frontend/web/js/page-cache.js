@@ -6,6 +6,7 @@
 define([
     'jquery',
     'domReady',
+    'consoleLogger',
     'jquery/ui',
     'mage/cookies'
 ], function ($, domReady) {
@@ -61,6 +62,7 @@ define([
                                elem.contentDocument || (elem.contentWindow ? elem.contentWindow.document : []) :
                                $.merge([], elem.childNodes);
                     } catch (e) {
+                        consoleLogger.error(e);
                         return [];
                     }
                 });
