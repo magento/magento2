@@ -4,33 +4,38 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="shipping-address-item" data-bind="css: isSelected() ? 'selected-item' : 'not-selected-item'">
-    <!-- ko text: address().prefix --><!-- /ko --> <!-- ko text: address().firstname --><!-- /ko --> <!-- ko text: address().middlename --><!-- /ko -->
-    <!-- ko text: address().lastname --><!-- /ko --> <!-- ko text: address().suffix --><!-- /ko --><br/>
-    <!-- ko text: _.values(address().street).join(", ") --><!-- /ko --><br/>
-    <!-- ko text: address().city --><!-- /ko -->, <span data-bind="html: address().region"></span> <!-- ko text: address().postcode --><!-- /ko --><br/>
-    <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
-    <!-- ko if: (address().telephone) -->
-    <a data-bind="text: address().telephone, attr: {'href': 'tel:' + address().telephone}"></a>
-    <!-- /ko --><br/>
-    <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
-        <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
-            <!-- ko if: (typeof element[attribute] === "object") -->
-                <!-- ko text: element[attribute].value --><!-- /ko -->
-            <!-- /ko -->
-            <!-- ko if: (typeof element[attribute] === "string") -->
-                <!-- ko text: element[attribute] --><!-- /ko -->
-            <!-- /ko --><br/>
-        <!-- /ko -->
-    <!-- /ko -->
-    <!-- ko if: (address().isEditable()) -->
-    <button type="button"
+<div class="shipping-address-item" css="'selected-item' : isSelected() , 'not-selected-item':!isSelected()">
+    <text args="address().prefix"/> <text args="address().firstname"/> <text args="address().middlename"/>
+    <text args="address().lastname"/> <text args="address().suffix"/><br/>
+    <text args="_.values(address().street).join(', ')"/><br/>
+    <text args="address().city "/>, <span html="address().region"></span> <text args="address().postcode"/><br/>
+    <text args="getCountryName(address().countryId)"/><br/>
+    <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br/>
+
+    <each args="data: address().customAttributes, as: 'element'">
+        <each args="data: Object.keys(element), as: 'attribute'">
+            <if args="typeof element[attribute] === 'object'">
+                <if args="element[attribute].label">
+                    <text args="element[attribute].label"/>
+                </if>
+                <ifnot args="element[attribute].label">
+                    <if args="element[attribute].value">
+                        <text args="element[attribute].value"/>
+                    </if>
+                </ifnot>
+            </if>
+            <if args="typeof element[attribute] === 'string'">
+                <text args="element[attribute]"/>
+            </if><br/>
+        </each>
+    </each>
+
+    <button visible="address().isEditable()" type="button"
             class="action edit-address-link"
-            data-bind="click: editAddress, visible: address().isEditable()">
-        <span data-bind="i18n: 'Edit'"></span>
+            click="editAddress">
+        <span translate="'Edit'"></span>
     </button>
-    <!-- /ko -->
-    <button type="button" data-bind="click: selectAddress" class="action action-select-shipping-item">
-        <span data-bind="i18n: 'Ship Here'"></span>
+    <button type="button" click="selectAddress" class="action action-select-shipping-item">
+        <span translate="'Ship Here'"></span>
     </button>
 </div>

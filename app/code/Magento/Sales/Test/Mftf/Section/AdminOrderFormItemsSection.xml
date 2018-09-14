@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormItemsSection">
         <element name="skuNumber" type="input" selector="#sku_{{row}}" parameterized="true"/>
         <element name="qty" type="input" selector="#sku_qty_{{row}}" parameterized="true"/>
@@ -27,5 +27,6 @@
         <element name="rowCheck" type="checkbox" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-select [type=checkbox]" parameterized="true"/>
         <element name="rowQty" type="input" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-qty [name='qty']" parameterized="true"/>
         <element name="addSelected" type="button" selector="#order-search .admin__page-section-title .actions button.action-add" timeout="30"/>
+        <element name="configure" type="button" selector=".product-configure-block button.action-default.scalable" timeout="30"/>
     </section>
 </sections>

@@ -1468,9 +1468,7 @@ class AccountManagement implements AccountManagementInterface
         /** @var \Magento\Customer\Model\Visitor $visitor */
         foreach ($visitorCollection->getItems() as $visitor) {
             $sessionId = $visitor->getSessionId();
-            $this->sessionManager->start();
             $this->saveHandler->destroy($sessionId);
-            $this->sessionManager->writeClose();
         }
     }
 }

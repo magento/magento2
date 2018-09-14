@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Change the tax configuration to display in cart and checkout flow -->
     <actionGroup name="editTaxConfigurationByUI">
         <!-- navigate to the tax configuration page -->
@@ -15,13 +15,15 @@
         <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
 
         <!-- change the default state to California -->
-        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDefaultState}}" visible="false" />
+        <scrollTo selector="#tax_defaults-head" x="0" y="-80" stepKey="scrollToTaxDefaults" />
+        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false" />
         <uncheckOption stepKey="clickDefaultState" selector="{{AdminConfigureTaxSection.systemValueDefaultState}}"/>
         <selectOption stepKey="selectDefaultState" selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="California"/>
         <fillField stepKey="fillDefaultPostCode" selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput="*"/>
 
         <!-- change the options for shopping cart display to show tax -->
-        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <scrollTo selector="#tax_cart_display-head" x="0" y="-80" stepKey="scrollToTaxShoppingCartDisplay" />
+        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="#tax_cart_display" visible="false"/>
         <uncheckOption stepKey="clickTaxTotalCart" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}"/>
         <selectOption stepKey="selectTaxTotalCart" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalCart}}" userInput="Yes"/>
         <uncheckOption stepKey="clickDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}"/>
@@ -30,7 +32,8 @@
         <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
 
         <!-- change the options for orders, invoices, credit memos display to show tax -->
-        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <scrollTo selector="#tax_sales_display-head" x="0" y="-80" stepKey="scrollToTaxSalesDisplay" />
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="#tax_sales_display" visible="false"/>
         <uncheckOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
         <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
         <uncheckOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>

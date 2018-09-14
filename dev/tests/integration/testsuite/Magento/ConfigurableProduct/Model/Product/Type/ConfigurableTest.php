@@ -153,6 +153,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_custom.php
+     */
+    public function testGetConfigurableAttributesWithSourceModel()
+    {
+        $collection = $this->model->getConfigurableAttributes($this->product);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+        $configurableAttribute = $collection->getFirstItem();
+        $attribute = $this->_getAttributeByCode('test_configurable_with_sm');
+        $this->assertSameSize($attribute->getSource()->getAllOptions(), $configurableAttribute->getOptions());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetConfigurableAttributesAsArray()

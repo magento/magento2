@@ -6,11 +6,12 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
+        <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="RequiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="RequiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
@@ -43,7 +44,10 @@
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
+        <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
         <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
