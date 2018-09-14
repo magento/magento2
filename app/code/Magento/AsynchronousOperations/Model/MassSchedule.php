@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
@@ -69,6 +70,7 @@ class MassSchedule
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
      * @param OperationRepository $operationRepository
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -77,7 +79,7 @@ class MassSchedule
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
         OperationRepository $operationRepository,
-        UserContextInterface $userContext
+        UserContextInterface $userContext = null
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -85,7 +87,7 @@ class MassSchedule
         $this->bulkManagement = $bulkManagement;
         $this->logger = $logger;
         $this->operationRepository = $operationRepository;
-        $this->userContext = $userContext;
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**

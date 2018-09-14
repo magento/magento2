@@ -5,6 +5,7 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
@@ -71,6 +72,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      * @param \Psr\Log\LoggerInterface $logger
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         EntityManager $entityManager,
@@ -79,8 +81,8 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        UserContextInterface $userContext,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        UserContextInterface $userContext = null
     ) {
         $this->entityManager = $entityManager;
         $this->bulkSummaryFactory= $bulkSummaryFactory;
@@ -88,8 +90,8 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
         $this->publisher = $publisher;
-        $this->userContext = $userContext;
         $this->logger = $logger;
+        $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
