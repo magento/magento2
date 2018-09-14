@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
+
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\ObjectManager;
@@ -88,7 +89,7 @@ class CustomerAccountEditTest extends GraphQlAbstract
         $query = $this->getSubscriptionQuery($isSubscribed);
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $customerPassword);
 
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->graphQlQuery($query, [], '', $headerMap);
 
         $subscriberModel = ObjectManager::getInstance()->get(Subscriber::class);
         $subscriber = $subscriberModel->loadByEmail($customerEmail);

@@ -49,8 +49,12 @@ class CustomerUpdate implements ResolverInterface
     protected $customerRegistry;
 
     /**
+     * CustomerUpdate constructor.
+     *
      * @param CustomerDataProvider $customerResolver
+     * @param CustomerDataUpdater $customerUpdater
      * @param ValueFactory $valueFactory
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      */
     public function __construct(
         CustomerDataProvider $customerResolver,

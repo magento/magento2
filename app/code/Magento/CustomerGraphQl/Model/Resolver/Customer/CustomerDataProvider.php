@@ -47,9 +47,13 @@ class CustomerDataProvider
     protected $encryptor;
 
     /**
+     * CustomerDataProvider constructor.
+     *
      * @param CustomerRepositoryInterface $customerRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param SerializerInterface $jsonSerializer
+     * @param CustomerRegistry $customerRegistry
+     * @param Encryptor $encryptor
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,

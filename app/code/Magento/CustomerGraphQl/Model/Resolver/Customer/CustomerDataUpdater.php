@@ -42,8 +42,11 @@ class CustomerDataUpdater
 
     /**
      * CustomerDataUpdater constructor.
+     *
      * @param CustomerRepositoryInterface $customerRepository
      * @param StoreResolverInterface $storeResolver
+     * @param CustomerDataProvider $customerDataProvider
+     * @param SubscriberFactory $subscriberFactory
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
@@ -61,7 +64,7 @@ class CustomerDataUpdater
      * Manage customer subscription. Subscribe OR unsubscribe if required. Return new subscription status
      *
      * @param int $customerId
-     * @param $newSubscriptionStatus
+     * @param bool $newSubscriptionStatus
      * @return bool
      */
     public function manageSubscription(int $customerId, bool $newSubscriptionStatus): bool
@@ -78,6 +81,8 @@ class CustomerDataUpdater
     }
 
     /**
+     * Update account information related to
+     *
      * @param int $customerId
      * @param array $customerData
      * @return CustomerInterface
