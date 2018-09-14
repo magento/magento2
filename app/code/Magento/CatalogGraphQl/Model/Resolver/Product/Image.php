@@ -10,8 +10,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -26,19 +24,11 @@ class Image implements ResolverInterface
     private $catalogImageHelperFactory;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param ValueFactory $valueFactory
      * @param CatalogImageHelperFactory $catalogImageHelperFactory
      */
     public function __construct(
-        ValueFactory $valueFactory,
         CatalogImageHelperFactory $catalogImageHelperFactory
     ) {
-        $this->valueFactory = $valueFactory;
         $this->catalogImageHelperFactory = $catalogImageHelperFactory;
     }
 
@@ -51,7 +41,7 @@ class Image implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ): array {
         if (!isset($value['model'])) {
             throw new \LogicException(__("Cannot resolve entity model"));
         }
@@ -66,15 +56,9 @@ class Image implements ResolverInterface
             ['type' => $imageType]
         )->getUrl();
 
-        $imageData = [
+        return [
             'url' => $imageUrl,
             'path' => $product->getData($imageType)
         ];
-
-        $result = function () use ($imageData) {
-            return $imageData;
-        };
-
-        return $this->valueFactory->create($result);
     }
 }
