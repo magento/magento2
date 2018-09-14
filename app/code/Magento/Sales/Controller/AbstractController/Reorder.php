@@ -4,12 +4,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
 
+/**
+ * Class Reorder
+ *
+ * @package Magento\Sales\Controller\AbstractController
+ */
 abstract class Reorder extends Action\Action
 {
     /**
