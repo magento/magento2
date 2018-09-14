@@ -12,6 +12,9 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class SeparateAppsTest
+ */
 class SeparateAppsTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -19,6 +22,9 @@ class SeparateAppsTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -41,6 +47,27 @@ class SeparateAppsTest extends \PHPUnit\Framework\TestCase
         $newRelicWrapper->expects($this->once())
             ->method('setAppName')
             ->with($this->equalTo('beverly_hills;beverly_hills_90210'));
+
+        $state = $this->objectManager->get(State::class);
+
+        $state->setAreaCode('90210');
+    }
+
+    /**
+     * @magentoConfigFixture default/newrelicreporting/general/enable 1
+     * @magentoConfigFixture default/newrelicreporting/general/app_name beverly_hills
+     * @magentoConfigFixture default/newrelicreporting/general/separate_apps 0
+     */
+    public function testAppNameIsNotSetWhenDisabled()
+    {
+        $newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
+            ->setMethods(['setAppName'])
+            ->getMock();
+
+        $this->objectManager->configure([NewRelicWrapper::class => ['shared' => true]]);
+        $this->objectManager->addSharedInstance($newRelicWrapper, NewRelicWrapper::class);
+
+        $newRelicWrapper->expects($this->never())->method('setAppName');
 
         $state = $this->objectManager->get(State::class);
 

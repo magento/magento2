@@ -13,6 +13,9 @@ use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Handles setting which, when enabled, reports frontend and adminhtml as separate apps to New Relic.
+ */
 class StatePlugin
 {
     /**
@@ -33,6 +36,7 @@ class StatePlugin
     /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
@@ -49,25 +53,30 @@ class StatePlugin
      *
      * @param State $subject
      * @param null $result
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return mixed
      */
-    public function afterSetAreaCode(State $state, $result)
+    public function afterSetAreaCode(State $subject, $result)
     {
         if (!$this->shouldSetAppName()) {
             return $result;
         }
 
         try {
-            $this->newRelicWrapper->setAppName($this->appName($state));
+            $this->newRelicWrapper->setAppName($this->appName($subject));
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
             return $result;
         }
+
+        return $result;
     }
 
-    private function appName(State $state)
+    /**
+     * @param State $state
+     * @return string
+     * @throws LocalizedException
+     */
+    private function appName(State $state): string
     {
         $code = $state->getAreaCode();
         $current = $this->config->getNewRelicAppName();
@@ -75,20 +84,17 @@ class StatePlugin
         return $current . ';' . $current . '_' . $code;
     }
 
-    private function shouldSetAppName()
+    /**
+     * Check if app name should be set.
+     *
+     * @return bool
+     */
+    private function shouldSetAppName(): bool
     {
-        if (!$this->config->isNewRelicEnabled()) {
-            return false;
-        }
-
-        if (!$this->config->getNewRelicAppName()) {
-            return false;
-        }
-
-        if (!$this->config->isSeparateApps()) {
-            return false;
-        }
-
-        return true;
+        return (
+            $this->config->isSeparateApps() &&
+            $this->config->getNewRelicAppName() &&
+            $this->config->isNewRelicEnabled()
+        );
     }
 }
