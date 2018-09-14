@@ -399,12 +399,11 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
-                    if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
-                        if ($this->locator->getProduct()->getTypeId() !== ProductType::TYPE_BUNDLE
-                            || $attribute->getAttributeCode() !== ProductAttributeInterface::CODE_SPECIAL_PRICE
-                        ) {
-                            $attributeValue = $this->formatPrice($attributeValue);
-                        }
+                    if ($attribute->getFrontendInput() === 'price'
+                        && is_scalar($attributeValue)
+                        && !$this->isBundleSpecialPrice($attribute)
+                    ) {
+                        $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
@@ -412,6 +411,18 @@ class Eav extends AbstractModifier
         }
 
         return $data;
+    }
+
+    /**
+     * Obtain if current product is bundle and given attribute is special_price
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return bool
+     */
+    private function isBundleSpecialPrice(ProductAttributeInterface $attribute)
+    {
+        return $this->locator->getProduct()->getTypeId() === ProductType::TYPE_BUNDLE
+            && $attribute->getAttributeCode() === ProductAttributeInterface::CODE_SPECIAL_PRICE;
     }
 
     /**
