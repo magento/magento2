@@ -54,6 +54,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Escaper|null
+     */
+    private $escaper;
+
+    /**
+     * @var null|\Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Save constructor.
      *
      * @param Action\Context $context
@@ -62,6 +72,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Escaper|null $escaper
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -69,12 +81,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Escaper $escaper = null,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->productRepository = $productRepository;
+        $this->escaper = $escaper ?? $this->_objectManager->get(\Magento\Framework\Escaper::class);
+        $this->logger = $logger ?? $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -128,12 +144,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addNoticeMessage(
                         __(
                             'SKU for product %1 has been changed to %2.',
-                            $this->_objectManager->get(
-                                \Magento\Framework\Escaper::class
-                            )->escapeHtml($product->getName()),
-                            $this->_objectManager->get(
-                                \Magento\Framework\Escaper::class
-                            )->escapeHtml($product->getSku())
+                            $this->escaper->escapeHtml($product->getName()),
+                            $this->escaper->escapeHtml($product->getSku())
                         )
                     );
                 }
@@ -148,12 +160,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->logger->critical($e);
                 $this->messageManager->addExceptionMessage($e);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->logger->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
