@@ -10,14 +10,13 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Returns product image.
+ * Return product image paths by image type.
  */
 class ProductImage implements ResolverInterface
 {
@@ -27,27 +26,19 @@ class ProductImage implements ResolverInterface
     private $catalogImageHelperFactory;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @param ValueFactory             $valueFactory
      * @param CatalogImageHelperFactory $catalogImageHelperFactory,
      * @param StoreManagerInterface    $storeManager
      */
     public function __construct(
-        ValueFactory $valueFactory,
         CatalogImageHelperFactory $catalogImageHelperFactory,
         StoreManagerInterface $storeManager
     )
     {
-        $this->valueFactory = $valueFactory;
         $this->catalogImageHelperFactory = $catalogImageHelperFactory;
         $this->storeManager = $storeManager;
     }
@@ -63,13 +54,9 @@ class ProductImage implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value
-    {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
         /** @var Product $product */
         $product = $value['model'];
@@ -88,10 +75,6 @@ class ProductImage implements ResolverInterface
             'path' => $product->getData($imageType)
         ];
 
-        $result = function () use ($imageData) {
-            return $imageData;
-        };
-
-        return $this->valueFactory->create($result);
+        return $imageData;
     }
 }
