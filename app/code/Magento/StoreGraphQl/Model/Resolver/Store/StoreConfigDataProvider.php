@@ -58,18 +58,6 @@ class StoreConfigDataProvider
         $store = $this->storeRepository->getById($storeId);
         $storeConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));
 
-        return $this->hidrateStoreConfig($storeConfig);
-    }
-
-    /**
-     * Transform StoreConfig object to in array format
-     *
-     * @param StoreConfigInterface $storeConfig
-     * @return array
-     */
-    private function hidrateStoreConfig($storeConfig): array
-    {
-        /** @var StoreConfigInterface $storeConfig */
         $storeConfigData = [
             'id' => $storeConfig->getId(),
             'code' => $storeConfig->getCode(),
@@ -88,7 +76,6 @@ class StoreConfigDataProvider
             'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
             'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl()
         ];
-
         return $storeConfigData;
     }
 }
