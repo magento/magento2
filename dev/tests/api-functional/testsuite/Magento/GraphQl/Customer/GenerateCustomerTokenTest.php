@@ -8,10 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\TestResult;
 
+/**
+ * Class GenerateCustomerTokenTest
+ * @package Magento\GraphQl\Customer
+ */
 class GenerateCustomerTokenTest extends GraphQlAbstract
 {
-
     /**
      * Verify customer token with valid credentials
      *
@@ -29,13 +33,15 @@ mutation {
 	generateCustomerToken(
         email: "{$userName}"
         password: "{$password}"
-    )
+    ) {
+        token
+    }
 }
 MUTATION;
 
         $response = $this->graphQlQuery($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
-        $this->assertInternalType('string', $response['generateCustomerToken']);
+        $this->assertInternalType('array', $response['generateCustomerToken']);
     }
 
     /**
@@ -54,7 +60,9 @@ mutation {
 	generateCustomerToken(
         email: "{$userName}"
         password: "{$password}"
-    )
+    ) {
+        token
+    }
 }
 MUTATION;
 

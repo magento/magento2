@@ -16,9 +16,11 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
+/**
+ * Customers Token resolver, used for GraphQL request processing.
+ */
 class GenerateCustomerToken implements ResolverInterface
 {
-
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -54,7 +56,7 @@ class GenerateCustomerToken implements ResolverInterface
         try {
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
             $result = function () use ($token) {
-                return !empty($token) ? $token : '';
+                return !empty($token) ? ['token' => $token] : '';
             };
             return $this->valueFactory->create($result);
         } catch (AuthenticationException $e) {
