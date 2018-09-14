@@ -18,15 +18,13 @@
                 <base>USD</base>
                 <default>USD</default>
             </options>
-            <yahoofinance>
-                <timeout>100</timeout>
-            </yahoofinance>
             <fixerio>
                 <timeout>100</timeout>
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </fixerio>
-            <webservicex>
+            <currencyconverterapi>
                 <timeout>100</timeout>
-            </webservicex>
+            </currencyconverterapi>
             <import>
                 <enabled>0</enabled>
                 <error_email />
