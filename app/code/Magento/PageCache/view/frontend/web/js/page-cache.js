@@ -9,7 +9,7 @@ define([
     'consoleLogger',
     'jquery/ui',
     'mage/cookies'
-], function ($, domReady) {
+], function ($, domReady, consoleLogger) {
     'use strict';
 
     /**
