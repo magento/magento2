@@ -12,6 +12,8 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator;
  * Purpose of class is to resolve table alias for Search Request filter
  * @api
  * @since 100.1.6
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class AliasResolver
 {
