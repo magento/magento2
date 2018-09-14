@@ -78,4 +78,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
+        <plugin name="weeeAttributeOptionsProcess" type="Magento\Weee\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProcessTaxAttribute"/>
+    </type>
 </config>
