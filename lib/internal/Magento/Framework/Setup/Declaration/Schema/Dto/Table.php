@@ -138,7 +138,7 @@ class Table extends GenericElement implements
      */
     public function getConstraintByName($name)
     {
-        return isset($this->constraints[$name]) ? $this->constraints[$name] : false;
+        return $this->constraints[$name] ?? false;
     }
 
     /**
@@ -168,9 +168,7 @@ class Table extends GenericElement implements
      */
     public function getPrimaryConstraint()
     {
-        return isset($this->constraints[Internal::PRIMARY_NAME]) ?
-            $this->constraints[Internal::PRIMARY_NAME] :
-            false;
+        return $this->constraints[Internal::PRIMARY_NAME] ?? false;
     }
 
     /**
@@ -196,7 +194,7 @@ class Table extends GenericElement implements
      */
     public function getIndexByName($name)
     {
-        return isset($this->indexes[$name]) ? $this->indexes[$name] : false;
+        return $this->indexes[$name] ?? false;
     }
 
     /**

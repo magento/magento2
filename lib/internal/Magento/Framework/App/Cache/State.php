@@ -74,7 +74,7 @@ class State implements StateInterface
     public function isEnabled($cacheType)
     {
         $this->load();
-        return isset($this->statuses[$cacheType]) ? (bool)$this->statuses[$cacheType] : false;
+        return (bool)($this->statuses[$cacheType] ?? false);
     }
 
     /**
