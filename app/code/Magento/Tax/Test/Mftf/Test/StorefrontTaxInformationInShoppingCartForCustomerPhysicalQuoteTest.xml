@@ -7,10 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForCustomerPhysicalQuoteTest">
         <annotations>
-            <features value="Tax information in shopping cart for Customer with default addresses (physical quote)"/>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
             <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <severity value="CRITICAL"/>

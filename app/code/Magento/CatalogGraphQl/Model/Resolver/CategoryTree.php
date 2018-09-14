@@ -11,8 +11,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 
 /**
  * Category tree field resolver, used for GraphQL request processing.
@@ -25,60 +23,48 @@ class CategoryTree implements ResolverInterface
     const CATEGORY_INTERFACE = 'CategoryInterface';
 
     /**
-     * @var Products\DataProvider\CategoryTree
+     * @var \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree
      */
     private $categoryTree;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @param Products\DataProvider\CategoryTree $categoryTree
-     * @param ValueFactory $valueFactory
+     * @param \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
      */
     public function __construct(
-        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree,
-        ValueFactory $valueFactory
+        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
     ) {
         $this->categoryTree = $categoryTree;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * Assert that filters from search criteria are valid and retrieve root category id
-     *
      * @param array $args
      * @return int
      * @throws GraphQlInputException
      */
-    private function assertFiltersAreValidAndGetCategoryRootIds(array $args) : int
+    private function getCategoryId(array $args) : int
     {
         if (!isset($args['id'])) {
             throw new GraphQlInputException(__('"id for category should be specified'));
         }
 
-        return (int) $args['id'];
+        return (int)$args['id'];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return $this->valueFactory->create(function () use ($value, $args, $field, $info) {
-            if (isset($value[$field->getName()])) {
-                return $value[$field->getName()];
-            }
+        if (isset($value[$field->getName()])) {
+            return $value[$field->getName()];
+        }
 
-            $rootCategoryId = $this->assertFiltersAreValidAndGetCategoryRootIds($args);
-            $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-            if (!empty($categoriesTree)) {
-                return current($categoriesTree);
-            } else {
-                return null;
-            }
-        });
+        $rootCategoryId = $this->getCategoryId($args);
+        $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
+        if (!empty($categoriesTree)) {
+            return current($categoriesTree);
+        } else {
+            return null;
+        }
     }
 }
