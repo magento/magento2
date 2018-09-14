@@ -33,7 +33,6 @@ define([
             data = {},
             parameters = {},
             root = {},
-            len = 0,
             key = '';
 
         /**
@@ -160,15 +159,15 @@ define([
              * @returns {void}
              */
             categoryLoader.buildCategoryTree = function (parent, nodeConfig) {
-                var j = 0;
+                var i = 0;
 
                 if (!nodeConfig) {
                     return null;
                 }
 
                 if (parent && nodeConfig && nodeConfig.length) {
-                    for (j = 0; j < nodeConfig.length; j++) {
-                        categoryLoader.processCategoryTree(parent, nodeConfig, j);
+                    for (i; i < nodeConfig.length; i++) {
+                        categoryLoader.processCategoryTree(parent, nodeConfig, i);
                     }
                 }
             };
@@ -180,14 +179,15 @@ define([
              * @returns {Object}
              */
             categoryLoader.buildHashChildren = function (hash, node) {
-                var j = 0;
+                var i = 0,
+                    len;
 
                 if (node.childNodes.length > 0 || node.loaded === false && node.loading === false) {
                     hash.children = [];
 
-                    for (j = 0, len = node.childNodes.length; j < len; j++) {
+                    for (i, len = node.childNodes.length; i < len; i++) {
                         hash.children = hash.children ? hash.children : [];
-                        hash.children.push(this.buildHash(node.childNodes[j]));
+                        hash.children.push(this.buildHash(node.childNodes[i]));
                     }
                 }
 
