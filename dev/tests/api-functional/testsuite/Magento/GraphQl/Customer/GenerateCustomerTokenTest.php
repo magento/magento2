@@ -20,7 +20,6 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      * Verify customer token with valid credentials
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGenerateCustomerValidToken()
     {
@@ -46,8 +45,6 @@ MUTATION;
 
     /**
      * Verify customer with invalid credentials
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGenerateCustomerTokenWithInvalidCredentials()
     {
