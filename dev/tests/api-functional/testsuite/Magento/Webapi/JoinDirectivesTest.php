@@ -125,7 +125,7 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /**
      * Test get list of orders with extension attributes
      *
-     * @magentoApiDataFixture Magneto/Sales/_files/order.php
+     * @magentoApiDataFixture Magento/Sales/_files/order.php
      */
     public function testGetOrderList()
     {
