@@ -32,6 +32,8 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
+ * Product attribute save controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends Attribute
@@ -126,10 +128,13 @@ class Save extends Attribute
     }
 
     /**
+     * @inheritdoc
+     *
      * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Validate_Exception
      */
     public function execute()
     {
@@ -158,7 +163,7 @@ class Save extends Attribute
                 $name = trim($name);
 
                 try {
-                    /** @var $attributeSet Set */
+                    /** @var Set $attributeSet */
                     $attributeSet = $this->buildFactory->create()
                         ->setEntityTypeId($this->_entityTypeId)
                         ->setSkeletonId($setId)
@@ -180,7 +185,7 @@ class Save extends Attribute
 
             $attributeId = $this->getRequest()->getParam('attribute_id');
 
-            /** @var $model ProductAttributeInterface */
+            /** @var ProductAttributeInterface $model */
             $model = $this->attributeFactory->create();
             if ($attributeId) {
                 $model->load($attributeId);
@@ -212,7 +217,7 @@ class Save extends Attribute
 
             //validate frontend_input
             if (isset($data['frontend_input'])) {
-                /** @var $inputType Validator */
+                /** @var Validator $inputType */
                 $inputType = $this->validatorFactory->create();
                 if (!$inputType->isValid($data['frontend_input'])) {
                     foreach ($inputType->getMessages() as $message) {
@@ -340,6 +345,8 @@ class Save extends Attribute
     }
 
     /**
+     * Provides an initialized Result object.
+     *
      * @param string $path
      * @param array $params
      * @param array $response

@@ -12,6 +12,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
 /**
+ * Product attribute validate controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
@@ -69,6 +71,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
+     * @inheritdoc
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -146,7 +150,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
-     * Throws Exception if not unique values into options
+     * Throws Exception if not unique values into options.
+     *
      * @param array $optionsValues
      * @param array $deletedOptions
      * @return bool
@@ -180,6 +185,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
+     * Performs checking the uniqueness of the attribute options.
+     *
      * @param DataObject $response
      * @param array|null $options
      * @return $this
