@@ -381,13 +381,13 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
-            'than the number of pages available.');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available');
         $this->graphQlQuery($query);
     }
 
     /**
-     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
+     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage = 2
      * Expected result is to get the second product on the list on the second page
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
@@ -449,7 +449,7 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // when pagSize =1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
+        // when pageSize = 1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
         // since sorting is done on price in the DESC order
         $product = $productRepository->get('simple1');
         $filteredProducts = [$product];
@@ -1132,8 +1132,8 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
-            'than the number of pages available.');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 2 specified is greater ' .
+            'than the 1 page(s) available.');
         $this->graphQlQuery($query);
     }
 
