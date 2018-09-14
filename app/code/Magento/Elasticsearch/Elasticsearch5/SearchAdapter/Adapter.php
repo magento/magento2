@@ -100,6 +100,8 @@ class Adapter implements AdapterInterface
     }
 
     /**
+     * Search query
+     *
      * @param RequestInterface $request
      * @return QueryResponse
      */
