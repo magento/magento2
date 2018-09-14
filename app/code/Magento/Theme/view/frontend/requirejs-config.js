@@ -44,6 +44,9 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
+            },
+            'jquery/jquery-ui': {
+                'jquery/patches/jquery-ui': true
             }
         }
     }
