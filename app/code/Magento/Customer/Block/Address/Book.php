@@ -212,4 +212,16 @@ class Book extends \Magento\Framework\View\Element\Template
             return $customer->getDefaultShipping();
         }
     }
+
+    /**
+     * @param $street
+     * @return string
+     */
+    public function getStreetAddress($street)
+    {
+        if (is_array($street)) {
+            $street = implode(', ', $street);
+        }
+        return $street;
+    }
 }

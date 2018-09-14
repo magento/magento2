@@ -67,19 +67,45 @@
     <div class="block-title"><strong><?= $block->escapeHtml(__('Additional Address Entries')) ?></strong></div>
     <div class="block-content">
         <?php if ($_pAddsses = $block->getAdditionalAddresses()): ?>
-            <ol class="items addresses">
-                <?php foreach ($_pAddsses as $_address): ?>
-                    <li class="item">
-                        <address>
-                            <?= $block->getAddressHtml($_address) ?><br />
-                        </address>
-                        <div class="item actions">
-                            <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $_address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
-                            <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($_address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete Address')) ?></span></a>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ol>
+
+            <div class="table-wrapper additional-addresses">
+                <table class="data table table-additional-addresses-items history" id="additional-addresses-table">
+                    <caption class="table-caption"><?= /* @escapeNotVerified */ __('Additional addresses') ?></caption>
+                    <thead>
+                    <tr>
+                        <th scope="col" class="col id"><?= /* @escapeNotVerified */ __('Address #') ?></th>
+                        <th scope="col" class="col firstname"><?= /* @escapeNotVerified */ __('First Name') ?></th>
+                        <th scope="col" class="col lastname"><?= /* @escapeNotVerified */ __('Last Name') ?></th>
+                        <th scope="col" class="col streetaddress"><?= /* @escapeNotVerified */ __('Street Address') ?></th>
+                        <th scope="col" class="col city"><?= /* @escapeNotVerified */ __('City') ?></th>
+                        <th scope="col" class="col country"><?= /* @escapeNotVerified */ __('Country') ?></th>
+                        <th scope="col" class="col state"><?= /* @escapeNotVerified */ __('State') ?></th>
+                        <th scope="col" class="col zip"><?= /* @escapeNotVerified */ __('Zip/Postal Code') ?></th>
+                        <th scope="col" class="col phone"><?= /* @escapeNotVerified */ __('Phone') ?></th>
+                        <th scope="col" class="col actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($_pAddsses as $address): ?>
+                        <tr>
+                            <td data-th="<?= $block->escapeHtml(__('Address #')) ?>" class="col id"><?= /* @escapeNotVerified */ $address->getId() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= /* @escapeNotVerified */ $address->getFirstname() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= /* @escapeNotVerified */ $address->getLastname() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->getStreetAddress($address->getStreet()) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= /* @escapeNotVerified */ $address->getCity() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= /* @escapeNotVerified */ $address->getCountryId() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion()->getRegion() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= /* @escapeNotVerified */ $address->getPostcode() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= /* @escapeNotVerified */ $address->getTelephone() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                                <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
+                                <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete Address')) ?></span></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
             <p class="empty"><?= $block->escapeHtml(__('You have no other address entries in your address book.')) ?></p>
         <?php endif ?>
@@ -98,7 +124,7 @@
     {
         ".page-main": {
             "address": {
-                "deleteAddress": "li.item a[role='delete-address']",
+                "deleteAddress": "td a[role='delete-address']",
                 "deleteUrlPrefix": "<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>id/",
                 "addAddress": "button[role='add-address']",
                 "addAddressLocation": "<?= $block->escapeJs($block->escapeUrl($block->getAddAddressUrl())) ?>"
