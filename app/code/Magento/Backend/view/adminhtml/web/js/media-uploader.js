@@ -123,11 +123,10 @@ define([
             this.element.find('input[type=file]').fileupload('option', {
                 process: [{
                     action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/
+                    fileTypes: /^image\/(gif|jpeg|png)$/,
+                    maxFileSize: this.options.maxFileSize
                 }, {
-                    action: 'resize',
-                    maxWidth: this.options.maxWidth,
-                    maxHeight: this.options.maxHeight
+                    action: 'resize'
                 }, {
                     action: 'save'
                 }]

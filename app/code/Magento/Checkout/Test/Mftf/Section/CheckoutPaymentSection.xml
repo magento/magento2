@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutPaymentSection">
         <element name="isPaymentSection" type="text" selector="//*[@class='opc-progress-bar']/li[contains(@class, '_active') and span[contains(.,'Review &amp; Payments')]]"/>
         <element name="availablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div:nth-child(2)>div.payment-method-title.field.choice"/>
@@ -36,6 +36,7 @@
         <element name="ProductItemByName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']" parameterized="true" />
         <element name="ProductOptionsByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true" />
         <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
+        <element name="ProductOptionLinkActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']//a[text() = '{{var2}}']" parameterized="true" />
         <element name="shipToInformation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
         <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
@@ -46,5 +47,8 @@
         <element name="taxPercentage" type="text" selector=".totals-tax-details .mark"/>
         <element name="orderSummaryTotalIncluding" type="text" selector="//tr[@class='grand totals incl']//span[@class='price']" />
         <element name="orderSummaryTotalExcluding" type="text" selector="//tr[@class='grand totals excl']//span[@class='price']" />
+        <element name="shippingAndBillingAddressSame" type="input" selector="#billing-address-same-as-shipping-braintree_cc_vault"/>
+        <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
+        <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
     </section>
 </sections>

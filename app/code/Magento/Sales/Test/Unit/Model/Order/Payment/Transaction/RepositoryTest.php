@@ -122,14 +122,20 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCreate()
+    /**
+     * @return void
+     */
+    public function testCreate(): void
     {
         $expected = "expect";
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($expected);
         $this->assertEquals($expected, $this->repository->create());
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -142,7 +148,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($transaction, $this->repository->save($transaction));
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -152,7 +161,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->repository->delete($transaction));
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -165,22 +177,24 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testGetException()
+    public function testGetException(): void
     {
         $transactionId = null;
         $this->repository->get($transactionId);
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testGetNoSuchEntity()
+    public function testGetNoSuchEntity(): void
     {
         $transactionId = null;
         $transactionIdFromArgument = 12;
@@ -193,7 +207,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($transaction, $this->repository->get(12));
     }
 
-    public function testGetExistInStorage()
+    /**
+     * @return void
+     */
+    public function testGetExistInStorage(): void
     {
         $transactionId = 12;
         $transaction = "transaction";
@@ -206,7 +223,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($transaction, $this->repository->get($transactionId));
     }
 
-    public function testGetList()
+    /**
+     * @return void
+     */
+    public function testGetList(): void
     {
         $this->initListMock();
         $this->collectionProcessor->expects($this->once())
@@ -215,7 +235,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
-    public function testGetByTransactionId()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionId(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -241,7 +264,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($transaction, $this->repository->getByTransactionId($transactionId, $paymentId, $orderId));
     }
 
-    public function testGetByTransactionIdNotFound()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionIdNotFound(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -267,7 +293,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetByTransactionIdFromStorage()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionIdFromStorage(): void
     {
         $transactionId = "100-refund";
         $paymentId = 1;
@@ -284,11 +313,13 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetByTransactionType()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionType(): void
     {
         $transactionType = Transaction::TYPE_AUTH;
         $paymentId = 1;
-        $orderId = 3;
         $cacheStorage = 'txn_type';
         $identityFieldsForCache = [$transactionType, $paymentId];
         $this->entityStorage->expects($this->once())
@@ -341,15 +372,17 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($transaction, $identityFieldsForCache, $cacheStorage);
         $this->assertEquals(
             $transaction,
-            $this->repository->getByTransactionType($transactionType, $paymentId, $orderId)
+            $this->repository->getByTransactionType($transactionType, $paymentId)
         );
     }
 
-    public function testGetByTransactionTypeFromCache()
+    /**
+     * @return void
+     */
+    public function testGetByTransactionTypeFromCache(): void
     {
         $transactionType = Transaction::TYPE_AUTH;
         $paymentId = 1;
-        $orderId = 3;
         $cacheStorage = 'txn_type';
         $transaction = "transaction";
         $identityFieldsForCache = [$transactionType, $paymentId];
@@ -358,7 +391,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($transaction);
         $this->assertEquals(
             $transaction,
-            $this->repository->getByTransactionType($transactionType, $paymentId, $orderId)
+            $this->repository->getByTransactionType($transactionType, $paymentId)
         );
     }
 
@@ -379,7 +412,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function initListMock()
+    protected function initListMock(): void
     {
         $this->searchResultFactory->method('create')->willReturn($this->collection);
         $this->collection->expects($this->once())->method('addPaymentInformation')->with(['method']);

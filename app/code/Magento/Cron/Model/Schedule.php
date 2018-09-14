@@ -71,7 +71,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
@@ -79,6 +79,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set cron expression.
+     *
      * @param string $expr
      * @return $this
      * @throws \Magento\Framework\Exception\CronException
@@ -87,7 +89,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
         if (sizeof($e) < 5 || sizeof($e) > 6) {
-            throw new CronException(__('The "%1" cron expression is invalid. Verify and try again.', $expr));
+            throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
         $this->setCronExprArr($e);
@@ -95,7 +97,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Checks the observer's cron expression against time
+     * Checks the observer's cron expression against time.
      *
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
@@ -125,6 +127,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Match cron expression.
+     *
      * @param string $expr
      * @param int $num
      * @return bool
@@ -184,13 +188,15 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($from === false || $to === false) {
-            throw new CronException(__('The "%1" cron expression is invalid. Verify and try again.', $expr));
+            throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
         return $num >= $from && $num <= $to && $num % $mod === 0;
     }
 
     /**
+     * Get number of a month.
+     *
      * @param int|string $value
      * @return bool|int|string
      */
