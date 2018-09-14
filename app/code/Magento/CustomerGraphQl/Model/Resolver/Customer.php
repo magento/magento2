@@ -15,8 +15,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -30,24 +28,16 @@ class Customer implements ResolverInterface
     private $customerResolver;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param CustomerDataProvider $customerResolver
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        CustomerDataProvider $customerResolver,
-        ValueFactory $valueFactory
+        CustomerDataProvider $customerResolver
     ) {
         $this->customerResolver = $customerResolver;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -55,7 +45,7 @@ class Customer implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ) {
         /** @var ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
             throw new GraphQlAuthorizationException(
@@ -68,10 +58,7 @@ class Customer implements ResolverInterface
 
         try {
             $data = $this->customerResolver->getCustomerById($context->getUserId());
-            $result = function () use ($data) {
-                return !empty($data) ? $data : [];
-            };
-            return $this->valueFactory->create($result);
+            return !empty($data) ? $data : [];
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
         }
