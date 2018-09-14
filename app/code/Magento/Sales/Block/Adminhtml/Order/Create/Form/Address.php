@@ -298,6 +298,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     }
 
     /**
+     * Process country options.
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
      * @return void
      */
@@ -312,7 +314,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     }
 
     /**
-     * Retrieve Directiry Countries collection
+     * Retrieve Directory Countries collection
+     *
      * @deprecated 100.1.3
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
@@ -328,6 +331,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Backend Quote Session
+     *
      * @deprecated 100.1.3
      * @return Quote
      */
