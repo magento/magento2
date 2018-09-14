@@ -145,6 +145,6 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      */
     private function getOptionId($option)
     {
-        return $option->getValue() ?: 'new_option';
+        return 'id_' . ($option->getValue() ?: 'new_option');
     }
 }
