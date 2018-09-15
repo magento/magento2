@@ -8,6 +8,9 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
+/**
+ * Data object converter.
+ */
 class SimpleDataObjectConverter
 {
     /**
@@ -162,8 +165,7 @@ class SimpleDataObjectConverter
     /**
      * Convert a CamelCase string read from method into field key in snake_case
      *
-     * e.g. DefaultShipping => default_shipping
-     *      Postcode => postcode
+     * For example [DefaultShipping => default_shipping, Postcode => postcode]
      *
      * @param string $name
      * @return string
