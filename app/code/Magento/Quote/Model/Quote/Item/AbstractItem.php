@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
@@ -131,11 +134,12 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      */
     abstract public function getAddress();
 
-    /**
-     * Retrieve product model object associated with item
-     *
-     * @return \Magento\Catalog\Model\Product
-     */
+	/**
+	 * Retrieve product model object associated with item
+	 *
+	 * @return \Magento\Catalog\Model\Product
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getProduct()
     {
         $product = $this->_getData('product');
@@ -599,6 +603,26 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         return $this;
     }
 
+	/**
+	 * @param bool $status
+	 *
+	 * @return AbstractItem
+	 */
+    public function setHasChildren(bool $status): AbstractItem
+    {
+	    $this->setData('has-children', $status);
+
+    	return $this;
+    }
+
+	/**
+	 * @return bool
+	 */
+    public function getHasChildren(): bool
+    {
+    	return !! $this->_getData('has-children');
+    }
+
     /**
      * Clone quote item
      *
@@ -613,12 +637,13 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         return $this;
     }
 
-    /**
-     * Checking if there children calculated or parent item
-     * when we have parent quote item and its children
-     *
-     * @return bool
-     */
+	/**
+	 * Checking if there children calculated or parent item
+	 * when we have parent quote item and its children
+	 *
+	 * @return bool
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function isChildrenCalculated()
     {
         if ($this->getParentItem()) {
@@ -635,12 +660,13 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         return false;
     }
 
-    /**
-     * Checking can we ship product separately (each child separately)
-     * or each parent product item can be shipped only like one item
-     *
-     * @return bool
-     */
+	/**
+	 * Checking can we ship product separately (each child separately)
+	 * or each parent product item can be shipped only like one item
+	 *
+	 * @return bool
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function isShipSeparately()
     {
         if ($this->getParentItem()) {
