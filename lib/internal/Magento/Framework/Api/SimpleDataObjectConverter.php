@@ -156,7 +156,7 @@ class SimpleDataObjectConverter
      */
     public static function snakeCaseToCamelCase($input)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $input))));
+        return lcfirst(self::snakeCaseToUpperCamelCase($input));
     }
 
     /**
