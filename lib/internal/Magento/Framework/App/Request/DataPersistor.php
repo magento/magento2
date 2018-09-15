@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Request;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Session\SessionManagerInterface;
 
+/**
+ * Persist data to session.
+ */
 class DataPersistor implements DataPersistorInterface
 {
     /**
