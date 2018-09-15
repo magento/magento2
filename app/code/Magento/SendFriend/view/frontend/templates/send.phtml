@@ -35,6 +35,7 @@
             <div class="control">
                 <input name="recipients[email][<%- data._index_ %>]" title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
+                       data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
@@ -72,7 +73,8 @@
             <label for="sender-email" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input name="sender[email]" value="<?= $block->escapeHtmlAttr($block->getEmail()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="text" class="input-text"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="email" class="input-text"
+                       data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
@@ -121,7 +123,7 @@
 <script type="text/x-magento-init">
     {
         "a[role='back']": {
-            "Magento_SendFriend/back-event": {}
+            "Magento_SendFriend/js/back-event": {}
         }
     }
 </script>

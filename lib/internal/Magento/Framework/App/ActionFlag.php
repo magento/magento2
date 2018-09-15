@@ -65,9 +65,7 @@ class ActionFlag
             $action = $this->_request->getActionName();
         }
         if ('' === $flag) {
-            return isset(
-                $this->_flags[$this->_getControllerKey()]
-            ) ? $this->_flags[$this->_getControllerKey()] : [];
+            return $this->_flags[$this->_getControllerKey()] ?? [];
         } elseif (isset($this->_flags[$this->_getControllerKey()][$action][$flag])) {
             return $this->_flags[$this->_getControllerKey()][$action][$flag];
         } else {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminMenuSection">
+        <element name="dashboard" type="button" selector="//li[@id='menu-magento-backend-dashboard']"/>
+        <element name="sales" type="button" selector="//li[@id='menu-magento-sales-sales']"/>
+        <element name="catalog" type="button" selector="//li[@id='menu-magento-catalog-catalog']"/>
+        <element name="customers" type="button" selector="//li[@id='menu-magento-customer-customer']"/>
+        <element name="marketing" type="button" selector="//li[@id='//li[@id='menu-magento-backend-marketing']']"/>
+        <element name="content" type="button" selector="//li[@id='menu-magento-backend-content']"/>
+        <element name="reports" type="button" selector="//li[@id='menu-magento-reports-report']"/>
+        <element name="stores" type="button" selector="//li[@id='menu-magento-backend-stores']"/>
+        <element name="system" type="button" selector="//li[@id='menu-magento-backend-system']"/>
+        <element name="findPartners" type="button" selector="//li[@id='menu-magento-marketplace-partners']"/>
+    </section>
+</sections>

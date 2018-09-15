@@ -69,7 +69,11 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get field name.
+     *
+     * @param string $attributeCode
+     * @param array $context
+     * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -105,8 +109,12 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get all attributes types.
+     *
+     * @param array $context
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -131,7 +139,7 @@ class ProductFieldMapper implements FieldMapperInterface
                 if ($attribute->getIsFilterable() || $attribute->getIsFilterableInSearch()) {
                     $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
                 } else if ($allAttributes[$attributeCode]['type'] === FieldType::ES_DATA_TYPE_TEXT) {
-                    $allAttributes[$attributeCode]['index'] = 'no';
+                    $allAttributes[$attributeCode]['index'] = false;
                 }
             } else if ($attributeCode == "category_ids") {
                 $allAttributes[$attributeCode] = [
@@ -155,6 +163,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Is attribute used in advanced search.
+     *
      * @param Object $attribute
      * @return bool
      */
@@ -166,6 +176,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get refined field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
@@ -173,11 +185,20 @@ class ProductFieldMapper implements FieldMapperInterface
      */
     protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
     {
-        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'integer')
-            ? $attributeCode . '_value' : $attributeCode;
+        switch ($frontendInput) {
+            case 'select':
+            case 'multiselect':
+                return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
+            case 'boolean':
+                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
+            default:
+                return $attributeCode;
+        }
     }
 
     /**
+     * Get query type field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode

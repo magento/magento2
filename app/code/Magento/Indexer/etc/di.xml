@@ -42,7 +42,11 @@
         <plugin name="page-cache-indexer-reindex-clean-cache"
                 type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
-
+    <type name="\Magento\Indexer\Model\ProcessManager">
+        <arguments>
+            <argument name="threadsCount" xsi:type="init_parameter">Magento\Indexer\Model\ProcessManager::THREADS_COUNT</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -52,6 +56,8 @@
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
+                <item name="set-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand</item>
+                <item name="show-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand</item>
             </argument>
         </arguments>
     </type>

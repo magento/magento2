@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <test name="CartPriceRuleForConfigurableProductTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="MAGETWO-94407 - Cart Price Rule for configurable products"/>
+            <title value="Checking Cart Price Rule for configurable products"/>
+            <description value="Checking Cart Price Rule for configurable products"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-94471"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create the configurable product and add it to the category -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                  <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute we just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                  <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create a simple product and give it the attribute with option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                 <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="DeleteCartPriceRuleByName">
+                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+	    <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        
+        <!-- Create the rule -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ABCD" stepKey="fillCouponCOde"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ScrollToApplyRuleForConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ApplyRuleForConditions"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$" stepKey="selectAttribute"/>
+        <waitForPageLoad stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('is')}}" stepKey="clickToChooseCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.operator}}" userInput="is not" stepKey="selectOperator"/>
+        <waitForPageLoad stepKey="waitForOperatorOpened1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption"/>
+        <waitForPageLoad stepKey="waitForConditionOpened2"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.option}}" userInput="option1" stepKey="selectOption"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+
+        <!-- Add the first product to the cart -->
+        <amOnPage url="$$createConfigChildProduct1.sku$$.html" stepKey="goToProductPage1"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
+        <waitForPageLoad stepKey="waitForAddToCart1"/>
+        <!-- Add the second product to the cart -->
+        <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
+        <waitForPageLoad stepKey="waitForAddToCart2"/>
+
+        <!--View and edit cart-->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickViewAndEditCartFromMiniCart"/>
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode" />
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="You used coupon code" stepKey="assertText"/>
+        <!--Verify values-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.itemDiscount}}" stepKey="getDiscount"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.subtotal}}" stepKey="getSubtotal"/>
+        <assertEquals stepKey="checkDescount">
+            <expectedResult type="string">-$117.00</expectedResult>
+            <actualResult type="variable">$getDiscount</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="checkSubtotal">
+            <expectedResult type="string">$357.00</expectedResult>
+            <actualResult type="variable">$getSubtotal</actualResult>
+        </assertEquals>
+    </test>
+</tests>

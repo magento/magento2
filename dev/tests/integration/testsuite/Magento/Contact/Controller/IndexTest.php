@@ -6,11 +6,16 @@
 
 namespace Magento\Contact\Controller;
 
+use Zend\Http\Request;
+
 /**
  * Contact index controller test
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * testPostAction
+     */
     public function testPostAction()
     {
         $params = [
@@ -20,6 +25,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'hideit' => '',
         ];
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
@@ -33,12 +39,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider dataInvalidPostAction
-     * @param $params
-     * @param $expectedMessage
+     * @param array $params
+     * @param string $expectedMessage
      */
     public function testInvalidPostAction($params, $expectedMessage)
     {
         $this->getRequest()->setPostValue($params);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
 
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
@@ -48,6 +55,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public static function dataInvalidPostAction()
     {
         return [
