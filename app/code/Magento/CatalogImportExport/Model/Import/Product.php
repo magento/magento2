@@ -785,6 +785,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -2939,7 +2940,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Retrieve product by sku.
      *
-     * @param $sku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface|null
      */
     private function retrieveProductBySku($sku)
