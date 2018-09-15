@@ -10,6 +10,8 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Directory\Model\Country\Format;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer address helper
@@ -148,8 +150,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param string $renderer
-     * @return \Magento\Framework\View\Element\BlockInterface
+     * @param BlockInterface|string $renderer
+     * @return BlockInterface
      */
     public function getRenderer($renderer)
     {
@@ -160,13 +162,15 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
-    /**
-     * Return customer address config value by key and store
-     *
-     * @param string $key
-     * @param \Magento\Store\Model\Store|int|string $store
-     * @return string|null
-     */
+	/**
+	 * Return customer address config value by key and store
+	 *
+	 * @param string                                $key
+	 * @param \Magento\Store\Model\Store|int|string $store
+	 *
+	 * @return string|null
+	 * @throws NoSuchEntityException
+	 */
     public function getConfig($key, $store = null)
     {
         $store = $this->_storeManager->getStore($store);
@@ -174,19 +178,22 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         if (!isset($this->_config[$websiteId])) {
             $this->_config[$websiteId] = $this->scopeConfig->getValue(
                 'customer/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         return isset($this->_config[$websiteId][$key]) ? (string)$this->_config[$websiteId][$key] : null;
     }
 
-    /**
-     * Return Number of Lines in a Street Address for store
-     *
-     * @param \Magento\Store\Model\Store|int|string $store
-     * @return int
-     */
+	/**
+	 * Return Number of Lines in a Street Address for store
+	 *
+	 * @param \Magento\Store\Model\Store|int|string $store
+	 *
+	 * @return int
+	 * @throws NoSuchEntityException
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function getStreetLines($store = null)
     {
         $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
@@ -228,25 +235,29 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         return $formatType->getRenderer();
     }
 
-    /**
-     * Determine if specified address config value can be shown
-     *
-     * @param string $key
-     * @return bool
-     */
+	/**
+	 * Determine if specified address config value can be shown
+	 *
+	 * @param string $key
+	 *
+	 * @return bool
+	 * @throws NoSuchEntityException
+	 */
     public function canShowConfig($key)
     {
         return (bool)$this->getConfig($key);
     }
 
-    /**
-     * Get string with frontend validation classes for attribute
-     *
-     * @param string $attributeCode
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
+	/**
+	 * Get string with frontend validation classes for attribute
+	 *
+	 * @param string $attributeCode
+	 *
+	 * @return string
+	 *
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function getAttributeValidationClass($attributeCode)
     {
         $class = '';
@@ -313,9 +324,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isVatValidationEnabled($store = null)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VAT_VALIDATION_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -327,9 +338,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isDisableAutoGroupAssignDefaultValue()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -341,9 +352,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function hasValidateOnEachTransaction($store = null)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VIV_ON_EACH_TRANSACTION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -358,7 +369,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -370,19 +381,22 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isVatAttributeVisible()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VAT_FRONTEND_VISIBILITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
-    /**
-     * Retrieve attribute visibility
-     *
-     * @param string $code
-     * @return bool
-     * @since 100.2.0
-     */
+	/**
+	 * Retrieve attribute visibility
+	 *
+	 * @param string $code
+	 *
+	 * @return bool
+	 * @throws NoSuchEntityException
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @since 100.2.0
+	 */
     public function isAttributeVisible($code)
     {
         $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);

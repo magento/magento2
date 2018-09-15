@@ -73,7 +73,7 @@ class DataProvider implements SuggestedQueriesInterface
      */
     public function isResultsCountEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_RESULTS_COUNT_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
@@ -130,7 +130,7 @@ class DataProvider implements SuggestedQueriesInterface
      */
     private function isSearchRecommendationsEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_IS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );

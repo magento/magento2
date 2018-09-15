@@ -117,11 +117,12 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         return parent::getCustomAttribute($attributeCode);
     }
 
-    /**
-     * Update customer gender value
-     * Method set gender label instead of id value
-     * @return void
-     */
+	/**
+	 * Update customer gender value
+	 * Method set gender label instead of id value
+	 * @return void
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     private function setGenderValue()
     {
         $value = $this->getData(self::$genderAttributeCode);
@@ -140,11 +141,12 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         }
     }
 
-    /**
-     * Update customer group value
-     * Method set group code instead id value
-     * @return void
-     */
+	/**
+	 * Update customer group value
+	 * Method set group code instead id value
+	 * @return void
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     private function setCustomerGroupValue()
     {
         $value = $this->getData(self::$groupAttributeCode);
@@ -178,7 +180,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     {
         $value = $this->getData(self::$confirmationAttributeCode);
         $websiteId = $this->getData(self::$websiteIdAttributeCode) ?: $this->getData(self::$websiteAttributeCode);
-        $isConfirmationRequired = (bool)$this->scopeConfig->getValue(
+        $isConfirmationRequired = $this->scopeConfig->isSetFlag(
             AccountManagement::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId

@@ -74,7 +74,7 @@ class Config
      */
     public function isEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_MSRP_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $this->storeId

@@ -56,7 +56,7 @@ class AccountConfirmation
             return false;
         }
 
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId

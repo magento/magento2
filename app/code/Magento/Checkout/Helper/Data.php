@@ -145,9 +145,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'checkout/options/onepage_checkout_enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -217,7 +217,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Quote\Model\Quote $checkout,
         string $message,
         string $checkoutType = 'onepage'
-    ): \Magento\Checkout\Helper\Data {
+    ): Data {
         $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
@@ -232,7 +232,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $data = $this->scopeConfig->getValue(
             $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!empty($data)) {
@@ -256,7 +256,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $guestCheckout = $this->scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
 
@@ -295,7 +295,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

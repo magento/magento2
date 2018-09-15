@@ -122,16 +122,18 @@ class Suggestions implements SuggestedQueriesInterface
      */
     public function isResultsCountEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
 
-    /**
-     * @param QueryInterface $query
-     * @return array
-     */
+	/**
+	 * @param QueryInterface $query
+	 *
+	 * @return array
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     private function getSuggestions(QueryInterface $query)
     {
         $suggestions = [];
@@ -204,7 +206,7 @@ class Suggestions implements SuggestedQueriesInterface
      */
     private function isSuggestionsAllowed()
     {
-        $isSearchSuggestionsEnabled = (bool)$this->scopeConfig->getValue(
+        $isSearchSuggestionsEnabled = $this->scopeConfig->isSetFlag(
             self::CONFIG_SUGGESTION_ENABLED,
             ScopeInterface::SCOPE_STORE
         );

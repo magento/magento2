@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
@@ -41,7 +42,12 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      */
     protected $checkoutSession;
 
-    /**
+	/**
+	 * @var HttpContext
+	 */
+	protected $httpContext;
+
+	/**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -93,13 +99,13 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     {
         $configuration = [];
         $configuration['giftMessage'] = [];
-        $orderLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
+        $orderLevelGiftMessageConfiguration = $this->scopeConfiguration->isSetFlag(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
-        $itemLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
+        $itemLevelGiftMessageConfiguration = $this->scopeConfiguration->isSetFlag(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
@@ -164,11 +170,12 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         return $this->cartRepository->get($cartId);
     }
 
-    /**
-     * Load already specified item level gift messages and related configuration.
-     *
-     * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
-     */
+	/**
+	 * Load already specified item level gift messages and related configuration.
+	 *
+	 * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     protected function getItemLevelGiftMessages()
     {
         $itemLevelConfig = [];

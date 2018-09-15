@@ -256,12 +256,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
     }
 
-    /**
-     * Get attribute data by attribute code
-     *
-     * @param string $attributeCode
-     * @return array
-     */
+	/**
+	 * Get attribute data by attribute code
+	 *
+	 * @param string $attributeCode
+	 *
+	 * @return array
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     protected function _getAttribute($attributeCode)
     {
         if (!isset($this->_attributesCache[$attributeCode])) {
@@ -279,12 +281,15 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $this->_attributesCache[$attributeCode];
     }
 
-    /**
-     * Get category collection array
-     *
-     * @param null|string|bool|int|Store $storeId
-     * @return array|bool
-     */
+	/**
+	 * Get category collection array
+	 *
+	 * @param null|string|bool|int|Store $storeId
+	 *
+	 * @return array|bool
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getCollection($storeId)
     {
         $products = [];
@@ -343,13 +348,15 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $products;
     }
 
-    /**
-     * Prepare product
-     *
-     * @param array $productRow
-     * @param int $storeId
-     * @return \Magento\Framework\DataObject
-     */
+	/**
+	 * Prepare product
+	 *
+	 * @param array $productRow
+	 * @param int   $storeId
+	 *
+	 * @return \Magento\Framework\DataObject
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     protected function _prepareProduct(array $productRow, $storeId)
     {
         $product = new \Magento\Framework\DataObject();
@@ -482,7 +489,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function isCategoryProductURLsConfig($storeId)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             HelperProduct::XML_PATH_PRODUCT_URL_USE_CATEGORY,
             ScopeInterface::SCOPE_STORE,
             $storeId

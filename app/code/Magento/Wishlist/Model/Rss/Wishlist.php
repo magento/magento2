@@ -7,6 +7,7 @@
 namespace Magento\Wishlist\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
@@ -114,17 +115,18 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
-    /**
-     * Get RSS feed items
-     *
-     * @return array
-     */
+	/**
+	 * Get RSS feed items
+	 *
+	 * @return array
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function getRssData()
     {
         $wishlist = $this->getWishlist();

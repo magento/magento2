@@ -6,6 +6,7 @@
 
 namespace Magento\Directory\Helper;
 
+use Magento\Directory\Model\Currency;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -165,11 +166,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_countryCollection;
     }
 
-    /**
-     * Retrieve regions data json
-     *
-     * @return string
-     */
+	/**
+	 * Retrieve regions data json
+	 *
+	 * @return string
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getRegionJson()
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
@@ -191,15 +193,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_regionJson;
     }
 
-    /**
-     * Convert currency
-     *
-     * @param float $amount
-     * @param string $from
-     * @param string $to
-     * @return float
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
+	/**
+	 * Convert currency
+	 *
+	 * @param float  $amount
+	 * @param string $from
+	 * @param string $to
+	 *
+	 * @return float
+	 * @SuppressWarnings(PHPMD.ShortVariable)
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function currencyConvert($amount, $from, $to = null)
     {
         if (empty($this->_currencyCache[$from])) {
@@ -251,7 +255,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns the list of countries, for which region is required
      *
      * @param boolean $asJson
-     * @return array
+     * @return array|string
      */
     public function getCountriesWithStatesRequired($asJson = false)
     {
@@ -275,7 +279,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isShowNonRequiredState()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_ALL_STATES,
             ScopeInterface::SCOPE_STORE
         );
@@ -303,7 +307,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBaseCurrencyCode()
     {
-        return $this->scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+        return $this->scopeConfig->getValue( Currency::XML_PATH_CURRENCY_BASE, 'default');
     }
 
     /**
