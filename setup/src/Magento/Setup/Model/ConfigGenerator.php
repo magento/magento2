@@ -78,15 +78,15 @@ class ConfigGenerator
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
-        DriverOptions $driverOptions,
         ConfigDataFactory $configDataFactory = null,
-        CryptKeyGeneratorInterface $cryptKeyGenerator = null
+        CryptKeyGeneratorInterface $cryptKeyGenerator = null,
+        DriverOptions $driverOptions = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
-        $this->driverOptions = $driverOptions;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
         $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
+        $this->driverOptions = $driverOptions ?? ObjectManager::getInstance()->get(DriverOptions::class);
     }
 
     /**
