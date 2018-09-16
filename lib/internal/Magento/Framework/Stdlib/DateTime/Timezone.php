@@ -306,8 +306,25 @@ class Timezone implements TimezoneInterface
      * @param string $format
      * @throws LocalizedException
      * @return string
+     * @deprecated
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
+    {
+        return $this->convertConfigTimeToUtcWithPattern($date, $format);
+    }
+
+    /**
+     * Convert date from config timezone to Utc.
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @param string $pattern
+     * @throws LocalizedException
+     * @return string
+     * @deprecated
+     */
+    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = 'Y-M-dd HH:mm:ss')
     {
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
@@ -319,7 +336,7 @@ class Timezone implements TimezoneInterface
                     \IntlDateFormatter::MEDIUM,
                     $this->getConfigTimezone(),
                     null,
-                    $format
+                    $pattern
                 );
                 $unixTime = $formatter->parse($date);
                 $dateTime = new DateTime($this);
@@ -342,6 +359,7 @@ class Timezone implements TimezoneInterface
 
         return $date->format($format);
     }
+
 
     /**
      * Retrieve date with time

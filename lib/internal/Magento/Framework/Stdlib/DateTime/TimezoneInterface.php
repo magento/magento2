@@ -143,6 +143,15 @@ interface TimezoneInterface
      * @param string $format
      * @return string
      * @since 100.1.0
+     * @deprecated
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
+
+    /**
+     * @param $date
+     * @param string $format
+     * @param string $pattern
+     * @return mixed
+     */
+    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = 'Y-m-d H:i:s');
 }
