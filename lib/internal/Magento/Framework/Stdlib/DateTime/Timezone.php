@@ -309,21 +309,21 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        $formatter = new \IntlDateFormatter(
-            $this->_localeResolver->getLocale(),
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::MEDIUM,
-            $this->getConfigTimezone(),
-            null,
-            null
-        );
-        $unixTime = $formatter->parse($date);
-        $dateTime = new DateTime($this);
-
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
+                $formatter = new \IntlDateFormatter(
+                    $this->_localeResolver->getLocale(),
+                    \IntlDateFormatter::MEDIUM,
+                    \IntlDateFormatter::MEDIUM,
+                    $this->getConfigTimezone(),
+                    null,
+                    $format
+                );
+                $unixTime = $formatter->parse($date);
+                $dateTime = new DateTime($this);
+
                 $dateUniversal = $dateTime->gmtDate(null, $unixTime);
                 $date = new \DateTime($dateUniversal, new \DateTimeZone($this->getConfigTimezone()));
             }

@@ -196,7 +196,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if ($startAt === null || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $this->setQueueStartAt($this->timezone->convertConfigTimeToUtc($startAt));
+            $startAt = $this->timezone->convertConfigTimeToUtc($startAt, null);
+            $this->setQueueStartAt($startAt);
         }
         return $this;
     }
