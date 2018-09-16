@@ -42,7 +42,7 @@ class DbValidator
      * Check if database table prefix is valid
      *
      * @param string $prefix
-     * @return boolean
+     * @return bool
      * @throws \InvalidArgumentException
      */
     public function checkDatabaseTablePrefix($prefix)
@@ -72,7 +72,7 @@ class DbValidator
      * @param string $dbHost
      * @param string $dbUser
      * @param string $dbPass
-     * @return boolean
+     * @return bool
      * @throws \Magento\Setup\Exception
      * @deprecated
      */
@@ -89,7 +89,7 @@ class DbValidator
      * @param string $dbUser
      * @param string $dbPass
      * @param array $driverOptions
-     * @return boolean
+     * @return bool
      * @throws \Magento\Setup\Exception
      */
     public function checkDatabaseConnectionWithDriverOptions(

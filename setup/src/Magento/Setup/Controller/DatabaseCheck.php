@@ -67,7 +67,7 @@ class DatabaseCheck extends AbstractActionController
 
     /**
      * @param array $params
-     * @return boolean
+     * @return bool
      */
     private function isDriverOptionsGiven($params)
     {
