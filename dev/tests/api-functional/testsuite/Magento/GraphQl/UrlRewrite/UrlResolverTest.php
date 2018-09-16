@@ -326,19 +326,18 @@ QUERY;
     {
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface */
         $scopeConfigInterface = $this->objectManager->get(ScopeConfigInterface::class);
-        $homePageIdentifier = $scopeConfigInterface->getValue(PageHelper::XML_PATH_HOME_PAGE, ScopeInterface::SCOPE_STORE);
-
+        $homePageIdentifier = $scopeConfigInterface->getValue(
+            PageHelper::XML_PATH_HOME_PAGE,
+            ScopeInterface::SCOPE_STORE
+        );
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
         $page->load($homePageIdentifier);
         $homePageId = $page->getId();
-
         /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
         $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
-
         /** @param \Magento\Cms\Api\Data\PageInterface $page */
         $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
-
         $query
             = <<<QUERY
 {
@@ -351,7 +350,6 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($homePageId, $response['urlResolver']['id']);
         $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
