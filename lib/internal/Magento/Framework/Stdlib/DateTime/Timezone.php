@@ -324,14 +324,18 @@ class Timezone implements TimezoneInterface
      * @return string
      * @deprecated
      */
-    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = 'Y-M-dd HH:mm:ss')
+    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = null)
     {
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
+                $locale = $this->_localeResolver->getLocale();
+                if ($locale === null) {
+                    $pattern = 'Y-M-dd HH:mm:ss';
+                }
                 $formatter = new \IntlDateFormatter(
-                    $this->_localeResolver->getLocale(),
+                    $locale,
                     \IntlDateFormatter::MEDIUM,
                     \IntlDateFormatter::MEDIUM,
                     $this->getConfigTimezone(),
