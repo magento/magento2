@@ -8,38 +8,40 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextareaAttribute\FormatFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Resolve rendered content for attributes where HTML content is allowed
  */
-class ProductHtmlAttribute implements ResolverInterface
+class ProductTextareaAttribute implements ResolverInterface
 {
+    const DEFAULT_CONTENT_FORMAT_IDENTIFIER = 'html';
+
     /**
      * @var ValueFactory
      */
     private $valueFactory;
 
     /**
-     * @var OutputHelper
+     * @var FormatFactory
      */
-    private $outputHelper;
+    private $formatFactory;
 
     /**
      * @param ValueFactory $valueFactory
-     * @param OutputHelper $outputHelper
+     * @param FormatFactory $formatFactory
      */
     public function __construct(
         ValueFactory $valueFactory,
-        OutputHelper $outputHelper
+        FormatFactory $formatFactory
     ) {
         $this->valueFactory = $valueFactory;
-        $this->outputHelper = $outputHelper;
+        $this->formatFactory = $formatFactory;
     }
 
     /**
@@ -62,9 +64,12 @@ class ProductHtmlAttribute implements ResolverInterface
         /* @var $product Product */
         $product = $value['model'];
         $fieldName = $field->getName();
-        $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
-        $result = function () use ($renderedValue) {
-            return $renderedValue;
+        $formatIdentifier = $args['format'] ?? self::DEFAULT_CONTENT_FORMAT_IDENTIFIER;
+        $format = $this->formatFactory->create($formatIdentifier);
+        $attribute = ['content' => $format->getContent($product, $fieldName)];
+
+        $result = function () use ($attribute) {
+            return $attribute;
         };
 
         return $this->valueFactory->create($result);
