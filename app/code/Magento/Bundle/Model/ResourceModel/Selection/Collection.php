@@ -5,10 +5,8 @@
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection;
 
-use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\App\ObjectManager;
 
@@ -46,6 +44,95 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $websiteScopePriceJoined = false;
 
     /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item
+     */
+    private $stockItem;
+
+    /**
+     * Collection constructor.
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|null $tableMaintainer
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|null $stockItem
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItem = null
+    ) {
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $eavConfig,
+            $resource,
+            $eavEntityFactory,
+            $resourceHelper,
+            $universalFactory,
+            $storeManager,
+            $moduleManager,
+            $catalogProductFlatState,
+            $scopeConfig,
+            $productOptionFactory,
+            $catalogUrl,
+            $localeDate,
+            $customerSession,
+            $dateTime,
+            $groupManagement,
+            $connection,
+            $productLimitationFactory,
+            $metadataPool,
+            $tableMaintainer
+        );
+
+        $this->stockItem = $stockItem
+            ?? ObjectManager::getInstance()->get(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
+    }
+
+    /**
      * Initialize collection
      *
      * @return void
@@ -64,13 +151,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function _afterLoad()
     {
-        parent::_afterLoad();
-        if ($this->getStoreId() && $this->_items) {
-            foreach ($this->_items as $item) {
-                $item->setStoreId($this->getStoreId());
-            }
-        }
-        return $this;
+        return parent::_afterLoad();
     }
 
     /**
@@ -170,28 +251,30 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addQuantityFilter()
     {
-        $stockItemTable = $this->getTable('cataloginventory_stock_item');
-        $stockStatusTable = $this->getTable('cataloginventory_stock_status');
+        $manageStockExpr = $this->stockItem->getManageStockExpr('stock_item');
+        $backordersExpr = $this->stockItem->getBackordersExpr('stock_item');
+        $minQtyExpr = $this->getConnection()->getCheckSql(
+            'selection.selection_can_change_qty',
+            $this->stockItem->getMinSaleQtyExpr('stock_item'),
+            'selection.selection_qty'
+        );
+
+        $where = $manageStockExpr . ' = 0';
+        $where .= ' OR ('
+            . 'stock_item.is_in_stock = ' . \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK
+            . ' AND ('
+                . $backordersExpr . ' != ' . \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO
+                . ' OR '
+                . $minQtyExpr . ' <= stock_item.qty'
+            . ')'
+        . ')';
+
         $this->getSelect()
             ->joinInner(
-                ['stock' => $stockStatusTable],
-                'selection.product_id = stock.product_id',
-                []
-            )->joinInner(
-                ['stock_item' => $stockItemTable],
+                ['stock_item' => $this->stockItem->getMainTable()],
                 'selection.product_id = stock_item.product_id',
                 []
-            )
-            ->where(
-                '('
-                . 'selection.selection_can_change_qty > 0'
-                . ' or '
-                . 'selection.selection_qty <= stock.qty'
-                . ' or '
-                .'stock_item.manage_stock = 0'
-                . ')'
-            )
-            ->where('stock.stock_status = 1');
+            )->where($where);
 
         return $this;
     }
@@ -267,7 +350,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get Catalog Rule Processor.
+     *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     *
      * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()

@@ -5,11 +5,11 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminApplyTierPriceToProductTest">
         <annotations>
-            <features value="Apply tier price to a product"/>
+            <features value="Catalog"/>
+            <stories value="Apply tier price to a product"/>
             <title value="You should be able to apply tier price to a product."/>
             <description value="You should be able to apply tier price to a product."/>
             <severity value="CRITICAL"/>
@@ -235,9 +235,10 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton5"/>
+        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice" />
+        <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
         <actionGroup ref="saveProductForm" stepKey="saveProduct5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton6"/>
