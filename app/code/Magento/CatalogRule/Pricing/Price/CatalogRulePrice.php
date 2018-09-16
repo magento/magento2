@@ -89,7 +89,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     {
         if (null === $this->value) {
             if ($this->product->hasData(self::PRICE_CODE)) {
-                $this->value = floatval($this->product->getData(self::PRICE_CODE)) ?: false;
+                $this->value = (float)$this->product->getData(self::PRICE_CODE) ?: false;
             } else {
                 $this->value = $this->getRuleResource()
                     ->getRulePrice(
@@ -98,7 +98,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                         $this->customerSession->getCustomerGroupId(),
                         $this->product->getId()
                     );
-                $this->value = $this->value ? floatval($this->value) : false;
+                $this->value = $this->value ? (float)$this->value : false;
             }
             if ($this->value) {
                 $this->value = $this->priceCurrency->convertAndRound($this->value);
