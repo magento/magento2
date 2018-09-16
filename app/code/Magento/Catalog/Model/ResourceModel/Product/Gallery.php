@@ -218,8 +218,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'position_default' => 'default_value.position',
                 'disabled_default' => 'default_value.disabled'
             ])
-            ->where($mainTableAlias . '.attribute_id = ?', $attributeId)
-            ->where($mainTableAlias . '.disabled = 0');
+            ->where($mainTableAlias . '.attribute_id = ?', $attributeId);
 
         // filter entities by store
         if ($storeId > 0) {
