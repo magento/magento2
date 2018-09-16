@@ -66,7 +66,7 @@ class DatabaseCheck extends AbstractActionController
      * @param array $params
      * @return boolean
      */
-    protected function isDriverOptionsGiven($params)
+    private function isDriverOptionsGiven($params)
     {
         return !(
             empty($params['driverOptionsSslKey']) ||
