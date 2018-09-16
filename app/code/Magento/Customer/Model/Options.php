@@ -9,6 +9,10 @@ use Magento\Config\Model\Config\Source\Nooptreq as NooptreqSource;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
 
+/**
+ * Class Options
+ * @package Magento\Customer\Model
+ */
 class Options
 {
     /**
@@ -38,7 +42,7 @@ class Options
     /**
      * Retrieve name prefix dropdown options
      *
-     * @param null $store
+     * @param $store
      * @return array|bool
      */
     public function getNamePrefixOptions($store = null)
@@ -52,7 +56,7 @@ class Options
     /**
      * Retrieve name suffix dropdown options
      *
-     * @param null $store
+     * @param $store
      * @return array|bool
      */
     public function getNameSuffixOptions($store = null)
@@ -64,6 +68,8 @@ class Options
     }
 
     /**
+     * Prepare Name Suffix Options
+     *
      * @param $options
      * @param bool $isOptional
      * @return array|bool
@@ -78,6 +84,7 @@ class Options
 
     /**
      * Unserialize and clear name prefix or suffix options
+     *
      * If field is optional, add an empty first option.
      *
      * @param string $options
@@ -95,9 +102,7 @@ class Options
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;
-            $result = array_filter($result);
         }
-
         if ($isOptional && trim(current($options))) {
             $result = array_merge([' ' => ' '], $result);
         }
