@@ -6,6 +6,9 @@
 
 namespace Magento\SalesRule\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RulesApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -28,6 +31,11 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
      */
     protected $validatorUtility;
 
+    /**
+     * @var \Magento\SalesRule\Model\Quote\ChildrenValidationLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $childrenValidationLocator;
+
     protected function setUp()
     {
         $this->calculatorFactory = $this->createMock(
@@ -38,11 +46,15 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Model\Utility::class,
             ['canProcessRule', 'minFix', 'deltaRoundingFix', 'getItemQty']
         );
-
+        $this->childrenValidationLocator = $this->createPartialMock(
+            \Magento\SalesRule\Model\Quote\ChildrenValidationLocator::class,
+            ['isChildrenValidationRequired']
+        );
         $this->rulesApplier = new \Magento\SalesRule\Model\RulesApplier(
             $this->calculatorFactory,
             $this->eventManager,
-            $this->validatorUtility
+            $this->validatorUtility,
+            $this->childrenValidationLocator
         );
     }
 
@@ -84,6 +96,10 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         $item->setDiscountCalculationPrice($positivePrice);
         $item->setData('calculation_price', $positivePrice);
 
+        $this->childrenValidationLocator->expects($this->any())
+            ->method('isChildrenValidationRequired')
+            ->willReturn(true);
+
         $this->validatorUtility->expects($this->atLeastOnce())
             ->method('canProcessRule')
             ->will($this->returnValue(true));
@@ -124,6 +140,9 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($appliedRuleIds, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderChildren()
     {
         return [
@@ -163,6 +182,10 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         return $item;
     }
 
+    /**
+     * @param $item
+     * @param $rule
+     */
     protected function applyRule($item, $rule)
     {
         $qty = 2;

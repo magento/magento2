@@ -9,6 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Sales\Api\PaymentFailuresInterface;
 
 /**
  * Checkout default helper
@@ -53,6 +54,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $priceCurrency;
 
     /**
+     * @var PaymentFailuresInterface
+     */
+    private $paymentFailures;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -60,6 +66,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param PriceCurrencyInterface $priceCurrency
+     * @param PaymentFailuresInterface|null $paymentFailures
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -69,7 +76,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        PaymentFailuresInterface $paymentFailures = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
@@ -77,6 +85,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->priceCurrency = $priceCurrency;
+        $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PaymentFailuresInterface::class);
         parent::__construct($context);
     }
 
@@ -154,7 +164,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
@@ -181,7 +191,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
@@ -202,126 +212,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $message
      * @param string $checkoutType
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
-    {
-        $this->inlineTranslation->suspend();
-
-        $template = $this->scopeConfig->getValue(
-            'checkout/payment_failed/template',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $checkout->getStoreId()
-        );
-
-        $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
-        $copyMethod = $this->scopeConfig->getValue(
-            'checkout/payment_failed/copy_method',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $checkout->getStoreId()
-        );
-        $bcc = [];
-        if ($copyTo && $copyMethod == 'bcc') {
-            $bcc = $copyTo;
-        }
-
-        $_receiver = $this->scopeConfig->getValue(
-            'checkout/payment_failed/receiver',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $checkout->getStoreId()
-        );
-        $sendTo = [
-            [
-                'email' => $this->scopeConfig->getValue(
-                    'trans_email/ident_' . $_receiver . '/email',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $checkout->getStoreId()
-                ),
-                'name' => $this->scopeConfig->getValue(
-                    'trans_email/ident_' . $_receiver . '/name',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $checkout->getStoreId()
-                ),
-            ],
-        ];
-
-        if ($copyTo && $copyMethod == 'copy') {
-            foreach ($copyTo as $email) {
-                $sendTo[] = ['email' => $email, 'name' => null];
-            }
-        }
-        $shippingMethod = '';
-        if ($shippingInfo = $checkout->getShippingAddress()->getShippingMethod()) {
-            $data = explode('_', $shippingInfo);
-            $shippingMethod = $data[0];
-        }
-
-        $paymentMethod = '';
-        if ($paymentInfo = $checkout->getPayment()) {
-            $paymentMethod = $paymentInfo->getMethod();
-        }
-
-        $items = '';
-        foreach ($checkout->getAllVisibleItems() as $_item) {
-            /* @var $_item \Magento\Quote\Model\Quote\Item */
-            $items .=
-                $_item->getProduct()->getName() . '  x ' . $_item->getQty() . '  ' . $checkout->getStoreCurrencyCode()
-                . ' ' . $_item->getProduct()->getFinalPrice(
-                    $_item->getQty()
-                ) . "\n";
-        }
-        $total = $checkout->getStoreCurrencyCode() . ' ' . $checkout->getGrandTotal();
-
-        foreach ($sendTo as $recipient) {
-            $transport = $this->_transportBuilder->setTemplateIdentifier(
-                $template
-            )->setTemplateOptions(
-                [
-                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                    'store' => Store::DEFAULT_STORE_ID
-                ]
-            )->setTemplateVars(
-                [
-                    'reason' => $message,
-                    'checkoutType' => $checkoutType,
-                    'dateAndTime' => $this->_localeDate->formatDateTime(
-                        new \DateTime(),
-                        \IntlDateFormatter::MEDIUM,
-                        \IntlDateFormatter::MEDIUM
-                    ),
-                    'customer' => $checkout->getCustomerFirstname() . ' ' . $checkout->getCustomerLastname(),
-                    'customerEmail' => $checkout->getCustomerEmail(),
-                    'billingAddress' => $checkout->getBillingAddress(),
-                    'shippingAddress' => $checkout->getShippingAddress(),
-                    'shippingMethod' => $this->scopeConfig->getValue(
-                        'carriers/' . $shippingMethod . '/title',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    ),
-                    'paymentMethod' => $this->scopeConfig->getValue(
-                        'payment/' . $paymentMethod . '/title',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    ),
-                    'items' => nl2br($items),
-                    'total' => $total,
-                ]
-            )->setFrom(
-                $this->scopeConfig->getValue(
-                    'checkout/payment_failed/identity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $checkout->getStoreId()
-                )
-            )->addTo(
-                $recipient['email'],
-                $recipient['name']
-            )->addBcc(
-                $bcc
-            )->getTransport();
-
-            $transport->sendMessage();
-        }
-
-        $this->inlineTranslation->resume();
+    public function sendPaymentFailedEmail(
+        \Magento\Quote\Model\Quote $checkout,
+        string $message,
+        string $checkoutType = 'onepage'
+    ): \Magento\Checkout\Helper\Data {
+        $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
     }

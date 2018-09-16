@@ -111,6 +111,9 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         $tester->execute($input);
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

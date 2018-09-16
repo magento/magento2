@@ -116,7 +116,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Return result CMS page
      *
      * @param Action $action
-     * @param null $pageId
+     * @param int $pageId
      * @return \Magento\Framework\View\Result\Page|bool
      */
     public function prepareResultPage(Action $action, $pageId = null)
@@ -189,9 +189,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $page = $this->_pageFactory->create();
         if ($pageId !== null && $pageId !== $page->getId()) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
-            if (!$page->load($pageId)) {
-                return null;
-            }
+            $page->load($pageId);
         }
 
         if (!$page->getId()) {

@@ -28,6 +28,10 @@ class AttributesJoiner
 
         /** @var FieldNode $field */
         foreach ($query as $field) {
+            if ($field->kind === 'InlineFragment') {
+                continue;
+            }
+
             if (!$collection->isAttributeAdded($field->name->value)) {
                 $collection->addAttributeToSelect($field->name->value);
             }

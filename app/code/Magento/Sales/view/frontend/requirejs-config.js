@@ -6,8 +6,8 @@
 var config = {
     map: {
         '*': {
-            giftMessage:    'Magento_Sales/gift-message',
-            ordersReturns:  'Magento_Sales/orders-returns'
+            giftMessage:    'Magento_Sales/js/gift-message',
+            ordersReturns:  'Magento_Sales/js/orders-returns'
         }
     }
 };

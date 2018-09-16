@@ -19,6 +19,10 @@ class SimpleConstructor
      */
     private $name;
 
+    /**
+     * @param int $entityId
+     * @param string $name
+     */
     public function __construct(
         int $entityId,
         string $name

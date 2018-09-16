@@ -73,6 +73,9 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit\Framework\TestCase
         $this->observerMock->execute($this->eventObserverMock);
     }
 
+    /**
+     * @return array
+     */
     public function dataAddFields()
     {
         return [

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfigurableProductChildImageShouldBeShownOnWishListTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="MAGETWO-8709"/>
+            <group value="wishlist"/>
+            <title value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
+            <description value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93097"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/cart/configurable_product_image 0" stepKey="setProductImageSettingUnderCofigurationSalesCheckout"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfPresent"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchProductGrid">
+            <argument name="keyword" value="_defaultProduct.name"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.selectRowBasedOnName(_defaultProduct.name)}}" stepKey="selectProductToAddImage"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
+        <actionGroup ref="addProductImage" stepKey="addImageForParentProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad1"/>
+        <click selector="{{AdminProductGridSection.selectRowBasedOnName(colorProductAttribute1.name)}}" stepKey="selectProductToAddImage1"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
+        <actionGroup ref="addProductImage" stepKey="addImageForChildProduct">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+
+         <!--Sign in as customer -->
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <fillField userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
+        <fillField userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="waitForButton"/>
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <see userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeFirstName"/>
+        <see userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
+        <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
+        <waitForPageLoad stepKey="waitForLogin"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
+        <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistProductImage" />
+        <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByImageName(TestImageNew.filename)}}" stepKey="AssertWishlistSidebarProductImage" />
+    </test>
+</tests>

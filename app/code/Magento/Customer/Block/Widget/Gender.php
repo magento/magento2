@@ -59,7 +59,7 @@ class Gender extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/gender.phtml');
+        $this->setTemplate('Magento_Customer::widget/gender.phtml');
     }
 
     /**

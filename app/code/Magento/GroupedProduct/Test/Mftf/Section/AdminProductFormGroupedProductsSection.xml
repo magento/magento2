@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormGroupedProductsSection">
+        <element name="toggleGroupedProduct" type="button" selector="div[data-index=grouped] .admin__collapsible-title"/>
+        <element name="addProductsToGroup" type="button" selector="button[data-index='grouped_products_button']" timeout="30"/>
+    </section>
+</sections>

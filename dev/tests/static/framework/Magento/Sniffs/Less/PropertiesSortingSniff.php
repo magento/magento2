@@ -101,7 +101,7 @@ class PropertiesSortingSniff implements Sniff
     private function validatePropertiesSorting(File $phpcsFile, $stackPtr, array $properties)
     {
         // Fix needed for cases when incorrect properties passed for validation due to bug in PHP tokens.
-        $symbolsForSkip = ['(', 'block'];
+        $symbolsForSkip = ['(', 'block', 'field'];
         $properties = array_filter(
             $properties,
             function ($var) use ($symbolsForSkip) {

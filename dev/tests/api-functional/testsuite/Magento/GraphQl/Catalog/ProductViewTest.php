@@ -211,7 +211,6 @@ class ProductViewTest extends GraphQlAbstract
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -460,7 +459,6 @@ QUERY;
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -922,7 +920,6 @@ QUERY;
             'meta_keyword',
             'meta_title',
             'short_description',
-            'tax_class_id',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
@@ -959,30 +956,5 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            self::assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            self::assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

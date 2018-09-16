@@ -19,6 +19,8 @@ class Configurable extends Renderer implements IdentityInterface
 {
     /**
      * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
+     * @deprecated moved to model because of class refactoring
+     * @see \Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver::CONFIG_THUMBNAIL_SOURCE
      */
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
@@ -53,29 +55,6 @@ class Configurable extends Renderer implements IdentityInterface
     public function getOptionList()
     {
         return $this->_productConfig->getOptions($this->getItem());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProductForThumbnail()
-    {
-        /**
-         * Show parent product thumbnail if it must be always shown according to the related setting in system config
-         * or if child thumbnail is not available
-         */
-        if ($this->_scopeConfig->getValue(
-            self::CONFIG_THUMBNAIL_SOURCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE
-          || !($this->getChildProduct()
-          && $this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
-        ) {
-            $product = $this->getProduct();
-        } else {
-            $product = $this->getChildProduct();
-        }
-        return $product;
     }
 
     /**
