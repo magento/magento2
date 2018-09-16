@@ -64,7 +64,6 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         $orderItems = $order->getAllItems();
-        $product = $orderItems[0]->getProduct();
         $payment = $order->getPayment();
         $billingAddress = $order->getBillingAddress();
         $shippingAddress = $order->getShippingAddress();
@@ -87,7 +86,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
-                'avsResponseCode' => 'U',
+                'avsResponseCode' => '',
                 'cvvResponseCode' => '',
                 'orderChannel' => 'WEB',
                 'totalPrice' => $order->getGrandTotal(),
@@ -104,16 +103,16 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
                         'itemName' => $orderItems[0]->getName(),
                         'itemPrice' => $orderItems[0]->getPrice(),
                         'itemQuantity' => $orderItems[0]->getQtyOrdered(),
-                        'itemUrl' => $product->getProductUrl(),
-                        'itemWeight' => $product->getWeight()
+                        'itemUrl' => $orderItems[0]->getProduct()->getProductUrl(),
+                        'itemWeight' => $orderItems[0]->getProduct()->getWeight()
                     ],
                     1 => [
                         'itemId' => $orderItems[1]->getSku(),
                         'itemName' => $orderItems[1]->getName(),
                         'itemPrice' => $orderItems[1]->getPrice(),
                         'itemQuantity' => $orderItems[1]->getQtyOrdered(),
-                        'itemUrl' => $product->getProductUrl(),
-                        'itemWeight' => $product->getWeight()
+                        'itemUrl' => $orderItems[1]->getProduct()->getProductUrl(),
+                        'itemWeight' => $orderItems[1]->getProduct()->getWeight()
                     ]
                 ],
                 'paymentMethod' => 'PAYPAL_ACCOUNT'

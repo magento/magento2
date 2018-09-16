@@ -6,6 +6,8 @@
 namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
@@ -22,6 +24,8 @@ class Config implements ClientOptionsInterface
      * Search engine name
      */
     const ENGINE_NAME = 'elasticsearch';
+
+    private const ENGINE_NAME_5 = 'elasticsearch5';
 
     /**
      * Elasticsearch Entity type
@@ -55,25 +59,33 @@ class Config implements ClientOptionsInterface
     private $clientResolver;
 
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @param ClientResolver $clientResolver
-     * @param string $prefix
+     * @param ClientResolver|null $clientResolver
+     * @param EngineResolverInterface|null $engineResolver
+     * @param string|null $prefix
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ClientResolver $clientResolver = null,
+        EngineResolverInterface $engineResolver = null,
         $prefix = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->clientResolver = $clientResolver ?:
-            ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function prepareClientOptions($options = [])
@@ -126,7 +138,7 @@ class Config implements ClientOptionsInterface
      */
     public function isElasticsearchEnabled()
     {
-        return $this->getSearchConfigData('engine') == self::ENGINE_NAME;
+        return in_array($this->engineResolver->getCurrentSearchEngine(), [self::ENGINE_NAME, self::ENGINE_NAME_5]);
     }
 
     /**
@@ -141,7 +153,7 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * get Elasticsearch entity type
+     * Get Elasticsearch entity type
      *
      * @return string
      * @since 100.1.0

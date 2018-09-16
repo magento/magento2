@@ -66,7 +66,7 @@ class Dob extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/dob.phtml');
+        $this->setTemplate('Magento_Customer::widget/dob.phtml');
     }
 
     /**
@@ -127,7 +127,8 @@ class Dob extends AbstractWidget
     protected function applyOutputFilter($value)
     {
         $filter = $this->getFormFilter();
-        if ($filter) {
+        if ($filter && $value) {
+            $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
         return $value;

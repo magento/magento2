@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormItemsSection">
+        <element name="skuNumber" type="input" selector="#sku_{{row}}" parameterized="true"/>
+        <element name="qty" type="input" selector="#sku_qty_{{row}}" parameterized="true"/>
+        <element name="addAnother" type="button" selector="#sku_container .col-actions > button.add"/>
+        <element name="deleteRow" type="button" selector="#sku_container tr:nth_of_type({{row}}) .col-actions button.action-delete" parameterized="true"/>
+        <element name="addToOrder" type="button" selector="#order-additional_area .admin__page-section-title .actions button.action-add"/>
+        <element name="addProducts" type="button" selector="//section[@id='order-items']/div/div/button/span[text() = 'Add Products']" timeout="30"/>
+        <element name="search" type="button" selector="#sales_order_create_search_grid [data-action='grid-filter-apply']" timeout="30"/>
+        <element name="resetFilter" type="button" selector="#sales_order_create_search_grid [data-action='grid-filter-reset']" timeout="30"/>
+        <element name="idFilter" type="input" selector="#sales_order_create_search_grid_filter_entity_id"/>
+        <element name="nameFilter" type="input" selector="#sales_order_create_search_grid_filter_name"/>
+        <element name="skuFilter" type="input" selector="#sales_order_create_search_grid_filter_sku"/>
+        <element name="priceFromFilter" type="input" selector="#sales_order_create_search_grid_filter_price_from"/>
+        <element name="priceToFilter" type="input" selector="#sales_order_create_search_grid_filter_price_to"/>
+        <element name="selectedFilter" type="select" selector="#sales_order_create_search_grid_filter_in_products"/>
+        <element name="row" type="text" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}})" parameterized="true"/>
+        <element name="rowCheck" type="checkbox" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-select [type=checkbox]" parameterized="true"/>
+        <element name="rowQty" type="input" selector="#sales_order_create_search_grid_table > tbody tr:nth-of-type({{row}}) td.col-qty [name='qty']" parameterized="true"/>
+        <element name="addSelected" type="button" selector="#order-search .admin__page-section-title .actions button.action-add" timeout="30"/>
+        <element name="configure" type="button" selector=".product-configure-block button.action-default.scalable" timeout="30"/>
+    </section>
+</sections>

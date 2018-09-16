@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Check that required fields are actually required-->
+    <actionGroup name="checkRequiredFieldsInGroupedProductForm">
+        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
+        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
+        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
+        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
+    </actionGroup>
+
+    <!--Fill main fields in grouped product form-->
+    <actionGroup name="fillGroupedProductForm">
+        <arguments>
+            <argument name="product" defaultValue="GroupedProduct"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
+    </actionGroup>
+
+    <!--Filter product grid and see expected grouped product-->
+    <actionGroup name="viewGroupedProductInAdminGrid">
+        <arguments>
+            <argument name="product" defaultValue="GroupedProduct"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{product.type_id}}" stepKey="selectionProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeProductNameInGrid"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+    </actionGroup>
+
+    <!--Fill product min quantity in group products grid-->
+    <actionGroup name="fillDefaultQuantityForLinkedToGroupProductInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
+    </actionGroup>
+</actionGroups>

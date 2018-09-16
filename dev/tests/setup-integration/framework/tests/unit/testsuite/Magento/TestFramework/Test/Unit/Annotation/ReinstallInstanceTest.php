@@ -45,22 +45,9 @@ class ReinstallInstanceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testEndTestOnReinstall()
+    public function testEndTest()
     {
         $this->applicationMock->expects($this->once())
-            ->method('isInstalled')
-            ->willReturn(true);
-        $this->applicationMock->expects($this->once())
-            ->method('cleanup');
-        $this->model->endTest();
-    }
-
-    public function testEndTestWithoutCleanup()
-    {
-        $this->applicationMock->expects($this->once())
-            ->method('isInstalled')
-            ->willReturn(false);
-        $this->applicationMock->expects(self::at(0))
             ->method('cleanup');
         $this->model->endTest();
     }

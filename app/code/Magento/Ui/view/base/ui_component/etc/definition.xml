@@ -149,6 +149,13 @@
             <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
         </settings>
     </imageUploader>
+    <colorPicker class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/color-picker" template="ui/form/field">
+        <settings>
+            <elementTmpl>ui/form/element/color-picker</elementTmpl>
+            <colorFormat>rgb</colorFormat>
+            <colorPickerMode>full</colorPickerMode>
+        </settings>
+    </colorPicker>
     <urlInput class="Magento\Ui\Component\Form\Element\UrlInput" component="Magento_Ui/js/form/element/url-input" template="ui/form/element/url-input">
         <settings>
             <settingTemplate>ui/form/element/urlInput/setting</settingTemplate>

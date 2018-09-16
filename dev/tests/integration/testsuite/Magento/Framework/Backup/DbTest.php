@@ -16,12 +16,26 @@ use PHPUnit\Framework\TestCase;
 /**
  * Provide tests for \Magento\Framework\Backup\Db.
  */
-class DbTest extends TestCase
+class DbTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
     /**
      * Test db backup includes triggers.
      *
      * @magentoDataFixture Magento/Framework/Backup/_files/trigger.php
+     * @magentoDbIsolation disabled
      */
     public function testBackupIncludesCustomTriggers()
     {
@@ -47,5 +61,13 @@ class DbTest extends TestCase
         );
         //Clean up.
         $write->delete('/backups/' . $time . '_db_testbackup.sql');
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

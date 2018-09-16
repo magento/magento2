@@ -33,7 +33,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'inline.phtml';
+    protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
      * Gift message message
@@ -371,9 +371,6 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
-            ->setImageId($imageId)
-            ->setAttributes($attributes)
-            ->create();
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

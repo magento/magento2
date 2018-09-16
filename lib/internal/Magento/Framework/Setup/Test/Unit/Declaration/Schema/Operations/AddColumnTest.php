@@ -118,7 +118,16 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareColumn()
     {
-        $table = new Table('table', 'table', 'table', 'default', 'innodb');
+        $table = new Table(
+            'table',
+            'table',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
+        );
         $column = new Integer(
             'int',
             'int',
@@ -158,7 +167,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->migrateDataTrigger->expects(self::once())
             ->method('getCallback')
-            ->with($column)
+            ->with($elementHistory)
             ->willReturn($callback);
         $statement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
@@ -170,7 +179,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
             ->method('addElement')
             ->with('int', 'default', 'table', $definition, 'column')
             ->willReturn($statement);
-        $index = new Index('index', 'index', $column->getTable(), [$column], 'btree');
+        $index = new Index('index', 'index', $column->getTable(), [$column], 'btree', 'index');
         $this->elementFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($index);

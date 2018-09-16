@@ -97,7 +97,7 @@ return [
                 ],
             ],
             'name' => 'reference_table',
-            'resource' => 'sales',
+            'resource' => 'default',
         ],
         'auto_increment_test' => [
             'column' => [
@@ -120,12 +120,12 @@ return [
                 ],
             ],
             'constraint' => [
-                'unique_null_key' => [
+                'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE' => [
                     'column' => [
                         'int_auto_increment_with_nullable' => 'int_auto_increment_with_nullable',
                     ],
                     'type' => 'unique',
-                    'name' => 'unique_null_key',
+                    'name' => 'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE',
                 ],
             ],
             'name' => 'auto_increment_test',
@@ -225,17 +225,17 @@ return [
                 ],
             ],
             'constraint' => [
-                'some_unique_key' => [
+                'TEST_TABLE_SMALLINT_BIGINT' => [
                     'column' => [
                         'smallint' => 'smallint',
                         'bigint' => 'bigint',
                     ],
                     'type' => 'unique',
-                    'name' => 'some_unique_key',
+                    'name' => 'TEST_TABLE_SMALLINT_BIGINT',
                 ],
-                'some_foreign_key' => [
+                'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
                     'type' => 'foreign',
-                    'name' => 'some_foreign_key',
+                    'name' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',
@@ -244,12 +244,12 @@ return [
                 ],
             ],
             'index' => [
-                'speedup_index' => [
+                'TEST_TABLE_TINYINT_BIGINT' => [
                     'column' => [
                         'tinyint' => 'tinyint',
                         'bigint' => 'bigint',
                     ],
-                    'name' => 'speedup_index',
+                    'name' => 'TEST_TABLE_TINYINT_BIGINT',
                     'indexType' => 'btree',
                 ],
             ],

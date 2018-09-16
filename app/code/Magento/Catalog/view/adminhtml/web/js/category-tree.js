@@ -5,9 +5,10 @@
 
 define([
     'jquery',
+    'mageUtils',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($) {
+], function ($, utils) {
     'use strict';
 
     $.widget('mage.categoryTree', {
@@ -90,7 +91,7 @@ define([
             }
             result = {
                 data: {
-                    title: node.name + ' (' + node['product_count'] + ')'
+                    title: utils.unescape(node.name) + ' (' + node['product_count'] + ')'
                 },
                 attr: {
                     'class': node.cls + (!!node.disabled ? ' disabled' : '') //eslint-disable-line no-extra-boolean-cast

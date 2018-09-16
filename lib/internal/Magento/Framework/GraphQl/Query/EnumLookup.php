@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use Magento\Framework\GraphQl\Config\ConfigInterface;
-use Magento\Framework\GraphQl\Type\Enum\DataMapperInterface;
-use Magento\Framework\GraphQl\Config\Data\Enum;
+use Magento\Framework\GraphQl\Config\Element\Enum;
+use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -37,16 +38,16 @@ class EnumLookup
     }
 
     /**
-     * Convert a field value from a db query to an enum value declared as an item in the graphql.xml schema
+     * Convert a field value from a db query to an enum value declared as an item in the graphql schema
      *
      * @param string $enumName
-     * @param int|string|bool|float|null $fieldValue
-     * @return int|string|bool|float|null
+     * @param string $fieldValue
+     * @return string
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getEnumValueFromField(string $enumName, $fieldValue)
+    public function getEnumValueFromField(string $enumName, string $fieldValue) : string
     {
-        $priceViewEnum = $this->typeConfig->getTypeStructure($enumName);
+        $priceViewEnum = $this->typeConfig->getConfigElement($enumName);
         if ($priceViewEnum instanceof Enum) {
             foreach ($priceViewEnum->getValues() as $enumItem) {
                 $mappedValues = $this->enumDataMapper->getMappedEnums($enumName);
@@ -59,5 +60,6 @@ class EnumLookup
                 new Phrase('Enum type "%1" not defined', [$enumName])
             );
         }
+        return '';
     }
 }

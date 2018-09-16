@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -108,6 +110,33 @@ QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: Missing attribute_code for the input ' .
             'entity_type: catalog_category.');
+
+        $this->graphQlQuery($query);
+    }
+
+    public function testInvalidEntityTypeException()
+    {
+        $query
+            = <<<QUERY
+  {
+  customAttributeMetadata(attributes:[
+    {
+      attribute_code:"sku"
+      entity_type:"invalid"
+    }
+  ])
+    {
+      items{        
+      attribute_code
+      attribute_type
+      entity_type
+    }      
+    }  
+  }
+QUERY;
+        $this->expectException(\Exception::class);
+
+        $this->expectExceptionMessage('Invalid entity_type specified: invalid');
 
         $this->graphQlQuery($query);
     }

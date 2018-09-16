@@ -65,6 +65,18 @@ class ImageUploader
     protected $allowedExtensions;
 
     /**
+     * List of allowed image mime types
+     *
+     * @var array
+     */
+    private $allowedMimeTypes = [
+        'image/jpg',
+        'image/jpeg',
+        'image/gif',
+        'image/png',
+    ];
+
+    /**
      * ImageUploader constructor
      *
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -227,7 +239,9 @@ class ImageUploader
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowedExtensions($this->getAllowedExtensions());
         $uploader->setAllowRenameFiles(true);
-
+        if (!$uploader->checkMimeType($this->allowedMimeTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('File validation failed.'));
+        }
         $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
         unset($result['path']);
 

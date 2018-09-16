@@ -5,11 +5,13 @@
 
 var config = {
     shim: {
-        'tinymceDeprecated': {
+        'Magento_Tinymce3/tiny_mce/tiny_mce_src': {
             'exports': 'tinymce'
         }
     },
-    paths: {
-        'tinymceDeprecated': 'Magento_Tinymce3/tiny_mce/tiny_mce_src'
+    map: {
+        '*': {
+            'tinymceDeprecated': 'Magento_Tinymce3/tiny_mce/tiny_mce_src'
+        }
     }
 };

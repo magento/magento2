@@ -50,7 +50,9 @@
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
                 <item name="configured_price" xsi:type="string">Magento\Bundle\Pricing\Price\ConfiguredPrice</item>
+                <item name="configured_regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\ConfiguredRegularPrice</item>
                 <item name="bundle_option" xsi:type="string">Magento\Bundle\Pricing\Price\BundleOptionPrice</item>
+                <item name="bundle_option_regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\BundleOptionRegularPrice</item>
                 <item name="catalog_rule_price" xsi:type="string">Magento\CatalogRule\Pricing\Price\CatalogRulePrice</item>
             </argument>
         </arguments>
@@ -71,6 +73,11 @@
         </arguments>
     </type>
     <type name="Magento\Bundle\Pricing\Price\FinalPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Pricing\Price\ConfiguredPriceSelection">
         <arguments>
             <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
         </arguments>
@@ -197,6 +204,13 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Bundle\Api\Data\OptionInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Bundle\Model\Selection" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Quote\ChildrenValidationLocator">
+        <arguments>
+            <argument name="productTypeChildrenValidationMap" xsi:type="array">
+                <item name="bundle" xsi:type="boolean">false</item>
             </argument>
         </arguments>
     </type>

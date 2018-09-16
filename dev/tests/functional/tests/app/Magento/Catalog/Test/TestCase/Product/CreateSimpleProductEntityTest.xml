@@ -238,5 +238,20 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCustomOptions" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertFileExtensionHints" />
         </variation>
+        <variation name="CreateSimpleProductEntityTestVariation12" ticketId="MAGETWO-90368">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10</data>
+            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+            <data name="product/data/weight" xsi:type="string">1</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory,default_subcategory</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductViewBreadcrumbsCategory" />
+        </variation>
     </testCase>
 </config>

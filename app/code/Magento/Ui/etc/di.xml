@@ -252,6 +252,7 @@
     <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
+                <item name="const" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Constant</item>
                 <item name="object" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="configurableObject" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
                 <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>

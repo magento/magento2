@@ -17,7 +17,7 @@ return [
                 ],
             ],
             'name' => 'reference_table',
-            'resource' => 'sales',
+            'resource' => 'default',
         ],
         'test_table' => [
             'column' => [
@@ -31,9 +31,9 @@ return [
                 ],
             ],
             'constraint' => [
-                'some_foreign_key' => [
+                'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF' => [
                     'type' => 'foreign',
-                    'name' => 'some_foreign_key',
+                    'name' => 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',
@@ -41,7 +41,7 @@ return [
                 ],
             ],
             'name' => 'test_table',
-            'resource' => 'sales',
+            'resource' => 'default',
         ],
     ],
 ];

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnabledWYSIWYG">
+        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1" />
+        <waitForElementVisible  selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="waitForUseSystemValueVisible"/>
+        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" stepKey="selectOption1"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    </actionGroup>
+    <actionGroup name="DisabledWYSIWYG">
+        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <waitForPageLoad stepKey="wait3"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown2" time="30"/>
+        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" stepKey="selectOption2"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+    </actionGroup>
+    <actionGroup name="UseStaticURLForMediaContentInWYSIWYG">
+        <arguments>
+            <argument name="value" defaultValue="Yes" type="string"/>
+        </arguments>
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1" />
+        <selectOption selector="{{ContentManagementSection.StaticURL}}" userInput="{{value}}" stepKey="selectOption1"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+    </actionGroup>
+</actionGroups>

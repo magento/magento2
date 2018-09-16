@@ -65,6 +65,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/model/cart/estimate-service', function () {
 
         it('test subscribe when billingAddress was changed for  virtual quote', function () {

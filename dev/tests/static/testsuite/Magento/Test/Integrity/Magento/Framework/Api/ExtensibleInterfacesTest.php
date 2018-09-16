@@ -24,18 +24,19 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $errors = [];
                 $fileContent = file_get_contents($filename);
-                $extendsFromExtensibleDataInterface = preg_match(
-                    '/' . str_replace('\\', '\\\\', self::EXTENSIBLE_DATA_INTERFACE) . '/',
-                    $fileContent
-                );
+                $pattern = '/'
+                    . str_replace('\\', '\\\\', self::EXTENSIBLE_DATA_INTERFACE)
+                    . '/';
+                $extendsFromExtensibleDataInterface = preg_match($pattern, $fileContent);
+                $namespacePattern = '/namespace ([\w\\\\]+).*interface ([\w\\\\]+)/s';
                 if ($extendsFromExtensibleDataInterface
-                    && preg_match('/namespace ([\w\\\\]+).*interface ([\w\\\\]+)/s', $fileContent, $matches)
+                    && preg_match($namespacePattern, $fileContent, $matches)
                 ) {
                     $namespace = $matches[1];
                     $interfaceName = $matches[2];
@@ -158,9 +159,9 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $errors = [];
                 $fileContent = file_get_contents($filename);

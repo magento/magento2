@@ -9,50 +9,19 @@
 /** @var \Magento\Translation\Block\Js $block */
 ?>
 <?php if ($block->dictionaryEnabled()): ?>
-    <script>
-        require.config({
-            deps: [
-                'jquery',
-                'mage/translate',
-                'jquery/jquery-storageapi'
-            ],
-            callback: function ($) {
-                'use strict';
 
-                var dependencies = [],
-                    versionObj;
-
-                $.initNamespaceStorage('mage-translation-storage');
-                $.initNamespaceStorage('mage-translation-file-version');
-                versionObj = $.localStorage.get('mage-translation-file-version');
-
-                <?php $version = $block->getTranslationFileVersion(); ?>
-
-                if (versionObj.version !== '<?= /* @escapeNotVerified */ $block->escapeJsQuote($version) ?>') {
-                    dependencies.push(
-                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
-                    );
-
+<?php
+  $version = $block->getTranslationFileVersion();
+  $fileName = Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME;
+?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "mage/translate-init": {
+                    "dictionaryFile": "text!<?= $block->escapeJs($fileName); ?>",
+                    "version": "<?= $block->escapeJs($version) ?>"
                 }
-
-                require.config({
-                    deps: dependencies,
-                    callback: function (string) {
-                        if (typeof string === 'string') {
-                            $.mage.translate.add(JSON.parse(string));
-                            $.localStorage.set('mage-translation-storage', string);
-                            $.localStorage.set(
-                                'mage-translation-file-version',
-                                {
-                                    version: '<?= /* @escapeNotVerified */ $block->escapeJsQuote($version) ?>'
-                                }
-                            );
-                        } else {
-                            $.mage.translate.add($.localStorage.get('mage-translation-storage'));
-                        }
-                    }
-                });
             }
-        });
+        }
     </script>
 <?php endif; ?>

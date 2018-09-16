@@ -29,7 +29,7 @@ class MultipleStreamOutput extends Output
     public function __construct(
         array $streams,
         $verbosity = self::VERBOSITY_NORMAL,
-        $decorated = null,
+        $decorated = false,
         OutputFormatterInterface $formatter = null
     ) {
         foreach ($streams as $stream) {

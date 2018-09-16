@@ -670,6 +670,7 @@ class Application
             \Magento\Framework\App\Area::AREA_WEBAPI_REST,
             \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
             \Magento\Framework\App\Area::AREA_CRONTAB,
+            \Magento\Framework\App\Area::AREA_GRAPHQL
         ];
         if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);

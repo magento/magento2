@@ -442,7 +442,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resendConfirmation($email, $websiteId = null, $redirectUrl = '')
     {
@@ -465,7 +465,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activate($email, $confirmationKey)
     {
@@ -474,7 +474,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function activateById($customerId, $confirmationKey)
     {
@@ -514,7 +514,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authenticate($username, $password)
     {
@@ -549,7 +549,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
     {
@@ -558,7 +558,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
@@ -611,7 +611,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetPassword($email, $resetToken, $newPassword)
     {
@@ -624,6 +624,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $this->getAuthentication()->unlock($customer->getId());
         $this->sessionManager->destroy();
         $this->destroyCustomerSessions($customer->getId());
         $this->customerRepository->save($customer);
@@ -719,7 +720,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfirmationStatus($customerId)
     {
@@ -735,7 +736,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
@@ -757,7 +758,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -793,6 +794,11 @@ class AccountManagement implements AccountManagementInterface
 
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
+            $websiteId = $customer->getWebsiteId();
+            if ($websiteId && !$this->isCustomerInStore($websiteId, $customer->getStoreId())) {
+                throw new LocalizedException(__('The store view is not in the associated website.'));
+            }
+
             $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
@@ -835,7 +841,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultBillingAddress($customerId)
     {
@@ -844,7 +850,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultShippingAddress($customerId)
     {
@@ -873,11 +879,13 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePassword($email, $currentPassword, $newPassword)
     {
@@ -890,7 +898,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function changePasswordById($customerId, $currentPassword, $newPassword)
     {
@@ -958,7 +966,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(CustomerInterface $customer)
     {
@@ -983,7 +991,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
@@ -999,7 +1007,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function isCustomerInStore($customerWebsiteId, $storeId)
     {
@@ -1460,9 +1468,7 @@ class AccountManagement implements AccountManagementInterface
         /** @var \Magento\Customer\Model\Visitor $visitor */
         foreach ($visitorCollection->getItems() as $visitor) {
             $sessionId = $visitor->getSessionId();
-            $this->sessionManager->start();
             $this->saveHandler->destroy($sessionId);
-            $this->sessionManager->writeClose();
         }
     }
 }

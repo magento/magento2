@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SignUpNewUserFromStorefrontActionGroup">
+        <arguments>
+            <argument name="Customer"/>
+        </arguments>
+        <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
+        <fillField  stepKey="fillFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField  stepKey="fillConfirmPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+        <see stepKey="seeFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeLastName" userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+    </actionGroup>
+    
+    <actionGroup name="EnterCustomerAddressInfo">
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+        
+        <amOnPage url="customer/address/new/" stepKey="goToAddressPage"/>
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+        <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerAddressSection.firstName}}" userInput="{{Address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{StorefrontCustomerAddressSection.lastName}}" userInput="{{Address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{StorefrontCustomerAddressSection.company}}" userInput="{{Address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{StorefrontCustomerAddressSection.phoneNumber}}" userInput="{{Address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{StorefrontCustomerAddressSection.streetAddress1}}" userInput="{{Address.street[0]}}"/>
+        <fillField stepKey="fillStreetAddress2" selector="{{StorefrontCustomerAddressSection.streetAddress2}}" userInput="{{Address.street[1]}}"/>
+        <fillField stepKey="fillCityName" selector="{{StorefrontCustomerAddressSection.city}}" userInput="{{Address.city}}"/>
+        <selectOption stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvince}}" userInput="{{Address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{StorefrontCustomerAddressSection.zip}}" userInput="{{Address.postcode}}"/>
+        <selectOption stepKey="selectCounty" selector="{{StorefrontCustomerAddressSection.country}}" userInput="{{Address.country_id}}"/>
+        
+        <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
+    </actionGroup>
+</actionGroups>

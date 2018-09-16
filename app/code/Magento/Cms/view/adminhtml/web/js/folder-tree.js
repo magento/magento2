@@ -94,7 +94,7 @@ define([
 
                     lastExistentFolderEl = folderEl;
 
-                    if (path.length > 1) {
+                    if (path.length) {
                         tree.jstree('open_node', folderEl, recursiveOpen);
                     } else {
                         tree.jstree('open_node', folderEl, function () {

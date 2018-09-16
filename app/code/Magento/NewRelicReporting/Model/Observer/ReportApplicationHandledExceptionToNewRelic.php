@@ -37,6 +37,9 @@ class ReportApplicationHandledExceptionToNewRelic implements ObserverInterface
         $this->newRelicWrapper = $newRelicWrapper;
     }
 
+    /**
+     * @param Observer $observer
+     */
     public function execute(Observer $observer)
     {
         if ($this->config->isNewRelicEnabled()) {

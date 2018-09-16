@@ -20,7 +20,7 @@ class UrlInput extends \Magento\Ui\Component\Form\Element\AbstractElement
      *
      * @return string
      */
-    public function getComponentName()
+    public function getComponentName(): string
     {
         return static::NAME;
     }
@@ -28,7 +28,7 @@ class UrlInput extends \Magento\Ui\Component\Form\Element\AbstractElement
     /**
      * {@inheritdoc}
      */
-    public function prepare()
+    public function prepare(): void
     {
         $config = $this->getData('config');
         //process urlTypes

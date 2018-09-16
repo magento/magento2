@@ -64,7 +64,7 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
     public function assertPrice(FixtureInterface $product, View $productViewBlock)
     {
         $fields = $product->getData();
-        $specialPrice = $productViewBlock->getPriceBlock()->getSpecialPrice();
+        $specialPrice = $productViewBlock->getPriceBlock($product)->getSpecialPrice();
         if (isset($fields['special_price'])) {
             \PHPUnit\Framework\Assert::assertEquals(
                 number_format($fields['special_price'], 2),

@@ -110,7 +110,7 @@ class MassSchedule
         $requestItems = [];
         $bulkException = new BulkException();
         foreach ($entitiesArray as $key => $entityParams) {
-            /** @var \Magento\WebapiAsync\Api\Data\ItemStatusInterface $requestItem */
+            /** @var \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {

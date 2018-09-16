@@ -31,13 +31,10 @@ class ModifyTable implements OperationInterface
     private $dbSchemaWriter;
 
     /**
-     * Constructor.
-     *
      * @param DbSchemaWriterInterface $dbSchemaWriter
      */
-    public function __construct(
-        DbSchemaWriterInterface $dbSchemaWriter
-    ) {
+    public function __construct(DbSchemaWriterInterface $dbSchemaWriter)
+    {
         $this->dbSchemaWriter = $dbSchemaWriter;
     }
 
@@ -64,13 +61,22 @@ class ModifyTable implements OperationInterface
     {
         /** @var Table $table */
         $table = $elementHistory->getNew();
-        return [
-            $this->dbSchemaWriter->modifyTableOption(
-                $table->getName(),
-                $table->getResource(),
-                'comment',
-                $table->getComment()
-            )
-        ];
+        /** @var Table $oldTable */
+        $oldTable = $elementHistory->getOld();
+        $oldOptions = $oldTable->getDiffSensitiveParams();
+        $statements = [];
+
+        foreach ($table->getDiffSensitiveParams() as $optionName => $optionValue) {
+            if ($oldOptions[$optionName] !== $optionValue) {
+                $statements[] = $this->dbSchemaWriter->modifyTableOption(
+                    $table->getName(),
+                    $table->getResource(),
+                    $optionName,
+                    $optionValue
+                );
+            }
+        }
+
+        return $statements;
     }
 }

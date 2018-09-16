@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver\Query;
 
@@ -56,7 +57,7 @@ class Type
      * @return string
      * @throws GraphQlInputException
      */
-    public function getType(string $attributeCode, string $entityType)
+    public function getType(string $attributeCode, string $entityType) : string
     {
         $type = $this->typeLocator->getType($attributeCode, $entityType);
 

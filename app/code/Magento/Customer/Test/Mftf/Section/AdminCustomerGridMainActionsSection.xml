@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerGridMainActionsSection">
+        <element name="addNewCustomer" type="button" selector="#add" timeout="30"/>
+        <element name="multicheck" type="checkbox" selector="#container>div>div.admin__data-grid-wrap>table>thead>tr>th.data-grid-multicheck-cell>div>label"/>
+        <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
+        <element name="actions" type="text" selector=".action-select"/>
+    </section>
+</sections>

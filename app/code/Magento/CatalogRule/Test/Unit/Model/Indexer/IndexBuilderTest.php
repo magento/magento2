@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -123,9 +126,15 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
     private $reindexRuleGroupWebsite;
 
     /**
+     * @var ProductLoader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productLoader;
+
+    /**
      * Set up test
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -171,36 +180,47 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         $this->rules->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
+
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
         $this->ruleCollectionFactory->expects($this->any())->method('addFieldToFilter')->will(
             $this->returnValue([$this->rules])
         );
+
         $this->product->expects($this->any())->method('load')->will($this->returnSelf());
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->product->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
+
         $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
+        $this->productLoader = $this->getMockBuilder(ProductLoader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->indexBuilder = new \Magento\CatalogRule\Model\Indexer\IndexBuilder(
-            $this->ruleCollectionFactory,
-            $this->priceCurrency,
-            $this->resource,
-            $this->storeManager,
-            $this->logger,
-            $this->eavConfig,
-            $this->dateFormat,
-            $this->dateTime,
-            $this->productFactory
+        $this->indexBuilder = (new ObjectManager($this))->getObject(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class,
+            [
+                'ruleCollectionFactory' => $this->ruleCollectionFactory,
+                'priceCurrency' => $this->priceCurrency,
+                'resource' => $this->resource,
+                'storeManager' => $this->storeManager,
+                'logger' => $this->logger,
+                'eavConfig' => $this->eavConfig,
+                'dateFormat' => $this->dateFormat,
+                'dateTime' => $this->dateTime,
+                'productFactory' => $this->productFactory,
+                'productLoader' => $this->productLoader,
+            ]
         );
+
         $this->reindexRuleProductPrice =
             $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->reindexRuleGroupWebsite =
             $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->setProperties($this->indexBuilder, [
             'metadataPool' => $this->metadataPool,
             'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
@@ -234,6 +254,11 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         $priceAttrMock->expects($this->any())
             ->method('getBackend')
             ->will($this->returnValue($backendModelMock));
+
+        $iterator = [$this->product];
+        $this->productLoader->expects($this->once())
+            ->method('getProducts')
+            ->willReturn($iterator);
 
         $this->reindexRuleProductPrice->expects($this->once())->method('execute')->willReturn(true);
         $this->reindexRuleGroupWebsite->expects($this->once())->method('execute')->willReturn(true);

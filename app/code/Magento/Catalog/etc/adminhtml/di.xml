@@ -207,4 +207,17 @@
             <argument name="path" xsi:type="string">web/default_layouts/default_category_layout</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Ui\Model\UrlInput\LinksConfigProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Product</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Category</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <arguments>
+            <argument name="filter" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddSearchKeyConditionToCollection</argument>
+        </arguments>
+    </type>
 </config>

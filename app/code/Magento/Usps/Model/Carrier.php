@@ -1036,7 +1036,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $api = 'TrackV2';
             $request = $xml->asXML();
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
 
             try {
                 $url = $this->getConfigData('gateway_url');
@@ -1901,7 +1901,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
 
-        $debugData = ['request' => $requestXml];
+        $debugData = ['request' => $this->filterDebugData($requestXml)];
         $url = $this->getConfigData('gateway_secure_url');
         if (!$url) {
             $url = $this->_defaultGatewayUrl;

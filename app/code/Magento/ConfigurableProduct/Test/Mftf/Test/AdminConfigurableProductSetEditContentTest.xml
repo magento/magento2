@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductSetEditContentTest" extends="AdminSimpleProductSetEditContentTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create/edit configurable product"/>
+            <title value="Admin should be able to set/edit product Content when editing a configurable product"/>
+            <description value="Admin should be able to set/edit product Content when editing a configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3424"/>
+            <group value="ConfigurableProduct"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Checking content storefront-->
+        <amOnPage url="{{BaseConfigurableProduct.name}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

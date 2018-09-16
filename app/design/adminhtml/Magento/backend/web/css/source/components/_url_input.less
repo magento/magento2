@@ -8,25 +8,43 @@
 //  _____________________________________________
 .url-input-container {
 
-    .url-input-select {
-        float: left;
-        max-width: 7.5em;
-        min-width: 7.5em;
+    .type-selector-input-container {
+        align-items: stretch;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
     }
 
+    .url-input-select {
+        flex-grow: 0;
+    }
 
     .url-input-element-linked-element {
-        float: left;
+        flex-grow: 1;
         margin-left: 1.5em;
-        width: calc(~'100% - 9em');
     }
 
     .url-input-setting {
         clear: both;
         display: block;
         &:before {
-            content: "";
             clear: both;
+            content: "";
+        }
+    }
+
+    .admin__action-multiselect-text {
+        &.warning {
+            color: #F00;
+        }
+    }
+
+    .action-close, .action-close:active {
+        margin-right: 3.2rem;
+        padding: 0.8rem 1.5rem 0.6rem;
+
+        &:before {
+            font-size: 1.5rem;
         }
     }
 }

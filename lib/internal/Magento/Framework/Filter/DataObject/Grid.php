@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Filter\DataObject;
 
-use Magento\Framework\DataObject;
-
 class Grid extends \Magento\Framework\Filter\DataObject
 {
     /**

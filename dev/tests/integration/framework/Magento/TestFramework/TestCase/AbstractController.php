@@ -9,9 +9,11 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -96,7 +98,16 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
      */
     public function dispatch($uri)
     {
-        $this->getRequest()->setRequestUri($uri);
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        $request->setRequestUri($uri);
+        if ($request->isPost()
+            && !array_key_exists('form_key', $request->getPost())
+        ) {
+            /** @var FormKey $formKey */
+            $formKey = $this->_objectManager->get(FormKey::class);
+            $request->setPostValue('form_key', $formKey->getFormKey());
+        }
         $this->_getBootstrap()->runApp();
     }
 

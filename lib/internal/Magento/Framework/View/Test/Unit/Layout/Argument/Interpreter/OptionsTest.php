@@ -67,10 +67,16 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluateWrongModel($input, $expectedException, $expectedExceptionMessage)
     {
-        $this->expectException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $this->_objectManager->method('get')
+            ->willReturnSelf();
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateWrongModelDataProvider()
     {
         return [

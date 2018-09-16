@@ -492,8 +492,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function downloadTypesDataProvider()
     {
         return [
-            ['mimeType' => 'text/html',  'disposition' => \Zend_Mime::DISPOSITION_ATTACHMENT],
-            ['mimeType' => 'image/jpeg', 'disposition' => \Zend_Mime::DISPOSITION_INLINE],
+            ['mimeType' => 'text/html',  'disposition' => \Magento\Framework\HTTP\Mime::DISPOSITION_ATTACHMENT],
+            ['mimeType' => 'image/jpeg', 'disposition' => \Magento\Framework\HTTP\Mime::DISPOSITION_INLINE],
         ];
     }
 }

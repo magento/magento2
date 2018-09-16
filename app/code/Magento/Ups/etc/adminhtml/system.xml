@@ -106,7 +106,7 @@
                     <label>Live Account</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="unit_of_measure" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="unit_of_measure" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Ups\Model\Config\Source\Unitofmeasure</source_model>
                 </field>

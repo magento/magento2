@@ -28,6 +28,7 @@
             <xs:element name="button" type="componentButton"/>
             <xs:element name="checkbox" type="componentCheckbox"/>
             <xs:element name="checkboxset" type="componentCheckboxset"/>
+            <xs:element name="colorPicker" type="componentColorPicker"/>
             <xs:element name="column" type="componentColumn"/>
             <xs:element name="columns" type="componentColumns"/>
             <xs:element name="columnsControls" type="componentColumnsControls"/>

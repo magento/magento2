@@ -41,7 +41,9 @@ var config = {
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
-        'domReady': 'requirejs/domReady'
+        'domReady': 'requirejs/domReady',
+        'spectrum': 'jquery/spectrum/spectrum',
+        'tinycolor': 'jquery/spectrum/tinycolor'
     },
     'deps': [
         'jquery/jquery-migrate'
@@ -50,6 +52,9 @@ var config = {
         'mixins': {
             'jquery/jstree/jquery.jstree': {
                 'mage/backend/jstree-mixin': true
+            },
+            'jquery': {
+                'jquery/patches/jquery': true
             }
         },
         'text': {
@@ -59,9 +64,3 @@ var config = {
         }
     }
 };
-
-require(['jquery'], function ($) {
-    'use strict';
-
-    $.noConflict();
-});

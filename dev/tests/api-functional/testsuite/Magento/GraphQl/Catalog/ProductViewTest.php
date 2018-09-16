@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -38,22 +42,17 @@ class ProductViewTest extends GraphQlAbstract
     {
         items {
             attribute_set_id
-            category_ids
-            category_links
-            {
-                category_id
-                position
-            }
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
+            categories {
+               name
+               url_path
+               available_sort_by
+               level
+            }
             image
             image_label
             meta_description
@@ -152,7 +151,6 @@ class ProductViewTest extends GraphQlAbstract
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -213,7 +211,6 @@ class ProductViewTest extends GraphQlAbstract
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -229,7 +226,8 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
-            website_ids
+            canonical_url
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -247,19 +245,38 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-
+        $responseObject = new DataObject($response);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $product->setId(
+            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
-        $this->assertCategoryIds($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
+        self::assertEquals(
+            'Movable Position 2',
+            $responseObject->getData('products/items/0/categories/1/name')
+        );
+        self::assertEquals(
+            'Filter category',
+            $responseObject->getData('products/items/0/categories/2/name')
+        );
+        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        self::assertEquals(
+            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
+            $responseObject->getData('products/items/0/canonical_url')
+        );
     }
 
     /**
@@ -268,7 +285,7 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-
+        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -277,19 +294,12 @@ QUERY;
     {
         items{
             attribute_set_id
-            category_ids
-            category_links
+            categories
             {
-                category_id
-                position
+                id
             }
             country_of_manufacture
             created_at
-            custom_design
-            custom_design_from
-            custom_design_to
-            custom_layout
-            custom_layout_update
             description
             gift_message_available
             id
@@ -389,7 +399,6 @@ QUERY;
                   }
               }
             }
-            page_layout
             price {
               minimalPrice {
                 amount {
@@ -450,7 +459,6 @@ QUERY;
             special_price
             special_to_date
             swatch_image
-            tax_class_id
             thumbnail
             thumbnail_label
             tier_price
@@ -466,7 +474,7 @@ QUERY;
             updated_at
             url_key
             url_path
-            website_ids
+            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -476,7 +484,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-
+        
         /**
          * @var ProductRepositoryInterface $productRepository
          */
@@ -487,6 +495,8 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -518,6 +528,135 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertCustomAttribute($response['products']['items'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
+     */
+    public function testProductLinks()
+    {
+        $productSku = 'simple_with_cross';
+
+        $query = <<<QUERY
+       {
+           products(filter: {sku: {eq: "{$productSku}"}})
+           {
+               items {
+                   attribute_set_id
+                   type_id
+                   product_links
+                   {
+                       link_type
+                       linked_product_sku
+                       linked_product_type
+                       position
+                       sku
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $this->assertNotNull($response['products']['items'][0]['product_links'], "product_links must not be null");
+        $this->assertProductLinks($product, $response['products']['items'][0]['product_links'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testProductPrices()
+    {
+        $firstProductSku = 'simple-249';
+        $secondProductSku = 'simple-156';
+        $query = <<<QUERY
+       {
+           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           {
+               items {
+                   attribute_set_id
+                   created_at
+                   id
+                   name
+                   price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
+                   sku
+                   type_id
+                   updated_at
+                   ... on PhysicalProductInterface {
+                        weight
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $firstProduct->setId(
+            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        $secondProduct->setId(
+            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        self::assertCount(2, $response['products']['items']);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
     }
 
     /**
@@ -557,18 +696,6 @@ QUERY;
                 'video_url' => $videoContent->getVideoUrl(),
             ]
         );
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertCategoryIds($product, $actualResponse)
-    {
-        $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
-        $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-        $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-        $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
     /**
@@ -701,7 +828,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
+
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -745,6 +872,45 @@ QUERY;
      * @param ProductInterface $product
      * @param array $actualResponse
      */
+    private function assertWebsites($product, $actualResponse)
+    {
+        $assertionMap = [
+            [
+                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
+                'name' => 'Main Website',
+                'code' => 'base',
+                'sort_order' => 0,
+                'default_group_id' => '1',
+                'is_default' => true,
+            ]
+        ];
+
+        $this->assertEquals($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertProductLinks($product, $actualResponse)
+    {
+        /** @var ProductLinkInterface $productLinks */
+        $productLinks = $product->getProductLinks();
+        $productLink = $productLinks[0];
+        $assertionMap = [
+            ['response_field' => 'link_type', 'expected_value' => $productLink->getLinkType()],
+            ['response_field' => 'linked_product_sku', 'expected_value' => $productLink->getLinkedProductSku()],
+            ['response_field' => 'linked_product_type', 'expected_value' => $productLink->getLinkedProductType()],
+            ['response_field' => 'position', 'expected_value' => $productLink->getPosition()],
+            ['response_field' => 'sku', 'expected_value' => $productLink->getSku()],
+        ];
+        $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
     private function assertEavAttributes($product, $actualResponse)
     {
         $eavAttributes = [
@@ -754,7 +920,6 @@ QUERY;
             'meta_keyword',
             'meta_title',
             'short_description',
-            'tax_class_id',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',
@@ -791,30 +956,5 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
     }
 }

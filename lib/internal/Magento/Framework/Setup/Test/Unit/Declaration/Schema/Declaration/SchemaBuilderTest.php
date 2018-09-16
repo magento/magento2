@@ -192,7 +192,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             $name,
             'table',
             'default',
-            'resource'
+            'resource',
+            'utf-8',
+            'utf-8',
+            ''
         );
     }
 
@@ -238,14 +241,16 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @param Table $table
      * @param array $columns
+     * @param string $nameWithoutPrefix
      * @return Internal
      */
-    private function createPrimaryConstraint(Table $table, array $columns)
+    private function createPrimaryConstraint(Table $table, array $columns, $nameWithoutPrefix = 'PRIMARY')
     {
         return new Internal(
             'PRIMARY',
             'primary',
             $table,
+            $nameWithoutPrefix,
             $columns
         );
     }
@@ -256,16 +261,18 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $indexName
      * @param Table $table
      * @param array $columns
+     * @param string|null $nameWithoutPrefix
      * @return Index
      */
-    private function createIndex($indexName, Table $table, array $columns)
+    private function createIndex($indexName, Table $table, array $columns, $nameWithoutPrefix = null)
     {
         return new Index(
             $indexName,
             'index',
             $table,
             $columns,
-            'btree'
+            'btree',
+            $nameWithoutPrefix ?: $indexName
         );
     }
 
@@ -292,13 +299,14 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @dataProvider tablesProvider
      * @param array $tablesData
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Magento\Framework\Setup\Exception
      */
     public function testBuild(array $tablesData)
     {
         $table = $this->createTable('first_table');
         $refTable = $this->createTable('second_table');
         $refColumn = $this->createIntegerColumn('ref_column', $refTable);
-        $index = $this->createIndex('FIRST_INDEX', $table, [$refColumn]);
+        $index = $this->createIndex('PRE_FIRST_INDEX', $table, [$refColumn], 'FIRST_INDEX');
         $refTable->addColumns([$refColumn]);
         $refTable->addIndexes([$index]);
         $firstColumn = $this->createIntegerAIColumn('first_column', $table);
@@ -309,113 +317,18 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'some_foreign_key',
             'foreign',
             $table,
+            'some_foreign_key',
             $foreignColumn,
             $refTable,
             $refColumn,
             'CASCADE'
         );
-        $table->addColumns([$firstColumn, $foreignColumn, $timestampColumn]);
-        $table->addConstraints([$foreignKey, $primaryKey]);
+        $firstTableColumns = [$firstColumn, $foreignColumn, $timestampColumn];
+        $firstTableConstraints = [$foreignKey, $primaryKey];
+        $table->addColumns($firstTableColumns);
+        $table->addConstraints($firstTableConstraints);
         $this->elementFactoryMock->expects(self::exactly(9))
             ->method('create')
-            ->withConsecutive(
-                [
-                    'table',
-                    [
-                        'name' =>'first_table',
-                        'resource' => 'default',
-                        'engine' => 'innodb',
-                        'comment' => null
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'first_column',
-                        'type' => 'int',
-                        'table' => $table,
-                        'padding' => 10,
-                        'identity' => true,
-                        'nullable' => false,
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'foreign_column',
-                        'type' => 'int',
-                        'table' => $table,
-                        'padding' => 10,
-                        'nullable' => false,
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'timestamp',
-                    [
-                        'name' => 'second_column',
-                        'type' => 'timestamp',
-                        'table' => $table,
-                        'default' => 'CURRENT_TIMESTAMP',
-                        'on_update' => true,
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'table',
-                    [
-                        'name' =>'second_table',
-                        'resource' => 'default',
-                        'engine' => 'innodb',
-                        'comment' => null
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'ref_column',
-                        'type' => 'int',
-                        'table' => $refTable,
-                        'padding' => 10,
-                        'nullable' => false,
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'index',
-                    [
-                        'name' => 'FIRST_INDEX',
-                        'table' => $refTable,
-                        'column' => ['ref_column'],
-                        'columns' => [$refColumn],
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'foreign',
-                    [
-                        'name' => 'some_foreign_key',
-                        'type' => 'foreign',
-                        'column' => $foreignColumn,
-                        'table' => $table,
-                        'referenceTable' => $refTable,
-                        'referenceColumn' => $refColumn,
-                        'resource' => 'default'
-                    ]
-                ],
-                [
-                    'primary',
-                    [
-                        'name' => 'PRIMARY',
-                        'type' => 'primary',
-                        'columns' => [$firstColumn],
-                        'table' => $table,
-                        'column' => ['first_column'],
-                        'resource' => 'default'
-                    ]
-                ]
-            )
             ->willReturnOnConsecutiveCalls(
                 $table,
                 $firstColumn,
