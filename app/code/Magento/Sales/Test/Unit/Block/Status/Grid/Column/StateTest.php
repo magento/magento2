@@ -70,14 +70,14 @@ class StateTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
             ['create', 'joinStates']
         );
-        $this->orderStatusCollectionFactoryMock->expects($this->once())
+        $this->orderStatusCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())
+        $collectionMock->expects($this->any())
             ->method('joinStates')
             ->will($this->returnValue($statuses));
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
-        $this->assertSame('processing[Suspected Fraud]', $result);
+        $this->assertSame('processing[Processing]', $result);
     }
 }
