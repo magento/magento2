@@ -62,14 +62,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function __construct(
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
-        DriverOptions $driverOptions
+        DriverOptions $driverOptions = null
     ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
         foreach ($this->configOptionsListClasses as $className) {
             $this->configOptionsCollection[] = \Magento\Framework\App\ObjectManager::getInstance()->get($className);
         }
-        $this->driverOptions = $driverOptions;
+        $this->driverOptions = $driverOptions ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DriverOptions::class);
     }
 
     /**
@@ -165,7 +165,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY,
-                'Client key file for SSL',
+                'Full path of client key file in order to establish db connection through SSL',
                 null
             ),
             new TextConfigOption(
@@ -173,7 +173,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT,
-                'Client certificate for SSL',
+                'Full path of client certificate file in order to establish db connection through SSL',
                 null
             ),
             new TextConfigOption(
@@ -181,14 +181,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CA,
-                'Server sertificate for SSL',
+                'Full path of server certificate file in order to establish db connection through SSL',
                 null
             ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY,
-                'Verify server sertification'
+                'Verify server certification'
             ),
         ];
 
