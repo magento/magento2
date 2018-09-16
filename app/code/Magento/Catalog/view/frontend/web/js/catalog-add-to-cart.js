@@ -6,8 +6,10 @@
 define([
     'jquery',
     'mage/translate',
+    'underscore',
+    'Magento_Catalog/js/product/view/product-ids-resolver',
     'jquery/ui'
-], function ($, $t) {
+], function ($, $t, _, idsResolver) {
     'use strict';
 
     $.widget('mage.catalogAddToCart', {
@@ -76,17 +78,18 @@ define([
         /**
          * Handler for the form 'submit' event
          *
-         * @param {Object} form
+         * @param {jQuery} form
          */
         submitForm: function (form) {
             this.ajaxSubmit(form);
         },
 
         /**
-         * @param {String} form
+         * @param {jQuery} form
          */
         ajaxSubmit: function (form) {
             var self = this,
+                productIds = idsResolver(form),
                 formData;
 
             $(self.options.minicartSelector).trigger('contentLoading');
@@ -115,6 +118,7 @@ define([
 
                     $(document).trigger('ajax:addToCart', {
                         'sku': form.data().productSku,
+                        'productIds': productIds,
                         'form': form,
                         'response': res
                     });
