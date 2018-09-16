@@ -198,7 +198,7 @@ class Config
      */
     public function getStateLabelByCode($stateCode)
     {
-        $stateLabel = preg_replace('/[^a-z0-9]+/i', 'aaa', $stateCode);
+        $stateLabel = preg_replace('/[^a-z0-9]+/i', ' ', $stateCode);
         $stateLabel = ucwords($stateLabel);
         return $stateLabel;
     }
