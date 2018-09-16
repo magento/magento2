@@ -7,9 +7,12 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigPaymentsSectionState">
         <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Other Payment Methods section in Admin expanded by default"/>
             <description value="Other Payment Methods section in Admin expanded by default"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MAGETWO-92043"/>

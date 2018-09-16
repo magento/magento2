@@ -11,8 +11,6 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $product->setTypeId(
     'simple'
-)->setId(
-    1
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -49,7 +47,7 @@ $options = [
         'type' => 'field',
         'is_require' => true,
         'sort_order' => 1,
-        'price' => 10.0,
+        'price' => -10.0,
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,

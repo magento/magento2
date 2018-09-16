@@ -7,15 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AddressStateFieldForUKCustomerRemainOptionAfterRefreshTest">
         <annotations>
             <features value="Checkout"/>
-            <title value="Guest Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Address State Field For UK Customers Remain Option even After Browser Refresh"/>
             <description value="Address State Field For UK Customers Remain Option even After Browser Refresh"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93329"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MAGETWO-93726"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -45,6 +49,7 @@
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
         <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{UK_Address.street[0]}}" stepKey="enterStreet"/>
         <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{UK_Address.city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="{{UK_Address.province}}" stepKey="enterProvince"/>
         <waitForPageLoad stepKey="waitFormToReload2"/>
         <see userInput="State/Province" stepKey="StateFieldStillExists"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{UK_Address.telephone}}" stepKey="enterTelephone"/>

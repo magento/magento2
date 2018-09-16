@@ -57,6 +57,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     private $catalogRuleProcessor;
 
     /**
+     * @var array
+     */
+    private $optionsPosition = [];
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -86,6 +91,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return catalog rule processor or creates processor if it does not exist
+     *
      * @deprecated 100.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
@@ -101,6 +108,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * Returns the bundle product options
+     *
      * Will return cached options data if the product options are already initialized
      * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
      *
@@ -135,6 +143,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Return true if product has options
+     *
      * @return bool
      */
     public function hasOptions()
@@ -150,7 +160,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns JSON encoded config to be used in JS scripts
      *
      * @return string
-     *
      */
     public function getJsonConfig()
     {
@@ -172,6 +181,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             }
             $optionId = $optionItem->getId();
             $options[$optionId] = $this->getOptionItemData($optionItem, $currentProduct, $position);
+            $this->optionsPosition[$position] = $optionId;
 
             // Add attribute default value (if set)
             if ($preConfiguredFlag) {
@@ -370,6 +380,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = [
             'options' => $options,
             'selected' => $this->selectedOptions,
+            'positions' => $this->optionsPosition,
             'bundleId' => $product->getId(),
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => [

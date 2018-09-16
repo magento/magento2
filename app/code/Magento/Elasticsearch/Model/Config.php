@@ -25,6 +25,8 @@ class Config implements ClientOptionsInterface
      */
     const ENGINE_NAME = 'elasticsearch';
 
+    private const ENGINE_NAME_5 = 'elasticsearch5';
+
     /**
      * Elasticsearch Entity type
      */
@@ -82,7 +84,8 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function prepareClientOptions($options = [])
@@ -135,7 +138,7 @@ class Config implements ClientOptionsInterface
      */
     public function isElasticsearchEnabled()
     {
-        return $this->engineResolver->getCurrentSearchEngine() === self::ENGINE_NAME;
+        return in_array($this->engineResolver->getCurrentSearchEngine(), [self::ENGINE_NAME, self::ENGINE_NAME_5]);
     }
 
     /**
@@ -150,7 +153,7 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * get Elasticsearch entity type
+     * Get Elasticsearch entity type
      *
      * @return string
      * @since 100.1.0

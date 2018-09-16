@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\Manager;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -139,5 +144,96 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
+    }
+
+    /**
+     * Test create product with already existing url key.
+     *
+     * @dataProvider saveActionWithAlreadyExistingUrlKeyDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     * @param array $postData
+     * @return void
+     */
+    public function testSaveActionWithAlreadyExistingUrlKey(array $postData)
+    {
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/catalog/product/save');
+        /** @var Manager $messageManager */
+        $messageManager = $this->_objectManager->get(Manager::class);
+        $messages = $messageManager->getMessages();
+        $errors = $messages->getItemsByType('error');
+        $message = array_shift($errors);
+        $this->assertSame('URL key for specified store already exists.', $message->getText());
+        $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
+        /** @var DataPersistorInterface $dataPersistor */
+        $dataPersistor = $this->_objectManager->get(DataPersistorInterface::class);
+        $productData = $dataPersistor->get('catalog_product')['product'];
+        $image = array_shift($productData['media_gallery']['images']);
+        $this->assertStringEndsNotWith('.tmp', $image['file']);
+        $this->assertStringEndsNotWith('.tmp', $productData['image']);
+        $this->assertStringEndsNotWith('.tmp', $productData['small_image']);
+        $this->assertStringEndsNotWith('.tmp', $productData['thumbnail']);
+        $this->assertStringEndsNotWith('.tmp', $productData['swatch_image']);
+    }
+
+    /**
+     * Provide test data for testSaveActionWithAlreadyExistingUrlKey().
+     *
+     * @return array
+     */
+    public function saveActionWithAlreadyExistingUrlKeyDataProvider()
+    {
+        return [
+            [
+                'post_data' => [
+                    'product' =>
+                        [
+                            'attribute_set_id' => '4',
+                            'status' => '1',
+                            'name' => 's2',
+                            'url_key' => 'simple-product',
+                            'quantity_and_stock_status' =>
+                                [
+                                    'qty' => '10',
+                                    'is_in_stock' => '1',
+                                ],
+                            'website_ids' =>
+                                [
+                                    1 => '1',
+                                ],
+                            'sku' => 's2',
+                            'price' => '3',
+                            'tax_class_id' => '2',
+                            'product_has_weight' => '0',
+                            'visibility' => '4',
+                            'media_gallery' =>
+                                [
+                                    'images' =>
+                                        [
+                                            'h17hftqohrd' =>
+                                                [
+                                                    'position' => '1',
+                                                    'media_type' => 'image',
+                                                    'video_provider' => '',
+                                                    'file' => '/m/a//magento_image.jpg.tmp',
+                                                    'value_id' => '',
+                                                    'label' => '',
+                                                    'disabled' => '0',
+                                                    'removed' => '',
+                                                    'role' => '',
+                                                ],
+                                        ],
+                                ],
+                            'image' => '/m/a//magento_image.jpg.tmp',
+                            'small_image' => '/m/a//magento_image.jpg.tmp',
+                            'thumbnail' => '/m/a//magento_image.jpg.tmp',
+                            'swatch_image' => '/m/a//magento_image.jpg.tmp',
+                        ],
+                    'form_key' => Bootstrap::getObjectManager()->get(FormKey::class)->getFormKey(),
+                ]
+            ]
+        ];
     }
 }
