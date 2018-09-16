@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1)
 namespace Magento\Setup\Model\ConfigOptionsList;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -31,7 +31,7 @@ class DriverOptions
      * @param string $driverOptionKey
      * @return bool
      */
-    protected function optionExists($options, $driverOptionKey)
+    private function optionExists($options, $driverOptionKey)
     {
         return $options[$driverOptionKey] === false || !empty($options[$driverOptionKey]);
     }
