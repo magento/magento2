@@ -53,9 +53,9 @@ class ConfigGeneratorTest extends TestCase
         $this->configGeneratorObject = new ConfigGenerator(
             $randomMock,
             $deployConfig,
-            $driverOptions,
             $configDataFactoryMock,
-            $cryptKeyGenerator
+            $cryptKeyGenerator,
+            $driverOptions
         );
     }
 
