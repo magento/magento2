@@ -15,6 +15,8 @@ use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as 
 use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
 
 /**
+ * Class to validate the quote
+ *
  * @api
  * @since 100.0.2
  */
