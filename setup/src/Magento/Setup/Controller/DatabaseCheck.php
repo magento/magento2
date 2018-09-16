@@ -40,6 +40,9 @@ class DatabaseCheck extends AbstractActionController
             $password = isset($params['password']) ? $params['password'] : '';
             $driverOptions = [];
             if ($this->isDriverOptionsGiven($params)) {
+                if (empty($params['driverOptionsSslVerify'])) {
+                    $params['driverOptionsSslVerify'] = 0;
+                }
                 $driverOptions = [
                     ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY => $params['driverOptionsSslKey'],
                     ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT => $params['driverOptionsSslCert'],
