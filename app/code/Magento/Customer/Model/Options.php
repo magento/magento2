@@ -102,6 +102,7 @@ class Options
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;
+            $result = array_filter($result);
         }
         if ($isOptional && trim(current($options))) {
             $result = array_merge([' ' => ' '], $result);
