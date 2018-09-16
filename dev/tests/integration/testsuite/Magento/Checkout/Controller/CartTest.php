@@ -11,8 +11,12 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -26,6 +30,28 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /** @var CheckoutSession */
+    private $checkoutSession;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->checkoutSession = $this->_objectManager->get(CheckoutSession::class);
+        $this->_objectManager->addSharedInstance($this->checkoutSession, CheckoutSession::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->_objectManager->removeSharedInstance(CheckoutSession::class);
+        parent::tearDown();
+    }
+
     /**
      * Test for \Magento\Checkout\Controller\Cart::configureAction() with simple product
      *
@@ -33,8 +59,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithSimpleProduct()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        /** @var $session CheckoutSession */
+        $session = $this->_objectManager->create(CheckoutSession::class);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
@@ -64,19 +90,20 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test for \Magento\Checkout\Controller\Cart::configureAction() with simple product and custom option
      *
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_and_custom_option.php
+     * @magentoDataFixture Magento/Checkout/_files/cart_with_simple_product_and_custom_options.php
      */
     public function testConfigureActionWithSimpleProductAndCustomOption()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        /** @var Quote $quote */
+        $quote = $this->getQuote('test_order_item_with_custom_options');
+        $this->checkoutSession->setQuoteId($quote->getId());
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = $productRepository->get('simple');
+        $product = $productRepository->get('simple_with_custom_options');
 
-        $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
+        $quoteItem = $this->_getQuoteItemIdByProductId($quote, $product->getId());
         $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product with custom option');
 
         $this->dispatch(
@@ -113,8 +140,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithBundleProduct()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        /** @var $session CheckoutSession */
+        $session = $this->_objectManager->create(CheckoutSession::class);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
@@ -148,8 +175,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithDownloadableProduct()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        /** @var $session CheckoutSession */
+        $session = $this->_objectManager->create(CheckoutSession::class);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
@@ -202,8 +229,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $productId = $product->getId();
         $originalQuantity = 1;
         $updatedQuantity = 2;
-        /** @var $checkoutSession \Magento\Checkout\Model\Session  */
-        $checkoutSession = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
+        /** @var $checkoutSession CheckoutSession */
+        $checkoutSession = $this->_objectManager->create(CheckoutSession::class);
         $quoteItem = $this->_getQuoteItemIdByProductId($checkoutSession->getQuote(), $productId);
 
         /** @var FormKey $formKey */
@@ -235,6 +262,26 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote->load($checkoutSession->getQuote()->getId());
         $quoteItem = $this->_getQuoteItemIdByProductId($quote, $product->getId());
         $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
+    }
+
+    /**
+     * Gets quote by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return Quote
+     */
+    private function getQuote($reservedOrderId)
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $items = $quoteRepository->getList($searchCriteria)->getItems();
+
+        return array_pop($items);
     }
 
     /**
