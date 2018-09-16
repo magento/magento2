@@ -19,6 +19,8 @@ use Magento\Backend\Helper\Data;
 use Magento\User\Model\Spi\NotificatorInterface;
 
 /**
+ * Initiate forgot-password process.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Forgotpassword extends Auth

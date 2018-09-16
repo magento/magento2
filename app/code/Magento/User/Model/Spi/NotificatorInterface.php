@@ -39,7 +39,7 @@ interface NotificatorInterface
      * Send a notification when a user is updated.
      *
      * @param UserInterface $user The user updated.
-     * @param string[] List of changed properties.
+     * @param string[] $changed List of changed properties.
      * @throws NotificationExceptionInterface
      *
      * @return void

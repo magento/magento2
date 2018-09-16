@@ -12,6 +12,8 @@ use Magento\Security\Model\SecurityCookie;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 
 /**
+ * Save admin user.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\User\Controller\Adminhtml\User
@@ -37,7 +39,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     }
 
     /**
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -119,6 +121,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     }
 
     /**
+     * Redirect to Edit form.
+     *
      * @param \Magento\User\Model\User $model
      * @param array $data
      * @return void

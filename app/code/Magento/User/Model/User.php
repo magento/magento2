@@ -199,6 +199,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+     * Removing dependencies and leaving only entity's properties.
+     *
      * @return string[]
      */
     public function __sleep()
@@ -221,6 +223,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+     * Restoring required objects after serialization.
+     *
      * @return void
      */
     public function __wakeup()
@@ -407,7 +411,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Check if such combination role/user exists
+     * Check if such combination role/user exists.
      *
      * @return bool
      */
@@ -419,6 +423,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     /**
      * Send email with reset password confirmation link.
+     *
      * @deprecated
      * @see NotificatorInterface::sendForgotPassword()
      *
@@ -738,7 +743,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -746,7 +751,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setFirstName($firstName)
     {
@@ -754,7 +759,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {
@@ -762,7 +767,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setLastName($lastName)
     {
@@ -770,7 +775,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getEmail()
     {
@@ -778,7 +783,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setEmail($email)
     {
@@ -786,7 +791,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserName()
     {
@@ -794,7 +799,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setUserName($userName)
     {
@@ -802,7 +807,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPassword()
     {
@@ -810,7 +815,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setPassword($password)
     {
@@ -818,7 +823,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCreated()
     {
@@ -826,7 +831,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCreated($created)
     {
@@ -834,7 +839,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getModified()
     {
@@ -842,7 +847,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setModified($modified)
     {
@@ -850,7 +855,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getIsActive()
     {
@@ -858,7 +863,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setIsActive($isActive)
     {
@@ -866,7 +871,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getInterfaceLocale()
     {
@@ -874,7 +879,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setInterfaceLocale($interfaceLocale)
     {
