@@ -219,15 +219,26 @@ define([
          */
         applyBillingAddress: function () {
             var shippingAddress;
+            var isBillingAddressInitialized;
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
 
                 return;
             }
-            shippingAddress = quote.shippingAddress();
+            shippingAddress = quote.billingAddress();
+            if(quote.isVirtual()) {
+                isBillingAddressInitialized = addressList.some(function (addrs) {
+                    if (addrs.isDefaultBilling()) {
+                        selectBillingAddress(addrs);
+                        return true;
+                    }
+                    return false;
+                });
+            }
 
-            if (shippingAddress &&
+            if (!isBillingAddressInitialized &&
+                shippingAddress &&
                 shippingAddress.canUseForBilling() &&
                 (shippingAddress.isDefaultShipping() || !quote.isVirtual())
             ) {
