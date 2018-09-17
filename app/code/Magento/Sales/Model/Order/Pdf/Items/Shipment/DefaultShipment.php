@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Items\Shipment;
@@ -89,7 +89,7 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                 ];
 
                 // draw options value
-                if ($option['value']) {
+                if ($option['value']!= null) {
                     $printValue = isset(
                         $option['print_value']
                     ) ? $option['print_value'] : $this->filterManager->stripTags(

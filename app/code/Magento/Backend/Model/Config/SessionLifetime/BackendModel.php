@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config\SessionLifetime;
@@ -19,6 +19,10 @@ class BackendModel extends Value
     /** Minimum admin session lifetime */
     const MIN_LIFETIME = 60;
 
+    /**
+     * @return Value
+     * @throws LocalizedException
+     */
     public function beforeSave()
     {
         $value = (int) $this->getValue();

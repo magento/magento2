@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,6 +55,14 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      */
     protected $_implOfBInterface;
 
+    /**
+     * Context constructor.
+     * @param ClassA $exA
+     * @param ClassB $exB
+     * @param ClassC $exC
+     * @param InterfaceA $interfaceA
+     * @param ImplementationOfInterfaceB $implOfBInterface
+     */
     public function __construct(
         \ClassA $exA,
         \ClassB $exB,

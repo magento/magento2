@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
@@ -138,6 +138,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_model->reindexRow(1, $forceReindex);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderReindexRow()
     {
         return [
@@ -207,6 +210,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_model->reindexList([1], $forceReindex);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderReindexList()
     {
         return [

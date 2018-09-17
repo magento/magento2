@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,6 +41,7 @@
                 </td>
                 <td>
                     <input name="product[options][<%- data.option_id %>][file_extension]" class="input-text" type="text" value="<%- data.file_extension %>">
+                    <div class="note"><?php /* @escapeNotVerified */ echo __('Enter separated extensions, like: png, jpg, gif.') ?></div>
                 </td>
                 <td class="col-file"><?php /* @escapeNotVerified */ echo __('%1 <span>x</span> %2 <span>px.</span>',
                     '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_x]" value="<%- data.image_size_x %>">',

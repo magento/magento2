@@ -1,6 +1,6 @@
 // jscs:disable requireDotNotation
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // jscs:disable jsDoc
@@ -276,12 +276,12 @@ define([
             var element;
 
             _.each(this.disabledAttributes, function (attribute) {
-                registry.get('index = ' + attribute).disabled(false);
+                registry.get('code = ' + attribute, 'index = ' + attribute).disabled(false);
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
-                element = registry.get('index = ' + attribute.code);
+                element = registry.get('code = ' + attribute.code, 'index = ' + attribute.code);
                 if (!_.isUndefined(element)) {
                     element.disabled(true);
                     this.disabledAttributes.push(attribute.code);

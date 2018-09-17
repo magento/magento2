@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -550,7 +550,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setCustomAttribute($descriptionAttributeCode, "new description");
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
         $this->assertEquals(
@@ -639,5 +639,38 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $model->setData('image', 'myimage');
         $result = $model->getImageUrl();
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentities()
+    {
+        $category = $this->getCategoryModel();
+
+        //Without an ID no identities can be given.
+        $this->assertEmpty($category->getIdentities());
+
+        //Now because ID is set we can get some
+        $category->setId(42);
+        $this->assertNotEmpty($category->getIdentities());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentitiesWithAffectedCategories()
+    {
+        $category = $this->getCategoryModel();
+        $expectedIdentities = [
+            'catalog_category_1',
+            'catalog_category_2',
+            'catalog_category_3',
+            'catalog_category_product_1',
+        ];
+        $category->setId(1);
+        $category->setAffectedCategoryIds([1,2,3]);
+
+        $this->assertEquals($expectedIdentities, $category->getIdentities());
     }
 }

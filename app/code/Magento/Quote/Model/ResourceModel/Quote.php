@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,6 +62,10 @@ class Quote extends AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
+        if ($this->getIdFieldName() === $field) {
+            return $select;
+        }
+
         $storeIds = $object->getSharedStoreIds();
         if ($storeIds) {
             if ($storeIds != ['*']) {
@@ -167,7 +171,7 @@ class Quote extends AbstractDb
     {
         return $this->sequenceManager->getSequence(
             \Magento\Sales\Model\Order::ENTITY,
-            $quote->getStore()->getGroup()->getDefaultStoreId()
+            $quote->getStoreId()
         )
         ->getNextValue();
     }
@@ -177,6 +181,8 @@ class Quote extends AbstractDb
      *
      * @param int $orderIncrementId
      * @return bool
+     * @deprecated
+     * @see \Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed()
      */
     public function isOrderIncrementIdUsed($orderIncrementId)
     {
@@ -225,12 +231,23 @@ class Quote extends AbstractDb
     }
 
     /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return Quote
+     * @deprecated
+     * @see subtractProductFromQuotes
+     */
+    public function substractProductFromQuotes($product)
+    {
+        return $this->subtractProductFromQuotes($product);
+    }
+
+    /**
      * Subtract product from all quotes quantities
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    public function substractProductFromQuotes($product)
+    public function subtractProductFromQuotes($product)
     {
         $productId = (int)$product->getId();
         if (!$productId) {

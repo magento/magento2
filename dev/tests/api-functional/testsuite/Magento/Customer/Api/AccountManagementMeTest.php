@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -94,7 +94,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
      */
     public function tearDown()
     {
-        unset($this->customerRepository);
+        $this->customerRepository = null;
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');

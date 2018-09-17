@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Mvc\Bootstrap;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
@@ -23,7 +22,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
 
 /**
- * A listener that injects relevant Magento initialization parameters and initializes Magento\Filesystem component.
+ * A listener that injects relevant Magento initialization parameters and initializes filesystem.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -35,8 +34,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
-     * List of ZF event listeners
-     *
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
@@ -139,8 +136,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
 
-                if (
-                    !$authentication->isLoggedIn() ||
+                if (!$authentication->isLoggedIn() ||
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
                 ) {
                     $adminSession->destroy();
@@ -170,9 +166,9 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /** @var \Magento\Backend\App\BackendAppList $backendAppList */
         $backendAppList = $objectManager->get(\Magento\Backend\App\BackendAppList::class);
         $backendApp = $backendAppList->getBackendApp('setup');
-        /** @var \Magento\Backend\Model\UrlFactory $backendUrlFactory */
-        $backendUrlFactory = $objectManager->get(\Magento\Backend\Model\UrlFactory::class);
-        $baseUrl = parse_url($backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+        /** @var \Magento\Backend\Model\Url $url */
+        $url = $objectManager->create(\Magento\Backend\Model\Url::class);
+        $baseUrl = parse_url($url->getBaseUrl(), PHP_URL_PATH);
         $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
         $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;

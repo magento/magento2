@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
@@ -50,6 +50,11 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_className, $this->_factory->createAttribute($this->_className, $this->_arguments));
     }
 
+    /**
+     * @param $className
+     * @param $arguments
+     * @return mixed
+     */
     public function getModelInstance($className, $arguments)
     {
         $this->assertInternalType('array', $arguments);

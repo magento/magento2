@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -127,7 +127,8 @@ class Dob extends AbstractWidget
     protected function applyOutputFilter($value)
     {
         $filter = $this->getFormFilter();
-        if ($filter) {
+        if ($filter && $value) {
+            $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
         return $value;
@@ -208,7 +209,11 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        /** Escape invisible characters which are present in some locales and may corrupt formatting */
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
+
+        return $escapedDateFormat;
     }
 
     /**

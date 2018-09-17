@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
@@ -20,7 +20,7 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      *
      * @var string
      */
-    protected $_template = 'order/create/totals/subtotal.phtml';
+    protected $_template = 'Magento_Sales::order/create/totals/subtotal.phtml';
 
     /**
      * Tax config

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -113,7 +113,12 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $customAttributeCodes = $this->getCustomAttributesCodes();
 
             foreach ($customAttributeCodes as $customAttributeCode) {
-                if (isset($this->_data[$customAttributeCode])) {
+                if (isset($this->_data[self::CUSTOM_ATTRIBUTES][$customAttributeCode])) {
+                    $customAttribute = $this->customAttributeFactory->create()
+                        ->setAttributeCode($customAttributeCode)
+                        ->setValue($this->_data[self::CUSTOM_ATTRIBUTES][$customAttributeCode]->getValue());
+                    $customAttributes[$customAttributeCode] = $customAttribute;
+                } elseif (isset($this->_data[$customAttributeCode])) {
                     $customAttribute = $this->customAttributeFactory->create()
                         ->setAttributeCode($customAttributeCode)
                         ->setValue($this->_data[$customAttributeCode]);

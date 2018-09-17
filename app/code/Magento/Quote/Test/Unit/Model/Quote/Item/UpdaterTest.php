@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
@@ -143,6 +143,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $this->object->update($this->itemMock, ['qty' => $qty]);
     }
 
+    /**
+     * @return array
+     */
     public function qtyProvider()
     {
         return [
@@ -155,6 +158,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function qtyProviderDecimal()
     {
         return [

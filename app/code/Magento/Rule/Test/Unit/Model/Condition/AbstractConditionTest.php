@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,6 +40,9 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('category_ids', $this->_condition->getMappedSqlField());
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeDataProvider()
     {
         return [
@@ -149,6 +152,9 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeArrayInputTypeDataProvider()
     {
         return [

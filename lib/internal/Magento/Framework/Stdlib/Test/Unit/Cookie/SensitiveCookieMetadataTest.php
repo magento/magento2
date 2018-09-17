@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
@@ -59,6 +59,9 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('path', $object->getPath());
     }
 
+    /**
+     * @return array
+     */
     public function constructorAndGetHttpOnlyTestDataProvider()
     {
         return [
@@ -104,6 +107,9 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $object->getSecure());
     }
 
+    /**
+     * @return array
+     */
     public function getSecureDataProvider()
     {
         return [
@@ -160,6 +166,9 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $object->__toArray());
     }
 
+    /**
+     * @return array
+     */
     public function toArrayDataProvider()
     {
         return [

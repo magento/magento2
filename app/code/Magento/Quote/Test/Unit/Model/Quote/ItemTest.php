@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -411,6 +411,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isQtyDecimal, $this->model->getIsQtyDecimal());
     }
 
+    /**
+     * @param $productId
+     * @param $productType
+     * @param $productSku
+     * @param $productName
+     * @param $productWeight
+     * @param $productTaxClassId
+     * @param $productCost
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function generateProductMock(
         $productId,
         $productType,
@@ -846,6 +856,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->setOptions(null));
     }
 
+    /**
+     * @param $optionCode
+     * @param array $optionData
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function createOptionMock($optionCode, $optionData = [])
     {
         $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')

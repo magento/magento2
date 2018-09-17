@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
@@ -144,6 +144,10 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->indexerMock));
     }
 
+    /**
+     * @param bool $returnValue
+     * @return \Closure
+     */
     protected function mockPluginProceed($returnValue = false)
     {
         return function () use ($returnValue) {

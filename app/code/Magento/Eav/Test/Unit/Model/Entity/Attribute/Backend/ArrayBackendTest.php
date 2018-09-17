@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
@@ -43,6 +43,9 @@ class ArrayBackendTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $product->getEmpty());
     }
 
+    /**
+     * @return array
+     */
     public static function attributeValueDataProvider()
     {
         return [[[1, 2, 3]], ['1,2,3']];

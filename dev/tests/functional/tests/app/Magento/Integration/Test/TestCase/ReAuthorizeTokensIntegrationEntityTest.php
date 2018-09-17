@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,7 @@ class ReAuthorizeTokensIntegrationEntityTest extends Injectable
      *
      * @param FixtureFactory $fixtureFactory
      * @param IntegrationIndex $integrationIndex
-     * @retun void
+     * @return void
      */
     public function __inject(IntegrationIndex $integrationIndex, FixtureFactory $fixtureFactory)
     {

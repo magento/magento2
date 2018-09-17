@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Order;
@@ -15,7 +15,7 @@ class Shipment extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/shipment.phtml';
+    protected $_template = 'Magento_Shipping::order/shipment.phtml';
 
     /**
      * Core registry

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,11 +41,11 @@
     <?php endif; ?>
 </div>
 
-<script>
-require(['jquery'], function($){
-        $('.actions-split')
-            .on('click.splitDefault', '.action-default', function() {
-                $(this).siblings('.dropdown-menu').find('.item-default').trigger('click');
-            });
-});
+<script type="text/x-magento-init">
+    {
+        ".actions-split": {
+            "Magento_Ui/js/grid/controls/button/split": {}
+        }
+    }
 </script>
+

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,6 +56,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param $groupId
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice
+     */
     protected function processInit($groupId)
     {
         $searchResult = $this->getMock('Magento\Customer\Api\Data\GroupSearchResultsInterface', [], [], '', false);

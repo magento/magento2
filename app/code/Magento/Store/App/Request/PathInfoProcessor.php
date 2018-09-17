@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Request;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
@@ -42,7 +43,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
         }
 
         if ($store->isUseStoreInUrl()) {
-            if (!$request->isDirectAccessFrontendName($storeCode)) {
+            if (!$request->isDirectAccessFrontendName($storeCode) && $storeCode != Store::ADMIN_CODE) {
                 $this->storeManager->setCurrentStore($storeCode);
                 $pathInfo = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
                 return $pathInfo;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -232,6 +232,7 @@ class EmailNotification implements EmailNotificationInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)
+            ->setScopeId($storeId)
             ->setFrom($this->scopeConfig->getValue($sender, 'store', $storeId))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();

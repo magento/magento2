@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -16,7 +16,7 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/history.phtml';
+    protected $_template = 'Magento_Sales::order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,6 +68,9 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
     }
 
+    /**
+     * @return array
+     */
     public function createPluginsAndRelationsReadableDataProvider()
     {
         return [
@@ -98,6 +101,9 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
     }
 
+    /**
+     * @return array
+     */
     public function createPluginsAndRelationsNotReadableDataProvider()
     {
         return [

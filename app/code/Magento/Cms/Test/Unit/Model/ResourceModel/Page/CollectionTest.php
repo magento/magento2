@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page;
@@ -117,6 +117,9 @@ class CollectionTest extends AbstractCollectionTest
         $this->assertEquals($expectedResult[$item->getId()], $item->getStoreId());
     }
 
+    /**
+     * @return array
+     */
     public function getItemsDataProvider()
     {
         return [

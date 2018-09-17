@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -132,6 +132,10 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         $this->setupSelectionPrice();
     }
 
+    /**
+     * @param bool $useRegularPrice
+     * @param int $qty
+     */
     protected function setupSelectionPrice($useRegularPrice = false, $qty = 1)
     {
         $this->selectionPrice = new \Magento\Bundle\Pricing\Price\BundleSelectionPrice(
@@ -306,6 +310,9 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function useRegularPriceDataProvider()
     {
         return [

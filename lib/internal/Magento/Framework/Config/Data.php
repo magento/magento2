@@ -2,7 +2,7 @@
 /**
  * Config data. Represents loaded and cached configuration data. Should be used to gain access to different types
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;

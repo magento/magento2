@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
@@ -46,7 +46,7 @@ class PropertiesLineBreakSniff implements PHP_CodeSniffer_Sniff
         }
 
         if ($tokens[$prevPtr]['line'] === $tokens[$stackPtr]['line']) {
-            $error = 'Each propery must be on a line by itself';
+            $error = 'Each property must be on a line by itself';
             $phpcsFile->addError($error, $stackPtr, 'SameLine');
         }
     }

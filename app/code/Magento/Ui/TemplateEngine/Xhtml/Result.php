@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
@@ -80,7 +80,9 @@ class Result implements ResultInterface
      */
     public function appendLayoutConfiguration()
     {
-        $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
+        $layoutConfiguration = $this->wrapContent(
+            json_encode($this->structure->generate($this->component), JSON_HEX_TAG)
+        );
         $this->template->append($layoutConfiguration);
     }
 

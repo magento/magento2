@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout;
@@ -427,6 +427,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if ($result) {
             $this->addUpdate($result);
             $this->pageLayout = $this->_loadCache($cacheIdPageLayout);
+            foreach ($this->getHandles() as $handle) {
+                $this->allHandles[$handle] = $this->handleProcessed;
+            }
             return $this;
         }
 
@@ -631,7 +634,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $result = $this->_loadXmlString($result);
         } else {
             $result = $this->_loadFileLayoutUpdatesXml();
-            $this->_saveCache($result->asXml(), $cacheId);
+            $this->_saveCache($result->asXML(), $cacheId);
         }
         $this->layoutUpdatesCache = $result;
         return $result;

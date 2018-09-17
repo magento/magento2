@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -194,7 +194,7 @@ define([
         ],
         "time12h": [
             function(value) {
-                return /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\ [AP]M))$/i.test(value);
+                return /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\s[AP]M))$/i.test(value);
             },
             $.mage.__('Please enter a valid time, between 00:00 am and 12:00 pm')
         ],
@@ -316,7 +316,7 @@ define([
         ],
         "pattern": [
             function(value, param) {
-                return param.test(value);
+                return new RegExp(param).test(value);
             },
             $.mage.__('Invalid format.')
         ],

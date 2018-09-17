@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint jquery:true*/
@@ -166,8 +166,9 @@ define([
                 try {
                     //Is the success callback invoked
                     if (IdentityLogin.win.closed ||
-                        (IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl)) {
-                        //Stop the the polling
+                        IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl //eslint-disable-line eqeqeq
+                    ) {
+                        //Stop the polling
                         clearInterval(IdentityLogin.checker);
                         $('body').trigger('processStart');
                         //Check for window closed

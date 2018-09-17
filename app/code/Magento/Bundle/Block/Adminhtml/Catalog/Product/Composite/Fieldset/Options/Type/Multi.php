@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
@@ -15,7 +15,7 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/multi.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/multi.phtml';
 
     /**
      * @param  string $elementId

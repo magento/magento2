@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Setup;
@@ -88,6 +88,9 @@ class SetupCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->object->has($table, $parentId, $rowId, $field));
     }
 
+    /**
+     * @return array
+     */
     public function hasDataProvider()
     {
         return [

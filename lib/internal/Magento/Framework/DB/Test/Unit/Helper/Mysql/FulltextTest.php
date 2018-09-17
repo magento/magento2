@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper\Mysql;
@@ -64,6 +64,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($select, $result);
     }
 
+    /**
+     * @return array
+     */
     public function matchProvider()
     {
         return [[true], [false]];

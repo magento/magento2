@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Setup;
@@ -90,13 +90,13 @@ class InstallSchema implements InstallSchemaInterface
                 'is_active',
                 Table::TYPE_BOOLEAN,
                 null,
-                ['nullable' => false, 'dafault' => true],
+                ['nullable' => false, 'default' => true],
                 'Is active flag'
             )->addColumn(
                 'is_visible',
                 Table::TYPE_BOOLEAN,
                 null,
-                ['nullable' => false, 'dafault' => true],
+                ['nullable' => false, 'default' => true],
                 'Is visible flag'
             )->addIndex(
                 $setup->getIdxName(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,6 +51,9 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->checkInteraction(false);
     }
 
+    /**
+     * @param $answer
+     */
     public function checkInteraction($answer)
     {
         $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -188,6 +188,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->getDataByKey('action_type'), $type);
     }
 
+    /**
+     * @return array
+     */
     public function updateWebsitesDataProvider()
     {
         return [

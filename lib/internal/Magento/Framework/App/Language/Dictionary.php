@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -193,7 +193,9 @@ class Dictionary
             foreach ($foundCsvFiles as $foundCsvFile) {
                 $file = $directoryRead->openFile($foundCsvFile);
                 while (($row = $file->readCsv()) !== false) {
-                    $result[$row[0]] = $row[1];
+                    if (is_array($row) && count($row) > 1) {
+                        $result[$row[0]] = $row[1];
+                    }
                 }
             }
         }

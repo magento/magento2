@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class LinkTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Downloadable\Controller\Download\Link */
@@ -82,10 +87,10 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -95,7 +100,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->session = $this->getMock(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [
                 'getCustomerId',
                 'authenticate',
@@ -106,7 +111,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->helperData = $this->getMock(
-            'Magento\Downloadable\Helper\Data',
+            \Magento\Downloadable\Helper\Data::class,
             [
                 'getIsShareable'
             ],
@@ -115,7 +120,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->downloadHelper = $this->getMock(
-            'Magento\Downloadable\Helper\Download',
+            \Magento\Downloadable\Helper\Download::class,
             [
                 'setResource',
                 'getFilename',
@@ -129,7 +134,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '_wakeup',
                 'load',
@@ -142,7 +147,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->linkPurchasedItem = $this->getMock(
-            'Magento\Downloadable\Model\Link\Purchased\Item',
+            \Magento\Downloadable\Model\Link\Purchased\Item::class,
             [
                 'load',
                 'getId',
@@ -163,7 +168,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->linkPurchased = $this->getMock(
-            'Magento\Downloadable\Model\Link\Purchased',
+            \Magento\Downloadable\Model\Link\Purchased::class,
             [
                 'load',
                 'getCustomerId'
@@ -173,28 +178,28 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->messageManager = $this->getMock(
-            'Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             [],
             '',
             false
         );
         $this->redirect = $this->getMock(
-            'Magento\Framework\App\Response\RedirectInterface',
+            \Magento\Framework\App\Response\RedirectInterface::class,
             [],
             [],
             '',
             false
         );
         $this->urlInterface = $this->getMock(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             [],
             '',
             false
         );
         $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             [
                 'create',
                 'get'
@@ -204,7 +209,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->link = $this->objectManagerHelper->getObject(
-            'Magento\Downloadable\Controller\Download\Link',
+            \Magento\Downloadable\Controller\Download\Link::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -219,12 +224,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Customer\Model\Session')
+            ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased\Item')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -243,12 +248,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Customer\Model\Session')
+            ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased\Item')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -257,7 +262,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Downloadable\Helper\Data')
+            ->with(\Magento\Downloadable\Helper\Data::class)
             ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
@@ -266,7 +271,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->objectManager->expects($this->at(3))
             ->method('create')
-            ->with('Magento\Catalog\Model\Product')
+            ->with(\Magento\Catalog\Model\Product::class)
             ->willReturn($this->product);
         $this->linkPurchasedItem->expects($this->once())->method('getProductId')->willReturn('product_id');
         $this->product->expects($this->once())->method('load')->with('product_id')->willReturnSelf();
@@ -279,7 +284,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager->expects($this->at(4))
             ->method('create')
-            ->with('Magento\Framework\UrlInterface')
+            ->with(\Magento\Framework\UrlInterface::class)
             ->willReturn($this->urlInterface);
         $this->urlInterface->expects($this->once())
             ->method('getUrl')
@@ -294,12 +299,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Customer\Model\Session')
+            ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased\Item')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -308,7 +313,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Downloadable\Helper\Data')
+            ->with(\Magento\Downloadable\Helper\Data::class)
             ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
@@ -317,7 +322,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn('customer_id');
         $this->objectManager->expects($this->at(3))
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased')
+            ->with(\Magento\Downloadable\Model\Link\Purchased::class)
             ->willReturn($this->linkPurchased);
         $this->linkPurchasedItem->expects($this->once())->method('getPurchasedId')->willReturn('purchased_id');
         $this->linkPurchased->expects($this->once())->method('load')->with('purchased_id')->willReturnSelf();
@@ -330,16 +335,22 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testExceptionInUpdateLinkStatus()
+    /**
+     * @param string $mimeType
+     * @param string $disposition
+     * @dataProvider downloadTypesDataProvider
+     * @return void
+     */
+    public function testExceptionInUpdateLinkStatus($mimeType, $disposition)
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Customer\Model\Session')
+            ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased\Item')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -348,7 +359,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Downloadable\Helper\Data')
+            ->with(\Magento\Downloadable\Helper\Data::class)
             ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
@@ -360,7 +371,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');
 
-        $this->processDownload('link_url', 'url');
+        $this->processDownload('link_url', 'url', $mimeType, $disposition);
 
         $this->linkPurchasedItem->expects($this->any())->method('setNumberOfDownloadsUsed')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
@@ -374,40 +385,43 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    private function processDownload($resource, $resourceType)
+    /**
+     * @param string $resource
+     * @param string $resourceType
+     * @param string $mimeType
+     * @param atring $disposition
+     * @return void
+     */
+    private function processDownload($resource, $resourceType, $mimeType, $disposition)
     {
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
+
         $this->objectManager->expects($this->at(3))
             ->method('get')
-            ->with('Magento\Downloadable\Helper\Download')
+            ->with(\Magento\Downloadable\Helper\Download::class)
             ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())
             ->method('setResource')
             ->with($resource, $resourceType)
             ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn('file_name');
-        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn('content_type');
+        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn($fileName);
+        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn($mimeType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
-        $this->response->expects($this->at(1))->method('setHeader')->with('Pragma', 'public', true)->willReturnSelf();
-        $this->response->expects($this->at(2))
+        $this->response
+            ->expects($this->any())
             ->method('setHeader')
-            ->with('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
+                ['Content-type', $mimeType, true],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', $disposition . '; filename=' . $fileName]
+            )
             ->willReturnSelf();
-        $this->response->expects($this->at(3))
-            ->method('setHeader')
-            ->with('Content-type', 'content_type', true)
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn('file_size');
-        $this->response->expects($this->at(4))
-            ->method('setHeader')
-            ->with('Content-Length', 'file_size')
-            ->willReturnSelf();
-        $this->downloadHelper->expects($this->once())
-            ->method('getContentDisposition')
-            ->willReturn('content_disposition');
-        $this->response->expects($this->at(5))
-            ->method('setHeader')
-            ->with('Content-Disposition', 'content_disposition; filename=file_name')
-            ->willReturnSelf();
+
+        $this->downloadHelper->expects($this->once())->method('getContentDisposition')->willReturn($disposition);
+        $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn($fileSize);
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('output');
@@ -423,12 +437,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Customer\Model\Session')
+            ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Downloadable\Model\Link\Purchased\Item')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -437,7 +451,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Downloadable\Helper\Data')
+            ->with(\Magento\Downloadable\Helper\Data::class)
             ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
@@ -461,6 +475,17 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ['addNotice', 'pending', 'The link is not available.'],
             ['addNotice', 'payment_review', 'The link is not available.'],
             ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function downloadTypesDataProvider()
+    {
+        return [
+            ['mimeType' => 'text/html',  'disposition' => \Zend_Mime::DISPOSITION_ATTACHMENT],
+            ['mimeType' => 'image/jpeg', 'disposition' => \Zend_Mime::DISPOSITION_INLINE],
         ];
     }
 }

@@ -1,17 +1,22 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * CatalogWidget Rule Product Condition data model
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use \Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use \Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Product
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -28,7 +33,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -41,8 +46,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param array $data
+     * @param \Magento\Catalog\Model\ResourceModel\Category $category
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -54,8 +60,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        array $data = []
+        StoreManagerInterface $storeManager,
+        array $data = [],
+        \Magento\Catalog\Model\ResourceModel\Category $category = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(
@@ -67,7 +74,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $productResource,
             $attrSetCollection,
             $localeFormat,
-            $data
+            $data,
+            $category
         );
     }
 
@@ -106,7 +114,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Add condition to collection
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param ProductCollection $collection
      * @return $this
      */
     public function addToCollection($collection)
@@ -137,14 +145,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param EavAttribute $attribute
+     * @param ProductCollection $collection
      * @return $this
      */
-    protected function addGlobalAttribute(
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-    ) {
+    protected function addGlobalAttribute(EavAttribute $attribute, ProductCollection $collection)
+    {
         $storeId =  $this->storeManager->getStore()->getId();
 
         switch ($attribute->getBackendType()) {
@@ -170,14 +176,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param EavAttribute $attribute
+     * @param ProductCollection $collection
      * @return $this
      */
-    protected function addNotGlobalAttribute(
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-    ) {
+    protected function addNotGlobalAttribute(EavAttribute $attribute, ProductCollection $collection)
+    {
         $storeId =  $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];

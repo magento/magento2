@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -138,6 +138,9 @@ EXPECTED_RESULT;
         $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
     }
 
+    /**
+     * @return array
+     */
     public function varDirectiveDataProvider()
     {
         /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */

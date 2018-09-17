@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
@@ -85,6 +85,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($expected, $html);
     }
 
+    /**
+     * @return array
+     */
     public function isPaymentEnabledDataProvider()
     {
         return [

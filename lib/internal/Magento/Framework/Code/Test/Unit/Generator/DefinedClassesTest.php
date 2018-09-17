@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@
 namespace Magento\Framework\Code\Generator {
     use Magento\Framework\Code\Test\Unit\Generator\DefinedClassesTest;
 
+    /**
+     * @param $className
+     * @return bool
+     */
     function class_exists($className)
     {
         return DefinedClassesTest::$definedClassesTestActive

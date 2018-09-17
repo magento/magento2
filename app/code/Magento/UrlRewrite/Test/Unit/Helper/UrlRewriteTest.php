@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Helper;
@@ -16,7 +16,9 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject('Magento\UrlRewrite\Helper\UrlRewrite');
+        $this->_helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\UrlRewrite\Helper\UrlRewrite'
+        );
     }
 
     /**
@@ -53,6 +55,9 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         $this->_helper->validateSuffix($suffix);
     }
 
+    /**
+     * @return array
+     */
     public function requestPathDataProvider()
     {
         return [
@@ -61,6 +66,9 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function requestPathExceptionDataProvider()
     {
         return [

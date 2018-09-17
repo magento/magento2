@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -96,6 +96,12 @@
     left: 0;
     overflow-y: auto;
 
+    &.confirm {
+        .modal-inner-wrap {
+            .lib-css(width, @modal-popup-confirm__width);
+        }
+    }
+
     &._show {
         .modal-inner-wrap {
             -webkit-transform: translateY(0);
@@ -189,6 +195,8 @@
         //  If applied, switching outer popup scroll to inner
         &._inner-scroll {
             overflow-y: visible;
+
+            .ie11 &,
             .ie10 &,
             .ie9 & {
                 overflow-y: auto;
@@ -196,6 +204,8 @@
 
             .modal-inner-wrap {
                 max-height: 90%;
+
+                .ie11 &,
                 .ie10 &,
                 .ie9 & {
                     max-height: none;

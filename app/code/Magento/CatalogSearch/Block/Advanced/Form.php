@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -197,16 +197,16 @@ class Form extends Template
     public function getAttributeInputType($attribute)
     {
         $dataType = $attribute->getBackend()->getType();
-        $imputType = $attribute->getFrontend()->getInputType();
-        if ($imputType == 'select' || $imputType == 'multiselect') {
+        $inputType = $attribute->getFrontend()->getInputType();
+        if ($inputType == 'select' || $inputType == 'multiselect') {
             return 'select';
         }
 
-        if ($imputType == 'boolean') {
+        if ($inputType == 'boolean') {
             return 'yesno';
         }
 
-        if ($imputType == 'price') {
+        if ($inputType == 'price') {
             return 'price';
         }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper\Helper;
@@ -50,11 +50,17 @@ class RelativePathConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
     }
 
+    /**
+     * @return array
+     */
     public function testConvertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
 
+    /**
+     * @return array
+     */
     public function testConvertDataProvider()
     {
         return [

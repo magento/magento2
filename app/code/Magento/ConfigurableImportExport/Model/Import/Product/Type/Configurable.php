@@ -2,7 +2,7 @@
 /**
  * Import entity configurable product type model
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -246,9 +246,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (isset($this->_productSuperAttrs["{$productId}_{$attributeId}"])) {
             return $this->_productSuperAttrs["{$productId}_{$attributeId}"];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -605,7 +604,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get new supper attribute id.
+     * Get new super attribute id.
      *
      * @return int
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model\Layout;
@@ -70,6 +70,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $output);
     }
 
+    /**
+     * @return array
+     */
     public function afterGenerateXmlDataProvider()
     {
         return [
@@ -108,6 +111,9 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($output, $html);
     }
 
+    /**
+     * @return array
+     */
     public function afterGetOutputDataProvider()
     {
         $tags = 'identity1,identity2';

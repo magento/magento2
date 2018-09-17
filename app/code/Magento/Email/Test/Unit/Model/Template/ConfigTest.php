@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template;
@@ -211,6 +211,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->parseTemplateIdParts($input), $expectedOutput);
     }
 
+    /**
+     * @return array
+     */
     public function parseTemplateCodePartsDataProvider()
     {
         return [
@@ -309,6 +312,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getterMethodUnknownTemplateDataProvider()
     {
         return [
@@ -355,6 +361,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getterMethodUnknownFieldDataProvider()
     {
         return [

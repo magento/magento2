@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,9 @@ class CouponManagement implements CouponManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
+        }
+        if (!$quote->getStoreId()) {
+            throw new NoSuchEntityException(__('Cart isn\'t assigned to correct store'));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
 

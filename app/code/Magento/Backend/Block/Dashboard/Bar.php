@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -38,14 +38,6 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     public function addTotal($label, $value, $isQuantity = false)
     {
-        /*if (!$isQuantity) {
-          $value = $this->format($value);
-          $decimals = substr($value, -2);
-          $value = substr($value, 0, -2);
-          } else {
-          $value = ($value != '')?$value:0;
-          $decimals = '';
-          }*/
         if (!$isQuantity) {
             $value = $this->format($value);
         }

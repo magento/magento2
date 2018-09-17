@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,7 +67,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', ['getName'], [], '', false);
         $option->expects($this->exactly(3))->method('getName')->willReturn('Fake');
         $optionsSet = [
             $option,

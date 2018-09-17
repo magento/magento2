@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
@@ -17,7 +17,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'customer/list.phtml';
+    protected $_template = 'Magento_Review::customer/list.phtml';
 
     /**
      * Product reviews collection

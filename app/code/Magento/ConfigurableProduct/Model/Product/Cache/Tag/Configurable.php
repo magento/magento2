@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Cache\Tag;
@@ -43,9 +43,6 @@ class Configurable implements StrategyInterface
 
         $result = $object->getIdentities();
 
-        foreach ($this->catalogProductTypeConfigurable->getParentIdsByChild($object->getId()) as $parentId) {
-            $result[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $parentId;
-        }
         return $result;
     }
 }

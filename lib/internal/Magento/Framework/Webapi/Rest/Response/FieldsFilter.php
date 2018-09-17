@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,9 +104,9 @@ class FieldsFilter
             }
             switch ($filterString[$position]) {
                 case '[':
-                    array_push($parent, $currentElement);
+                    $parent[] = $currentElement;
                     // push current field in stack and initialize current
-                    array_push($stack, $current);
+                    $stack[] = $current;
                     $current = [];
                     break;
 

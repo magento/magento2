@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -67,7 +67,20 @@ class Escaper extends \Zend\Escaper\Escaper
             }
         } else {
             $result = str_replace($quote, '\\' . $quote, $data);
+            //Preventing XSS attacks by inserting script tags in JS inside
+            //an HTML document.
+            $result = str_replace(
+                '</script>',
+                '<' . $quote . ' + ' . $quote . '/script>',
+                $result
+            );
+            $result = str_replace(
+                '<script>',
+                '<' . $quote . ' + ' . $quote . 'script>',
+                $result
+            );
         }
+
         return $result;
     }
 

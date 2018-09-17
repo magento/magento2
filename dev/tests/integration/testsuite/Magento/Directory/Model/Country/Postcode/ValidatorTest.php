@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Country\Postcode;
@@ -40,6 +40,48 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testPostCodesThrowsExceptionIfCountryDoesNotExist()
     {
         $this->validator->validate('12345', 'INVALID-CODE');
+    }
+
+    /**
+     * @dataProvider getCanadaInvalidPostCodes
+     */
+    public function testInvalidCanadaZipCode($countryId, $invalidPostCode)
+    {
+        $this->assertFalse($this->validator->validate($invalidPostCode, $countryId));
+    }
+
+    /**
+     * @dataProvider getCanadaValidPostCodes
+     */
+    public function testValidCanadaZipCode($countryId, $validPostCode)
+    {
+        $this->assertTrue($this->validator->validate($validPostCode, $countryId));
+    }
+
+    /**
+     * @return array
+     */
+    public function getCanadaInvalidPostCodes()
+    {
+        return [
+            ['countryId' => 'CA', 'postcode' => '12345'],
+            ['countryId' => 'CA', 'postcode' => 'A1B2C3D'],
+            ['countryId' => 'CA', 'postcode' => 'A1B2C'],
+            ['countryId' => 'CA', 'postcode' => 'A1B  2C3'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCanadaValidPostCodes()
+    {
+        return [
+            ['countryId' => 'CA', 'postcode' => 'A1B2C3'],
+            ['countryId' => 'CA', 'postcode' => 'A1B 2C3'],
+            ['countryId' => 'CA', 'postcode' => 'Z9Y 8X7'],
+            ['countryId' => 'CA', 'postcode' => 'Z9Y8X7'],
+        ];
     }
 
     /**

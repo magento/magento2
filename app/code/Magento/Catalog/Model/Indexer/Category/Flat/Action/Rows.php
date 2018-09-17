@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
@@ -69,22 +69,24 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $categoriesIdsChunk = $this->filterIdsByStore($categoriesIdsChunk, $store);
 
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
+                $linkField = $this->categoryMetadata->getLinkField();
                 $data = [];
                 foreach ($categoriesIdsChunk as $categoryId) {
-                    if (!isset($attributesData[$categoryId])) {
-                        continue;
-                    }
-
                     try {
                         $category = $this->categoryRepository->get($categoryId);
                     } catch (NoSuchEntityException $e) {
                         continue;
                     }
 
+                    $categoryData = $category->getData();
+                    if (!isset($attributesData[$categoryData[$linkField]])) {
+                        continue;
+                    }
+
                     $data[] = $this->prepareValuesToInsert(
                         array_merge(
-                            $category->getData(),
-                            $attributesData[$categoryId],
+                            $categoryData,
+                            $attributesData[$categoryData[$linkField]],
                             ['store_id' => $store->getId()]
                         )
                     );

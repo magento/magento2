@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -33,7 +33,9 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
         }
         $output .= 'interface ' . $this->getName();
         if (!empty($this->extendedClass)) {
-            $output .= ' extends ' . $this->extendedClass;
+            if (!empty($this->extendedClass)) {
+                $output .= ' extends \\' . ltrim($this->extendedClass, '\\');
+            }
         }
 
         $output .= self::LINE_FEED . '{' . self::LINE_FEED . self::LINE_FEED

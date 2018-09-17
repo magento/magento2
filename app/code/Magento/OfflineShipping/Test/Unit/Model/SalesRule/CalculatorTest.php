@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\SalesRule;
@@ -23,6 +23,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return bool
+     */
     public function testProcessFreeShipping()
     {
         $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')

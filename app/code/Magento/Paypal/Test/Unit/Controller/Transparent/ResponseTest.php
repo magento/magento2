@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
@@ -14,11 +14,15 @@ use Magento\Paypal\Controller\Transparent\Response;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Sales\Api\PaymentFailuresInterface;
+use Magento\Framework\Session\Generic as Session;
 
 /**
  * Class ResponseTest
  *
  * Test for class \Magento\Paypal\Controller\Transparent\Response
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,6 +54,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      * @var Transparent | \PHPUnit_Framework_MockObject_MockObject
      */
     private $payflowFacade;
+
+    /**
+     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentFailures;
+
+    /**
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionTransparent;
 
     protected function setUp()
     {
@@ -98,13 +112,25 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $this->sessionTransparent = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuoteId'])
+            ->getMock();
+
         $this->object = new Response(
             $this->contextMock,
             $this->coreRegistryMock,
             $this->transactionMock,
             $this->responseValidatorMock,
             $this->resultLayoutFactoryMock,
-            $this->payflowFacade
+            $this->payflowFacade,
+            $this->sessionTransparent,
+            $this->paymentFailures
         );
     }
 
@@ -132,6 +158,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->willReturn($this->getLayoutMock());
 
+        $this->paymentFailures->expects($this->never())
+            ->method('handle');
+
         $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->execute());
     }
 
@@ -156,6 +185,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->resultLayoutMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($this->getLayoutMock());
+
+        $this->sessionTransparent->method('getQuoteId')
+            ->willReturn(1);
+
+        $this->paymentFailures->expects($this->once())
+            ->method('handle')
+            ->with(1)
+            ->willReturnSelf();
 
         $this->assertInstanceOf('\Magento\Framework\Controller\ResultInterface', $this->object->execute());
     }

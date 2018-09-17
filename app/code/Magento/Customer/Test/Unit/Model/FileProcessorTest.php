@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -71,6 +71,11 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * @param $entityTypeCode
+     * @param array $allowedExtensions
+     * @return FileProcessor
+     */
     private function getModel($entityTypeCode, array $allowedExtensions = [])
     {
         $model = new FileProcessor(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -206,16 +206,25 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;
 
+/**
+ * @return string
+ */
 function fopen()
 {
     return 'filestream';
 }
 
+/**
+ * @return bool
+ */
 function is_resource()
 {
     return true;
 }
 
+/**
+ * @return string
+ */
 function get_resource_type()
 {
     return 'stream';

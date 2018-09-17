@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -26,6 +26,9 @@ class ReviewTest extends AbstractModifierTest
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return \Magento\Ui\DataProvider\Modifier\ModifierInterface|object
+     */
     protected function createModel()
     {
         return $this->objectManager->getObject(Review::class, [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,13 @@ class GenericSchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleReaderMock;
 
+    /**
+     * @param ModuleDirReader $reader
+     * @param $moduleName
+     * @param $mergeSchema
+     * @param $perFileSchema
+     * @return GenericSchemaLocator
+     */
     private function createNewSchemaLocatorInstance(ModuleDirReader $reader, $moduleName, $mergeSchema, $perFileSchema)
     {
         return new GenericSchemaLocator($reader, $moduleName, $mergeSchema, $perFileSchema);

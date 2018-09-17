@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type;
@@ -146,6 +146,11 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
         $this->totalsCollectorMock = $this->createSimpleMock(TotalsCollector::class);
+        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -168,24 +173,8 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
             $this->totalsCollectorMock,
-            $data
-        );
-
-        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
-
-        $objectManager = new ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'cartExtensionFactory',
-            $this->cartExtensionFactoryMock
-        );
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'shippingAssignmentProcessor',
+            $data,
+            $this->cartExtensionFactoryMock,
             $this->shippingAssignmentProcessorMock
         );
     }

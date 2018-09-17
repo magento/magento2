@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
@@ -68,6 +68,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $selectMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Statement_Interface
+     */
+    protected $statementMock;
+
+    /**
      * Prepare subjects for tests.
      *
      * @return void
@@ -95,6 +100,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
         $this->stock = $this->getMockBuilder(Stock::class)
             ->setMethods(['getTable', 'getConnection'])
             ->setConstructorArgs(
@@ -119,7 +125,21 @@ class StockTest extends \PHPUnit_Framework_TestCase
     {
         $websiteId = 0;
         $productIds = [1, 2, 3];
-        $result = ['testResult'];
+        $result = [
+            1 => [
+                'product_id' => 1,
+                'type_id' => 'simple'
+            ],
+            2 => [
+                'product_id' => 2,
+                'type_id' => 'simple'
+            ],
+            3 => [
+                'product_id' => 3,
+                'type_id' => 'simple'
+            ]
+        ];
+
         $this->selectMock->expects(self::exactly(2))
             ->method('from')
             ->withConsecutive(
@@ -130,7 +150,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects(self::exactly(3))
             ->method('where')
             ->withConsecutive(
-                [self::identicalTo('website_id=?'), self::identicalTo($websiteId)],
+                [self::identicalTo('website_id = ?'), self::identicalTo($websiteId)],
                 [self::identicalTo('product_id IN(?)'), self::identicalTo($productIds)],
                 [self::identicalTo('entity_id IN (?)'), self::identicalTo($productIds)]
             )
@@ -149,10 +169,19 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->selectMock);
         $this->connectionMock->expects(self::once())
             ->method('query')
-            ->with(self::identicalTo($this->selectMock));
+            ->with(self::identicalTo($this->selectMock))
+            ->willReturn($this->statementMock);
+        $this->statementMock->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([
+                1 => ['product_id' => 1],
+                2 => ['product_id' => 2],
+                3 => ['product_id' => 3]
+            ]);
+
         $this->connectionMock->expects(self::once())
             ->method('fetchAll')
-            ->with($this->selectMock)
+            ->with(self::identicalTo($this->selectMock))
             ->willReturn($result);
 
         $this->stock->expects(self::exactly(2))

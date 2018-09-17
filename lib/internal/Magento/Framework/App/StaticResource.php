@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -127,9 +127,12 @@ class StaticResource implements \Magento\Framework\AppInterface
     {
         $path = ltrim($path, '/');
         $parts = explode('/', $path, 6);
-        if (count($parts) < 5) {
+        if (count($parts) < 5 || mb_strpos($path, '..') !== false) {
+            //Checking that path contains all required parts and is not above
+            //static folder.
             throw new \InvalidArgumentException("Requested path '$path' is wrong.");
         }
+
         $result = [];
         $result['area'] = $parts[0];
         $result['theme'] = $parts[1] . '/' . $parts[2];

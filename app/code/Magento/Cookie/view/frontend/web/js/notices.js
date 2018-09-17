@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -25,7 +25,7 @@ define([
                 });
 
                 if ($.mage.cookies.get(this.options.cookieName)) {
-                    window.location.reload();
+                    this.element.hide();
                 } else {
                     window.location.href = this.options.noCookiesUrl;
                 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
@@ -55,7 +55,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
         }
 
         if ($this->_getProduct()->getId()) {
-            $this->_addProductLinkBlock($this->_getProduct());
+            $this->_addProductLinkBlock();
         }
 
         if ($this->_getCategory()->getId()) {

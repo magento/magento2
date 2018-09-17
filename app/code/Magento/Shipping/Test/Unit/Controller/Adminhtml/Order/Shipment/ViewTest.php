@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -212,6 +212,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->resultForwardMock, $this->controller->execute());
     }
 
+    /**
+     * @param $orderId
+     * @param $shipmentId
+     * @param $shipment
+     * @param $tracking
+     * @param $comeFrom
+     * @param $returnShipment
+     */
     protected function loadShipment($orderId, $shipmentId, $shipment, $tracking, $comeFrom, $returnShipment)
     {
         $valueMap = [

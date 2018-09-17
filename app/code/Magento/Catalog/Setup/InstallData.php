@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -123,7 +123,6 @@ class InstallData implements InstallDataInterface
         // update attributes group and sort
         $attributes = [
             'custom_design' => ['group' => 'design', 'sort' => 10],
-            // 'custom_design_apply' => array('group' => 'design', 'sort' => 20),
             'custom_design_from' => ['group' => 'design', 'sort' => 30],
             'custom_design_to' => ['group' => 'design', 'sort' => 40],
             'page_layout' => ['group' => 'design', 'sort' => 50],

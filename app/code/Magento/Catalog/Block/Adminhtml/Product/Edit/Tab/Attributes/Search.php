@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class Search extends \Magento\Backend\Block\Widget
      *
      * @param string $labelPart
      * @param int $templateId
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @return array
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {

@@ -1,7 +1,7 @@
 /**
  * @category    mage.js
  * @package     test
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 //Code to be tested for /app/code/Magento/Search/view/frontend/form-mini.js (_onSubmit)

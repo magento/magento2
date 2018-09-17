@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ $fields = [
 ];
 $number = is_object($track) ? $track->getTracking() : $track['number'];
 ?>
-<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $number; ?>">
+<table class="data table order tracking" id="tracking-table-popup-<?php echo $block->escapeHtml($number); ?>">
     <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
     <tbody>
     <?php if (is_object($track)): ?>

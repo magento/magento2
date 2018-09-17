@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ $numColumns = sizeof($block->getColumns());
                                        type="text"
                                        id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('period_date_from') ?>"
                                        name="report_from"
-                                       value="<?php /* @escapeNotVerified */ echo $block->getFilter('report_from') ?>">
+                                       value="<?php echo $block->escapeHtml($block->getFilter('report_from')) ?>">
                                 <span id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('period_date_from_advice')?>"></span>
                             </span>
 
@@ -44,7 +44,7 @@ $numColumns = sizeof($block->getColumns());
                                        type="text"
                                        id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('period_date_to') ?>"
                                        name="report_to"
-                                       value="<?php /* @escapeNotVerified */ echo $block->getFilter('report_to') ?>"/>
+                                       value="<?php echo $block->escapeHtml($block->getFilter('report_to')) ?>"/>
                                 <span id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('period_date_to_advice')?>"></span>
                             </span>
 

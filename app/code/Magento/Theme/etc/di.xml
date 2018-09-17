@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -94,7 +94,7 @@
     </type>
     <type name="Magento\Framework\App\Area">
         <arguments>
-            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+            <argument name="translator" xsi:type="object">Magento\Framework\TranslateInterface</argument>
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
@@ -210,6 +210,14 @@
                 <item name="footer_absolute_footer" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
+                <item name="default_robots" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
+                </item>
+                <item name="custom_instructions" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/custom_instructions</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
                 </item>
             </argument>
         </arguments>

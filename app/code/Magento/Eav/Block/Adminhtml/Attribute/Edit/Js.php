@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit;
@@ -17,5 +17,5 @@ class Js extends \Magento\Backend\Block\Template
      *
      * @var string
      */
-    protected $_template = 'attribute/edit/js.phtml';
+    protected $_template = 'Magento_Eav::attribute/edit/js.phtml';
 }
