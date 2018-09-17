@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="ContentManagementSection">
         <element name="WYSIWYGOptions" type="button" selector="#cms_wysiwyg-head"/>
         <element name="CheckIfTabExpand" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
@@ -32,5 +32,10 @@
     <section name="UrlOptionsSection">
         <element name="addStoreCodeToUrl" type="select" selector="#web_url_use_store"/>
         <element name="systemValueForStoreCode" type="checkbox" selector="#web_url_use_store_inherit"/>
+    </section>
+    <section name="CountryOptionsSection">
+        <element name="countryOptions" type="button" selector="#general_country-head"/>
+        <element name="countryOptionsOpen" type="button" selector="#general_country-head.open"/>
+        <element name="topDestinations" type="select" selector="#general_country_destinations"/>
     </section>
 </sections>

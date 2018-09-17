@@ -25,6 +25,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/1335');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->shipmentRepository = $this->objectManager->get(

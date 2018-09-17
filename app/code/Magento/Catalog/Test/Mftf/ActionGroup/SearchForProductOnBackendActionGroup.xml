@@ -6,16 +6,22 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SearchForProductOnBackendActionGroup">
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
+        <waitForPageLoad time="60" stepKey="waitForProductsPageToLoad"/>
         <click selector="{{AdminProductFiltersSection.filtersButton}}" stepKey="openFiltersSectionOnProductsPage"/>
         <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <fillField userInput="{{product.sku}}" selector="{{AdminProductFiltersSection.skuInput}}" stepKey="fillSkuFieldOnFiltersSection"/>
         <click selector="{{AdminProductFiltersSection.apply}}" stepKey="clickApplyFiltersButton"/>
+    </actionGroup>
+
+    <actionGroup name="ClearProductsFilterActionGroup">
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
+        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
     </actionGroup>
 </actionGroups>
