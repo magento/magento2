@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 
 /**
  * Class Options
+ *
  * @package Magento\Customer\Model
  */
 class Options
@@ -42,7 +43,7 @@ class Options
     /**
      * Retrieve name prefix dropdown options
      *
-     * @param $store
+     * @param string|null $store
      * @return array|bool
      */
     public function getNamePrefixOptions($store = null)
@@ -56,7 +57,7 @@ class Options
     /**
      * Retrieve name suffix dropdown options
      *
-     * @param $store
+     * @param string|null $store
      * @return array|bool
      */
     public function getNameSuffixOptions($store = null)
@@ -70,7 +71,7 @@ class Options
     /**
      * Prepare Name Suffix Options
      *
-     * @param $options
+     * @param string|null $options
      * @param bool $isOptional
      * @return array|bool
      *
