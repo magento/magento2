@@ -6,6 +6,9 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
+/**
+ * Location directory.
+ */
 class LocationDirectory
 {
     /**
@@ -52,6 +55,8 @@ class LocationDirectory
     }
 
     /**
+     * Retrieve country id.
+     *
      * @param string $countryCode
      * @return null|string
      */
@@ -93,6 +98,8 @@ class LocationDirectory
     }
 
     /**
+     * Check if there is country id with provided country code.
+     *
      * @param string $countryCode
      * @return bool
      */
@@ -103,6 +110,8 @@ class LocationDirectory
     }
 
     /**
+     * Check if there is region id with provided region code and country id.
+     *
      * @param string $countryId
      * @param string $regionCode
      * @return bool
@@ -141,6 +150,8 @@ class LocationDirectory
     }
 
     /**
+     * Retrieve region id.
+     *
      * @param int $countryId
      * @param string $regionCode
      * @return string
@@ -155,8 +166,8 @@ class LocationDirectory
     /**
      * Return region ids for country and region
      *
-     * @param $countryId
-     * @param $regionCode
+     * @param int $countryId
+     * @param string $regionCode
      * @return array
      */
     public function getRegionIds($countryId, $regionCode)

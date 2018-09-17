@@ -17,6 +17,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Import offline shipping.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Import
@@ -87,6 +88,8 @@ class Import
     }
 
     /**
+     * Check if there are errors.
+     *
      * @return bool
      */
     public function hasErrors()
@@ -95,6 +98,8 @@ class Import
     }
 
     /**
+     * Get errors.
+     *
      * @return array
      */
     public function getErrors()
@@ -103,6 +108,8 @@ class Import
     }
 
     /**
+     * Retrieve columns.
+     *
      * @return array
      */
     public function getColumns()
@@ -111,6 +118,8 @@ class Import
     }
 
     /**
+     * Get data from file.
+     *
      * @param ReadInterface $file
      * @param int $websiteId
      * @param string $conditionShortName
@@ -177,6 +186,8 @@ class Import
     }
 
     /**
+     * Retrieve column headers.
+     *
      * @param ReadInterface $file
      * @return array|bool
      * @throws LocalizedException

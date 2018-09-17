@@ -9,6 +9,9 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 use Magento\Framework\Phrase;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
 
+/**
+ * Row parser.
+ */
 class RowParser
 {
     /**
@@ -26,6 +29,8 @@ class RowParser
     }
 
     /**
+     * Retrieve columns.
+     *
      * @return array
      */
     public function getColumns()
@@ -42,6 +47,8 @@ class RowParser
     }
 
     /**
+     * Parse provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param int $websiteId
@@ -93,6 +100,8 @@ class RowParser
     }
 
     /**
+     * Get country id from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
@@ -121,6 +130,8 @@ class RowParser
     }
 
     /**
+     * Retrieve region id from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
@@ -150,6 +161,8 @@ class RowParser
     }
 
     /**
+     * Retrieve zip code from provided row data.
+     *
      * @param array $rowData
      * @param ColumnResolver $columnResolver
      * @return float|int|null|string
@@ -165,6 +178,8 @@ class RowParser
     }
 
     /**
+     * Get condition value form provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param string $conditionFullName
@@ -192,6 +207,8 @@ class RowParser
     }
 
     /**
+     * Retrieve price from provided row data.
+     *
      * @param array $rowData
      * @param int $rowNumber
      * @param ColumnResolver $columnResolver
@@ -217,6 +234,7 @@ class RowParser
 
     /**
      * Parse and validate positive decimal value
+     *
      * Return false if value is not decimal or is not positive
      *
      * @param string $value
