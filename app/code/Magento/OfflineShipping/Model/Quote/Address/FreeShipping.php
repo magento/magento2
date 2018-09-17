@@ -47,8 +47,6 @@ class FreeShipping implements FreeShippingInterface
             return false;
         }
 
-        $result = false;
-        $addressFreeShipping = true;
         $store = $this->storeManager->getStore($quote->getStoreId());
         $this->calculator->init(
             $store->getWebsiteId(),
@@ -60,7 +58,6 @@ class FreeShipping implements FreeShippingInterface
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
-                $addressFreeShipping = false;
                 $item->setFreeShipping(false);
                 continue;
             }
@@ -71,20 +68,21 @@ class FreeShipping implements FreeShippingInterface
             }
 
             $this->calculator->processFreeShipping($item);
-            // at least one item matches to the rule and the rule mode is not a strict
-            if ((bool)$item->getAddress()->getFreeShipping()) {
-                $result = true;
-                break;
-            }
-
             $itemFreeShipping = (bool)$item->getFreeShipping();
-            $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
-            $result = $addressFreeShipping;
-        }
 
-        $shippingAddress->setFreeShipping((int)$result);
-        $this->applyToItems($items, $result);
-        return $result;
+            /**  Removed below as it is set in Calculator.
+             *
+             * $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
+             *
+             * if ($addressFreeShipping && !$item->getAddress()->getFreeShipping()) {
+             *   $item->getAddress()->setFreeShipping(true);
+             * }
+             *
+             */
+             /** Parent free shipping we apply to all children*/
+            $this->applyToChildren($item, $itemFreeShipping);
+        }
+        return (bool)$shippingAddress->getFreeShipping();
     }
 
     /**
@@ -101,22 +99,6 @@ class FreeShipping implements FreeShippingInterface
                     $child->setFreeShipping($isFreeShipping);
                 }
             }
-        }
-    }
-
-    /**
-     * Sets free shipping availability to the quote items.
-     *
-     * @param array $items
-     * @param bool $freeShipping
-     */
-    private function applyToItems(array $items, bool $freeShipping)
-    {
-        /** @var AbstractItem $item */
-        foreach ($items as $item) {
-            $item->getAddress()
-                ->setFreeShipping((int)$freeShipping);
-            $this->applyToChildren($item, $freeShipping);
         }
     }
 }

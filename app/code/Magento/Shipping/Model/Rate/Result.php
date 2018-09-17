@@ -117,6 +117,22 @@ class Result
     }
 
     /**
+     * Return rate by method id
+     *
+     * @param $id
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method|null
+     */
+    public function getRateByMethodId($rateMethodId)
+    {
+        return array_reduce($this->_rates, function ($foundItem, $item) use ($rateMethodId) {
+            if (!$foundItem && $item->getMethod() == $rateMethodId) {
+                return $item;
+            } 
+            return $foundItem;
+        });
+    }
+    
+    /**
      * Return quotes for specified type
      *
      * @param string $carrier

@@ -374,10 +374,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeight($weight);
-        if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
-            $r->setFreeMethodWeight($request->getFreeMethodWeight());
-        }
 
+        $r->setFreeMethodWeight($request->getFreeMethodWeight());
+        
         $r->setValue($request->getPackagePhysicalValue());
         $r->setValueWithDiscount($request->getPackageValueWithDiscount());
 

@@ -348,9 +348,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $weight = $this->_getCorrectWeight($weight);
 
         $rowRequest->setWeight($weight);
-        if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
-            $rowRequest->setFreeMethodWeight($request->getFreeMethodWeight());
-        }
+
+        $rowRequest->setFreeMethodWeight($request->getFreeMethodWeight());
 
         $rowRequest->setValue($request->getPackageValue());
         $rowRequest->setValueWithDiscount($request->getPackageValueWithDiscount());
