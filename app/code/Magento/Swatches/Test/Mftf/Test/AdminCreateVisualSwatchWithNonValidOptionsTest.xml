@@ -17,7 +17,7 @@
             <group value="Swatches"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
