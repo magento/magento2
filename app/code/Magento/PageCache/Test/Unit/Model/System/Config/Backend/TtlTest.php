@@ -15,6 +15,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class for tesing backend model for processing Public content cache lifetime settings.
+ */
 class TtlTest extends TestCase
 {
     /**
