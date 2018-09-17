@@ -65,5 +65,17 @@ define([
             expect(normal.foo['1'].value).toEqual(123);
             expect(normal.foo['1--1']).toEqual(321);
         });
+
+        it('Check keys containing a dot are normalized', function () {
+            var normal = normalizer.normalize({
+                'foo[1][name.foo]': 'bar',
+                'foo[1][value.foo]': 123,
+                'foo[1--1]': 321
+            });
+
+            expect(normal.foo['1']['name.foo']).toEqual('bar');
+            expect(normal.foo['1']['value.foo']).toEqual(123);
+            expect(normal.foo['1--1']).toEqual(321);
+        });
     });
 });

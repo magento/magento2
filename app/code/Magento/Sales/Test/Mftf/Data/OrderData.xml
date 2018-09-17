@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!--Data for order created through UI with simple and configurable order-->
+    <entity name="AdminOrderSimpleConfigurableProduct" type="order">
+        <data key="subtotal">246.00</data>
+        <data key="shipping">10.00</data>
+        <data key="grandTotal">256.00</data>
+    </entity>
+    <entity name="AdminOrderSimpleProduct" type="order">
+        <data key="subtotal">123.00</data>
+        <data key="shipping">5.00</data>
+        <data key="grandTotal">128.00</data>
+    </entity>
+    <entity name="OrderGrandTotalFilterRange" type="filter">
+        <data key="from">200</data>
+        <data key="to">400</data>
+    </entity>
+
+    <entity name="OrderStatus" type="status">
+        <data key="canceled">Canceled</data>
+        <data key="closed">Closed</data>
+        <data key="complete">Complete</data>
+        <data key="suspected">Suspected</data>
+        <data key="onHold">On Hold</data>
+        <data key="paymentReview">Payment Review</data>
+        <data key="pending">Pending</data>
+        <data key="pendingPayment">Pending Payment</data>
+        <data key="processing">Processing</data>
+    </entity>
+</entities>

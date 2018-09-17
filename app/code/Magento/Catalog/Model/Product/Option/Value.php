@@ -76,6 +76,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -89,6 +90,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $this->_valueCollectionFactory = $valueCollectionFactory;
         $this->customOptionPriceCalculator = $customOptionPriceCalculator
             ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
+
         parent::__construct(
             $context,
             $registry,
@@ -201,19 +203,15 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function saveValues()
     {
+        $option = $this->getOption();
+
         foreach ($this->getValues() as $value) {
             $this->isDeleted(false);
-            $this->setData(
-                $value
-            )->setData(
-                'option_id',
-                $this->getOption()->getId()
-            )->setData(
-                'store_id',
-                $this->getOption()->getStoreId()
-            );
+            $this->setData($value)
+                ->setData('option_id', $option->getId())
+                ->setData('store_id', $option->getStoreId());
 
-            if ($this->getData('is_delete') == '1') {
+            if ((bool) $this->getData('is_delete') === true) {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
                     $this->delete();
@@ -222,7 +220,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 $this->save();
             }
         }
-        //eof foreach()
+
         return $this;
     }
 

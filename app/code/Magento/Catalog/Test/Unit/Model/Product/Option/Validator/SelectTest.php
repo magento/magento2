@@ -18,6 +18,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      */
     protected $valueMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
@@ -69,6 +72,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidSuccessDataProvider()
     {
         return [
@@ -87,7 +93,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
             [
-                false,
+                true,
                 [
                     'title' => 'Some Title',
                     'price_type' => 'fixed',
@@ -97,6 +103,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testIsValidateWithInvalidOptionValues()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -115,6 +124,9 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @return void
+     */
     public function testIsValidateWithEmptyValues()
     {
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -154,10 +166,12 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @return array
+     */
     public function isValidateWithInvalidDataDataProvider()
     {
         return [
-            'invalid_price' => ['fixed', -10, 'Title'],
             'invalid_price_type' => ['some_value', '10', 'Title'],
             'empty_title' => ['fixed', 10, null]
         ];

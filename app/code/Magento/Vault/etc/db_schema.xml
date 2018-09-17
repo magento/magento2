@@ -30,12 +30,12 @@
         <constraint xsi:type="foreign" name="VAULT_PAYMENT_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
                     table="vault_payment_token" column="customer_id" referenceTable="customer_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="UNQ_54DCE14AEAEA03B587F9EF723EB10A10">
+        <constraint xsi:type="unique" name="VAULT_PAYMENT_TOKEN_PAYMENT_METHOD_CODE_CSTR_ID_GATEWAY_TOKEN">
             <column name="payment_method_code"/>
             <column name="customer_id"/>
             <column name="gateway_token"/>
         </constraint>
-        <constraint xsi:type="unique" name="VAULT_PAYMENT_TOKEN_HASH_UNIQUE_INDEX_PUBLIC_HASH">
+        <constraint xsi:type="unique" name="VAULT_PAYMENT_TOKEN_PUBLIC_HASH">
             <column name="public_hash"/>
         </constraint>
     </table>

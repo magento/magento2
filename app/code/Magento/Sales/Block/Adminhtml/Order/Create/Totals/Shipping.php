@@ -20,7 +20,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      *
      * @var string
      */
-    protected $_template = 'order/create/totals/shipping.phtml';
+    protected $_template = 'Magento_Sales::order/create/totals/shipping.phtml';
 
     /**
      * Tax config

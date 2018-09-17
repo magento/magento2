@@ -335,7 +335,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->method('getInvoice')
             ->willReturn($invoiceMock);
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You voided the credit memo.');
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')

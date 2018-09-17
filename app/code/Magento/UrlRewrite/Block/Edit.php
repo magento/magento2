@@ -65,7 +65,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('edit.phtml');
+        $this->setTemplate('Magento_UrlRewrite::edit.phtml');
 
         $this->_addBackButton();
         $this->_prepareLayoutFeatures();
@@ -243,7 +243,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Since buttons are set as children, we remove them as children after generating them
      * not to duplicate them in future
      *
-     * @param null $area
+     * @param string $area
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

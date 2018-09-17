@@ -26,7 +26,7 @@
             <column name="tinyint_ref"/>
             <column name="smallint_ref"/>
         </constraint>
-        <constraint xsi:type="unique" name="smallint_unique">
+        <constraint xsi:type="unique" name="REFERENCE_TABLE_SMALLINT_REF">
             <column name="smallint_ref"/>
         </constraint>
     </table>
@@ -35,7 +35,7 @@
                 nullable="true"/>
         <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
                 unsigned="true" nullable="true"/>
-        <constraint xsi:type="unique" name="unique_null_key">
+        <constraint xsi:type="unique" name="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
             <column name="int_auto_increment_with_nullable"/>
         </constraint>
     </table>
@@ -60,21 +60,23 @@
         <column xsi:type="boolean" name="boolean"/>
         <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true"/>
         <!--Constraints-->
-        <constraint xsi:type="unique" name="some_unique_key">
+        <constraint xsi:type="unique" name="TEST_TABLE_SMALLINT_FLOAT">
             <column name="smallint"/>
             <column name="float"/>
         </constraint>
-        <constraint xsi:type="unique" name="some_unique_key_2">
+        <constraint xsi:type="unique" name="TEST_TABLE_DOUBLE">
             <column name="double"/>
         </constraint>
         <constraint xsi:type="foreign" name="some_foreign_key_new" column="smallint_main" table="test_table"
                     referenceTable="reference_table" referenceColumn="smallint_ref" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table"
+        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+                    column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" name="some_foreign_key_without_action" column="integer_main" table="test_table"
+        <constraint xsi:type="foreign" name="FK_FB77604C299EB8612D01E4AF8D9931F2"
+                    column="integer_main" table="test_table"
                     referenceTable="auto_increment_test" referenceColumn="int_auto_increment_with_nullable"/>
         <!--Indexes-->
-        <index name="speedup_index_renamed" indexType="btree">
+        <index name="TEST_TABLE_TINYINT_BIGINT" indexType="btree">
             <column name="tinyint"/>
             <column name="bigint"/>
         </index>

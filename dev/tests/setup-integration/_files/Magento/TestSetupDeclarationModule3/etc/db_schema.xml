@@ -21,7 +21,8 @@
         <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
         <column xsi:type="varchar" name="varchar" length="254" nullable="true"/>
         <column xsi:type="varbinary" name="varbinary" default="10101" />
-        <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table"
+        <constraint xsi:type="foreign" name="TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF"
+                    column="tinyint" table="test_table"
                     referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="CASCADE"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="smallint" />

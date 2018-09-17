@@ -6,12 +6,15 @@
  */
 namespace Magento\Eav\Api\Data;
 
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
+
 /**
  * Interface AttributeInterface
  * @api
  * @since 100.0.2
  */
-interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
+interface AttributeInterface extends CustomAttributesDataInterface, MetadataObjectInterface
 {
     const ATTRIBUTE_ID = 'attribute_id';
 

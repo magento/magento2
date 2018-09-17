@@ -10,6 +10,6 @@
 
     <xs:attributeGroup name="baseConstraint">
         <xs:attributeGroup ref="basicOperations" />
-        <xs:attribute name="name" type="nameType" />
+        <xs:attribute name="name" type="nameType" use="required" />
     </xs:attributeGroup>
 </xs:schema>

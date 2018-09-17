@@ -6,11 +6,14 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class Result extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -45,7 +48,7 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -58,7 +61,9 @@ class Result extends \Magento\Framework\App\Action\Action
             $defaultUrl = $this->_urlFactory->create()
                 ->addQueryParams($this->getRequest()->getQueryValue())
                 ->getUrl('*/*/');
-            $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
+            return $resultRedirect;
         }
     }
 }

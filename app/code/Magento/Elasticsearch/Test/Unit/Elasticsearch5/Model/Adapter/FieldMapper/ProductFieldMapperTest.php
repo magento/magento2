@@ -180,7 +180,9 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider attributeProvider
      * @param string $attributeCode
-     *
+     * @param string $inputType
+     * @param array $searchAttributes
+     * @param array $expected
      * @return void
      */
     public function testGetAllAttributesTypes($attributeCode, $inputType, $searchAttributes, $expected)
@@ -227,17 +229,17 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
     public function attributeCodeProvider()
     {
         return [
-            ['id', 'id', 'string'],
-            ['status', 'status', 'string'],
-            ['status', 'status', 'string', ['type'=>'default']],
-            ['price', 'price_0_1', 'string', ['type'=>'default']],
-            ['position', 'position_category_1', 'string', ['type'=>'default']],
-            ['price', 'price_2_3', 'string', ['type'=>'default', 'customerGroupId'=>'2', 'websiteId'=>'3']],
-            ['position', 'position_category_3', 'string', ['type'=>'default', 'categoryId'=>'3']],
-            ['color', 'color', 'select', ['type'=>'default']],
-            ['description', 'sort_description', 'string', ['type'=>'some']],
-            ['*', '_all', 'string', ['type'=>'text']],
-            ['description', 'description', 'string', ['type'=>'text']],
+            ['id', 'id', 'text'],
+            ['status', 'status', 'text'],
+            ['status', 'status_value', 'text', ['type'=>'default']],
+            ['price', 'price_0_1', 'text', ['type'=>'default']],
+            ['position', 'position_category_1', 'text', ['type'=>'default']],
+            ['price', 'price_2_3', 'text', ['type'=>'default', 'customerGroupId'=>'2', 'websiteId'=>'3']],
+            ['position', 'position_category_3', 'text', ['type'=>'default', 'categoryId'=>'3']],
+            ['color', 'color_value', 'text', ['type'=>'text']],
+            ['description', 'sort_description', 'text', ['type'=>'some']],
+            ['*', '_all', 'text', ['type'=>'text']],
+            ['description', 'description_value', 'text', ['type'=>'text']],
         ];
     }
 

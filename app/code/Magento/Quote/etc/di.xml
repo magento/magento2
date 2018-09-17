@@ -11,6 +11,8 @@
     <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
     <preference for="Magento\Quote\Model\ShippingAddressManagementInterface" type="Magento\Quote\Model\ShippingAddressManagement" />
+    <preference for="Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface" type="Magento\Quote\Model\MaskedQuoteIdToQuoteId" />
+    <preference for="Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface" type="Magento\Quote\Model\QuoteIdToMaskedQuoteId" />
     <preference for="Magento\Quote\Api\Data\AddressInterface" type="Magento\Quote\Model\Quote\Address" />
     <preference for="Magento\Quote\Api\Data\CartItemInterface" type="Magento\Quote\Model\Quote\Item" />
     <preference for="Magento\Quote\Api\Data\CartInterface" type="Magento\Quote\Model\Quote" />
@@ -41,6 +43,7 @@
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
     <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
+    <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
@@ -94,5 +97,42 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
         <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\QuoteValidationComposite">
+        <arguments>
+            <argument name="validationRules" xsi:type="array">
+                <item name="AllowedCountryValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule</item>
+                <item name="ShippingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule</item>
+                <item name="ShippingMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule</item>
+                <item name="BillingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\BillingAddressValidationRule</item>
+                <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
+                <item name="MinimumAmountValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\MinimumAmountValidationRule</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\AllowedCountryValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Some addresses can't be used due to the configurations for specific countries.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingAddressValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the shipping address information.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">The shipping method is missing. Select the shipping method and try again.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\BillingAddressValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Please check the billing address information.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Enter a valid payment method and try again.</argument>
+        </arguments>
     </type>
 </config>

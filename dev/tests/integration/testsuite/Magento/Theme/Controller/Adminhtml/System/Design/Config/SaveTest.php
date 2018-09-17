@@ -15,6 +15,11 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class SaveTest extends AbstractBackendController
 {
     /**
+     * @var FormKey
+     */
+    private $formKey;
+
+    /**
      * @inheritdoc
      */
     protected $resource = 'Magento_Config::config_design';
@@ -23,6 +28,15 @@ class SaveTest extends AbstractBackendController
      * @inheritdoc
      */
     protected $uri = 'backend/theme/design_config/save';
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->formKey = $this->_objectManager->get(
+            FormKey::class
+        );
+    }
 
     /**
      * Test design configuration save valid values.
@@ -89,7 +103,22 @@ class SaveTest extends AbstractBackendController
             'watermark_swatch_image_imageOpacity' => '',
             'watermark_swatch_image_position' => 'stretch',
             'scope' => 'default',
-            'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+            'form_key' => $this->formKey->getFormKey(),
         ];
+    }
+
+    public function testAclHasAccess()
+    {
+        $this->getRequest()->setMethod(
+            \Zend\Http\Request::METHOD_POST
+        );
+
+        $this->getRequest()->setParams(
+            [
+                'form_key' => $this->formKey->getFormKey()
+            ]
+        );
+
+        parent::testAclHasAccess();
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateUserActionGroup">
+        <arguments>
+            <argument name="role"/>
+            <argument name="User" defaultValue="admin2"/>
+        </arguments>
+        <amOnPage url="{{AdminEditUserPage.url}}" stepKey="navigateToNewUser"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{admin2.username}}" stepKey="enterUserName" />
+        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{admin2.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{admin2.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{admin2.username}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{AdminEditUserSection.passwordTextField}}" userInput="{{admin2.password}}" stepKey="enterPassword" />
+        <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{admin2.password}}" stepKey="confirmPassword" />
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
+        <scrollToTopOfPage stepKey="scrollToTopOfPage" />
+        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRole" />
+        <fillField selector="{{AdminEditUserRoleSection.roleNameFilterTextField}}" userInput="{{role.name}}" stepKey="filterRole" />
+        <click selector="{{AdminEditUserRoleSection.searchButton}}" stepKey="clickSearch" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <click selector="{{AdminEditUserRoleSection.searchResultFirstRow}}" stepKey="selectRole" />
+        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveUser" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <see userInput="You saved the user." stepKey="seeSuccessMessage" />
+    </actionGroup>
+</actionGroups>

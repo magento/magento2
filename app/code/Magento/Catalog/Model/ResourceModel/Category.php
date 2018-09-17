@@ -490,7 +490,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * Get chlden categories count
+     * Get children categories count
      *
      * @param int $categoryId
      * @return int
