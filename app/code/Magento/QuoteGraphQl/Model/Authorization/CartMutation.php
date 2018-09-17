@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model;
+namespace Magento\QuoteGraphQl\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,7 +15,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 /**
  * {@inheritDoc}
  */
-class CartMutationsAllowed implements CartMutationsAllowedInterface
+class CartMutation implements CartMutationInterface
 {
     /**
      * @var CartRepositoryInterface
@@ -42,7 +42,7 @@ class CartMutationsAllowed implements CartMutationsAllowedInterface
     /**
      * {@inheritDoc}
      */
-    public function execute(int $quoteId): bool
+    public function isAllowed(int $quoteId): bool
     {
         try {
             $quote = $this->cartRepository->get($quoteId);
@@ -52,10 +52,12 @@ class CartMutationsAllowed implements CartMutationsAllowedInterface
 
         $customerId = $quote->getCustomerId();
 
+        /* Guest cart, allow operations */
         if (!$customerId) {
             return true;
         }
 
+        /* If the quote belongs to the current customer allow operations */
         if ($customerId == $this->userContext->getUserId()) {
             return true;
         }

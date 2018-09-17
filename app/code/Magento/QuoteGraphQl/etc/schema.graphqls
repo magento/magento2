@@ -25,7 +25,6 @@ type CartAddress {
 }
 
 type AppliedCoupon {
-    # Wrapper allows for future extension of coupon info
     code: String!
 }
 

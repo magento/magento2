@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model;
+namespace Magento\QuoteGraphQl\Model\Authorization;
 
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
@@ -13,12 +13,12 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
  * Service for checking that the shopping cart operations
  * are allowed for current user
  */
-interface CartMutationsAllowedInterface
+interface CartMutationInterface
 {
     /**
      * @param int $quoteId
      * @return bool
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(int $quoteId): bool;
+    public function isAllowed(int $quoteId): bool;
 }

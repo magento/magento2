@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for empty cart creation mutation
+ * Test for adding/removing shopping cart coupon codes
  */
 class CouponTest extends GraphQlAbstract
 {
@@ -121,7 +121,7 @@ class CouponTest extends GraphQlAbstract
         $this->quoteResource->save($this->quote);
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
-        self::expectExceptionMessage('Operations with selected cart is not permitted for current user');
+        self::expectExceptionMessage('The current user cannot perform operations on the selected cart');
         $this->graphQlQuery($query);
     }
 
@@ -178,7 +178,7 @@ class CouponTest extends GraphQlAbstract
         $this->quoteResource->save($this->quote);
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
 
-        self::expectExceptionMessage('Operations with selected cart is not permitted for current user');
+        self::expectExceptionMessage('The current user cannot perform operations on the selected cart');
         $this->graphQlQuery($query);
     }
 

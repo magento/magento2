@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\Coupon;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -18,7 +19,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\QuoteGraphQl\Model\CartMutationsAllowedInterface;
+use Magento\QuoteGraphQl\Model\Authorization\CartMutationInterface;
 
 /**
  * {@inheritdoc}
@@ -40,25 +41,25 @@ class RemoveCouponFromCart implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var CartMutationsAllowedInterface
+     * @var CartMutationInterface
      */
-    private $cartMutationsAllowed;
+    private $cartMutationAuthorization;
 
     /**
      * @param ValueFactory $valueFactory
      * @param CouponManagementInterface $couponManagement
-     * @param CartMutationsAllowedInterface $cartMutationsAllowed
+     * @param CartMutationInterface $cartMutationAuthorization
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId
      */
     public function __construct(
         ValueFactory $valueFactory,
         CouponManagementInterface $couponManagement,
-        CartMutationsAllowedInterface $cartMutationsAllowed,
+        CartMutationInterface $cartMutationAuthorization,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId
     ) {
         $this->valueFactory = $valueFactory;
         $this->couponManagement = $couponManagement;
-        $this->cartMutationsAllowed = $cartMutationsAllowed;
+        $this->cartMutationAuthorization = $cartMutationAuthorization;
         $this->maskedQuoteIdToId = $maskedQuoteIdToId;
     }
 
@@ -76,18 +77,20 @@ class RemoveCouponFromCart implements ResolverInterface
         try {
             $cartId = $this->maskedQuoteIdToId->execute($maskedCartId);
         } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('No cart with provided ID found'));
+            throw new GraphQlNoSuchEntityException(__('Could not find a cart with the provided ID'));
         }
 
-        if (!$this->cartMutationsAllowed->execute((int) $cartId)) {
+        if (!$this->cartMutationAuthorization->isAllowed((int) $cartId)) {
             throw new GraphQlAuthorizationException(
-                __('Operations with selected cart is not permitted for current user')
+                __('The current user cannot perform operations on the selected cart')
             );
         }
 
         try {
             $this->couponManagement->remove($cartId);
-        } catch (\Exception $exception) {
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
+        } catch (CouldNotDeleteException $exception) {
             throw new GraphQlInputException(__($exception->getMessage()));
         }
 
