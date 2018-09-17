@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -33,7 +34,7 @@ class Image implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -43,7 +44,7 @@ class Image implements ResolverInterface
         array $args = null
     ): array {
         if (!isset($value['model'])) {
-            throw new \LogicException(__("Cannot resolve entity model"));
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
         /** @var Product $product */
         $product = $value['model'];
