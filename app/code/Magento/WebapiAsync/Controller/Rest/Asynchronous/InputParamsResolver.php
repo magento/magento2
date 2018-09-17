@@ -95,6 +95,13 @@ class InputParamsResolver
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
         $inputData = $this->request->getRequestData();
+
+        $httpMethod = $this->request->getHttpMethod();
+        if ($httpMethod == \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE) {
+            $requestBodyParams = $this->request->getBodyParams();
+            $inputData = array_merge($requestBodyParams, $inputData);
+        }
+
         foreach ($inputData as $key => $singleEntityParams) {
             $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams);
         }
