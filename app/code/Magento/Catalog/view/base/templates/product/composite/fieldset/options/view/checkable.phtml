@@ -60,8 +60,8 @@ $option->getId() ?>-list">
         }
         ?>
 
-        <div class="field choice admin__field admin__field-option'<?php echo /* @noEscape */
-        $option->getIsRequire() ?>'">
+        <div class="field choice admin__field admin__field-option <?php echo /* @noEscape */
+        $option->getIsRequire() ? 'required': '' ?>">
             <input type="<?php echo /* @noEscape */
             $optionType ?>"
                    class="<?php /** @noinspection DisconnectedForeachInstructionInspection */
