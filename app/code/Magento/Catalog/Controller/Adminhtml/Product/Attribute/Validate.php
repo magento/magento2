@@ -83,7 +83,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $response->setError(false);
         try {
             $optionsData = $this->optionsDataSerializer
-                ->unserialize($this->getRequest()->getParam('serialized_options'));
+                ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
                 . "If the error persists, please try again later.");

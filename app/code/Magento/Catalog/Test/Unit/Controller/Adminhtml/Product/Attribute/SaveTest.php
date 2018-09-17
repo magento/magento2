@@ -180,7 +180,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
-                ['serialized_options', null, ''],
+                ['serialized_options', '[]', ''],
             ]);
         $this->optionsDataSerializerMock
             ->expects($this->once())
@@ -211,7 +211,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
-                ['serialized_options', null, ''],
+                ['serialized_options', '[]', ''],
             ]);
         $this->optionsDataSerializerMock
             ->expects($this->once())
@@ -271,7 +271,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, true],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
         $this->optionsDataSerializerMock
             ->expects($this->once())
