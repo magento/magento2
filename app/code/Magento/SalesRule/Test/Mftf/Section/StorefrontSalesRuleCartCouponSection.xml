@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontSalesRuleCartCouponSection">
+        <element name="couponHeader" type="button" selector="//*[@id='block-discount-heading']"/>
+        <element name="couponField" type="text" selector="//*[@id='coupon_code']"/>
+        <element name="discountBlockActive" type="text" selector="//*[@class='block discount active']" />
+        <element name="applyButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'apply')]"/>
+        <element name="cancelButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'cancel')]"/>
+    </section>
+</sections>

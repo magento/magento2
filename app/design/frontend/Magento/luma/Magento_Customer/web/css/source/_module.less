@@ -93,6 +93,21 @@
                 }
             }
         }
+        .fieldset.create.account {
+            .lib-form-hasrequired(bottom);
+            &:after {
+                margin-top: 35px;
+            }
+        }
+    }
+
+    .form.password.forget {
+        .fieldset {
+            .lib-form-hasrequired(bottom);
+            &:after {
+                margin-top: 35px;
+            }
+        }
     }
 
     //  Full name fieldset
@@ -209,7 +224,7 @@
                 .column.main & {
                 }
             }
-
+            display: block;
             margin-bottom: @indent__s;
         }
 

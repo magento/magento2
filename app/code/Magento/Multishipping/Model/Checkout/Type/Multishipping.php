@@ -171,8 +171,11 @@ class Multishipping extends \Magento\Framework\DataObject
     private $logger;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -197,8 +200,9 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
-     * @param Multishipping\PlaceOrderFactory $placeOrderFactory
-     * @param LoggerInterface $logger
+     * @param Multishipping\PlaceOrderFactory|null $placeOrderFactory
+     * @param LoggerInterface|null $logger
+     * @param \Magento\Framework\Api\DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -227,7 +231,8 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
         AllowedCountries $allowedCountryReader = null,
         Multishipping\PlaceOrderFactory $placeOrderFactory = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -258,12 +263,15 @@ class Multishipping extends \Magento\Framework\DataObject
             ->get(Multishipping\PlaceOrderFactory::class);
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
+        $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\DataObjectHelper::class);
         parent::__construct($data);
         $this->_init();
     }
 
     /**
      * Initialize multishipping checkout.
+     *
      * Split virtual/not virtual items between default billing/shipping addresses
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
@@ -329,6 +337,7 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * Get quote items assigned to different quote addresses populated per item qty.
+     *
      * Based on result array we can display each item separately
      *
      * @return array
@@ -389,7 +398,7 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Assign quote items to addresses and specify items qty
      *
-     * array structure:
+     * Array structure:
      * array(
      *      $quoteItemId => array(
      *          'qty'       => $qty,
@@ -670,7 +679,14 @@ class Multishipping extends \Magento\Framework\DataObject
         $quote->reserveOrderId();
         $quote->collectTotals();
 
-        $order = $this->quoteAddressToOrder->convert($address);
+        $order = $this->_orderFactory->create();
+
+        $this->dataObjectHelper->mergeDataObjects(
+            \Magento\Sales\Api\Data\OrderInterface::class,
+            $order,
+            $this->quoteAddressToOrder->convert($address)
+        );
+
         $order->setQuote($quote);
         $order->setBillingAddress($this->quoteAddressToOrderAddress->convert($quote->getBillingAddress()));
 
@@ -678,6 +694,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $order->setIsVirtual(1);
         } else {
             $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
+            $order->setShippingMethod($address->getShippingMethod());
         }
 
         $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
@@ -912,6 +929,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get minimum amount error.
+     *
      * @return string
      */
     public function getMinimumAmountError()
@@ -1056,7 +1075,7 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Check if specified address ID belongs to customer.
      *
-     * @param $addressId
+     * @param mixed $addressId
      * @return bool
      */
     protected function isAddressIdApplicable($addressId)
@@ -1069,6 +1088,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      */
@@ -1089,6 +1110,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get shipping assignment processor.
+     *
      * @return \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
      */
     private function getShippingAssignmentProcessor()
@@ -1171,10 +1194,11 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get quote address errors.
+     *
      * @param OrderInterface[] $orders
      * @param \Magento\Quote\Model\Quote\Address[] $addresses
      * @param \Exception[] $exceptionList
-     *
      * @return string[]
      * @throws NotFoundException
      */

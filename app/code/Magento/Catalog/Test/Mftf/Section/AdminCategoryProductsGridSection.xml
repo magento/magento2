@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryProductsGridSection">
+        <element name="rowProductId" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-id" parameterized="true"/>
+        <element name="rowProductName" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-name" parameterized="true"/>
+        <element name="rowProductSku" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-sku" parameterized="true"/>
+        <element name="rowPrice" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-price" parameterized="true"/>
+        <element name="rowPosition" type="input" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-position .position input" timeout="30" parameterized="true"/>
+    </section>
+</sections>

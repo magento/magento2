@@ -100,7 +100,7 @@
             <field id="enable_express_checkout_bml" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml">
                 <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                             You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
-                            <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                            <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
                 </comment>
                 <config_path>payment/payflow_express_bml/active</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Bml</frontend_model>

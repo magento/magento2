@@ -98,8 +98,8 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|null $id
      * @param string $typeId
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectedGetTitle
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectedGetValue
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectedGetTitle
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectedGetValue
      * @return void
      * @dataProvider getLinksTitleDataProvider
      */

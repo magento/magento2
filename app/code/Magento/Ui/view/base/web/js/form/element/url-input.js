@@ -55,6 +55,8 @@ define([
                 linkSettingsArray.name = baseLinkType.namePrefix + linkName;
                 linkSettingsArray.dataScope = baseLinkType.dataScopePrefix + linkName;
                 linkSettingsArray.type = linkName;
+                linkSettingsArray.disabled = config.disabled;
+                linkSettingsArray.visible = config.visible;
                 processedLinkTypes[linkName] = {};
                 _.extend(processedLinkTypes[linkName], baseLinkType, linkSettingsArray);
             });

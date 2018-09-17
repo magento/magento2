@@ -231,7 +231,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargableOptionPrice(
+                    $result += $this->_getChargeableOptionPrice(
                         $_result->getPrice(),
                         $_result->getPriceType() == 'percent',
                         $basePrice
@@ -246,7 +246,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargableOptionPrice(
+                $result = $this->_getChargeableOptionPrice(
                     $_result->getPrice(),
                     $_result->getPriceType() == 'percent',
                     $basePrice

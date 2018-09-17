@@ -256,7 +256,8 @@ class Value extends AbstractDb
                 $object->unsetData('title');
             }
 
-            if ($object->getTitle()) {
+            /*** Checking whether title is not null ***/
+            if ($object->getTitle()!= null) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
                         $where = [
@@ -300,7 +301,7 @@ class Value extends AbstractDb
     }
 
     /**
-     * Get first col from from first row for option table
+     * Get first col from first row for option table
      *
      * @param string $tableName
      * @param int $optionId

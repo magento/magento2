@@ -49,9 +49,10 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('The "%1" attribute doesn\'t work with options.', $attributeCode));
         }
 
+        $optionLabel = $option->getLabel();
         $optionId = $this->getOptionId($option);
         $options = [];
-        $options['value'][$optionId][0] = $option->getLabel();
+        $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
 
         if (is_array($option->getStoreLabels())) {
@@ -67,11 +68,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);
+            if ($optionLabel && $attribute->getAttributeCode()) {
+                $this->setOptionValue($option, $attribute, $optionLabel);
+            }
         } catch (\Exception $e) {
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
-        return true;
+        return $this->getOptionId($option);
     }
 
     /**
@@ -147,8 +151,32 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @return string
      */
-    private function getOptionId($option)
+    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
     {
         return $option->getValue() ?: 'new_option';
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @param string $optionLabel
+     * @return void
+     */
+    private function setOptionValue(
+        \Magento\Eav\Api\Data\AttributeOptionInterface $option,
+        \Magento\Eav\Api\Data\AttributeInterface $attribute,
+        string $optionLabel
+    ) {
+        $optionId = $attribute->getSource()->getOptionId($optionLabel);
+        if ($optionId) {
+            $option->setValue($attribute->getSource()->getOptionId($optionId));
+        } elseif (is_array($option->getStoreLabels())) {
+            foreach ($option->getStoreLabels() as $label) {
+                if ($optionId = $attribute->getSource()->getOptionId($label->getLabel())) {
+                    $option->setValue($attribute->getSource()->getOptionId($optionId));
+                    break;
+                }
+            }
+        }
     }
 }

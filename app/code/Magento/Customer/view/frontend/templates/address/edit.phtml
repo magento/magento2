@@ -42,13 +42,13 @@
         <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
         <div class="field street required">
             <label for="street_1" class="label">
-                <span><?= $block->escapeHtml(__('Street Address')) ?></span>
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span>
             </label>
             <div class="control">
                 <input type="text"
                        name="street[]"
                        value="<?= $block->escapeHtmlAttr($block->getStreetLine(1)) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Street Address')) ?>"
+                       title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                        id="street_1"
                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>"/>
                 <div class="nested">
@@ -74,20 +74,20 @@
         <?php if ($this->helper('Magento\Customer\Helper\Address')->isVatAttributeVisible()) : ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
-                    <span><?= $block->escapeHtml(__('VAT Number')) ?></span>
+                    <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
                 </label>
                 <div class="control">
                     <input type="text"
                            name="vat_id"
                            value="<?= $block->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
-                           title="<?= $block->escapeHtmlAttr(__('VAT Number')) ?>"
+                           title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
                            class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('vat_id')) ?>"
                            id="vat_id">
                 </div>
             </div>
         <?php endif; ?>
         <div class="field city required">
-            <label class="label" for="city"><span><?= $block->escapeHtml(__('City')) ?></span></label>
+            <label class="label" for="city"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span></label>
             <div class="control">
                 <input type="text"
                        name="city"
@@ -99,11 +99,11 @@
         </div>
         <div class="field region required">
             <label class="label" for="region_id">
-                <span><?= $block->escapeHtml(__('State/Province')) ?></span>
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?></span>
             </label>
             <div class="control">
                 <select id="region_id" name="region_id"
-                        title="<?= $block->escapeHtmlAttr(__('State/Province')) ?>"
+                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
                         class="validate-select" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
                     <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                 </select>
@@ -111,25 +111,25 @@
                        id="region"
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('State/Province')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+                       title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
+                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
             </div>
         </div>
         <div class="field zip required">
             <label class="label" for="zip">
-                <span><?= $block->escapeHtml(__('Zip/Postal Code')) ?></span>
+                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
             </label>
             <div class="control">
                 <input type="text"
                        name="postcode"
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Zip/Postal Code')) ?>"
+                       title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
                        class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
             </div>
         </div>
         <div class="field country required">
-            <label class="label" for="country"><span><?= $block->escapeHtml(__('Country')) ?></span></label>
+            <label class="label" for="country"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
             <div class="control">
                 <?= $block->getCountryHtmlSelect() ?>
             </div>

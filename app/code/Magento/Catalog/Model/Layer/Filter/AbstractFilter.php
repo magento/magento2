@@ -241,7 +241,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     }
 
     /**
-     * Get all product ids from from collection with applied filters
+     * Get all product ids from collection with applied filters
      *
      * @return array
      */

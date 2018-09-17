@@ -26,18 +26,18 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
                 $model->load($id);
                 $model->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('You deleted the block.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the block.'));
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form
                 return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
             }
         }
         // display error message
-        $this->messageManager->addError(__('We can\'t find a block to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a block to delete.'));
         // go to grid
         return $resultRedirect->setPath('*/*/');
     }

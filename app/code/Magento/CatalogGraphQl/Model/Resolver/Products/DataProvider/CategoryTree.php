@@ -24,9 +24,9 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 class CategoryTree
 {
     /**
-     * In depth we need to calculate only children nodes, so 2 first wrapped nodes should be ignored
+     * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
      */
-    const DEPTH_OFFSET = 2;
+    const DEPTH_OFFSET = 1;
 
     /**
      * @var CollectionFactory
@@ -89,7 +89,7 @@ class CategoryTree
      */
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
-        $categoryQuery = $resolveInfo->fieldASTs[0];
+        $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
@@ -100,7 +100,7 @@ class CategoryTree
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');
         $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getLinkField() . ' = ?',
+            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
             $rootCategoryId
         );
         return $this->processTree($collection->getIterator());
@@ -143,6 +143,10 @@ class CategoryTree
 
         /** @var FieldNode $node */
         foreach ($subSelection as $node) {
+            if ($node->kind === 'InlineFragment') {
+                continue;
+            }
+
             $this->joinAttributesRecursively($collection, $node);
         }
     }

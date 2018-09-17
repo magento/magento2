@@ -245,7 +245,7 @@ class System implements ConfigTypeInterface
         );
         $scopes = [];
         foreach (['websites', 'stores'] as $curScopeType) {
-            foreach ($data[$curScopeType] as $curScopeId => $curScopeData) {
+            foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
                 $this->cache->save(
                     $this->serializer->serialize($curScopeData),

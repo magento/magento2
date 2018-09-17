@@ -25,7 +25,7 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     /**
      * @var string
      */
-    protected $_template = 'store/switcher/form/renderer/fieldset.phtml';
+    protected $_template = 'Magento_Backend::store/switcher/form/renderer/fieldset.phtml';
 
     /**
      * Retrieve an element

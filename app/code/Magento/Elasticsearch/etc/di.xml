@@ -166,7 +166,7 @@
         <arguments>
             <argument name="intervals" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
             </argument>
         </arguments>
     </type>
@@ -188,6 +188,12 @@
                 <item name="dynamicBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="stockedProductsFilterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
+    </type>
+    <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
+        <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Match">
         <arguments>

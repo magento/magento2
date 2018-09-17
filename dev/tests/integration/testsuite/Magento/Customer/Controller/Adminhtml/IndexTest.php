@@ -44,6 +44,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var \Magento\TestFramework\ObjectManager */
     protected $objectManager;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -67,6 +70,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown()
     {
         /**
@@ -522,7 +528,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
-    public function testNewAction()
+    /**
+     * Tests new action
+     */
+    public function testNewAction(): void
     {
         $this->dispatch('backend/customer/index/edit');
         $body = $this->getResponse()->getBody();
@@ -717,12 +726,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->assertContains('{"error":true,"messages":', $body);
         $this->assertContains('\"First Name\" is a required value', $body);
-        $this->assertContains('\"First Name\" length must be equal or greater than 1 characters', $body);
         $this->assertContains('\"Last Name\" is a required value.', $body);
-        $this->assertContains('\"Last Name\" length must be equal or greater than 1 characters.', $body);
         $this->assertContains('\"Country\" is a required value.', $body);
         $this->assertContains('\"Phone Number\" is a required value.', $body);
-        $this->assertContains('\"Phone Number\" length must be equal or greater than 1 characters.', $body);
     }
 
     /**

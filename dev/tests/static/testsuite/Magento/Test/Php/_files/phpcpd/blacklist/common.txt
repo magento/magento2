@@ -201,3 +201,4 @@ IntegrationConfig.php
 setup/performance-toolkit/aggregate-report
 Magento/MessageQueue/Setup
 Magento/Elasticsearch/Elasticsearch5
+Test/_files

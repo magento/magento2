@@ -77,6 +77,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
+     */
     public function testGetCategoryWithAppliedId()
     {
         $storeId = 1234;

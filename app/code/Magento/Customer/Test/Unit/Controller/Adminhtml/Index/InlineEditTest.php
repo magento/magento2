@@ -164,6 +164,9 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param int $populateSequence
+     */
     protected function prepareMocksForTesting($populateSequence = 0)
     {
         $this->resultJsonFactory->expects($this->once())

@@ -22,11 +22,11 @@
                 <?php $shippingAddress = $block->getCheckoutData()->getOrderShippingAddress($orderId); ?>
                     <div class="shipping-item">
                         <?php if ($shippingAddress) : ?>
-                        <span class="shipping-label"><?= $block->escapeHtml('Ship to:'); ?></span>
+                        <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
                         <span class="shipping-address">
-                        <?= $block->escapeHtml(
-                            $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
-                        ); ?>
+                            <?= $block->escapeHtml(
+                                $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
+                            ); ?>
                         </span>
                         <?php else : ?>
                             <span class="shipping-address">

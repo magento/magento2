@@ -14,5 +14,5 @@ class Group extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/main/tree/group.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main/tree/group.phtml';
 }

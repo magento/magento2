@@ -6,6 +6,7 @@
 namespace Magento\Ui\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Ui\Component\MassAction\Filter;
@@ -31,10 +32,16 @@ class ConvertToCsv
     protected $pageSize = null;
 
     /**
+     * @var Filter
+     */
+    protected $filter;
+
+    /**
      * @param Filesystem $filesystem
      * @param Filter $filter
      * @param MetadataProvider $metadataProvider
      * @param int $pageSize
+     * @throws FileSystemException
      */
     public function __construct(
         Filesystem $filesystem,

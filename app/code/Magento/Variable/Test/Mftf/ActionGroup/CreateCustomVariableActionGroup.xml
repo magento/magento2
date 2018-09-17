@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!--
+         /**
+          * Copyright © Magento, Inc. All rights reserved.
+          * See COPYING.txt for license details.
+          */
+        -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroup name="CreateCustomVariableActionGroup">
+    <amOnPage url="admin/admin/system_variable/new/" stepKey="goToNewCustomVarialePage" />
+    <waitForPageLoad stepKey="waitForPageLoad" />
+    <fillField selector="{{CustomVariableSection.variableCode}}" userInput="{{customVariable.code}}" stepKey="fillVariableCode" />
+    <fillField selector="{{CustomVariableSection.variableName}}" userInput="{{customVariable.name}}" stepKey="fillVariableName" />
+    <fillField selector="{{CustomVariableSection.variableHTML}}" userInput="{{customVariable.html}}" stepKey="fillVariableHtml" />
+    <fillField selector="{{CustomVariableSection.variablePlain}}" userInput="{{customVariable.plain}}" stepKey="fillVariablePlain" />
+    <click selector="{{CustomVariableSection.saveCustomVariable}}" stepKey="clickSaveVariable"/>
+</actionGroup>
+<actionGroup name="DeleteCustomVariableActionGroup">
+    <amOnPage url="admin/admin/system_variable/" stepKey="goToVarialeGrid" />
+    <waitForPageLoad stepKey="waitForPageLoad1" />
+    <click selector="{{CustomVariableSection.GridCustomVariableCode(customVariable.code)}}" stepKey="goToCustomVariableEditPage" />
+    <waitForPageLoad stepKey="waitForPageLoad2" />
+    <waitForElementVisible selector="{{CustomVariableSection.delete}}" stepKey="waitForDeleteBtn" />
+    <click selector="{{CustomVariableSection.delete}}" stepKey="deleteCustomVariable" />
+    <waitForText userInput="Are you sure you want to do this?" stepKey="waitForText" />
+    <click selector="{{CustomVariableSection.confirmDelete}}" stepKey="confirmDelete" />
+    <waitForPageLoad stepKey="waitForPageLoad3" />
+</actionGroup>
+</actionGroups>

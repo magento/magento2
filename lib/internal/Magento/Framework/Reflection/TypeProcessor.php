@@ -9,6 +9,7 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\DocBlock\Tag\ParamTag;
 use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
 use Zend\Code\Reflection\DocBlockReflection;
 use Zend\Code\Reflection\MethodReflection;
@@ -522,35 +523,24 @@ class TypeProcessor
         }
         if ($type == 'array') {
             // try to determine class, if it's array of objects
-            $docBlock = $param->getDeclaringFunction()->getDocBlock();
-            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
-            $matches = [];
-            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
-                return $matches[1];
-            }
-            return "{$type}[]";
+            $paramDocBlock = $this->getParamDocBlockTag($param);
+            $paramTypes = $paramDocBlock->getTypes();
+            $paramType = array_shift($paramTypes);
+            return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
         return $type;
     }
 
     /**
-     * Get parameter description
+     * Gets method parameter description.
      *
      * @param ParameterReflection $param
      * @return string|null
      */
     public function getParamDescription(ParameterReflection $param)
     {
-        $docBlock = $param->getDeclaringFunction()->getDocBlock();
-        $docBlockLines = explode("\n", $docBlock->getContents());
-        $pattern = "/\@param\s+([\w\\\_\[\]\|]+)\s+(\\\${$param->getName()})\s(.*)/";
-        $matches = [];
-
-        foreach ($docBlockLines as $line) {
-            if (preg_match($pattern, $line, $matches)) {
-                return $matches[3];
-            }
-        }
+        $paramDocBlock = $this->getParamDocBlockTag($param);
+        return $paramDocBlock->getDescription();
     }
 
     /**
@@ -731,7 +721,7 @@ class TypeProcessor
             // throw an exception if even implemented interface doesn't have return annotations
             if (empty($returnAnnotations)) {
                 throw new \InvalidArgumentException(
-                    "Getter return type must be specified using @return annotation. "
+                    "Method's return type must be specified using @return annotation. "
                     . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodName}()"
                 );
             }
@@ -750,10 +740,24 @@ class TypeProcessor
         $methodDocBlock = $methodReflection->getDocBlock();
         if (!$methodDocBlock) {
             throw new \InvalidArgumentException(
-                "Each getter must have a doc block. "
+                "Each method must have a doc block. "
                 . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
             );
         }
         return current($methodDocBlock->getTags('return'));
+    }
+
+    /**
+     * Gets method's param doc block.
+     *
+     * @param ParameterReflection $param
+     * @return ParamTag
+     */
+    private function getParamDocBlockTag(ParameterReflection $param): ParamTag
+    {
+        $docBlock = $param->getDeclaringFunction()
+            ->getDocBlock();
+        $paramsTag = $docBlock->getTags('param');
+        return $paramsTag[$param->getPosition()];
     }
 }

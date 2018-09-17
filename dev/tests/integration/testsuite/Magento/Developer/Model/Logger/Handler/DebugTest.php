@@ -95,6 +95,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
 
         // Preconditions
         $this->mode->enableDeveloperMode();
+        $this->enableDebugging();
         if (file_exists($this->getDebuggerLogPath())) {
             unlink($this->getDebuggerLogPath());
         }

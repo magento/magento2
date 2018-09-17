@@ -51,7 +51,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * List of comma-separated module names. That must be avoided during installation.
      * List of comma-separated module names. That must be avoided during installation.
-     * Avaiable magic param all.
+     * Available magic param all.
      */
     const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
 
@@ -161,14 +161,14 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'List of comma-separated module names. That must be included during installation. '
-                . 'Avaiable magic param "all".'
+                . 'Available magic param "all".'
             ),
             new InputOption(
                 self::INPUT_KEY_DISABLE_MODULES,
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'List of comma-separated module names. That must be avoided during installation. '
-                . 'Avaiable magic param "all".'
+                . 'Available magic param "all".'
             ),
             new InputOption(
                 self::CONVERT_OLD_SCRIPTS_KEY,

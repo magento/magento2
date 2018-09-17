@@ -16,6 +16,11 @@ use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * Class DependencyTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -76,6 +81,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($expectedPackages, $dependency->getSampleDataPackages());
     }
+
+    /**
+     * @return array
+     */
     public static function dataPackagesFromComposerSuggest()
     {
         return [
@@ -167,6 +176,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param array $composerJsonContent
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     public function stubComposerJsonReader(array $composerJsonContent)
     {
         $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
@@ -183,6 +196,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         return $stub;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     public function stubFileNotFoundReader()
     {
         $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)

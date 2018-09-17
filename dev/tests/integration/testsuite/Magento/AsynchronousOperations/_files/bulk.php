@@ -44,7 +44,7 @@ $bulks = [
         'user_id' => 1,
         'description' => 'Bulk Description',
         'operation_count' => 2,
-    ]
+    ],
 ];
 // Only processed operations are saved into database (i.e. operations that are not in 'open' state)
 $operations = [
@@ -88,7 +88,6 @@ $operations = [
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
     ],
-
 ];
 
 $bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`)"

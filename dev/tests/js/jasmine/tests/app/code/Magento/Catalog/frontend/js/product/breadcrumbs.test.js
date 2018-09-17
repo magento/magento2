@@ -18,7 +18,11 @@ define([
             'Magento_Theme/js/model/breadcrumb-list': jasmine.createSpyObj(['push'])
         },
         defaultContext = require.s.contexts._,
-        menuItem = $('<li class="level0"><a href="http://localhost.com/cat1.html" id="ui-id-3">Cat1</a></li>')[0],
+        menuItem = $(
+            '<li class="level0 category-item">' +
+            '<a href="http://localhost.com/cat1.html">Cat1</a>' +
+            '</li>'
+        )[0],
 
         /**
          * Create context object.
@@ -112,14 +116,14 @@ define([
             });
 
             it('Check _getCategoryCrumb call', function () {
-                var item = $('<a href="http://localhost.com/cat1.html" id="ui-id-3">Cat1</a>');
+                var item = $('<a href="http://localhost.com/cat1.html">Cat1</a>');
 
                 expect(widget).toBeDefined();
                 expect(widget).toEqual(jasmine.any(Function));
                 expect(widget.prototype._getCategoryCrumb).toBeDefined();
                 expect(widget.prototype._getCategoryCrumb(item)).toEqual(jasmine.objectContaining(
                     {
-                        'name': 'category3',
+                        'name': 'category',
                         'label': 'Cat1',
                         'link': 'http://localhost.com/cat1.html'
                     }
@@ -228,7 +232,7 @@ define([
                 expect(result.length).toBe(1);
                 expect(result[0]).toEqual(jasmine.objectContaining(
                     {
-                        'name': 'category3',
+                        'name': 'category',
                         'label': 'Cat1',
                         'link': 'http://localhost.com/cat1.html'
                     }
@@ -239,10 +243,10 @@ define([
                 var result,
                     menuItems = $(
                         '<li class="level0 nav-1">' +
-                            '<a href="http://localhost.com/cat1.html" id="ui-id-3">cat1</a>' +
+                            '<a href="http://localhost.com/cat1.html">cat1</a>' +
                             '<ul>' +
                                 '<li class="level1 nav-1-1">' +
-                                    '<a href="http://localhost.com/cat1/cat21.html" id="ui-id-9">cat21</a>' +
+                                    '<a href="http://localhost.com/cat1/cat21.html">cat21</a>' +
                                 '</li>' +
                             '</ul>' +
                         '</li>'
@@ -258,14 +262,14 @@ define([
 
                 context = createContext(widget.prototype);
                 getParentMenuHandler = widget.prototype._getParentMenuItem.bind(context);
-                result = getParentMenuHandler($('#ui-id-9'));
+                result = getParentMenuHandler($('[href="http://localhost.com/cat1/cat21.html"]'));
 
                 expect(result).toBeDefined();
                 expect(result.length).toBe(1);
                 expect(result[0].tagName.toLowerCase()).toEqual('a');
-                expect(result.attr('id')).toEqual('ui-id-3');
+                expect(result.attr('href')).toEqual('http://localhost.com/cat1.html');
 
-                result = getParentMenuHandler($('#ui-id-3'));
+                result = getParentMenuHandler($('[href="http://localhost.com/cat1.html"]'));
 
                 expect(result).toBeNull();
             });

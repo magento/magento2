@@ -69,6 +69,7 @@ class Save extends Attribute
      * @var LayoutFactory
      */
     private $layoutFactory;
+
     /**
      * @var Presentation
      */
@@ -124,6 +125,7 @@ class Save extends Attribute
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
+            $this->preprocessOptionsData($data);
             $setId = $this->getRequest()->getParam('set');
 
             $attributeSet = null;
@@ -139,9 +141,7 @@ class Save extends Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addErrorMessage(
-                        __('A "%1" attribute set name already exists. Create a new name and try again.', $name)
-                    );
+                    $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (LocalizedException $e) {
@@ -202,6 +202,8 @@ class Save extends Attribute
                 }
             }
 
+            $data = $this->presentation->convertPresentationDataToInputType($data);
+
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
@@ -216,7 +218,7 @@ class Save extends Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
+                $data['frontend_input'] = $data['frontend_input'] ?? $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties
@@ -228,8 +230,6 @@ class Save extends Attribute
                     $data['frontend_input']
                 );
             }
-
-            $data = $this->presentation->convertPresentationDataToInputType($data);
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
 
@@ -313,6 +313,28 @@ class Save extends Attribute
             }
         }
         return $this->returnResult('catalog/*/', [], ['error' => true]);
+    }
+
+    /**
+     * Extract options data from serialized options field and append to data array.
+     *
+     * This logic is required to overcome max_input_vars php limit
+     * that may vary and/or be inaccessible to change on different instances.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function preprocessOptionsData(&$data)
+    {
+        if (isset($data['serialized_options'])) {
+            $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
+            foreach ($serializedOptions as $serializedOption) {
+                $option = [];
+                parse_str($serializedOption, $option);
+                $data = array_replace_recursive($data, $option);
+            }
+        }
+        unset($data['serialized_options']);
     }
 
     /**

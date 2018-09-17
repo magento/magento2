@@ -75,6 +75,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
+            $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
@@ -233,7 +234,7 @@ class CategoryProcessor
      */
     public function getCategoryById($categoryId)
     {
-        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+        return $this->categoriesCache[$categoryId] ?? null;
     }
 
     /**

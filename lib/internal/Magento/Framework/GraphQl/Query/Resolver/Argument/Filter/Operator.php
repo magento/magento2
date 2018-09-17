@@ -65,7 +65,7 @@ class Operator
         return $type->getConstants();
     }
 
-    /*
+    /**
      * Convert operator to string
      *
      * @return string

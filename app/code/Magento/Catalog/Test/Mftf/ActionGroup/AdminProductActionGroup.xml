@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Navigate to create product page from product grid page-->
+    <actionGroup name="goToCreateProductPage">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForElementVisible selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="waitForAddProductDropdown" time="30"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct(product.type_id)}}" stepKey="clickAddProductType"/>
+        <waitForPageLoad stepKey="waitForCreateProductPageLoad"/>
+        <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, product.type_id)}}" stepKey="seeNewProductUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductTitle"/>
+    </actionGroup>
+
+    <!--Fill main fields in create product form-->
+    <actionGroup name="fillMainProductForm">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{product.weight}}" stepKey="fillProductWeight"/>
+    </actionGroup>
+
+    <!--Fill main fields in create product form with no weight, useful for virtual and downloadable products -->
+    <actionGroup name="fillMainProductFormNoWeight">
+        <arguments>
+            <argument name="product" defaultValue="DownloadableProduct"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectWeight"/>
+    </actionGroup>
+
+    <!--Fill main fields in create product form with name and sku -->
+    <actionGroup name="fillProductNameAndSkuInProductForm">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
+    </actionGroup>
+
+    <!--Check that required fields are actually required-->
+    <actionGroup name="checkRequiredFieldsInProductForm">
+        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductName"/>
+        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductSku"/>
+        <clearField selector="{{AdminProductFormSection.productPrice}}" stepKey="clearProductPrice"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
+        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
+        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
+        <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="This is a required field." stepKey="seePriceRequired"/>
+    </actionGroup>
+
+    <!--Save product and see success message-->
+    <actionGroup name="saveProductForm">
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
+    <!--Upload image for product-->
+    <actionGroup name="addProductImage">
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageUploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.uploadProgressBar}}" stepKey="waitForUpload"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
+    </actionGroup>
+
+    <!--Remove image for product-->
+    <actionGroup name="removeProductImage">
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageRefresh"/>
+        <click selector="{{AdminProductImagesSection.removeImageButton}}" stepKey="clickRemoveImage"/>
+    </actionGroup>
+
+    <!-- Assert product image in Admin Product page -->
+    <actionGroup name="assertProductImageAdminProductPage">
+        <arguments>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Admin Product page -->
+    <actionGroup name="assertProductImageNotInAdminProductPage">
+        <arguments>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!--Fill fields for simple product in a category in Admin-->
+    <actionGroup name="FillAdminSimpleProductForm">
+        <arguments>
+            <argument name="category"/>
+            <argument name="simpleProduct"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{simpleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{simpleProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{simpleProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+        <seeInField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="assertFieldName"/>
+        <seeInField userInput="{{simpleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="assertFieldSku"/>
+        <seeInField userInput="{{simpleProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="assertFieldPrice"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSectionAssert"/>
+        <seeInField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="assertFieldUrlKey"/>
+    </actionGroup>
+
+    <!--Fill fields for simple product in a category in Admin, including text option with char limit-->
+    <actionGroup name="AdminCreateSimpleProductWithTextOptionCharLimit">
+        <arguments>
+            <argument name="category"/>
+            <argument name="simpleProduct"/>
+            <argument name="charLimit"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{simpleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{simpleProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{simpleProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="searchAndSelectCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <fillField userInput="option1" selector="{{AdminProductCustomizableOptionsSection.optionTitleInput}}" stepKey="fillOptionTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openTypeDropDown"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeTextField}}" stepKey="selectTypeTextField"/>
+        <fillField userInput="20" selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput}}" stepKey="fillMaxChars"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+        <seeInField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="assertFieldName"/>
+        <seeInField userInput="{{simpleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="assertFieldSku"/>
+        <seeInField userInput="{{simpleProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="assertFieldPrice"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSectionAssert"/>
+        <seeInField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="assertFieldUrlKey"/>
+    </actionGroup>
+
+    <actionGroup name="ProductSetWebsite">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
+    </actionGroup>
+
+    <actionGroup name="ProductSetAdvancedPricing">
+        <arguments>
+            <argument name="website" type="string" defaultValue=""/>
+            <argument name="group" type="string" defaultValue="Retailer"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="price" type="string" defaultValue="Discount"/>
+            <argument name="amount" type="string" defaultValue="45"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
+        <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
+    <!--Assert text in Related, Up-Sell or Cross-Sell section in Admin Product page-->
+    <actionGroup name="AssertTextInAdminProductRelatedUpSellCrossSellSection">
+        <arguments>
+            <argument name="element" defaultValue="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openTab"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <see selector="{{element}}" userInput="{{expectedText}}" stepKey="assertText"/>
+    </actionGroup>
+
+    <!--Related products-->
+    <actionGroup name="addRelatedProductBySku">
+        <arguments>
+            <argument name="sku"/>
+        </arguments>
+        <!--Scroll up to avoid error-->
+        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
+    </actionGroup>
+
+    <!--Add special price to product in Admin product page-->
+    <actionGroup name="AddSpecialPriceToProductActionGroup">
+        <arguments>
+            <argument name="price" type="string" defaultValue="8"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitSpecialPrice"/>
+        <fillField userInput="{{price}}" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
+        <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
+      </actionGroup>
+
+    <!--Select Product In Websites-->
+    <actionGroup name="SelectProductInWebsitesActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{CreateProductSection.productInWebsite}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{CreateProductSection.productInWebsite}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click selector="{{CreateProductSection.isSelected(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct"/>
+    </actionGroup>
+
+    <!--Switch to New Store view-->
+    <actionGroup name="SwitchToTheNewStoreView">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductContentSection.pageHeader}}" stepKey="scrollToUp"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForElementBecomeVisible"/>
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName)}}" stepKey="chooseStoreView"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+</actionGroups>

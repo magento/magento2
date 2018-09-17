@@ -89,7 +89,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attribute.description';
+    protected $productDescription = '.product.attribute.description .value';
 
     /**
      * Product short-description element.

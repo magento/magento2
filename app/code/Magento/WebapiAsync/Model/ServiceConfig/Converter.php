@@ -20,7 +20,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_METHOD = 'method';
     const KEY_METHODS = 'methods';
     const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
+    const KEY_ROUTES = 'routes';
     /**#@-*/
+
+    private $allowedRouteMethods = [
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PATCH
+    ];
 
     /**
      * {@inheritdoc}
@@ -44,6 +53,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $this->initServiceMethodsKey($result, $serviceClass, $serviceMethod);
             $this->mergeSynchronousInvocationMethodsData($service, $result, $serviceClass, $serviceMethod);
         }
+        $result[self::KEY_ROUTES] = $this->convertRouteCustomizations($source);
 
         return $result;
     }
@@ -157,5 +167,69 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
 
         return filter_var($synchronousInvocationOnlyNode->nodeValue, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Convert and merge "route" nodes, which represent route customizations
+     * @param \DOMDocument $source
+     * @return array
+     */
+    private function convertRouteCustomizations($source)
+    {
+        $customRoutes = [];
+        $routes = $source->getElementsByTagName('route');
+        /** @var \DOMElement  $route */
+        foreach ($routes as $route) {
+            $routeUrl = $this->getRouteUrl($route);
+            $routeMethod = $this->getRouteMethod($route);
+            $routeAlias = $this->getRouteAlias($route);
+            if ($routeUrl && $routeMethod && $routeAlias) {
+                if (!isset($customRoutes[$routeAlias])) {
+                    $customRoutes[$routeAlias] = [];
+                }
+                $customRoutes[$routeAlias][$routeMethod] = $routeUrl;
+            }
+        }
+        return $customRoutes;
+    }
+
+    /**
+     * @param \DOMElement $route
+     * @return null|string
+     */
+    private function getRouteUrl($route)
+    {
+        $url = $route->attributes->getNamedItem('url')->nodeValue;
+        return mb_strlen((string) $url) === 0 ? null : $url;
+    }
+
+    /**
+     * @param \DOMElement $route
+     * @return null|string
+     */
+    private function getRouteAlias($route)
+    {
+        $alias = $route->attributes->getNamedItem('alias')->nodeValue;
+        return mb_strlen((string) $alias) === 0 ? null : ltrim($alias, '/');
+    }
+
+    /**
+     * @param \DOMElement $route
+     * @return null|string
+     */
+    private function getRouteMethod($route)
+    {
+        $method = $route->attributes->getNamedItem('method')->nodeValue;
+        $method =  mb_strlen((string) $method) === 0 ? null : $method;
+        return ($this->validateRouteMethod($method)) ? $method : null;
+    }
+
+    /**
+     * @param string $method
+     * @return bool
+     */
+    private function validateRouteMethod($method)
+    {
+        return in_array($method, $this->allowedRouteMethods);
     }
 }

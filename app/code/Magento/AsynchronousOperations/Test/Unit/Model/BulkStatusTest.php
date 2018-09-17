@@ -174,6 +174,9 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($size, $this->model->getOperationsCountByBulkIdAndStatus($bulkUuid, $status));
     }
 
+    /**
+     * @return array
+     */
     public function getFailedOperationsByBulkIdDataProvider()
     {
         return [
