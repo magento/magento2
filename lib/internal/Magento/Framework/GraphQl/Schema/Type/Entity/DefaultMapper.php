@@ -30,6 +30,6 @@ class DefaultMapper implements MapperInterface
      */
     public function getMappedTypes(string $entityName) : array
     {
-        return isset($this->map[$entityName]) ? $this->map[$entityName] : [];
+        return $this->map[$entityName] ?? [];
     }
 }

@@ -30,6 +30,6 @@ class DefaultDataMapper implements DataMapperInterface
      */
     public function getMappedEnums(string $enumName) : array
     {
-        return isset($this->map[$enumName]) ? $this->map[$enumName] : [];
+        return $this->map[$enumName] ?? [];
     }
 }

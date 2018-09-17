@@ -101,7 +101,7 @@ class Editor extends Textarea
         $pluginOptions = $plugins[$pluginArrIndex]['options'];
 
         if ($key !== null) {
-            return isset($pluginOptions[$key]) ? $pluginOptions[$key] : null;
+            return $pluginOptions[$key] ?? null;
         } else {
             return $pluginOptions;
         }

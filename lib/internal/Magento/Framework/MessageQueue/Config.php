@@ -35,9 +35,7 @@ class Config implements ConfigInterface
     public function getExchangeByTopic($topicName)
     {
         $publisherConfig = $this->getPublisherConfigByTopic($topicName);
-        return isset($publisherConfig[ConfigInterface::PUBLISHER_EXCHANGE])
-            ? $publisherConfig[ConfigInterface::PUBLISHER_EXCHANGE]
-            : null;
+        return $publisherConfig[ConfigInterface::PUBLISHER_EXCHANGE] ?? null;
     }
 
     /**
@@ -76,9 +74,7 @@ class Config implements ConfigInterface
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return null;
         }
-        return isset($publisherConfig[ConfigInterface::PUBLISHER_CONNECTION])
-            ? $publisherConfig[ConfigInterface::PUBLISHER_CONNECTION]
-            : null;
+        return $publisherConfig[ConfigInterface::PUBLISHER_CONNECTION] ?? null;
     }
 
     /**
