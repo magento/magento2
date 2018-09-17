@@ -62,8 +62,9 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
     }
 
     /**
-     * Prepare block text and determine whether block output enabled or not
-     * Prevent blocks recursion if needed
+     * Prepare block text and determine whether block output enabled or not.
+     *
+     * Prevent blocks recursion if needed.
      *
      * @return $this
      */
@@ -110,6 +111,8 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
     }
 
     /**
+     * Get block
+     *
      * @return CmsBlock|null
      */
     private function getBlock(): ?CmsBlock
