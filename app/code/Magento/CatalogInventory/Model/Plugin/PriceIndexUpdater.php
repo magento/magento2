@@ -36,7 +36,7 @@ class PriceIndexUpdater
      * @return Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(Item $subject, Item $result, AbstractModel $model)
+    public function afterSave(Item $subject, Item $result, AbstractModel $model): Item
     {
         $fields = [
             'is_in_stock',
@@ -55,7 +55,7 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
-     * @param $result
+     * @param mixed $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -67,7 +67,7 @@ class PriceIndexUpdater
 
     /**
      * @param Item $subject
-     * @param $result
+     * @param mixed $result
      * @param int $websiteId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

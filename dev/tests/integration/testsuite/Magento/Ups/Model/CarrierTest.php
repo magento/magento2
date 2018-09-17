@@ -11,17 +11,21 @@ use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Ups\Model\Carrier
+     * @var Carrier
      */
     private $carrier;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->carrier = Bootstrap::getObjectManager()->create(
-            \Magento\Ups\Model\Carrier::class
-        );
+        $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class);
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipAcceptUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
@@ -37,6 +41,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
     }
 
+    /**
+     * @return void
+     */
     public function testGetShipConfirmUrl()
     {
         $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
@@ -71,7 +78,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rateRequest->setFreeMethodWeight(0);
         $rateRequest->setLimitCarrier($this->carrier::CODE);
         $rateRequest->setFreeShipping(true);
-
         $rateResult = $this->carrier->collectRates($rateRequest);
         $result = $rateResult->asArray();
         $methods = $result[$this->carrier::CODE]['methods'];

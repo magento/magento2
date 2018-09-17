@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryProductsGridSection">
         <element name="rowProductId" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-id" parameterized="true"/>
         <element name="rowProductName" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-name" parameterized="true"/>

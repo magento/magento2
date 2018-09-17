@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\ValidatorInterface as RequestValidator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\App\Action\AbstractAction;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,16 +41,23 @@ class FrontController implements FrontControllerInterface
     private $messages;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param RouterListInterface $routerList
      * @param ResponseInterface $response
      * @param RequestValidator|null $requestValidator
      * @param MessageManager|null $messageManager
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         RouterListInterface $routerList,
         ResponseInterface $response,
         ?RequestValidator $requestValidator = null,
-        ?MessageManager $messageManager = null
+        ?MessageManager $messageManager = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->_routerList = $routerList;
         $this->response = $response;
@@ -57,6 +65,8 @@ class FrontController implements FrontControllerInterface
             ?? ObjectManager::getInstance()->get(RequestValidator::class);
         $this->messages = $messageManager
             ?? ObjectManager::getInstance()->get(MessageManager::class);
+        $this->logger = $logger
+            ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -125,6 +135,10 @@ class FrontController implements FrontControllerInterface
             }
         } catch (InvalidRequestException $exception) {
             //Validation failed - processing validation results.
+            $this->logger->debug(
+                'Request validation failed for action "'
+                .get_class($actionInstance) .'"'
+            );
             $result = $exception->getReplaceResult();
             if ($messages = $exception->getMessages()) {
                 foreach ($messages as $message) {

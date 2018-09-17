@@ -34,7 +34,7 @@ class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function execute(int $quoteId): string
     {

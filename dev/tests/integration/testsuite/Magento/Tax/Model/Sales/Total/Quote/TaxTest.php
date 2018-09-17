@@ -11,6 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
+require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
@@ -30,6 +31,9 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $totalsCollector;
 
+    /**
+     * test setup
+     */
     public function setUp()
     {
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
@@ -122,6 +126,40 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
             $quote->getGrandTotal(),
             'Customer tax was collected by \Magento\Tax\Model\Sales\Total\Quote\Tax::collect incorrectly.'
         );
+    }
+
+    /**
+     * Test taxes collection with full discount for quote.
+     *
+     * Test tax calculation and price when the discount may be bigger than total
+     * This method will test the collector through $quote->collectTotals() method
+     *
+     * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
+     * @magentoDataFixture Magento/Tax/_files/full_discount_with_tax.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testFullDiscountWithDeltaRoundingFix()
+    {
+        global $fullDiscountIncTax;
+        $configData = $fullDiscountIncTax['config_data'];
+        $quoteData = $fullDiscountIncTax['quote_data'];
+        $expectedResults = $fullDiscountIncTax['expected_result'];
+
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+
+        //Setup tax configurations
+        $this->setupUtil = new SetupUtil($objectManager);
+        $this->setupUtil->setupTax($configData);
+
+        $quote = $this->setupUtil->setupQuote($quoteData);
+
+        $quote->collectTotals();
+
+        $quoteAddress = $quote->getShippingAddress();
+
+        $this->verifyResult($quoteAddress, $expectedResults);
     }
 
     /**

@@ -34,7 +34,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
      class="gallery"
      data-mage-init='{"openVideoModal":{}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
+     data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
      data-types="<?= $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"

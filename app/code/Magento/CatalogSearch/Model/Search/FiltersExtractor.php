@@ -12,6 +12,9 @@ use Magento\Framework\Search\Request\Filter\BoolExpression;
 /**
  * Class FiltersExtractor
  * Extracts filters from QueryInterface
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class FiltersExtractor
 {
