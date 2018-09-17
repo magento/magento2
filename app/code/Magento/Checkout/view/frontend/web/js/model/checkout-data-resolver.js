@@ -226,7 +226,7 @@ define([
 
                 return;
             }
-            shippingAddress = quote.billingAddress();
+
             if(quote.isVirtual()) {
                 isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
@@ -237,6 +237,7 @@ define([
                 });
             }
 
+            shippingAddress = quote.shippingAddress();
             if (!isBillingAddressInitialized &&
                 shippingAddress &&
                 shippingAddress.canUseForBilling() &&
