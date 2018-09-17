@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -17,6 +19,21 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @var FormKey
+     */
+    private $formKey;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->formKey = $this->_objectManager->get(FormKey::class);
+    }
+
     /**
      * Generate random hex color.
      *
@@ -116,6 +133,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         return [
             'form_key' => 'XxtpPYjm2YPYUlAt',
+            'serialized_options' => '[]',
             'frontend_label' => [
                 0 => 'asdasd',
                 1 => '',
@@ -178,7 +196,9 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         int $expectedOptionsCount,
         array $expectedLabels
     ) : void {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($attributeData);
+        $this->getRequest()->setPostValue('form_key', $this->formKey->getFormKey());
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(
             \Magento\Eav\Model\Entity::class
