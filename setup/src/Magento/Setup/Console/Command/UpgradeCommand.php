@@ -47,10 +47,9 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
-     * Constructor.
-     *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
+     * @param AppState|null $appState
      */
     public function __construct(
         InstallerFactory $installerFactory,

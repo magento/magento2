@@ -36,9 +36,9 @@ interface DiffInterface
     /**
      * Register operation.
      *
-     * @param  ElementInterface|object $dtoObject
-     * @param  string                  $operation
-     * @param  ElementInterface        $oldDtoObject
+     * @param ElementInterface|object $dtoObject
+     * @param string $operation
+     * @param ElementInterface $oldDtoObject
      * @return void
      */
     public function register(

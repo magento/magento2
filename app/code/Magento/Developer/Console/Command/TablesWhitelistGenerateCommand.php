@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command that allows to generate whitelist, that will be used, when declaration data is installed.
+ *
  * If whitelist already exists, new values will be added to existing whitelist.
  */
 class TablesWhitelistGenerateCommand extends Command
@@ -148,8 +149,9 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * As for whitelist we do not need any specific attributes like nullable or indexType,
-     * we need to choose only names.
+     * Filter attribute names
+     *
+     * As for whitelist we do not need any specific attributes like nullable or indexType, we need to choose only names.
      *
      * @param array $content
      * @return array
