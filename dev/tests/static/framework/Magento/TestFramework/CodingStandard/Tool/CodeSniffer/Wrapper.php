@@ -12,6 +12,9 @@ namespace Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Runner;
 
+/**
+ * PHP Code Sniffer wrapper class
+ */
 class Wrapper extends Runner
 {
     /**
@@ -33,10 +36,21 @@ class Wrapper extends Runner
         return $version;
     }
 
+    /**
+     * Initialize PHPCS runner and modifies the configuration settings
+     *
+     * @throws \PHP_CodeSniffer\Exceptions\DeepExitException
+     */
     public function init()
     {
         $this->config->extensions = $this->settings['extensions'];
         unset($this->settings['extensions']);
+
+        $settings = $this->config->getSettings();
+        unset($settings['files']);
+
+        $this->config->setSettings($settings);
+
         $this->config->setSettings(array_replace_recursive(
             $this->config->getSettings(),
             $this->settings
@@ -45,6 +59,8 @@ class Wrapper extends Runner
     }
 
     /**
+     * Sets the settings
+     *
      * @param array $settings
      */
     public function setSettings($settings)
