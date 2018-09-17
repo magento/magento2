@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,11 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Upload
+ *
+ * @package Magento\Downloadable\Controller\Adminhtml\Downloadable\File
+ */
 class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
 {
     /**
