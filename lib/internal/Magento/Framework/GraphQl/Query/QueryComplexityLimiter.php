@@ -36,23 +36,17 @@ class QueryComplexityLimiter
      * @param int $queryComplexity
      */
     public function __construct(
-        int $queryDepth = 10,
+        int $queryDepth = 15,
         int $queryComplexity = 50
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
     }
 
-    /**
-     * @param bool $developerMode
-     */
-    public function execute(bool $developerMode = false): void
+    public function execute(): void
     {
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-
-        if (!$developerMode) {
-            DocumentValidator::addRule(new DisableIntrospection());
-            DocumentValidator::addRule(new QueryDepth($this->queryDepth));
-        }
+        DocumentValidator::addRule(new DisableIntrospection());
+        DocumentValidator::addRule(new QueryDepth($this->queryDepth));
     }
 }

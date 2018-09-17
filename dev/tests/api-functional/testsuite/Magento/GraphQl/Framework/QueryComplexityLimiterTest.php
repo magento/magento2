@@ -9,6 +9,10 @@ namespace Magento\GraphQl\Framework;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests query complexity limiter and depth limiter.
+ * Actual for production mode only
+ */
 class QueryComplexityLimiterTest extends GraphQlAbstract
 {
     /**
@@ -159,7 +163,7 @@ QUERY;
   }
 }
 QUERY;
-        self::expectExceptionMessageRegExp('/Max query depth should be 10 but got 20/');
+        self::expectExceptionMessageRegExp('/Max query depth should be 15 but got 20/');
         $this->graphQlQuery($query);
     }
 }

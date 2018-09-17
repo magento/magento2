@@ -55,8 +55,10 @@ class QueryProcessor
         array $variableValues = null,
         string $operationName = null
     ) : array {
-        $developerMode = !$this->exceptionFormatter->shouldShowDetail();
-        $this->queryComplexityLimiter->execute($developerMode);
+        var_dump($this->exceptionFormatter->shouldShowDetail());
+        if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->execute();
+        }
 
         $rootValue = null;
         return \GraphQL\GraphQL::executeQuery(
