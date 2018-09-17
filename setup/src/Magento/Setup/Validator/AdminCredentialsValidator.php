@@ -41,6 +41,7 @@ class AdminCredentialsValidator
      * @param \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory
      * @param \Magento\Setup\Module\ConnectionFactory $connectionFactory
      * @param \Magento\Setup\Module\SetupFactory $setupFactory
+     * @param DriverOptions|null $driverOptions
      */
     public function __construct(
         \Magento\Setup\Model\AdminAccountFactory $adminAccountFactory,
