@@ -11,7 +11,6 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -29,6 +28,8 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Hydrator\CartHydrator;
 
 /**
+ * Add simple product to cart GraphQl resolver
+ *
  * {@inheritdoc}
  */
 class AddSimpleProductsToCart implements ResolverInterface
@@ -112,6 +113,8 @@ class AddSimpleProductsToCart implements ResolverInterface
     }
 
     /**
+     * Resolve adding simple product to cart for customers/guests
+     *
      * {@inheritDoc}
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value

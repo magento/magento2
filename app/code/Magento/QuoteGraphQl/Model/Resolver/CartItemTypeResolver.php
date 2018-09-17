@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
+ * Resolver for cart item types that vary by product types
+ *
  * {@inheritdoc}
  */
 class CartItemTypeResolver implements TypeResolverInterface
@@ -29,6 +31,8 @@ class CartItemTypeResolver implements TypeResolverInterface
     }
 
     /**
+     * Resolve GraphQl types to retrieve product type specific information about cart items
+     *
      * {@inheritdoc}
      * @throws GraphQlInputException
      */

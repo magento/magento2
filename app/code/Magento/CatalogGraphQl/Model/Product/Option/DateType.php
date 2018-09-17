@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Product\Option;
 
 use Magento\Catalog\Model\Product\Option\Type\Date as ProductDateOptionType;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime;
 
 /**
@@ -16,6 +17,8 @@ use Magento\Framework\Stdlib\DateTime;
 class DateType extends ProductDateOptionType
 {
     /**
+     * Make valid string as a value of date option type for GraphQl queries
+     *
      * {@inheritdoc}
      */
     public function validateUserValue($values)
@@ -28,8 +31,12 @@ class DateType extends ProductDateOptionType
     }
 
     /**
-     * @param array $values
-     * @return array mixed
+     * Format date value from string to date array
+     *
+     * @param [] $values
+     *
+     * @return []
+     * @throws LocalizedException
      */
     protected function formatValues($values)
     {
@@ -51,6 +58,8 @@ class DateType extends ProductDateOptionType
     }
 
     /**
+     * Check if calendar should be shown
+     *
      * @return bool
      */
     public function useCalendar()
