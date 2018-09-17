@@ -58,6 +58,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param ConfigGenerator $configGenerator
      * @param DbValidator $dbValidator
+     * @param DriverOptions|null $driverOptions
      */
     public function __construct(
         ConfigGenerator $configGenerator,
