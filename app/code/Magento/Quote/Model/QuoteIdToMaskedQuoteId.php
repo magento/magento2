@@ -10,6 +10,9 @@ namespace Magento\Quote\Model;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResource;
 
+/**
+ * QuoteId to MaskedQuoteId resolver
+ */
 class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
 {
     /**
