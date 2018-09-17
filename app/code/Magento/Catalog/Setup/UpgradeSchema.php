@@ -850,6 +850,4 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->getConnection()->dropColumn($setup->getTable('catalog_product_entity_media_gallery'), 'disabled');
     }
-
 }
-

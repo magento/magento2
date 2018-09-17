@@ -21,7 +21,6 @@ $product->setStoreId(0)
             'file' => '/m/a/magento_image.jpg',
             'position' => 1,
             'label' => 'Image Alt Text',
-            'disabled' => 0,
             'media_type' => 'image'
         ],
     ]])
