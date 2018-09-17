@@ -49,13 +49,6 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mathRandom;
 
     /**
-     * Guest customer id
-     *
-     * @var int
-     */
-    private $guestCustomerId = 0;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -75,8 +68,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -143,24 +135,22 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $result;
         }
 
-        if ($customer->getId() === $this->guestCustomerId) {
-            $select = $this->connection
-                ->select()
-                ->from($this->getMainTable())
-                ->where('subscriber_email=:subscriber_email and store_id=:store_id');
+        $select = $this->connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('subscriber_email=:subscriber_email and store_id=:store_id');
 
-            $result = $this->connection
-                ->fetchRow(
-                    $select,
-                    [
-                        'subscriber_email' => $customer->getEmail(),
-                        'store_id' => $customer->getStoreId()
-                    ]
-                );
+        $result = $this->connection
+            ->fetchRow(
+                $select,
+                [
+                    'subscriber_email' => $customer->getEmail(),
+                    'store_id' => $customer->getStoreId()
+                ]
+            );
 
-            if ($result) {
-                return $result;
-            }
+        if ($result) {
+            return $result;
         }
 
         return [];
