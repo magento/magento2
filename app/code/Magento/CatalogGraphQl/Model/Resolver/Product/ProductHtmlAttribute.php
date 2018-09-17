@@ -9,8 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Helper\Output as OutputHelper;
@@ -21,29 +20,21 @@ use Magento\Catalog\Helper\Output as OutputHelper;
 class ProductHtmlAttribute implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var OutputHelper
      */
     private $outputHelper;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param OutputHelper $outputHelper
      */
     public function __construct(
-        ValueFactory $valueFactory,
         OutputHelper $outputHelper
     ) {
-        $this->valueFactory = $valueFactory;
         $this->outputHelper = $outputHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -51,22 +42,15 @@ class ProductHtmlAttribute implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /* @var $product Product */
         $product = $value['model'];
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);
-        $result = function () use ($renderedValue) {
-            return $renderedValue;
-        };
-
-        return $this->valueFactory->create($result);
+        return $renderedValue;
     }
 }
