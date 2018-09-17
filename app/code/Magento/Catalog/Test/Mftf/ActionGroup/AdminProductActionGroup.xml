@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Navigate to create product page from product grid page-->
     <actionGroup name="goToCreateProductPage">
         <arguments>
@@ -121,6 +121,7 @@
             <argument name="simpleProduct"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -173,6 +174,42 @@
         <seeInField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="assertFieldUrlKey"/>
     </actionGroup>
 
+    <actionGroup name="ProductSetWebsite">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
+    </actionGroup>
+
+    <actionGroup name="ProductSetAdvancedPricing">
+        <arguments>
+            <argument name="website" type="string" defaultValue=""/>
+            <argument name="group" type="string" defaultValue="Retailer"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="price" type="string" defaultValue="Discount"/>
+            <argument name="amount" type="string" defaultValue="45"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
+        <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+
     <!--Assert text in Related, Up-Sell or Cross-Sell section in Admin Product page-->
     <actionGroup name="AssertTextInAdminProductRelatedUpSellCrossSellSection">
         <arguments>
@@ -182,6 +219,24 @@
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openTab"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
         <see selector="{{element}}" userInput="{{expectedText}}" stepKey="assertText"/>
+    </actionGroup>
+
+    <!--Related products-->
+    <actionGroup name="addRelatedProductBySku">
+        <arguments>
+            <argument name="sku"/>
+        </arguments>
+        <!--Scroll up to avoid error-->
+        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
     </actionGroup>
 
     <!--Add special price to product in Admin product page-->
@@ -196,4 +251,30 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForCloseModalWindow"/>
       </actionGroup>
+
+    <!--Select Product In Websites-->
+    <actionGroup name="SelectProductInWebsitesActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{CreateProductSection.productInWebsite}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{CreateProductSection.productInWebsite}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click selector="{{CreateProductSection.isSelected(website)}}" stepKey="SelectWebsite"/>
+        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct"/>
+    </actionGroup>
+
+    <!--Switch to New Store view-->
+    <actionGroup name="SwitchToTheNewStoreView">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminProductContentSection.pageHeader}}" stepKey="scrollToUp"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForElementBecomeVisible"/>
+        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
+        <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName)}}" stepKey="chooseStoreView"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
 </actionGroups>

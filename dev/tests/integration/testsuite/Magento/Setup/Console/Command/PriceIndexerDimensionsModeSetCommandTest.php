@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Setup\Console\Command;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
@@ -12,18 +10,16 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Console\Command\PriceIndexerDimensionsModeSetCommand;
 
 /**
- * Class PriceIndexerDimensionsModeSetCommand
- * @package Magento\Setup\Console\Command
+ * Test command that sets indexer mode for catalog_product_price indexer
  */
 class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /** @var  ObjectManagerInterface */
     private $objectManager;
 
-    /** @var  GenerateFixturesCommand */
+    /** @var  \Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand */
     private $command;
 
     /** @var  CommandTester */
@@ -39,20 +35,12 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         $this->objectManager->get(\Magento\TestFramework\App\Config::class)->clean();
 
         $this->command = $this->objectManager->create(
-            \Magento\Catalog\Console\Command\PriceIndexerDimensionsModeSetCommand::class
+            \Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand::class
         );
 
         $this->commandTester = new CommandTester($this->command);
 
         parent::setUp();
-    }
-
-    /**
-     * tearDown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
     }
 
     /**
@@ -75,19 +63,20 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      *
-     * @param $previousMode
-     * @param $currentMode
+     * @param string $previousMode
+     * @param string $currentMode
      * @dataProvider modesDataProvider
      */
     public function testSwitchMode($previousMode, $currentMode)
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => $currentMode
+                'indexer' => 'catalog_product_price',
+                'mode'    => $currentMode,
             ]
         );
-        $expectedOutput = 'Dimensions mode for indexer Product Price was changed from \''
-            . $previousMode . '\' to \'' . $currentMode . '\'';
+        $expectedOutput = 'Dimensions mode for indexer "Product Price" was changed from \''
+            . $previousMode . '\' to \'' . $currentMode . '\'' . PHP_EOL;
 
         $actualOutput = $this->commandTester->getDisplay();
 
@@ -100,6 +89,10 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         );
     }
 
+    /**
+     * Modes data provider
+     * @return array
+     */
     public function modesDataProvider()
     {
         return [
@@ -134,10 +127,11 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE
+                'indexer' => 'catalog_product_price',
+                'mode' => DimensionModeConfiguration::DIMENSION_NONE
             ]
         );
-        $expectedOutput = 'Dimensions mode for indexer Product Price has not been changed';
+        $expectedOutput = 'Dimensions mode for indexer "Product Price" has not been changed' . PHP_EOL;
 
         $actualOutput = $this->commandTester->getDisplay();
 
@@ -160,8 +154,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     {
         $this->commandTester->execute(
             [
-                PriceIndexerDimensionsModeSetCommand::INPUT_KEY_MODE => DimensionModeConfiguration::DIMENSION_NONE .
-                    '_not_valid'
+                'indexer' => 'indexer_not_valid'
             ]
         );
     }

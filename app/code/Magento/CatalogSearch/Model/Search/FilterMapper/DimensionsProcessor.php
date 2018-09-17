@@ -16,6 +16,9 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 /**
  * Class DimensionsProcessor
  * Adds dimension conditions to select query
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class DimensionsProcessor
 {

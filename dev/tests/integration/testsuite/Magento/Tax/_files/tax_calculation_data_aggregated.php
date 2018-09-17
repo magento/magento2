@@ -30,3 +30,4 @@ require_once __DIR__ . '/scenarios/multi_tax_rule_unit_calculate_subtotal_no.php
 require_once __DIR__ . '/scenarios/multi_tax_rule_total_calculate_subtotal_yes.php';
 require_once __DIR__ . '/scenarios/multi_tax_rule_two_row_calculate_subtotal_yes_row.php';
 require_once __DIR__ . '/scenarios/multi_tax_rule_two_row_calculate_subtotal_yes_total.php';
+require_once __DIR__ . '/scenarios/including_tax_apply_tax_after_discount.php';

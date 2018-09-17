@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            downloadable: 'Magento_Downloadable/downloadable'
+            downloadable: 'Magento_Downloadable/js/downloadable'
         }
     }
 };
