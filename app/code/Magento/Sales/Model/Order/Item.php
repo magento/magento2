@@ -483,6 +483,7 @@ class Item extends AbstractModel implements OrderItemInterface
 
     /**
      * Get product options array by code.
+     *
      * If code is null return all options
      *
      * @param string $code
@@ -540,8 +541,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return checking of what calculation
-     * type was for this product
+     * Return checking of what calculation type was for this product
      *
      * @return bool
      */
@@ -581,8 +581,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Return checking of what shipment
-     * type was for this product
+     * Return checking of what shipment type was for this product
      *
      * @return bool
      */
@@ -605,9 +604,9 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * This is Dummy item or not
-     * if $shipment is true then we checking this for shipping situation if not
-     * then we checking this for calculation
+     * This is Dummy item or not.
+     *
+     * If $shipment is true then we checking this for shipping situation if not, we checking this for calculation.
      *
      * @param bool $shipment
      * @return bool
@@ -652,8 +651,9 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * Returns formatted buy request - object, holding request received from
-     * product view page with keys and options for configured product
+     * Returns formatted buy request.
+     *
+     * This object is holding request received from product view page with keys and options for configured product.
      *
      * @return \Magento\Framework\DataObject
      */
@@ -963,7 +963,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -1621,7 +1621,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -1629,7 +1629,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setItemId($id)
     {
@@ -1637,7 +1637,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -1645,7 +1645,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentItemId($id)
     {
@@ -1653,7 +1653,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuoteItemId($id)
     {
@@ -1661,7 +1661,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($id)
     {
@@ -1669,7 +1669,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductId($id)
     {
@@ -1677,7 +1677,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductType($productType)
     {
@@ -1685,7 +1685,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeight($weight)
     {
@@ -1693,7 +1693,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsVirtual($isVirtual)
     {
@@ -1701,7 +1701,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -1709,7 +1709,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -1717,7 +1717,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -1725,7 +1725,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAppliedRuleIds($appliedRuleIds)
     {
@@ -1733,7 +1733,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdditionalData($additionalData)
     {
@@ -1741,7 +1741,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsQtyDecimal($isQtyDecimal)
     {
@@ -1749,7 +1749,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setNoDiscount($noDiscount)
     {
@@ -1757,7 +1757,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyBackordered($qtyBackordered)
     {
@@ -1765,7 +1765,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyCanceled($qtyCanceled)
     {
@@ -1773,7 +1773,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyInvoiced($qtyInvoiced)
     {
@@ -1781,7 +1781,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyOrdered($qtyOrdered)
     {
@@ -1789,7 +1789,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyRefunded($qtyRefunded)
     {
@@ -1797,7 +1797,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyShipped($qtyShipped)
     {
@@ -1805,7 +1805,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseCost($baseCost)
     {
@@ -1813,7 +1813,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -1821,7 +1821,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBasePrice($price)
     {
@@ -1829,7 +1829,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOriginalPrice($price)
     {
@@ -1837,7 +1837,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseOriginalPrice($price)
     {
@@ -1845,7 +1845,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxPercent($taxPercent)
     {
@@ -1853,7 +1853,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxAmount($amount)
     {
@@ -1861,7 +1861,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxAmount($amount)
     {
@@ -1869,7 +1869,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxInvoiced($taxInvoiced)
     {
@@ -1877,7 +1877,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxInvoiced($baseTaxInvoiced)
     {
@@ -1885,7 +1885,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountPercent($discountPercent)
     {
@@ -1893,7 +1893,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -1901,7 +1901,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -1909,7 +1909,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountInvoiced($discountInvoiced)
     {
@@ -1917,7 +1917,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountInvoiced($baseDiscountInvoiced)
     {
@@ -1925,7 +1925,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAmountRefunded($amountRefunded)
     {
@@ -1933,7 +1933,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseAmountRefunded($baseAmountRefunded)
     {
@@ -1941,7 +1941,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowTotal($amount)
     {
@@ -1949,7 +1949,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseRowTotal($amount)
     {
@@ -1957,7 +1957,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowInvoiced($rowInvoiced)
     {
@@ -1965,7 +1965,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseRowInvoiced($baseRowInvoiced)
     {
@@ -1973,7 +1973,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowWeight($rowWeight)
     {
@@ -1981,7 +1981,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxBeforeDiscount($baseTaxBeforeDiscount)
     {
@@ -1989,7 +1989,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxBeforeDiscount($taxBeforeDiscount)
     {
@@ -1997,7 +1997,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtOrderItemId($id)
     {
@@ -2005,7 +2005,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLockedDoInvoice($flag)
     {
@@ -2013,7 +2013,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLockedDoShip($flag)
     {
@@ -2021,7 +2021,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPriceInclTax($amount)
     {
@@ -2029,7 +2029,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBasePriceInclTax($amount)
     {
@@ -2037,7 +2037,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowTotalInclTax($amount)
     {
@@ -2045,7 +2045,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseRowTotalInclTax($amount)
     {
@@ -2053,7 +2053,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -2061,7 +2061,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -2069,7 +2069,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced)
     {
@@ -2077,7 +2077,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
@@ -2088,7 +2088,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
@@ -2096,7 +2096,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
@@ -2107,7 +2107,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxCanceled($taxCanceled)
     {
@@ -2115,7 +2115,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationCanceled($discountTaxCompensationCanceled)
     {
@@ -2123,7 +2123,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxRefunded($taxRefunded)
     {
@@ -2131,7 +2131,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxRefunded($baseTaxRefunded)
     {
@@ -2139,7 +2139,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountRefunded($discountRefunded)
     {
@@ -2147,7 +2147,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountRefunded($baseDiscountRefunded)
     {
@@ -2155,7 +2155,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwId($id)
     {
@@ -2163,7 +2163,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBasePrice($price)
     {
@@ -2171,7 +2171,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwPrice($price)
     {
@@ -2179,7 +2179,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBaseTaxAmount($amount)
     {
@@ -2187,7 +2187,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwTaxAmount($amount)
     {
@@ -2195,7 +2195,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBasePriceInvoiced($gwBasePriceInvoiced)
     {
@@ -2203,7 +2203,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwPriceInvoiced($gwPriceInvoiced)
     {
@@ -2211,7 +2211,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBaseTaxAmountInvoiced($gwBaseTaxAmountInvoiced)
     {
@@ -2219,7 +2219,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwTaxAmountInvoiced($gwTaxAmountInvoiced)
     {
@@ -2227,7 +2227,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBasePriceRefunded($gwBasePriceRefunded)
     {
@@ -2235,7 +2235,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwPriceRefunded($gwPriceRefunded)
     {
@@ -2243,7 +2243,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwBaseTaxAmountRefunded($gwBaseTaxAmountRefunded)
     {
@@ -2251,7 +2251,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGwTaxAmountRefunded($gwTaxAmountRefunded)
     {
@@ -2259,7 +2259,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFreeShipping($freeShipping)
     {
@@ -2267,7 +2267,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyReturned($qtyReturned)
     {
@@ -2275,7 +2275,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEventId($id)
     {
@@ -2283,7 +2283,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxAppliedAmount($amount)
     {
@@ -2291,7 +2291,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt)
     {
@@ -2299,7 +2299,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxAppliedAmount($amount)
     {
@@ -2307,7 +2307,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxAppliedRowAmount($amount)
     {
@@ -2315,7 +2315,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxApplied($weeeTaxApplied)
     {
@@ -2323,7 +2323,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition)
     {
@@ -2331,7 +2331,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition)
     {
@@ -2339,7 +2339,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition)
     {
@@ -2347,7 +2347,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
@@ -2355,7 +2355,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProductOption()
     {
@@ -2363,7 +2363,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption)
     {
@@ -2371,7 +2371,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\OrderItemExtensionInterface|null
      */
@@ -2381,7 +2381,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes
      * @return $this
