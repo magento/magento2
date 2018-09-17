@@ -63,7 +63,7 @@ class Real implements FactoryInterface
         }
 
         if (isset($data['default'])) {
-            $data['default'] = floatval($data['default']);
+            $data['default'] = (float)$data['default'];
         }
 
         return $this->objectManager->create($this->className, $data);
