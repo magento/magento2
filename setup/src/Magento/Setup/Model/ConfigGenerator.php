@@ -74,6 +74,7 @@ class ConfigGenerator
      * @param DeploymentConfig $deploymentConfig
      * @param ConfigDataFactory|null $configDataFactory
      * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
+     * @param DriverOptions|null $driverOptions
      */
     public function __construct(
         Random $random,
