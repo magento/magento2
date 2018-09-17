@@ -306,7 +306,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 'file' => '/d/o/download_7.jpg',
                 'label' => null,
                 'position' => '1',
-                'disabled' => '0',
                 'label_default' => null,
                 'position_default' => '1',
                 'disabled_default' => '0',
@@ -404,9 +403,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 [
                     'main.attribute_id = ?',
                     $attributeId
-                ],
-                [
-                    'main.disabled = 0'
                 ],
                 [
                     'value.store_id = ' . $storeId . ' OR default_value.store_id = 0'

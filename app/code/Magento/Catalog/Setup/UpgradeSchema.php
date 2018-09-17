@@ -147,6 +147,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->removeIndexFromPriceIndexTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.7', '<')) {
+            $this->removeDisabledColumnMediaGalleryTable($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -840,5 +844,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getTable('catalog_product_index_price_tmp'),
             $setup->getIdxName('catalog_product_index_price_tmp', ['min_price'])
         );
+    }
+
+    private function removeDisabledColumnMediaGalleryTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropColumn($setup->getTable('catalog_product_entity_media_gallery'), 'disabled');
     }
 }
