@@ -106,7 +106,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
-        if ($attribute->getAttributeId()) {
+        if ($attribute->getAttributeCode()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
             if (!$existingModel->getAttributeId()) {
