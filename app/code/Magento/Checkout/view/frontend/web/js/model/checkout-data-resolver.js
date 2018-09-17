@@ -227,7 +227,7 @@ define([
                 return;
             }
 
-            if(quote.isVirtual()) {
+            if (quote.isVirtual()) {
                 isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);
