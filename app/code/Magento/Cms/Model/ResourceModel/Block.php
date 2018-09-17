@@ -95,9 +95,11 @@ class Block extends AbstractDb
     }
 
     /**
+     * Get block id.
+     *
      * @param AbstractModel $object
      * @param mixed $value
-     * @param null $field
+     * @param string $field
      * @return bool|int|string
      * @throws LocalizedException
      * @throws \Exception
@@ -187,7 +189,7 @@ class Block extends AbstractDb
         $isDefaultStore = $this->_storeManager->isSingleStoreMode()
             || array_search(Store::DEFAULT_STORE_ID, $stores) !== false;
 
-        if(!$isDefaultStore) {
+        if (!$isDefaultStore) {
             $stores[] = Store::DEFAULT_STORE_ID;
         }
 
@@ -200,7 +202,7 @@ class Block extends AbstractDb
             )
             ->where('cb.identifier = ?  ', $object->getData('identifier'));
 
-        if(!$isDefaultStore) {
+        if (!$isDefaultStore) {
             $select->where('cbs.store_id IN (?)', $stores);
         }
 
@@ -241,6 +243,8 @@ class Block extends AbstractDb
     }
 
     /**
+     * Save an object.
+     *
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
