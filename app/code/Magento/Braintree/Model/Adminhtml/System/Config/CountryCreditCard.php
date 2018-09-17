@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
@@ -56,6 +56,13 @@ class CountryCreditCard extends Value
     public function beforeSave()
     {
         $value = $this->getValue();
+        if (!is_array($value)) {
+            try {
+                $value = unserialize($value);
+            } catch (\InvalidArgumentException $e) {
+                $value = [];
+            }
+        }
         $result = [];
         foreach ($value as $data) {
             if (empty($data['country_id']) || empty($data['cc_types'])) {

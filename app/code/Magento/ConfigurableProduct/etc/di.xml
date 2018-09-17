@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,6 +14,8 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
 
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
@@ -157,6 +159,11 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable">
+        <arguments>
+            <argument name="attributeOptionProvider" xsi:type="object">Magento\ConfigurableProduct\Model\AttributeOptionProvider\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
@@ -170,5 +177,8 @@
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">\Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
     </type>
 </config>

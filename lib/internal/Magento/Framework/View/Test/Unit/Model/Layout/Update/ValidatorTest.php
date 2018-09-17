@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
 
-use \Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,6 +13,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectHelper;
+
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationState;
 
     protected function setUp()
     {
@@ -27,7 +32,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
         $domConfigFactory = $this->getMockBuilder(
-            'Magento\Framework\Config\DomFactory'
+            \Magento\Framework\Config\DomFactory::class
+        )->disableOriginalConstructor()->getMock();
+        $this->validationState = $this->getMockBuilder(
+            \Magento\Framework\Config\ValidationStateInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
@@ -35,6 +43,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
                 trim($layoutUpdate) . '</layout>',
             'schemaFile' => $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/page_layout.xsd'),
+            'validationState' => $this->validationState,
         ];
 
         $exceptionMessage = 'validation exception';
@@ -49,10 +58,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Config\Dom\ValidationException($exceptionMessage)
             )
         );
-        $urnResolver = $this->_objectHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
+        $urnResolver = $this->_objectHelper->getObject(\Magento\Framework\Config\Dom\UrnResolver::class);
         $model = $this->_objectHelper->getObject(
-            'Magento\Framework\View\Model\Layout\Update\Validator',
-            ['domConfigFactory' => $domConfigFactory, 'urnResolver' => $urnResolver]
+            \Magento\Framework\View\Model\Layout\Update\Validator::class,
+            [
+                'domConfigFactory' => $domConfigFactory,
+                'urnResolver' => $urnResolver,
+                'validationState' => $this->validationState,
+            ]
         );
 
         return $model;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
@@ -50,7 +50,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCost', 'setDoTransaction'])
+            ->setMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
             ->getMockForAbstractClass();
 
         $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
@@ -364,6 +364,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param $amounts
+     */
     private function setBaseAmounts($amounts)
     {
         foreach ($amounts as $amountName => $summands) {
@@ -403,6 +406,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$item1, $item2, $item3]);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getCreditmemoItemMock()
     {
         return $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoItemInterface::class)

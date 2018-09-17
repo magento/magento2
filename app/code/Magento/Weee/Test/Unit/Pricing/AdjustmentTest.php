@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,6 +134,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->adjustment->isExcludedWith($adjustmentCode));
     }
 
+    /**
+     * @return array
+     */
     public function isExcludedWithDataProvider()
     {
         return [
@@ -157,6 +160,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->adjustment->getSortOrder());
     }
 
+    /**
+     * @return array
+     */
     public function getSortOrderProvider()
     {
         return [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
@@ -72,6 +72,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
+        'ms_MY', /*Malaysian (Malaysia)*/
         'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
         'nb_NO', /*Norwegian BokmГ_l (Norway)*/
@@ -98,6 +99,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lo_LA', /*Laotian*/
         'es_VE', /*Spanish (Venezuela)*/
         'en_IE', /*English (Ireland)*/
+        'es_BO', /*Spanish (Bolivia)*/
     ];
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/info/buttons.phtml';
+    protected $_template = 'Magento_Sales::order/info/buttons.phtml';
 
     /**
      * Core registry

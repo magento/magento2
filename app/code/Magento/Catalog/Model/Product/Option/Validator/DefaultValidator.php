@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -106,7 +106,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $title === null) {
             return true;
         }
-        if ($this->isEmpty($title)) {
+
+        // checking whether title is null and is empty string
+        if ($title === null || $title === '') {
             return false;
         }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -176,6 +176,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
+    /**
+     * @param bool $id
+     * @return mixed
+     */
     protected function mockPayment($id = false)
     {
         $payment = $this->getMock(

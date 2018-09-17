@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
@@ -290,6 +290,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -303,7 +306,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -311,7 +314,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -446,6 +449,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
@@ -536,6 +542,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -636,6 +645,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -732,6 +744,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

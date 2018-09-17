@@ -62,7 +62,7 @@ Error!,Error!
 "DB exception","DB exception"
 "Wrong minimum amount.","Wrong minimum amount."
 Message,Message
-"<a href=""%1"" onclick=""this.target=\'_blank\'"" class=""print"">Print receipt</a>","<a href=""%1"" onclick=""this.target=\'_blank\'"" class=""print"">Print receipt</a>"
+"Print receipt","Print receipt"
 "Apply Discount Code","Apply Discount Code"
 "Enter discount code","Enter discount code"
 "Apply Discount","Apply Discount"
@@ -180,3 +180,4 @@ Payment,Payment
 "Not yet calculated","Not yet calculated"
 "We received your order!","We received your order!"
 "Thank you for your purchase!","Thank you for your purchase!"
+"Password", "Password"

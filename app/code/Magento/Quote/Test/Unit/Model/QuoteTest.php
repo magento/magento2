@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -141,6 +141,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerDataFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\OrderIncrementIdChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderIncrementIdCheckerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -285,6 +290,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->orderIncrementIdCheckerMock = $this->getMock(
+            \Magento\Sales\Model\OrderIncrementIdChecker::class,
+            ['isIncrementIdUsed'],
+            [],
+            '',
+            false
+        );
+
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote::class,
@@ -310,7 +323,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'customerDataFactory' => $this->customerDataFactoryMock,
                     'data' => [
                         'reserved_order_id' => 1000001
-                    ]
+                    ],
+                    'orderIncrementIdChecker' => $this->orderIncrementIdCheckerMock,
                 ]
             );
     }
@@ -658,6 +672,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddress()
     {
         return [
@@ -699,6 +716,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals((bool)$expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderGetAddressByCustomer()
     {
         return [
@@ -745,6 +765,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, (bool)$result);
     }
 
+    /**
+     * @return array
+     */
     public static function dataProviderShippingAddress()
     {
         return [
@@ -1246,9 +1269,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testReserveOrderId($isReservedOrderIdExist, $reservedOrderId)
     {
-        $this->resourceMock
+        $this->orderIncrementIdCheckerMock
             ->expects($this->once())
-            ->method('isOrderIncrementIdUsed')
+            ->method('isIncrementIdUsed')
             ->with(1000001)
             ->willReturn($isReservedOrderIdExist);
         $this->resourceMock

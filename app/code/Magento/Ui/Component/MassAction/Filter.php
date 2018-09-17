@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\MassAction;
@@ -101,13 +101,11 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
+
+        $collection->addFieldToFilter(
+            $collection->getIdFieldName(),
+            ['in' => $this->getFilterIds()]
+        );
 
         return $collection;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\RequireJs;
@@ -136,7 +136,7 @@ config;
         $customConfigFiles = $this->fileSource->getFiles($this->design->getDesignTheme(), self::CONFIG_FILE_NAME);
         foreach ($customConfigFiles as $file) {
             /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
-            $fileReader = $this->readFactory->create($file->getFileName(), DriverPool::FILE);
+            $fileReader = $this->readFactory->create($file->getFilename(), DriverPool::FILE);
             $config = $fileReader->readAll($file->getName());
             $distributedConfig .= str_replace(
                 ['%config%', '%context%'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -102,7 +102,7 @@ class PageRepository implements PageRepositoryInterface
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        if (empty($page->getStoreId())) {
+        if ($page->getStoreId() === null) {
             $storeId = $this->storeManager->getStore()->getId();
             $page->setStoreId($storeId);
         }

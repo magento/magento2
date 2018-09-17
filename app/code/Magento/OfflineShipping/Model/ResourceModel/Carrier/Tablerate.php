@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -224,10 +224,10 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->_importedRows += count($values);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__('Unable to import data'), $e);
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while importing table rates.')

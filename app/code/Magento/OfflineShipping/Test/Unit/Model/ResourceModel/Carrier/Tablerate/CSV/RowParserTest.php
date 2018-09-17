@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -128,6 +128,9 @@ class RowParserTest extends \PHPUnit_Framework_TestCase
         throw $exception;
     }
 
+    /**
+     * @return array
+     */
     public function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];

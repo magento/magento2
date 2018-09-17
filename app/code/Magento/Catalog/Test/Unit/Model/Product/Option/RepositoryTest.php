@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,14 +95,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
-            $this->converterMock
+            $this->converterMock,
+            $optionFactory,
+            $this->optionCollectionFactory
         );
 
         $this->setProperties(
             $this->optionRepository,
             [
-                'optionFactory' => $optionFactory,
-                'collectionFactory' => $this->optionCollectionFactory,
                 'metadataPool' => $metadataPool
             ]
         );

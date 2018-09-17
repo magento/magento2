@@ -2,7 +2,7 @@
 /**
  * Review renderer
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product;
@@ -18,8 +18,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @var array
      */
     protected $_availableTemplates = [
-        self::FULL_VIEW => 'helper/summary.phtml',
-        self::SHORT_VIEW => 'helper/summary_short.phtml',
+        self::FULL_VIEW => 'Magento_Review::helper/summary.phtml',
+        self::SHORT_VIEW => 'Magento_Review::helper/summary_short.phtml',
     ];
 
     /**

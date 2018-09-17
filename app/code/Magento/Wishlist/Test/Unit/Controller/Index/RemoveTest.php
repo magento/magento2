@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
@@ -139,6 +139,9 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultFactoryMock);
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Remove
+     */
     public function getController()
     {
         $this->prepareContext();

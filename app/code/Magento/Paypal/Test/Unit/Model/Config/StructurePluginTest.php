@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,6 +75,9 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetElementByPathPartsNonPaymentDataProvider()
     {
         return [
@@ -118,6 +121,9 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetElementByPathPartsDataProvider()
     {
         return [
@@ -180,6 +186,9 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
         $this->_aroundGetElementByPathPartsAssertResult($result, $getElementByPathParts, $pathParts);
     }
 
+    /**
+     * @return array
+     */
     public function aroundGetSectionByPathPartsDataProvider()
     {
         return [

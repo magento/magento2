@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -111,6 +111,9 @@ HTML;
         );
     }
 
+    /**
+     * @return Topmenu
+     */
     protected function getTopmenu()
     {
         return new Topmenu($this->context, $this->nodeFactory, $this->treeFactory);

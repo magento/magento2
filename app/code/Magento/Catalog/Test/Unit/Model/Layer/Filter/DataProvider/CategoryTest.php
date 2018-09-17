@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -77,6 +77,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
+     */
     public function testGetCategoryWithAppliedId()
     {
         $storeId = 1234;

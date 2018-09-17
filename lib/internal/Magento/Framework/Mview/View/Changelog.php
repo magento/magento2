@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\View;
@@ -121,7 +121,7 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
 
         return true;
     }

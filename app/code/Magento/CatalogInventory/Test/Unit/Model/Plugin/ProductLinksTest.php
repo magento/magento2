@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
@@ -60,6 +60,9 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }
 
+    /**
+     * @return array
+     */
     private function buildMocks()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collectionMock */

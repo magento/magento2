@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
@@ -84,6 +84,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getAllItems());
     }
 
+    /**
+     * @return array
+     */
     public function getAllItemsDataProvider()
     {
         return [
@@ -135,6 +138,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($getterMethod, $model->{$getterMethod}());
     }
 
+    /**
+     * @return array
+     */
     public function getterDataProvider()
     {
         return [

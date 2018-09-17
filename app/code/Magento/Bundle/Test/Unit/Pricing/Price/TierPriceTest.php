@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -183,6 +183,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($baseAmount, $savePercent)
     {
+        /** @var \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit_Framework_MockObject_MockObject $amount */
         $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
         $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
 

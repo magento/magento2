@@ -2,7 +2,7 @@
 /**
  * Loads catalog attributes configuration from multiple XML files by merging them together
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;

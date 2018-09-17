@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
@@ -113,6 +113,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cssClasses, $priceBox->getData('css_classes'));
     }
 
+    /**
+     * @return array
+     */
     public function toHtmlDataProvider()
     {
         return [
@@ -216,6 +219,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPriceId, $this->model->getPriceId($defaultPrefix, $defaultSuffix));
     }
 
+    /**
+     * @return array
+     */
     public function getPriceIdProvider()
     {
         return [

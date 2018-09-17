@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model\Session;
@@ -90,10 +90,15 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @return object
+     */
     protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Session\SuccessValidator', ['checkoutSession' => $checkoutSession]
+            'Magento\Checkout\Model\Session\SuccessValidator',
+            ['checkoutSession' => $checkoutSession]
         );
     }
 }

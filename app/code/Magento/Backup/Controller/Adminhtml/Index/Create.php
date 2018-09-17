@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
@@ -12,14 +12,14 @@ use Magento\Framework\Filesystem;
 class Create extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
-     * Create backup action
+     * Create backup action.
      *
      * @return void|\Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
+        if (!$this->requestAllowed()) {
             return $this->_redirect('*/*/index');
         }
 
@@ -28,7 +28,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         /**
          * @var \Magento\Backup\Helper\Data $helper
          */
-        $helper = $this->_objectManager->get('Magento\Backup\Helper\Data');
+        $helper = $this->_objectManager->get(\Magento\Backup\Helper\Data::class);
 
         try {
             $type = $this->getRequest()->getParam('type');
@@ -73,7 +73,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
 
             if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
                 /** @var Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+                $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $backupManager->setRootDir($filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath())
                     ->addIgnorePaths($helper->getBackupIgnorePaths());
             }
@@ -88,10 +88,10 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
             $errorMessage = __('You need more free space to create a backup.');
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMessage = __('You need more permissions to create a backup.');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMessage = __('We can\'t create the backup right now.');
         }
 
@@ -105,5 +105,15 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         }
 
         $this->getResponse()->representJson($response->toJson());
+    }
+
+    /**
+     * Check if request is allowed.
+     *
+     * @return bool
+     */
+    private function requestAllowed()
+    {
+        return $this->getRequest()->isAjax() && $this->getRequest()->isPost();
     }
 }

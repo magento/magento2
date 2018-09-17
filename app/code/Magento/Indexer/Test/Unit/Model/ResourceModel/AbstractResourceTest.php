@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
@@ -21,7 +21,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_tableStrategyInterface;
-
 
     protected function setUp()
     {
@@ -176,6 +175,9 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function insertFromTableData()
     {
         return [[false], [true]];

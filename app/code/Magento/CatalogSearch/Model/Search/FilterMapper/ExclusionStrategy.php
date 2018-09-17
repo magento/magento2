@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,14 +70,18 @@ class ExclusionStrategy implements FilterStrategyInterface
                 []
             );
             $isApplied = true;
-        } elseif ('category_ids' === $field) {
+        } elseif ('category_ids' === $field || $field === 'visibility') {
             $alias = $this->aliasResolver->getAlias($filter);
-            $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');
-            $select->joinInner(
-                [$alias => $tableName],
-                'search_index.entity_id = category_ids_index.product_id',
-                []
-            );
+            if (!array_key_exists($alias, $select->getPart('from'))) {
+                $tableName = $this->resourceConnection->getTableName(
+                    'catalog_category_product_index'
+                );
+                $select->joinInner(
+                    [$alias => $tableName],
+                    "search_index.entity_id = $alias.product_id",
+                    []
+                );
+            }
             $isApplied = true;
         }
 

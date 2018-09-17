@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -292,27 +292,34 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product);
+        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
+     * @param  bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
     {
-        if (!$this->storeManager->hasSingleStore()) {
+        $websiteIds = $product->getWebsiteIds();
 
-            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
-                $websiteIds = array_keys($this->storeManager->getWebsites());
-            } else {
-                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
-            }
-
-            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        if ($createNew && !$this->storeManager->hasSingleStore()) {
+            $websiteIds = array_unique(
+                array_merge(
+                    $websiteIds,
+                    [$this->storeManager->getStore()->getWebsiteId()]
+                )
+            );
         }
+
+        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+            $websiteIds = array_keys($this->storeManager->getWebsites());
+        }
+
+        $product->setWebsiteIds($websiteIds);
     }
 
     /**
@@ -401,7 +408,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $linksToInitialize = [];
                 foreach ($linksByType as $link) {
                     $linkDataArray = $this->extensibleDataObjectConverter
-                        ->toNestedArray($link, [], 'Magento\Catalog\Api\Data\ProductLinkInterface');
+                        ->toNestedArray($link, [], \Magento\Catalog\Api\Data\ProductLinkInterface::class);
                     $linkedSku = $link->getLinkedProductSku();
                     if (!isset($linkedProductIds[$linkedSku])) {
                         throw new NoSuchEntityException(
@@ -448,25 +455,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $newEntries[] = $entry;
                 }
             }
-            foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
-                        unset($updatedEntry['file']);
-                    }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
-                } else {
-                    //set the removed flag
-                    $existingEntry['removed'] = true;
-                }
-            }
+            $existingMediaGallery = $this->processingExistingImages($existingMediaGallery, $entriesById);
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
             $newEntries = $mediaGalleryEntries;
         }
 
-        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $images = $product->getMediaGallery('images');
+        if ($images) {
+            $images = $this->determineImageRoles($product, $images);
+        }
+
+        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
+
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
@@ -475,25 +476,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         }
 
-        foreach ($newEntries as $newEntry) {
-            if (!isset($newEntry['content'])) {
-                throw new InputException(__('The image content is not valid.'));
-            }
-            /** @var ImageContentInterface $contentDataObject */
-            $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
-                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
-            $newEntry['content'] = $contentDataObject;
-            $this->processNewMediaGalleryEntry($product, $newEntry);
+        $this->processingNewEntries($newEntries, $product, $entriesById);
 
-            $finalGallery = $product->getData('media_gallery');
-            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
-            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
-            $entriesById[$newEntryId] = $newEntry;
-            $finalGallery['images'][$newEntryId] = $newEntry;
-            $product->setData('media_gallery', $finalGallery);
-        }
         return $this;
     }
 
@@ -518,7 +502,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         $productDataArray = $this->extensibleDataObjectConverter
-            ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
+            ->toNestedArray($product, [], \Magento\Catalog\Api\Data\ProductInterface::class);
         $productDataArray = array_replace($productDataArray, $product->getData());
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
@@ -631,6 +615,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
+        $collection->addCategoryIds();
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
@@ -651,24 +636,78 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         Collection $collection
     ) {
         $fields = [];
-        $categoryFilter = [];
+
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $isApplied = $this->applyCustomFilter($collection, $filter, $conditionType);
 
-            if ($filter->getField() == 'category_id') {
-                $categoryFilter[$conditionType][] = $filter->getValue();
-                continue;
+            if (!$isApplied) {
+                $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
             }
-            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
-        }
-
-        if ($categoryFilter) {
-            $collection->addCategoriesFilter($categoryFilter);
         }
 
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Ascertain image roles, if they are not set against the gallery entries
+     *
+     * @param ProductInterface $product
+     * @param array $images
+     * @return array
+     */
+    private function determineImageRoles(ProductInterface $product, array $images)
+    {
+        $imagesWithRoles = [];
+        foreach ($images as $image) {
+            if (!isset($image['types'])) {
+                $image['types'] = [];
+                if (isset($image['file'])) {
+                    foreach (array_keys($product->getMediaAttributes()) as $attribute) {
+                        if ($image['file'] == $product->getData($attribute)) {
+                            $image['types'][] = $attribute;
+                        }
+                    }
+                }
+            }
+            $imagesWithRoles[] = $image;
+        }
+        return $imagesWithRoles;
+    }
+
+    /**
+     * Apply custom filters to product collection.
+     *
+     * @param Collection $collection
+     * @param \Magento\Framework\Api\Filter $filter
+     * @param string $conditionType
+     * @return bool
+     */
+    private function applyCustomFilter(Collection $collection, \Magento\Framework\Api\Filter $filter, $conditionType)
+    {
+        if ($filter->getField() == 'category_id') {
+            $categoryFilter[$conditionType][] = $filter->getValue();
+            $collection->addCategoriesFilter($categoryFilter);
+            return true;
+        }
+
+        if ($filter->getField() == 'store') {
+            $collection->addStoreFilter($filter->getValue());
+            return true;
+        }
+
+        if ($filter->getField() == 'website_id') {
+            $value = $filter->getValue();
+            if (strpos($value, ',') !== false) {
+                $value = explode(',', $value);
+            }
+            $collection->addWebsiteFilter($value);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -689,8 +728,63 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (null === $this->mediaGalleryProcessor) {
             $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Gallery\Processor');
+                ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
+    }
+
+    /**
+     * @param array $existingMediaGallery
+     * @param array $entriesById
+     * @return array
+     */
+    private function processingExistingImages(array $existingMediaGallery, array $entriesById)
+    {
+        foreach ($existingMediaGallery as $key => &$existingEntry) {
+            if (isset($entriesById[$existingEntry['value_id']])) {
+                $updatedEntry = $entriesById[$existingEntry['value_id']];
+                if ($updatedEntry['file'] === null) {
+                    unset($updatedEntry['file']);
+                }
+                $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
+            } else {
+                //set the removed flag
+                $existingEntry['removed'] = true;
+            }
+        }
+
+        return $existingMediaGallery;
+    }
+
+    /**
+     * @param array $newEntries
+     * @param ProductInterface $product
+     * @param array $entriesById
+     * @return void
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws StateException
+     */
+    private function processingNewEntries(array $newEntries, ProductInterface $product, array $entriesById)
+    {
+        foreach ($newEntries as $newEntry) {
+            if (!isset($newEntry['content'])) {
+                throw new InputException(__('The image content is not valid.'));
+            }
+            /** @var ImageContentInterface $contentDataObject */
+            $contentDataObject = $this->contentFactory->create()
+                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
+            $newEntry['content'] = $contentDataObject;
+            $this->processNewMediaGalleryEntry($product, $newEntry);
+
+            $finalGallery = $product->getData('media_gallery');
+            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
+            $entriesById[$newEntryId] = $newEntry;
+            $finalGallery['images'][$newEntryId] = $newEntry;
+            $product->setData('media_gallery', $finalGallery);
+        }
     }
 }

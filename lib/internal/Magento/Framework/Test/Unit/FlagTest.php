@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -23,6 +23,9 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $this->createInstance($data);
     }
 
+    /**
+     * @param array $data
+     */
     protected function createInstance(array $data = [])
     {
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false, false);

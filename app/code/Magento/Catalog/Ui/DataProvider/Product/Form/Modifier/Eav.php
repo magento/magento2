@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -244,7 +244,7 @@ class Eav extends AbstractModifier
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', __($group->getAttributeGroupName()));
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = true;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =

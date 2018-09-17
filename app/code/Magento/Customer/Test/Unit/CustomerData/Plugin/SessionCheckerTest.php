@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\CustomerData\Plugin;
@@ -86,6 +86,9 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->plugin->beforeStart($this->sessionManager);
     }
 
+    /**
+     * @return array
+     */
     public function testBeforeStartDataProvider()
     {
         return [

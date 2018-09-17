@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -269,6 +269,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         return $validatorFactory;
     }
 
+    /**
+     * @return \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected function prepareCustomerFactory()
     {
         $this->customerFactory = $this->getMock('Magento\Customer\Model\CustomerFactory', ['create'], [], '', false);
@@ -290,16 +293,26 @@ class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Addr
 {
     protected $attributeLoader;
 
+    /**
+     * @param null $object
+     * @return \Magento\Customer\Model\ResourceModel\Address|\Magento\Eav\Model\Entity\AbstractEntity
+     */
     public function loadAllAttributes($object = null)
     {
         return $this->getAttributeLoader()->loadAllAttributes($this, $object);
     }
 
+    /**
+     * @param $attributeLoader
+     */
     public function setAttributeLoader($attributeLoader)
     {
         $this->attributeLoader = $attributeLoader;
     }
 
+    /**
+     * @return \Magento\Eav\Model\Entity\AttributeLoaderInterface
+     */
     protected function getAttributeLoader()
     {
         return $this->attributeLoader;

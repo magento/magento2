@@ -12,7 +12,7 @@ Rate,Rate
 "Invalid file upload attempt","Invalid file upload attempt"
 "Invalid file upload attempt.","Invalid file upload attempt."
 "Invalid file format.","Invalid file format."
-"One of the countries has invalid code.","One of the countries has invalid code."
+"Country code is invalid: %1","Country code is invalid: %1"
 "Import Tax Rates","Import Tax Rates"
 "Export Tax Rates","Export Tax Rates"
 CSV,CSV

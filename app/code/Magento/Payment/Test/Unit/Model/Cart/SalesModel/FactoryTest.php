@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
@@ -40,6 +40,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

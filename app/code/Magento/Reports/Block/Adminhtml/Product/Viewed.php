@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Product;
@@ -15,7 +15,7 @@ class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
     /**
      * @var string
      */
-    protected $_template = 'report/grid/container.phtml';
+    protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
      * @return void

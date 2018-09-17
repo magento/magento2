@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -28,6 +28,9 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
+                        continue;
+                    }
                     $recordsToDelete[] = $image['value_id'];
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();
                     $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Swatches\Model\Swatch;
 use Magento\Framework\Exception\InputException;
+use Magento\Swatches\Model\Swatch;
+use Magento\Framework\Unserialize\SecureUnserializer;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -51,18 +53,27 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
+     * @var SecureUnserializer
+     */
+    private $secureUnserializer;
+
+    /**
      * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param SecureUnserializer|null $secureUnserializer
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        SecureUnserializer $secureUnserializer = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
+        $this->secureUnserializer = $secureUnserializer
+            ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
     }
 
     /**
@@ -118,9 +129,17 @@ class EavAttribute
             $swatchesArray = $attribute->getData('swatchtext');
         }
         if ($canReplace == true) {
-            $attribute->setData('option', $optionsArray);
-            $attribute->setData('default', $defaultValue);
-            $attribute->setData('swatch', $swatchesArray);
+            if (!empty($optionsArray)) {
+                $attribute->setData('option', $optionsArray);
+            }
+            if (!empty($defaultValue)) {
+                $attribute->setData('default', $defaultValue);
+            } else {
+                $attribute->setData('default', [0 => $attribute->getDefaultValue()]);
+            }
+            if (!empty($swatchesArray)) {
+                $attribute->setData('swatch', $swatchesArray);
+            }
         }
     }
 
@@ -135,7 +154,7 @@ class EavAttribute
         if ($attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_DROPDOWN) {
             $additionalData = $attribute->getData('additional_data');
             if (!empty($additionalData)) {
-                $additionalData = unserialize($additionalData);
+                $additionalData = $this->secureUnserializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
                     $attribute->setData('additional_data', serialize($additionalData));
@@ -174,7 +193,7 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete'][$optionId]) && $optionsArray['delete'][$optionId] == 1) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
@@ -316,7 +335,7 @@ class EavAttribute
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
-        $isOptionForDelete = $attribute->getData('option/delete/'.$optionId);
+        $isOptionForDelete = $attribute->getData('option/delete/' . $optionId);
         return isset($isOptionForDelete) && $isOptionForDelete;
     }
 
@@ -333,7 +352,7 @@ class EavAttribute
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->addFieldToFilter('store_id', $storeId);
         $collection->setPageSize(1);
-        
+
         $loadedSwatch = $collection->getFirstItem();
         if ($loadedSwatch->getId()) {
             $this->isSwatchExists = true;
@@ -356,7 +375,6 @@ class EavAttribute
         if ($this->isSwatchExists) {
             $swatch->setData('type', $type);
             $swatch->setData('value', $value);
-
         } else {
             $swatch->setData('option_id', $optionId);
             $swatch->setData('store_id', $storeId);

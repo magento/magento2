@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Inline;
@@ -45,11 +45,26 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     private $translateInlineMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
+
     protected function setUp()
     {
-        $this->resourceMock = $this->getMockBuilder('Magento\Translation\Model\ResourceModel\StringUtilsFactory')
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->translateInlineMock =
+            $this->getMockForAbstractClass(\Magento\Framework\Translate\InlineInterface::class);
+        $this->appCacheMock = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->resourceFactoryMock = $this->getMockBuilder(
+            \Magento\Translation\Model\ResourceModel\StringUtilsFactory::class
+        )
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')

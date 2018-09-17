@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Helper;
@@ -176,9 +176,26 @@ class ReportTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Phrase', $message);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     */
+    public function testImportFileExistsException()
+    {
+        $this->report->importFileExists('some_folder/../another_folder');
+    }
+
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('file'), true);
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testImportFileExistsExceptionInverted()
+    {
+        $this->report->importFileExists('some_folder\..\another_folder');
     }
 
     /**

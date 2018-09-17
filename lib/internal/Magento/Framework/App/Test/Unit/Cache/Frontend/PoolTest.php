@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
@@ -105,6 +105,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $model->current();
     }
 
+    /**
+     * @return array
+     */
     public function initializationParamsDataProvider()
     {
         return [

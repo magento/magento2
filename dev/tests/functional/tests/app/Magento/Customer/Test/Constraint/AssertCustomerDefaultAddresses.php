@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
      */
     public function processAssert(CustomerAccountIndex $customerAccountIndex, Address $address)
     {
-        $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Account Dashboard');
+        $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Account');
         sleep(6);
         $defaultBillingAddress = explode(
             "\n",

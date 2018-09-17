@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,12 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
-    public function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', ['getName'], [], '', false);
         $option
             ->expects($this->any())
             ->method('getName')

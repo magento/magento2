@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -123,13 +123,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $data['general'] = $this->getRequest()->getPostValue();
-        $categoryPostData = $data['general'];
+        $categoryPostData = $this->getRequest()->getPostValue();
 
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
         $categoryPostData = $this->imagePreprocessing($categoryPostData);
-        $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
         $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel;
@@ -121,10 +121,15 @@ abstract class EntityAbstract extends AbstractDb
     {
         /** @var \Magento\Sales\Model\AbstractModel $object */
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
+            $store = $object->getStore();
+            $storeId = $store->getId();
+            if ($storeId === null) {
+                $storeId = $store->getGroup()->getDefaultStoreId();
+            }
             $object->setIncrementId(
                 $this->sequenceManager->getSequence(
                     $object->getEntityType(),
-                    $object->getStore()->getGroup()->getDefaultStoreId()
+                    $storeId
                 )->getNextValue()
             );
         }

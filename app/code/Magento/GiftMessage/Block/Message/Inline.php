@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Message;
@@ -33,7 +33,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'inline.phtml';
+    protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
      * Gift message message

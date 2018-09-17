@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -184,6 +184,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         ) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
+        }
+
+        // Set group id to current stored id if no group id passed.
+        if (!($prevCustomerData === null) && $prevCustomerData->getGroupId() && $customer->getGroupId() === null) {
+            $customerModel->setGroupId(
+                $prevCustomerData->getGroupId()
+            );
         }
 
         $this->setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel);

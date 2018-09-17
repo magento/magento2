@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -26,7 +26,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'categories.phtml';
+    protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
      * Adminhtml data

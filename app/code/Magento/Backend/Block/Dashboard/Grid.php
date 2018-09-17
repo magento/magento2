@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -15,7 +15,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var string
      */
-    protected $_template = 'dashboard/grid.phtml';
+    protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**
      * Setting default for every grid on dashboard

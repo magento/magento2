@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -85,7 +85,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $orderItem = $this->getMock(
             'Magento\Sales\Model\Order\Item',
-            ['getId', 'getQtyOrdered'],
+            ['getId', 'getQtyOrdered', 'getParentItemId', 'getIsVirtual'],
             [],
             '',
             false
@@ -97,6 +97,9 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getQtyOrdered')
             ->willReturn(5);
 
+        $orderItem->expects($this->any())->method('getParentItemId')->willReturn(false);
+        $orderItem->expects($this->any())->method('getIsVirtual')->willReturn(false);
+        
         $shipmentItem = $this->getMock(
             'Magento\Sales\Model\Order\Shipment\Item',
             ['setQty'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Auth;
@@ -130,6 +130,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($aclMock, $this->session->getAcl());
     }
 
+    /**
+     * @return array
+     */
     public function refreshAclDataProvider()
     {
         return [
@@ -235,6 +238,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->session->isAllowed('resource'));
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [
@@ -255,6 +261,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isFirstPageAfterLogin, $this->session->isFirstPageAfterLogin());
     }
 
+    /**
+     * @return array
+     */
     public function firstPageAfterLoginDataProvider()
     {
         return [

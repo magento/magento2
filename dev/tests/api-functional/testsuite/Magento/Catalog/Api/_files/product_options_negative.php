@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 return [
     'empty_required_field' => [
-        'title' => '',
+        'title' => null,
         'type' => 'field',
         'sort_order' => 1,
         'is_require' => 1,
@@ -54,7 +54,7 @@ return [
                 'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'radio option 1 sku',
-                'title' => '',
+                'title' => null,
                 'sort_order' => 1,
             ],
         ],

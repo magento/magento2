@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
@@ -80,6 +80,9 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }
 
+    /**
+     * @return array
+     */
     public function isLastDataProvider()
     {
         return [[1, false], [2, false], [3, true]];

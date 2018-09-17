@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,6 +107,12 @@ class Ftp
         if ($data['scheme'] != 'ftp') {
             throw new \Exception("Support for scheme unsupported: '{$data['scheme']}'");
         }
+        
+        // Decode user & password strings from URL
+        foreach (array_intersect(array_keys($data), ['user', 'pass']) as $key) {
+            $data[$key] = urldecode($data[$key]);
+        }
+        
         return $data;
     }
 

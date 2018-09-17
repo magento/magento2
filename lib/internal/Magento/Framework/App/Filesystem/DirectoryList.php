@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Filesystem;
+
+use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
@@ -108,6 +110,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const TEMPLATE_MINIFICATION_DIR = 'html';
 
     /**
+     * Relative directory key for generated code
+     */
+    const GENERATED_CODE = 'code';
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultConfig()
@@ -133,6 +140,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
             self::SETUP => [parent::PATH => 'setup/src'],
             self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
+            self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY]
         ];
         return parent::getDefaultConfig() + $result;
     }

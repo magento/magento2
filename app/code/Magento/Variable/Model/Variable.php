@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Model;
@@ -61,7 +61,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Variable\Model\ResourceModel\Variable');
+        $this->_init(\Magento\Variable\Model\ResourceModel\Variable::class);
     }
 
     /**
@@ -154,7 +154,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         foreach ($collection->toOptionArray() as $variable) {
             $variables[] = [
                 'value' => '{{customVar code=' . $variable['value'] . '}}',
-                'label' => __('%1', $variable['label']),
+                'label' => __('%1', $this->_escaper->escapeHtml($variable['label'])),
             ];
         }
         if ($withGroup && $variables) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
@@ -380,7 +380,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                         ),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
                         'value' => $rowData[self::COL_TIER_PRICE],
-                        'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
+                        'website_id' => $this->getWebSiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                 }
             }

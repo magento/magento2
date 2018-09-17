@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
         <label class="admin__field-label" for="downloadable_links_title"><span><?php /* @escapeNotVerified */ echo __('Title')?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?=  /* @escapeNotVerified */ $block->escapeQuote($block->getLinksTitle()) ?>" <?= /* @noEscape */($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
                 <div class="admin__field admin__field-option">
                     <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
@@ -158,9 +158,9 @@ require([
                         '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                         '<div class="fileinput-button form-buttons">'+
                             '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
-                            '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('links') ?>">' +
+                            '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?= /* @escapeNotVerified */ $block->escapeQuote($block->escapeJsQuote($block->getFileFieldName('links'))) ?>">' +
                             '<script>' +
-                                'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('links') ?>"); ' +
+                                'linksUploader("#downloadable_link_<%- data.id %>_file", "<?= /* @escapeNotVerified */ $block->escapeJsQuote($block->escapeJsQuote($block->getUploadUrl('links'), '"')) ?>"); ' +
                             '</scr'+'ipt>'+
                         '</div>'+
                     '</div>'+
@@ -184,9 +184,9 @@ require([
                         '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info new-file"></div>'+
                         '<div class="fileinput-button form-buttons">'+
                         '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
-                        '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('link_samples') ?>">' +
+                        '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?= /* @escapeNotVerified */ $block->escapeJsQuote($block->escapeJsQuote($block->getFileFieldName('link_samples'), '"')) ?>">' +
                         '<script>'+
-                        'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('link_samples') ?>"); ' +
+                        'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?= /* @escapeNotVerified */ $block->escapeJsQuote($block->escapeJsQuote($block->getUploadUrl('link_samples'), '"')) ?>"); ' +
                         '</scr'+'ipt>'+
                         '</div>'+
                     '</div>'+

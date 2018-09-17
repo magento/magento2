@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block;
@@ -44,6 +44,10 @@ class Payment extends Template
         $payment = $this->config->getConfig()['payment'];
         $config = $payment[$this->getCode()];
         $config['code'] = $this->getCode();
+        $config['clientTokenUrl'] = $this->_urlBuilder->getUrl(
+            'braintree/payment/getClientToken',
+            ['_secure' => true]
+        );
         return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
 

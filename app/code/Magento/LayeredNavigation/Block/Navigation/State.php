@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class State extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'layer/state.phtml';
+    protected $_template = 'Magento_LayeredNavigation::layer/state.phtml';
 
     /**
      * Catalog layer

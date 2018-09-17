@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Sales > Orders.
  * 3. Open the created order.
  * 4. Do cancel Order.
- * 5. Perform all assetions.
+ * 5. Perform all assertions.
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-28191

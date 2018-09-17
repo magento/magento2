@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
@@ -78,7 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setAttributeFilter($setId)
     {
-        return $this->addFieldToFilter('attribute_id', $setId);
+        return $this->addFieldToFilter('main_table.attribute_id', $setId);
     }
 
     /**

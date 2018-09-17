@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Helper;
@@ -765,7 +765,6 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         'xxyz' => 'chemical/x-xyz',
         'xzaz' => 'application/vnd.zzazz.deck+xml',
         'xzip' => 'application/zip',
-        'xzmm' => 'application/vnd.handheld-entertainment+xml',
-        'xodt' => 'application/x-vnd.oasis.opendocument.spreadsheet',
+        'xzmm' => 'application/vnd.handheld-entertainment+xml'
     ];
 }

@@ -2,7 +2,7 @@
 /**
  * Interface for a test service for error handling testing
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule3\Service\V1;

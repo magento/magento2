@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Fixtures\AttributeSet;
@@ -10,7 +10,9 @@ namespace Magento\Setup\Fixtures\AttributeSet;
  */
 class Pattern
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $attributePattern = [
         'is_required' => 1,
         'is_visible_on_front' => 1,

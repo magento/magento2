@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,6 +114,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         // Steps
         $this->addToCart($products);
 
+        $cart['data'] = (array)$cart['data'];
         $cart['data']['items'] = ['products' => $products];
         return [
             'cart' => $this->fixtureFactory->createByCode('cart', $cart),

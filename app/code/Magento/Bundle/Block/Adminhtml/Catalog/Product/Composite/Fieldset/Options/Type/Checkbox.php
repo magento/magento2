@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
@@ -15,7 +15,7 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/checkbox.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/checkbox.phtml';
 
     /**
      * @param  string $elementId

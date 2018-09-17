@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
@@ -191,6 +192,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
+            $this->isDeleted(false);
             $this->setData(
                 $value
             )->setData(
@@ -224,7 +226,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getFinalPrice();
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }

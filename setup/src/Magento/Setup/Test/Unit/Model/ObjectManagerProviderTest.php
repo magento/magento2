@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -83,6 +83,9 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ObjectManagerInterface::class, $this->model->get());
     }
 
+    /**
+     * @return mixed
+     */
     private function getCommandListMock()
     {
         $commandMock = $this->getMockBuilder(Command::class)->disableOriginalConstructor()->getMock();

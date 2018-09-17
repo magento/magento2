@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
@@ -100,6 +100,14 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
      */
     private function validatePropertiesSorting(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $properties)
     {
+        // Fix needed for cases when incorrect properties passed for validation due to bug in PHP tokens.
+        $symbolsForSkip = ['(', 'block', 'field'];
+        $properties = array_filter(
+            $properties,
+            function ($var) use ($symbolsForSkip) {
+                return !in_array($var, $symbolsForSkip);
+            }
+        );
 
         $originalProperties = $properties;
         sort($properties);

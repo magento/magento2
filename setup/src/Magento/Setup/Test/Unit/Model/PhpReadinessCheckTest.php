@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -394,6 +394,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Model;
 
+/**
+ * @param $param
+ * @return int|string
+ */
 function ini_get($param)
 {
     if ($param === 'xdebug.max_nesting_level') {

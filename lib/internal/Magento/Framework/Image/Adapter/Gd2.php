@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -63,6 +63,16 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
         $this->imageDestroy();
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
+        $fileType = $this->getImageType();
+        if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
+            $this->_keepTransparency = true;
+            if ($this->_imageHandler) {
+                $isAlpha = $this->checkAlpha($this->_fileName);
+                if ($isAlpha) {
+                    $this->_fillBackgroundColor($this->_imageHandler);
+                }
+            }
+        }
     }
 
     /**
@@ -103,7 +113,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + pow(2, 16)) * 1.65
         );
     }
 
@@ -423,7 +433,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
             imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -448,7 +458,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             imagecolortransparent($newWatermark, $col);
             imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
             imagealphablending($newWatermark, true);
-            imageSaveAlpha($newWatermark, true);
+            imagesavealpha($newWatermark, true);
             imagecopyresampled(
                 $newWatermark,
                 $watermark,
@@ -666,7 +676,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     private function _saveAlpha($imageHandler)
     {
         $background = imagecolorallocate($imageHandler, 0, 0, 0);
-        ImageColorTransparent($imageHandler, $background);
+        imagecolortransparent($imageHandler, $background);
         imagealphablending($imageHandler, false);
         imagesavealpha($imageHandler, true);
     }

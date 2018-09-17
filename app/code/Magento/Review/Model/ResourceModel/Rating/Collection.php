@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
@@ -138,7 +138,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id',
                 []
             );
-            //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
         $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);

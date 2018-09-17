@@ -2,7 +2,7 @@
 /**
  * oAuth client for Magento REST API.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Authentication\Rest;
@@ -44,7 +44,7 @@ class OauthClient extends AbstractService
             $httpClient->setTimeout(self::DEFAULT_TIMEOUT);
         }
         if (!isset($storage)) {
-            $storage = new \OAuth\Common\Storage\Session();
+            $storage = new \OAuth\Common\Storage\Memory();
         }
         if (!isset($signature)) {
             $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($credentials);

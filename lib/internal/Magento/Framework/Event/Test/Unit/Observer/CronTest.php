@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
@@ -37,6 +37,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->getNumeric($value));
     }
 
+    /**
+     * @return array
+     */
     public function numericValueProvider()
     {
         return [
@@ -78,6 +81,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->matchCronExpression($expression, $number));
     }
 
+    /**
+     * @return array
+     */
     public function matchCronExpressionProvider()
     {
         return [
@@ -107,6 +113,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->cron->isValidFor($eventMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidForProvider()
     {
         return [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Block;
@@ -136,6 +136,9 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsDataProvider()
     {
         return [
@@ -199,6 +202,9 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getScriptOptionsPrivateContentDataProvider()
     {
         // @codingStandardsIgnoreStart

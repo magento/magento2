@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -66,7 +66,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         foreach ($this->layoutProcessors as $processor) {
             $this->jsLayout = $processor->process($this->jsLayout);
         }
-        return parent::getJsLayout();
+        return json_encode($this->jsLayout, JSON_HEX_TAG);
     }
 
     /**

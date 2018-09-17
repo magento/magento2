@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Action\Action;
@@ -47,7 +47,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
                 <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
-                <div class="product-item-info" data-container="product-grid">
+                <div class="product-item-info" data-container="product-<?= /* @escapeNotVerified */ $viewMode ?>">
                     <?php
                     $productImage = $block->getImage($_product, $image);
                     if ($pos != null) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
@@ -283,6 +283,12 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($adjustmentHtml1 . $adjustmentHtml2, $this->model->getAdjustmentsHtml());
     }
 
+    /**
+     * @param array $data
+     * @param string $html
+     * @param string $code
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {
         $adjustmentRender = $this->getMockForAbstractClass(

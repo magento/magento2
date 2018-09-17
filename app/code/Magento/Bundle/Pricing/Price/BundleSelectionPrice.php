@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
@@ -163,8 +163,7 @@ class BundleSelectionPrice extends AbstractPrice
     {
         if ($this->bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
             return parent::getProduct();
-        } else {
-            return $this->bundleProduct;
         }
+        return $this->bundleProduct;
     }
 }

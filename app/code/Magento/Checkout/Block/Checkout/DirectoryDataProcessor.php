@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
@@ -136,9 +136,9 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
         ]];
         foreach ($countryOptions as $countryOption) {
             if (empty($countryOption['value']) || in_array($countryOption['value'], $topCountryCodes)) {
-                array_push($headOptions, $countryOption);
+                $headOptions[] = $countryOption;
             } else {
-                array_push($tailOptions, $countryOption);
+                $tailOptions[] = $countryOption;
             }
         }
         return array_merge($headOptions, $tailOptions);

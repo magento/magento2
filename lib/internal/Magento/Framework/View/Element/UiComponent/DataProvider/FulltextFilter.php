@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,6 +63,16 @@ class FulltextFilter implements FilterApplierInterface
     }
 
     /**
+     * Escape against value
+     * @param string $value
+     * @return string
+     */
+    private function escapeAgainstValue($value)
+    {
+        return preg_replace('/([+\-><\(\)~*\"@]+)/', ' ', $value);
+    }
+
+    /**
      * Apply fulltext filters
      *
      * @param Collection $collection
@@ -86,7 +96,7 @@ class FulltextFilter implements FilterApplierInterface
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                $filter->getValue()
+                $this->escapeAgainstValue($filter->getValue())
             );
     }
 }

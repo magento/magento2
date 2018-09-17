@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Observer;
@@ -139,6 +139,9 @@ class NoCookiesObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->noCookiesObserver, $this->noCookiesObserver->execute($this->observerMock));
     }
 
+    /**
+     * @return array
+     */
     public function noCookiesDataProvider()
     {
         return [

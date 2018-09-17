@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Helper;
@@ -50,6 +50,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyDataProvider()
     {
         return [
@@ -84,6 +87,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyByStoreDataProvider()
     {
         return [

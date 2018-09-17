@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Io;
@@ -364,7 +364,7 @@ class File extends AbstractIo
             $dirCallback = $fileCallback;
         }
         if (is_dir($dir)) {
-            foreach (scandir($dir) as $item) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }

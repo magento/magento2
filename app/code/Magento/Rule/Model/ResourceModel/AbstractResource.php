@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
         try {
             $this->_multiplyBunchInsert($ruleIds, $entityIds, $entityType);
         } catch (\Exception $e) {
-            $this->getConnection()->rollback();
+            $this->getConnection()->rollBack();
             throw $e;
         }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,10 +64,10 @@ define([
         },
 
         /**
-         * Has weight swither
+         * Has weight switcher
          * @returns {*}
          */
-        hasWeightSwither: function () {
+        hasWeightSwitcher: function () {
             return this.$weightSwitcher().is(':visible');
         },
 
@@ -104,7 +104,7 @@ define([
         'Magento_Catalog/js/product/weight-handler': function () {
             this.bindAll();
 
-            if (this.hasWeightSwither()) {
+            if (this.hasWeightSwitcher()) {
                 this.switchWeight();
             }
         },

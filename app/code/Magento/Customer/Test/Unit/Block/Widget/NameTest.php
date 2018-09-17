@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -157,6 +157,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [

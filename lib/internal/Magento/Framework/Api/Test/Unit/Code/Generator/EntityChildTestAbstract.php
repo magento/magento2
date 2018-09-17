@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
@@ -31,12 +31,24 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Code\Generator\DefinedClasses */
     protected $definedClassesMock;
 
+    /**
+     * @return mixed
+     */
     abstract protected function getSourceClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getResultClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getGeneratorClassName();
 
+    /**
+     * @return mixed
+     */
     abstract protected function getOutputFileName();
 
     protected function setUp()

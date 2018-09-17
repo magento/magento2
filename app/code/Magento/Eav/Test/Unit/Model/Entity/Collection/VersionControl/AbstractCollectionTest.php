@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
@@ -72,6 +72,9 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         }
     }
 
+    /**
+     * @return array
+     */
     public static function fetchItemDataProvider()
     {
         return [

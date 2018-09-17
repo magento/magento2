@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat;
@@ -103,6 +103,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->model->isAvailable());
     }
 
+    /**
+     * @return array
+     */
     public function isAvailableDataProvider()
     {
         return [
