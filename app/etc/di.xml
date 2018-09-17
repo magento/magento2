@@ -206,6 +206,7 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+    <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
     <preference for="Magento\Framework\App\Request\ValidatorInterface"
                 type="Magento\Framework\App\Request\CsrfValidator" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
@@ -1693,6 +1694,18 @@
     <type name="Magento\Framework\Session\Config">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
+                </item>
+                <item name="sync" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>
