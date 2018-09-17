@@ -37,6 +37,7 @@
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Framework\Locale\Deployed\Codes" />
     <preference for="Magento\Framework\Locale\OptionInterface" type="Magento\Framework\Locale\Deployed\Options" />
+    <preference for="Magento\Framework\Lock\LockManagerInterface" type="Magento\Framework\Lock\Backend\Database" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
     <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
@@ -87,6 +88,7 @@
     <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization" />
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config" />
     <preference for="Magento\Framework\Image\Adapter\ConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
+    <preference for="Magento\Framework\Image\Adapter\UploadConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
     <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
     <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
