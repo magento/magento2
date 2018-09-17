@@ -14,7 +14,6 @@ use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -39,26 +38,18 @@ class ChangePassword implements ResolverInterface
     private $customerResolver;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param UserContextInterface $userContext
      * @param AccountManagementInterface $accountManagement
      * @param CustomerDataProvider $customerResolver
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
         UserContextInterface $userContext,
         AccountManagementInterface $accountManagement,
-        CustomerDataProvider $customerResolver,
-        ValueFactory $valueFactory
+        CustomerDataProvider $customerResolver
     ) {
         $this->userContext = $userContext;
         $this->accountManagement = $accountManagement;
         $this->customerResolver = $customerResolver;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -81,13 +72,15 @@ class ChangePassword implements ResolverInterface
                 )
             );
         }
-
+        if (!isset($args['currentPassword'])) {
+            throw new GraphQlInputException(__('"currentPassword" value should be specified'));
+        }
+        if (!isset($args['newPassword'])) {
+            throw new GraphQlInputException(__('"newPassword" value should be specified'));
+        }
         $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
         $data = $this->customerResolver->getCustomerById($customerId);
-        $result = function () use ($data) {
-            return !empty($data) ? $data : [];
-        };
 
-        return $this->valueFactory->create($result);
+        return !empty($data) ? $data : [];
     }
 }
