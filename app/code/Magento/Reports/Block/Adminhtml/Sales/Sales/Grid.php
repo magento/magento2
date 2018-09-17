@@ -6,6 +6,8 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+
 /**
  * Adminhtml sales report grid block
  *
@@ -22,7 +24,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * Reports grid constructor
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -32,17 +35,19 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * Return collection name based on report_type
+     *
+     * @return string
      */
     public function getResourceCollectionName()
     {
-        return $this->getFilterData()->getData('report_type') == 'updated_at_order'
+        return $this->getFilterData()->getData('report_type') === 'updated_at_order'
             ? \Magento\Sales\Model\ResourceModel\Report\Order\Updatedat\Collection::class
             : \Magento\Sales\Model\ResourceModel\Report\Order\Collection::class;
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize reports grid columns
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -103,9 +108,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             ]
         );
 
-        if ($this->getFilterData()->getStoreIds()) {
-            $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
-        }
+        $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
         $rate = $this->getRate($currencyCode);
 
@@ -118,6 +121,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_income_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-sales-total',
                 'column_css_class' => 'col-sales-total'
@@ -133,6 +137,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_revenue_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-revenue',
@@ -149,6 +154,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_profit_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-profit',
@@ -165,6 +171,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_invoiced_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-invoiced',
                 'column_css_class' => 'col-invoiced'
@@ -180,6 +187,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_paid_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-paid',
@@ -196,6 +204,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_refunded_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-refunded',
                 'column_css_class' => 'col-refunded'
@@ -211,6 +220,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_tax_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-sales-tax',
                 'column_css_class' => 'col-sales-tax'
@@ -226,6 +236,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_tax_amount_actual',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-tax',
@@ -242,6 +253,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_shipping_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-sales-shipping',
                 'column_css_class' => 'col-sales-shipping'
@@ -257,6 +269,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_shipping_amount_actual',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-shipping',
@@ -273,6 +286,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_discount_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-sales-discount',
                 'column_css_class' => 'col-sales-discount'
@@ -288,6 +302,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_discount_amount_actual',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'visibility_filter' => ['show_actual_columns'],
                 'rate' => $rate,
                 'header_css_class' => 'col-discount',
@@ -304,6 +319,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'total_canceled_amount',
                 'total' => 'sum',
                 'sortable' => false,
+                'renderer' => Currency::class,
                 'rate' => $rate,
                 'header_css_class' => 'col-canceled',
                 'column_css_class' => 'col-canceled'
