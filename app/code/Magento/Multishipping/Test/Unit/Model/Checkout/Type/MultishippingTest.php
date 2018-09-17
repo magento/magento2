@@ -282,6 +282,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getAllItems')->willReturn([]);
+        $this->quoteMock->expects($this->once())
+            ->method('__call')
+            ->with('setTotalsCollectedFlag', [false])
+            ->willReturnSelf();
 
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
@@ -421,6 +425,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([$addressMock]);
         $addressMock->expects($this->once())->method('setShippingMethod')->with($methodsArray[$addressId]);
+        $this->quoteMock->expects($this->once())
+            ->method('__call')
+            ->with('setTotalsCollectedFlag', [false])
+            ->willReturnSelf();
 
         $this->mockShippingAssignment();
 

@@ -874,7 +874,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function save()
     {
-        $this->getQuote()->collectTotals();
+        $this->getQuote()->setTotalsCollectedFlag(false)->collectTotals();
         $this->quoteRepository->save($this->getQuote());
         return $this;
     }
@@ -1145,6 +1145,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $storeId
         );
 
+        $this->getQuote()->collectTotals();
         $addresses = $this->getQuote()->getAllAddresses();
 
         $baseTotal = 0;
