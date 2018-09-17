@@ -8,7 +8,10 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper;
+use Magento\Elasticsearch\Model\Adapter\Document\Builder;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -59,31 +62,13 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->builderMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Document\Builder::class)
-            ->setMethods(['addField', 'addFields', 'build'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->builderMock = $this->createTestProxy(Builder::class);
+        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
+        $this->dataProvider = $this->createMock(DataProvider::class);
+        $this->attribute = $this->createMock(Attribute::class);
+        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
+        $this->dateFieldTypeMock = $this->createMock(Date::class);
 
-        $this->fieldMapperMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
-            ->setMethods(['getFieldName', 'getAllAttributesTypes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->dataProvider = $this->getMockBuilder(DataProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->additionalFieldsProvider = $this->getMockBuilder(AdditionalFieldsProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->dateFieldTypeMock = $this->getMockBuilder(Date::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             ProductDataMapper::class,
@@ -97,257 +82,347 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetMapAdditionalFieldsOnly()
     {
-        $productId = 42;
         $storeId = 1;
+        $productId = 42;
         $additionalFields = ['some data'];
-        $this->builderMock->expects($this->once())->method('addField')->with('store_id', $storeId);
+        $this->builderMock->expects($this->once())
+            ->method('addField')
+            ->with('store_id', $storeId);
 
-        $this->builderMock->expects($this->any())->method('addFields')
+        $this->builderMock->expects($this->any())
+            ->method('addFields')
             ->withConsecutive([$additionalFields])
-            ->will(
-                $this->returnSelf()
-            );
-        $this->builderMock->expects($this->any())->method('build')->will(
-            $this->returnValue([])
-        );
-        $this->additionalFieldsProvider->expects($this->once())->method('getFields')
+            ->will($this->returnSelf());
+        $this->builderMock->expects($this->any())
+            ->method('build')
+            ->will($this->returnValue([]));
+        $this->additionalFieldsProvider->expects($this->once())
+            ->method('getFields')
             ->with([$productId], $storeId)
             ->willReturn([$productId => $additionalFields]);
 
-        $this->assertEquals(
-            [$productId],
-            array_keys($this->model->map([$productId => []], $storeId, []))
-        );
+        $documents = $this->model->map([$productId => []], $storeId, []);
+        $this->assertEquals([$productId], array_keys($documents));
     }
 
+    /**
+     * @return void
+     */
     public function testGetMapEmptyData()
     {
         $storeId = 1;
+
         $this->builderMock->expects($this->never())->method('addField');
         $this->builderMock->expects($this->never())->method('build');
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
-            ->with([], $storeId)->willReturn([]);
+            ->with([], $storeId)
+            ->willReturn([]);
 
-        $this->assertEquals(
-            [],
-            $this->model->map([], $storeId, [])
-        );
-    }
-
-    public function testGetMapWithExcludedAttribute()
-    {
-        $productId = 42;
-        $storeId = 1;
-        $productAttributeData = ['price' => 42];
-        $attributeCode = 'price';
-        $returnAttributeData = ['store_id' => $storeId];
-
-        $this->dataProvider->expects($this->any())->method('getSearchableAttribute')
-            ->with($attributeCode)
-            ->willReturn($this->getAttribute($attributeCode, [
-                'value' => 42,
-                'backendType' => 'int',
-                'frontendInput' => 'int',
-                'options' => []
-            ]));
-
-        $this->fieldMapperMock->expects($this->never())->method('getFieldName');
-        $this->builderMock->expects($this->any())
-            ->method('addField')
-            ->with('store_id', $storeId);
-        $this->builderMock->expects($this->once())->method('build')->willReturn($returnAttributeData);
-
-        $this->additionalFieldsProvider->expects($this->once())->method('getFields')->willReturn([]);
-        $this->assertEquals(
-            [$productId => $returnAttributeData],
-            $this->model->map([$productId => $productAttributeData], $storeId, [])
-        );
+        $documents = $this->model->map([], $storeId, []);
+        $this->assertEquals([], $documents);
     }
 
     /**
      * @param int $productId
-     * @param array $productData
+     * @param array $attributeData
+     * @param array|string $attributeValue
      * @param array $returnAttributeData
      * @dataProvider mapProvider
      */
-    public function testGetMap($productId, $productData, $returnAttributeData)
+    public function testGetMap(int $productId, array $attributeData, $attributeValue, array $returnAttributeData)
     {
         $storeId = 1;
-        $attributeCode = $productData['attributeCode'];
-        $this->dataProvider->expects($this->any())->method('getSearchableAttribute')
-            ->with($attributeCode)
-            ->willReturn($this->getAttribute($attributeCode, $productData['attributeData']));
+        $attributeId = 5;
+        $context = [];
 
-        $this->fieldMapperMock->expects($this->any())->method('getFieldName')
-            ->with($attributeCode, [])
+        $this->dataProvider->method('getSearchableAttribute')
+            ->with($attributeId)
+            ->willReturn($this->getAttribute($attributeData));
+        $this->fieldMapperMock->method('getFieldName')
             ->willReturnArgument(0);
-        if ($productData['attributeData']['frontendInput'] === 'date') {
-            $this->dateFieldTypeMock->expects($this->once())->method('formatDate')
-                ->with($storeId, $productData['attributeValue'])
-                ->willReturnArgument(1);
-        }
+        $this->dateFieldTypeMock->method('formatDate')
+            ->willReturnArgument(1);
+        $this->additionalFieldsProvider->expects($this->once())
+            ->method('getFields')
+            ->willReturn([]);
 
-        $this->builderMock->expects($this->exactly(2))
-            ->method('addField')
-            ->withConsecutive(
-                ['store_id', $storeId],
-                [$attributeCode, $returnAttributeData[$attributeCode]]
-            );
-
-        $this->builderMock->expects($this->once())->method('build')->willReturn($returnAttributeData);
-        $this->additionalFieldsProvider->expects($this->once())->method('getFields')->willReturn([]);
         $documentData = [
-            $productId => [$productData['attributeCode'] => $productData['attributeValue']]
+            $productId => [$attributeId => $attributeValue],
         ];
-        $this->assertEquals(
-            [$productId => $returnAttributeData],
-            $this->model->map($documentData, $storeId, [])
-        );
+        $documents = $this->model->map($documentData, $storeId, $context);
+        $returnAttributeData['store_id'] = $storeId;
+        $this->assertEquals($returnAttributeData, $documents[$productId]);
     }
 
     /**
-     * @param int $productId
-     * @param array $productData
-     * @param array $returnAttributeData
-     * @dataProvider mapProviderForAttributeWithOptions
+     * @return void
      */
-    public function testGetMapForAttributeWithOptions($productId, $productData, $returnAttributeData)
+    public function testGetMapWithOptions()
     {
         $storeId = 1;
-        $attributeCode = $productData['attributeCode'];
-        $this->dataProvider->expects($this->any())->method('getSearchableAttribute')
-            ->with($attributeCode)
-            ->willReturn($this->getAttribute($attributeCode, $productData['attributeData']));
-
-        $this->fieldMapperMock->expects($this->any())->method('getFieldName')
-            ->with($attributeCode, [])
-            ->willReturnArgument(0);
-        if ($productData['attributeData']['frontendInput'] === 'date') {
-            $this->dateFieldTypeMock->expects($this->once())->method('formatDate')
-                ->with($storeId, $productData['attributeValue'])
-                ->willReturnArgument(1);
-        }
-        $this->builderMock->expects($this->exactly(3))
-            ->method('addField')
-            ->withConsecutive(
-                ['store_id', $storeId],
-                [$attributeCode . '_value', $returnAttributeData[$attributeCode . '_value']],
-                [$attributeCode, $returnAttributeData[$attributeCode]]
-            );
-        $this->builderMock->expects($this->once())->method('build')->willReturn($returnAttributeData);
-        $this->additionalFieldsProvider->expects($this->once())->method('getFields')->willReturn([]);
-        $documentData = [
-            $productId => [$productData['attributeCode'] => $productData['attributeValue']]
+        $productId = 10;
+        $context = [];
+        $attributeValue = ['o1', 'o2'];
+        $returnAttributeData = [
+            'store_id' => $storeId,
+            'options' => $attributeValue,
         ];
-        $this->assertEquals(
-            [$productId => $returnAttributeData],
-            $this->model->map($documentData, $storeId, [])
-        );
+
+        $this->dataProvider->expects($this->never())
+            ->method('getSearchableAttribute');
+        $this->fieldMapperMock->method('getFieldName')
+            ->willReturnArgument(0);
+        $this->additionalFieldsProvider->expects($this->once())
+            ->method('getFields')
+            ->willReturn([]);
+
+        $documentData = [
+            $productId => ['options' => $attributeValue],
+        ];
+        $documents = $this->model->map($documentData, $storeId, $context);
+        $this->assertEquals($returnAttributeData, $documents[$productId]);
     }
 
     /**
      * Return attribute mock
      *
-     * @param string $attributeCode
      * @param array attributeData
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getAttribute($attributeCode, $attributeData)
+    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
     {
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
-        $attribute->expects($this->once())->method('getBackendType')->willReturn($attributeData['backendType']);
-        $attribute->expects($this->any())->method('getFrontendInput')->willReturn($attributeData['frontendInput']);
-        $attribute->expects($this->any())->method('getOptions')->willReturn($attributeData['options']);
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);
+        $attributeMock->method('getBackendType')->willReturn($attributeData['backendType']);
+        $attributeMock->method('getFrontendInput')->willReturn($attributeData['frontendInput']);
+        $attributeMock->method('getIsSearchable')->willReturn($attributeData['is_searchable']);
+        $options = [];
+        foreach ($attributeData['options'] as $option) {
+            $optionMock = $this->createMock(AttributeOptionInterface::class);
+            $optionMock->method('getValue')->willReturn($option['value']);
+            $optionMock->method('getLabel')->willReturn($option['label']);
+            $options[] = $optionMock;
+        }
+        $attributeMock->method('getOptions')->willReturn($options);
 
-        return $attribute;
+        return $attributeMock;
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public static function mapProvider()
+    public static function mapProvider(): array
     {
         return [
-            'text attribute' => [
-                11,
+            'text' => [
+                10,
                 [
-                    'attributeCode' => 'description',
-                    'attributeValue' => 'some text',
-                    'attributeData' => [
-                        'backendType' => 'text',
-                        'frontendInput' => 'text',
-                        'options' => []
-                    ]
+                    'code' => 'description',
+                    'backendType' => 'text',
+                    'frontendInput' => 'text',
+                    'is_searchable' => false,
+                    'options' => [],
                 ],
+                'some text',
                 ['description' => 'some text'],
             ],
-            'date time attribute' => [
-                12,
+            'datetime' => [
+                10,
                 [
-                    'attributeCode' => 'created_at',
-                    'attributeValue' => '00-00-00 00:00:00',
-                    'attributeData' => [
-                        'backendType' => 'datetime',
-                        'frontendInput' => 'date',
-                        'options' => []
-                    ]
+                    'code' => 'created_at',
+                    'backendType' => 'datetime',
+                    'frontendInput' => 'date',
+                    'is_searchable' => false,
+                    'options' => [],
                 ],
+                '00-00-00 00:00:00',
                 ['created_at' => '00-00-00 00:00:00'],
 
             ],
-            'array value attribute' => [
-                12,
+            'array single value' => [
+                10,
                 [
-                    'attributeCode' => 'attribute_array',
-                    'attributeValue' => ['one', 'two', 'three'],
-                    'attributeData' => [
-                        'backendType' => 'text',
-                        'frontendInput' => 'text',
-                        'options' => []
-                    ]
+                    'code' => 'attribute_array',
+                    'backendType' => 'text',
+                    'frontendInput' => 'text',
+                    'is_searchable' => false,
+                    'options' => [],
                 ],
-                ['attribute_array' => 'one two three'],
+                [10 => 'one'],
+                ['attribute_array' => 'one'],
             ],
-            'multiselect value attribute' => [
-                12,
+            'array multiple value' => [
+                10,
                 [
-                    'attributeCode' => 'multiselect',
-                    'attributeValue' => 'some,data with,comma',
-                    'attributeData' => [
-                        'backendType' => 'text',
-                        'frontendInput' => 'multiselect',
-                        'options' => []
-                    ]
+                    'code' => 'attribute_array',
+                    'backendType' => 'text',
+                    'frontendInput' => 'text',
+                    'is_searchable' => false,
+                    'options' => [],
                 ],
-                ['multiselect' => 'some data with comma'],
+                [10 => 'one', 11 => 'two', 12 => 'three'],
+                ['attribute_array' => ['one', 'two', 'three']],
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function mapProviderForAttributeWithOptions()
-    {
-        return [
-            'select value attribute' => [
-                12,
+            'array multiple decimal value' => [
+                10,
                 [
-                    'attributeCode' => 'color',
-                    'attributeValue' => '44',
-                    'attributeData' => [
-                        'backendType' => 'text',
-                        'frontendInput' => 'select',
-                        'options' => [new \Magento\Framework\DataObject(['value' => '44', 'label' => 'red'])]
-                    ]
+                    'code' => 'decimal_array',
+                    'backendType' => 'decimal',
+                    'frontendInput' => 'text',
+                    'is_searchable' => false,
+                    'options' => [],
                 ],
+                [10 => '0.1', 11 => '0.2', 12 => '0.3'],
+                ['decimal_array' => ['0.1', '0.2', '0.3']],
+            ],
+            'array excluded from merge' => [
+                10,
+                [
+                    'code' => 'status',
+                    'backendType' => 'int',
+                    'frontendInput' => 'select',
+                    'is_searchable' => false,
+                    'options' => [
+                        ['value' => '1', 'label' => 'Enabled'],
+                        ['value' => '2', 'label' => 'Disabled'],
+                    ],
+                ],
+                [10  => '1', 11 => '2'],
+                ['status' => '1'],
+            ],
+            'select without options' => [
+                10,
+                [
+                    'code' => 'color',
+                    'backendType' => 'text',
+                    'frontendInput' => 'select',
+                    'is_searchable' => false,
+                    'options' => [],
+                ],
+                '44',
+                ['color' => '44'],
+            ],
+            'unsearchable select with options' => [
+                10,
+                [
+                    'code' => 'color',
+                    'backendType' => 'text',
+                    'frontendInput' => 'select',
+                    'is_searchable' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44',
+                ['color' => '44'],
+            ],
+            'searchable select with options' => [
+                10,
+                [
+                    'code' => 'color',
+                    'backendType' => 'text',
+                    'frontendInput' => 'select',
+                    'is_searchable' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44',
                 ['color' => '44', 'color_value' => 'red'],
+            ],
+            'composite select with options' => [
+                10,
+                [
+                    'code' => 'color',
+                    'backendType' => 'text',
+                    'frontendInput' => 'select',
+                    'is_searchable' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => ['44', '45'], 'color_value' => ['red', 'black']],
+            ],
+            'multiselect without options' => [
+                10,
+                [
+                    'code' => 'multicolor',
+                    'backendType' => 'text',
+                    'frontendInput' => 'multiselect',
+                    'is_searchable' => false,
+                    'options' => [],
+                ],
+                '44,45',
+                ['multicolor' => [44, 45]],
+            ],
+            'unsearchable multiselect with options' => [
+                10,
+                [
+                    'code' => 'multicolor',
+                    'backendType' => 'text',
+                    'frontendInput' => 'multiselect',
+                    'is_searchable' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44,45',
+                ['multicolor' => [44, 45]],
+            ],
+            'searchable multiselect with options' => [
+                10,
+                [
+                    'code' => 'multicolor',
+                    'backendType' => 'text',
+                    'frontendInput' => 'multiselect',
+                    'is_searchable' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44,45',
+                ['multicolor' => [44, 45], 'multicolor_value' => ['red', 'black']],
+            ],
+            'composite multiselect with options' => [
+                10,
+                [
+                    'code' => 'multicolor',
+                    'backendType' => 'text',
+                    'frontendInput' => 'multiselect',
+                    'is_searchable' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                        ['value' => '46', 'label' => 'green'],
+                    ],
+                ],
+                [10 => '44,45', 11 => '45,46'],
+                ['multicolor' => [44, 45, 46], 'multicolor_value' => ['red', 'black', 'green']],
+            ],
+            'excluded attribute' => [
+                10,
+                [
+                    'code' => 'price',
+                    'backendType' => 'int',
+                    'frontendInput' => 'int',
+                    'is_searchable' => false,
+                    'options' => []
+                ],
+                15,
+                []
             ],
         ];
     }

@@ -31,7 +31,8 @@ var app = angular.module(
         'home',
         'auth-dialog',
         'system-config',
-        'marketplace-credentials'
+        'marketplace-credentials',
+        'ngSanitize'
     ]);
 
 app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $stateProvider) {
