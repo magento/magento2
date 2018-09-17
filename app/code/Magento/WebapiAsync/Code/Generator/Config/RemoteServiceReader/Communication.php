@@ -67,7 +67,8 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
                         CommunicationConfig::HANDLER_TYPE   => $serviceClass,
                         CommunicationConfig::HANDLER_METHOD => $serviceMethod,
                     ],
-                ]
+                ],
+                false
             );
             $rewriteTopicParams = [
                 CommunicationConfig::TOPIC_IS_SYNCHRONOUS => false,

@@ -124,7 +124,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $requestSchema,
                 $responseSchema
             );
-            $isSynchronous = $this->extractTopicIsSynchronous($topicNode) ?? null;
+            $isSynchronous = $this->extractTopicIsSynchronous($topicNode);
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
@@ -136,7 +136,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             } elseif ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
-                    Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous ?? true,
+                    Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
                     Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema: null,
@@ -145,7 +145,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             } elseif ($requestSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
-                    Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous ?? false,
+                    Config::TOPIC_IS_SYNCHRONOUS => false,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
                     Config::TOPIC_RESPONSE => null,
@@ -265,17 +265,15 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Extract is_synchronous topic value.
      *
      * @param \DOMNode $topicNode
-     * @return boolean|null
+     * @return bool
      */
-    protected function extractTopicIsSynchronous($topicNode)
+    private function extractTopicIsSynchronous($topicNode): bool
     {
         $attributeName = Config::TOPIC_IS_SYNCHRONOUS;
         $topicAttributes = $topicNode->attributes;
         if (!$topicAttributes->getNamedItem($attributeName)) {
-            return null;
+            return true;
         }
-        $value = $topicAttributes->getNamedItem($attributeName)->nodeValue;
-        $isSynchronous = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        return $isSynchronous;
+        return $this->booleanUtils->toBoolean($topicAttributes->getNamedItem($attributeName)->nodeValue);
     }
 }
