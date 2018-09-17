@@ -13,6 +13,8 @@ use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
 
 /**
+ * QueryComplexityLimiter
+ *
  * Sets limits for query complexity. A single GraphQL query can potentially
  * generate thousands of database operations so, the very complex queries
  * should be filtered and rejected.
@@ -43,6 +45,11 @@ class QueryComplexityLimiter
         $this->queryComplexity = $queryComplexity;
     }
 
+    /**
+     * Sets limits for query complexity
+     *
+     * @return void
+     */
     public function execute(): void
     {
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
