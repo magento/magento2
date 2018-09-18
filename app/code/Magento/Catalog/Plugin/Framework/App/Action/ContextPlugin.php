@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\App\Action;
+namespace Magento\Catalog\Plugin\Framework\App\Action;
 
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
@@ -56,21 +56,17 @@ class ContextPlugin
     public function beforeDispatch()
     {
         if ($this->toolbarMemorizer->isMemorizingAllowed()) {
-            $order = $this->catalogSession->getData(ToolbarModel::ORDER_PARAM_NAME);
-            if ($order) {
-                $this->httpContext->setValue(ToolbarModel::ORDER_PARAM_NAME, $order, false);
-            }
-            $direction = $this->catalogSession->getData(ToolbarModel::DIRECTION_PARAM_NAME);
-            if ($direction) {
-                $this->httpContext->setValue(ToolbarModel::DIRECTION_PARAM_NAME, $direction, false);
-            }
-            $mode = $this->catalogSession->getData(ToolbarModel::MODE_PARAM_NAME);
-            if ($mode) {
-                $this->httpContext->setValue(ToolbarModel::MODE_PARAM_NAME, $mode, false);
-            }
-            $limit = $this->catalogSession->getData(ToolbarModel::LIMIT_PARAM_NAME);
-            if ($limit) {
-                $this->httpContext->setValue(ToolbarModel::LIMIT_PARAM_NAME, $limit, false);
+            $params = [
+                ToolbarModel::ORDER_PARAM_NAME,
+                ToolbarModel::DIRECTION_PARAM_NAME,
+                ToolbarModel::MODE_PARAM_NAME,
+                ToolbarModel::LIMIT_PARAM_NAME
+            ];
+            foreach ($params as $param) {
+                $paramValue = $this->catalogSession->getData($param);
+                if ($paramValue) {
+                    $this->httpContext->setValue($param, $paramValue, false);
+                }
             }
         }
     }

@@ -150,6 +150,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context|null $httpContext
      * @param \Magento\Framework\Data\Form\FormKey|null $formKey
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
