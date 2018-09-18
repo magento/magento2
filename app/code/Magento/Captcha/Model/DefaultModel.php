@@ -314,7 +314,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
         $storedWord = $this->getWord();
         $this->clearWord();
 
-        if (!$word || !$storedWord) {
+        if ($word != $storedWord) {
             return false;
         }
 

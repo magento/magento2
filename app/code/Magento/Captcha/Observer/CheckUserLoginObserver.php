@@ -135,7 +135,7 @@ class CheckUserLoginObserver implements ObserverInterface
             : null;
         if ($captchaModel->isRequired($login)) {
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
-            if ($word && !$captchaModel->isCorrect($word)) {
+            if (!$captchaModel->isCorrect($word)) {
                 try {
                     $customer = $this->getCustomerRepository()->get($login);
                     $this->getAuthentication()->processAuthenticationFailure($customer->getId());
