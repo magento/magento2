@@ -12,4 +12,8 @@
         <observer instance="Magento\InventoryLowQuantityNotification\Observer\BulkTransferConfiguration"
                   name="magento_inventory_bulk_transfer_low_quantity_notification"/>
     </event>
+    <event name="inventory_bulk_source_unassign_after">
+        <observer instance="Magento\InventoryLowQuantityNotification\Observer\BulkUnassignConfiguration"
+                  name="magento_inventory_bulk_unassign_low_quantity_notification"/>
+    </event>
 </config>
