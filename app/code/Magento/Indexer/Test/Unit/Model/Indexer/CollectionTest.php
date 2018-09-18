@@ -200,11 +200,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param array $arguments
      * @dataProvider stubMethodsDataProvider
      */
-    public function testStubMethods(string $methodName, array $arguments)
+    public function testInvalidMethods(string $methodName, array $arguments)
     {
         $this->statesFactoryMock
             ->expects($this->never())
             ->method('create');
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage(
+            Collection::class . "::$methodName should not be used in the current implementation"
+        );
         $collection = $this->objectManagerHelper->getObject(
             Collection::class,
             [
@@ -251,37 +255,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'toOptionHash',
                 []
             ],
-        ];
-    }
-
-    /**
-     * @param string $methodName
-     * @param array $arguments
-     * @dataProvider stubMethodsWithReturnSelfDataProvider
-     */
-    public function testStubMethodsWithReturnSelf(string $methodName, array $arguments)
-    {
-        $this->statesFactoryMock
-            ->expects($this->never())
-            ->method('create');
-        $collection = $this->objectManagerHelper->getObject(
-            Collection::class,
-            [
-                'entityFactory' => $this->entityFactoryMock,
-                'config' => $this->configMock,
-                'statesFactory' => $this->statesFactoryMock,
-                '_items' => [$this->getIndexerMock()],
-            ]
-        );
-        $this->assertInstanceOf(Collection::class, $collection->{$methodName}(...$arguments));
-    }
-
-    /**
-     * @return array
-     */
-    public function stubMethodsWithReturnSelfDataProvider()
-    {
-        return [
             [
                 'setDataToAll',
                 ['colName', 'value']
