@@ -115,9 +115,6 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             $this->cart->save();
 
-            /**
-             * @todo remove wishlist observer \Magento\Wishlist\Observer\AddToCart
-             */
             $this->_eventManager->dispatch(
                 'checkout_cart_add_product_complete',
                 ['product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse()]
