@@ -218,8 +218,8 @@ define([
          * Apply resolved billing address to quote
          */
         applyBillingAddress: function () {
-            var shippingAddress;
-            var isBillingAddressInitialized;
+            var shippingAddress,
+                isBillingAddressInitialized;
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
