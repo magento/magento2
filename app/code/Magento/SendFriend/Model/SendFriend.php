@@ -235,7 +235,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         }
 
         $email = $this->getSender()->getEmail();
-        if (empty($email) or !\Zend_Validate::is($email, 'EmailAddress')) {
+        $validator = new \Zend\Validator\EmailAddress();
+        if (empty($email) or !$validator->isValid($email)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -250,7 +251,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!$validator->isValid($email)) {
                 $errors[] = __('Please enter a correct recipient email address.');
                 break;
             }
