@@ -13,8 +13,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
-* Service for checking that the shopping cart operations are allowed for current user
-*/
+ * Service for checking that the shopping cart operations are allowed for current user
+ */
 class IsCartMutationAllowedForCurrentUser
 {
     /**
