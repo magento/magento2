@@ -68,9 +68,9 @@ class InventoryTransferTest extends TestCase
     /**
      * @param string $sku
      * @param string $sourceCode
-     * @return float
+     * @return SourceItemInterface
      */
-    private function getSourceItemQuantity(string $sku, string $sourceCode): ?float
+    private function getSourceItem(string $sku, string $sourceCode): ?SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $sku)
@@ -82,7 +82,7 @@ class InventoryTransferTest extends TestCase
             return null;
         }
 
-        return (float) reset($sourceItems)->getQuantity();
+        return current($sourceItems);
     }
 
     /**
@@ -107,8 +107,42 @@ class InventoryTransferTest extends TestCase
 
         self::assertEquals(
             8.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            $this->getSourceItem('SKU-1', 'eu-2')->getQuantity(),
             'Items were not correctly moved to destination source'
+        );
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDbIsolation enabled
+     */
+    public function testBulkInventoryTransferWithOutOfStockOrigin()
+    {
+        $skus = ['SKU-1'];
+
+        $previousSourceStatus = $this->getSourceItem('SKU-1', 'eu-3')->getStatus();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->bulkInventoryTransfer->execute($skus, 'eu-3', 'eu-1', true);
+
+        $sourceItemCodes = $this->getSourceItemCodesBySku('SKU-1');
+        self::assertContains(
+            'eu-1',
+            $sourceItemCodes,
+            'Items with out of stock quantity are not transferred to destination'
+        );
+
+        self::assertEquals(
+            15.5,
+            $this->getSourceItem('SKU-1', 'eu-1')->getQuantity(),
+            'Items with out of stock quantity were not correctly moved to destination source'
+        );
+        self::assertEquals(
+            $previousSourceStatus,
+            $this->getSourceItem('SKU-1', 'eu-1')->getStatus(),
+            'Stock status was not copied to existing source when origin was out of stock'
         );
     }
 
@@ -122,6 +156,8 @@ class InventoryTransferTest extends TestCase
     {
         $skus = ['SKU-1'];
 
+        $previousSourceStatus = $this->getSourceItem('SKU-1', 'eu-1')->getStatus();
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->bulkInventoryTransfer->execute($skus, 'eu-1', 'us-1', false);
 
@@ -134,14 +170,19 @@ class InventoryTransferTest extends TestCase
 
         self::assertEquals(
             0,
-            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
+            $this->getSourceItem('SKU-1', 'eu-1')->getQuantity(),
             'Items were not removed from source during inventory transfer'
         );
 
         self::assertEquals(
             5.5,
-            $this->getSourceItemQuantity('SKU-1', 'us-1'),
+            $this->getSourceItem('SKU-1', 'us-1')->getQuantity(),
             'Items were not correctly moved to destination source'
+        );
+        self::assertEquals(
+            $previousSourceStatus,
+            $this->getSourceItem('SKU-1', 'us-1')->getStatus(),
+            'Destination stock status should have the same configuration as the origin'
         );
     }
 
@@ -151,9 +192,11 @@ class InventoryTransferTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDbIsolation enabled
      */
-    public function testBulkInventoryTransferFromUnassignedSourceSource()
+    public function testBulkInventoryTransferFromUnassignedOriginSource()
     {
         $skus = ['SKU-1'];
+
+        $previousDestinationStatus = $this->getSourceItem('SKU-1', 'eu-1')->getStatus();
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->bulkInventoryTransfer->execute($skus, 'us-1', 'eu-1', false);
@@ -167,8 +210,13 @@ class InventoryTransferTest extends TestCase
 
         self::assertEquals(
             5.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
+            $this->getSourceItem('SKU-1', 'eu-1')->getQuantity(),
             'Destination source is changed even if origin source was not assigned'
+        );
+        self::assertEquals(
+            $previousDestinationStatus,
+            $this->getSourceItem('SKU-1', 'eu-1')->getStatus(),
+            'Stock status on destination was changed even if the source was not assigned'
         );
     }
 
@@ -182,6 +230,8 @@ class InventoryTransferTest extends TestCase
     {
         $skus = ['SKU-1'];
 
+        $previousSourceStatus = $this->getSourceItem('SKU-1', 'eu-1')->getStatus();
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->bulkInventoryTransfer->execute($skus, 'eu-1', 'eu-2', false);
 
@@ -194,20 +244,29 @@ class InventoryTransferTest extends TestCase
 
         self::assertEquals(
             0,
-            $this->getSourceItemQuantity('SKU-1', 'eu-1'),
+            $this->getSourceItem('SKU-1', 'eu-1')->getQuantity(),
             'Items were not removed from source during inventory transfer'
+        );
+        self::assertEquals(
+            SourceItemInterface::STATUS_OUT_OF_STOCK,
+            $this->getSourceItem('SKU-1', 'eu-1')->getStatus(),
+            'Origin source was not set to out of stock'
         );
 
         self::assertNotEquals(
             5.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            $this->getSourceItem('SKU-1', 'eu-2')->getQuantity(),
             'Item quantity on destination source is not incremented by origin source'
         );
-
         self::assertEquals(
             8.5,
-            $this->getSourceItemQuantity('SKU-1', 'eu-2'),
+            $this->getSourceItem('SKU-1', 'eu-2')->getQuantity(),
             'Items were not correctly moved to destination source'
+        );
+        self::assertEquals(
+            $previousSourceStatus,
+            $this->getSourceItem('SKU-1', 'eu-2')->getStatus(),
+            'Stock status on destination should be the same as the origin'
         );
     }
 }
