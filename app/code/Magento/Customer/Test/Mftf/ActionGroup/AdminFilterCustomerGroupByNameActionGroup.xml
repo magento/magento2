@@ -12,9 +12,9 @@
         <arguments>
             <argument name="customerGroupName" type="string"/>
         </arguments>
-        <click selector="{{AdminCustomerGroupFiltersSection.filterButton}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
-        <conditionalClick selector="{{AdminCustomerGroupFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminCustomerGroupFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-        <fillField userInput="{{customerGroupName}}" selector="{{AdminCustomerGroupFiltersSection.nameField}}" stepKey="fillNameFieldOnFiltersSection"/>
-        <click selector="{{AdminCustomerGroupFiltersSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <fillField userInput="{{customerGroupName}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('customer_group_code')}}" stepKey="fillNameFieldOnFiltersSection"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
     </actionGroup>
 </actionGroups>
