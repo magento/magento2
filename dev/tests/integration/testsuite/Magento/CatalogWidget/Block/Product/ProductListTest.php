@@ -131,4 +131,43 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             "Product collection was not filtered according to the widget condition."
         );
     }
+
+    /**
+     * Check that collection returns correct result if use not contains operator for string attribute
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
+     * @dataProvider createCollectionForSkuDataProvider
+     * @return void
+     */
+    public function testCreateCollectionForSku($encodedConditions)
+    {
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+        $this->assertEquals(
+            1,
+            $productCollection->count(),
+            "Product collection was not filtered according to the widget condition."
+        );
+        $this->assertEquals('virtual-product', $productCollection->getFirstItem()->getSku());
+    }
+
+    /**
+     * @return array
+     */
+    public function createCollectionForSkuDataProvider()
+    {
+        return [
+            'contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+                . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],'
+                . '`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+                . '`attribute`:`sku`,`operator`:`^[^]`,`value`:`virtual`^]^]'],
+            'not contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+                . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],'
+                . '`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+                . '`attribute`:`sku`,`operator`:`!^[^]`,`value`:`simple`^]^]']
+        ];
+    }
 }
