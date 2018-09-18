@@ -14,7 +14,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
@@ -80,9 +80,9 @@ class Save extends Attribute implements HttpPostActionInterface
     private $presentation;
 
     /**
-     * @var OptionsDataSerializer|null
+     * @var FormData|null
      */
-    private $optionsDataSerializer;
+    private $dataSerializer;
 
     /**
      * @param Context $context
@@ -97,7 +97,7 @@ class Save extends Attribute implements HttpPostActionInterface
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
      * @param Presentation|null $presentation
-     * @param OptionsDataSerializer|null $optionsDataSerializer
+     * @param FormData|null $dataSerializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +113,7 @@ class Save extends Attribute implements HttpPostActionInterface
         Product $productHelper,
         LayoutFactory $layoutFactory,
         Presentation $presentation = null,
-        OptionsDataSerializer $optionsDataSerializer = null
+        FormData $dataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -124,8 +124,8 @@ class Save extends Attribute implements HttpPostActionInterface
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
         $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
-        $this->optionsDataSerializer = $optionsDataSerializer
-            ?: ObjectManager::getInstance()->get(OptionsDataSerializer::class);
+        $this->dataSerializer = $dataSerializer
+            ?: ObjectManager::getInstance()->get(FormData::class);
     }
 
     /**
@@ -140,7 +140,7 @@ class Save extends Attribute implements HttpPostActionInterface
     public function execute()
     {
         try {
-            $optionData = $this->optionsDataSerializer
+            $optionData = $this->dataSerializer
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "

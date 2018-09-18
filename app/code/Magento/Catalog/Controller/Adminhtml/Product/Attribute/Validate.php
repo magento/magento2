@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -39,9 +39,9 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private $multipleAttributeList;
 
     /**
-     * @var OptionsDataSerializer|null
+     * @var FormData|null
      */
-    private $optionsDataSerializer;
+    private $dataSerializer;
 
     /**
      * Constructor
@@ -53,7 +53,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
-     * @param OptionsDataSerializer|null $optionsDataSerializer
+     * @param FormData|null $dataSerializer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -63,14 +63,14 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        OptionsDataSerializer $optionsDataSerializer = null
+        FormData $dataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->multipleAttributeList = $multipleAttributeList;
-        $this->optionsDataSerializer = $optionsDataSerializer ?: ObjectManager::getInstance()
-            ->get(OptionsDataSerializer::class);
+        $this->dataSerializer = $dataSerializer ?: ObjectManager::getInstance()
+            ->get(FormData::class);
     }
 
     /**
@@ -85,7 +85,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         $response = new DataObject();
         $response->setError(false);
         try {
-            $optionsData = $this->optionsDataSerializer
+            $optionsData = $this->dataSerializer
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\Product\AttributeSet\Build;
@@ -85,9 +85,9 @@ class SaveTest extends AttributeTest
     protected $inputTypeValidatorMock;
 
     /**
-     * @var OptionsDataSerializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $optionsDataSerializerMock;
+    private $dataSerializerMock;
 
     /**
      * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -135,7 +135,7 @@ class SaveTest extends AttributeTest
         $this->inputTypeValidatorMock = $this->getMockBuilder(InputTypeValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionsDataSerializerMock = $this->getMockBuilder(OptionsDataSerializer::class)
+        $this->dataSerializerMock = $this->getMockBuilder(FormData::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -170,7 +170,7 @@ class SaveTest extends AttributeTest
             'validatorFactory' => $this->validatorFactoryMock,
             'groupCollectionFactory' => $this->groupCollectionFactoryMock,
             'layoutFactory' => $this->layoutFactoryMock,
-            'optionsDataSerializer' => $this->optionsDataSerializerMock,
+            'dataSerializer' => $this->dataSerializerMock,
         ]);
     }
 
@@ -182,7 +182,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
             ]);
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with('')
@@ -213,7 +213,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
             ]);
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with('')
@@ -273,7 +273,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, true],
                 ['serialized_options', '[]', $serializedOptions],
             ]);
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)

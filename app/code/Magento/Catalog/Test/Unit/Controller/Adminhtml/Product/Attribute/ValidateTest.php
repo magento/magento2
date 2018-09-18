@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
-use Magento\Catalog\Model\Product\Attribute\Option\OptionsDataSerializer;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
@@ -63,9 +63,9 @@ class ValidateTest extends AttributeTest
     protected $layoutMock;
 
     /**
-     * @var OptionsDataSerializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $optionsDataSerializerMock;
+    private $dataSerializerMock;
 
     protected function setUp()
     {
@@ -92,7 +92,7 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
-        $this->optionsDataSerializerMock = $this->getMockBuilder(OptionsDataSerializer::class)
+        $this->dataSerializerMock = $this->getMockBuilder(FormData::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,7 +116,7 @@ class ValidateTest extends AttributeTest
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'layoutFactory' => $this->layoutFactoryMock,
                 'multipleAttributeList' => ['select' => 'option'],
-                'optionsDataSerializer' => $this->optionsDataSerializerMock,
+                'dataSerializer' => $this->dataSerializerMock,
             ]
         );
     }
@@ -184,7 +184,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
@@ -319,7 +319,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
@@ -431,7 +431,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->optionsDataSerializerMock
+        $this->dataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
