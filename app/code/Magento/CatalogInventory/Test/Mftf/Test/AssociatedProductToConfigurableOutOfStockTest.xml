@@ -107,6 +107,8 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryLoad"/>
 
+        <magentoCLI stepKey="runCron" command="cron:run --group='index'"/>
+
         <!-- Wait till cron job runs for schedule updates -->
         <wait time="60" stepKey="waitForUpdateStarts"/>
 
