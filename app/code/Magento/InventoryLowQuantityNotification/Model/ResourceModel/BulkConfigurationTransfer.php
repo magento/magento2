@@ -75,25 +75,23 @@ class BulkConfigurationTransfer
 
                 $res = $connection->fetchOne($qry);
 
-                if ($res === null) {
-                    $notifyStockQty = $res === null ? null : (float) $res;
-                    try {
-                        $connection->insert(
-                            $tableName,
-                            [
-                                'source_code' => $destinationSource,
-                                'sku' => $sku,
-                                'notify_stock_qty' => $notifyStockQty,
-                            ]
-                        );
-                    } catch (DuplicateException $e) {
-                        $connection->update(
-                            $tableName,
-                            ['notify_stock_qty' => $notifyStockQty],
-                            $connection->quoteInto('sku IN (?)', $skus) . ' AND ' .
-                            $connection->quoteInto('source_code = ?', $destinationSource)
-                        );
-                    }
+                $notifyStockQty = $res === null ? null : (float) $res;
+                try {
+                    $connection->insert(
+                        $tableName,
+                        [
+                            'source_code' => $destinationSource,
+                            'sku' => $sku,
+                            'notify_stock_qty' => $notifyStockQty,
+                        ]
+                    );
+                } catch (DuplicateException $e) {
+                    $connection->update(
+                        $tableName,
+                        ['notify_stock_qty' => $notifyStockQty],
+                        $connection->quoteInto('sku IN (?)', $skus) . ' AND ' .
+                        $connection->quoteInto('source_code = ?', $destinationSource)
+                    );
                 }
             }
         }
