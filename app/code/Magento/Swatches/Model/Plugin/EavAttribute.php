@@ -81,9 +81,9 @@ class EavAttribute
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper,
+        \Magento\Eav\Model\Entity\Attribute\Source\TableFactory $tableFactory,
         Json $serializer = null,
-        SwatchResource $swatchResource = null,
-        \Magento\Eav\Model\Entity\Attribute\Source\TableFactory $tableFactory
+        SwatchResource $swatchResource = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
