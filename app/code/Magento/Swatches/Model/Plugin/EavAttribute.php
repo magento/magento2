@@ -198,10 +198,10 @@ class EavAttribute
         if (!empty($optionsArray) && is_array($optionsArray)) {
             $optionsArray = $this->prepareOptionIds($optionsArray);
 
-            $defaultStoreAttribute = clone $attribute;
-            $defaultStoreAttribute->setStoreId(0);
+            $adminStoreAttribute = clone $attribute;
+            $adminStoreAttribute->setStoreId(0);
             $sourceModel = $this->tableFactory->create();
-            $sourceModel->setAttribute($defaultStoreAttribute);
+            $sourceModel->setAttribute($adminStoreAttribute);
 
             $this->prepareOptionLinks($optionsArray, $sourceModel);
         }
