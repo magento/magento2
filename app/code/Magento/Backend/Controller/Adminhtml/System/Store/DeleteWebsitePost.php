@@ -8,6 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+
 /**
  * Delete website.
  */
