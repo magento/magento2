@@ -24,7 +24,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 /**
  * Class CategoryProcessUrlRewriteMovingObserverTest
  *
- * @covers \Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteMovingObserver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryProcessUrlRewriteMovingObserverTest extends \PHPUnit\Framework\TestCase
 {
