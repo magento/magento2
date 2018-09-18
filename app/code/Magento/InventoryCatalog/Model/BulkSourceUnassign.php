@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
@@ -15,7 +14,6 @@ use Magento\InventoryCatalogApi\Model\BulkSourceUnassignValidatorInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkSourceUnassign as BulkSourceUnassignResource;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
 use Magento\CatalogInventory\Model\Indexer\Stock as LegacyIndexer;
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 
 /**
  * @inheritdoc
@@ -53,16 +51,6 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
     private $getProductIdsBySkus;
 
     /**
-     * @var EventManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
      * MassProductSourceAssign constructor.
      * @param BulkSourceUnassignValidatorInterface $unassignValidator
      * @param BulkSourceUnassignResource $bulkSourceUnassign
@@ -70,8 +58,6 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
      * @param GetProductIdsBySkus $getProductIdsBySkus
      * @param SourceIndexer $sourceIndexer
      * @param LegacyIndexer $legacyIndexer
-     * @param EventManagerInterface $eventManager
-     * @param DataObjectFactory $dataObjectFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -80,9 +66,7 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         DefaultSourceProviderInterface $defaultSourceProvider,
         GetProductIdsBySkus $getProductIdsBySkus,
         SourceIndexer $sourceIndexer,
-        LegacyIndexer $legacyIndexer,
-        EventManagerInterface $eventManager,
-        DataObjectFactory $dataObjectFactory
+        LegacyIndexer $legacyIndexer
     ) {
         $this->unassignValidator = $unassignValidator;
         $this->bulkSourceUnassign = $bulkSourceUnassign;
@@ -90,8 +74,6 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         $this->legacyIndexer = $legacyIndexer;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
-        $this->eventManager = $eventManager;
-        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
@@ -116,14 +98,7 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
-        $operation = $this->dataObjectFactory->create(['data' => [
-            'skus' => $skus,
-            'source_codes' => $sourceCodes,
-        ]]);
-
-        $this->eventManager->dispatch('inventory_bulk_source_unassign_before', ['operation' => $operation]);
         $res = $this->bulkSourceUnassign->execute($skus, $sourceCodes);
-        $this->eventManager->dispatch('inventory_bulk_source_unassign_after', ['operation' => $operation]);
 
         $this->sourceIndexer->executeList($sourceCodes);
         if (in_array($this->defaultSourceProvider->getCode(), $sourceCodes, true)) {

@@ -112,7 +112,7 @@ class BulkConfigurationTransfer
                             $connection->update(
                                 $tableName,
                                 ['notify_stock_qty' => $notifyStockQty],
-                                $connection->quoteInto('sku IN (?)', $skus) . ' AND ' .
+                                $connection->quoteInto('sku = ?', $sku) . ' AND ' .
                                 $connection->quoteInto('source_code = ?', $destinationSource)
                             );
                         }
