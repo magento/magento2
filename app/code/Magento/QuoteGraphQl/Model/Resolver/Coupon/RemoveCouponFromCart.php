@@ -13,16 +13,14 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\QuoteGraphQl\Model\Authorization\CartMutationInterface;
+use Magento\QuoteGraphQl\Model\Authorization\IsCartMutationAllowedForCurrentUser;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class RemoveCouponFromCart implements ResolverInterface
 {
@@ -35,54 +33,51 @@ class RemoveCouponFromCart implements ResolverInterface
      * @var CouponManagementInterface
      */
     private $couponManagement;
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
 
     /**
-     * @var CartMutationInterface
+     * @var IsCartMutationAllowedForCurrentUser
      */
-    private $cartMutationAuthorization;
+    private $isCartMutationAllowedForCurrentUser;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param CouponManagementInterface $couponManagement
-     * @param CartMutationInterface $cartMutationAuthorization
+     * @param IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId
      */
     public function __construct(
-        ValueFactory $valueFactory,
         CouponManagementInterface $couponManagement,
-        CartMutationInterface $cartMutationAuthorization,
+        IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToId
     ) {
-        $this->valueFactory = $valueFactory;
         $this->couponManagement = $couponManagement;
-        $this->cartMutationAuthorization = $cartMutationAuthorization;
+        $this->isCartMutationAllowedForCurrentUser = $isCartMutationAllowedForCurrentUser;
         $this->maskedQuoteIdToId = $maskedQuoteIdToId;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $maskedCartId = $args['input']['cart_id'];
-
-        if (!$maskedCartId) {
-            throw new GraphQlInputException(__('Required parameter is missing'));
+        if (!isset($args['input']['cart_id'])) {
+            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+        $maskedCartId = $args['input']['cart_id'];
 
         try {
             $cartId = $this->maskedQuoteIdToId->execute($maskedCartId);
         } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('Could not find a cart with the provided ID'));
+            throw new GraphQlNoSuchEntityException(
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $maskedCartId])
+            );
         }
 
-        if (!$this->cartMutationAuthorization->isAllowed((int) $cartId)) {
+        if (false === $this->isCartMutationAllowedForCurrentUser->execute($cartId)) {
             throw new GraphQlAuthorizationException(
-                __('The current user cannot perform operations on the selected cart')
+                __(
+                    'The current user cannot perform operations on cart "%masked_cart_id"',
+                    ['masked_cart_id' => $maskedCartId]
+                )
             );
         }
 
@@ -95,13 +90,8 @@ class RemoveCouponFromCart implements ResolverInterface
         }
 
         $data['cart']['applied_coupon'] = [
-            'code' => ''
+            'code' => '',
         ];
-
-        $result = function () use ($data) {
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+        return $data;
     }
 }

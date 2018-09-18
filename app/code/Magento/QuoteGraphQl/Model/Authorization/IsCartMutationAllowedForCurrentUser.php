@@ -13,9 +13,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
- * {@inheritDoc}
- */
-class CartMutation implements CartMutationInterface
+* Service for checking that the shopping cart operations are allowed for current user
+*/
+class IsCartMutationAllowedForCurrentUser
 {
     /**
      * @var CartRepositoryInterface
@@ -40,9 +40,13 @@ class CartMutation implements CartMutationInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Check that the shopping cart operations are allowed for current user
+     *
+     * @param int $quoteId
+     * @return bool
+     * @throws GraphQlNoSuchEntityException
      */
-    public function isAllowed(int $quoteId): bool
+    public function execute(int $quoteId): bool
     {
         try {
             $quote = $this->cartRepository->get($quoteId);
@@ -58,10 +62,6 @@ class CartMutation implements CartMutationInterface
         }
 
         /* If the quote belongs to the current customer allow operations */
-        if ($customerId == $this->userContext->getUserId()) {
-            return true;
-        }
-
-        return false;
+        return $customerId == $this->userContext->getUserId();
     }
 }
