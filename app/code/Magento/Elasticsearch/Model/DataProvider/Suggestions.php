@@ -219,18 +219,18 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * Is Suggestions Allowed
+     * Is Search Suggestions Allowed
      *
      * @return bool
      */
     private function isSuggestionsAllowed()
     {
-        $isSearchSuggestionsEnabled = $this->scopeConfig->isSetFlag(
+        $isSuggestionsEnabled = $this->scopeConfig->isSetFlag(
             self::CONFIG_SUGGESTION_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
         $isEnabled = $this->config->isElasticsearchEnabled();
-        $isSuggestionsAllowed = ($isEnabled && $isSearchSuggestionsEnabled);
+        $isSuggestionsAllowed = ($isEnabled && $isSuggestionsEnabled);
         return $isSuggestionsAllowed;
     }
 }

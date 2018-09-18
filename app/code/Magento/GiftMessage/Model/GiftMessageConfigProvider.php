@@ -108,7 +108,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
             ScopeInterface::SCOPE_STORE
         );
-        $itemLevelGiftMessageConfiguration = $this->scopeConfiguration->isSetFlag(
+        $itemLevelGiftMessage = $this->scopeConfiguration->isSetFlag(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             ScopeInterface::SCOPE_STORE
         );
@@ -119,7 +119,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         }
 
         $itemMessages = $this->getItemLevelGiftMessages();
-        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
+        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessage;
         $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
 
         $configuration['priceFormat'] = $this->localeFormat->getPriceFormat(
