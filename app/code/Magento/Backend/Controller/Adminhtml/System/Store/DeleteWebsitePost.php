@@ -6,9 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
+class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
