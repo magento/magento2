@@ -194,10 +194,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     }
                 }
                 
-                
                 $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
                 $selections = $options[$optionId]['selections'];
-                array_walk($selections, function(&$selection, $selectionId) use ($preConfiguredQtys) {
+                array_walk($selections, function (&$selection, $selectionId) use ($preConfiguredQtys) {
                     if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
                         $selection['qty'] = $preConfiguredQtys[$selectionId];
                     } else if ((int)$preConfiguredQtys > 0) {
