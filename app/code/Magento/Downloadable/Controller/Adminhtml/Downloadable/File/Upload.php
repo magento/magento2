@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
@@ -12,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @package Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  */
-class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
+class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Downloadable\Model\Link
