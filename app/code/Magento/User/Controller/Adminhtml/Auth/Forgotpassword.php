@@ -6,6 +6,8 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Security\Model\SecurityManager;
 use Magento\Backend\App\Action\Context;
@@ -23,7 +25,7 @@ use Magento\User\Model\Spi\NotificatorInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Forgotpassword extends Auth
+class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var SecurityManager
