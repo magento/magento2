@@ -5,9 +5,14 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Order credit memo tax total calculation model
+ */
 class Tax extends AbstractTotal
 {
     /**
+     * Collect credit memo tax total
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      *
@@ -72,7 +77,7 @@ class Tax extends AbstractTotal
         $isPartialShippingRefunded = false;
         if ($invoice = $creditmemo->getInvoice()) {
             //recalculate tax amounts in case if refund shipping value was changed
-            if ($order->getBaseShippingAmount() && $creditmemo->getBaseShippingAmount()) {
+            if ($order->getBaseShippingAmount() && $creditmemo->getBaseShippingAmount() !== null) {
                 $taxFactor = $creditmemo->getBaseShippingAmount() / $order->getBaseShippingAmount();
                 $shippingTaxAmount = $invoice->getShippingTaxAmount() * $taxFactor;
                 $baseShippingTaxAmount = $invoice->getBaseShippingTaxAmount() * $taxFactor;
