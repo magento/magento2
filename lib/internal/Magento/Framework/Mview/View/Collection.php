@@ -96,7 +96,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
             $orderedViewIds[] = $indexer->load($indexerId)->getViewId();
         }
         $orderedViewIds = array_filter($orderedViewIds);
-        $orderedViewIds += array_diff(array_keys($this->config->getViews()), $orderedViewIds);
+        $orderedViewIds = array_merge($orderedViewIds, array_diff(array_keys($this->config->getViews()), $orderedViewIds));
 
         return $orderedViewIds;
     }
