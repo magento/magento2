@@ -6,7 +6,7 @@
 namespace Magento\NewRelicReporting\Model;
 
 /**
- * Class Config
+ * NewRelic configuration model
  */
 class Config
 {
@@ -162,6 +162,16 @@ class Config
     public function getNewRelicAppName()
     {
         return (string)$this->scopeConfig->getValue('newrelicreporting/general/app_name');
+    }
+
+    /**
+     * Returns configured separate apps value
+     *
+     * @return bool
+     */
+    public function isSeparateApps()
+    {
+        return (bool)$this->scopeConfig->getValue('newrelicreporting/general/separate_apps');
     }
 
     /**
