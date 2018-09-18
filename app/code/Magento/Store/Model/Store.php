@@ -460,11 +460,12 @@ class Store extends AbstractExtensibleModel implements
         return $this->_session;
     }
 
-    /**
-     * Validation rules for store
-     *
-     * @return \Zend_Validate_Interface|null
-     */
+	/**
+	 * Validation rules for store
+	 *
+	 * @return \Zend_Validate_Interface|null
+	 * @throws \Zend_Validate_Exception
+	 */
     protected function _getValidationRulesBeforeSave()
     {
         $validator = new \Magento\Framework\Validator\DataObject();
@@ -486,13 +487,15 @@ class Store extends AbstractExtensibleModel implements
         return $validator;
     }
 
-    /**
-     * Loading store data
-     *
-     * @param   mixed $key
-     * @param   string $field
-     * @return  $this
-     */
+	/**
+	 * Loading store data
+	 *
+	 * @param   mixed  $key
+	 * @param   string $field
+	 *
+	 * @return  $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function load($key, $field = null)
     {
         if (!is_numeric($key) && $field === null) {
@@ -562,11 +565,12 @@ class Store extends AbstractExtensibleModel implements
         $this->setWebsiteId($website->getId());
     }
 
-    /**
-     * Retrieve store website
-     *
-     * @return Website|bool
-     */
+	/**
+	 * Retrieve store website
+	 *
+	 * @return Website|bool
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getWebsite()
     {
         if ($this->getWebsiteId() === null) {
@@ -575,13 +579,15 @@ class Store extends AbstractExtensibleModel implements
         return $this->websiteRepository->getById($this->getWebsiteId());
     }
 
-    /**
-     * Retrieve url using store configuration specific
-     *
-     * @param   string $route
-     * @param   array $params
-     * @return  string
-     */
+	/**
+	 * Retrieve url using store configuration specific
+	 *
+	 * @param   string $route
+	 * @param   array  $params
+	 *
+	 * @return  string
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getUrl($route = '', $params = [])
     {
         /** @var $url UrlInterface */
@@ -877,12 +883,14 @@ class Store extends AbstractExtensibleModel implements
         return $currency;
     }
 
-    /**
-     * Set current store currency code
-     *
-     * @param   string $code
-     * @return  string
-     */
+	/**
+	 * Set current store currency code
+	 *
+	 * @param   string $code
+	 *
+	 * @return  string
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function setCurrentCurrencyCode($code)
     {
         $code = strtoupper($code);
@@ -968,11 +976,12 @@ class Store extends AbstractExtensibleModel implements
         return explode(',', $this->getConfig($this->_currencyInstalled));
     }
 
-    /**
-     * Retrieve store current currency
-     *
-     * @return Currency
-     */
+	/**
+	 * Retrieve store current currency
+	 *
+	 * @return Currency
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function getCurrentCurrency()
     {
         $currency = $this->getData('current_currency');
@@ -990,21 +999,23 @@ class Store extends AbstractExtensibleModel implements
         return $currency;
     }
 
-    /**
-     * Retrieve current currency rate
-     *
-     * @return float
-     */
+	/**
+	 * Retrieve current currency rate
+	 *
+	 * @return float
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function getCurrentCurrencyRate()
     {
         return $this->getBaseCurrency()->getRate($this->getCurrentCurrency());
     }
 
-    /**
-     * Retrieve root category identifier
-     *
-     * @return int
-     */
+	/**
+	 * Retrieve root category identifier
+	 *
+	 * @return int
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getRootCategoryId()
     {
         if (!$this->getGroup()) {
@@ -1025,11 +1036,12 @@ class Store extends AbstractExtensibleModel implements
         return $this;
     }
 
-    /**
-     * Retrieve group model
-     *
-     * @return Group|bool
-     */
+	/**
+	 * Retrieve group model
+	 *
+	 * @return Group|bool
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getGroup()
     {
         if (null === $this->getGroupId()) {
@@ -1132,11 +1144,12 @@ class Store extends AbstractExtensibleModel implements
         return $this->_getData('default_group_id');
     }
 
-    /**
-     * Check if store can be deleted
-     *
-     * @return boolean
-     */
+	/**
+	 * Check if store can be deleted
+	 *
+	 * @return boolean
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function isCanDelete()
     {
         if (!$this->getId()) {
@@ -1146,12 +1159,13 @@ class Store extends AbstractExtensibleModel implements
         return $this->getGroup()->getStoresCount() > 1;
     }
 
-    /**
-     * Check if store is default
-     *
-     * @return boolean
-     * @since 100.1.0
-     */
+	/**
+	 * Check if store is default
+	 *
+	 * @return boolean
+	 * @since 100.1.0
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function isDefault()
     {
         if (!$this->getId() && $this->getWebsite() && $this->getWebsite()->getStoresCount() == 0) {
@@ -1160,14 +1174,16 @@ class Store extends AbstractExtensibleModel implements
         return $this->getGroup()->getDefaultStoreId() == $this->getId();
     }
 
-    /**
-     * Retrieve current url for store
-     *
-     * @param bool $fromStore
-     * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
+	/**
+	 * Retrieve current url for store
+	 *
+	 * @param bool $fromStore
+	 *
+	 * @return string
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getCurrentUrl($fromStore = true)
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
@@ -1238,22 +1254,24 @@ class Store extends AbstractExtensibleModel implements
         return (bool)$this->_getData('is_active');
     }
 
-    /**
-     * Protect delete from non admin area
-     *
-     * @return $this
-     */
+	/**
+	 * Protect delete from non admin area
+	 *
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(ScopeInterface::SCOPE_STORES, $this->getId());
         return parent::beforeDelete();
     }
 
-    /**
-     * Rewrite in order to clear configuration cache
-     *
-     * @return $this
-     */
+	/**
+	 * Rewrite in order to clear configuration cache
+	 *
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function afterDelete()
     {
         $store = $this;
@@ -1308,11 +1326,12 @@ class Store extends AbstractExtensibleModel implements
         return $this->_isReadOnly;
     }
 
-    /**
-     * Retrieve store group name
-     *
-     * @return string
-     */
+	/**
+	 * Retrieve store group name
+	 *
+	 * @return string
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getFrontendName()
     {
         if (null === $this->_frontendName) {
@@ -1349,7 +1368,7 @@ class Store extends AbstractExtensibleModel implements
     public function getStorePath()
     {
         $parsedUrl = parse_url($this->getBaseUrl());
-        return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+        return $parsedUrl['path'] ?? '/';
     }
 
     /**
