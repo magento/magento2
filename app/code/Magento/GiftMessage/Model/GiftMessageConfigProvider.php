@@ -42,12 +42,12 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      */
     protected $checkoutSession;
 
-	/**
-	 * @var HttpContext
-	 */
-	protected $httpContext;
+    /**
+     * @var HttpContext
+     */
+    protected $httpContext;
 
-	/**
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -63,6 +63,8 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected $formKey;
 
     /**
+     * GiftMessageConfigProvider constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository
@@ -93,7 +95,10 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Config
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getConfig()
     {
@@ -170,12 +175,12 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         return $this->cartRepository->get($cartId);
     }
 
-	/**
-	 * Load already specified item level gift messages and related configuration.
-	 *
-	 * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
-	 * @throws \Magento\Framework\Exception\NoSuchEntityException
-	 */
+    /**
+     * Load already specified item level gift messages and related configuration.
+     *
+     * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function getItemLevelGiftMessages()
     {
         $itemLevelConfig = [];

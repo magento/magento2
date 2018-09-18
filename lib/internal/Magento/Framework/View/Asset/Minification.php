@@ -112,6 +112,8 @@ class Minification
     }
 
     /**
+     * Is Minified Filename
+     *
      * @param string $filename
      * @return bool
      */
@@ -121,6 +123,8 @@ class Minification
     }
 
     /**
+     * Is Excluded
+     *
      * @param string $filename
      * @return boolean
      */
@@ -135,6 +139,8 @@ class Minification
     }
 
     /**
+     * Get Excludes
+     *
      * @param string $contentType
      * @return string[]
      */

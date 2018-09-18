@@ -17,9 +17,11 @@ class BaseUrlChecker
      */
     private $scopeConfig;
 
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
+	/**
+	 * BaseUrlChecker constructor.
+	 *
+	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+	 */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {

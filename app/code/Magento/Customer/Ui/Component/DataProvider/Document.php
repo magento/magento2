@@ -72,6 +72,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
 
     /**
      * Document constructor.
+     *
      * @param AttributeValueFactory $attributeValueFactory
      * @param GroupRepositoryInterface $groupRepository
      * @param CustomerMetadataInterface $customerMetadata
@@ -93,7 +94,12 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-     * @inheritdoc
+     * Get Custom Attribute
+     *
+     * @param string $attributeCode
+     *
+     * @return \Magento\Framework\Api\AttributeInterface|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCustomAttribute($attributeCode)
     {
@@ -117,12 +123,13 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         return parent::getCustomAttribute($attributeCode);
     }
 
-	/**
-	 * Update customer gender value
-	 * Method set gender label instead of id value
-	 * @return void
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Update customer gender value
+     * Method set gender label instead of id value
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function setGenderValue()
     {
         $value = $this->getData(self::$genderAttributeCode);
@@ -141,12 +148,13 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         }
     }
 
-	/**
-	 * Update customer group value
-	 * Method set group code instead id value
-	 * @return void
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Update customer group value
+     * Method set group code instead id value
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function setCustomerGroupValue()
     {
         $value = $this->getData(self::$groupAttributeCode);
@@ -161,6 +169,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     /**
      * Update website value
      * Method set website name instead id value
+     *
      * @return void
      */
     private function setWebsiteValue()
@@ -174,6 +183,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     /**
      * Update confirmation value
      * Method set confirmation text value to match what is shown in grid
+     *
      * @return void
      */
     private function setConfirmationValue()
@@ -197,6 +207,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     /**
      * Update lock expires value
      * Method set account lock text value to match what is shown in grid
+     *
      * @return void
      */
     private function setAccountLockValue()

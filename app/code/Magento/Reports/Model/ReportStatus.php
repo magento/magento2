@@ -20,9 +20,11 @@ class ReportStatus
      */
     private $scopeConfig;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     */
+	/**
+	 * ReportStatus constructor.
+	 *
+	 * @param ScopeConfigInterface $scopeConfig
+	 */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
@@ -42,6 +44,8 @@ class ReportStatus
     }
 
     /**
+     * Get Config Path By Event Type
+     *
      * @param string $reportEventType
      * @return string
      * @throws InputException

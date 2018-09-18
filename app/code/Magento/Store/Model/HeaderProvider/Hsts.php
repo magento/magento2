@@ -32,16 +32,20 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
      */
     protected $scopeConfig;
 
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
+	/**
+	 * Hsts constructor.
+	 *
+	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+	 */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * Whether the header should be attached to the response
+     *
+     * @return bool
      */
     public function canApply()
     {

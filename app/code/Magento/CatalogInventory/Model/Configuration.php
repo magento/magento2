@@ -131,12 +131,14 @@ class Configuration implements StockConfigurationInterface
      */
     protected $storeManager;
 
-    /**
-     * @param ConfigInterface $config
-     * @param ScopeConfigInterface $scopeConfig
-     * @param MinsaleqtyHelper $minsaleqtyHelper
-     * @param StoreManagerInterface $storeManager
-     */
+	/**
+	 * Configuration constructor.
+	 *
+	 * @param ConfigInterface $config
+	 * @param ScopeConfigInterface $scopeConfig
+	 * @param MinsaleqtyHelper $minsaleqtyHelper
+	 * @param StoreManagerInterface $storeManager
+	 */
     public function __construct(
         ConfigInterface $config,
         ScopeConfigInterface $scopeConfig,
@@ -149,9 +151,11 @@ class Configuration implements StockConfigurationInterface
         $this->storeManager = $storeManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+	/**
+	 * Default Scope Id
+	 *
+	 * @return int
+	 */
     public function getDefaultScopeId()
     {
         // TODO: should be fixed in MAGETWO-46043
@@ -160,6 +164,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Is Qty Type Ids
+     *
      * @param int|null $filter
      * @return array
      */
@@ -183,6 +189,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Is Qty
+     *
      * @param int $productTypeId
      * @return bool
      */
@@ -208,6 +216,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Min Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
      */
@@ -221,6 +231,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Min Sale Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param int $customerGroupId
      * @return float
@@ -231,6 +243,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Max Sale Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float|null
      */
@@ -244,6 +258,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Notify Stock Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
      */
@@ -273,6 +289,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Qty Increments
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
      */
@@ -378,6 +396,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Default Config Value
+     *
      * @param string $field
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
@@ -392,6 +412,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Stock Threshold Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
      */

@@ -30,10 +30,12 @@ class AccountConfirmation
      */
     private $registry;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Registry $registry
-     */
+	/**
+	 * AccountConfirmation constructor.
+	 *
+	 * @param ScopeConfigInterface $scopeConfig
+	 * @param Registry $registry
+	 */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Registry $registry

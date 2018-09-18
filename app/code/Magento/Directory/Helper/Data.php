@@ -112,6 +112,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_currencyFactory;
 
     /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
@@ -166,12 +168,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_countryCollection;
     }
 
-	/**
-	 * Retrieve regions data json
-	 *
-	 * @return string
-	 * @throws \Magento\Framework\Exception\NoSuchEntityException
-	 */
+    /**
+     * Retrieve regions data json
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function getRegionJson()
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
@@ -193,17 +195,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_regionJson;
     }
 
-	/**
-	 * Convert currency
-	 *
-	 * @param float  $amount
-	 * @param string $from
-	 * @param string $to
-	 *
-	 * @return float
-	 * @SuppressWarnings(PHPMD.ShortVariable)
-	 * @throws \Magento\Framework\Exception\NoSuchEntityException
-	 */
+    /**
+     * Convert currency
+     *
+     * @param float  $amount
+     * @param string $from
+     * @param string $to
+     *
+     * @return float
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function currencyConvert($amount, $from, $to = null)
     {
         if (empty($this->_currencyCache[$from])) {

@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
+ * 
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Wishlist implements DataProviderInterface
@@ -71,6 +72,8 @@ class Wishlist implements DataProviderInterface
     protected $customerFactory;
 
     /**
+     * Wishlist constructor.
+     *
      * @param \Magento\Wishlist\Helper\Rss $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock
      * @param \Magento\Catalog\Helper\Output $outputHelper
@@ -121,12 +124,12 @@ class Wishlist implements DataProviderInterface
         );
     }
 
-	/**
-	 * Get RSS feed items
-	 *
-	 * @return array
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Get RSS feed items
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getRssData()
     {
         $wishlist = $this->getWishlist();
@@ -193,6 +196,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * GetCacheKey
+     *
      * @return string
      */
     public function getCacheKey()
@@ -201,6 +206,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * Get Cache Lifetime
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -266,6 +273,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * Get Feeds
+     *
      * @return array
      */
     public function getFeeds()
@@ -274,7 +283,9 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Is Auth Required
+     *
+     * @return bool
      */
     public function isAuthRequired()
     {

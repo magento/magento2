@@ -96,6 +96,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_addressConfig;
 
     /**
+     * Address constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -129,6 +131,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Edit Url
+     *
      * @return void
      */
     public function getEditUrl()
@@ -136,6 +140,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Delete Url
+     *
      * @return void
      */
     public function getDeleteUrl()
@@ -143,6 +149,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Create Url
+     *
      * @return void
      */
     public function getCreateUrl()
@@ -150,6 +158,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Renderer
+     *
      * @param BlockInterface|string $renderer
      * @return BlockInterface
      */
@@ -162,15 +172,15 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
-	/**
-	 * Return customer address config value by key and store
-	 *
-	 * @param string                                $key
-	 * @param \Magento\Store\Model\Store|int|string $store
-	 *
-	 * @return string|null
-	 * @throws NoSuchEntityException
-	 */
+    /**
+     * Return customer address config value by key and store
+     *
+     * @param string                                $key
+     * @param \Magento\Store\Model\Store|int|string $store
+     *
+     * @return string|null
+     * @throws NoSuchEntityException
+     */
     public function getConfig($key, $store = null)
     {
         $store = $this->_storeManager->getStore($store);
@@ -185,15 +195,15 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         return isset($this->_config[$websiteId][$key]) ? (string)$this->_config[$websiteId][$key] : null;
     }
 
-	/**
-	 * Return Number of Lines in a Street Address for store
-	 *
-	 * @param \Magento\Store\Model\Store|int|string $store
-	 *
-	 * @return int
-	 * @throws NoSuchEntityException
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Return Number of Lines in a Street Address for store
+     *
+     * @param \Magento\Store\Model\Store|int|string $store
+     *
+     * @return int
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getStreetLines($store = null)
     {
         $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
@@ -211,6 +221,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Format
+     *
      * @param string $code
      * @return Format|string
      */
@@ -235,29 +247,29 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         return $formatType->getRenderer();
     }
 
-	/**
-	 * Determine if specified address config value can be shown
-	 *
-	 * @param string $key
-	 *
-	 * @return bool
-	 * @throws NoSuchEntityException
-	 */
+    /**
+     * Determine if specified address config value can be shown
+     *
+     * @param string $key
+     *
+     * @return bool
+     * @throws NoSuchEntityException
+     */
     public function canShowConfig($key)
     {
         return (bool)$this->getConfig($key);
     }
 
-	/**
-	 * Get string with frontend validation classes for attribute
-	 *
-	 * @param string $attributeCode
-	 *
-	 * @return string
-	 *
-	 * @SuppressWarnings(PHPMD.NPathComplexity)
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Get string with frontend validation classes for attribute
+     *
+     * @param string $attributeCode
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getAttributeValidationClass($attributeCode)
     {
         $class = '';
@@ -387,16 +399,16 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-	/**
-	 * Retrieve attribute visibility
-	 *
-	 * @param string $code
-	 *
-	 * @return bool
-	 * @throws NoSuchEntityException
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 * @since 100.2.0
-	 */
+    /**
+     * Retrieve attribute visibility
+     *
+     * @param string $code
+     *
+     * @return bool
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
+     */
     public function isAttributeVisible($code)
     {
         $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);

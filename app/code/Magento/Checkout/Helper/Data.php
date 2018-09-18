@@ -58,17 +58,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private $paymentFailures;
 
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param PaymentFailuresInterface|null $paymentFailures
-     * @codeCoverageIgnore
-     */
+	/**
+	 * Data constructor.
+	 *
+	 * @param \Magento\Framework\App\Helper\Context $context
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Magento\Checkout\Model\Session $checkoutSession
+	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+	 * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+	 * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+	 * @param PriceCurrencyInterface $priceCurrency
+	 * @param PaymentFailuresInterface|null $paymentFailures
+	 * @codeCoverageIgnore
+	 */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -113,6 +115,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Format Price
      * @param float $price
      * @return string
      */
@@ -127,6 +130,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Convert Price
+     *
      * @param float $price
      * @param bool $format
      * @return float
@@ -184,6 +189,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Base Price Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -196,6 +203,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Base Subtotal Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -224,6 +233,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Emails
+     *
      * @param string $configPath
      * @param null|string|bool|int|Store $storeId
      * @return array|false
@@ -302,6 +313,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Checks if display billing address on payment method is available, otherwise
      * billing address should be display on payment page
+     *
      * @return bool
      */
     public function isDisplayBillingOnPaymentMethodAvailable()

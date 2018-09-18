@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
+/**
+ * Class Suggestions
+ */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
@@ -66,6 +69,8 @@ class Suggestions implements SuggestedQueriesInterface
     private $storeManager;
 
     /**
+     * Suggestions constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param Config $config
      * @param QueryResultFactory $queryResultFactory
@@ -90,8 +95,14 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Items
      *
+     * @param QueryInterface $query
+     * @param null           $limit
+     * @param null           $additionalFilters
+     *
+     * @return array|\Magento\Search\Model\QueryResult[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItems(QueryInterface $query, $limit = null, $additionalFilters = null)
@@ -118,7 +129,9 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Is Results Count Enabled
+     *
+     * @return bool
      */
     public function isResultsCountEnabled()
     {
@@ -128,12 +141,14 @@ class Suggestions implements SuggestedQueriesInterface
         );
     }
 
-	/**
-	 * @param QueryInterface $query
-	 *
-	 * @return array
-	 * @throws \Magento\Framework\Exception\NoSuchEntityException
-	 */
+    /**
+     * Get Suggestions
+     *
+     * @param QueryInterface $query
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getSuggestions(QueryInterface $query)
     {
         $suggestions = [];
@@ -180,6 +195,8 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
+     * Fetch Query
+     *
      * @param array $query
      * @return array
      */
@@ -202,6 +219,8 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
+     * Is Suggestions Allowed
+     *
      * @return bool
      */
     private function isSuggestionsAllowed()

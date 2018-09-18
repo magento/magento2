@@ -32,16 +32,20 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
      */
     protected $scopeConfig;
 
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
+	/**
+	 * UpgradeInsecure constructor.
+	 *
+	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+	 */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * Whether the header should be attached to the response
+     *
+     * @return bool
      */
     public function canApply()
     {
