@@ -311,7 +311,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         return [
             ['1/2/3'],    //Invalid cron expression, expecting 'match/modulus': 1/2/3
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
-            ['-'],        //The "-" cron expression is invalid. Verify and try again.
+            ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
         ];
     }

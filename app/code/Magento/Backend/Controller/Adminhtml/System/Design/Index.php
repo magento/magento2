@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\System\Design
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Backend\Controller\Adminhtml\System\Design implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

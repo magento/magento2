@@ -20,6 +20,5 @@
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
         <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
-        <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
     </section>
 </sections>
