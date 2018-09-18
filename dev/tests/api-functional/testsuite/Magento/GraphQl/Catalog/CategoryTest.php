@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -283,16 +284,13 @@ QUERY;
      */
     public function testAnchorCategory()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-        $categoryCollection = $this->objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
-        );
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
         $categoryCollection->addFieldToFilter('name', 'Category 1');
+        /** @var CategoryInterface $category */
         $category = $categoryCollection->getFirstItem();
-        /** @var \Magento\Framework\EntityManager\MetadataPool $entityManagerMetadataPool */
-        $entityManagerMetadataPool = $this->objectManager->create(\Magento\Framework\EntityManager\MetadataPool::class);
-        $categoryLinkField = $entityManagerMetadataPool->getMetadata(CategoryInterface::class)->getLinkField();
-        $categoryId = $category->getData($categoryLinkField);
+        $categoryId = $category->getId();
+
         $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
 
         $query = <<<QUERY
@@ -414,31 +412,6 @@ QUERY;
 
         foreach ($eavAttributes as $eavAttribute) {
             $this->assertArrayHasKey($eavAttribute, $actualResponse);
-        }
-    }
-
-    /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            self::assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            self::assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
         }
     }
 }

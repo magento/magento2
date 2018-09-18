@@ -9,8 +9,10 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -34,18 +36,26 @@ class AdaptAssignStatusToProductPlugin
     private $defaultStockProvider;
 
     /**
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
+
+    /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param IsProductSalableInterface $isProductSalable
      * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         IsProductSalableInterface $isProductSalable,
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider,
+        GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
         $this->defaultStockProvider = $defaultStockProvider;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
@@ -67,11 +77,17 @@ class AdaptAssignStatusToProductPlugin
             return;
         }
 
-        if (null === $status) {
-            $stockId = $this->getStockIdForCurrentWebsite->execute();
-            $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
-        }
+        try {
+            $this->getProductIdsBySkus->execute([$product->getSku()]);
 
-        $proceed($product, $status);
+            if (null === $status) {
+                $stockId = $this->getStockIdForCurrentWebsite->execute();
+                $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
+            }
+
+            $proceed($product, $status);
+        } catch (NoSuchEntityException $e) {
+            return;
+        }
     }
 }

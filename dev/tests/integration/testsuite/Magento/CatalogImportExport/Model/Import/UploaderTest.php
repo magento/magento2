@@ -48,7 +48,14 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $tmpDir = $this->directory->getRelativePath($mediaPath . '/import');
-        $this->uploader->setTmpDir($tmpDir);
+        if (!$this->directory->create($tmpDir)) {
+            throw new \RuntimeException('Failed to create temporary directory');
+        }
+        if (!$this->uploader->setTmpDir($tmpDir)) {
+            throw new \RuntimeException(
+                'Failed to set temporary directory for files.'
+            );
+        }
 
         parent::setUp();
     }
@@ -70,6 +77,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppIsolation enabled
      * @return void
      * @expectedException \Exception
+     * @expectedExceptionMessage Disallowed file type
      */
     public function testMoveWithInvalidFile(): void
     {

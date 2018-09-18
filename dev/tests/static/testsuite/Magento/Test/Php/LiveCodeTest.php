@@ -256,10 +256,16 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test code quality using phpcs
+     */
     public function testCodeStyle()
     {
         $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
         $reportFile = self::$reportDir . '/phpcs_report.txt';
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
         $report = file_get_contents($reportFile);
@@ -270,6 +276,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test code quality using phpmd
+     */
     public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
@@ -298,6 +307,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test code quality using phpcpd
+     */
     public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';

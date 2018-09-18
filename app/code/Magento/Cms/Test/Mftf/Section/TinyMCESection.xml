@@ -36,7 +36,7 @@
         <element name="Browse" type="button" selector=".mce-i-browse"/>
         <element name="BrowseUploadImage" type="file" selector=".fileupload" />
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
-        <element name="imageOrImageCopy" type="text" selector="//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')]" parameterized="true"/>
+        <element name="imageOrImageCopy" type="text" selector="//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')]" parameterized="true"/>
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
@@ -98,9 +98,6 @@
         <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
         <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
         <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
-        <!--Widget on Storefront-->
-        <element name="CategoryWidget" type="text" selector="//a[@href='http://magento2.vagrant42/{{var1}}.html?___store=default']" parameterized="true"/>
-        <element name="CMSPageWidget" type="text" selector="//a[@href='http://magento2.vagrant42/home']"/>
         <!--Compare on Storefront-->
         <element name="ProductName" type="text" selector=".product.name.product-item-name" />
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>

@@ -93,7 +93,7 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
     public function testSourceDeductionWhileInvoicingWholeOrderedQty()
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('increment_id', 'test_order_virt_1')
+            ->addFilter('increment_id', 'created_order_for_test')
             ->create();
         /** @var OrderInterface $order */
         $order = current($this->orderRepository->getList($searchCriteria)->getItems());
@@ -129,7 +129,7 @@ class SourceDeductionForVirtualProductsOnDefaultStockTest extends TestCase
     public function testSourceDeductionWhileInvoicingPartialOrderedQty()
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('increment_id', 'test_order_virt_1')
+            ->addFilter('increment_id', 'created_order_for_test')
             ->create();
         /** @var OrderInterface $order */
         $order = current($this->orderRepository->getList($searchCriteria)->getItems());

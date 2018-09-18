@@ -15,6 +15,7 @@
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
+        <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog" />
         <element name="Save" type="button" selector="#save"/>
     </section>
     <section name="WebSection">

@@ -514,13 +514,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
+        $images = (array)$product->getMediaGallery('images');
+        $images = $this->determineImageRoles($product, $images);
+
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
-        $images = $product->getMediaGallery('images');
-        if ($images) {
-            foreach ($images as $image) {
-                if (!isset($image['removed']) && !empty($image['types'])) {
-                    $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
-                }
+
+        foreach ($images as $image) {
+            if (!isset($image['removed']) && !empty($image['types'])) {
+                $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }
 
@@ -756,6 +757,32 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $this->instances = null;
         $this->instancesById = null;
+    }
+
+    /**
+     * Ascertain image roles, if they are not set against the gallery entries
+     *
+     * @param ProductInterface $product
+     * @param array $images
+     * @return array
+     */
+    private function determineImageRoles(ProductInterface $product, array $images) : array
+    {
+        $imagesWithRoles = [];
+        foreach ($images as $image) {
+            if (!isset($image['types'])) {
+                $image['types'] = [];
+                if (isset($image['file'])) {
+                    foreach (array_keys($product->getMediaAttributes()) as $attribute) {
+                        if ($image['file'] == $product->getData($attribute)) {
+                            $image['types'][] = $attribute;
+                        }
+                    }
+                }
+            }
+            $imagesWithRoles[] = $image;
+        }
+        return $imagesWithRoles;
     }
 
     /**

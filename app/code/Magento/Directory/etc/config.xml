@@ -27,6 +27,9 @@
             <webservicex>
                 <timeout>100</timeout>
             </webservicex>
+            <currencyconverterapi>
+                <timeout>100</timeout>
+            </currencyconverterapi>
             <import>
                 <enabled>0</enabled>
                 <error_email />

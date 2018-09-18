@@ -177,19 +177,11 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCurrency($attribute)
     {
         return $this->_storeManager->getStore()->getCurrentCurrencyCode();
-
-        $baseCurrency = $this->_storeManager->getStore()->getBaseCurrency()->getCurrencyCode();
-        return $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) ? $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) : $baseCurrency;
     }
 
     /**

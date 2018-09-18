@@ -21,6 +21,15 @@
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
     </type>
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater"/>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\Stock\PriceIndexUpdater"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter">
+        <plugin name="change_select_for_price_modifier" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter"/>
+    </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
@@ -31,6 +40,7 @@
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="update_source_item_at_legacy_stock_item_save"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
+        <plugin name="priceIndexUpdater" disabled="true"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="adapt_add_stock_data_to_collection"

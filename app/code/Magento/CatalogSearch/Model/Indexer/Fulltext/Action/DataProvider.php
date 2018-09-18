@@ -538,7 +538,7 @@ class DataProvider
      * @param array $indexData
      * @param array $productData
      * @param int $storeId
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 100.0.3
      */

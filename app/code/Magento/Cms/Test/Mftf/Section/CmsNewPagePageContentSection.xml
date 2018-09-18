@@ -19,6 +19,8 @@
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
+        <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="ImageAlt" type="text" selector="//img[contains(@alt,'{{var1}}')]" parameterized="true"/>
     </section>
     <section name="CmsDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>

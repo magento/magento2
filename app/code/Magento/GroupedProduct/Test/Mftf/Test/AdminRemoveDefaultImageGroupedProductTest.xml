@@ -69,9 +69,7 @@
         <!-- Remove image from product -->
         <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
 
-        <!-- Skip success message check when saving product because of bug MAGETWO-91177 -->
-        <!-- actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
         <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>

@@ -13,11 +13,8 @@
             <argument name="productName"/>
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>

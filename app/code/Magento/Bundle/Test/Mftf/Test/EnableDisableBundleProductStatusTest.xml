@@ -72,7 +72,7 @@
         <!--Go to page-->
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="GoToProductCatalog"/>
@@ -87,6 +87,6 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>

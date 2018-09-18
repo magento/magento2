@@ -100,7 +100,7 @@ class CategoryTree
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');
         $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getLinkField() . ' = ?',
+            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
             $rootCategoryId
         );
         return $this->processTree($collection->getIterator());

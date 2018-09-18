@@ -111,7 +111,7 @@ class SetDataToLegacyCatalogInventory
             }
 
             $this->setDataToLegacyStockItem->execute(
-                $sourceItem->getSku(),
+                (string)$sourceItem->getSku(),
                 (float)$sourceItem->getQuantity(),
                 $isInStock
             );

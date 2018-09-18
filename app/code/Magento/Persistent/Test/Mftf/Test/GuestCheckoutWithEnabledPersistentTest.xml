@@ -72,12 +72,12 @@
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeBilllingPostcode" />
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeBilllingTelephone" />
         <!-- Check that "Ship To" block contains correct information -->
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeShipToFirstName" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeShipToLastName" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeShipToStreet" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeShipToCity" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeShipToState" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeShipToPostcode" />
-        <see selector="{{CheckoutPaymentSection.shipToInfomation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeShipToTelephone" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeShipToFirstName" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeShipToLastName" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeShipToStreet" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeShipToCity" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeShipToState" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeShipToPostcode" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeShipToTelephone" />
     </test>
 </tests>

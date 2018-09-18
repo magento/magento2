@@ -16,7 +16,14 @@
         "magento/functional-test-module-inventory-configuration-api": "100.0.0-dev",
         "magento/functional-test-module-catalog": "100.0.0-dev",
         "magento/functional-test-module-store": "100.0.0-dev",
-        "magento/functional-test-module-ui": "100.0.0-dev"
+        "magento/functional-test-module-ui": "100.0.0-dev",
+        "magento/functional-test-module-inventory-reservations-api": "100.0.0-dev",
+        "magento/functional-test-module-inventory-source-deduction-api": "100.0.0-dev",
+        "magento/functional-test-module-sales-inventory": "100.0.0-dev",
+        "magento/functional-test-module-sales": "100.0.0-dev"
+    },
+    "suggest": {
+        "magento/functional-test-module-inventory-catalog": "100.0.0-dev"
     },
     "type": "magento2-test",
     "license": [

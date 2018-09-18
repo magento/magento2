@@ -21,13 +21,10 @@
         <data key="store_action">add</data>
         <data key="store_type">group</data>
     </entity>
-    <entity name="CustomStoreGroupCustomWebsite" type="group">
-        <data key="group_id">null</data>
-        <data key="name" unique="suffix">Store Group Custom Website</data>
-        <data key="code" unique="suffix">store_group_custom_website</data>
+    <entity name="staticStoreGroup" type="group">
+        <data key="name">NewStore</data>
+        <data key="code">Base12</data>
         <data key="root_category_id">2</data>
-        <data key="store_action">add</data>
-        <data key="store_type">group</data>
-        <requiredEntity type="website">customWebsite</requiredEntity>
+        <data key="website_id">1</data>
     </entity>
 </entities>

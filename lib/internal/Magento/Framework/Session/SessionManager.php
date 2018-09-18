@@ -473,7 +473,7 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _getHosts()
     {
-        return isset($_SESSION[self::HOST_KEY]) ? $_SESSION[self::HOST_KEY] : [];
+        return $_SESSION[self::HOST_KEY] ?? [];
     }
 
     /**

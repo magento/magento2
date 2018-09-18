@@ -23,6 +23,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
         </before>
         <after>
@@ -30,6 +31,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
@@ -42,19 +44,15 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
-        <!--<selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>-->
 
         <!-- Open the Actions Tab in the Rules Edit page -->
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="waitForElementToBeVisible"/>
         <click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enableApplyDiscountToShiping"/>
-        <seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="DiscountIsAppliedToShiping"/>
+        <seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="discountIsAppliedToShiping"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
 
-        <!--<scrollTo selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="scrollToShippingLabel"/>-->
-        <!--<click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enableApplyDiscountToShiping"/>-->
-        <!--<seeCheckboxIsChecked selector="{{AdminCartPriceRulesFormSection.applyDiscountToShipping}}" stepKey="DiscountIsAppliedToShiping"/>-->
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
@@ -132,6 +130,6 @@
         <assertEquals expected='-$15.00' expectedType="string" actual="($grabRefundDiscountValue)" message="notExpectedDiscountOnRefundPage" stepKey="assertDiscountValue1"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabRefundGrandTotal"/>
         <assertEquals expected="($grabInvoiceGrandTotal)" actual="($grabRefundGrandTotal)" message="RefundGrandTotalMatchesWithInvoiceGrandTotal" stepKey="compareRefundGrandTotalAndInvoiceGrandTotal"/>
-        </test>
+    </test>
 </tests>
 

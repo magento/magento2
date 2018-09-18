@@ -6,6 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\ObjectManager;
+
+$objectManager = ObjectManager::getInstance();
+/** @var Magento\Backend\Model\UrlInterface $backendUrl */
+$backendUrl = $objectManager->get(UrlInterface::class);
+
 ?>
 <?php $expressions = []; foreach ( $this->main as $item ): ?>
     <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
@@ -20,13 +27,13 @@
     ng-show="<?= implode( '&&', $expressions) ?>"
     >
 <nav class="admin__menu" ng-controller="mainController">
-    <span
-        class="logo logo-static"
+    <a href="<?= $backendUrl->getBaseUrl() . $backendUrl->getAreaFrontName(); ?>"
+        class="logo"
         data-edition="Community Edition">
         <img class="logo-img"
              src="./pub/images/logo.svg"
              alt="Magento Admin Panel">
-    </span>
+    </a>
     <ul id="nav" role="menubar">
         <li class="item-home level-0" ng-class="{_active: $state.current.name === 'root.home'}">
             <a href="" ui-sref="root.home">

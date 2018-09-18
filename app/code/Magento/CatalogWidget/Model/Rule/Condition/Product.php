@@ -101,6 +101,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
+     *
+     * @param array &$attributes
+     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -163,8 +166,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-        $storeId =  $this->storeManager->getStore()->getId();
-
         switch ($attribute->getBackendType()) {
             case 'decimal':
             case 'datetime':
@@ -173,10 +174,15 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $collection->addAttributeToSelect($attribute->getAttributeCode(), 'inner');
                 break;
             default:
-                $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
+                $alias = 'at_' . sha1($this->getId()) . $attribute->getAttributeCode();
+
+                $connection = $this->_productResource->getConnection();
+                $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
+                $linkField = $attribute->getEntity()->getLinkField();
+
                 $collection->getSelect()->join(
-                    [$alias => $collection->getTable('catalog_product_index_eav')],
-                    "($alias.entity_id = e.entity_id) AND ($alias.store_id = $storeId)" .
+                    [$alias => $collection->getTable('catalog_product_entity_varchar')],
+                    "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []
                 );
@@ -225,6 +231,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getMappedSqlField()
     {
@@ -244,6 +252,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {

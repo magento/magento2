@@ -69,7 +69,9 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $attributeCode
+     * @param array $context
+     * @return string
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -105,8 +107,10 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $context
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -173,8 +177,14 @@ class ProductFieldMapper implements FieldMapperInterface
      */
     protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
     {
-        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'integer')
-            ? $attributeCode . '_value' : $attributeCode;
+        switch ($frontendInput) {
+            case 'select':
+                return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
+            case 'boolean':
+                return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
+            default:
+                return $attributeCode;
+        }
     }
 
     /**

@@ -20,11 +20,11 @@
     <entity name="RegionCA" type="region">
         <data key="region">California</data>
         <data key="region_code">CA</data>
-        <data key="region_id">2</data>
+        <data key="region_id">12</data>
     </entity>
     <entity name="RegionNY" type="region">
         <data key="region">New York</data>
         <data key="region_code">NY</data>
-        <data key="region_id">3</data>
+        <data key="region_id">43</data>
     </entity>
 </entities>

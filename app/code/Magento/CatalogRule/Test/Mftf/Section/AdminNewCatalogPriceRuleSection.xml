@@ -11,6 +11,7 @@
     <section name="AdminNewCatalogPriceRule">
         <element name="saveAndApply" type="button" selector="#save_and_apply" timeout="30"/>
         <element name="save" type="button" selector="#save" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
         <element name="delete" type="button" selector="#delete" timeout="30"/>
 
         <element name="ruleName" type="input" selector="[name='name']"/>
@@ -33,7 +34,7 @@
     <section name="AdminNewCatalogPriceRuleActions">
         <element name="apply" type="select" selector="[name='simple_action']"/>
         <element name="discountAmount" type="input" selector="[name='discount_amount']"/>
-        <element name="disgardRules" type="select" selector="[name='stop_rules_processing']"/>
+        <element name="disregardRules" type="select" selector="[name='stop_rules_processing']"/>
     </section>
 
     <section name="AdminCatalogPriceRuleGrid">

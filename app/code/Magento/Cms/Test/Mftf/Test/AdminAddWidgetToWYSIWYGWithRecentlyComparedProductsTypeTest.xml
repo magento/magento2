@@ -17,6 +17,8 @@
             <description value="Admin should be able to create a CMS page with widget type: Recently Compared Products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83792"/>
+            <!--Skip test due to MC-1284-->
+            <group value="skip"/>
         </annotations>
         <!--Main test-->
         <before>

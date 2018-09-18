@@ -7,6 +7,16 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Request\ValidatorInterface as RequestValidator;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\App\Action\AbstractAction;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FrontController implements FrontControllerInterface
 {
     /**
@@ -15,27 +25,45 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
+     * @var RequestValidator
+     */
+    private $requestValidator;
+
+    /**
+     * @var MessageManager
+     */
+    private $messages;
+
+    /**
      * @param RouterListInterface $routerList
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param ResponseInterface $response
+     * @param RequestValidator|null $requestValidator
+     * @param MessageManager|null $messageManager
      */
     public function __construct(
         RouterListInterface $routerList,
-        \Magento\Framework\App\ResponseInterface $response
+        ResponseInterface $response,
+        ?RequestValidator $requestValidator = null,
+        ?MessageManager $messageManager = null
     ) {
         $this->_routerList = $routerList;
         $this->response = $response;
+        $this->requestValidator = $requestValidator
+            ?? ObjectManager::getInstance()->get(RequestValidator::class);
+        $this->messages = $messageManager
+            ?? ObjectManager::getInstance()->get(MessageManager::class);
     }
 
     /**
      * Perform action and generate response
      *
      * @param RequestInterface $request
-     * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      * @throws \LogicException
      */
     public function dispatch(RequestInterface $request)
@@ -49,13 +77,10 @@ class FrontController implements FrontControllerInterface
                 try {
                     $actionInstance = $router->match($request);
                     if ($actionInstance) {
-                        $request->setDispatched(true);
-                        $this->response->setNoCacheHeaders();
-                        if ($actionInstance instanceof \Magento\Framework\App\Action\AbstractAction) {
-                            $result = $actionInstance->dispatch($request);
-                        } else {
-                            $result = $actionInstance->execute();
-                        }
+                        $result = $this->processRequest(
+                            $request,
+                            $actionInstance
+                        );
                         break;
                     }
                 } catch (\Magento\Framework\Exception\NotFoundException $e) {
@@ -70,6 +95,44 @@ class FrontController implements FrontControllerInterface
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
+        return $result;
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param ActionInterface $actionInstance
+     * @throws NotFoundException
+     *
+     * @return ResponseInterface|ResultInterface
+     */
+    private function processRequest(
+        RequestInterface $request,
+        ActionInterface $actionInstance
+    ) {
+        $request->setDispatched(true);
+        $this->response->setNoCacheHeaders();
+        //Validating request.
+        try {
+            $this->requestValidator->validate(
+                $request,
+                $actionInstance
+            );
+
+            if ($actionInstance instanceof AbstractAction) {
+                $result = $actionInstance->dispatch($request);
+            } else {
+                $result = $actionInstance->execute();
+            }
+        } catch (InvalidRequestException $exception) {
+            //Validation failed - processing validation results.
+            $result = $exception->getReplaceResult();
+            if ($messages = $exception->getMessages()) {
+                foreach ($messages as $message) {
+                    $this->messages->addErrorMessage($message);
+                }
+            }
+        }
+
         return $result;
     }
 }

@@ -121,7 +121,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *  test fro method getValue with dynamic productType
+     *  Test for method getValue with dynamic productType
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider

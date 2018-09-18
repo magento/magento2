@@ -8,12 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
-use Magento\InventoryCatalogApi\Model\GetSourceCodesBySkusInterface;
-use Magento\Ui\Component\MassAction\Filter;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\BulkPageProcessor;
 
+/**
+ * Mass unassign sources from products.
+ */
 class BulkUnassign extends Action
 {
     /**
@@ -22,73 +23,28 @@ class BulkUnassign extends Action
     const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
-     * @var Filter
+     * @var BulkPageProcessor
      */
-    private $filter;
-
-    /**
-     * @var BulkSessionProductsStorage
-     */
-    private $bulkSessionProductsStorage;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var GetSourceCodesBySkusInterface
-     */
-    private $getSourceCodesBySkus;
+    private $processBulkPage;
 
     /**
      * @param Action\Context $context
-     * @param CollectionFactory $collectionFactory
-     * @param Filter $filter
-     * @param BulkSessionProductsStorage $bulkSessionProductsStorage
-     * @param GetSourceCodesBySkusInterface $getSourceCodesBySkus
-     * @SuppressWarnings(PHPMD.LongVariable)
+     * @param BulkPageProcessor $processBulkPage
      */
     public function __construct(
         Action\Context $context,
-        CollectionFactory $collectionFactory,
-        Filter $filter,
-        BulkSessionProductsStorage $bulkSessionProductsStorage,
-        GetSourceCodesBySkusInterface $getSourceCodesBySkus
+        BulkPageProcessor $processBulkPage
     ) {
         parent::__construct($context);
 
-        $this->filter = $filter;
-        $this->bulkSessionProductsStorage = $bulkSessionProductsStorage;
-        $this->collectionFactory = $collectionFactory;
-        $this->getSourceCodesBySkus = $getSourceCodesBySkus;
+        $this->processBulkPage = $processBulkPage;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      */
     public function execute()
     {
-        try {
-            $collection = $this->filter->getCollection($this->collectionFactory->create());
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Could not create products collection.'));
-            $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            return $redirect->setPath('catalog/product/index');
-        }
-
-        $skus = $collection->getColumnValues('sku');
-        if (empty($this->getSourceCodesBySkus->execute($skus))) {
-            $this->messageManager->addErrorMessage(__('The products selection is not assigned to any store.'));
-            $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            return $redirect->setPath('catalog/product/index');
-        }
-
-        $this->bulkSessionProductsStorage->setProductsSkus($skus);
-
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__('Bulk source unassignment'));
-
-        return $resultPage;
+        return $this->processBulkPage->execute(__('Bulk source unassignment'), true);
     }
 }

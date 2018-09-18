@@ -1399,7 +1399,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            if (!$item->isDeleted() && !$item->getParentItemId()) {
+            if (!$item->isDeleted() && !$item->getParentItemId() && !$item->getParentItem()) {
                 $items[] = $item;
             }
         }
@@ -1608,7 +1608,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          * Error message
          */
         if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
-            return strval($cartCandidates);
+            return (string)$cartCandidates;
         }
 
         /**

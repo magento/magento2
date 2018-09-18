@@ -33,7 +33,7 @@
             <parameter name="template" xsi:type="select" required="true" visible="true">
                 <label translate="true">Template</label>
                 <options>
-                    <option name="default" value="product/widget/content/grid.phtml" selected="true">
+                    <option name="default" value="Magento_CatalogWidget::product/widget/content/grid.phtml" selected="true">
                         <label translate="true">Products Grid Template</label>
                     </option>
                 </options>

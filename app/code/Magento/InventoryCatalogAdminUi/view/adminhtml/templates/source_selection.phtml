@@ -102,7 +102,7 @@ if ($block->getData('show_only_assigned_sources')) {
     </form>
 </div>
 
-<script type="text/javascript">
+<script>
     require(['jquery'], function ($) {
         $('#back').click(function () {
             self.location.href='<?= /* @noEscape */ $block->getUrl('catalog/product/index') ?>';

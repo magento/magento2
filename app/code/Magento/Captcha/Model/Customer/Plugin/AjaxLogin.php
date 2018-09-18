@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
@@ -81,27 +82,37 @@ class AjaxLogin
         if ($content) {
             $loginParams = $this->serializer->unserialize($content);
         }
-        $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
-        $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;
+        $username = $loginParams['username'] ?? null;
+        $captchaString = $loginParams[$captchaInputName] ?? null;
+        $loginFormId = $loginParams[$captchaFormIdField] ?? null;
+
+        if (!in_array($loginFormId, $this->formIds) && $this->helper->getCaptcha($loginFormId)->isRequired($username)) {
+            return $this->returnJsonError(__('Provided form does not exist'));
+        }
 
         foreach ($this->formIds as $formId) {
-            $captchaModel = $this->helper->getCaptcha($formId);
-            if ($captchaModel->isRequired($username) && !in_array($loginFormId, $this->formIds)) {
-                $resultJson = $this->resultJsonFactory->create();
-                return $resultJson->setData(['errors' => true, 'message' => __('Provided form does not exist')]);
-            }
-
-            if ($formId == $loginFormId) {
-                $captchaModel->logAttempt($username);
-                if (!$captchaModel->isCorrect($captchaString)) {
-                    $this->sessionManager->setUsername($username);
-                    /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-                    $resultJson = $this->resultJsonFactory->create();
-                    return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+            if ($formId === $loginFormId) {
+                $captchaModel = $this->helper->getCaptcha($formId);
+                if ($captchaModel->isRequired($username)) {
+                    $captchaModel->logAttempt($username);
+                    if (!$captchaModel->isCorrect($captchaString)) {
+                        $this->sessionManager->setUsername($username);
+                        return $this->returnJsonError(__('Incorrect CAPTCHA'));
+                    }
                 }
             }
         }
         return $proceed();
+    }
+
+    /**
+     *
+     * @param \Magento\Framework\Phrase $phrase
+     * @return \Magento\Framework\Controller\Result\Json
+     */
+    private function returnJsonError(\Magento\Framework\Phrase $phrase): \Magento\Framework\Controller\Result\Json
+    {
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData(['errors' => true, 'message' => $phrase]);
     }
 }

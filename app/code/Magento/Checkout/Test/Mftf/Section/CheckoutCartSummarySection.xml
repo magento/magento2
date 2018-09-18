@@ -16,8 +16,10 @@
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
-        <element name="postcode" type="input" selector="input[name='postcode']"/>
-        <element name="stateProvince" type="select" selector="select[name='region_id']"/>
-        <element name="country" type="select" selector="select[name='country_id']"/>
+        <element name="postcode" type="input" selector="input[name='postcode']" timeout="10"/>
+        <element name="stateProvince" type="select" selector="select[name='region_id']" timeout="10"/>
+        <element name="country" type="select" selector="select[name='country_id']" timeout="10"/>
+        <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
+        <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
     </section>
 </sections>

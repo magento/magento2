@@ -38,9 +38,10 @@
         "elasticsearch/elasticsearch": "~2.0|~5.1",
         "magento/composer": "~1.4.0",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "~1.14.0",
+        "magento/zendframework1": "~1.14.1",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
+        "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^2.0.0",
         "php-amqplib/php-amqplib": "~2.7.0",
         "phpseclib/mcrypt_compat": "1.0.5",
@@ -81,6 +82,7 @@
         "zendframework/zend-view": "~2.10.0"
     },
     "require-dev": {
+        "magento/magento2-functional-testing-framework": "2.3.4",
         "friendsofphp/php-cs-fixer": "~2.12.0",
         "lusitanian/oauth": "~0.8.10",
         "pdepend/pdepend": "2.5.2",
@@ -169,6 +171,7 @@
         "magento/module-inventory-admin-ui": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-bundle-product": "*",
+        "magento/module-inventory-bundle-product-admin-ui": "*",
         "magento/module-inventory-cache": "*",
         "magento/module-inventory-configurable-product": "*",
         "magento/module-inventory-catalog-api": "*",
@@ -180,6 +183,7 @@
         "magento/module-inventory-configuration": "*",
         "magento/module-inventory-configuration-api": "*",
         "magento/module-inventory-grouped-product": "*",
+        "magento/module-inventory-grouped-product-admin-ui": "*",
         "magento/module-inventory-import-export": "*",
         "magento/module-inventory-indexer": "*",
         "magento/module-inventory-multi-dimensional-indexer-api": "*",
@@ -311,7 +315,8 @@
         },
         "psr-0": {
             "": [
-                "app/code/"
+                "app/code/",
+                "generated/code/"
             ]
         },
         "files": [

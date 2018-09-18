@@ -159,6 +159,13 @@ define([
                             .html(res.product.statusText);
                     }
                     self.enableAddToCartButton(form);
+                },
+
+                /** @inheritdoc */
+                complete: function (res) {
+                    if (res.state() === 'rejected') {
+                        location.reload();
+                    }
                 }
             });
         },

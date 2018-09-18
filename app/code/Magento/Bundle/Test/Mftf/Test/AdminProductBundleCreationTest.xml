@@ -72,6 +72,6 @@
 
         <!--Test Assertion - on correct page/page has been published-->
         <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement stepKey="LookingForNameOfProduct" selector="{{BundleStorefrontSection.bundleProductName}}"/>
+        <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
     </test>
 </tests>
