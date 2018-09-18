@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface;
 use Magento\InventoryCatalogApi\Model\BulkSourceAssignValidatorInterface;
@@ -34,20 +36,36 @@ class BulkSourceAssign implements BulkSourceAssignInterface
     private $sourceItemIndexer;
 
     /**
+     * @var EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * MassProductSourceAssign constructor.
      * @param BulkSourceAssignValidatorInterface $assignValidator
      * @param BulkSourceAssignResource $bulkSourceAssign
+     * @param EventManagerInterface $eventManager
      * @param SourceItemIndexer $sourceItemIndexer
+     * @param DataObjectFactory $dataObjectFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         BulkSourceAssignValidatorInterface $assignValidator,
         BulkSourceAssignResource $bulkSourceAssign,
-        SourceItemIndexer $sourceItemIndexer
+        EventManagerInterface $eventManager,
+        SourceItemIndexer $sourceItemIndexer,
+        DataObjectFactory $dataObjectFactory
     ) {
         $this->assignValidator = $assignValidator;
         $this->bulkSourceAssign = $bulkSourceAssign;
         $this->sourceItemIndexer = $sourceItemIndexer;
+        $this->eventManager = $eventManager;
+        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
@@ -60,7 +78,14 @@ class BulkSourceAssign implements BulkSourceAssignInterface
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
-        $res = $this->bulkSourceAssign->execute($skus, $sourceCodes);
+        $operation = $this->dataObjectFactory->create(['data' => [
+            'skus' => $skus,
+            'source_codes' => $sourceCodes,
+        ]]);
+
+        $this->eventManager->dispatch('inventory_bulk_source_assign_before', ['operation' => $operation]);
+        $res = $this->bulkSourceAssign->execute($operation->getData('skus'), $operation->getData('source_codes'));
+        $this->eventManager->dispatch('inventory_bulk_source_assign_after', ['operation' => $operation]);
         $this->sourceItemIndexer->executeList($sourceCodes);
 
         return $res;

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalog\Model\ResourceModel\BulkInventoryTransfer as BulkInventoryTransferResource;
 use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
@@ -52,6 +54,16 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
     private $sourceIndexer;
 
     /**
+     * @var EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * MassProductSourceAssign constructor.
      * @param BulkInventoryTransferValidatorInterface $inventoryTransferValidator
      * @param BulkInventoryTransferResource $bulkInventoryTransfer
@@ -59,6 +71,8 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param LegacyIndexer $legacyIndexer
+     * @param EventManagerInterface $eventManager
+     * @param DataObjectFactory $dataObjectFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -67,7 +81,9 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
         SourceIndexer $sourceIndexer,
         DefaultSourceProviderInterface $defaultSourceProvider,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
-        LegacyIndexer $legacyIndexer
+        LegacyIndexer $legacyIndexer,
+        EventManagerInterface $eventManager,
+        DataObjectFactory $dataObjectFactory
     ) {
         $this->bulkInventoryTransferValidator = $inventoryTransferValidator;
         $this->bulkInventoryTransfer = $bulkInventoryTransfer;
@@ -75,6 +91,8 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
         $this->legacyIndexer = $legacyIndexer;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->sourceIndexer = $sourceIndexer;
+        $this->eventManager = $eventManager;
+        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
@@ -106,12 +124,21 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
+        $operation = $this->dataObjectFactory->create(['data' => [
+            'skus' => $skus,
+            'origin_source' => $originSource,
+            'destination_source' => $destinationSource,
+            'unassign_from_origin' => $unassignFromOrigin,
+        ]]);
+
+        $this->eventManager->dispatch('inventory_bulk_transfer_before', ['operation' => $operation]);
         $this->bulkInventoryTransfer->execute(
             $skus,
             $originSource,
             $destinationSource,
             $unassignFromOrigin
         );
+        $this->eventManager->dispatch('inventory_bulk_transfer_after', ['operation' => $operation]);
 
         $this->sourceIndexer->executeList([$originSource, $destinationSource]);
 
