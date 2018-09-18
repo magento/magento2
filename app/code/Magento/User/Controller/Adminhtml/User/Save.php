@@ -6,6 +6,7 @@
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
@@ -16,7 +17,7 @@ use Magento\User\Model\Spi\NotificationExceptionInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\User\Controller\Adminhtml\User
+class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie
@@ -47,10 +48,14 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     {
         $userId = (int)$this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPostValue();
+        if (array_key_exists('form_key', $data)) {
+            unset($data['form_key']);
+        }
         if (!$data) {
             $this->_redirect('adminhtml/*/');
             return;
         }
+
         /** @var $model \Magento\User\Model\User */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {

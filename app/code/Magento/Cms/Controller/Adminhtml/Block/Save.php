@@ -6,6 +6,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Model\Block;
@@ -14,7 +15,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 
-class Save extends \Magento\Cms\Controller\Adminhtml\Block
+class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostActionInterface
 {
     /**
      * @var DataPersistorInterface
