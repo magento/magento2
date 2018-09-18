@@ -6,9 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Refunded extends \Magento\Reports\Controller\Adminhtml\Report\Sales
+class Refunded extends \Magento\Reports\Controller\Adminhtml\Report\Sales implements HttpGetActionInterface
 {
     /**
      * Refunds report action
