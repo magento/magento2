@@ -26,15 +26,19 @@ class ObjectRegistry
     }
 
     /**
+     * Get
+     *
      * @param int $entityId
      * @return \Magento\Framework\DataObject|null
      */
     public function get($entityId)
     {
-        return isset($this->entitiesMap[$entityId]) ? $this->entitiesMap[$entityId] : null;
+        return $this->entitiesMap[$entityId] ?? null;
     }
 
     /**
+     * List
+     *
      * @return \Magento\Framework\DataObject[]
      */
     public function getList()

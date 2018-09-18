@@ -105,6 +105,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $scopeConfig;
 
     /**
+     * Product constructor.
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
@@ -157,6 +159,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Construct
+     *
      * @return void
      */
     protected function _construct()
@@ -167,11 +171,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add attribute to filter
      *
-     * @param int $storeId
+     * @param int    $storeId
      * @param string $attributeCode
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $type
+     *
      * @return \Magento\Framework\DB\Select|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
@@ -214,10 +220,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Join attribute by code
      *
-     * @param int $storeId
+     * @param int    $storeId
      * @param string $attributeCode
      * @param string $column Add attribute value to given column
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _joinAttribute($storeId, $attributeCode, $column = null)
     {
@@ -260,7 +268,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get attribute data by attribute code
      *
      * @param string $attributeCode
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getAttribute($attributeCode)
     {
@@ -283,7 +293,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get category collection array
      *
      * @param null|string|bool|int|Store $storeId
+     *
      * @return array|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function getCollection($storeId)
     {
@@ -347,8 +361,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Prepare product
      *
      * @param array $productRow
-     * @param int $storeId
+     * @param int   $storeId
+     *
      * @return \Magento\Framework\DataObject
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
@@ -482,7 +498,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function isCategoryProductURLsConfig($storeId)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             HelperProduct::XML_PATH_PRODUCT_URL_USE_CATEGORY,
             ScopeInterface::SCOPE_STORE,
             $storeId

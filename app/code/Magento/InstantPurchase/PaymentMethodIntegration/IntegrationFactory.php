@@ -72,6 +72,6 @@ class IntegrationFactory
      */
     private function extractFromConfig($config, string $field, string $default): string
     {
-        return isset($config[$field]) ? $config[$field] : $default;
+        return $config[$field] ?? $default;
     }
 }

@@ -10,6 +10,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
+/**
+ * Class Config
+ */
 class Config
 {
     /**#@+
@@ -39,11 +42,13 @@ class Config
      */
     protected $storeId;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
-     * @param Escaper $escaper
-     */
+	/**
+	 * Config constructor.
+	 *
+	 * @param ScopeConfigInterface $scopeConfig
+	 * @param StoreManagerInterface $storeManager
+	 * @param Escaper $escaper
+	 */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -74,7 +79,7 @@ class Config
      */
     public function isEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_MSRP_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $this->storeId

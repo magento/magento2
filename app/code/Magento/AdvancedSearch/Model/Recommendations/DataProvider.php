@@ -10,6 +10,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
+/**
+ * Class DataProvider
+ */
 class DataProvider implements SuggestedQueriesInterface
 {
     /**
@@ -50,12 +53,14 @@ class DataProvider implements SuggestedQueriesInterface
      */
     private $recommendationsFactory;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
-     * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
-     */
+	/**
+	 * DataProvider constructor.
+	 *
+	 * @param ScopeConfigInterface $scopeConfig
+	 * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+	 * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
+	 * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
+	 */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
@@ -69,19 +74,25 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
+     * Is Results Count Enabled
+     *
      * @return bool
      */
     public function isResultsCountEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_RESULTS_COUNT_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+	/**
+	 * Get Items
+	 *
+	 * @param QueryInterface $query
+	 *
+	 * @return array|\Magento\Search\Model\QueryResult[]
+	 */
     public function getItems(QueryInterface $query)
     {
         $recommendations = [];
@@ -102,6 +113,8 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
+     * Return Search Recommendations
+     *
      * @param QueryInterface $query
      * @return array
      */
@@ -126,17 +139,21 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
+     * Is Search Recommendations Enabled
+     *
      * @return bool
      */
     private function isSearchRecommendationsEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_IS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
+     * Return Search Recommendations Count
+     *
      * @return int
      */
     private function getSearchRecommendationsCount()

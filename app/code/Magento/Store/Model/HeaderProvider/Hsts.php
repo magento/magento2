@@ -32,20 +32,24 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
      */
     protected $scopeConfig;
 
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
+	/**
+	 * Hsts constructor.
+	 *
+	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+	 */
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * {@inheritdoc}
+     * Whether the header should be attached to the response
+     *
+     * @return bool
      */
     public function canApply()
     {
-        return (bool)$this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_FRONTEND)
+        return $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_FRONTEND)
             && $this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML)
             && $this->scopeConfig->isSetFlag(Store::XML_PATH_ENABLE_HSTS);
     }

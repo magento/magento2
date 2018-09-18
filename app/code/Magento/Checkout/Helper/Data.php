@@ -58,17 +58,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private $paymentFailures;
 
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param PaymentFailuresInterface|null $paymentFailures
-     * @codeCoverageIgnore
-     */
+	/**
+	 * Data constructor.
+	 *
+	 * @param \Magento\Framework\App\Helper\Context $context
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Magento\Checkout\Model\Session $checkoutSession
+	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+	 * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+	 * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+	 * @param PriceCurrencyInterface $priceCurrency
+	 * @param PaymentFailuresInterface|null $paymentFailures
+	 * @codeCoverageIgnore
+	 */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -113,6 +115,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Format Price
      * @param float $price
      * @return string
      */
@@ -127,6 +130,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Convert Price
+     *
      * @param float $price
      * @param bool $format
      * @return float
@@ -145,9 +150,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'checkout/options/onepage_checkout_enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -184,6 +189,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Base Price Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -196,6 +203,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Base Subtotal Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -217,13 +226,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Quote\Model\Quote $checkout,
         string $message,
         string $checkoutType = 'onepage'
-    ): \Magento\Checkout\Helper\Data {
+    ): Data {
         $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
     }
 
     /**
+     * Get Emails
+     *
      * @param string $configPath
      * @param null|string|bool|int|Store $storeId
      * @return array|false
@@ -232,7 +243,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $data = $this->scopeConfig->getValue(
             $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!empty($data)) {
@@ -256,7 +267,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $guestCheckout = $this->scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
 
@@ -295,13 +306,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * Checks if display billing address on payment method is available, otherwise
      * billing address should be display on payment page
+     *
      * @return bool
      */
     public function isDisplayBillingOnPaymentMethodAvailable()

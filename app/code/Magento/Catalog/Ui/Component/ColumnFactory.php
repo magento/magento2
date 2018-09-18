@@ -46,12 +46,14 @@ class ColumnFactory
         $this->componentFactory = $componentFactory;
     }
 
-    /**
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
-     * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-     * @param array $config
-     * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     */
+	/**
+	 * @param \Magento\Catalog\Api\Data\ProductAttributeInterface          $attribute
+	 * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+	 * @param array                                                        $config
+	 *
+	 * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function create($attribute, $context, array $config = [])
     {
         $columnName = $attribute->getAttributeCode();
@@ -96,9 +98,7 @@ class ColumnFactory
      */
     protected function getDataType($attribute)
     {
-        return isset($this->dataTypeMap[$attribute->getFrontendInput()])
-            ? $this->dataTypeMap[$attribute->getFrontendInput()]
-            : $this->dataTypeMap['default'];
+        return $this->dataTypeMap[$attribute->getFrontendInput()] ?? $this->dataTypeMap['default'];
     }
 
     /**
@@ -111,6 +111,6 @@ class ColumnFactory
     {
         $filtersMap = ['date' => 'dateRange'];
         $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
-        return isset($result[$frontendInput]) ? $result[$frontendInput] : $result['default'];
+        return $result[$frontendInput] ?? $result['default'];
     }
 }

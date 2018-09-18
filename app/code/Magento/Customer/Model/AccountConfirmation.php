@@ -30,10 +30,12 @@ class AccountConfirmation
      */
     private $registry;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Registry $registry
-     */
+	/**
+	 * AccountConfirmation constructor.
+	 *
+	 * @param ScopeConfigInterface $scopeConfig
+	 * @param Registry $registry
+	 */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Registry $registry
@@ -56,7 +58,7 @@ class AccountConfirmation
             return false;
         }
 
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId
