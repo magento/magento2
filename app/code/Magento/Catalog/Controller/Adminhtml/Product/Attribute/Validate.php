@@ -7,9 +7,12 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\DataObject;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
 
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
+class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_MESSAGE_KEY = 'message';
 

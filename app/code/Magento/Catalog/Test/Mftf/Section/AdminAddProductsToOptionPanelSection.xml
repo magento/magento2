@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminAddProductsToOptionPanel">
         <element name="addSelectedProducts" type="button" selector=".product_form_product_form_bundle-items_modal button.action-primary" timeout="30"/>
         <element name="filters" type="button" selector=".product_form_product_form_bundle-items_modal button[data-action='grid-filter-expand']" timeout="30"/>
