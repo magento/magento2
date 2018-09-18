@@ -66,6 +66,11 @@ class EavAttribute
     private $serializer;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\Source\TableFactory
+     */
+    private $tableFactory;
+
+    /**
      * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
@@ -77,13 +82,15 @@ class EavAttribute
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper,
         Json $serializer = null,
-        SwatchResource $swatchResource = null
+        SwatchResource $swatchResource = null,
+        \Magento\Eav\Model\Entity\Attribute\Source\TableFactory $tableFactory
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchResource = $swatchResource ?: ObjectManager::getInstance()->create(SwatchResource::class);
+        $this->tableFactory = $tableFactory;
     }
 
     /**
@@ -150,6 +157,8 @@ class EavAttribute
             if (!empty($swatchesArray)) {
                 $attribute->setData('swatch', $swatchesArray);
             }
+
+            $this->handleOptionsWithoutSwatches($attribute);
         }
     }
 
@@ -188,8 +197,13 @@ class EavAttribute
 
         if (!empty($optionsArray) && is_array($optionsArray)) {
             $optionsArray = $this->prepareOptionIds($optionsArray);
-            $attributeSavedOptions = $attribute->getSource()->getAllOptions();
-            $this->prepareOptionLinks($optionsArray, $attributeSavedOptions);
+
+            $defaultStoreAttribute = clone $attribute;
+            $defaultStoreAttribute->setStoreId(0);
+            $sourceModel = $this->tableFactory->create();
+            $sourceModel->setAttribute($defaultStoreAttribute);
+
+            $this->prepareOptionLinks($optionsArray, $sourceModel);
         }
 
         return $attribute;
@@ -219,17 +233,17 @@ class EavAttribute
      * Create links for non existed swatch options
      *
      * @param array $optionsArray
-     * @param array $attributeSavedOptions
+     * @param \Magento\Eav\Model\Entity\Attribute\Source\Table $sourceModel
      * @return void
      */
-    protected function prepareOptionLinks(array $optionsArray, array $attributeSavedOptions)
-    {
+    protected function prepareOptionLinks(
+        array $optionsArray,
+        \Magento\Eav\Model\Entity\Attribute\Source\Table $sourceModel
+    ) {
         $dependencyArray = [];
         if (is_array($optionsArray['value'])) {
-            $optionCounter = 1;
-            foreach (array_keys($optionsArray['value']) as $baseOptionId) {
-                $dependencyArray[$baseOptionId] = $attributeSavedOptions[$optionCounter]['value'];
-                $optionCounter++;
+            foreach ($optionsArray['value'] as $baseOptionId => $labels) {
+                $dependencyArray[$baseOptionId] = $sourceModel->getOptionId($labels[0]);
             }
         }
 
@@ -367,9 +381,19 @@ class EavAttribute
     protected function getAttributeOptionId($optionId)
     {
         if (substr($optionId, 0, 6) == self::BASE_OPTION_TITLE) {
-            $optionId = isset($this->dependencyArray[$optionId]) ? $this->dependencyArray[$optionId] : null;
+            $possibleOptions = [
+                $optionId,
+                substr($optionId, 7), //Let's remove "option" keyword in case data came from API instead of Admin Panel
+            ];
+
+            foreach ($possibleOptions as $optionId) {
+                if (isset($this->dependencyArray[$optionId])) {
+                    return $this->dependencyArray[$optionId];
+                }
+            }
         }
-        return $optionId;
+
+        return null;
     }
 
     /**
@@ -511,5 +535,26 @@ class EavAttribute
             return true;
         }
         return $result;
+    }
+
+    /**
+     * @param Attribute $attribute
+     */
+    protected function handleOptionsWithoutSwatches(Attribute $attribute)
+    {
+        if (count($attribute->getData('option/value')) !== count($attribute->getData('swatch/value'))) {
+            $swatchesValues = $attribute->getData('swatch/value') ?? [];
+            foreach ($attribute->getData('option/value') as $key => $label) {
+                if (!array_key_exists($key, $swatchesValues)) {
+                    $swatchesValues[sprintf('%s_%s', self::BASE_OPTION_TITLE, $key)] = $label;
+                }
+            }
+
+            if ($attribute->getData('swatch') === null) {
+                $attribute->setData('swatch', []);
+            }
+
+            $attribute->setData('swatch', ['value' => $swatchesValues]);
+        }
     }
 }
