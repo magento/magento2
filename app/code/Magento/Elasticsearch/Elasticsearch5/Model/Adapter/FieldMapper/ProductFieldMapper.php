@@ -9,7 +9,7 @@ use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldNameResolverPoolInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -51,29 +51,29 @@ class ProductFieldMapper implements FieldMapperInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var FieldNameResolverPoolInterface
+     * @var ResolverInterface
      */
-    private $fieldNameResolverPool;
+    private $fieldNameResolver;
 
     /**
      * @param Config $eavConfig
      * @param FieldType $fieldType
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FieldNameResolverPoolInterface $fieldNameResolverPool
+     * @param ResolverInterface $fieldNameResolver
      */
     public function __construct(
         Config $eavConfig,
         FieldType $fieldType,
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FieldNameResolverPoolInterface $fieldNameResolverPool
+        ResolverInterface $fieldNameResolver
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->fieldNameResolverPool = $fieldNameResolverPool;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -85,7 +85,7 @@ class ProductFieldMapper implements FieldMapperInterface
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        return $this->fieldNameResolverPool->getResolver($attributeCode)->getFieldName($attributeCode, $context);
+        return $this->fieldNameResolver->getFieldName($attributeCode, $context);
     }
 
     /**

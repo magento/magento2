@@ -12,7 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverIn
 /**
  * Resolver field name for price attribute.
  */
-class Price implements ResolverInterface
+class Price extends Resolver implements ResolverInterface
 {
     /**
      * @var CustomerSession
@@ -20,23 +20,30 @@ class Price implements ResolverInterface
     private $customerSession;
 
     /**
+     * @param ResolverInterface $resolver
      * @param CustomerSession $customerSession
      */
     public function __construct(
+        ResolverInterface $resolver,
         CustomerSession $customerSession
     ) {
+        parent::__construct($resolver);
         $this->customerSession = $customerSession;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = [])
+    public function getFieldName($attributeCode, $context = []): string
     {
-        $customerGroupId = !empty($context['customerGroupId'])
-            ? $context['customerGroupId']
-            : $this->customerSession->getCustomerGroupId();
+        if ($attributeCode === 'price') {
+            $customerGroupId = !empty($context['customerGroupId'])
+                ? $context['customerGroupId']
+                : $this->customerSession->getCustomerGroupId();
 
-        return 'price_' . $customerGroupId;
+            return 'price_' . $customerGroupId;
+        }
+
+        return $this->getNext()->getFieldName($attributeCode, $context);
     }
 }

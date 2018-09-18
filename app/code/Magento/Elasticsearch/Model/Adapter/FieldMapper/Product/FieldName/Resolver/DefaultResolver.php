@@ -15,7 +15,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverIn
 /**
  * Default name resolver.
  */
-class DefaultResolver implements ResolverInterface
+class DefaultResolver extends Resolver implements ResolverInterface
 {
     /**
      * @var Config
@@ -28,13 +28,16 @@ class DefaultResolver implements ResolverInterface
     private $fieldType;
 
     /**
+     * @param ResolverInterface $resolver
      * @param Config $eavConfig
      * @param FieldType $fieldType
      */
     public function __construct(
+        ResolverInterface $resolver,
         Config $eavConfig,
         FieldType $fieldType
     ) {
+        parent::__construct($resolver);
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
     }
@@ -42,7 +45,7 @@ class DefaultResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = [])
+    public function getFieldName($attributeCode, $context = []): string
     {
         $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
         $fieldType = $this->fieldType->getFieldType($attribute);

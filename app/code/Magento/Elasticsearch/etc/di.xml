@@ -7,8 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapperInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldNameResolverPoolInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldNameResolverPool" />
-    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\SpecificationInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\NotEavAttribute" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\NotEavAttribute" />
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
@@ -273,42 +272,29 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldNameResolverPool">
+    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\NotEavAttribute">
         <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\NotEavAttribute</argument>
-            <argument name="map" xsi:type="array">
-                <item name="default" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\DefaultResolver</item>
-                <item name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\SpecialAttribute::TYPE" xsi:type="string">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Special</item>
-                <item name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\NotEavAttribute::TYPE" xsi:type="string">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\NotEavAttribute</item>
-                <item name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PriceAttribute::TYPE" xsi:type="string">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Price</item>
-                <item name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\CategoryNameAttribute::TYPE" xsi:type="string">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\CategoryName</item>
-                <item name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PositionAttribute::TYPE" xsi:type="string">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Position</item>
-            </argument>
+            <argument name="resolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\SpecialAttribute</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\NotEavAttribute">
+    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\SpecialAttribute">
         <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\SpecialAttribute</argument>
+            <argument name="resolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Price</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\SpecialAttribute">
+    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Price">
         <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PriceAttribute</argument>
+            <argument name="resolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\CategoryName</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PriceAttribute">
+    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\CategoryName">
         <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\CategoryNameAttribute</argument>
+            <argument name="resolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Position</argument>
         </arguments>
     </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\CategoryNameAttribute">
+    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\Position">
         <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PositionAttribute</argument>
-        </arguments>
-    </type>
-    <type name="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\PositionAttribute">
-        <arguments>
-            <argument name="specification" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Specification\DummySpecification</argument>
+            <argument name="resolver" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver\DefaultResolver</argument>
         </arguments>
     </type>
 </config>

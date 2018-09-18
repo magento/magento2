@@ -6,6 +6,11 @@
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName;
 
+use Magento\Framework\Exception\NotFoundException;
+
+/**
+ * Field name resolver interface.
+ */
 interface ResolverInterface
 {
     /**
@@ -15,5 +20,20 @@ interface ResolverInterface
      * @param array $context
      * @return string
      */
-    public function getFieldName($attributeCode, $context = []);
+    public function getFieldName($attributeCode, $context = []): string;
+
+    /**
+     * Get next resolver.
+     *
+     * @return ResolverInterface
+     * @throws NotFoundException
+     */
+    public function getNext(): ResolverInterface;
+
+    /**
+     * Check if next resolver present.
+     *
+     * @return bool
+     */
+    public function hasNext(): bool;
 }

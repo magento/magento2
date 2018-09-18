@@ -11,13 +11,17 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverIn
 /**
  * Resolver field name for not special attribute.
  */
-class SpecialAttribute implements ResolverInterface
+class SpecialAttribute extends Resolver implements ResolverInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = [])
+    public function getFieldName($attributeCode, $context = []): string
     {
-        return $attributeCode;
+        if (in_array($attributeCode, ['id', 'sku', 'store_id', 'visibility'], true)) {
+            return $attributeCode;
+        }
+
+        return $this->getNext()->getFieldName($attributeCode, $context);
     }
 }

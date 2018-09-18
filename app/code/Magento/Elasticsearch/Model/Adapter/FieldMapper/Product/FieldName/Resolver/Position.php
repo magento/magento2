@@ -13,7 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverIn
 /**
  * Resolver field name for position attribute.
  */
-class Position implements ResolverInterface
+class Position extends Resolver implements ResolverInterface
 {
     /**
      * @var StoreManager
@@ -26,13 +26,16 @@ class Position implements ResolverInterface
     private $coreRegistry;
 
     /**
+     * @param ResolverInterface $resolver
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
      */
     public function __construct(
+        ResolverInterface $resolver,
         StoreManager $storeManager,
         Registry $coreRegistry
     ) {
+        parent::__construct($resolver);
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
     }
@@ -40,9 +43,13 @@ class Position implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = [])
+    public function getFieldName($attributeCode, $context = []): string
     {
-        return 'position_category_' . $this->resolveCategoryId($context);
+        if ($attributeCode === 'position') {
+            return 'position_category_' . $this->resolveCategoryId($context);
+        }
+
+        return $this->getNext()->getFieldName($attributeCode, $context);
     }
 
     /**
