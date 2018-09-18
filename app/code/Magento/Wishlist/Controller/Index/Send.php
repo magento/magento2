@@ -26,7 +26,7 @@ use Magento\Customer\Model\Customer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Send extends \Magento\Wishlist\Controller\AbstractIndex
+class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var \Magento\Customer\Helper\View
