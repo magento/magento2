@@ -17,6 +17,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogAdminUi\Model\BulkOperationsConfig;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
 use Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface;
+use Psr\Log\LoggerInterface;
 
 class BulkUnassignPost extends Action
 {
@@ -51,11 +52,17 @@ class BulkUnassignPost extends Action
     private $authSession;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Action\Context $context
      * @param BulkSourceUnassignInterface $bulkSourceUnassign
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
      * @param BulkOperationsConfig $bulkOperationsConfig
      * @param MassSchedule $massSchedule
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -63,7 +70,8 @@ class BulkUnassignPost extends Action
         BulkSourceUnassignInterface $bulkSourceUnassign,
         BulkSessionProductsStorage $bulkSessionProductsStorage,
         BulkOperationsConfig $bulkOperationsConfig,
-        MassSchedule $massSchedule
+        MassSchedule $massSchedule,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
 
@@ -72,6 +80,7 @@ class BulkUnassignPost extends Action
         $this->bulkOperationsConfig = $bulkOperationsConfig;
         $this->massSchedule = $massSchedule;
         $this->authSession = $context->getAuth();
+        $this->logger = $logger;
     }
 
     /**
@@ -136,7 +145,8 @@ class BulkUnassignPost extends Action
                 $this->runSynchronousOperation($skus, $sourceCodes);
             }
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->logger->error($e->getMessage());
+            $this->messageManager->addErrorMessage(__('Something went wrong during the operation.'));
         }
 
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -82,7 +82,7 @@ class BulkInventoryTransfer
      * @param string $source
      * @return array|null
      */
-    private function getSourceItem(string $sku, string $source): ?array
+    private function getSourceItemData(string $sku, string $source): ?array
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
@@ -113,8 +113,8 @@ class BulkInventoryTransfer
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
-        $orgSourceItem = $this->getSourceItem($sku, $originSource);
-        $dstSourceItem = $this->getSourceItem($sku, $destinationSource);
+        $orgSourceItem = $this->getSourceItemData($sku, $originSource);
+        $dstSourceItem = $this->getSourceItemData($sku, $destinationSource);
 
         $orgSourceItemQty = $orgSourceItem === null ? 0.0 : (float) $orgSourceItem[SourceItemInterface::QUANTITY];
         $dstSourceItemQty = $dstSourceItem === null ? 0.0 : (float) $dstSourceItem[SourceItemInterface::QUANTITY];

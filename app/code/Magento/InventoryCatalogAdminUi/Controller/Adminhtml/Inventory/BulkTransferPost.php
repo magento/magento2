@@ -15,6 +15,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryCatalogAdminUi\Model\BulkOperationsConfig;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
 use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
+use Psr\Log\LoggerInterface;
 
 class BulkTransferPost extends Action
 {
@@ -49,10 +50,16 @@ class BulkTransferPost extends Action
     private $massSchedule;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Action\Context $context
      * @param BulkInventoryTransferInterface $bulkInventoryTransfer
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
      * @param BulkOperationsConfig $bulkOperationsConfig
+     * @param LoggerInterface $logger
      * @param MassSchedule $massSchedule
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -61,6 +68,7 @@ class BulkTransferPost extends Action
         BulkInventoryTransferInterface $bulkInventoryTransfer,
         BulkSessionProductsStorage $bulkSessionProductsStorage,
         BulkOperationsConfig $bulkOperationsConfig,
+        LoggerInterface $logger,
         MassSchedule $massSchedule
     ) {
         parent::__construct($context);
@@ -70,6 +78,7 @@ class BulkTransferPost extends Action
         $this->authSession = $context->getAuth();
         $this->bulkOperationsConfig = $bulkOperationsConfig;
         $this->massSchedule = $massSchedule;
+        $this->logger = $logger;
     }
 
     /**
@@ -151,7 +160,8 @@ class BulkTransferPost extends Action
                 $this->runSynchronousOperation($skus, $originSource, $destinationSource, $unassignSource);
             }
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->logger->error($e->getMessage());
+            $this->messageManager->addErrorMessage(__('Something went wrong during the operation.'));
         }
 
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
