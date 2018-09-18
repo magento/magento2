@@ -12,6 +12,7 @@
     <preference for="Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface" type="Magento\InventoryCatalog\Model\ResourceModel\GetProductTypesBySkus" />
     <preference for="Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface" type="Magento\InventoryCatalog\Model\GetSkusByProductIds"/>
     <preference for="Magento\InventoryCatalogApi\Model\IsSingleSourceModeInterface" type="Magento\InventoryCatalog\Model\IsSingleSourceMode"/>
+    <preference for="Magento\InventoryCatalogApi\Model\GetSourceCodesBySkusInterface" type="Magento\InventoryCatalog\Model\GetSourceCodesBySkus" />
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
