@@ -24,6 +24,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Model\Customer;
 
 /**
+ * Class Send
+ *
+ * @package Magento\Wishlist\Controller\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
@@ -333,6 +336,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
 
     /**
      * Log customer action attempts
+     *
      * @param CaptchaModel $captchaModel
      * @return void
      */
@@ -350,6 +354,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
     }
 
     /**
+     * Captcha validate logic
+     *
      * @param CaptchaModel $captchaModel
      * @param string $captchaFormName
      * @return bool
