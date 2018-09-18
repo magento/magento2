@@ -337,6 +337,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $optionTypeTitles;
 
     /**
+     * @var array
+     */
+    private $lastOptionTitle;
+
+    /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
@@ -1119,6 +1124,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Process option row.
+     *
      * @param string $name
      * @param array $optionRow
      * @return array
@@ -1185,6 +1192,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * Import data rows.
+     *
      * Additional store view data (option titles) will be sought in store view specified import file rows
      *
      * @return boolean
@@ -1257,6 +1265,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $childCount
                     );
                     $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
+                    $this->checkOptionTitles(
+                        $options,
+                        $titles,
+                        $combinedData,
+                        $prevOptionId,
+                        $optionId,
+                        $products,
+                        $prices
+                    );
                 }
             }
 
@@ -1276,12 +1293,72 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     'prices' => $typePrices,
                     'titles' => $typeTitles
                 ];
+                $this->setLastOptionTitle($titles);
                 $this->savePreparedCustomOptions($products, $options, $titles, $prices, $types);
             }
         }
 
         return true;
     }
+
+    /**
+     * Check options titles.
+     *
+     * If products were split up between bunches,
+     * this function will add needed option for option titles.
+     *
+     * @param array $options
+     * @param array $titles
+     * @param array $combinedData
+     * @param int $prevOptionId
+     * @param int $optionId
+     * @param array $products
+     * @param array $prices
+     * @return void
+     */
+    private function checkOptionTitles(
+        array &$options,
+        array &$titles,
+        array $combinedData,
+        int &$prevOptionId,
+        int &$optionId,
+        array $products,
+        array $prices
+    ) {
+        $titlesCount = count($titles);
+        if ($titlesCount > 0 && count($options) !== $titlesCount) {
+            $combinedData[Product::COL_STORE_VIEW_CODE] = '';
+            $optionId--;
+            $option = $this->_collectOptionMainData(
+                $combinedData,
+                $prevOptionId,
+                $optionId,
+                $products,
+                $prices
+            );
+            if ($option) {
+                $options[] = $option;
+            }
+        }
+    }
+
+    /**
+     * Setting last Custom Option Title
+     * to use it later in _collectOptionTitle
+     * to set correct title for default store view.
+     *
+     * @param array $titles
+     * @return void
+     */
+    private function setLastOptionTitle(array &$titles)
+    {
+        if (count($titles) > 0) {
+            end($titles);
+            $key = key($titles);
+            $this->lastOptionTitle[$key] = $titles[$key];
+        }
+    }
+
 
     /**
      * Load data of existed products
@@ -1413,8 +1490,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $defaultStoreId = Store::DEFAULT_STORE_ID;
         if (!empty($rowData[self::COLUMN_TITLE])) {
             if (!isset($titles[$prevOptionId][$defaultStoreId])) {
-                // ensure default title is set
-                $titles[$prevOptionId][$defaultStoreId] = $rowData[self::COLUMN_TITLE];
+                if (isset($this->lastOptionTitle[$prevOptionId])) {
+                     $titles[$prevOptionId] = $this->lastOptionTitle[$prevOptionId];
+                     unset($this->lastOptionTitle);
+                } else {
+                    $titles[$prevOptionId][$defaultStoreId] = $rowData[self::COLUMN_TITLE];
+                }
             }
             $titles[$prevOptionId][$this->_rowStoreId] = $rowData[self::COLUMN_TITLE];
         }
