@@ -104,7 +104,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     {
         $configuration = [];
         $configuration['giftMessage'] = [];
-        $orderLevelGiftMessageConfiguration = $this->scopeConfiguration->isSetFlag(
+        $orderLevelGiftMessage = $this->scopeConfiguration->isSetFlag(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
             ScopeInterface::SCOPE_STORE
         );
@@ -112,7 +112,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             ScopeInterface::SCOPE_STORE
         );
-        if ($orderLevelGiftMessageConfiguration) {
+        if ($orderLevelGiftMessage) {
             $orderMessages = $this->getOrderLevelGiftMessages();
             $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
