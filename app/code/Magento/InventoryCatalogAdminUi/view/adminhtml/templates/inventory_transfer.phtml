@@ -10,9 +10,10 @@
 // @codingStandardsIgnoreFile
 
 /** @var Magento\Backend\Block\Template $block */
-/** @var \Magento\InventoryCatalogAdminUi\ViewModel\InventoryTransfer $viewModel */
+/** @var Magento\InventoryCatalogAdminUi\ViewModel\SourcesSelection $viewModel */
 $viewModel = $block->getViewModel();
-$sources = $viewModel->getSources();
+$originSources = $viewModel->getAssignedSources();
+$destinationSources = $viewModel->getSources();
 ?>
 <div class="page-main-actions">
     <div class="page-actions">
@@ -80,7 +81,7 @@ $sources = $viewModel->getSources();
                         </label>&nbsp;
 
                         <select class="admin__control-select" name="origin_source" id="origin-source">
-                            <?php foreach ($sources as $source) : ?>
+                            <?php foreach ($originSources as $source) : ?>
                                 <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
                                 <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
                                     <?= $block->escapeHtml($source->getName())?>
@@ -93,7 +94,7 @@ $sources = $viewModel->getSources();
                         </label>&nbsp;
 
                         <select class="admin__control-select" name="destination_source" id="destination-source">
-                            <?php foreach ($sources as $source) : ?>
+                            <?php foreach ($destinationSources as $source) : ?>
                                 <?php /** @var \Magento\InventoryApi\Api\Data\SourceInterface $source */ ?>
                                 <option value="<?= $block->escapeHtmlAttr($source->getSourceCode()) ?>">
                                     <?= $block->escapeHtml($source->getName())?>
