@@ -336,7 +336,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param CaptchaModel $captchaModel
      * @return void
      */
-    private function logCaptchaAttempt(CaptchaModel $captchaModel)
+    private function logCaptchaAttempt(CaptchaModel $captchaModel): void
     {
         /** @var  Customer $customer */
         $customer = $this->_customerSession->getCustomer();
