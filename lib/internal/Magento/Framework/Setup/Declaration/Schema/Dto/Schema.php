@@ -63,9 +63,10 @@ class Schema
 
     /**
      * Retrieve table by it name.
+     *
      * Return false if table is not present in schema.
      *
-     * @param  $name
+     * @param string $name
      * @return bool|Table
      */
     public function getTableByName($name)

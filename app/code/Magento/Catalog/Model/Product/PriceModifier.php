@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Product form price modifier
+ */
 class PriceModifier
 {
     /**
@@ -26,6 +29,8 @@ class PriceModifier
     }
 
     /**
+     * Remove tier price
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|string $customerGroupId
      * @param int $qty

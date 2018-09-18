@@ -65,6 +65,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Validate stock
+     *
      * @param StockItemInterface $stockItem
      * @return bool
      */
@@ -82,6 +84,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Verify notification
+     *
      * @param StockItemInterface $stockItem
      * @return bool
      */
@@ -91,6 +95,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Validate quote qty
+     *
      * @param StockItemInterface $stockItem
      * @param int|float $qty
      * @param int|float $summaryQty
@@ -254,6 +260,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Returns suggested qty
+     *
      * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
      * or original qty if such value does not exist
      *
@@ -294,6 +302,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Check Qty Increments
+     *
      * @param StockItemInterface $stockItem
      * @param float|int $qty
      * @return \Magento\Framework\DataObject
@@ -369,6 +379,8 @@ class StockStateProvider implements StockStateProviderInterface
     }
 
     /**
+     * Get numeric qty
+     *
      * @param string|float|int|null $qty
      * @return float|null
      */

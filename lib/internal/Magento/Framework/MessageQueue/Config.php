@@ -30,7 +30,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExchangeByTopic($topicName)
     {
@@ -39,7 +39,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQueuesByTopic($topic)
     {
@@ -65,7 +65,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConnectionByTopic($topic)
     {
@@ -78,7 +78,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConnectionByConsumer($consumer)
     {
@@ -94,7 +94,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMessageSchemaType($topic)
     {
@@ -105,7 +105,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConsumerNames()
     {
@@ -114,7 +114,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConsumer($name)
     {
@@ -123,7 +123,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBinds()
     {
@@ -131,7 +131,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPublishers()
     {
@@ -139,7 +139,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConsumers()
     {
@@ -147,7 +147,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTopic($name)
     {
@@ -155,7 +155,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPublisher($name)
     {
@@ -163,7 +163,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getResponseQueueName($topicName)
     {

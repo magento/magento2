@@ -135,6 +135,8 @@ class Config
     }
 
     /**
+     * Create amqp connection
+     *
      * @return AbstractConnection
      */
     private function createConnection(): AbstractConnection

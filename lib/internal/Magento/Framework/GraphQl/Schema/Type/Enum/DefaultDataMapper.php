@@ -26,7 +26,7 @@ class DefaultDataMapper implements DataMapperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getMappedEnums(string $enumName) : array
     {

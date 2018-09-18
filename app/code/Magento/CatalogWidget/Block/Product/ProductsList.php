@@ -14,6 +14,7 @@ use Magento\Widget\Block\BlockInterface;
 
 /**
  * Catalog Products List widget block
+ *
  * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -130,7 +131,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -174,7 +175,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
@@ -211,7 +212,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
@@ -249,6 +250,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
+     * Returns conditions
+     *
      * @return \Magento\Rule\Model\Condition\Combine
      */
     protected function getConditions()
@@ -386,6 +389,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
+     * Returns PriceCurrencyInterface instance
+     *
      * @return PriceCurrencyInterface
      *
      * @deprecated 100.2.0

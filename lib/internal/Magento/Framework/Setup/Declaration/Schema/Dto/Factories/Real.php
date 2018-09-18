@@ -39,7 +39,7 @@ class Real implements FactoryInterface
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -50,7 +50,7 @@ class Real implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $data)
     {
