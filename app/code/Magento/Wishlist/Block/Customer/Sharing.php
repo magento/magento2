@@ -14,8 +14,11 @@ namespace Magento\Wishlist\Block\Customer;
 use Magento\Captcha\Block\Captcha;
 
 /**
+ * Class Sharing
+ *
  * @api
  * @since 100.0.2
+ * @package Magento\Wishlist\Block\Customer
  */
 class Sharing extends \Magento\Framework\View\Element\Template
 {
