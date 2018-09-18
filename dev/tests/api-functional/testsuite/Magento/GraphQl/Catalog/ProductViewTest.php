@@ -53,7 +53,7 @@ class ProductViewTest extends GraphQlAbstract
                available_sort_by
                level
             }
-            image
+            image { url, path }
             image_label
             meta_description
             meta_keyword
@@ -205,13 +205,13 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image
+            small_image { url, path }
             small_image_label
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
+            thumbnail { url, path }
             thumbnail_label
             tier_price
             tier_prices
