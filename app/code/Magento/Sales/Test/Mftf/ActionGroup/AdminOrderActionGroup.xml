@@ -268,4 +268,28 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
+
+    <actionGroup name="CreateOrderInStoreActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="customer"/>
+            <argument name="storeView"/>
+        </arguments>
+        <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageOpened"/>
+        <click stepKey="chooseStore" selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <waitForPageLoad stepKey="waitForProductsListForOrder"/>
+        <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
+        <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+    </actionGroup>
 </actionGroups>

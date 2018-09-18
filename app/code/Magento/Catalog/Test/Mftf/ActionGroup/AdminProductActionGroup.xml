@@ -276,5 +276,20 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
-
+    <actionGroup name="CreatedProductConnectToWebsite">
+        <arguments>
+            <argument name="website"/>
+            <argument name="product"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductsList"/>
+        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.name)}}"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
+        <waitForPageLoad stepKey="waitForWebsitesList"/>
+        <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="SelectWebsite"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+    </actionGroup>
 </actionGroups>

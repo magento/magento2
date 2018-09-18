@@ -65,6 +65,7 @@
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
     </entity>
     <entity name="US_Address_CA" type="address">
         <data key="firstname">John</data>
