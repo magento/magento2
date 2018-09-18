@@ -89,7 +89,7 @@ class CategoryTree
      */
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
-        $categoryQuery = $resolveInfo->fieldASTs[0];
+        $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
@@ -100,7 +100,7 @@ class CategoryTree
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
         $collection->setOrder('level');
         $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getLinkField() . ' = ?',
+            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
             $rootCategoryId
         );
         return $this->processTree($collection->getIterator());

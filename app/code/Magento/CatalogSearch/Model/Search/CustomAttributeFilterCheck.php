@@ -12,6 +12,9 @@ use Magento\Catalog\Model\Product;
 /**
  * Class CustomAttributeFilterSelector
  * Checks if FilterInterface is by custom attribute
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class CustomAttributeFilterCheck
 {

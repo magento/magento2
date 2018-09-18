@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Ui\Component;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
@@ -20,6 +21,11 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $authorization;
 
     /**
+     * @var AddFilterInterface[]
+     */
+    private $additionalFilterPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -29,6 +35,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param FilterBuilder $filterBuilder
      * @param array $meta
      * @param array $data
+     * @param array $additionalFilterPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -39,7 +47,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        array $additionalFilterPool = []
     ) {
         parent::__construct(
             $name,
@@ -54,6 +63,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         );
 
         $this->meta = array_replace_recursive($meta, $this->prepareMetadata());
+        $this->additionalFilterPool = $additionalFilterPool;
     }
 
     /**
@@ -94,5 +104,17 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         }
 
         return $metadata;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addFilter(Filter $filter)
+    {
+        if (!empty($this->additionalFilterPool[$filter->getField()])) {
+            $this->additionalFilterPool[$filter->getField()]->addFilter($this->searchCriteriaBuilder, $filter);
+        } else {
+            parent::addFilter($filter);
+        }
     }
 }

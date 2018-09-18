@@ -13,7 +13,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Path to block template
      */
-    const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+    const WIZARD_TEMPLATE = 'Magento_Paypal::system/config/api_wizard.phtml';
 
     /**
      * Set template to itself

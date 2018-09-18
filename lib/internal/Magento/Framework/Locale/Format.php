@@ -65,7 +65,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
         }
 
         //trim spaces and apostrophes
-        $value = str_replace(['\'', ' '], '', $value);
+        $value = preg_replace('/[^0-9^\^.,-]/m', '', $value);
 
         $separatorComa = strpos($value, ',');
         $separatorDot = strpos($value, '.');

@@ -23,7 +23,7 @@ $track = $block->getData('track');
         </thead>
         <tbody>
         <?php foreach ($track->getProgressdetail() as $detail): ?>
-            <?php $detailDate = (!empty($detail['deliverydate']) ? $parentBlock->formatDeliveryDate($detail['deliverydate']) : ''); ?>
+            <?php $detailDate = (!empty($detail['deliverydate']) ? $parentBlock->formatDeliveryDate($detail['deliverydate'] . ' ' . $detail['deliverytime']) : ''); ?>
             <?php $detailTime = (!empty($detail['deliverytime']) ? $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) : ''); ?>
             <tr>
                 <td data-th="<?= $block->escapeHtml(__('Location')) ?>" class="col location">

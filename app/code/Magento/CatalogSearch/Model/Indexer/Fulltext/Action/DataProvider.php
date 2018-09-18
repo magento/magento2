@@ -16,6 +16,8 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.3
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class DataProvider
 {
@@ -538,7 +540,7 @@ class DataProvider
      * @param array $indexData
      * @param array $productData
      * @param int $storeId
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 100.0.3
      */
