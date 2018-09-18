@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Test\Integration\Model\ResourceModel;
 
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\BulkConfigurationTransfer;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\BulkConfigurationAssign;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class BulkConfigurationTransferTest extends TestCase
+class BulkConfigurationAssignTest extends TestCase
 {
     /**
-     * @var BulkConfigurationTransfer
+     * @var BulkConfigurationAssign
      */
-    private $bulkConfigurationTransfer;
+    private $bulkConfigurationAssign;
 
     /**
      * @var GetSourceItemConfigurationInterface
@@ -27,7 +27,7 @@ class BulkConfigurationTransferTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->bulkConfigurationTransfer = Bootstrap::getObjectManager()->get(BulkConfigurationTransfer::class);
+        $this->bulkConfigurationAssign = Bootstrap::getObjectManager()->get(BulkConfigurationAssign::class);
         $this->getSourceItemConfiguration =
             Bootstrap::getObjectManager()->create(GetSourceItemConfigurationInterface::class);
 
@@ -41,16 +41,14 @@ class BulkConfigurationTransferTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testTransfer()
+    public function testAssign()
     {
-        $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', false);
-        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
+        $this->bulkConfigurationAssign->execute(['SKU-1'], ['us-1']);
+        $sourceConfig = $this->getSourceItemConfiguration->execute('us-1', 'SKU-1');
 
-        self::assertEquals(
+        self::assertNull(
             $sourceConfig->getNotifyStockQty(),
-            $destinationConfig->getNotifyStockQty(),
-            'Low stock notification configuration was not transferred on bulk operations'
+            'Low stock notification configuration was not defaulted during assign'
         );
     }
 
@@ -62,32 +60,15 @@ class BulkConfigurationTransferTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testTransferWithUnassign()
+    public function testAssignOnExisting()
     {
+        $this->bulkConfigurationAssign->execute(['SKU-1'], ['eu-1']);
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', true);
-        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
 
         self::assertEquals(
+            5.6,
             $sourceConfig->getNotifyStockQty(),
-            $destinationConfig->getNotifyStockQty(),
-            'Low stock notification configuration was not transferred on bulk operations'
+            'Low stock notification configuration was changed assigning on existing source'
         );
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @magentoDbIsolation enabled
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function testTransferUnassign()
-    {
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', true);
-        $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-
-        self::assertNull($sourceConfig->getId(), 'Low stock notification not removed after unassign');
     }
 }

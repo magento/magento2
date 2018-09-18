@@ -17,7 +17,7 @@ class BulkConfigurationUnassignTest extends TestCase
     /**
      * @var BulkConfigurationUnassign
      */
-    private $bulkConfigurationTransfer;
+    private $bulkConfigurationUnassign;
 
     /**
      * @var GetSourceItemConfigurationInterface
@@ -27,9 +27,9 @@ class BulkConfigurationUnassignTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->bulkConfigurationTransfer = Bootstrap::getObjectManager()->get(BulkConfigurationUnassign::class);
+        $this->bulkConfigurationUnassign = Bootstrap::getObjectManager()->get(BulkConfigurationUnassign::class);
         $this->getSourceItemConfiguration =
-            Bootstrap::getObjectManager()->get(GetSourceItemConfigurationInterface::class);
+            Bootstrap::getObjectManager()->create(GetSourceItemConfigurationInterface::class);
 
     }
 
@@ -43,9 +43,13 @@ class BulkConfigurationUnassignTest extends TestCase
      */
     public function testUnassign()
     {
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], ['eu-1']);
+        $this->bulkConfigurationUnassign->execute(['SKU-1'], ['eu-1']);
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
 
-        self::assertNull($sourceConfig->getId(), 'Low stock notification not removed after unassign');
+        self::assertEquals(
+            1.0, // Default value when configuration is not defined
+            $sourceConfig->getNotifyStockQty(),
+            'Low stock notification not removed after unassign'
+        );
     }
 }

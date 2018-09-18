@@ -16,4 +16,8 @@
         <observer instance="Magento\InventoryLowQuantityNotification\Observer\BulkUnassignConfiguration"
                   name="magento_inventory_bulk_unassign_low_quantity_notification"/>
     </event>
+    <event name="inventory_bulk_source_assign_after">
+        <observer instance="Magento\InventoryLowQuantityNotification\Observer\BulkAssignSourceConfiguration"
+                  name="magento_inventory_bulk_assign_low_quantity_notification"/>
+    </event>
 </config>

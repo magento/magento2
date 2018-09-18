@@ -9,6 +9,8 @@ namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
+use Magento\InventoryConfigurationApi\Model\IsSourceItemManagementAllowedForProductTypeInterface;
 
 class BulkConfigurationTransfer
 {
@@ -18,12 +20,29 @@ class BulkConfigurationTransfer
     private $resourceConnection;
 
     /**
+     * @var GetProductTypesBySkusInterface
+     */
+    private $getProductTypesBySkus;
+
+    /**
+     * @var IsSourceItemManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemManagementAllowedForProductType;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
+     * @param IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        GetProductTypesBySkusInterface $getProductTypesBySkus,
+        IsSourceItemManagementAllowedForProductTypeInterface $isSourceItemManagementAllowedForProductType
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
+        $this->isSourceItemManagementAllowedForProductType = $isSourceItemManagementAllowedForProductType;
     }
 
     /**
@@ -66,32 +85,38 @@ class BulkConfigurationTransfer
         if ($unassignFromOrigin) {
             $this->reassignConfigurations($skus, $originSource, $destinationSource);
         } else {
-            foreach ($skus as $sku) {
-                $qry = $connection
-                    ->select()
-                    ->from($tableName, 'notify_stock_qty')
-                    ->where('sku = ?', $sku)
-                    ->where('source_code = ?', $originSource);
+            $types = $this->getProductTypesBySkus->execute($skus);
 
-                $res = $connection->fetchOne($qry);
+            foreach ($types as $sku => $type) {
+                if ($this->isSourceItemManagementAllowedForProductType->execute($type)) {
+                    foreach ($skus as $sku) {
+                        $qry = $connection
+                            ->select()
+                            ->from($tableName, 'notify_stock_qty')
+                            ->where('sku = ?', $sku)
+                            ->where('source_code = ?', $originSource);
 
-                $notifyStockQty = $res === null ? null : (float) $res;
-                try {
-                    $connection->insert(
-                        $tableName,
-                        [
-                            'source_code' => $destinationSource,
-                            'sku' => $sku,
-                            'notify_stock_qty' => $notifyStockQty,
-                        ]
-                    );
-                } catch (DuplicateException $e) {
-                    $connection->update(
-                        $tableName,
-                        ['notify_stock_qty' => $notifyStockQty],
-                        $connection->quoteInto('sku IN (?)', $skus) . ' AND ' .
-                        $connection->quoteInto('source_code = ?', $destinationSource)
-                    );
+                        $res = $connection->fetchOne($qry);
+
+                        $notifyStockQty = $res === null ? null : (float)$res;
+                        try {
+                            $connection->insert(
+                                $tableName,
+                                [
+                                    'source_code' => $destinationSource,
+                                    'sku' => $sku,
+                                    'notify_stock_qty' => $notifyStockQty,
+                                ]
+                            );
+                        } catch (DuplicateException $e) {
+                            $connection->update(
+                                $tableName,
+                                ['notify_stock_qty' => $notifyStockQty],
+                                $connection->quoteInto('sku IN (?)', $skus) . ' AND ' .
+                                $connection->quoteInto('source_code = ?', $destinationSource)
+                            );
+                        }
+                    }
                 }
             }
         }
