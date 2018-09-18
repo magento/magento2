@@ -18,7 +18,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ChangePassword implements ResolverInterface
 {
