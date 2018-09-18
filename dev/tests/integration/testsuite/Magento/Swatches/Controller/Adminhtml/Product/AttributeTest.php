@@ -133,7 +133,6 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         return [
             'form_key' => 'XxtpPYjm2YPYUlAt',
-            'serialized_options' => '[]',
             'frontend_label' => [
                 0 => 'asdasd',
                 1 => '',

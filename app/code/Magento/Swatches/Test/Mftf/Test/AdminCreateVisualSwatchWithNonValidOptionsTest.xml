@@ -66,6 +66,11 @@
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}"
                    userInput="red" stepKey="fillAdmin1"/>
 
+        <!-- Go to Storefront Properties tab -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
+
         <!-- Save the new product attribute -->
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave2"/>
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}"
