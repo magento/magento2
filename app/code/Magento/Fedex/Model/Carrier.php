@@ -982,11 +982,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
     }
 
-    /**
-     * Return FeDex currency ISO code by Magento Base Currency Code
-     *
-     * @return string 3-digit currency code
-     */
+	/**
+	 * Return FeDex currency ISO code by Magento Base Currency Code
+	 *
+	 * @return string 3-digit currency code
+	 * @throws \Magento\Framework\Exception\NoSuchEntityException
+	 */
     public function getCurrencyCode()
     {
         $codes = [
@@ -1008,7 +1009,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         ];
         $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
 
-        return isset($codes[$currencyCode]) ? $codes[$currencyCode] : $currencyCode;
+        return $codes[$currencyCode] ?? $currencyCode;
     }
 
     /**

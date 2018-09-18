@@ -184,11 +184,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Return code of carrier
      *
-     * @return string
+     * @return string|null
      */
     public function getCarrierCode()
     {
-        return isset($this->_code) ? $this->_code : null;
+        return $this->_code ?? null;
     }
 
     /**
@@ -410,7 +410,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $key = $this->_getQuotesCacheKey($requestParams);
 
-        return isset(self::$_quotesCache[$key]) ? self::$_quotesCache[$key] : null;
+        return self::$_quotesCache[$key] ?? null;
     }
 
     /**

@@ -147,7 +147,7 @@ class Sales extends \Magento\Backend\Block\Template
      */
     public function getWebsiteCount($websiteId)
     {
-        return isset($this->_websiteCounts[$websiteId]) ? $this->_websiteCounts[$websiteId] : 0;
+        return $this->_websiteCounts[$websiteId] ?? 0;
     }
 
     /**
@@ -166,13 +166,15 @@ class Sales extends \Magento\Backend\Block\Template
         return $this->_collection->getTotals();
     }
 
-    /**
-     * Format price by specified website
-     *
-     * @param float $price
-     * @param null|int $websiteId
-     * @return string
-     */
+	/**
+	 * Format price by specified website
+	 *
+	 * @param float    $price
+	 * @param null|int $websiteId
+	 *
+	 * @return string
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 */
     public function formatCurrency($price, $websiteId = null)
     {
         return $this->_storeManager->getWebsite($websiteId)->getBaseCurrency()->format($price);
