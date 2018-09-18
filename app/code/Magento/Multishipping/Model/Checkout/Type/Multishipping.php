@@ -904,10 +904,12 @@ class Multishipping extends \Magento\Framework\DataObject
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        if ($this->_scopeConfig->isSetFlag(
+        $minimumOrderMultiFlag = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-        ) {
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if ($minimumOrderMultiFlag) {
             $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
         } else {
             $result = !($minimumOrderActive && !$this->validateMinimumAmountForAddressItems());
