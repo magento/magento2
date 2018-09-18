@@ -5,12 +5,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category\Image;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Upload
  */
-class Upload extends \Magento\Backend\App\Action
+class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Image uploader
