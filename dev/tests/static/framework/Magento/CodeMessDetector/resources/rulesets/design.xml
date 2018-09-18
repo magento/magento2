@@ -33,4 +33,29 @@ class Baz {
             ]]>
         </example>
     </rule>
+    <rule name="AllPurposeAction"
+          class="Magento\CodeMessDetector\Rule\Design\AllPurposeAction"
+          message= "The class {0} does not restrict processed HTTP methods by implementing a Http*Method name*ActionInterface">
+        <description>
+            <![CDATA[
+Controllers (classes implementing ActionInterface) have to implement marker Http<Method>ActionInterface
+to restrict incoming requests by methods.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class PostOrder implements ActionInterface
+{
+    public function execute()
+    {
+        //I process GET, POST, PATCH etc. while only intended for POST
+        ...
+        return $response;
+    }
+}
+            ]]>
+        </example>
+    </rule>
 </ruleset>

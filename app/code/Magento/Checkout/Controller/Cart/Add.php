@@ -6,6 +6,7 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -15,7 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Checkout\Controller\Cart
+class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * @var ProductRepositoryInterface
