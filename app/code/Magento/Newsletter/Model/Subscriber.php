@@ -392,6 +392,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             $customerData = $this->customerRepository->getById($customerId);
             $customerData->setStoreId($this->_storeManager->getStore()->getId());
+            if ($customerData->getWebsiteId() === null) {
+                $customerData->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
+            }
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
