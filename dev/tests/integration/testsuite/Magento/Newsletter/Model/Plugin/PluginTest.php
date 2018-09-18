@@ -63,14 +63,14 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->setFirstname('Firstname')
             ->setLastname('Lastname')
             ->setEmail('customer_two@example.com');
-        $this->customerRepository->save(
+        $createdCustomer = $this->customerRepository->save(
             $customerDataObject,
             $this->accountManagement->getPasswordHash('password')
         );
 
         $subscriber->loadByEmail('customer_two@example.com');
         $this->assertTrue($subscriber->isSubscribed());
-        $this->assertEquals(0, (int)$subscriber->getCustomerId());
+        $this->assertEquals((int)$createdCustomer->getId(), (int)$subscriber->getCustomerId());
     }
 
     /**
