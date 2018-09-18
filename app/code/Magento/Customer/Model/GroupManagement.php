@@ -8,14 +8,16 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Model\GroupFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,6 +68,11 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     protected $filterBuilder;
 
     /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param GroupFactory $groupFactory
@@ -73,6 +80,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      * @param GroupInterfaceFactory $groupDataFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -81,7 +89,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         GroupRepositoryInterface $groupRepository,
         GroupInterfaceFactory $groupDataFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        SortOrderBuilder $sortOrderBuilder = null
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -90,6 +99,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         $this->groupDataFactory = $groupDataFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder ?: ObjectManager::getInstance()
+            ->get(SortOrderBuilder::class);
     }
 
     /**
@@ -155,9 +166,14 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
             ->setConditionType('neq')
             ->setValue(self::CUST_GROUP_ALL)
             ->create();
+        $groupNameSortOrder = $this->sortOrderBuilder
+            ->setField('customer_group_code')
+            ->setDirection(Collection::SORT_ORDER_ASC)
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilters($notLoggedInFilter)
             ->addFilters($groupAll)
+            ->addSortOrder($groupNameSortOrder)
             ->create();
         return $this->groupRepository->getList($searchCriteria)->getItems();
     }
