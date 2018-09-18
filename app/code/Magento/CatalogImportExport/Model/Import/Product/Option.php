@@ -1220,7 +1220,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $parentCount = [];
             $childCount = [];
             $optionsToRemove = [];
-
             foreach ($bunch as $rowNumber => $rowData) {
                 if (isset($optionId, $valueId) && empty($rowData[Product::COL_STORE_VIEW_CODE])) {
                     $nextOptionId = $optionId;
@@ -1276,7 +1275,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     );
                 }
             }
-
             // Remove all existing options if import behaviour is APPEND
             // in other case remove options for products with empty "custom_options" row only
             if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
@@ -1285,7 +1283,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // Remove options for products with empty "custom_options" row
                 $this->_deleteEntities($optionsToRemove);
             }
-
             // Save prepared custom options data
             if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
                 $types = [
