@@ -21,7 +21,4 @@
     <page name="AdminConfigGeneralPage" url="admin/system_config/edit/section/general/" area="admin" module="Magento_Config">
         <section name="GeneralSection"/>
     </page>
-    <page name="AdminShippingMethodsPage" url="admin/system_config/edit/section/carriers/" area="admin" module="Magento_Config">
-        <section name="ShippingMethodsSection"/>
-    </page>
 </pages>

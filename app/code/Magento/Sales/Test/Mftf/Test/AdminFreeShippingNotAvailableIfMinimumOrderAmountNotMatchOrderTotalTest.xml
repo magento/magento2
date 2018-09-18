@@ -23,42 +23,41 @@
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">100</field>
             </createData>
-            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DisableFlatRate" stepKey="disableFlatRate"/>
-            <actionGroup ref="EnableFreeShipping" stepKey="enableFreeShipping">
-                <argument name="orderAmount" value="101"/>
-            </actionGroup>
-            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheBefore"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="EnableFlatRate" stepKey="enableFlatRate"/>
-            <actionGroup ref="DisableFreeShipping" stepKey="disableFreeShipping"/>
-            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
         </after>
-
+        <!--Create new order with existing customer-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
-            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-
-        <!--Admin creates order-->
+        <!--Add product to order-->
         <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
-            <argument name="product" value="SimpleProduct"/>
+            <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
         <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
         <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
-        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
         <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeAbsentFreeShipping"/>
-
-        <!--Submit Order and verify information-->
+        <!--Submit Order and verify that Order isn't placed-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
 
-        <dontSeeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
-        <seeElement selector="{{AdminOrderDetailsMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>
+        <dontSeeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <seeElement selector="{{AdminMessagesSection.errorMessage}}" stepKey="seeErrorMessage"/>
     </test>
 </tests>
