@@ -6,6 +6,7 @@
 
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
@@ -25,7 +26,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Place extends Payment
+class Place extends Payment implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Quote\Api\CartManagementInterface

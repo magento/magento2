@@ -6,9 +6,10 @@
 namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Engine extends \Magento\Framework\App\Config\Value
 {

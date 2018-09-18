@@ -7,10 +7,11 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductContentSection">
         <element name="sectionHeader" type="button" selector="div[data-index='content']" timeout="30"/>
         <element name="descriptionTextArea" type="textarea" selector="#product_form_description"/>
         <element name="shortDescriptionTextArea" type="textarea" selector="#product_form_short_description"/>
+        <element name="sectionHeaderIfNotShowing" type="button" selector="//div[@data-index='content']//div[contains(@class, '_hide')]"/>
     </section>
 </sections>
