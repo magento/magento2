@@ -55,7 +55,6 @@ class QueryProcessor
         array $variableValues = null,
         string $operationName = null
     ) : array {
-        var_dump($this->exceptionFormatter->shouldShowDetail());
         if (!$this->exceptionFormatter->shouldShowDetail()) {
             $this->queryComplexityLimiter->execute();
         }
