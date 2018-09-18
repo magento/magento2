@@ -32,6 +32,7 @@ class BulkTransferPost extends Action
      * @var BulkInventoryTransferInterface
      */
     private $bulkInventoryTransfer;
+
     /**
      * @var BulkOperationsConfig
      */
