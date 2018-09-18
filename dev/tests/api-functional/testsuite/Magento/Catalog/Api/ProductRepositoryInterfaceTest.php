@@ -864,6 +864,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
 
         $index = null;
@@ -922,6 +923,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
         $this->assertEquals('simple-2', $response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
     /**
@@ -1068,6 +1070,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(3, $searchResult['total_count']);
         $this->assertEquals(1, count($searchResult['items']));
         $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
+        $this->assertNotNull(
+            $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
+        );
     }
 
     /**
