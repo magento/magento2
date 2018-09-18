@@ -63,7 +63,7 @@ class BulkAssign extends Action
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addErrorMessage(__('Could not create products collection.'));
             $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $redirect->setPath('catalog/product/index');
         }
