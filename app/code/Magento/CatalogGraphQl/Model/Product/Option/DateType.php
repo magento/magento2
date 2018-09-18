@@ -13,12 +13,12 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Catalog product option date validator
+ * {@inheritdoc}
  */
 class DateType extends ProductDateOptionType
 {
     /**
      * Make valid string as a value of date option type for GraphQl queries
-     *
      * {@inheritdoc}
      */
     public function validateUserValue($values)
@@ -32,9 +32,7 @@ class DateType extends ProductDateOptionType
 
     /**
      * Format date value from string to date array
-     *
      * @param [] $values
-     *
      * @return []
      * @throws LocalizedException
      */
@@ -58,9 +56,7 @@ class DateType extends ProductDateOptionType
     }
 
     /**
-     * Check if calendar should be shown
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function useCalendar()
     {

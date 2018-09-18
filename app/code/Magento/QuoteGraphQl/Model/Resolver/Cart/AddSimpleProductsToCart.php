@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver\Cart;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -25,15 +22,20 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
-use Magento\QuoteGraphQl\Model\Hydrator\CartHydrator;
+use Magento\QuoteGraphQl\Model\Cart\AddSimpleProductToCartProcessor;
+use Magento\QuoteGraphQl\Model\Resolver\DataProvider\Cart\CartHydrator;
 
 /**
  * Add simple product to cart GraphQl resolver
- *
  * {@inheritdoc}
  */
 class AddSimpleProductsToCart implements ResolverInterface
 {
+    /**
+     * @var AddSimpleProductToCartProcessor
+     */
+    private $addSimpleProductToCartProcessor;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -45,19 +47,9 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $maskedQuoteIdToQuoteId;
 
     /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
      * @var GuestCartRepositoryInterface
      */
     private $guestCartRepository;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * @var CartHydrator
@@ -80,42 +72,38 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $userContext;
 
     /**
-     * @param DataObjectFactory $dataObjectFactory
+     * @param AddSimpleProductToCartProcessor $addSimpleProductToCartProcessor
      * @param CartHydrator $cartHydrator
      * @param ArrayManager $arrayManager
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
      * @param GuestCartRepositoryInterface $guestCartRepository
-     * @param ProductRepositoryInterface $productRepository
      * @param ValueFactory $valueFactory
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        DataObjectFactory $dataObjectFactory,
+        AddSimpleProductToCartProcessor $addSimpleProductToCartProcessor,
         CartHydrator $cartHydrator,
         ArrayManager $arrayManager,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CartRepositoryInterface $cartRepository,
         GuestCartRepositoryInterface $guestCartRepository,
-        ProductRepositoryInterface $productRepository,
         ValueFactory $valueFactory,
         UserContextInterface $userContext
     ) {
         $this->valueFactory = $valueFactory;
         $this->userContext = $userContext;
         $this->arrayManager = $arrayManager;
-        $this->productRepository = $productRepository;
         $this->cartHydrator = $cartHydrator;
         $this->guestCartRepository = $guestCartRepository;
-        $this->dataObjectFactory = $dataObjectFactory;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
+        $this->addSimpleProductToCartProcessor = $addSimpleProductToCartProcessor;
     }
 
     /**
      * Resolve adding simple product to cart for customers/guests
-     *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
     {
@@ -136,11 +124,10 @@ class AddSimpleProductsToCart implements ResolverInterface
 
         $cart = $this->getCart((string) $cartHash);
 
-        foreach ($cartItems as $cartItem) {
-            $sku = $this->arrayManager->get('details/sku', $cartItem);
-            $product = $this->productRepository->get($sku);
+        foreach ($cartItems as $cartItemData) {
+            $sku = $this->arrayManager->get('details/sku', $cartItemData);
 
-            $message = $cart->addProduct($product, $this->getBuyRequest($cartItem));
+            $message = $this->addSimpleProductToCartProcessor->process($cart, $cartItemData);
 
             if (is_string($message)) {
                 throw new GraphQlInputException(
@@ -167,32 +154,7 @@ class AddSimpleProductsToCart implements ResolverInterface
     }
 
     /**
-     * Format GraphQl input data to a shape that buy request has
-     *
-     * @param array $cartItem
-     * @return DataObject
-     */
-    private function getBuyRequest($cartItem): DataObject
-    {
-        $customOptions = [];
-        $qty = $this->arrayManager->get('details/qty', $cartItem);
-        $customizableOptions = $this->arrayManager->get('customizable_options', $cartItem, []);
-
-        foreach ($customizableOptions as $customizableOption) {
-            $customOptions[$customizableOption['id']] = $customizableOption['value'];
-        }
-
-        return $this->dataObjectFactory->create([
-            'data' => [
-                'qty' => $qty,
-                'options' => $customOptions
-            ]
-        ]);
-    }
-
-    /**
      * Collecting cart errors
-     *
      * @param CartInterface|Quote $cart
      * @return string
      */
@@ -210,7 +172,6 @@ class AddSimpleProductsToCart implements ResolverInterface
 
     /**
      * Retrieving quote mode based on customer authorization
-     *
      * @param string $cartHash
      * @return CartInterface|Quote
      * @throws NoSuchEntityException

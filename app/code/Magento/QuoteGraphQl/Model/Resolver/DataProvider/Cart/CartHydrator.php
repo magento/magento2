@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Hydrator;
+namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\Cart;
 
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
@@ -13,16 +13,12 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
  * Cart Hydrator class
- *
- * {@inheritdoc}
  */
 class CartHydrator
 {
     /**
      * Hydrate cart to plain array
-     *
      * @param CartInterface|Quote $cart
-     *
      * @return array
      */
     public function hydrate(CartInterface $cart): array
