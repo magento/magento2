@@ -1573,6 +1573,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testImportWithoutUrlKeys()
     {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         
         /**
@@ -1611,7 +1612,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku, false, null, true)->getUrlKey());
         }
     }
 
