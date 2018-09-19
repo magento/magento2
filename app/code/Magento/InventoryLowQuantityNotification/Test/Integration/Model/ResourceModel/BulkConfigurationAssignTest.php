@@ -30,7 +30,6 @@ class BulkConfigurationAssignTest extends TestCase
         $this->bulkConfigurationAssign = Bootstrap::getObjectManager()->get(BulkConfigurationAssign::class);
         $this->getSourceItemConfiguration =
             Bootstrap::getObjectManager()->create(GetSourceItemConfigurationInterface::class);
-
     }
 
     /**
