@@ -1,18 +1,18 @@
 {
-    "name": "magento/module-inventory-grouped-product-admin-ui",
+    "name": "magento/module-inventory-grouped-product-indexer",
     "description": "N/A",
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
-        "magento/module-grouped-product": "*",
-        "magento/module-ui": "*",
         "magento/module-inventory-api": "*",
         "magento/module-inventory-catalog-api": "*",
-        "magento/module-inventory-catalog-admin-ui": "*"
+        "magento/module-inventory-indexer": "*",
+        "magento/module-inventory-multi-dimensional-indexer-api": "*",
+        "magento/module-grouped-product": "*"
     },
     "suggest": {
-      "magento/module-inventory-configuration-api": "*"
+        "magento/module-inventory": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -24,7 +24,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\InventoryGroupedProductAdminUi\\": ""
+            "Magento\\InventoryGroupedProductIndexer\\": ""
         }
     }
 }
