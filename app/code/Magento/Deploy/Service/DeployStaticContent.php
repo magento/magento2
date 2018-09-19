@@ -136,6 +136,8 @@ class DeployStaticContent
     }
 
     /**
+     * Returns jobs count
+     *
      * @param array $options
      * @return int
      */
@@ -145,6 +147,8 @@ class DeployStaticContent
     }
 
     /**
+     * Check if '--refresh-content-version-only' argument was inserted
+     *
      * @param array $options
      * @return bool
      */

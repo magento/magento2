@@ -158,7 +158,7 @@ class InputValidatorTest extends TestCase
             new InputOption(Options::EXCLUDE_AREA, '', 4, '', ['none']),
             new InputOption(Options::THEME, null, 4, '', ['all']),
             new InputOption(Options::EXCLUDE_THEME, null, 4, '', ['none']),
-            new InputArgument(Options::LANGUAGES_ARGUMENT, null, 4, ['en_US']),
+            new InputArgument(Options::LANGUAGES_ARGUMENT, 2, '', ['en_US']),
             new InputOption(Options::EXCLUDE_LANGUAGE, null, 4, '', ['all'])
         ];
 
@@ -185,7 +185,7 @@ class InputValidatorTest extends TestCase
             new InputOption(Options::EXCLUDE_AREA, null, 4, '', ['none']),
             new InputOption(Options::THEME, null, 4, '', ['all']),
             new InputOption(Options::EXCLUDE_THEME, null, 4, '', ['none']),
-            new InputArgument(Options::LANGUAGES_ARGUMENT, null, 4, ['en_US']),
+            new InputArgument(Options::LANGUAGES_ARGUMENT, 2, '', ['en_US']),
             new InputOption(Options::EXCLUDE_LANGUAGE, null, 4, '', ['none']),
             new InputOption(Options::CONTENT_VERSION, null, 4, '', '/*!#')
         ];

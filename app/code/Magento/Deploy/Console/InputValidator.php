@@ -164,6 +164,8 @@ class InputValidator
     }
 
     /**
+     * Version input checks
+     *
      * @param string $contentVersion
      * @throws \InvalidArgumentException
      */
