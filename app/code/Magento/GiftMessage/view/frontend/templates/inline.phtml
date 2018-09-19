@@ -18,7 +18,7 @@
         </div>
 
         <dl class="options-items" id="allow-gift-options-container">
-            <?php if ($block->isOrderLevelAvailable()): ?>
+            <?php if ($block->isMessagesAvailable()): ?>
             <dt id="add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_messages_for_order" id="allow_gift_options_for_order" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
@@ -28,7 +28,6 @@
 
             <dd id="allow-gift-options-for-order-container" class="order-options">
                 <div class="options-order-container" id="options-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"></div>
-                <?php if ($block->isMessagesAvailable()): ?>
                     <button class="action action-gift"
                             data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'>
                         <span><?= /* @escapeNotVerified */ __('Gift Message') ?></span>
@@ -63,9 +62,8 @@
                             });
                         </script>
                     </div>
-                <?php endif; ?>
             </dd>
-            <?php endif; ?>
+            <?php endif ?>
             <?php if ($block->isItemsAvailable()): ?>
             <dt id="add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title individual">
                 <div class="field choice">
@@ -154,7 +152,7 @@
         </div>
 
         <dl class="options-items" id="allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
-            <?php if ($block->isOrderLevelAvailable()): ?>
+            <?php if ($block->isMessagesOrderAvailable() || $block->isMessagesAvailable()): ?>
             <dt id="add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />

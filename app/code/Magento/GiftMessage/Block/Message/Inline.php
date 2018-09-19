@@ -330,14 +330,11 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      */
-    public function isOrderLevelAvailable()
+    public function isMessagesOrderAvailable()
     {
         $entity = $this->getEntity();
         if (!$entity->hasIsGiftOptionsAvailable()) {
             $this->_eventManager->dispatch('gift_options_prepare', ['entity' => $entity]);
-            if (!$entity->getIsGiftOptionsAvailable()) {
-                $entity->setIsGiftOptionsAvailable($this->isMessagesAvailable());
-            }
         }
         return $entity->getIsGiftOptionsAvailable();
     }
@@ -372,7 +369,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         // render HTML when messages are allowed for order or for items only
-        if ($this->isItemsAvailable() || $this->isOrderLevelAvailable()) {
+        if ($this->isItemsAvailable() || $this->isMessagesAvailable() || $this->isMessagesOrderAvailable()) {
             return parent::_toHtml();
         }
         return '';
