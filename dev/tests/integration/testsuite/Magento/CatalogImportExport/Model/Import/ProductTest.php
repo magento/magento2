@@ -1568,15 +1568,24 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
     {
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        
         /**
          * Products `simple1` and `simple2` are created by fixture so already
          * have a URL Key, whereas `simple3` is a new product so won't have one.
+         * Therefore we delete `simple3` to ensure other tests do not impact this.
          */
+        try {
+            $productRepository->deleteById('simple3');
+        } catch (\Exception $e) {
+            // nothing to do, the product already does not exist
+        }
+        
         $products = [
             'simple1' => 'url-key',
             'simple2' => 'url-key2',
@@ -1601,7 +1610,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
