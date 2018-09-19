@@ -16,6 +16,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
+ * Resource model for category entity
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends AbstractResource
@@ -249,7 +251,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data before saving
-     * prepare path and increment children count for parent categories
+     *
+     * Prepare path and increment children count for parent categories
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -298,7 +301,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data after save category object
-     * save related products ids and update path value
+     *
+     * Save related products ids and update path value
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -490,7 +494,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * Get chlden categories count
+     * Get children categories count
      *
      * @param int $categoryId
      * @return int
@@ -664,7 +668,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return intval($counts);
+        return (int) $counts;
     }
 
     /**
@@ -862,6 +866,7 @@ class Category extends AbstractResource
 
     /**
      * Check category is forbidden to delete.
+     *
      * If category is root and assigned to store group return false
      *
      * @param integer $categoryId
@@ -982,6 +987,7 @@ class Category extends AbstractResource
 
     /**
      * Process positions of old parent category children and new parent category children.
+     *
      * Get position for moved category
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -1062,7 +1068,7 @@ class Category extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -1088,6 +1094,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns EntityManager object
+     *
      * @return EntityManager
      */
     private function getEntityManager()
@@ -1100,6 +1108,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns AggregateCount object
+     *
      * @return Category\AggregateCount
      */
     private function getAggregateCount()

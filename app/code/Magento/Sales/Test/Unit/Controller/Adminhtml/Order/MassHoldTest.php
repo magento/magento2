@@ -90,6 +90,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderManagementMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -166,6 +169,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteOneOrderPutOnHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -196,11 +202,11 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) were not put on hold.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You have put 1 order(s) on hold.');
 
         $this->resultRedirectMock->expects($this->once())
@@ -211,6 +217,9 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
         $this->massAction->execute();
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteNoOrdersPutOnHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -240,7 +249,7 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('No order(s) were put on hold.');
 
         $this->resultRedirectMock->expects($this->once())

@@ -183,9 +183,12 @@
 
 .admin__field-label {
     color: @field-label__color;
-    cursor: pointer;
     margin: 0;
     text-align: right;
+
+    label {
+        cursor: pointer;
+    }
 
     + br {
         display: none;
@@ -225,7 +228,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        > span {
+        span {
             &:after {
                 color: @validation__color;
                 content: '*';

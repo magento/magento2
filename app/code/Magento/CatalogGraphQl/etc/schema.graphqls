@@ -248,8 +248,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     id: Int @doc(description: "The ID number assigned to the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
-    description: String @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
-    short_description: String @doc(description: "A short description of the product. Its use depends on the theme.")
+    description: String @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductHtmlAttribute")
+    short_description: String @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductHtmlAttribute")
     special_price: Float @doc(description: "The discounted price of the product")
     special_from_date: String @doc(description: "The beginning date that a product has a special price")
     special_to_date: String @doc(description: "The end date that a product has a special price")
@@ -381,6 +381,14 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
     ): CategoryProducts @doc(description: "The list of products assigned to the category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
+}
+
+type Breadcrumb @doc(description: "Breadcrumb item"){
+    category_id: Int @doc(description: "Category ID")
+    category_name: String @doc(description: "Category name")
+    category_level: Int @doc(description: "Category level")
+    category_url_key: String @doc(description: "Category URL key")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option") {
@@ -540,6 +548,6 @@ type SortField {
 }
 
 type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields") {
-    default: String @doc(description: "Default value of sort fields") 
+    default: String @doc(description: "Default value of sort fields")
     options: [SortField] @doc(description: "Available sort fields")
 }

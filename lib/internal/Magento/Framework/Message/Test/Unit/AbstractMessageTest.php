@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Message\Test\Unit;
 
-use Magento\Framework\Message\MessageInterface;
-
 /**
  * \Magento\Framework\Message\AbstractMessage test case
  */

@@ -62,6 +62,14 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        destroy: function () {
+            this._super();
+            wysiwyg.removeEvents(this.wysiwygId);
+        },
+
+        /**
          *
          * @returns {exports}
          */

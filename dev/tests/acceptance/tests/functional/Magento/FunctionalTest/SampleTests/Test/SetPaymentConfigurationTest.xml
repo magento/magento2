@@ -11,7 +11,9 @@
     <test name="SetPaypalConfigurationTest">
         <annotations>
             <features value="SampleTests"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <createData entity="SamplePaypalConfig" stepKey="createSamplePaypalConfig"/>
         <createData entity="DefaultPayPalConfig" stepKey="restoreDefaultPaypalConfig"/>
@@ -19,7 +21,9 @@
     <test name="SetBraintreeConfigurationTest">
         <annotations>
             <features value="SampleTests"/>
-            <group value="skip"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
         </annotations>
         <createData entity="SampleBraintreeConfig" stepKey="createSampleBraintreeConfig"/>
         <createData entity="DefaultBraintreeConfig" stepKey="restoreDefaultBraintreeConfig"/>

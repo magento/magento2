@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewProductActionGroup">
+
+        <click stepKey="openCatalog" selector="{{AdminMenuSection.catalog}}"/>
+        <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
+        <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>
+        <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
+        <click stepKey="addProduct" selector="{{ProductsPageSection.addProductButton}}"/>
+        <waitForPageLoad stepKey="waitForNewProductPage" time="10"/>
+        <fillField stepKey="FillProductName" selector="{{NewProductPageSection.productName}}" userInput="{{NewProductData.ProductName}}"/>
+        <fillField stepKey="FillPrice" selector="{{NewProductPageSection.price}}" userInput="{{NewProductData.Price}}"/>
+        <fillField stepKey="FillQuantity" selector="{{NewProductPageSection.quantity}}" userInput="{{NewProductData.Quantity}}"/>
+        <click stepKey="Save" selector="{{NewProductPageSection.saveButton}}"/>
+        <waitForElementVisible stepKey="waitForSuccessfullyCreatedMessage" selector="{{NewProductPageSection.createdSuccessMessage}}" time="10"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+    </actionGroup>
+</actionGroups>

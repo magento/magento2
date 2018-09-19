@@ -12,6 +12,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
+use Psr\Log\LoggerInterface;
 
 /**
  * A bootstrap of Magento application
@@ -258,6 +259,7 @@ class Bootstrap
                 \Magento\Framework\Profiler::stop('magento');
             } catch (\Exception $e) {
                 \Magento\Framework\Profiler::stop('magento');
+                $this->objectManager->get(LoggerInterface::class)->error($e->getMessage());
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
@@ -423,7 +425,7 @@ class Bootstrap
                 if (!$this->objectManager) {
                     throw new \DomainException();
                 }
-                $this->objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->objectManager->get(LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }

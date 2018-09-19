@@ -219,6 +219,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                         break;
                     }
                 }
+
+                $uniqueValues = array_unique($values);
+                if (count($uniqueValues) != count($values)) {
+                    $valid = false;
+                    $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
+                }
                 break;
             case 'datetime':
                 $val = trim($rowData[$attrCode]);

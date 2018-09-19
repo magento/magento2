@@ -6,13 +6,13 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 
 /**
  * Bundle Type Model
@@ -537,7 +537,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
+                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -559,7 +559,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int) $qty;
     }
 
     /**
@@ -625,6 +625,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare of bundle selections options.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -790,6 +791,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Cast array values to int
+     *
      * @param array $array
      * @return int[]|int[][]
      */
@@ -809,6 +812,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Convert multi dimensional array to flat
+     *
      * @param array $array
      * @return int[]
      */
@@ -920,8 +925,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
@@ -987,6 +991,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Sort selections method for usort function
+     *
      * Sort selections by option position, selection position and selection id
      *
      * @param  \Magento\Catalog\Model\Product $firstItem
@@ -1050,6 +1055,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve additional searchable data from type instance
+     *
      * Using based on product id and store_id data
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -1118,6 +1124,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param  \Magento\Catalog\Model\Product $product
@@ -1214,6 +1221,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns selection qty
+     *
      * @param \Magento\Framework\DataObject $selection
      * @param int[] $qtys
      * @param int $selectionOptionId
@@ -1232,6 +1241,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns qty
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $selection
      * @return float|int
@@ -1249,6 +1260,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate required options
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1270,6 +1283,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Check if selection is salable
+     *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1300,6 +1315,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate result
+     *
      * @param array $_result
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1318,6 +1335,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Merge selections with options
+     *
      * @param \Magento\Catalog\Model\Product\Option[] $options
      * @param \Magento\Framework\DataObject[] $selections
      * @return \Magento\Framework\DataObject[]
