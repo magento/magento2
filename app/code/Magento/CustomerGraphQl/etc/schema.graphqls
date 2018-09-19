@@ -7,6 +7,7 @@ type Query {
 
 type Mutation {
     generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\GenerateCustomerToken") @doc(description:"Retrieve Customer token")
+    changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\ChangePassword") @doc(description:"Changes password for logged in customer")
 }
 
 type CustomerToken {
