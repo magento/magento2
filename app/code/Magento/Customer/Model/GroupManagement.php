@@ -20,6 +20,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * The class contains methods for getting information about a customer group
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
@@ -104,7 +106,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isReadonly($groupId)
     {
@@ -118,7 +120,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultGroup($storeId = null)
     {
@@ -144,7 +146,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNotLoggedInGroup()
     {
@@ -152,7 +154,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLoggedInGroups()
     {
@@ -179,7 +181,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllCustomersGroup()
     {
