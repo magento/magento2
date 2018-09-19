@@ -53,7 +53,7 @@
 
         <conditionalClick selector="//*[contains(@class,'admin__collapsible-title')]//span[contains(text(), 'Content')]" dependentSelector="//span[contains(@data-bind, 'label')][contains(text(),'Content')]/../../..//div[contains(@class, '_show')]" visible="false" stepKey="clickOnTheContentHeaderIfClosed1"/>
         <waitForPageLoad stepKey="waitForPageLoad8"/>
-        <fillField selector="#product_form_description" userInput="Best Product" stepKey="fillDescriptionField1"/>
+        <fillField selector="#product_form_short_description" userInput="Best Product" stepKey="fillShortDescriptionField1"/>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
