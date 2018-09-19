@@ -19,7 +19,6 @@ use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\AddSimpleProductToCartProcessor;
@@ -47,11 +46,6 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $maskedQuoteIdToQuoteId;
 
     /**
-     * @var GuestCartRepositoryInterface
-     */
-    private $guestCartRepository;
-
-    /**
      * @var CartHydrator
      */
     private $cartHydrator;
@@ -77,7 +71,6 @@ class AddSimpleProductsToCart implements ResolverInterface
      * @param ArrayManager $arrayManager
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
-     * @param GuestCartRepositoryInterface $guestCartRepository
      * @param ValueFactory $valueFactory
      * @param UserContextInterface $userContext
      */
@@ -87,7 +80,6 @@ class AddSimpleProductsToCart implements ResolverInterface
         ArrayManager $arrayManager,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CartRepositoryInterface $cartRepository,
-        GuestCartRepositoryInterface $guestCartRepository,
         ValueFactory $valueFactory,
         UserContextInterface $userContext
     ) {
@@ -95,7 +87,6 @@ class AddSimpleProductsToCart implements ResolverInterface
         $this->userContext = $userContext;
         $this->arrayManager = $arrayManager;
         $this->cartHydrator = $cartHydrator;
-        $this->guestCartRepository = $guestCartRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->addSimpleProductToCartProcessor = $addSimpleProductToCartProcessor;
@@ -180,13 +171,8 @@ class AddSimpleProductsToCart implements ResolverInterface
      */
     private function getCart(string $cartHash): CartInterface
     {
-        $customerId = $this->userContext->getUserId();
-
-        if (!$customerId) {
-            return $this->guestCartRepository->get($cartHash);
-        }
-
         $cartId = $this->maskedQuoteIdToQuoteId->execute((string) $cartHash);
+
         return $this->cartRepository->get($cartId);
     }
 }
