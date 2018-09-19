@@ -176,8 +176,6 @@ class Multishipping extends \Magento\Framework\DataObject
     private $dataObjectHelper;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -202,8 +200,9 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
-     * @param Multishipping\PlaceOrderFactory $placeOrderFactory
-     * @param LoggerInterface $logger
+     * @param Multishipping\PlaceOrderFactory|null $placeOrderFactory
+     * @param LoggerInterface|null $logger
+     * @param \Magento\Framework\Api\DataObjectHelper|null $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -272,6 +271,7 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * Initialize multishipping checkout.
+     *
      * Split virtual/not virtual items between default billing/shipping addresses
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
@@ -337,6 +337,7 @@ class Multishipping extends \Magento\Framework\DataObject
 
     /**
      * Get quote items assigned to different quote addresses populated per item qty.
+     *
      * Based on result array we can display each item separately
      *
      * @return array
@@ -397,7 +398,7 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Assign quote items to addresses and specify items qty
      *
-     * array structure:
+     * Array structure:
      * array(
      *      $quoteItemId => array(
      *          'qty'       => $qty,
@@ -693,6 +694,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $order->setIsVirtual(1);
         } else {
             $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
+            $order->setShippingMethod($address->getShippingMethod());
         }
 
         $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
@@ -927,6 +929,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get minimum amount error.
+     *
      * @return string
      */
     public function getMinimumAmountError()
@@ -1071,7 +1075,7 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Check if specified address ID belongs to customer.
      *
-     * @param $addressId
+     * @param mixed $addressId
      * @return bool
      */
     protected function isAddressIdApplicable($addressId)
@@ -1084,6 +1088,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      */
@@ -1104,6 +1110,8 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get shipping assignment processor.
+     *
      * @return \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
      */
     private function getShippingAssignmentProcessor()
@@ -1186,10 +1194,11 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get quote address errors.
+     *
      * @param OrderInterface[] $orders
      * @param \Magento\Quote\Model\Quote\Address[] $addresses
      * @param \Exception[] $exceptionList
-     *
      * @return string[]
      * @throws NotFoundException
      */
