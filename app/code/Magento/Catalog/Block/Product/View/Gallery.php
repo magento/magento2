@@ -235,17 +235,18 @@ class Gallery extends AbstractView
     }
 
     /**
-     * @param string $image
      * @return string
      */
-    public function getMainProductImage()
+    public function getMainProductImage($size = 'medium_image_url')
     {
-        $image = $this->getGalleryImages()->toArray()['items'][0]['medium_image_url'];
+        foreach ($this->getGalleryImages() as $image) {
+            $image = $image->getData($size);
 
-        if (!$image) {
-            return $this->_imageHelper->getDefaultPlaceholderUrl('image');
+            if (!$image) {
+                return $this->_imageHelper->getDefaultPlaceholderUrl('image');
+            }
+
+            return $image;
         }
-
-        return $image;
     }
 }
