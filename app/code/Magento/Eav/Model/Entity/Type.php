@@ -163,7 +163,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Init and retrieve attribute collection
      *
-     * @return mixed
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected function _getAttributeCollection()
     {
