@@ -62,9 +62,9 @@ class ChangePassword implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = (int)$this->userContext->getUserId();
+        $customerId = $this->userContext->getUserId();
 
-        if ($customerId === 0) {
+        if ($customerId === 0 || $customerId === null) {
             throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',
