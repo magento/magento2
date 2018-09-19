@@ -43,11 +43,11 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      */
     public function testApplyCouponToGuestCartWithItems()
     {
-        $couponCode = 'CART_FIXED_DISCOUNT_15';
+        $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load(
             $this->quote,
@@ -64,11 +64,11 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      */
     public function testApplyCouponTwice()
     {
-        $couponCode = 'CART_FIXED_DISCOUNT_15';
+        $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load(
             $this->quote,
@@ -88,11 +88,11 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      */
     public function testApplyCouponToCartWithNoItems()
     {
-        $couponCode = 'CART_FIXED_DISCOUNT_15';
+        $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
@@ -104,12 +104,12 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testGuestCustomerAttemptToChangeCustomerCart()
     {
-        $couponCode = 'CART_FIXED_DISCOUNT_15';
+        $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load(
             $this->quote,
@@ -127,11 +127,11 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      */
     public function testRemoveCoupon()
     {
-        $couponCode = 'CART_FIXED_DISCOUNT_15';
+        $couponCode = '2?ds5!2d';
 
         /* Apply coupon to the quote */
         $this->quoteResource->load(
@@ -158,7 +158,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testRemoveCouponFromCustomerCartByGuest()
