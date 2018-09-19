@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\TestFramework\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -23,6 +24,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     {
         $associatedProductIds = ['3', '14', '15', '92'];
         $associatedProductIdsJSON = json_encode($associatedProductIds);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'id' => 1,

@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,8 +20,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * @magentoAppIsolation enabled
@@ -157,6 +157,62 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
 
         return $website;
+    }
+
+    /**
+     * Test for check that 2 same product create and url_key save.
+     *
+     * @return void
+     */
+    public function testSaveTwoSameProduct()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $product1 = [
+            'product' => [
+                'attribute_set_id' => 4,
+                'name' =>  "Test API 1",
+                'price' =>  254.13,
+                'sku' => '1234'
+            ]
+        ];
+        $product2 = [
+            'product' => [
+                'attribute_set_id' => 4,
+                'name' =>  "Test API 1",
+                'price' =>  254.13,
+                'sku' => '1235'
+            ]
+        ];
+
+        $product1 = $this->_webApiCall($serviceInfo, $product1);
+        $response = $this->_webApiCall($serviceInfo, $product2);
+
+        $index = null;
+        foreach ($response['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'url_key') {
+                $index = $key;
+                break;
+            }
+        }
+
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        $expectedResult = $product1['custom_attributes'][$index]['value'] . '-1';
+        $this->assertEquals($expectedResult, $response['custom_attributes'][$index]['value']);
+
+        $this->deleteProduct('1234');
+        $this->deleteProduct('1235');
     }
 
     /**
@@ -815,6 +871,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) > 0);
 
         $this->assertNotNull($response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
 
         $index = null;
@@ -912,6 +969,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
         $this->assertEquals('simple-2', $response['items'][0]['sku']);
+        $this->assertNotNull($response['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']);
     }
 
     /**
@@ -1058,6 +1116,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(3, $searchResult['total_count']);
         $this->assertEquals(1, count($searchResult['items']));
         $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
+        $this->assertNotNull(
+            $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
+        );
     }
 
     /**

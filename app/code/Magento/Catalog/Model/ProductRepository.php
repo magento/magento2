@@ -20,6 +20,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
+use Magento\Framework\EntityManager\Operation\Read\ReadExtensions;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
@@ -29,6 +30,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
+ * Product Repository.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -155,6 +157,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $serializer;
 
     /**
+     * @var ReadExtensions
+     */
+    private $readExtensions;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -179,6 +186,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param CollectionProcessorInterface $collectionProcessor [optional]
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
+     * @param ReadExtensions|null $readExtensions
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -205,7 +213,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        $cacheLimit = 1000
+        $cacheLimit = 1000,
+        ReadExtensions $readExtensions = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -228,10 +237,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->cacheLimit = (int)$cacheLimit;
+        $this->readExtensions = $readExtensions ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ReadExtensions::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
@@ -261,7 +272,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
@@ -351,6 +362,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+     * Assign product to websites.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -366,6 +379,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+     * Process new gallery media entry.
+     *
      * @param ProductInterface $product
      * @param array $newEntry
      * @return $this
@@ -618,7 +633,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(ProductInterface $product)
     {
@@ -642,7 +657,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku)
     {
@@ -651,7 +666,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -668,6 +683,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->load();
 
         $collection->addCategoryIds();
+        $this->addExtensionAttributes($collection);
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
@@ -678,7 +694,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->getCacheKey(
                     [
                         false,
-                        $product->hasData(\Magento\Catalog\Model\Product::STORE_ID) ? $product->getStoreId() : null
+                        $product->getStoreId()
                     ]
                 ),
                 $product
@@ -686,6 +702,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         return $searchResult;
+    }
+
+    /**
+     * Add extension attributes to loaded items.
+     *
+     * @param Collection $collection
+     * @return Collection
+     */
+    private function addExtensionAttributes(Collection $collection) : Collection
+    {
+        foreach ($collection->getItems() as $item) {
+            $this->readExtensions->execute($item);
+        }
+        return $collection;
     }
 
     /**
@@ -759,6 +789,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+     * Retrieve media gallery processor.
+     *
      * @return Product\Gallery\Processor
      */
     private function getMediaGalleryProcessor()

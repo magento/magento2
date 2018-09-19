@@ -19,8 +19,7 @@ use Magento\Framework\App\TemplateTypesInterface;
     </div>
     <?= /* @noEscape */ $block->getForm() ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
-    <?= $block->getBlockHtml('formkey') ?>
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="get" id="newsletter_template_preview_form" target="_blank">
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
