@@ -245,7 +245,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function get($sku, $editMode = false, $storeId = null, $forceReload = false): ProductInterface
+    public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
@@ -267,7 +267,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function getById($productId, $editMode = false, $storeId = null, $forceReload = false): ProductInterface
+    public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
@@ -294,7 +294,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param array $data
      * @return string
      */
-    protected function getCacheKey($data): string
+    protected function getCacheKey($data)
     {
         $serializeData = [];
         foreach ($data as $key => $value) {
@@ -336,7 +336,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @return ProductInterface|Product
      * @throws NoSuchEntityException
      */
-    protected function initializeProductData(array $productData, $createNew): ProductInterface
+    protected function initializeProductData(array $productData, $createNew)
     {
         unset($productData['media_gallery']);
         if ($createNew) {
@@ -387,7 +387,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @return $this
      * @throws NoSuchEntityException
      */
-    private function processLinks(ProductInterface $product, $newLinks): ProductRepository
+    private function processLinks(ProductInterface $product, $newLinks)
     {
         if ($newLinks === null) {
             // If product links were not specified, don't do anything
@@ -663,7 +663,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
-    private function getCollectionProcessor(): CollectionProcessorInterface
+    private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
