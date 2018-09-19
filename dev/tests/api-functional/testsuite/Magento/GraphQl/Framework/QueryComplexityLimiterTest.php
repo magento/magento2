@@ -90,6 +90,127 @@ category(id: 2) {
                       id
                       types
                     }
+                    categories {
+                      id
+                      position
+                      level
+                      url_key
+                      url_path
+                      product_count
+                      breadcrumbs {
+                        category_id
+                        category_name
+                        category_url_key
+                      }
+                      products {
+                        items {
+                          name
+                          special_from_date
+                          special_to_date
+                          new_to_date
+                          new_from_date
+                          tier_price
+                          manufacturer
+                          thumbnail
+                          sku
+                          image
+                          canonical_url
+                          updated_at
+                          created_at
+                          categories {
+                            id
+                            position
+                            level
+                            url_key
+                            url_path
+                            product_count
+                            breadcrumbs {
+                              category_id
+                              category_name
+                              category_url_key
+                            }
+                            products {
+                              items {
+                                name
+                                special_from_date
+                                special_to_date
+                                new_to_date
+                                new_from_date
+                                tier_price
+                                manufacturer
+                                sku
+                                image
+                                canonical_url
+                                updated_at
+                                created_at
+                                categories {
+                                  id
+                                  position
+                                  level
+                                  url_key
+                                  url_path
+                                  product_count
+                                  breadcrumbs {
+                                    category_id
+                                    category_name
+                                    category_url_key
+                                  }
+                                  products {
+                                    items {
+                                      name
+                                      special_from_date
+                                      special_to_date
+                                      new_to_date
+                                      new_from_date
+                                      tier_price
+                                      manufacturer
+                                      sku
+                                      image
+                                      thumbnail
+                                      canonical_url
+                                      updated_at
+                                      created_at
+                                      categories {
+                                        id
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        level
+                                        url_key
+                                        url_path
+                                        product_count
+                                        default_sort_by
+                                        breadcrumbs {
+                                          category_id
+                                          category_name
+                                          category_url_key
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -102,7 +223,7 @@ category(id: 2) {
 }
 QUERY;
 
-        self::expectExceptionMessageRegExp('/Max query complexity should be 50 but got 62/');
+        self::expectExceptionMessageRegExp('/Max query complexity should be 160 but got 169/');
         $this->graphQlQuery($query);
     }
 
@@ -139,7 +260,13 @@ QUERY;
                                       categories {
                                         products {
                                           items {
-                                            name
+                                            categories {
+                                              products {
+                                                items {
+                                                  name
+                                                }
+                                              }
+                                            }
                                           }
                                         }
                                       }
@@ -163,7 +290,7 @@ QUERY;
   }
 }
 QUERY;
-        self::expectExceptionMessageRegExp('/Max query depth should be 15 but got 20/');
+        self::expectExceptionMessageRegExp('/Max query depth should be 20 but got 23/');
         $this->graphQlQuery($query);
     }
 }

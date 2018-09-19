@@ -99,8 +99,8 @@
     </type>
     <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
         <arguments>
-            <argument name="queryDepth" xsi:type="number">15</argument>
-            <argument name="queryComplexity" xsi:type="number">50</argument>
+            <argument name="queryDepth" xsi:type="number">20</argument>
+            <argument name="queryComplexity" xsi:type="number">160</argument>
         </arguments>
     </type>
 </config>
