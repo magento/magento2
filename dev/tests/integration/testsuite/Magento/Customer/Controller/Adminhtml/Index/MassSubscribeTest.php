@@ -69,14 +69,22 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             self::fail($e->getMessage());
         }
 
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
         $params = [
             'selected' => [
                 $customer1->getId(),
                 $customer2->getId(),
             ],
             'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
         ];
-        $this->getRequest()->setParams($params);
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
 
         $this->dispatch('backend/customer/index/massSubscribe');
 
@@ -106,11 +114,19 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     public function testMassSubscriberActionNoSelection()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
+
         $params = [
-            'namespace' => 'customer_listing'
+            'namespace' => 'customer_listing',
+            'form_key' => $formKey->getFormKey()
         ];
 
-        $this->getRequest()->setParams($params);
+        $this->getRequest()
+            ->setParams($params)
+            ->setMethod('POST');
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));

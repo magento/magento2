@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Math\Random;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -63,11 +65,17 @@ class ValidatorFile extends Validator
     protected $isImageValidator;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
+     * @param Random|null $random
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -75,12 +83,15 @@ class ValidatorFile extends Validator
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
-        \Magento\Framework\Validator\File\IsImage $isImageValidator
+        \Magento\Framework\Validator\File\IsImage $isImageValidator,
+        Random $random = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
         $this->httpFactory = $httpFactory;
         $this->isImageValidator = $isImageValidator;
+        $this->random = $random
+            ? $random : ObjectManager::getInstance()->get(Random::class);
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
@@ -147,16 +158,20 @@ class ValidatorFile extends Validator
         $userValue = [];
 
         if ($upload->isUploaded($file) && $upload->isValid($file)) {
-            $extension = pathinfo(strtolower($fileInfo['name']), PATHINFO_EXTENSION);
-
             $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
             $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
 
             $filePath = $dispersion;
 
             $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-            $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
-            $filePath .= '/' . $fileHash . '.' . $extension;
+            $fileHash = hash(
+                'md5',
+                $tmpDirectory->readFile(
+                    $tmpDirectory->getRelativePath($fileInfo['tmp_name'])
+                )
+            );
+            $fileRandomName = $this->random->getRandomString(32);
+            $filePath .= '/' . $fileRandomName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
 
             $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
