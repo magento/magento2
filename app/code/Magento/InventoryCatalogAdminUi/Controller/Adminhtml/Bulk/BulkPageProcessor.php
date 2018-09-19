@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
-use Magento\InventoryCatalogApi\Model\GetSourceCodesBySkusInterface;
+use Magento\InventoryCatalogAdminUi\Model\ResourceModel\GetSourceCodesBySkus;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Framework\Phrase;
 
@@ -48,7 +48,7 @@ class BulkPageProcessor
     private $messageManager;
 
     /**
-     * @var GetSourceCodesBySkusInterface
+     * @var GetSourceCodesBySkus
      */
     private $getSourceCodesBySkus;
 
@@ -58,7 +58,7 @@ class BulkPageProcessor
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
      * @param ResultFactory $resultFactory
      * @param ManagerInterface $messageManager
-     * @param GetSourceCodesBySkusInterface $getSourceCodesBySkus
+     * @param GetSourceCodesBySkus $getSourceCodesBySkus
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -67,7 +67,7 @@ class BulkPageProcessor
         BulkSessionProductsStorage $bulkSessionProductsStorage,
         ResultFactory $resultFactory,
         ManagerInterface $messageManager,
-        GetSourceCodesBySkusInterface $getSourceCodesBySkus
+        GetSourceCodesBySkus $getSourceCodesBySkus
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->filter = $filter;

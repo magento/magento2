@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\ResourceModel;
+namespace Magento\InventoryCatalogAdminUi\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
@@ -13,7 +13,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
 /**
  * Retrieve a list of source codes by a selection of SKUs
  */
-class GetSourcesCodesBySkus
+class GetSourceCodesBySkus
 {
     /**
      * @var ResourceConnection

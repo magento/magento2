@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalogAdminUi\Test\Integration;
 
-use Magento\InventoryCatalogApi\Model\GetSourceCodesBySkusInterface;
+use Magento\InventoryCatalogAdminUi\Model\ResourceModel\GetSourceCodesBySkus;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class GetSourceCodesBySkusTest extends TestCase
 {
     /**
-     * @var GetSourceCodesBySkusInterface
+     * @var GetSourceCodesBySkus
      */
     private $getSourceCodesBySkus;
 
@@ -22,7 +22,7 @@ class GetSourceCodesBySkusTest extends TestCase
     {
         parent::setUp();
 
-        $this->getSourceCodesBySkus = Bootstrap::getObjectManager()->get(GetSourceCodesBySkusInterface::class);
+        $this->getSourceCodesBySkus = Bootstrap::getObjectManager()->get(GetSourceCodesBySkus::class);
     }
 
     /**

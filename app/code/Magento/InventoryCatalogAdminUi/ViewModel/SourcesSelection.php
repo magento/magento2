@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogAdminUi\Model\BulkSessionProductsStorage;
-use Magento\InventoryCatalogApi\Model\GetSourceCodesBySkusInterface;
+use Magento\InventoryCatalogAdminUi\Model\ResourceModel\GetSourceCodesBySkus;
 
 class SourcesSelection implements ArgumentInterface
 {
@@ -33,21 +33,21 @@ class SourcesSelection implements ArgumentInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var GetSourceCodesBySkusInterface
+     * @var GetSourceCodesBySkus
      */
     private $getSourceCodesBySkus;
 
     /**
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param GetSourceCodesBySkusInterface $getSourceCodesBySkus
+     * @param GetSourceCodesBySkus $getSourceCodesBySkus
      * @param BulkSessionProductsStorage $bulkSessionProductsStorage
      * @SuppressWarnings(PHPMD.LongVariables)
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        GetSourceCodesBySkusInterface $getSourceCodesBySkus,
+        GetSourceCodesBySkus $getSourceCodesBySkus,
         BulkSessionProductsStorage $bulkSessionProductsStorage
     ) {
         $this->sourceRepository = $sourceRepository;
