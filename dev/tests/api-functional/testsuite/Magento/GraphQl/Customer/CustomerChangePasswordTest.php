@@ -8,22 +8,35 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class CustomerChangePasswordTest extends GraphQlAbstract
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var AccountManagementInterface
      */
     private $accountManagement;
+
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    protected function setUp()
+    {
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->accountManagement = Bootstrap::getObjectManager()->get(AccountManagementInterface::class);
+        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -42,8 +55,7 @@ class CustomerChangePasswordTest extends GraphQlAbstract
 
         try {
             // registry contains the old password hash so needs to be reset
-            $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class)
-                ->removeByEmail($customerEmail);
+            $this->customerRegistry->removeByEmail($customerEmail);
             $this->accountManagement->authenticate($customerEmail, $newCustomerPassword);
         } catch (LocalizedException $e) {
             $this->fail('Password was not changed: ' . $e->getMessage());
@@ -120,17 +132,14 @@ QUERY;
         return $query;
     }
 
-    private function getCustomerAuthHeaders($customerEmail, $oldCustomerPassword)
+    /**
+     * @param string $email
+     * @param string $password
+     * @return array
+     */
+    private function getCustomerAuthHeaders(string $email, string $password): array
     {
-        /** @var CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($customerEmail, $oldCustomerPassword);
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
     }
 }
