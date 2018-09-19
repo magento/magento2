@@ -45,8 +45,12 @@ class BulkConfigurationTransferInterfacePlugin
         string $destinationSource,
         bool $unassignFromOrigin
     ): bool {
-        $res = $proceed($skus, $originSource, $destinationSource, $unassignFromOrigin);
+        // Low stock configuration must be migrated before the inventory itself
+        // There is foreign key from inventory_low_stock_notification_configuration to inventory_source_item
+        // Otherwise, the unassignment may produce unexpected behaviours because it will erase the previous value of
+        // inventory_low_stock_notification_configuration
         $this->bulkConfigurationTransfer->execute($skus, $originSource, $destinationSource, $unassignFromOrigin);
+        $res = $proceed($skus, $originSource, $destinationSource, $unassignFromOrigin);
         return $res;
     }
 }

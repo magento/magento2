@@ -23,8 +23,4 @@
         <plugin name="inventory_bulk_source_assign_low_quantity_notification"
                 type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceAssignInterfacePlugin"/>
     </type>
-    <type name="Magento\InventoryCatalogApi\Api\BulkSourceUnassignInterface">
-        <plugin name="inventory_bulk_source_unassign_low_quantity_notification"
-                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceUnassignInterfacePlugin"/>
-    </type>
 </config>

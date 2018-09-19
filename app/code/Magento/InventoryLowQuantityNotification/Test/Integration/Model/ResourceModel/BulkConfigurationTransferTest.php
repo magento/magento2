@@ -110,4 +110,24 @@ class BulkConfigurationTransferTest extends TestCase
             'Low stock notification was overwritten by an unassigned source'
         );
     }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
+     * @magentoDbIsolation enabled
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testTransferToUnassignedSource()
+    {
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'us-1', false);
+        $sourceConfig = $this->getSourceItemConfiguration->execute('us-1', 'SKU-1');
+
+        self::assertEquals(
+            5.6,
+            $sourceConfig->getNotifyStockQty(),
+            'Low stock notification was not transferred to unassigned source'
+        );
+    }
 }
