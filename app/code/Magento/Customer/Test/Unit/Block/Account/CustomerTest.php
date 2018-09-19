@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\Account\Customer */
     private $block;
@@ -22,6 +22,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->getObject(\Magento\Customer\Block\Account\Customer::class, ['httpContext' => $this->httpContext]);
     }
 
+    /**
+     * @return array
+     */
     public function customerLoggedInDataProvider()
     {
         return [

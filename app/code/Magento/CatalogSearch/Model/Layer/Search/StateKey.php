@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**

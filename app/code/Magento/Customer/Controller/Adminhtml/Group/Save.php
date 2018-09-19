@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
-class Save extends \Magento\Customer\Controller\Adminhtml\Group
+class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor

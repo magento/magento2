@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -30,7 +30,7 @@ return [
         'behaviorModel="test" /></config>',
         [
             "Element 'entity', attribute 'model': [facet 'pattern'] The value 'afwer34' is not " .
-            "accepted by the pattern '[A-Za-z_\\\\\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
             "Element 'entity', attribute 'model': 'afwer34' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
@@ -40,7 +40,7 @@ return [
         '</config>',
         [
             "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '666' is not accepted by " .
-            "the pattern '[A-Za-z_\\\\\\\\]+'.\nLine: 1\n",
+            "the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
             "Element 'entity', attribute 'behaviorModel': '666' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],

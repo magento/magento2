@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Test class for \Magento\Catalog\Model\Product\Gallery\Processor.
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
@@ -146,15 +146,15 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
         $product->setData(['image' => 'test1', 'small_image' => 'test2', 'thumbnail' => 'test3']);
 
-        $this->assertNotEmpty($product->getData('image'));
+        $this->assertNotEquals('no_selection', $product->getData('image'));
         $this->_model->clearMediaAttribute($product, 'image');
-        $this->assertNull($product->getData('image'));
+        $this->assertEquals('no_selection', $product->getData('image'));
 
-        $this->assertNotEmpty($product->getData('small_image'));
-        $this->assertNotEmpty($product->getData('thumbnail'));
+        $this->assertNotEquals('no_selection', $product->getData('small_image'));
+        $this->assertNotEquals('no_selection', $product->getData('thumbnail'));
         $this->_model->clearMediaAttribute($product, ['small_image', 'thumbnail']);
-        $this->assertNull($product->getData('small_image'));
-        $this->assertNull($product->getData('thumbnail'));
+        $this->assertEquals('no_selection', $product->getData('small_image'));
+        $this->assertEquals('no_selection', $product->getData('thumbnail'));
     }
 
     public function testSetMediaAttribute()

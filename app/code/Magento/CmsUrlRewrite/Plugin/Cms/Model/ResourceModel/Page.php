@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel;
@@ -9,6 +9,8 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Before save and around delete plugin for \Magento\Cms\Model\ResourceModel\Page:
@@ -63,18 +65,16 @@ class Page
      * On delete handler to remove related url rewrites
      *
      * @param \Magento\Cms\Model\ResourceModel\Page $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $page
-     * @return \Magento\Cms\Model\ResourceModel\Page
-     *
+     * @param AbstractDb $result
+     * @param AbstractModel $page
+     * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function afterDelete(
         \Magento\Cms\Model\ResourceModel\Page $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $page
+        AbstractDb $result,
+        AbstractModel $page
     ) {
-        $result = $proceed($page);
         if ($page->isDeleted()) {
             $this->urlPersist->deleteByData(
                 [

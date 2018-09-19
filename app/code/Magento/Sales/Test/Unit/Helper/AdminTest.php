@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Helper;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdminTest extends \PHPUnit_Framework_TestCase
+class AdminTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -198,6 +198,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function displayPricesDataProvider()
     {
         return [
@@ -310,6 +313,9 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->adminHelper->applySalableProductTypesFilter($collectionMock);
     }
 
+    /**
+     * @return array
+     */
     public function applySalableProductTypesFilterDataProvider()
     {
         return [

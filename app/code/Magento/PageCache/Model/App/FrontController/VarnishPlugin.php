@@ -1,9 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\App\FrontController;
+
+use Magento\PageCache\Model\Config;
+use Magento\Framework\App\PageCache\Version;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Varnish for processing builtin cache
@@ -11,55 +19,53 @@ namespace Magento\PageCache\Model\App\FrontController;
 class VarnishPlugin
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Version
+     * @var Version
      */
-    protected $version;
+    private $version;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var AppState
      */
-    protected $state;
+    private $state;
 
     /**
-     * @param \Magento\PageCache\Model\Config $config
-     * @param \Magento\Framework\App\PageCache\Version $version
-     * @param \Magento\Framework\App\State $state
+     * @param Config $config
+     * @param Version $version
+     * @param AppState $state
      */
-    public function __construct(
-        \Magento\PageCache\Model\Config $config,
-        \Magento\Framework\App\PageCache\Version $version,
-        \Magento\Framework\App\State $state
-    ) {
+    public function __construct(Config $config, Version $version, AppState $state)
+    {
         $this->config = $config;
         $this->version = $version;
         $this->state = $state;
     }
 
     /**
-     * @param \Magento\Framework\App\FrontControllerInterface $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return false|\Magento\Framework\App\Response\Http|\Magento\Framework\Controller\ResultInterface
+     * Perform response postprocessing
+     *
+     * @param FrontControllerInterface $subject
+     * @param ResponseInterface|ResultInterface $result
+     * @return ResponseHttp|ResultInterface
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\FrontControllerInterface $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
-        $response = $proceed($request);
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()
-            && $response instanceof \Magento\Framework\App\Response\Http) {
+    public function afterDispatch(FrontControllerInterface $subject, $result)
+    {
+        if ($this->config->getType() == Config::VARNISH && $this->config->isEnabled()
+            && $result instanceof ResponseHttp
+        ) {
             $this->version->process();
-            if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                $response->setHeader('X-Magento-Debug', 1);
+
+            if ($this->state->getMode() == AppState::MODE_DEVELOPER) {
+                $result->setHeader('X-Magento-Debug', 1);
             }
         }
-        return $response;
+
+        return $result;
     }
 }

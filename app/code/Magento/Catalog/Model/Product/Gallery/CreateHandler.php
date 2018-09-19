@@ -1,33 +1,39 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class CreateHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 101.0.0
      */
     protected $metadata;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
@@ -35,28 +41,38 @@ class CreateHandler implements ExtensionInterface
      * Resource model
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 101.0.0
      */
     protected $resourceModel;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 101.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 101.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 101.0.0
      */
     protected $fileStorageDb;
+
+    /**
+     * @var array
+     */
+    private $mediaAttributeCodes;
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
@@ -86,6 +102,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Execute create handler
+     *
      * @param object $product
      * @param array $arguments
      * @return object
@@ -93,6 +111,7 @@ class CreateHandler implements ExtensionInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 101.0.0
      */
     public function execute($product, $arguments = [])
     {
@@ -145,27 +164,26 @@ class CreateHandler implements ExtensionInterface
         }
 
         /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($this->mediaConfig->getMediaAttributeCodes() as $mediaAttrCode) {
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
             $attrData = $product->getData($mediaAttrCode);
-
-            if (in_array($attrData, $clearImages)) {
-                $product->setData($mediaAttrCode, 'no_selection');
+            if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
+                continue;
             }
-
-            if (in_array($attrData, array_keys($newImages))) {
-                $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-                $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
-            }
-
-            if (in_array($attrData, array_keys($existImages))) {
-                $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
-            }
-
-            $product->addAttributeUpdate(
+            $this->processMediaAttribute(
+                $product,
                 $mediaAttrCode,
-                $product->getData($mediaAttrCode),
-                $product->getStoreId()
+                $clearImages,
+                $newImages
             );
+            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])) {
+                $this->processMediaAttributeLabel(
+                    $product,
+                    $mediaAttrCode,
+                    $clearImages,
+                    $newImages,
+                    $existImages
+                );
+            }
         }
 
         $product->setData($attrCode, $value);
@@ -188,7 +206,10 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns media gallery atribute instance
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     public function getAttribute()
     {
@@ -202,19 +223,25 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process delete images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
     }
 
     /**
+     * Process images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
+     * @since 101.0.0
      */
     protected function processNewAndExistingImages($product, array &$images)
     {
@@ -222,12 +249,13 @@ class CreateHandler implements ExtensionInterface
             if (empty($image['removed'])) {
                 $data = $this->processNewImage($product, $image);
 
-                $this->resourceModel->deleteGalleryValueInStore(
-                    $image['value_id'],
-                    $product->getData($this->metadata->getLinkField()),
-                    $product->getStoreId()
-                );
-
+                if (!$product->isObjectNew()) {
+                    $this->resourceModel->deleteGalleryValueInStore(
+                        $image['value_id'],
+                        $product->getData($this->metadata->getLinkField()),
+                        $product->getStoreId()
+                    );
+                }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
@@ -248,6 +276,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $image
      * @return array
+     * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
     {
@@ -271,8 +300,11 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 101.0.0
      */
     protected function duplicate($product)
     {
@@ -287,7 +319,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 
@@ -299,10 +331,11 @@ class CreateHandler implements ExtensionInterface
      *
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     protected function moveImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
         if ($this->fileStorageDb->checkDbUsage()) {
@@ -324,8 +357,24 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns safe filename for posted image
+     *
      * @param string $file
      * @return string
+     */
+    private function getSafeFilename($file)
+    {
+        $file = DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+
+        return $this->mediaDirectory->getDriver()->getRealPathSafety($file);
+    }
+
+    /**
+     * Returns file name according to tmp name
+     *
+     * @param string $file
+     * @return string
+     * @since 101.0.0
      */
     protected function getFilenameFromTmp($file)
     {
@@ -338,6 +387,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @param bool $forTmp
      * @return string
+     * @since 101.0.0
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
@@ -362,6 +412,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function copyImage($file)
     {
@@ -390,6 +441,96 @@ class CreateHandler implements ExtensionInterface
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
+            );
+        }
+    }
+
+    /**
+     * Get Media Attribute Codes cached value
+     *
+     * @return array
+     */
+    private function getMediaAttributeCodes()
+    {
+        if ($this->mediaAttributeCodes === null) {
+            $this->mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
+        }
+        return $this->mediaAttributeCodes;
+    }
+
+    /**
+     * Process media attribute
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     */
+    private function processMediaAttribute(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages
+    ) {
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode, 'no_selection');
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
+        }
+        if (!empty($product->getData($mediaAttrCode))) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
+        }
+    }
+
+    /**
+     * Process media attribute label
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     * @param array $existImages
+     */
+    private function processMediaAttributeLabel(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages,
+        array $existImages
+    ) {
+        $resetLabel = false;
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
+        }
+
+        if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
+            $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+        }
+
+        if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+        if (!empty($product->getData($mediaAttrCode . '_label'))
+            || $resetLabel === true
+        ) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode . '_label',
+                $product->getData($mediaAttrCode . '_label'),
+                $product->getStoreId()
             );
         }
     }

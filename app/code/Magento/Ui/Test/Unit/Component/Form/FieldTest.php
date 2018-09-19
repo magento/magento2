@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Test\Unit\Component\Form;
 
 use Magento\Ui\Component\Form\Field;
@@ -15,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  *
  * Test for class \Magento\Ui\Component\Form\Field
  */
-class FieldTest extends \PHPUnit_Framework_TestCase
+class FieldTest extends \PHPUnit\Framework\TestCase
 {
     const NAME = 'test-name';
     const COMPONENT_NAME = 'test-name';
@@ -56,10 +57,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         $this->field = new Field(
             $this->contextMock,
@@ -78,6 +75,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareSuccess(array $data, array $expectedData)
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactoryMock->expects($this->once())
             ->method('create')
             ->with(self::NAME, $data['config']['formElement'], $this->arrayHasKey('context'))
@@ -169,10 +170,11 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      * @return void
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The configuration parameter "formElement" is a required for "test-name" field.
+     * @expectedExceptionMessage The "formElement" configuration parameter is required for the "test-name" field.
      */
     public function testPrepareException()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $this->uiComponentFactoryMock->expects($this->never())
             ->method('create');
         $this->field->setData(['name' => self::NAME]);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
             }
             $formValue = isset($formData[$key]) ? $formData[$key] : null;
             if (is_numeric($formValue)) {
-                $formValue = floatval($formValue);
+                $formValue = (float)$formValue;
             }
 
             if (null === $formValue) {
@@ -118,8 +118,9 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
     /**
      * Sort multidimensional array by paths.
-     * Pattern path: key/subKey::sorkKey.
-     * Exapmle:
+     *
+     * Pattern path: key/subKey::sortKey.
+     * Example:
      * $data = [
      *     'custom_options' => [
      *         'options' => [
@@ -149,7 +150,6 @@ abstract class AbstractAssertForm extends AbstractConstraint
      * ];
      *
      * @param array $data
-     * @param string $path
      * @param string $path
      * @return array
      * @throws \Exception

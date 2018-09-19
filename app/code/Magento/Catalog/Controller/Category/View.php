@@ -1,20 +1,25 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Category;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\Action\Action;
 
 /**
+ * View a category on storefront. Needs to be accessible by POST because of the store switching.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends \Magento\Framework\App\Action\Action
+class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -111,7 +116,7 @@ class View extends \Magento\Framework\App\Action\Action
     /**
      * Initialize requested category object
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Category|bool
      */
     protected function _initCategory()
     {
@@ -183,16 +188,17 @@ class View extends \Magento\Framework\App\Action\Action
             if (!$hasChildren) {
                 // Two levels removed from parent.  Need to add default page type.
                 $parentType = strtok($type, '_');
-                $page->addPageLayoutHandles(['type' => $parentType]);
+                $page->addPageLayoutHandles(['type' => $parentType], null, false);
             }
-            $page->addPageLayoutHandles(['type' => $type, 'id' => $category->getId()]);
+            $page->addPageLayoutHandles(['type' => $type], null, false);
+            $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
             $layoutUpdates = $settings->getLayoutUpdates();
             if ($layoutUpdates && is_array($layoutUpdates)) {
                 foreach ($layoutUpdates as $layoutUpdate) {
                     $page->addUpdate($layoutUpdate);
-                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)]);
+                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)], null, false);
                 }
             }
 

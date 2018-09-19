@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Entity;
 
-class HydratorTest extends \PHPUnit_Framework_TestCase
+class HydratorTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOM_ATTRIBUTE_CODE = 'description';
 

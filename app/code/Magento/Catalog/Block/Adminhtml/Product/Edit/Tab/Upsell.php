@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Upsell products admin grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -106,7 +104,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Retirve currently edited product model
+     * Retrieve currently edited product model
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -317,7 +315,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Rerieve grid URL
+     * Retrieve grid URL
      *
      * @return string
      */

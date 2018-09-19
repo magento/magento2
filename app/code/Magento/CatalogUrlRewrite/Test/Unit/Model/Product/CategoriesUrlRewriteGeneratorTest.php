@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class CategoriesUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator */
     protected $categoriesUrlRewriteGenerator;
@@ -75,7 +75,7 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($urlPathWithCategory));
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
             ->will($this->returnValue($canonicalUrlPathWithCategory));
-        $category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
+        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
         $this->categoryRegistry->expects($this->any())->method('getList')
             ->will($this->returnValue([$category]));

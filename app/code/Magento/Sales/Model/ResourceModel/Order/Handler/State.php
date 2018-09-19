@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,16 +23,13 @@ class State
      */
     public function check(Order $order)
     {
-        if (!$order->getId()) {
-            return $order;
-        }
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
             if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
                 if ($order->getState() !== Order::STATE_COMPLETE) {
                     $order->setState(Order::STATE_COMPLETE)
                         ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
                 }
-            } elseif (floatval($order->getTotalRefunded())
+            } elseif ((float)$order->getTotalRefunded()
                 || !$order->getTotalRefunded() && $order->hasForcedCanCreditmemo()
             ) {
                 if ($order->getState() !== Order::STATE_CLOSED) {

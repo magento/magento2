@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SendFriend\Block;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SendTest extends \PHPUnit_Framework_TestCase
+class SendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SendFriend\Block\Send
@@ -54,7 +54,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerFieldFromSession($field, $value)
     {
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         /** @var $session \Magento\Customer\Model\Session */
         $session = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Session::class, [$logger]);
         /** @var \Magento\Customer\Api\AccountManagementInterface $service */

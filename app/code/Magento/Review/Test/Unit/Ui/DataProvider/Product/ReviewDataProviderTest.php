@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product;
@@ -14,7 +14,7 @@ use Magento\Review\Ui\DataProvider\Product\ReviewDataProvider;
 /**
  * Class ReviewDataProviderTest
  */
-class ReviewDataProviderTest extends \PHPUnit_Framework_TestCase
+class ReviewDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReviewDataProvider

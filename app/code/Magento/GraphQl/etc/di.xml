@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface" type="Magento\Framework\GraphQl\Schema\SchemaGenerator" />
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ContextInterface" type="Magento\GraphQl\Model\Query\Resolver\Context" />
+    <preference for="Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper"/>
+    <preference for="Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper"/>
+    <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
+    <type name="Magento\Framework\App\AreaList">
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="graphql" xsi:type="array">
+                    <item name="frontName" xsi:type="string">graphql</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\GraphQl\ConfigInterface" type="Magento\Framework\GraphQl\Config"/>
+    <preference for="Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface" type="Magento\Framework\GraphQl\Config\ConfigElementFactory"/>
+    <type name="Magento\Framework\GraphQl\Config\ConfigElementFactory">
+        <arguments>
+            <argument name="factoryMapByConfigElementType" xsi:type="array">
+                <item name="graphql_interface" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InterfaceFactory</item>
+                <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
+                <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
+                <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Config">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\Framework\GraphQl\Config\Data</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlSchemaStitching_Config_Data</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\GraphQl\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+        <arguments>
+            <argument name="realPath" xsi:type="string">urn:magento:module:Magento_GraphQl:etc/graphql.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\GraphQlSchemaStitching\Reader" type="Magento\Framework\GraphQlSchemaStitching\Common\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="graphql_reader" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\OutputFactory">
+        <arguments>
+            <argument name="prototypes" xsi:type="array">
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputTypeObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Input\InputFactory">
+        <arguments>
+            <argument name="prototypes" xsi:type="array">
+                <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper">
+        <arguments>
+            <argument name="formatter" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterComposite">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="fields" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Fields</item>
+                <item name="interfaces" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Interfaces</item>
+                <item name="resolveType" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\ResolveType</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite">
+        <arguments>
+            <argument name="typeReaders" xsi:type="array">
+                <item name="enum_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\EnumType</item>
+                <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ObjectType</item>
+                <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InputObjectType</item>
+                <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

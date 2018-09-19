@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ $link->setSampleType($linkData['sample']['type']);
  */
 $content = $objectManager->create(\Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class)->create();
 $content->setFileData(
-    base64_encode(file_get_contents(__DIR__.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.'test_image.jpg'))
+    base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
 );
 $content->setName('jellyfish_2_4.jpg');
 //$content->setName('');
@@ -92,7 +92,7 @@ $link->setLinkFileContent($content);
  */
 $sampleContent = $objectManager->create(\Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class)->create();
 $sampleContent->setFileData(
-    base64_encode(file_get_contents(__DIR__.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.'test_image.jpg'))
+    base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
 );
 $sampleContent->setName('jellyfish_1_3.jpg');
 $link->setSampleFileContent($sampleContent);
@@ -111,8 +111,6 @@ if ($link->getIsUnlimited()) {
     $link->setNumberOfDownloads(0);
 }
 $links[] = $link;
-
-
 
 $extension->setDownloadableProductLinks($links);
 
@@ -138,7 +136,7 @@ if (isset($downloadableData['sample']) && is_array($downloadableData['sample']))
                 \Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class
             )->create();
             $content->setFileData(
-                base64_encode(file_get_contents(__DIR__.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.'test_image.jpg'))
+                base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
             );
             $content->setName('jellyfish_1_4.jpg');
             $sample->setSampleFileContent($content);
@@ -156,3 +154,10 @@ if ($product->getLinksPurchasedSeparately()) {
     $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
 }
 $product->save();
+
+$stockRegistry = $objectManager->get(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
+$stockItem = $stockRegistry->getStockItem($product->getId());
+$stockItem->setUseConfigManageStock(true);
+$stockItem->setQty(100);
+$stockItem->setIsInStock(true);
+$stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);

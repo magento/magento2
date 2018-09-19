@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget;
 /**
  * @magentoAppArea adminhtml
  */
-class TabsTest extends \PHPUnit_Framework_TestCase
+class TabsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

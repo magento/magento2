@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
-
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfig;
@@ -16,22 +15,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Swatches\Model\Plugin\Configurable|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $pluginModel;
-    
+
     protected function setUp()
     {
-        $this->eavConfig = $this->getMock(
+        $this->eavConfig = $this->createPartialMock(
             \Magento\Eav\Model\Config::class,
-            ['getEntityAttributeCodes', 'getAttribute'],
-            [],
-            '',
-            false
+            ['getEntityAttributeCodes', 'getAttribute']
         );
-        $this->swatchHelper = $this->getMock(
+        $this->swatchHelper = $this->createPartialMock(
             \Magento\Swatches\Helper\Data::class,
-            ['isVisualSwatch', 'isTextSwatch'],
-            [],
-            '',
-            false
+            ['isVisualSwatch', 'isTextSwatch']
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -46,37 +39,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetUsedProductCollection()
     {
-        $subject = $this->getMock(
+        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)->getMock();
+
+        $subject = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
+            ['getUsedProductAttributes']
         );
-        $result = $this->getMock(
+        $result = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
-            ['getEntity', 'addAttributeToSelect'],
-            [],
-            '',
-            false
+            ['getEntity', 'addAttributeToSelect']
         );
 
-        $collectionEntity = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            ['getType'],
-            [],
-            '',
-            false
-        );
-        $collectionEntity->expects($this->once())->method('getType')->willReturn('catalog');
-        $result->expects($this->once())->method('getEntity')->willReturn($collectionEntity);
+        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 
-        $attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $subject->expects($this->once())->method('getUsedProductAttributes')->with($product)
+            ->willReturn(['size' => $attribute, 'color' => $attribute, 'swatch1' => $attribute]);
 
-        $this->eavConfig->expects($this->once())->method('getEntityAttributeCodes')->with('catalog')
-            ->willReturn(['size', 'color', 'swatch1']);
-
-        $this->eavConfig->expects($this->exactly(3))->method('getAttribute')->willReturn($attribute);
         $attribute->expects($this->any())
             ->method('getData')
             ->with('additional_data')
@@ -86,7 +64,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $result->expects($this->once())->method('addAttributeToSelect')
             ->with($this->identicalTo(['image', 'size', 'color', 'swatch1']))->willReturn($result);
 
-        $result = $this->pluginModel->afterGetUsedProductCollection($subject, $result);
+        $result = $this->pluginModel->afterGetUsedProductCollection($subject, $result, $product);
         $this->assertInstanceOf(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
             $result

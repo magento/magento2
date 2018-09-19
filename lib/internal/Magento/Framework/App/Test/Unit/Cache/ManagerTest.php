@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache;
 
 use \Magento\Framework\App\Cache\Manager;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\TypeListInterface
@@ -39,8 +39,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheTypeList = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->response = $this->getMock(\Magento\Framework\App\Console\Response::class, [], [], '', false);
-        $this->frontendPool = $this->getMock(\Magento\Framework\App\Cache\Type\FrontendPool::class, [], [], '', false);
+        $this->response = $this->createMock(\Magento\Framework\App\Console\Response::class);
+        $this->frontendPool = $this->createMock(\Magento\Framework\App\Cache\Type\FrontendPool::class);
         $this->model = new Manager($this->cacheTypeList, $this->cacheState, $this->frontendPool);
     }
 

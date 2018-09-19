@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -289,6 +293,12 @@ class Totals extends \Magento\Framework\View\Element\Template
      */
     public function applySortOrder($order)
     {
+        \uksort(
+            $this->_totals,
+            function ($code1, $code2) use ($order) {
+                return ($order[$code1] ?? 0) <=> ($order[$code2] ?? 0);
+            }
+        );
         return $this;
     }
 

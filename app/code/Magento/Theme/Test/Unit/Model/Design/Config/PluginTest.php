@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Theme\Model\Design\Config\Plugin;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $eventManager;
@@ -44,7 +44,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->repository = $this->getMock(\Magento\Theme\Model\DesignConfigRepository::class, [], [], '', false);
+        $this->repository = $this->createMock(\Magento\Theme\Model\DesignConfigRepository::class);
         $this->designConfig = $this->getMockForAbstractClass(
             \Magento\Theme\Api\Data\DesignConfigInterface::class,
             [],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\PaymentMethod;
 /**
  * Class PaymentMethodTest
  */
-class PaymentMethodTest extends \PHPUnit_Framework_TestCase
+class PaymentMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentMethod
@@ -32,8 +32,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
-        $this->paymentHelper = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
+        $this->paymentHelper = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\PaymentMethod::class,
             ['paymentHelper' => $this->paymentHelper, 'context' => $contextMock]

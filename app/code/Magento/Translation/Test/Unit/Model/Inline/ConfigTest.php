@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
 use \Magento\Translation\Model\Inline\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -26,8 +26,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->helperMock = $this->getMock(\Magento\Developer\Helper\Data::class, ['isDevAllowed'], [], '', false);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->helperMock = $this->createPartialMock(\Magento\Developer\Helper\Data::class, ['isDevAllowed']);
         $this->model = new Config(
             $this->scopeConfigMock,
             $this->helperMock
@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $store = 'some store';
         $result = 'result';
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfig->expects(
             $this->once()
         )->method(

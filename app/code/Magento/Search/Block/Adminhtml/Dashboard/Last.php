@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  * Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Last extends \Magento\Backend\Block\Dashboard\Grid
 {
@@ -26,7 +28,9 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected $_moduleManager;
 
-    /** @var string  */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**
@@ -59,6 +63,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareCollection()
     {
@@ -82,6 +87,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
@@ -114,7 +120,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

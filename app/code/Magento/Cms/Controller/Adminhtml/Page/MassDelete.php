@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
@@ -59,10 +59,11 @@ class MassDelete extends \Magento\Backend\App\Action
             $page->delete();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));
+        $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been deleted.', $collectionSize));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        
         return $resultRedirect->setPath('*/*/');
     }
 }

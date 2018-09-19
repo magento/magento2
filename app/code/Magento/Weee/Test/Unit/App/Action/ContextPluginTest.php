@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\App\Action;
@@ -11,7 +11,7 @@ namespace Magento\Weee\Test\Unit\App\Action;
  * @package Magento\Weee\Test\Unit\App\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContextPluginTest extends \PHPUnit_Framework_TestCase
+class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchBasedOnDefault()
+    public function testBeforeDispatchBasedOnDefault()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -186,15 +186,12 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 0], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnOrigin()
+    public function testBeforeDispatchBasedOnOrigin()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -218,15 +215,12 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->willReturn('origin');
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnBilling()
+    public function testBeforeDispatchBasedOnBilling()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -293,15 +287,12 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnShipping()
+    public function testBeforeDispatchBasedOnShipping()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -368,11 +359,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 }

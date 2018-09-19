@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
@@ -84,6 +84,14 @@ class QuoteUpdater extends AbstractHelper
 
         $quote->collectTotals();
 
+        /**
+         * Unset shipping assignment to prevent from saving / applying outdated data
+         * @see \Magento\Quote\Model\QuoteRepository\SaveHandler::processShippingAssignment
+         */
+        if ($quote->getExtensionAttributes()) {
+            $quote->getExtensionAttributes()->setShippingAssignments(null);
+        }
+
         $this->quoteRepository->save($quote);
     }
 
@@ -122,6 +130,11 @@ class QuoteUpdater extends AbstractHelper
         $shippingAddress->setCollectShippingRates(true);
 
         $this->updateAddressData($shippingAddress, $details['shippingAddress']);
+
+        // PayPal's address supposes not saving against customer account
+        $shippingAddress->setSaveInAddressBook(false);
+        $shippingAddress->setSameAsBilling(false);
+        $shippingAddress->unsCustomerAddressId();
     }
 
     /**
@@ -144,6 +157,11 @@ class QuoteUpdater extends AbstractHelper
         $billingAddress->setFirstname($details['firstName']);
         $billingAddress->setLastname($details['lastName']);
         $billingAddress->setEmail($details['email']);
+
+        // PayPal's address supposes not saving against customer account
+        $billingAddress->setSaveInAddressBook(false);
+        $billingAddress->setSameAsBilling(false);
+        $billingAddress->unsCustomerAddressId();
     }
 
     /**
@@ -164,5 +182,10 @@ class QuoteUpdater extends AbstractHelper
         $address->setRegionCode($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
+
+        // PayPal's address supposes not saving against customer account
+        $address->setSaveInAddressBook(false);
+        $address->setSameAsBilling(false);
+        $address->setCustomerAddressId(null);
     }
 }

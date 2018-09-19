@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
+
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,6 +22,7 @@ class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page_design_blank', 'identifier');
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'description' => 'Some URL rewrite description',

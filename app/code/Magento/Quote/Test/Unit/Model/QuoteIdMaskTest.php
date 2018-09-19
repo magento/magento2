@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\Math\Random;
 /**
  * Unit test for \Magento\Quote\Model\QuoteIdMask
  */
-class QuoteIdMaskTest extends \PHPUnit_Framework_TestCase
+class QuoteIdMaskTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\QuoteIdMask

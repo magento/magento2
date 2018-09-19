@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -106,7 +106,7 @@ class GuestShippingMethodManagement implements
     /**
      * Get shipment estimation management service
      * @return ShipmentEstimationInterface
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getShipmentEstimationManagement()
     {

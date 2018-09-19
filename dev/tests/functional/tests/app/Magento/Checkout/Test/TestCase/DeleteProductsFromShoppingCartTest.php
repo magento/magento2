@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Click 'Remove item' button from Shopping Cart for each product(s)
  * 3. Perform all asserts
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-25218
  */
 class DeleteProductsFromShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

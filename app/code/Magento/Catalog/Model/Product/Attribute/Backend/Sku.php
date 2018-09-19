@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Catalog product SKU backend attribute model
@@ -52,7 +50,9 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The "%1" attribute value is empty. Set the attribute and try again.', $attrCode)
+            );
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
@@ -73,9 +73,12 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $attribute = $this->getAttribute();
         $entity = $attribute->getEntity();
-        $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
         $attributeValue = $object->getData($attribute->getAttributeCode());
+        $increment = null;
         while (!$entity->checkAttributeUniqueValue($attribute, $object)) {
+            if ($increment === null) {
+                $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
+            }
             $sku = trim($attributeValue);
             if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
                 $sku = substr($sku, 0, -strlen($increment) - 1);

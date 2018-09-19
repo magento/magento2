@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class BookTest extends \PHPUnit_Framework_TestCase
+class BookTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Address\Book
@@ -118,8 +118,8 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressHtml()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
-            "\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />" .
+            "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         $address = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AddressRepositoryInterface::class
         )->getById(1);

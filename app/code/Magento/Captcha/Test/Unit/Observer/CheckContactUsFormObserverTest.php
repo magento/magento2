@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Captcha\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
+class CheckContactUsFormObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Captcha\Observer\CheckContactUsFormObserver
@@ -64,30 +64,12 @@ class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->helperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
-        $this->actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $this->messageManagerMock = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirectMock = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->captchaStringResolverMock = $this->getMock(
-            \Magento\Captcha\Observer\CaptchaStringResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sessionMock = $this->getMock(\Magento\Framework\Session\SessionManager::class, [], [], '', false);
+        $this->helperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
+        $this->actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->captchaStringResolverMock = $this->createMock(\Magento\Captcha\Observer\CaptchaStringResolver::class);
+        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\SessionManager::class, ['addError']);
         $this->dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMockForAbstractClass();
 
@@ -107,7 +89,7 @@ class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
             $this->dataPersistorMock
         );
 
-        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
+        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
     }
 
     public function testCheckContactUsFormWhenCaptchaIsRequiredAndValid()
@@ -115,8 +97,8 @@ class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
         $formId = 'contact_us';
         $captchaValue = 'some-value';
 
-        $controller = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $request->expects($this->any())
             ->method('getPost')
             ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
@@ -150,8 +132,8 @@ class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
         $redirectUrl = 'http://magento.com/contacts/';
         $postData = ['name' => 'Some Name'];
 
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $request->expects($this->any())
             ->method('getPost')
             ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
@@ -165,7 +147,7 @@ class CheckContactUsFormObserverTest extends \PHPUnit_Framework_TestCase
             ->with($response, $redirectRoutePath, [])
             ->willReturn($redirectUrl);
 
-        $controller = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
+        $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
         $controller->expects($this->any())->method('getRequest')->willReturn($request);
         $controller->expects($this->any())->method('getResponse')->willReturn($response);
         $this->captchaMock->expects($this->any())->method('isRequired')->willReturn(true);

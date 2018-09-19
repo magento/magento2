@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Module\Test\Unit;
 use \Magento\Framework\Module\Status;
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -43,17 +43,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
-        $this->moduleList = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
-        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
-        $this->conflictChecker = $this->getMock(\Magento\Framework\Module\ConflictChecker::class, [], [], '', false);
-        $this->dependencyChecker = $this->getMock(
-            \Magento\Framework\Module\DependencyChecker::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
+        $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
+        $this->conflictChecker = $this->createMock(\Magento\Framework\Module\ConflictChecker::class);
+        $this->dependencyChecker = $this->createMock(\Magento\Framework\Module\DependencyChecker::class);
         $this->object = new Status(
             $this->loader,
             $this->moduleList,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
@@ -52,7 +52,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * Render elemnt
+     * Render element
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string

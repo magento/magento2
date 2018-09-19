@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\EntityManager\Operation;
@@ -118,7 +118,7 @@ class Delete implements DeleteInterface
             $entity = $this->deleteMain->execute($entity, $arguments);
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_after', ['entity' => $entity]);
             $this->eventManager->dispatch(
-                'entity_manager_delete_before',
+                'entity_manager_delete_after',
                 [
                     'entity_type' => $entityType,
                     'entity' => $entity

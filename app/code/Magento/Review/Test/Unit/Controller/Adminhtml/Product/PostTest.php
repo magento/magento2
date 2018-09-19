@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Controller\Adminhtml\Product;
@@ -11,7 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PostTest extends \PHPUnit_Framework_TestCase
+class PostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Controller\Adminhtml\Product\Post
@@ -94,7 +94,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context
             ]
         );
-
     }
 
     /**
@@ -105,43 +104,19 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeModelMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['__wakeup', 'getId'],
-            [],
-            '',
-            false
-        );
-        $this->reviewMock = $this->getMock(
+        $this->storeModelMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId']);
+        $this->reviewMock = $this->createPartialMock(
             \Magento\Review\Model\Review::class,
-            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate'],
-            [],
-            '',
-            false
+            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate']
         );
-        $this->reviewFactoryMock = $this->getMock(
-            \Magento\Review\Model\ReviewFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->ratingMock = $this->getMock(
+        $this->reviewFactoryMock = $this->createPartialMock(\Magento\Review\Model\ReviewFactory::class, ['create']);
+        $this->ratingMock = $this->createPartialMock(
             \Magento\Review\Model\Rating::class,
-            ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote'],
-            [],
-            '',
-            false
+            ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote']
         );
-        $this->ratingFactoryMock = $this->getMock(
-            \Magento\Review\Model\RatingFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->ratingFactoryMock = $this->createPartialMock(\Magento\Review\Model\RatingFactory::class, ['create']);
         $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

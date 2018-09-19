@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTypeTest extends \PHPUnit_Framework_TestCase
+class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\AbstractType
@@ -23,18 +24,15 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $catalogProductOption = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Option::class
         );
-        $catalogProductType = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
-        $eventManager = $this->getMock(
-            \Magento\Framework\Event\ManagerInterface::class,
-            ['dispatch'],
-            [],
-            '',
-            false
+        $catalogProductType = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $eventManager = $this->createPartialMock(\Magento\Framework\Event\ManagerInterface::class, ['dispatch']);
+        $fileStorageDb = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
         );
-        $fileStorageDb = $this->getMock(\Magento\MediaStorage\Helper\File\Storage\Database::class, [], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
             [
@@ -46,7 +44,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 $filesystem,
                 $registry,
                 $logger,
-                $productRepository
+                $productRepository,
+                $serializer
             ]
         );
     }
@@ -186,7 +185,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
         $this->assertEquals($product->getId(), $buyRequest->getProductId());
         $this->assertSame($product, $buyRequest->getProduct());
-        $this->assertEquals(serialize($requestData), $buyRequest->getValue());
+        $this->assertEquals(json_encode($requestData), $buyRequest->getValue());
     }
 
     /**
@@ -201,7 +200,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         // fixture
 
         $this->assertContains(
-            'Please specify product\'s required option(s).',
+            "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
             $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product)
         );
     }
@@ -209,7 +208,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetSpecifyOptionMessage()
     {
         $this->assertEquals(
-            'Please specify product\'s required option(s).',
+            "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
             $this->_model->getSpecifyOptionMessage()
         );
     }
@@ -251,7 +250,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
         $product->load(1);
         // fixture
-        $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\DataObject(['qty' => 2])));
+        $product->addCustomOption('info_buyRequest', json_encode(['qty' => 2]));
         foreach ($product->getOptions() as $option) {
             if ('field' == $option->getType()) {
                 $product->addCustomOption('option_ids', $option->getId());

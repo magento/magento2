@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Configuration;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin
@@ -39,26 +39,17 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemMock = $this->getMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->typeInstanceMock = $this->getMock(
+        $this->itemMock = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->typeInstanceMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            ['getSelectedAttributesInfo', '__wakeup'],
-            [],
-            '',
-            false
+            ['getSelectedAttributesInfo', '__wakeup']
         );
         $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
         $this->closureMock = function () {
             return ['options'];
         };
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Helper\Product\Configuration::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
         $this->plugin = new \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin();
     }
 

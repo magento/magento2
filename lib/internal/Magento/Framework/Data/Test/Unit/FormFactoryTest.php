@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit;
@@ -10,7 +10,7 @@ use \Magento\Framework\Data\FormFactory;
 /**
  * Tests for \Magento\Framework\Data\FormFactory
  */
-class FormFactoryTest extends \PHPUnit_Framework_TestCase
+class FormFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -19,13 +19,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
     }
 
     /**
@@ -34,19 +28,17 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testWrongTypeException()
     {
-        $className = 'WrongClass';
-
-        $formMock = $this->getMock($className, [], [], '', false);
+        $formMock = $this->getMockBuilder('WrongClass')->getMock();
         $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($formMock));
 
-        $formFactory = new FormFactory($this->_objectManagerMock, $className);
+        $formFactory = new FormFactory($this->_objectManagerMock, 'WrongClass');
         $formFactory->create();
     }
 
     public function testCreate()
     {
         $className = \Magento\Framework\Data\Form::class;
-        $formMock = $this->getMock($className, [], [], '', false);
+        $formMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

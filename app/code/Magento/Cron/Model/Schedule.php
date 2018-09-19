@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Cron\Model;
 
 use Magento\Framework\Exception\CronException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Crontab schedule model
  *
- * @method \Magento\Cron\Model\ResourceModel\Schedule _getResource()
- * @method \Magento\Cron\Model\ResourceModel\Schedule getResource()
  * @method string getJobCode()
  * @method \Magento\Cron\Model\Schedule setJobCode(string $value)
  * @method string getStatus()
@@ -30,7 +30,8 @@ use Magento\Framework\Exception\CronException;
  * @method array getCronExprArr()
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
@@ -45,24 +46,32 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     const STATUS_ERROR = 'error';
 
     /**
+     * @var TimezoneInterface
+     */
+    private $timezoneConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param TimezoneInterface $timezoneConverter
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        TimezoneInterface $timezoneConverter = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
@@ -70,6 +79,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set cron expression.
+     *
      * @param string $expr
      * @return $this
      * @throws \Magento\Framework\Exception\CronException
@@ -86,7 +97,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Checks the observer's cron expression against time
+     * Checks the observer's cron expression against time.
      *
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
@@ -101,6 +112,9 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         if (!is_numeric($time)) {
+            //convert time from UTC to admin store timezone
+            //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
+            $time = $this->timezoneConverter->date($time)->format('Y-m-d H:i');
             $time = strtotime($time);
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))
@@ -113,6 +127,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Match cron expression.
+     *
      * @param string $expr
      * @param int $num
      * @return bool
@@ -179,6 +195,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get number of a month.
+     *
      * @param int|string $value
      * @return bool|int|string
      */
@@ -221,16 +239,17 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING.
-     * Returns true if status was changed and false otherwise.
+     * Lock the cron job so no other scheduled instances run simultaneously.
      *
-     * This is used to implement locking for cron jobs.
+     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING
+     * and no other jobs of the same code are currently in STATUS_RUNNING.
+     * Returns true if status was changed and false otherwise.
      *
      * @return boolean
      */
     public function tryLockJob()
     {
-        if ($this->_getResource()->trySetJobStatusAtomic(
+        if ($this->_getResource()->trySetJobUniqueStatusAtomic(
             $this->getId(),
             self::STATUS_RUNNING,
             self::STATUS_PENDING

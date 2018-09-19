@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
@@ -34,12 +34,13 @@ class ExportSearchCsv extends TermController
      * Export search report grid to CSV format
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Exception
      */
     public function execute()
     {
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         $content = $resultLayout->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        return $this->fileFactory->create(\search.csv::class, $content->getCsvFile(), DirectoryList::VAR_DIR);
+        return $this->fileFactory->create('search.csv', $content->getCsvFile(), DirectoryList::VAR_DIR);
     }
 }

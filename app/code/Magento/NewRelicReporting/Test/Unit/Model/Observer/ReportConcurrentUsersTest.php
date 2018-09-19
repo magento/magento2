@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -12,7 +12,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsers;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportConcurrentUsersTest extends \PHPUnit_Framework_TestCase
+class ReportConcurrentUsersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportConcurrentUsers

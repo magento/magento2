@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Directpost;
@@ -9,7 +9,7 @@ use Magento\Authorizenet\Model\Directpost\Session;
 use Magento\Framework\Session\StorageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

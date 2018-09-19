@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\Configurable;
 
-class AttributeSelectorTest extends \PHPUnit_Framework_TestCase
+class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector
@@ -20,7 +20,7 @@ class AttributeSelectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->attributeSelector = $helper->getObject(
             \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector::class,
             ['urlBuilder' => $this->urlBuilder]

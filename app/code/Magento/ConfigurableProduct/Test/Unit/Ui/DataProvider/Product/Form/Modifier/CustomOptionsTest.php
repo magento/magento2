@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -10,6 +10,14 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOpti
 
 class CustomOptionsTest extends AbstractModifierTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(1);
+    }
+
     /**
      * {@inheritdoc}
      */

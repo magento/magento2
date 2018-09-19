@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class ApplyPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
+class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\ApplyPersistentDataObserver
@@ -46,19 +46,13 @@ class ApplyPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->persistentHelperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $this->persistentConfigMock = $this->getMock(
-            \Magento\Persistent\Model\Persistent\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->persistentConfigMock = $this->createMock(\Magento\Persistent\Model\Persistent\Config::class);
         $this->configMock =
-            $this->getMock(\Magento\Persistent\Model\Persistent\ConfigFactory::class, ['create'], [], '', false);
+            $this->createPartialMock(\Magento\Persistent\Model\Persistent\ConfigFactory::class, ['create']);
         $this->model = new \Magento\Persistent\Observer\ApplyPersistentDataObserver(
             $this->sessionMock,
             $this->persistentHelperMock,

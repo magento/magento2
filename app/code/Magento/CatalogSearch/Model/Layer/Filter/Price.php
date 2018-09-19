@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 /**
  * Layer price filter based on Search API
  *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends AbstractFilter
@@ -175,6 +177,9 @@ class Price extends AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
+        $fromPrice = empty($fromPrice) ? 0 : $fromPrice * $this->getCurrencyRate();
+        $toPrice = empty($toPrice) ? $toPrice : $toPrice * $this->getCurrencyRate();
+
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
@@ -261,10 +266,7 @@ class Price extends AbstractFilter
         if ($to == '*') {
             $to = $this->getTo($to);
         }
-        $label = $this->_renderRangeLabel(
-            empty($from) ? 0 : $from * $this->getCurrencyRate(),
-            empty($to) ? $to : $to * $this->getCurrencyRate()
-        );
+        $label = $this->_renderRangeLabel($from, $to);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
         $data = [

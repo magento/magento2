@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -11,7 +11,7 @@ use Magento\Webapi\Model\Config\Reader as ConfigReader;
 /**
  * Webapi config reader test.
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_fileResolverMock;
@@ -22,7 +22,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
             \Magento\Webapi\Model\Config\Reader::class,

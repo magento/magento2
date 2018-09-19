@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
@@ -9,7 +9,7 @@ use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 
-class QueryContainerTest extends \PHPUnit_Framework_TestCase
+class QueryContainerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     private $select;

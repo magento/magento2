@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,6 @@
 ?>
 
 <nav data-mage-init='{"globalNavigation": {}}' class="admin__menu">
-    <?php /* @escapeNotVerified */ echo $block->renderNavigation($block->getMenuModel(), 0, 12); ?>
+    <?= /* @escapeNotVerified */ $block->renderNavigation($block->getMenuModel(), 0, 12) ?>
 </nav>
 

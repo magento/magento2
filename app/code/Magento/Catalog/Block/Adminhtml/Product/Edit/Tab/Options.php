@@ -1,24 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * customers defined options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Block\Widget;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Options extends Widget
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/options.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/options.phtml';
 
     /**
      * @return Widget

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block\Transparent;
@@ -9,7 +9,7 @@ namespace Magento\Payment\Block\Transparent;
  * Class IframeTest
  * @package Magento\Payment\Block\Transparent
  */
-class IframeTest extends \PHPUnit_Framework_TestCase
+class IframeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

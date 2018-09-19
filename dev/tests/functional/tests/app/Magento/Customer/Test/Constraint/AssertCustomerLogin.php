@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertCustomerLogin extends AbstractConstraint
             ['customer' => $customer]
         )->run();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsIndex->getLinksBlock()->isAuthorizationVisible(),
             "Authorisation link is visible after Login attempt."
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class OtherComponentsGrid extends AbstractActionController
                         'id' => $packageInfo[InfoCommand::CURRENT_VERSION],
                         'name' => $packageInfo[InfoCommand::CURRENT_VERSION]
                     ];
-                    
+
                     $versions[0]['name'] .= ' (latest)';
                     $versions[count($versions) - 1]['name'] .= ' (current)';
 

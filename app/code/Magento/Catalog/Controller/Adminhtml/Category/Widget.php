@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -14,6 +14,13 @@ use Magento\Framework\View\Element\BlockInterface;
  */
 abstract class Widget extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */

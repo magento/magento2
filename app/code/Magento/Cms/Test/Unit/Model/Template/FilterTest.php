@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Template;
 
 /**
+ * Work with catalog(store, website) urls
+ *
  * @covers \Magento\Cms\Model\Template\Filter
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -55,6 +57,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ' url="wysiwyg/image.jpg"'
         ];
         $expectedResult = 'pub/media/wysiwyg/image.jpg';
+        $this->storeMock->expects($this->once())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+    }
+
+    public function testMediaDirectiveWithEncodedQuotes()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url=&quot;wysiwyg/image.jpg&quot;}}',
+            'media',
+            ' url=&quot;wysiwyg/image.jpg&quot;'
+        ];
+        $expectedResult = 'pub/media/wysiwyg/image.jpg';
+
         $this->storeMock->expects($this->once())
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);

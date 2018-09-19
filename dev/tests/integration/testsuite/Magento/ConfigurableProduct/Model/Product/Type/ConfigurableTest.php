@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -19,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object under test
@@ -156,6 +153,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_custom.php
+     */
+    public function testGetConfigurableAttributesWithSourceModel()
+    {
+        $collection = $this->model->getConfigurableAttributes($this->product);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+        $configurableAttribute = $collection->getFirstItem();
+        $attribute = $this->_getAttributeByCode('test_configurable_with_sm');
+        $this->assertSameSize($attribute->getSource()->getAllOptions(), $configurableAttribute->getOptions());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetConfigurableAttributesAsArray()
@@ -238,6 +248,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Test getUsedProducts returns array with same indexes regardless collections was cache or not.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testGetUsedProductsCached()
+    {
+        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
+
+        $products = $this->getUsedProducts();
+        $productsCached = $this->getUsedProducts();
+        self::assertEquals(
+            array_keys($products),
+            array_keys($productsCached)
+        );
+    }
+
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
@@ -294,35 +324,51 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfo()
     {
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
+
         $product = $this->productRepository->getById(1, true);
         $attributes = $this->model->getConfigurableAttributesAsArray($product);
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
+        $product->addCustomOption(
+            'attributes',
+            $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
+        );
+
         $info = $this->model->getSelectedAttributesInfo($product);
-        $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1']], $info);
+        $this->assertEquals('Test Configurable', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
+     * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::getConfigurableAttributes()
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppIsolation enabled
      */
     public function testGetSelectedAttributesInfoForStore()
     {
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
+
         $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
 
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
+        $this->product->addCustomOption(
+            'attributes',
+            $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
+        );
 
         $configurableAttr = $this->model->getConfigurableAttributes($this->product);
         $attribute = $configurableAttr->getFirstItem();
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->model->getSelectedAttributesInfo($this->product);
-        $this->assertEquals([['label' => 'store label', 'value' => 'Option 1']], $info);
+        $this->assertEquals('store label', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
@@ -369,10 +415,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getOrderOptions($product);
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
-        $this->assertEquals(
-            [['label' => 'Test Configurable', 'value' => 'Option 1']],
-            $result['attributes_info']
-        );
+        $this->assertEquals('Test Configurable', $result['attributes_info'][0]['label']);
+        $this->assertEquals('Option 1', $result['attributes_info'][0]['value']);
         $this->assertArrayHasKey('product_calculations', $result);
         $this->assertArrayHasKey('shipment_type', $result);
         $this->assertEquals(
@@ -558,5 +602,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->model->prepareForCart($buyRequest, $product);
 
         return $product;
+    }
+
+    /**
+     * @return ProductInterface[]
+     */
+    protected function getUsedProducts()
+    {
+        $product = Bootstrap::getObjectManager()->create(Product::class);
+        $product->load(1);
+        return $this->model->getUsedProducts($product);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class WildcardTest extends \PHPUnit_Framework_TestCase
+class WildcardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject

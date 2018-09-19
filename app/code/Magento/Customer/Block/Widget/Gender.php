@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -59,7 +59,7 @@ class Gender extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/gender.phtml');
+        $this->setTemplate('Magento_Customer::widget/gender.phtml');
     }
 
     /**

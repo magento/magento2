@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Helper;
@@ -84,7 +84,6 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function displayPrices($dataObject, $basePrice, $price, $strong = false, $separator = '<br/>')
     {
-        $order = false;
         if ($dataObject instanceof \Magento\Sales\Model\Order) {
             $order = $dataObject;
         } else {

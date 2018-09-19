@@ -1,12 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Config;
 
+/**
+ * Information Expert in store groups handling
+ *
+ * @package Magento\Store\Model
+ */
 class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
 {
     /**
@@ -30,6 +37,11 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     protected $groupCollectionFactory;
 
     /**
+     * @var Config
+     */
+    private $appConfig;
+
+    /**
      * @param GroupFactory $groupFactory
      * @param \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
      */
@@ -49,8 +61,11 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
         if (isset($this->entities[$id])) {
             return $this->entities[$id];
         }
-        $group = $this->groupFactory->create();
-        $group->load($id);
+
+        $group = $this->groupFactory->create([
+            'data' => $this->getAppConfig()->get('scopes', "groups/$id", [])
+        ]);
+
         if (null === $group->getId()) {
             throw new NoSuchEntityException();
         }
@@ -64,14 +79,16 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     public function getList()
     {
         if (!$this->allLoaded) {
-            /** @var \Magento\Store\Model\ResourceModel\Group\Collection $groupCollection */
-            $groupCollection = $this->groupCollectionFactory->create();
-            $groupCollection->setLoadDefault(true);
-            foreach ($groupCollection as $item) {
-                $this->entities[$item->getId()] = $item;
+            $groups = $this->getAppConfig()->get('scopes', 'groups', []);
+            foreach ($groups as $data) {
+                $group = $this->groupFactory->create([
+                    'data' => $data
+                ]);
+                $this->entities[$group->getId()] = $group;
             }
             $this->allLoaded = true;
         }
+
         return $this->entities;
     }
 
@@ -82,5 +99,19 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     {
         $this->entities = [];
         $this->allLoaded = false;
+    }
+
+    /**
+     * Retrieve application config.
+     *
+     * @deprecated 100.1.3
+     * @return Config
+     */
+    private function getAppConfig()
+    {
+        if (!$this->appConfig) {
+            $this->appConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->appConfig;
     }
 }

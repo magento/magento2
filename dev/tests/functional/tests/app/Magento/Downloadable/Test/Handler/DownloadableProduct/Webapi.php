@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -148,7 +148,7 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
             'title' => $link['title'],
             'sort_order' => isset($link['sort_order']) ? $link['sort_order'] : 0,
             'is_shareable' => $link['is_shareable'],
-            'price' => floatval($link['price']),
+            'price' => (float)$link['price'],
             'number_of_downloads' => isset($link['number_of_downloads']) ? $link['number_of_downloads'] : 0,
             'link_type' => $link['type'],
             'link_url' => isset($link['link_url']) ? $link['link_url'] : null,

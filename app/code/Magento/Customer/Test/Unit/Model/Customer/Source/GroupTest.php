@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Customer\Source;
@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Group
@@ -71,8 +71,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $customerGroups = [
-            ['label' => __('ALL GROUPS'), 'value' => 32000],
-            ['label' => __('NOT LOGGED IN'), 'value' => 0]
+            ['label' => __('ALL GROUPS'), 'value' => '32000'],
+            ['label' => __('NOT LOGGED IN'), 'value' => '0'],
         ];
 
         $this->moduleManagerMock->expects($this->any())
@@ -95,11 +95,17 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->any())->method('getCode')->willReturn(__('NOT LOGGED IN'));
-        $groupTest->expects($this->any())->method('getId')->willReturn(0);
+        $groupTest->expects($this->any())->method('getId')->willReturn('0');
         $groups = [$groupTest];
 
         $this->searchResultMock->expects($this->any())->method('getItems')->willReturn($groups);
 
-        $this->assertEquals($customerGroups, $this->model->toOptionArray());
+        $actualCustomerGroups = $this->model->toOptionArray();
+
+        $this->assertEquals($customerGroups, $actualCustomerGroups);
+
+        foreach ($actualCustomerGroups as $actualCustomerGroup) {
+            $this->assertInternalType('string', $actualCustomerGroup['value']);
+        }
     }
 }

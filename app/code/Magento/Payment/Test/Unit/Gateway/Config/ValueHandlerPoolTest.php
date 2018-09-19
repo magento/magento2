@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
@@ -8,11 +8,11 @@ namespace Magento\Payment\Test\Unit\Gateway\Config;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Config\ValueHandlerPool;
 
-class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
+class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorException()
     {
-        $this->setExpectedException('LogicException');
+        $this->expectException('LogicException');
         $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

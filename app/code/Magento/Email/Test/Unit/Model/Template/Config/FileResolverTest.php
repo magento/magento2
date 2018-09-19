@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {
-        $fileIteratorFactory = $this->getMock(\Magento\Framework\Config\FileIteratorFactory::class, [], [], '', false);
-        $dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $fileIteratorFactory = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
+        $dirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $model = new \Magento\Email\Model\Template\Config\FileResolver($fileIteratorFactory, $dirSearch);
         $expected = ['found_file'];
         $fileIteratorFactory->expects($this->once())

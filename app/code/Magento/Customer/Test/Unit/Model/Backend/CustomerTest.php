@@ -2,7 +2,7 @@
 /**
  * Unit test for customer adminhtml model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Backend;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManager;
@@ -24,7 +24,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             \Magento\Customer\Model\Backend\Customer::class,

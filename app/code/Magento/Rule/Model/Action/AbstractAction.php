@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Action;
@@ -9,7 +9,10 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Quote rule action abstract
+ * Abstract rule action
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractAction extends \Magento\Framework\DataObject implements ActionInterface
 {
@@ -46,13 +49,16 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
 
         $this->loadAttributeOptions()->loadOperatorOptions()->loadValueOptions();
 
-        foreach (array_keys($this->getAttributeOption()) as $attr) {
-            $this->setAttribute($attr);
-            break;
+        $attributes = $this->getAttributeOption();
+        if ($attributes) {
+            reset($attributes);
+            $this->setAttribute(key($attributes));
         }
-        foreach (array_keys($this->getOperatorOption()) as $operator) {
-            $this->setOperator($operator);
-            break;
+
+        $operators = $this->getOperatorOption();
+        if ($operators) {
+            reset($operators);
+            $this->setOperator(key($operators));
         }
     }
 

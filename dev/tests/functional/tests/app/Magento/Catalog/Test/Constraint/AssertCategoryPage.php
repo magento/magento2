@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,7 +71,7 @@ class AssertCategoryPage extends AbstractConstraint
         $diff = array_merge($diff, $this->verifyContent($categoryData));
         $diff = array_merge($diff, $this->verifyDisplaySettings($categoryData));
         $diff = array_merge($diff, $this->verifySearchEngineOptimization($categoryData));
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $diff,
             "Category settings on Storefront page are different.\n" . implode(' ', $diff)
         );
@@ -177,8 +177,7 @@ class AssertCategoryPage extends AbstractConstraint
             }
         }
 
-        if (
-            isset($categoryData['landing_page'])
+        if (isset($categoryData['landing_page'])
             && isset($categoryData['display_mode'])
             && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
         ) {
@@ -261,7 +260,7 @@ class AssertCategoryPage extends AbstractConstraint
             $errorMessage[] = 'Wrong page URL.'
                 . "\nExpected: " . $categoryUrl
                 . "\nActual: " . $this->browser->getUrl();
-        };
+        }
 
         if (isset($categoryData['meta_title'])) {
             $actual = $this->browser->getTitle();
@@ -269,7 +268,7 @@ class AssertCategoryPage extends AbstractConstraint
                 $errorMessage[] = 'Wrong page title.'
                     . "\nExpected: " . $categoryData['meta_title']
                     . "\nActual: " . $actual;
-            };
+            }
         }
 
         return $errorMessage;

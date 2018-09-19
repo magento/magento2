@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Categories tree block
@@ -18,16 +16,18 @@ use Magento\Store\Model\Store;
 /**
  * Class Tree
  *
+ * @api
  * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/category/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/tree.phtml';
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -87,7 +87,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $addUrl = $this->getUrl("*/*/add", ['_current' => false, 'id' => null, '_query' => false]);
         if ($this->getStore()->getId() == Store::DEFAULT_STORE_ID) {
             $this->addChild(
-                'add_sub_button', \Magento\Backend\Block\Widget\Button::class,
+                'add_sub_button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Add Subcategory'),
                     'onclick' => "addNew('" . $addUrl . "', false)",
@@ -99,7 +100,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
             if ($this->canAddRootCategory()) {
                 $this->addChild(
-                    'add_root_button', \Magento\Backend\Block\Widget\Button::class,
+                    'add_root_button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Add Root Category'),
                         'onclick' => "addNew('" . $addUrl . "', true)",
@@ -226,7 +228,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getLoadTreeUrl($expanded = null)
     {
         $params = ['_current' => true, 'id' => null, 'store' => null];
-        if (is_null($expanded) && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
+        if ($expanded === null && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
             $params['expand_all'] = true;
         }
         return $this->getUrl('*/*/categoriesJson', $params);
@@ -314,8 +316,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $categories
         ) .
             ';' .
-            ($this->canAddSubCategory() ? '$("add_subcategory_button").show();' : '$("add_subcategory_button").hide();') .
-            '});</script>';
+            ($this->canAddSubCategory() ? '$("add_subcategory_button").show();' : '$("add_subcategory_button").hide();')
+            . '});</script>';
     }
 
     /**
@@ -323,7 +325,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

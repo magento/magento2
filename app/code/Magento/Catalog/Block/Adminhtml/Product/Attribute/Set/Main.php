@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
@@ -13,14 +13,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Main extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/main.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main.phtml';
 
     /**
      * Core registry
@@ -231,7 +233,7 @@ class Main extends \Magento\Backend\Block\Template
         /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
         foreach ($groups as $node) {
             $item = [];
-            $item['text'] = $node->getAttributeGroupName();
+            $item['text'] = $this->escapeHtml($node->getAttributeGroupName());
             $item['id'] = $node->getAttributeGroupId();
             $item['cls'] = 'folder';
             $item['allowDrop'] = true;
@@ -278,7 +280,7 @@ class Main extends \Magento\Backend\Block\Template
 
         foreach ($attributes as $child) {
             $attr = [
-                'text' => $child->getAttributeCode(),
+                'text' => $this->escapeHtml($child->getAttributeCode()),
                 'id' => $child->getAttributeId(),
                 'cls' => 'leaf',
                 'allowDrop' => false,

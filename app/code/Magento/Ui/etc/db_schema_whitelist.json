@@ -1,0 +1,22 @@
+{
+    "ui_bookmark": {
+        "column": {
+            "bookmark_id": true,
+            "user_id": true,
+            "namespace": true,
+            "identifier": true,
+            "current": true,
+            "title": true,
+            "config": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "UI_BOOKMARK_USER_ID_NAMESPACE_IDENTIFIER": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "UI_BOOKMARK_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    }
+}

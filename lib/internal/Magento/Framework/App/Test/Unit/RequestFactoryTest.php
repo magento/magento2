@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\RequestFactory;
 
-class RequestFactoryTest extends \PHPUnit_Framework_TestCase
+class RequestFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RequestFactory
@@ -21,7 +21,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new RequestFactory($this->objectManagerMock);
     }
 
@@ -33,7 +33,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = ['some_key' => 'same_value'];
 
-        $appRequest = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $appRequest = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

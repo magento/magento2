@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {
     /**
@@ -51,11 +55,11 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
     {
         $sortIndexA = 0;
         if ($this->_hasValue('sortOrder', $elementA)) {
-            $sortIndexA = floatval($elementA['sortOrder']);
+            $sortIndexA = (float)$elementA['sortOrder'];
         }
         $sortIndexB = 0;
         if ($this->_hasValue('sortOrder', $elementB)) {
-            $sortIndexB = floatval($elementB['sortOrder']);
+            $sortIndexB = (float)$elementB['sortOrder'];
         }
 
         if ($sortIndexA == $sortIndexB) {

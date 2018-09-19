@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test for save method
@@ -15,36 +15,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $config = [];
-        $fileStorageMock = $this->getMock(\Magento\MediaStorage\Model\File\Storage::class, [], [], '', false);
+        $fileStorageMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage::class);
         $fileStorageMock->expects($this->once())->method('getScriptConfig')->will($this->returnValue($config));
 
-        $file = $this->getMock(
-            \Magento\Framework\Filesystem\File\Write::class,
-            ['lock', 'write', 'unlock', 'close'],
-            [],
-            '',
-            false
-        );
+        $file = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Write::class)
+            ->setMethods(['lock', 'write', 'unlock', 'close'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $file->expects($this->once())->method('lock');
         $file->expects($this->once())->method('write')->with(json_encode($config));
         $file->expects($this->once())->method('unlock');
         $file->expects($this->once())->method('close');
-        $directory = $this->getMock(
-            \Magento\Framework\Filesystem\Direcoty\Write::class,
-            ['openFile', 'getRelativePath'],
-            [],
-            '',
-            false
+        $directory = $this->createPartialMock(
+            \Magento\Framework\Filesystem\Directory\Write::class,
+            ['openFile', 'getRelativePath']
         );
         $directory->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
         $directory->expects($this->once())->method('openFile')->with('cacheFile')->will($this->returnValue($file));
-        $filesystem = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryWrite'],
-            [],
-            '',
-            false
-        );
+        $filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
         $filesystem->expects(
             $this->once()
         )->method(

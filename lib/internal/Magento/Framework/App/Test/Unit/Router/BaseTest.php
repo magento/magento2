@@ -2,7 +2,7 @@
 /**
  * Tests Magento\Framework\App\Router\Base
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Router;
@@ -55,7 +55,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         // Create mocks
         $this->requestMock = $this->basicMock(\Magento\Framework\App\Request\Http::class);
         $this->routeConfigMock = $this->basicMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->appStateMock = $this->basicMock(\Magento\Framework\App\State::class);
+        $this->appStateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['isInstalled']);
         $this->actionListMock = $this->basicMock(\Magento\Framework\App\Router\ActionList::class);
         $this->actionFactoryMock = $this->basicMock(\Magento\Framework\App\ActionFactory::class);
         $this->nameBuilderMock = $this->basicMock(\Magento\Framework\Code\NameBuilder::class);
@@ -80,7 +80,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -109,7 +109,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
         $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
@@ -137,7 +137,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -169,7 +169,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $emptyModuleList = [];
 
         // Stubs
@@ -192,7 +192,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 

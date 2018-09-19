@@ -1,8 +1,6 @@
 <?php
 /**
- * Http application
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -17,6 +15,8 @@ use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
 
 /**
+ * HTTP web application. Called from webroot index.php to serve web requests.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Http implements \Magento\Framework\AppInterface
@@ -109,7 +109,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getLogger()
     {
@@ -241,8 +241,7 @@ class Http implements \Magento\Framework\AppInterface
                 . "because the Magento setup directory cannot be accessed. \n"
                 . 'You can install Magento using either the command line or you must restore access '
                 . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-            $newMessage .= 'If you are using the sample nginx configuration, please go to '
-                . $this->_request->getScheme(). '://' . $this->_request->getHttpHost() . $setupInfo->getUrl();
+
             throw new \Exception($newMessage, 0, $exception);
         }
     }

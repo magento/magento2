@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Export\Entity;
 
-class AbstractEavTest extends \PHPUnit_Framework_TestCase
+class AbstractEavTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Abstract eav export model
@@ -56,12 +56,9 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
     {
         $method = new \ReflectionMethod($this->_model, '_addAttributesToCollection');
         $method->setAccessible(true);
-        $stubCollection = $this->getMock(
+        $stubCollection = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            ['addAttributeToSelect'],
-            [],
-            '',
-            false
+            ['addAttributeToSelect']
         );
         $stubCollection->expects($this->once())->method('addAttributeToSelect')->with($this->_expectedAttributes);
         $method->invoke($this->_model, $stubCollection);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Backend\Block\Widget\Form\Element;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Dependence extends \Magento\Backend\Block\AbstractBlock
 {
     /**
@@ -120,14 +124,18 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script>
-            require(["mage/adminhtml/form"], function(){
-        new FormElementDependenceController(' .
-            $this->_getDependsJson() .
-            ($this->_configOptions ? ', ' .
-            $this->_jsonEncoder->encode(
-                $this->_configOptions
-            ) : '') . '); });</script>';
+
+        $params = $this->_getDependsJson();
+
+        if ($this->_configOptions) {
+            $params .= ', ' .  $this->_jsonEncoder->encode($this->_configOptions);
+        }
+
+        return "<script>
+require(['mage/adminhtml/form'], function(){
+    new FormElementDependenceController({$params});
+});
+</script>";
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,13 +67,13 @@ class AssertCustomVariableForm extends AbstractAssertForm
 
         $formData = $systemVariableNew->getSystemVariableForm()->getData();
         $errors = $this->verifyData($dataOrigin, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
 
         if ($storeOrigin !== null) {
             $systemVariableNew->getFormPageActions()->selectStoreView($storeOrigin->getName());
             $formData = $systemVariableNew->getSystemVariableForm()->getData();
             $errors = $this->verifyData($data, $formData);
-            \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+            \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
         }
     }
 

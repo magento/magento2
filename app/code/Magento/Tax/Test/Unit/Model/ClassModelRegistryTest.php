@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test for TaxRuleRegistry
  */
-class ClassModelRegistryTest extends \PHPUnit_Framework_TestCase
+class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Model\ClassModelRegistry

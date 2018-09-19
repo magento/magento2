@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use Magento\Framework\Module\Plugin\DbStatusValidator;
-
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * XPath in the configuration of a module output flag
@@ -29,6 +27,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $_outputConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
@@ -80,6 +81,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_One'));
     }
 
+    /**
+     * @return array
+     */
     public function isOutputEnabledGenericConfigPathDataProvider()
     {
         return ['output disabled' => [true, false], 'output enabled' => [false, true]];
@@ -100,6 +104,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_Two'));
     }
 
+    /**
+     * @return array
+     */
     public function isOutputEnabledCustomConfigPathDataProvider()
     {
         return [

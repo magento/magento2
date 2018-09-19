@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="PersistMultipleEntitiesTest">
+        <annotations>
+            <features value="SampleTests"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="simplesubcategory" stepKey="simplecategory"/>
+            <createData entity="simpleproduct" stepKey="simpleproduct1">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="simpleproduct" stepKey="simpleproduct2">
+                <requiredEntity createDataKey="categoryLink"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleproduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+        </after>
+        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+        <waitForPageLoad stepKey="s33"/>
+        <see stepKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
+    </test>
+</tests>

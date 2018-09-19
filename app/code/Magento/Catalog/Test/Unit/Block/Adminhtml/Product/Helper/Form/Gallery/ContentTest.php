@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form\Gallery;
 
-use Magento\Framework\Filesystem;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content;
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Phrase;
 
-class ContentTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -47,38 +51,21 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     protected $imageHelper;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $assetRepo;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
     public function setUp()
     {
-        $this->fileSystemMock = $this->getMock(
+        $this->fileSystemMock = $this->createPartialMock(
             \Magento\Framework\Filesystem::class,
-            ['stat', 'getDirectoryRead'],
-            [],
-            '',
-            false
+            ['stat', 'getDirectoryRead']
         );
-        $this->readMock = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->galleryMock = $this->getMock(
-            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->mediaConfigMock = $this->getMock(
+        $this->readMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->galleryMock = $this->createMock(\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class);
+        $this->mediaConfigMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Media\Config::class,
-            ['getMediaUrl', 'getMediaPath'],
-            [],
-            '',
-            false
+            ['getMediaUrl', 'getMediaPath']
         );
         $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()
@@ -171,12 +158,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultPlaceholderUrl', 'getPlaceholder'])
-            ->getMock();
-
-        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['createAsset', 'getPath'])
+            ->setMethods(['getDefaultPlaceholderUrl'])
             ->getMock();
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -185,15 +167,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             $this->imageHelper
         );
 
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->content,
-            'assetRepo',
-            $this->assetRepo
-        );
-
         $placeholderUrl = 'url_to_the_placeholder/placeholder.jpg';
-
-        $sizePlaceholder = ['size' => 399659];
 
         $imagesResult = [
             [
@@ -202,7 +176,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
                 'media_type' => 'image',
                 'position' => '0',
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
-                'size' => 399659
+                'size' => 0
             ],
             [
                 'value_id' => '1',
@@ -210,7 +184,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
                 'media_type' => 'image',
                 'position' => '1',
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
-                'size' => 399659
+                'size' => 0
             ]
         ];
 
@@ -238,20 +212,157 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->mediaConfigMock->expects($this->any())->method('getMediaPath');
         $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase('test'))
+                new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
             ),
-            $sizePlaceholder,
             $this->throwException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase('test'))
-            ),
-            $sizePlaceholder
+                new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
+            )
         );
         $this->imageHelper->expects($this->any())->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
-        $this->imageHelper->expects($this->any())->method('getPlaceholder');
-        $this->assetRepo->expects($this->any())->method('createAsset')->willReturnSelf();
-        $this->assetRepo->expects($this->any())->method('getPath');
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
+    }
+
+    /**
+     * Test GetImageTypes() will return value for given attribute from data persistor.
+     *
+     * @return void
+     */
+    public function testGetImageTypesFromDataPersistor()
+    {
+        $attributeCode = 'thumbnail';
+        $value = 'testImageValue';
+        $scopeLabel = 'testScopeLabel';
+        $label = 'testLabel';
+        $name = 'testName';
+        $expectedTypes = [
+            $attributeCode => [
+                'code' => $attributeCode,
+                'value' => $value,
+                'label' => $label,
+                'name' => $name,
+            ],
+        ];
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->once())
+            ->method('getData')
+            ->with($this->identicalTo($attributeCode))
+            ->willReturn(null);
+        $mediaAttribute = $this->getMediaAttribute($label, $attributeCode);
+        $product->expects($this->once())
+            ->method('getMediaAttributes')
+            ->willReturn([$mediaAttribute]);
+        $this->galleryMock->expects($this->exactly(2))
+            ->method('getDataObject')
+            ->willReturn($product);
+        $this->galleryMock->expects($this->once())
+            ->method('getImageValue')
+            ->with($this->identicalTo($attributeCode))
+            ->willReturn($value);
+        $this->galleryMock->expects($this->once())
+            ->method('getScopeLabel')
+            ->with($this->identicalTo($mediaAttribute))
+            ->willReturn($scopeLabel);
+        $this->galleryMock->expects($this->once())
+            ->method('getAttributeFieldName')
+            ->with($this->identicalTo($mediaAttribute))
+            ->willReturn($name);
+        $this->getImageTypesAssertions($attributeCode, $scopeLabel, $expectedTypes);
+    }
+
+    /**
+     * Test GetImageTypes() will return value for given attribute from product.
+     *
+     * @return void
+     */
+    public function testGetImageTypesFromProduct()
+    {
+        $attributeCode = 'thumbnail';
+        $value = 'testImageValue';
+        $scopeLabel = 'testScopeLabel';
+        $label = 'testLabel';
+        $name = 'testName';
+        $expectedTypes = [
+            $attributeCode => [
+                'code' => $attributeCode,
+                'value' => $value,
+                'label' => $label,
+                'name' => $name,
+            ],
+        ];
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->once())
+            ->method('getData')
+            ->with($this->identicalTo($attributeCode))
+            ->willReturn($value);
+        $mediaAttribute = $this->getMediaAttribute($label, $attributeCode);
+        $product->expects($this->once())
+            ->method('getMediaAttributes')
+            ->willReturn([$mediaAttribute]);
+        $this->galleryMock->expects($this->exactly(2))
+            ->method('getDataObject')
+            ->willReturn($product);
+        $this->galleryMock->expects($this->never())
+            ->method('getImageValue');
+        $this->galleryMock->expects($this->once())
+            ->method('getScopeLabel')
+            ->with($this->identicalTo($mediaAttribute))
+            ->willReturn($scopeLabel);
+        $this->galleryMock->expects($this->once())
+            ->method('getAttributeFieldName')
+            ->with($this->identicalTo($mediaAttribute))
+            ->willReturn($name);
+        $this->getImageTypesAssertions($attributeCode, $scopeLabel, $expectedTypes);
+    }
+
+    /**
+     * Perform assertions.
+     *
+     * @param string $attributeCode
+     * @param string $scopeLabel
+     * @param array $expectedTypes
+     * @return void
+     */
+    private function getImageTypesAssertions(string $attributeCode, string $scopeLabel, array $expectedTypes)
+    {
+        $this->content->setElement($this->galleryMock);
+        $result = $this->content->getImageTypes();
+        $scope = $result[$attributeCode]['scope'];
+        $this->assertSame($scopeLabel, $scope->getText());
+        unset($result[$attributeCode]['scope']);
+        $this->assertSame($expectedTypes, $result);
+    }
+
+    /**
+     * Get media attribute mock.
+     *
+     * @param string $label
+     * @param string $attributeCode
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMediaAttribute(string $label, string $attributeCode)
+    {
+        $frontend = $this->getMockBuilder(Product\Attribute\Frontend\Image::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $frontend->expects($this->once())
+            ->method('getLabel')
+            ->willReturn($label);
+        $mediaAttribute = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaAttribute->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+        $mediaAttribute->expects($this->once())
+            ->method('getFrontend')
+            ->willReturn($frontend);
+
+        return $mediaAttribute;
     }
 }

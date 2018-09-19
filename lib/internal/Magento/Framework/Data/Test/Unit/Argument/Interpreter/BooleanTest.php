@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use \Magento\Framework\Data\Argument\Interpreter\Boolean;
 
-class BooleanTest extends \PHPUnit_Framework_TestCase
+class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Boolean
@@ -21,7 +21,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
+        $this->_booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->_model = new Boolean($this->_booleanUtils);
     }
 

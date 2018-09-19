@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Usps\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Usps\Helper\Data
@@ -16,7 +16,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
-            'context' => $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false),
+            'context' => $this->createMock(\Magento\Framework\App\Helper\Context::class),
         ];
 
         $this->_helperData = $helper->getObject(\Magento\Usps\Helper\Data::class, $arguments);

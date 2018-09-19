@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -301,9 +301,12 @@ abstract class AbstractAdapter implements AdapterInterface
         if ($this->_fileType) {
             return $this->_fileType;
         } else {
-            list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType) = getimagesize($this->_fileName);
-            return $this->_fileType;
+            if ($this->_canProcess()) {
+                list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType) = getimagesize($this->_fileName);
+                return $this->_fileType;
+            }
         }
+        return null;
     }
 
     /**

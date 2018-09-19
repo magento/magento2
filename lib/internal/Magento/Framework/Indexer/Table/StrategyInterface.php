@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Indexer\Table;
 
 /**
- * Interface StrategyInterface
- * @package Magento\Indexer
+ * Interface \Magento\Framework\Indexer\Table\StrategyInterface
+ *
  */
 interface StrategyInterface
 {

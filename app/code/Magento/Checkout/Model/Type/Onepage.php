@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Type;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\AddressMetadataInterface as AddressMetadata;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerDataFactory;
@@ -667,7 +666,7 @@ class Onepage
         $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
         if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 // @codingStandardsIgnoreStart
                 __(
                     'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',

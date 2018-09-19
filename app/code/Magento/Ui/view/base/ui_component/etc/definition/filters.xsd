@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_component.xsd"/>
+
+    <xs:complexType name="componentFilters">
+        <xs:sequence>
+            <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentFiltersSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentFiltersSettings">
+        <xs:choice>
+            <xs:group ref="uiCollectionSettings"/>
+            <xs:element name="stickyTmpl" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Additional ".html" template that displays filters when the Toolbar component gets a fixed
+                        position.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="chipsConfig" type="chipsType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configuration passed to the "FiltersChips" component.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="templates" type="templatesType"/>
+            <xs:element ref="columnsProvider"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="templatesType">
+        <xs:choice>
+            <xs:element name="filters">
+                <xs:complexType>
+                    <xs:choice minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="base" type="paramType"/>
+                        <xs:element name="text" type="paramType"/>
+                        <xs:element name="select" type="paramType"/>
+                        <xs:element name="dateRange" type="paramType"/>
+                        <xs:element name="textRange" type="paramType"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+            <xs:element ref="param"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="chipsType">
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="provider" type="xs:string"/>
+            <xs:element name="param" type="argumentType"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

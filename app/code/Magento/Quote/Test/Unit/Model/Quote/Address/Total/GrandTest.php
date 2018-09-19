@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class GrandTest extends \PHPUnit_Framework_TestCase
+class GrandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Address\Total\Grand
@@ -27,21 +27,24 @@ class GrandTest extends \PHPUnit_Framework_TestCase
         $grandTotal = 6.4; // 1 + 2 + 3.4
         $grandTotalBase = 15.7; // 4 + 5 + 6.7
 
-        $totalMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address\Total::class,
-            ['getAllTotalAmounts', 'getAllBaseTotalAmounts', 'setGrandTotal', 'setBaseGrandTotal'],
-            [],
-            '',
-            false
-        );
+        $totalMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Total::class, [
+                'getAllTotalAmounts',
+                'getAllBaseTotalAmounts',
+                'setGrandTotal',
+                'setBaseGrandTotal',
+                'getGrandTotal',
+                'getBaseGrandTotal'
+            ]);
+        $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
+        $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
         $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);
         $totalMock->expects($this->once())->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
-        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal);
-        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase);
+        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal + 2);
+        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
 
         $this->model->collect(
-            $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false),
-            $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class),
+            $this->createMock(\Magento\Quote\Model\Quote::class),
+            $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class),
             $totalMock
         );
     }

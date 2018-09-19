@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Search\Model;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 use Magento\Search\Api\SynonymGroupRepositoryInterface;
 use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel;
-use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Synonym Group repository, provides implementation of saving and deleting synonym groups
@@ -44,7 +45,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
     {
@@ -73,7 +74,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
-                    'Synonym group with id %1 cannot be deleted. %2',
+                    'The synonym group with the "%1" ID can\'t be deleted. %2',
                     $synonymGroup->getGroupId(),
                     $exception->getMessage()
                 )
@@ -105,6 +106,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -126,7 +128,6 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $this->resourceModel->save($newSynonymGroupModel);
             $synonymGroup->setSynonymGroup($newSynonymGroupModel->getSynonymGroup());
             $synonymGroup->setGroupId($newSynonymGroupModel->getGroupId());
-
         } else {
             // no merge conflict, perform simple insert
             /** @var SynonymGroup $synonymGroupModel */
@@ -144,6 +145,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroupToMerge
      * @param array $matchingGroupIds
      * @return array
+     * @throws \Exception
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
@@ -182,6 +184,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function update(
         SynonymGroup $oldSynonymGroup,

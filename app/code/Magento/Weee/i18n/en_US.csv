@@ -3,7 +3,6 @@
 "All Websites","All Websites"
 FPT,FPT
 "You must set unique country-state combinations within the same fixed product tax","You must set unique country-state combinations within the same fixed product tax"
-"When specifying fixed product tax regions within the same country, select either unique region names or all ('*')","When specifying fixed product tax regions within the same country, select either unique region names or all ('*')"
 "Including FPT only","Including FPT only"
 "Including FPT and FPT description","Including FPT and FPT description"
 "Excluding FPT. Including FPT description and final price","Excluding FPT. Including FPT description and final price"

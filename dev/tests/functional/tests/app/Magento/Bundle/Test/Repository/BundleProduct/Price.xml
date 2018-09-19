@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -78,6 +78,18 @@
             <field name="cart_price" xsi:type="string">756.00</field>
         </dataset>
 
+        <dataset name="fixed-51">
+            <field name="price_from" xsi:type="string">51.00</field>
+            <field name="price_to" xsi:type="string">52.00</field>
+            <field name="regular_from" xsi:type="string">135.00</field>
+        </dataset>
+
+        <dataset name="fixed-756-custom-options">
+            <field name="price_from" xsi:type="string">785.00</field>
+            <field name="price_to" xsi:type="string">786.00</field>
+            <field name="cart_price" xsi:type="string">786.00</field>
+        </dataset>
+
         <dataset name="bundle_fixed_with_category">
             <field name="price_from" xsi:type="string">130.00</field>
             <field name="price_to" xsi:type="string">144.00</field>
@@ -94,6 +106,12 @@
             <field name="price_from" xsi:type="string">8.00</field>
             <field name="price_to" xsi:type="string">20.00</field>
             <field name="cart_price" xsi:type="string">80.00</field>
+            <field name="regular_from" xsi:type="string">40.00</field>
+        </dataset>
+
+        <dataset name="dynamic-18">
+            <field name="price_from" xsi:type="string">18.00</field>
+            <field name="price_to" xsi:type="string">20.00</field>
         </dataset>
 
         <dataset name="dynamic-32">

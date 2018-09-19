@@ -1,20 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
  * CMS block model
  *
- * @method ResourceCmsBlock _getResource()
- * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
  */
@@ -23,7 +20,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_block';
+    const CACHE_TAG = 'cms_b';
 
     /**#@+
      * Block's statuses
@@ -33,10 +30,8 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
-    protected $_cacheTag = 'cms_block';
+    /**#@-*/
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names
@@ -61,6 +56,10 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     public function beforeSave()
     {
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
+
         $needle = 'block_id="' . $this->getId() . '"';
         if (false == strstr($this->getContent(), $needle)) {
             return parent::beforeSave();

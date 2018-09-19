@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Filter\Template as FilterTemplate;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Store\Model\ScopeInterface;
 
@@ -18,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -32,6 +30,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 
@@ -84,6 +83,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $templateFactory;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -139,6 +143,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
     }
 
     /**
@@ -165,6 +171,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->filterManager,
                 $this->urlModel,
                 $this->filterFactory,
+                [],
+                $this->serializerMock
             ])
             ->getMock();
     }
@@ -291,6 +299,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
+    /**
+     * @return array
+     */
     public function loadDefaultDataProvider()
     {
         return [
@@ -304,7 +315,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2016 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -312,7 +323,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2016 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -426,18 +437,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isSMTPDisabled bool
      * @param $senderName string
      * @param $senderEmail string
      * @param $templateSubject string
      * @dataProvider isValidForSendDataProvider
      */
-    public function testIsValidForSend($isSMTPDisabled, $senderName, $senderEmail, $templateSubject, $expectedValue)
+    public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($isSMTPDisabled));
         $model = $this->getModelMock(['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getSenderName')
@@ -451,39 +457,31 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
+    /**
+     * @return array
+     */
     public function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => true
             ],
-            'no smtp so not valid' => [
-                'isSMTPDisabled' => true,
-                'senderName' => 'sender name',
-                'senderEmail' => 'email@example.com',
-                'templateSubject' => 'template subject',
-                'expectedValue' => false
-            ],
             'no sender name so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => '',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no sender email so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => '',
                 'templateSubject' => 'template subject',
                 'expectedValue' => false
             ],
             'no subject so not valid' => [
-                'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => '',
@@ -549,9 +547,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getModelMock();
         $model->setData('orig_template_variables', $templateVariables);
+
+        $this->serializerMock->expects($this->any())->method('unserialize')
+            ->willReturn(
+                json_decode($templateVariables, true)
+            );
         $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
+    /**
+     * @return array
+     */
     public function getVariablesOptionArrayDataProvider()
     {
         return [
@@ -652,6 +658,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($model->getUseAbsoluteLinks());
     }
 
+    /**
+     * @return array
+     */
     public function processTemplateVariable()
     {
         return [
@@ -727,19 +736,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_init'])
             ->setConstructorArgs([
-                $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false),
-                $this->getMock(\Magento\Theme\Model\View\Design::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
-                $this->getMock(\Magento\Store\Model\App\Emulation::class, [], [], '', false),
-                $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $this->createMock(\Magento\Framework\Model\Context::class),
+                $this->createMock(\Magento\Theme\Model\View\Design::class),
+                $this->createMock(\Magento\Framework\Registry::class),
+                $this->createMock(\Magento\Store\Model\App\Emulation::class),
+                $this->createMock(\Magento\Store\Model\StoreManager::class),
+                $this->createMock(\Magento\Framework\View\Asset\Repository::class),
+                $this->createMock(\Magento\Framework\Filesystem::class),
+                $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
                 $emailConfig,
-                $this->getMock(\Magento\Email\Model\TemplateFactory::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Filter\FilterManager::class, [], [], '', false),
-                $this->getMock(\Magento\Framework\Url::class, [], [], '', false),
-                $this->getMock(\Magento\Email\Model\Template\FilterFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Email\Model\TemplateFactory::class),
+                $this->createMock(\Magento\Framework\Filter\FilterManager::class),
+                $this->createMock(\Magento\Framework\Url::class),
+                $this->createMock(\Magento\Email\Model\Template\FilterFactory::class),
             ])
             ->getMock();
 
@@ -748,6 +757,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $model->getType());
     }
 
+    /**
+     * @return array
+     */
     public function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];

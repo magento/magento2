@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertCategoryCannotBeDeleted extends AbstractConstraint
      */
     public function processAssert(CatalogCategoryEdit $catalogCategoryEdit)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $catalogCategoryEdit->getFormPageActions()->checkDeleteButton(),
             false,
             'Delete button is available for the category.'

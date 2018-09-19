@@ -1,0 +1,14 @@
+{
+    "release_notification_viewer_log": {
+        "column": {
+            "id": true,
+            "viewer_id": true,
+            "last_view_version": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID_ADMIN_USER_USER_ID": true,
+            "RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID": true
+        }
+    }
+}

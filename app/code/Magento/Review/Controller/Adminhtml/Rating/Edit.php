@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends RatingController
+class Edit extends RatingController implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->initEnityId();
+        $this->initEntityId();
         /** @var \Magento\Review\Model\Rating $ratingModel */
         $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
         if ($this->getRequest()->getParam('id')) {

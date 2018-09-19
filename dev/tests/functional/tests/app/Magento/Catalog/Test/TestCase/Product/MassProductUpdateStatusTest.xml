@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateStatusTest" summary="Update status of Products Using Mass Actions" ticketId="MAGETWO-60847">
+        <variation name="MassProductStatusUpdateTestVariation1">
+            <data name="initialProducts" xsi:type="array">
+                <item name ="0" xsi:type="string">catalogProductSimple::simple_10_dollar</item>
+                <item name ="1" xsi:type="string">catalogProductSimple::simple_10_dollar</item>
+            </data>
+            <data name="gridStatus" xsi:type="string">Disable</data>
+            <data name="product/data/status" xsi:type="string">No</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertUpdatedProductStatusInGrid" />
+        </variation>
+    </testCase>
+</config>

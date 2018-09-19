@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel;
@@ -9,6 +9,9 @@ namespace Magento\Newsletter\Model\ResourceModel;
  * Newsletter subscriber resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -65,8 +68,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Initialize resource model
-     * Get tablename from config
+     * Initialize resource model. Get tablename from config
      *
      * @return void
      */
@@ -115,17 +117,37 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
-        $select = $this->connection->select()->from($this->getMainTable())->where('customer_id=:customer_id');
+        $select = $this->connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('customer_id=:customer_id and store_id=:store_id');
 
-        $result = $this->connection->fetchRow($select, ['customer_id' => $customer->getId()]);
+        $result = $this->connection
+            ->fetchRow(
+                $select,
+                [
+                    'customer_id' => $customer->getId(),
+                    'store_id' => $customer->getStoreId()
+                ]
+            );
 
         if ($result) {
             return $result;
         }
 
-        $select = $this->connection->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
+        $select = $this->connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('subscriber_email=:subscriber_email and store_id=:store_id');
 
-        $result = $this->connection->fetchRow($select, ['subscriber_email' => $customer->getEmail()]);
+        $result = $this->connection
+            ->fetchRow(
+                $select,
+                [
+                    'subscriber_email' => $customer->getEmail(),
+                    'store_id' => $customer->getStoreId()
+                ]
+            );
 
         if ($result) {
             return $result;

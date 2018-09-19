@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\Uploader;
 
 use Magento\Framework\Convert\DataSize;
 
-class ServiceTest extends \PHPUnit_Framework_TestCase
+class ServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Uploader\Service
@@ -55,24 +55,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_uploader = $this->getMock(\Magento\MediaStorage\Model\File\Uploader::class, [], [], '', false);
+        $this->_uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
         $this->dataSize = new DataSize();
-        $this->_uploaderFactory = $this->getMock(
+        $this->_uploaderFactory = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\UploaderFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_uploader));
-        $this->_directoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->_filesystemMock->expects(
             $this->any()
         )->method(

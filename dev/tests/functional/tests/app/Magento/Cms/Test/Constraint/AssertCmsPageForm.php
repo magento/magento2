@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,7 @@ class AssertCmsPageForm extends AbstractAssertForm
         $storeId = explode('/', $cms->getStoreId());
         $cmsFixtureData['store_id'] = array_pop($storeId);
         $errors = $this->verifyData($cmsFixtureData, $cmsFormData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**

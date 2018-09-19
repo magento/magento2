@@ -2,12 +2,12 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
-class CsvfileTest extends \PHPUnit_Framework_TestCase
+class CsvfileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider constructorProvider

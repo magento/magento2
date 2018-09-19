@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+__($variable)
+
+__($variable[Class::CONSTANT])
+
+__($variable[\Namespace\Class::CONSTANT])
+
+__($variable['value'])
+
+__(
+    $variable
+)
+
+Phrase($variable)
+
+Phrase($variable[Class::CONSTANT])
+
+Phrase($variable[\Namespace\Class::CONSTANT])
+
+\Magento\Framework\Phrase($variable['value'])
+
+\Magento\Framework\Phrase(
+    $variable[Class::CONSTANT]
+)

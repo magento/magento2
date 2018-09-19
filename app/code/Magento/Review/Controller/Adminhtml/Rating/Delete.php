@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends RatingController
+class Delete extends RatingController implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

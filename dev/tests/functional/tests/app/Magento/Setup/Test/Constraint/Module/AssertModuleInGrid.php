@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Constraint\Module;
@@ -24,7 +24,7 @@ class AssertModuleInGrid extends AbstractConstraint
      */
     public function processAssert(SetupWizard $setupWizard, $moduleName)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $setupWizard->getModuleGrid()->findModuleByName($moduleName)->isVisible(),
             'Module was not found in grid.'
         );

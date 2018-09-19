@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -11,11 +11,12 @@ use Magento\Customer\Test\Block\Form\Login;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action
+class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,25 +25,39 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
-    /** @var CustomerInterface */
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterface
+     */
     private $customer;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $resultJsonFactory;
 
-    /** @var \Magento\Customer\Model\Customer\Mapper  */
+    /**
+     * @var \Magento\Customer\Model\Customer\Mapper
+     */
     protected $customerMapper;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var EmailNotificationInterface */
+    /**
+     * @var \Magento\Customer\Model\EmailNotificationInterface
+     */
     private $emailNotification;
 
     /**
@@ -73,7 +88,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -125,7 +140,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Receive entity(customer|customer_address) data from request
      *
      * @param array $data
-     * @param null $isCustomerData
+     * @param mixed $isCustomerData
      * @return array
      */
     protected function getData(array $data, $isCustomerData = null)

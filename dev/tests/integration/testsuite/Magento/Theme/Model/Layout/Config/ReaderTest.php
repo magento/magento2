@@ -2,19 +2,19 @@
 /**
  * \Magento\Theme\Model\Layout\Config\Reader
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Layout\Config\Reader
      */
     protected $_model;
 
-    /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit\Framework\MockObject_MockObject */
     protected $_fileResolverMock;
 
     public function setUp()

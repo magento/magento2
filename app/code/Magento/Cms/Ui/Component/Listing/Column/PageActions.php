@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
 
+use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
-use Magento\Framework\UrlInterface;
 
 /**
  * Class PageActions
@@ -20,16 +22,25 @@ class PageActions extends Column
     const CMS_URL_PATH_EDIT = 'cms/page/edit';
     const CMS_URL_PATH_DELETE = 'cms/page/delete';
 
-    /** @var UrlBuilder */
+    /**
+     * @var \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+     */
     protected $actionUrlBuilder;
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlBuilder;
 
     /**
      * @var string
      */
     private $editUrl;
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * @param ContextInterface $context
@@ -71,12 +82,13 @@ class PageActions extends Column
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
                         'label' => __('Edit')
                     ];
+                    $title = $this->getEscaper()->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.title }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ]
                     ];
                 }
@@ -94,5 +106,18 @@ class PageActions extends Column
         }
 
         return $dataSource;
+    }
+
+    /**
+     * Get instance of escaper
+     * @return Escaper
+     * @deprecated 101.0.7
+     */
+    private function getEscaper()
+    {
+        if (!$this->escaper) {
+            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
+        }
+        return $this->escaper;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule;
@@ -8,8 +8,6 @@ namespace Magento\SalesRule\Model\Rule;
 /**
  * SalesRule Rule Customer Model
  *
- * @method \Magento\SalesRule\Model\ResourceModel\Rule\Customer _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Rule\Customer getResource()
  * @method int getRuleId()
  * @method \Magento\SalesRule\Model\Rule\Customer setRuleId(int $value)
  * @method int getCustomerId()

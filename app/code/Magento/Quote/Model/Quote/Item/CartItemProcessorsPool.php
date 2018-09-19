@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -9,7 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ConfigInterface;
 
 /**
- * @deprecated
+ * @deprecated 100.1.0
  */
 class CartItemProcessorsPool
 {
@@ -25,7 +25,7 @@ class CartItemProcessorsPool
 
     /**
      * @param ConfigInterface $objectManagerConfig
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function __construct(ConfigInterface $objectManagerConfig)
     {
@@ -34,7 +34,7 @@ class CartItemProcessorsPool
 
     /**
      * @return CartItemProcessorInterface[]
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getCartItemProcessors()
     {
@@ -42,7 +42,8 @@ class CartItemProcessorsPool
             return $this->cartItemProcessors;
         }
 
-        $arguments = $this->objectManagerConfig->getArguments(\Magento\Quote\Model\Quote\Item\Repository::class);
+        $typePreference = $this->objectManagerConfig->getPreference(Repository::class);
+        $arguments = $this->objectManagerConfig->getArguments($typePreference);
         if (isset($arguments['cartItemProcessors'])) {
             // Workaround for compiled mode.
             $processors = isset($arguments['cartItemProcessors']['_vac_'])

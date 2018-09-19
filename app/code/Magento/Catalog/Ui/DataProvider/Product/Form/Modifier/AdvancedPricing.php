@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -27,59 +28,77 @@ use Magento\Framework\Stdlib\ArrayManager;
 /**
  * Class AdvancedPricing
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class AdvancedPricing extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var ModuleManager
+     * @since 101.0.0
      */
     protected $moduleManager;
 
     /**
      * @var GroupManagementInterface
+     * @since 101.0.0
      */
     protected $groupManagement;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 101.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 101.0.0
      */
     protected $groupRepository;
 
     /**
      * @var Data
+     * @since 101.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @var string
+     * @since 101.0.0
      */
     protected $scopeName;
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $meta = [];
+
+    /**
+     * @var GroupSourceInterface
+     */
+    private $customerGroupSource;
 
     /**
      * @param LocatorInterface $locator
@@ -91,6 +110,7 @@ class AdvancedPricing extends AbstractModifier
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
      * @param string $scopeName
+     * @param GroupSourceInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,7 +122,8 @@ class AdvancedPricing extends AbstractModifier
         ModuleManager $moduleManager,
         Data $directoryHelper,
         ArrayManager $arrayManager,
-        $scopeName = ''
+        $scopeName = '',
+        GroupSourceInterface $customerGroupSource = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -113,10 +134,13 @@ class AdvancedPricing extends AbstractModifier
         $this->directoryHelper = $directoryHelper;
         $this->arrayManager = $arrayManager;
         $this->scopeName = $scopeName;
+        $this->customerGroupSource = $customerGroupSource
+            ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
     }
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -135,6 +159,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -148,6 +173,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @param string $fieldCode
      * @return $this
+     * @since 101.0.0
      */
     protected function preparePriceFields($fieldCode)
     {
@@ -174,7 +200,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return $this
      */
-    protected function customizeTierPrice()
+    private function customizeTierPrice()
     {
         $tierPricePath = $this->arrayManager->findPath(
             ProductAttributeInterface::CODE_TIER_PRICE,
@@ -209,28 +235,13 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return array
      */
-    protected function getCustomerGroups()
+    private function getCustomerGroups()
     {
         if (!$this->moduleManager->isEnabled('Magento_Customer')) {
             return [];
         }
-        $customerGroups = [
-            [
-                'label' => __('ALL GROUPS'),
-                'value' => GroupInterface::CUST_GROUP_ALL,
-            ]
-        ];
 
-        /** @var GroupInterface[] $groups */
-        $groups = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
-        foreach ($groups->getItems() as $group) {
-            $customerGroups[] = [
-                'label' => $group->getCode(),
-                'value' => $group->getId(),
-            ];
-        }
-
-        return $customerGroups;
+        return $this->customerGroupSource->toOptionArray();
     }
 
     /**
@@ -238,7 +249,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return bool
      */
-    protected function isScopeGlobal()
+    private function isScopeGlobal()
     {
         return $this->locator->getProduct()
             ->getResource()
@@ -251,7 +262,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return array
      */
-    protected function getWebsites()
+    private function getWebsites()
     {
         $websites = [
             [
@@ -292,7 +303,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return int
      */
-    protected function getDefaultCustomerGroup()
+    private function getDefaultCustomerGroup()
     {
         return $this->groupManagement->getAllCustomersGroup()->getId();
     }
@@ -301,6 +312,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve default value for website
      *
      * @return int
+     * @since 101.0.0
      */
     public function getDefaultWebsite()
     {
@@ -316,7 +328,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return bool
      */
-    protected function isShowWebsiteColumn()
+    private function isShowWebsiteColumn()
     {
         if ($this->isScopeGlobal() || $this->storeManager->isSingleStoreMode()) {
             return false;
@@ -329,7 +341,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return bool
      */
-    protected function isMultiWebsites()
+    private function isMultiWebsites()
     {
         return !$this->storeManager->isSingleStoreMode();
     }
@@ -339,7 +351,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return bool
      */
-    protected function isAllowChangeWebsite()
+    private function isAllowChangeWebsite()
     {
         if (!$this->isShowWebsiteColumn() || $this->locator->getProduct()->getStoreId()) {
             return false;
@@ -352,7 +364,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return $this
      */
-    protected function addAdvancedPriceLink()
+    private function addAdvancedPriceLink()
     {
         $pricePath = $this->arrayManager->findPath(
             ProductAttributeInterface::CODE_PRICE,
@@ -405,13 +417,14 @@ class AdvancedPricing extends AbstractModifier
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function getTierPriceStructure($tierPricePath)
+    private function getTierPriceStructure($tierPricePath)
     {
         return [
             'arguments' => [
                 'data' => [
                     'config' => [
                         'componentType' => 'dynamicRows',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-tier-price',
                         'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
                         'recordTemplate' => 'record',
@@ -419,7 +432,9 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'disabled' => false,
+                        'disabled' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/disabled', $this->meta),
+                        'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
@@ -452,6 +467,7 @@ class AdvancedPricing extends AbstractModifier
                                         'value' => $this->getDefaultWebsite(),
                                         'visible' => $this->isMultiWebsites(),
                                         'disabled' => ($this->isShowWebsiteColumn() && !$this->isAllowChangeWebsite()),
+                                        'sortOrder' => 10,
                                     ],
                                 ],
                             ],
@@ -467,6 +483,7 @@ class AdvancedPricing extends AbstractModifier
                                         'label' => __('Customer Group'),
                                         'options' => $this->getCustomerGroups(),
                                         'value' => $this->getDefaultCustomerGroup(),
+                                        'sortOrder' => 20,
                                     ],
                                 ],
                             ],
@@ -480,10 +497,12 @@ class AdvancedPricing extends AbstractModifier
                                         'dataType' => Number::NAME,
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
+                                        'sortOrder' => 30,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-digits' => false,
+                                            'validate-number' => true,
                                         ],
                                     ],
                                 ],
@@ -502,10 +521,14 @@ class AdvancedPricing extends AbstractModifier
                                         'addbefore' => $this->locator->getStore()
                                                                      ->getBaseCurrency()
                                                                      ->getCurrencySymbol(),
+                                        'sortOrder' => 40,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
                                             'validate-number' => true,
+                                        ],
+                                        'imports' => [
+                                            'priceValue' => '${ $.provider }:data.product.price',
                                         ],
                                     ],
                                 ],
@@ -518,6 +541,7 @@ class AdvancedPricing extends AbstractModifier
                                         'componentType' => 'actionDelete',
                                         'dataType' => Text::NAME,
                                         'label' => '',
+                                        'sortOrder' => 50,
                                     ],
                                 ],
                             ],
@@ -533,7 +557,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return $this
      */
-    protected function specialPriceDataToInline()
+    private function specialPriceDataToInline()
     {
         $pathFrom = $this->arrayManager->findPath('special_from_date', $this->meta, null, 'children');
         $pathTo = $this->arrayManager->findPath('special_to_date', $this->meta, null, 'children');
@@ -589,7 +613,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return $this
      */
-    protected function customizeAdvancedPricing()
+    private function customizeAdvancedPricing()
     {
         $this->meta['advanced-pricing']['arguments']['data']['config']['opened'] = true;
         $this->meta['advanced-pricing']['arguments']['data']['config']['collapsible'] = false;
@@ -646,9 +670,9 @@ class AdvancedPricing extends AbstractModifier
     /**
      * Retrieve store
      *
-     * @return \Magento\Store\Model\Store
+     * @return \Magento\Store\Api\Data\StoreInterface
      */
-    protected function getStore()
+    private function getStore()
     {
         return $this->locator->getStore();
     }

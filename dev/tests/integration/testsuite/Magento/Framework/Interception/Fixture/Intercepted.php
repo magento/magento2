@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Interception\Fixture;
 
+/**
+ * @codingStandardsIgnoreStart
+ */
 class Intercepted extends InterceptedParent implements InterceptedInterface
 {
     protected $_key;
@@ -48,6 +49,7 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
 
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
      */
     final public function E($param1)
     {

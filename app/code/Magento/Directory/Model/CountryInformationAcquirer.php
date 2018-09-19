@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model;
@@ -103,7 +103,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         if (!$country) {
             throw new NoSuchEntityException(
                 __(
-                    'Requested country is not available.'
+                    "The country isn't available."
                 )
             );
         }

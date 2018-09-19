@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
@@ -119,9 +119,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $configuration['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         $configuration['formKey'] = $this->formKey->getFormKey();
         $store = $this->storeManager->getStore();
-        $configuration['baseUrl'] = $store->isFrontUrlSecure()
-                ? $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)
-                : $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, false);
+        $configuration['baseUrl'] = $store->getBaseUrl(UrlInterface::URL_TYPE_LINK);
         return $configuration;
     }
 

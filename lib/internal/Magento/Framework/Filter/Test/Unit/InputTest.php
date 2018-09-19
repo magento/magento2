@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,16 +8,16 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use \Magento\Framework\Filter\Input;
 
-class InputTest extends \PHPUnit_Framework_TestCase
+class InputTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilterZendFilterAsObject()
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** @var \Zend_Filter_Interface $filterMock */
         /** This filter should be applied to 'field1' field value only */
-        $filterMock = $this->getMock(\Zend_Filter_Interface::class, [], [], '', false);
+        $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(1))->method('filter')->will(
             $this->returnCallback(
                 function ($input) {
@@ -35,7 +35,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterZendFilterAsArray()
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** This filter should be applied to 'field1' field value only */

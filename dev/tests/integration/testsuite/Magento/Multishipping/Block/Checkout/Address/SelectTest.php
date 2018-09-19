@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Multishipping\Block\Checkout\Address;
 
@@ -13,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Multishipping\Block\Checkout\Address\Select */
     protected $_selectBlock;
@@ -40,8 +38,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $address = $addressRepository->getById($fixtureAddressId);
         $addressAsHtml = $this->_selectBlock->getAddressAsHtml($address);
         $this->assertEquals(
-            "John Smith<br/>CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
-                . "<br/>United States<br/>T: <a href=\"tel:3468676\">3468676</a>",
+            "John Smith<br />CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
+                . "<br />United States<br />T: <a href=\"tel:3468676\">3468676</a>",
             str_replace("\n", '', $addressAsHtml),
             "Address was represented as HTML incorrectly"
         );

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Model;
 
@@ -226,6 +224,7 @@ class Config extends AbstractConfig
         'TWD',
         'THB',
         'USD',
+        'INR',
     ];
 
     /**
@@ -866,7 +865,11 @@ class Config extends AbstractConfig
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return $this->getPaypalUrl(['cmd' => '_express-checkout', 'token' => $token]);
+        return sprintf(
+            'https://www.%spaypal.com/checkoutnow%s',
+            $this->getValue('sandboxFlag') ? 'sandbox.' : '',
+            '?token=' . urlencode($token)
+        );
     }
 
     /**
@@ -1193,7 +1196,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;

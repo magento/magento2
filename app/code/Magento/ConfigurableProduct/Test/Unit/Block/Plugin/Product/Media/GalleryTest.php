@@ -1,96 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\Product\Media;
+
+use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class GalleryTest
  */
-class GalleryTest extends \PHPUnit_Framework_TestCase
+class GalleryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery
-     */
-    private $plugin;
-
-    /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $jsonEncoder;
-
-    /**
-     * @var \Magento\Framework\Json\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $jsonDecoder;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
-     */
-    private $galleryHandler;
-
-    protected function setUp()
-    {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->galleryHandler = $this->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\ReadHandler::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['execute'])
-            ->getMock();
-
-        $this->jsonEncoder = $this->getMock(\Magento\Framework\Json\EncoderInterface::class);
-        $this->jsonDecoder = $this->getMock(\Magento\Framework\Json\DecoderInterface::class);
-
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getTypeId', 'getTypeInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $variationProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['setMediaGalleryEntries', 'getSku', 'getMediaGalleryImages', 'getImage', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $image = new \Magento\Framework\DataObject(
-            ['media_type' => 'type', 'video_url' => 'url', 'file' => 'image.jpg']
-        );
-        $variationProduct->expects($this->any())->method('setMediaGalleryEntries')->willReturn([]);
-        $variationProduct->expects($this->any())->method('getSku')->willReturn('sku');
-        $variationProduct->expects($this->any())->method('getMediaGalleryImages')->willReturn([$image]);
-        $variationProduct->expects($this->any())->method('getImage')->willReturn('image.jpg');
-        $variationProduct->expects($this->any())->method('getData')->with('configurable_attribute')->willReturn(1);
-
-        $this->galleryHandler->expects($this->once())->method('execute')->with($variationProduct);
-
-        $configurableType = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUsedProducts', 'getConfigurableAttributesAsArray'])
-            ->getMock();
-        $configurableType->expects($this->any())->method('getUsedProducts')->with($productMock)
-            ->willReturn([$variationProduct]);
-        $configurableType->expects($this->any())->method('getConfigurableAttributesAsArray')->with($productMock)
-            ->willReturn([['attribute_code' => 'configurable_attribute']]);
-
-        $productMock->expects($this->any())->method('getTypeId')->willReturn('configurable');
-        $productMock->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
-
-        $this->plugin = $helper->getObject(
-            \Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery::class,
-            [
-                'productGalleryReadHandler' => $this->galleryHandler,
-                'jsonEncoder' => $this->jsonEncoder,
-                'jsonDecoder' => $this->jsonDecoder
-            ]
-        );
-        $this->plugin->setData('product', $productMock);
-    }
 
     public function testAfterGetOptions()
     {
+        $jsonMock = $this->createJsonMock();
+        $productMock = $this->createProductMock();
+        $galleryMock = $this->createGalleryMock();
+        $variationProductMock = $this->createProductMock();
+        $configurableTypeMock = $this->createConfigurableTypeMock();
+
         $resultJson = '[]';
-        $this->jsonDecoder->expects($this->once())->method('decode')->with('[]')->willReturn([]);
-        $expected = [
-            'configurable_attribute_1' => [
+        $variationProductId = 1;
+        $expectedGalleryJson = [
+            $variationProductId => [
                 [
                     'mediaType' => 'type',
                     'videoUrl' => 'url',
@@ -98,14 +34,69 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $this->jsonEncoder->expects($this->any())->method('encode')->with($expected)
-            ->willReturn(json_encode($expected));
+        $image = new \Magento\Framework\DataObject(
+            ['media_type' => 'type', 'video_url' => 'url', 'file' => 'image.jpg']
+        );
 
-        $blockMock = $this->getMockBuilder(\Magento\ProductVideo\Block\Product\View\Gallery::class)
+        $galleryMock->expects(($this->any()))->method('getProduct')->willReturn($productMock);
+        $productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
+        $productMock->expects($this->once())->method('getTypeInstance')->willReturn($configurableTypeMock);
+        $configurableTypeMock->expects($this->once())->method('getUsedProducts')->with($productMock)
+            ->willReturn([$variationProductMock]);
+        $variationProductMock->expects($this->once())->method('getId')->willReturn($variationProductId);
+        $variationProductMock->expects($this->once())->method('getMediaGalleryImages')->willReturn([$image]);
+        $variationProductMock->expects($this->once())->method('getImage')->willReturn('image.jpg');
+        $jsonMock->expects($this->once())->method('serialize')->with($expectedGalleryJson)
+            ->willReturn(json_encode($expectedGalleryJson));
+
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $plugin = $helper->getObject(
+            Gallery::class,
+            [
+                'json' => $jsonMock
+            ]
+        );
+        $result = $plugin->afterGetOptionsMediaGalleryDataJson($galleryMock, $resultJson);
+        $this->assertEquals(json_encode($expectedGalleryJson), $result);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createJsonMock()
+    {
+        return $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
 
-        $result = $this->plugin->afterGetOptionsMediaGalleryDataJson($blockMock, $resultJson);
-        $this->assertEquals(json_encode($expected), $result);
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createProductMock()
+    {
+        return $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createGalleryMock()
+    {
+        return $this->getMockBuilder(\Magento\Catalog\Block\Product\View\Gallery::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createConfigurableTypeMock()
+    {
+        return $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

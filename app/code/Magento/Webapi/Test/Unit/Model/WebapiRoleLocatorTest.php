@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleColl
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 
-class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
+class WebapiRoleLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Webapi\Model\WebapiRoleLocator

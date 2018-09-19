@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Observer;
@@ -15,7 +15,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Class DataAssignObserverTest
  */
-class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
+class DataAssignObserverTest extends \PHPUnit\Framework\TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
     const DEVICE_DATA = '{"test": "test"}';
@@ -28,7 +28,7 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentInfoModel = $this->getMock(InfoInterface::class);
+        $paymentInfoModel = $this->createMock(InfoInterface::class);
         $dataObject = new DataObject(
             [
                 PaymentInterface::KEY_ADDITIONAL_DATA => [

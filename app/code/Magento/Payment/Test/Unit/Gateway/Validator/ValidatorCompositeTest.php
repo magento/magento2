@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\ValidatorComposite;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 
-class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
+class ValidatorCompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testValidate()
     {
@@ -75,7 +75,8 @@ class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'isValid' => false,
-                    'failsDescription' => ['Fail']
+                    'failsDescription' => ['Fail'],
+                    'errorCodes' => []
                 ]
             )
             ->willReturn($compositeResult);

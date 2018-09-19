@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,5 +20,8 @@
         <max_characters>
             <selector>[name$='[max_characters]']</selector>
         </max_characters>
+        <add_before>
+            <selector>[class*="admin__addon-prefix"]</selector>
+        </add_before>
     </fields>
 </mapping>

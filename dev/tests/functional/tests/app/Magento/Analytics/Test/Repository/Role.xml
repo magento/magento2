@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\User\Test\Repository\Role">
+        <dataset name="role_without_subscription_permissions">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Stores" xsi:type="string">Magento_Backend::stores</item>
+                <item name="Configuration" xsi:type="string">Magento_Config::config</item>
+                <item name="General Section" xsi:type="string">Magento_Config::config_general</item>
+                <item name="System" xsi:type="string">Magento_Backend::system</item>
+                <item name="Other Settings" xsi:type="string">Magento_Backend::system_other_settings</item>
+                <item name="Notifications" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="Show list" xsi:type="string">Magento_AdminNotification::show_list</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

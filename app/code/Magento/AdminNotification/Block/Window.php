@@ -2,11 +2,15 @@
 /**
  * Critical notification window
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Block;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Window extends \Magento\Backend\Block\Template
 {
     /**
@@ -94,10 +98,9 @@ class Window extends \Magento\Backend\Block\Template
     {
         if ($this->_latestItem == null) {
             $items = array_values($this->_criticalCollection->getItems());
+            $this->_latestItem = false;
             if (count($items)) {
                 $this->_latestItem = $items[0];
-            } else {
-                $this->_latestItem = false;
             }
         }
         return $this->_latestItem;

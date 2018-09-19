@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,5 +20,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
         [
             'qty' => 100,
             'is_in_stock' => 1,
+            'manage_stock' => 1,
         ]
     )->save();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -8,8 +8,6 @@ namespace Magento\Quote\Model\Quote\Item;
 /**
  * Item option model
  *
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item\Option _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item\Option getResource()
  * @method int getItemId()
  * @method \Magento\Quote\Model\Quote\Item\Option setItemId(int $value)
  * @method int getProductId()

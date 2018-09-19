@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
@@ -12,7 +12,7 @@ use \Magento\TestFramework\Helper\Bootstrap;
  * @magentoComponentsDir Magento/Theme/Model/_files/design
  * @magentoDbIsolation enabled
  */
-class FileSystemTest extends \PHPUnit_Framework_TestCase
+class FileSystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\FileSystem

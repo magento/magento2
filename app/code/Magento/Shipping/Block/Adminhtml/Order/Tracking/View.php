@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
@@ -8,6 +8,8 @@ namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 /**
  * Shipment tracking control form
  *
+ * @api
+ * @since 100.0.2
  */
 class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
@@ -90,11 +92,6 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     public function getCarrierTitle($code)
     {
         $carrier = $this->_carrierFactory->create($code);
-        if ($carrier) {
-            return $carrier->getConfigData('title');
-        } else {
-            return __('Custom Value');
-        }
-        return false;
+        return $carrier ? $carrier->getConfigData('title') : __('Custom Value');
     }
 }

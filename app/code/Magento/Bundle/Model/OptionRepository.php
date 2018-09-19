@@ -1,19 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Model;
 
+use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+ * Repository for performing CRUD operations for a bundle product's options.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInterface
@@ -39,11 +40,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $optionResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManager
-     */
-    protected $storeManager;
-
-    /**
      * @var \Magento\Bundle\Api\ProductLinkManagementInterface
      */
     protected $linkManagement;
@@ -54,52 +50,43 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $productOptionList;
 
     /**
-     * @var Product\LinksList
-     */
-    protected $linkList;
-
-    /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var SaveAction
      */
-    private $metadataPool;
+    private $optionSave;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
      * @param \Magento\Bundle\Model\ResourceModel\Option $optionResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
-     * @param Product\LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param SaveAction $optionSave
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
         \Magento\Bundle\Model\ResourceModel\Option $optionResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
-        \Magento\Bundle\Model\Product\LinksList $linkList,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        SaveAction $optionSave
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
         $this->optionFactory = $optionFactory;
         $this->optionResource = $optionResource;
-        $this->storeManager = $storeManager;
         $this->linkManagement = $linkManagement;
         $this->productOptionList = $productOptionList;
-        $this->linkList = $linkList;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->optionSave = $optionSave;
     }
 
     /**
@@ -112,10 +99,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
         if (!$option || !$option->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+            throw new NoSuchEntityException(
+                __("The option that was requested doesn't exist. Verify the entity and try again.")
+            );
         }
 
-        $productLinks = $this->linkList->getItems($product, $optionId);
+        $productLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
 
         /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
         $optionDataObject = $this->optionFactory->create();
@@ -159,7 +148,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                __('Cannot delete option with id %1', $option->getOptionId()),
+                __('The option with "%1" ID can\'t be deleted.', $option->getOptionId()),
                 $exception
             );
         }
@@ -174,7 +163,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $product = $this->getProduct($sku);
         $optionCollection = $this->type->getOptionsCollection($product);
         $optionCollection->setIdFilter($optionId);
-        return $this->delete($optionCollection->getFirstItem());
+        $hasBeenDeleted = $this->delete($optionCollection->getFirstItem());
+
+        return $hasBeenDeleted;
     }
 
     /**
@@ -184,27 +175,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $savedOption = $this->optionSave->save($product, $option);
 
-        $option->setStoreId($product->getStoreId());
-        $option->setParentId($product->getData($metadata->getLinkField()));
-        $linksToAdd = [];
-        $option->setDefaultTitle($option->getDefaultTitle() ?: $option->getTitle());
-        if (is_array($option->getProductLinks())) {
-            $linksToAdd = $option->getProductLinks();
-        }
-        try {
-            $this->optionResource->save($option);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save option'), $e);
-        }
+        $productToSave = $this->productRepository->get($product->getSku());
+        $this->productRepository->save($productToSave);
 
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
-        foreach ($linksToAdd as $linkedProduct) {
-            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
-        }
-        $product->setIsRelationsChanged(true);
-        return $option->getOptionId();
+        return $savedOption->getOptionId();
     }
 
     /**
@@ -218,16 +194,25 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-        $existingLinks = [];
+        $optionId = $option->getOptionId();
+        $existingLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
         $linksToAdd = [];
+        $linksToUpdate = [];
         $linksToDelete = [];
         if (is_array($option->getProductLinks())) {
             $productLinks = $option->getProductLinks();
             foreach ($productLinks as $productLink) {
-                $linksToAdd[] = $productLink;
+                if (!$productLink->getId() && !$productLink->getSelectionId()) {
+                    $linksToAdd[] = $productLink;
+                } else {
+                    $linksToUpdate[] = $productLink;
+                }
             }
             /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
-            $linksToDelete = $this->compareLinks([], $existingLinks);
+            $linksToDelete = $this->compareLinks($existingLinks, $linksToUpdate);
+        }
+        foreach ($linksToUpdate as $linkedProduct) {
+            $this->linkManagement->saveChild($product->getSku(), $linkedProduct);
         }
         foreach ($linksToDelete as $linkedProduct) {
             $this->linkManagement->removeChild(
@@ -249,54 +234,44 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      */
     private function getProduct($sku)
     {
-        $product = $this->productRepository->get($sku, true);
+        $product = $this->productRepository->get($sku, true, null, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Only implemented for bundle product'));
+            throw new InputException(__('This is implemented for bundle products only.'));
         }
         return $product;
     }
 
     /**
-     * Computes the difference of arrays
+     * Computes the difference between given arrays.
      *
-     * @param array $firstArray of \Magento\Bundle\Api\Data\LinkInterface
-     * @param array $secondArray of \Magento\Bundle\Api\Data\LinkInterface
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $firstArray
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
+     *
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function compareLinks(
-        array $firstArray,
-        array $secondArray
-    ) {
-        $result = [];
-        if (count($firstArray) < count($secondArray)) {
-            $holder = $firstArray;
-            $firstArray = $secondArray;
-            $secondArray = $holder;
-        }
-        foreach ($firstArray as $obj) {
-            foreach ($secondArray as $objToCompare) {
-                if (
-                    $obj->getId() != $objToCompare->getId()
-                    && $obj instanceof \Magento\Bundle\Api\Data\LinkInterface
-                    && $objToCompare instanceof \Magento\Bundle\Api\Data\LinkInterface
-                ) {
-                    $result[] = $obj;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Get MetadataPool instance
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
+    private function compareLinks(array $firstArray, array $secondArray)
     {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $result = [];
+
+        $firstArrayIds = [];
+        $firstArrayMap = [];
+
+        $secondArrayIds = [];
+
+        foreach ($firstArray as $item) {
+            $firstArrayIds[] = $item->getId();
+
+            $firstArrayMap[$item->getId()] = $item;
         }
-        return $this->metadataPool;
+
+        foreach ($secondArray as $item) {
+            $secondArrayIds[] = $item->getId();
+        }
+
+        foreach (array_diff($firstArrayIds, $secondArrayIds) as $id) {
+            $result[] = $firstArrayMap[$id];
+        }
+
+        return $result;
     }
 }

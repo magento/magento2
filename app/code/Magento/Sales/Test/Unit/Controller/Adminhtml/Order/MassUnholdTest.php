@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class MassHoldTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassUnholdTest extends \PHPUnit_Framework_TestCase
+class MassUnholdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\MassUnhold
@@ -85,28 +85,24 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderManagementMock;
+
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $resultRedirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $resultRedirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
 
         $this->orderCollectionMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Collection::class)
             ->disableOriginalConstructor()
@@ -116,16 +112,10 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->sessionMock = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set'], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->resultRedirectMock = $this->getMock(
-            \Magento\Backend\Model\View\Result\Redirect::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlagMock = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set']);
+        $this->helperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirectMock = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
         $redirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
@@ -155,7 +145,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
-        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->orderCollectionMock)
@@ -164,16 +154,22 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->orderCollectionMock);
 
+        $this->orderManagementMock = $this->createMock(\Magento\Sales\Api\OrderManagementInterface::class);
+
         $this->massAction = $objectManagerHelper->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\MassUnhold::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
-                'collectionFactory' => $this->orderCollectionFactoryMock
+                'collectionFactory' => $this->orderCollectionFactoryMock,
+                'orderManagement' => $this->orderManagementMock
             ]
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteOneOrdersReleasedFromHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -193,9 +189,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('canUnhold')
             ->willReturn(true);
         $order1->expects($this->once())
-            ->method('unhold');
-        $order1->expects($this->once())
-            ->method('save');
+            ->method('getEntityId');
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
@@ -205,12 +199,14 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->method('canUnhold')
             ->willReturn(false);
 
+        $this->orderManagementMock->expects($this->atLeastOnce())->method('unHold')->willReturn(true);
+
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) were not released from on hold status.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 order(s) have been released from on hold status.');
 
         $this->resultRedirectMock->expects($this->once())
@@ -221,6 +217,9 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
         $this->massAction->execute();
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecuteNoReleasedOrderFromHold()
     {
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -249,7 +248,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('No order(s) were released from on hold status.');
 
         $this->resultRedirectMock->expects($this->once())

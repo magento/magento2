@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,9 @@ angular.module('extension-grid', ['ngStorage'])
             $scope.syncError = false;
             $scope.currentPage = 1;
 
-            $http.get('index.php/extensionGrid/extensions').success(function (data) {
+            $http.get('index.php/extensionGrid/extensions').then(function successCallback(resp) {
+                var data = resp.data;
+
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
 
@@ -37,7 +39,7 @@ angular.module('extension-grid', ['ngStorage'])
                 }
                 $scope.availableUpdatePackages = data.lastSyncData.packages;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $rootScope.extensionsProcessed = true;
             });
@@ -78,7 +80,9 @@ angular.module('extension-grid', ['ngStorage'])
 
             $scope.sync = function() {
                 $scope.isHiddenSpinner = false;
-                $http.get('index.php/extensionGrid/sync').success(function(data) {
+                $http.get('index.php/extensionGrid/sync').then(function successCallback(resp) {
+                    var data = resp.data;
+
                     if (typeof data.lastSyncData.lastSyncDate !== 'undefined') {
                         $scope.lastSyncDate = data.lastSyncData.lastSyncDate.date;
                         $scope.lastSyncTime = data.lastSyncData.lastSyncDate.time;
@@ -129,7 +133,7 @@ angular.module('extension-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[extension.name]['latestVersion']
                     }
                 ];
-                titleService.setTitle('update', extension.moduleName ? extension.moduleName : extension.name);
+                titleService.setTitle('update', extension);
                 $state.go('root.readiness-check-update');
             };
 
@@ -139,7 +143,7 @@ angular.module('extension-grid', ['ngStorage'])
                         name: extension.name
                     }
                 ];
-                titleService.setTitle('uninstall', extension.moduleName ? extension.moduleName : extension.name);
+                titleService.setTitle('uninstall', extension);
                 $localStorage.componentType = extension.type;
                 $state.go('root.readiness-check-uninstall');
             };

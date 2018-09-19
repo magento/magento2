@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Observer;
 
 use Magento\GiftMessage\Observer\SalesEventQuoteSubmitBeforeObserver as Observer;
 
-class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit_Framework_TestCase
+class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Observer\SalesEventQuoteSubmitBeforeObserver
@@ -23,10 +23,10 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit_Framework_TestCas
     public function testSalesEventQuoteSubmitBefore()
     {
         $giftMessageId = 42;
-        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getOrder', 'getQuote']);
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getGiftMessageId'], [], '', false);
-        $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId'], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getOrder', 'getQuote']);
+        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getGiftMessageId']);
+        $orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId']);
         $observerMock->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);

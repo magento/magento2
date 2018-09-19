@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\From\Element;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\From\Element;
 /**
  * Test class for \Magento\Customer\Block\Adminhtml\From\Element\Image
  */
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Adminhtml\Form\Element\Image

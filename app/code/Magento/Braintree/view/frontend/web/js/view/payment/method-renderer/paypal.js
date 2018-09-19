@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -7,13 +7,28 @@
 define([
     'jquery',
     'underscore',
+    'mage/utils/wrapper',
     'Magento_Checkout/js/view/payment/default',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
-    'Magento_Vault/js/view/payment/vault-enabler'
-], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators, VaultEnabler) {
+    'Magento_Vault/js/view/payment/vault-enabler',
+    'Magento_Checkout/js/action/create-billing-address',
+    'mage/translate'
+], function (
+    $,
+    _,
+    wrapper,
+    Component,
+    Braintree,
+    quote,
+    fullScreenLoader,
+    additionalValidators,
+    VaultEnabler,
+    createBillingAddress,
+    $t
+) {
     'use strict';
 
     return Component.extend({
@@ -87,7 +102,6 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
-                    self.reInitPayPal();
                 }
             });
 
@@ -172,14 +186,16 @@ define([
             var billingAddress = {
                 street: [address.streetAddress],
                 city: address.locality,
-                regionCode: address.region,
                 postcode: address.postalCode,
                 countryId: address.countryCodeAlpha2,
+                email: customer.email,
                 firstname: customer.firstName,
                 lastname: customer.lastName,
                 telephone: customer.phone
             };
 
+            billingAddress['region_code'] = address.region;
+            billingAddress = createBillingAddress(billingAddress);
             quote.billingAddress(billingAddress);
         },
 
@@ -190,7 +206,9 @@ define([
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
 
-            if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
+            if ((this.isRequiredBillingAddress() || quote.billingAddress() === null) &&
+                typeof data.details.billingAddress !== 'undefined'
+            ) {
                 this.setBillingAddress(data.details, data.details.billingAddress);
             }
 
@@ -204,8 +222,9 @@ define([
 
         /**
          * Re-init PayPal Auth Flow
+         * @param {Function} callback - Optional callback
          */
-        reInitPayPal: function () {
+        reInitPayPal: function (callback) {
             if (Braintree.checkout) {
                 Braintree.checkout.teardown(function () {
                     Braintree.checkout = null;
@@ -214,6 +233,18 @@ define([
 
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
+            this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
+
+            if (callback) {
+                this.clientConfig.onReady = wrapper.wrap(
+                    this.clientConfig.onReady,
+                    function (original, checkout) {
+                        this.clientConfig.onReady = original;
+                        original(checkout);
+                        callback();
+                    }.bind(this)
+                );
+            }
 
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
@@ -233,6 +264,14 @@ define([
          */
         isAllowOverrideShippingAddress: function () {
             return window.checkoutConfig.payment[this.getCode()].isAllowShippingAddressOverride;
+        },
+
+        /**
+         * Is billing address required from PayPal side
+         * @returns {Boolean}
+         */
+        isRequiredBillingAddress: function () {
+            return window.checkoutConfig.payment[this.getCode()].isRequiredBillingAddress;
         },
 
         /**
@@ -284,8 +323,7 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (address.postcode === null) {
-
+            if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
                 return {};
             }
 
@@ -390,9 +428,19 @@ define([
          * Triggers when customer click "Continue to PayPal" button
          */
         payWithPayPal: function () {
-            if (additionalValidators.validate()) {
-                Braintree.checkout.paypal.initAuthFlow();
-            }
+            this.reInitPayPal(function () {
+                if (!additionalValidators.validate()) {
+                    return;
+                }
+
+                try {
+                    Braintree.checkout.paypal.initAuthFlow();
+                } catch (e) {
+                    this.messageContainer.addErrorMessage({
+                        message: $t('Payment ' + this.getTitle() + ' can\'t be initialized.')
+                    });
+                }
+            }.bind(this));
         },
 
         /**

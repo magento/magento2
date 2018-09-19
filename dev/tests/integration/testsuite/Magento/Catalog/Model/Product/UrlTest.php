@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product;
  * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
  * @magentoAppArea frontend
  */
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Url

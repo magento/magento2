@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_component.xsd"/>
+
+    <xs:complexType name="componentDataSource">
+        <xs:sequence>
+            <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1" type="componentDataSourceSettings"/>
+            <xs:element name="aclResource" type="xs:string" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        ACL Resource used to validate access to UI Component data
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="componentDataSourceSettings">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="uiElementSettings"/>
+            <xs:element name="submitUrl" type="urlType">
+                <xs:annotation>
+                    <xs:documentation>
+                        POST controller url.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="validateUrl" type="urlType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Optional url that is used for data validation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="updateUrl" type="urlType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Query for data refresh (i.e. applying filters in Listing component).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="filterUrlParams">
+                <xs:annotation>
+                    <xs:documentation>
+                        URL parameters filter.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:choice minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="param" type="namedString"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+</xs:schema>

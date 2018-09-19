@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class NotifyStockTest
  * @package Magento\Catalog\Model\Rss\Product
  */
-class NotifyStockTest extends \PHPUnit_Framework_TestCase
+class NotifyStockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NotifyStock
@@ -56,22 +56,19 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
-        $this->stock = $this->getMock(\Magento\CatalogInventory\Model\ResourceModel\Stock::class, [], [], '', false);
-        $this->stockFactory = $this->getMock(
+        $this->stock = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock::class);
+        $this->stockFactory = $this->createPartialMock(
             \Magento\CatalogInventory\Model\ResourceModel\StockFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->stockFactory->expects($this->any())->method('create')->will($this->returnValue($this->stock));
 
-        $this->status = $this->getMock(\Magento\Catalog\Model\Product\Attribute\Source\Status::class);
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $this->status = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Source\Status::class);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->notifyStock = $this->objectManagerHelper->getObject(
@@ -89,7 +86,7 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection =
-            $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [], [], '', false);
+            $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->product->expects($this->once())->method('getCollection')->will($this->returnValue($productCollection));
 
         $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());

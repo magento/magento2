@@ -1,15 +1,64 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 define([
     'jquery',
     'underscore',
+    'mage/template',
+    'mage/smart-keyboard-handler',
+    'mage/translate',
+    'priceUtils',
     'jquery/ui',
-    'jquery/jquery.parsequery'
-], function ($, _) {
+    'jquery/jquery.parsequery',
+    'mage/validation/validation'
+], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
     'use strict';
+
+    /**
+     * Extend form validation to support swatch accessibility
+     */
+    $.widget('mage.validation', $.mage.validation, {
+        /**
+         * Handle form with swatches validation. Focus on first invalid swatch block.
+         *
+         * @param {jQuery.Event} event
+         * @param {Object} validation
+         */
+        listenFormValidateHandler: function (event, validation) {
+            var swatchWrapper, firstActive, swatches, swatch, successList, errorList, firstSwatch;
+
+            this._superApply(arguments);
+
+            swatchWrapper = '.swatch-attribute-options';
+            swatches = $(event.target).find(swatchWrapper);
+
+            if (!swatches.length) {
+                return;
+            }
+
+            swatch = '.swatch-attribute';
+            firstActive = $(validation.errorList[0].element || []);
+            successList = validation.successList;
+            errorList = validation.errorList;
+            firstSwatch = $(firstActive).parent(swatch).find(swatchWrapper);
+
+            keyboardHandler.focus(swatches);
+
+            $.each(successList, function (index, item) {
+                $(item).parent(swatch).find(swatchWrapper).attr('aria-invalid', false);
+            });
+
+            $.each(errorList, function (index, item) {
+                $(item.element).parent(swatch).find(swatchWrapper).attr('aria-invalid', true);
+            });
+
+            if (firstSwatch.length) {
+                $(firstSwatch).focus();
+            }
+        }
+    });
 
     /**
      * Render tooltips by attributes (only to up).
@@ -18,6 +67,8 @@ define([
      *  - option-label (string)
      *  - option-tooltip-thumb
      *  - option-tooltip-value
+     *  - thumb-width
+     *  - thumb-height
      */
     $.widget('mage.SwatchRendererTooltip', {
         options: {
@@ -37,11 +88,13 @@ define([
                 label = $this.attr('option-label'),
                 thumb = $this.attr('option-tooltip-thumb'),
                 value = $this.attr('option-tooltip-value'),
+                width = $this.attr('thumb-width'),
+                height = $this.attr('thumb-height'),
                 $image,
                 $title,
                 $corner;
 
-            if (!$element.size()) {
+            if (!$element.length) {
                 $element = $('<div class="' +
                     $widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
@@ -66,7 +119,9 @@ define([
                                 // Image
                                 $image.css({
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
-                                    'background-size': 'initial'
+                                    'background-size': 'initial',
+                                    'width': width + 'px',
+                                    'height': height + 'px'
                                 });
                                 $image.show();
                             } else if (type === 1) {
@@ -117,6 +172,7 @@ define([
                 $element.hide();
                 clearTimeout(timer);
             });
+
             $(document).on('tap', function () {
                 $element.hide();
                 clearTimeout(timer);
@@ -169,6 +225,9 @@ define([
             //selector of product images gallery wrapper
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
 
+            // selector of category product tile wrapper
+            selectorProductTile: '.product-item',
+
             // number of controls to show (false or zero = show all)
             numberToShow: false,
 
@@ -178,8 +237,11 @@ define([
             // enable label for control
             enableControlLabel: true,
 
+            // control label id
+            controlLabelId: '',
+
             // text for more button
-            moreButtonText: 'More',
+            moreButtonText: $t('More'),
 
             // Callback url for media
             mediaCallback: '',
@@ -190,29 +252,68 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
-            onlyMainImg: false
+            // Use ajax to get image data
+            useAjax: false,
+
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace',
+
+            // whether swatches are rendered in product list or on product page
+            inProductList: false,
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
+
+            // tier prise selectors start
+            tierPriceTemplateSelector: '#tier-prices-template',
+            tierPriceBlockSelector: '[data-role="tier-price-block"]',
+            tierPriceTemplate: '',
+            // tier prise selectors end
+
+            // A price label selector
+            normalPriceLabelSelector: '.normal-price .price-label'
         },
 
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
          * @private
          */
         _init: function () {
+            if (_.isEmpty(this.options.jsonConfig.images)) {
+                this.options.useAjax = true;
+                // creates debounced variant of _LoadProductMedia()
+                // to use it in events handlers instead of _LoadProductMedia()
+                this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            }
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                // store unsorted attributes
+                this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
+                this._setPreSelectedGallery();
+                $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**
@@ -220,7 +321,7 @@ define([
          */
         _sortAttributes: function () {
             this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
-                return attribute.position;
+                return parseInt(attribute.position, 10);
             });
         },
 
@@ -230,23 +331,49 @@ define([
         _create: function () {
             var options = this.options,
                 gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
-                isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ?
+                productData = this._determineProductData(),
+                $main = productData.isInProductView ?
                     this.element.parents('.column.main') :
                     this.element.parents('.product-item-info');
 
-            if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+            if (productData.isInProductView) {
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
-            this.productForm = this.element.parents(this.options.selectorProduct).find('form:first');
+
+            this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
+            this.inProductList = this.productForm.length > 0;
+        },
+
+        /**
+         * Determine product id and related data
+         *
+         * @returns {{productId: *, isInProductView: bool}}
+         * @private
+         */
+        _determineProductData: function () {
+            // Check if product is in a list of products.
+            var productId,
+                isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
+
+            if (!productId) {
+                // Check individual product.
+                productId = $('[name=product]').val();
+                isInProductView = productId > 0;
+            }
+
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
@@ -264,9 +391,11 @@ define([
 
             $.each(this.options.jsonConfig.attributes, function () {
                 var item = this,
-                    options = $widget._RenderSwatchOptions(item),
+                    controlLabelId = 'option-label-' + item.code + '-' + item.id,
+                    options = $widget._RenderSwatchOptions(item, controlLabelId),
                     select = $widget._RenderSwatchSelect(item, chooseText),
                     input = $widget._RenderFormInput(item),
+                    listLabel = '',
                     label = '';
 
                 // Show only swatch controls
@@ -276,22 +405,32 @@ define([
 
                 if ($widget.options.enableControlLabel) {
                     label +=
-                        '<span class="' + classes.attributeLabelClass + '">' + item.label + '</span>' +
+                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
+                            item.label +
+                        '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
-                if ($widget.productForm) {
+                if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
+                    listLabel = 'aria-label="' + item.label + '"';
+                } else {
+                    listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
 
                 // Create new control
                 container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code +
-                        '" attribute-code="' + item.code +
-                        '" attribute-id="' + item.id + '">' +
-                            label +
-                        '<div class="' + classes.attributeOptionsWrapper + ' clearfix">' +
+                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
+                         'attribute-code="' + item.code + '" ' +
+                         'attribute-id="' + item.id + '">' +
+                        label +
+                        '<div aria-activedescendant="" ' +
+                             'tabindex="0" ' +
+                             'aria-invalid="false" ' +
+                             'aria-required="true" ' +
+                             'role="listbox" ' + listLabel +
+                             'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
                             options + select +
                         '</div>' + input +
                     '</div>'
@@ -336,12 +475,14 @@ define([
          * Render swatch options by part of config
          *
          * @param {Object} config
+         * @param {String} controlId
          * @returns {String}
          * @private
          */
-        _RenderSwatchOptions: function (config) {
+        _RenderSwatchOptions: function (config, controlId) {
             var optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
+                sizeConfig = this.options.jsonSwatchImageSizeConfig,
                 moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
                 moreText = this.options.moreButtonText,
@@ -358,6 +499,8 @@ define([
                     value,
                     thumb,
                     label,
+                    width,
+                    height,
                     attr;
 
                 if (!optionConfig.hasOwnProperty(this.id)) {
@@ -373,13 +516,23 @@ define([
                 type = parseInt(optionConfig[id].type, 10);
                 value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
+                width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
+                height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
                 label = this.label ? this.label : '';
                 attr =
+                    ' id="' + controlId + '-item-' + id + '"' +
+                    ' aria-checked="false"' +
+                    ' aria-describedby="' + controlId + '"' +
+                    ' tabindex="0"' +
                     ' option-type="' + type + '"' +
                     ' option-id="' + id + '"' +
                     ' option-label="' + label + '"' +
+                    ' aria-label="' + label + '"' +
                     ' option-tooltip-thumb="' + thumb + '"' +
-                    ' option-tooltip-value="' + value + '"';
+                    ' option-tooltip-value="' + value + '"' +
+                    ' role="option"' +
+                    ' thumb-width="' + width + '"' +
+                    ' thumb-height="' + height + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
@@ -392,19 +545,20 @@ define([
                 } else if (type === 1) {
                     // Color
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                        '" style="background: ' + value +
+                        ' style="background: ' + value +
                         ' no-repeat center; background-size: initial;">' + '' +
                         '</div>';
                 } else if (type === 2) {
                     // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' +
+                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
+                        sizeConfig.swatchImage.width + 'px; height:' + sizeConfig.swatchImage.height + 'px">' + '' +
                         '</div>';
                 } else if (type === 3) {
                     // Clear
                     html += '<div class="' + optionClass + '" ' + attr + '></div>';
                 } else {
-                    // Defaualt
+                    // Default
                     html += '<div class="' + optionClass + '" ' + attr + '>' + label + '</div>';
                 }
             });
@@ -460,10 +614,9 @@ define([
                 'type="text" ' +
                 'value="" ' +
                 'data-selector="super_attribute[' + config.id + ']" ' +
-                'data-validate="{required:true}" ' +
+                'data-validate="{required: true}" ' +
                 'aria-required="true" ' +
-                'aria-invalid="true" ' +
-                'style="visibility: hidden; position:absolute; left:-1000px">';
+                'aria-invalid="false">';
         },
 
         /**
@@ -472,22 +625,63 @@ define([
          * @private
          */
         _EventListener: function () {
+            var $widget = this,
+                options = this.options.classes,
+                target;
 
-            var $widget = this;
-
-            $widget.element.on('click', '.' + this.options.classes.optionClass, function () {
+            $widget.element.on('click', '.' + options.optionClass, function () {
                 return $widget._OnClick($(this), $widget);
             });
 
-            $widget.element.on('change', '.' + this.options.classes.selectClass, function () {
+            $widget.element.on('change', '.' + options.selectClass, function () {
                 return $widget._OnChange($(this), $widget);
             });
 
-            $widget.element.on('click', '.' + this.options.classes.moreButton, function (e) {
+            $widget.element.on('click', '.' + options.moreButton, function (e) {
                 e.preventDefault();
 
                 return $widget._OnMoreClick($(this));
             });
+
+            $widget.element.on('keydown', function (e) {
+                if (e.which === 13) {
+                    target = $(e.target);
+
+                    if (target.is('.' + options.optionClass)) {
+                        return $widget._OnClick(target, $widget);
+                    } else if (target.is('.' + options.selectClass)) {
+                        return $widget._OnChange(target, $widget);
+                    } else if (target.is('.' + options.moreButton)) {
+                        e.preventDefault();
+
+                        return $widget._OnMoreClick(target);
+                    }
+                }
+            });
+        },
+
+        /**
+         * Load media gallery using ajax or json config.
+         *
+         * @private
+         */
+        _loadMedia: function () {
+            var $main = this.inProductList ?
+                    this.element.parents('.product-item-info') :
+                    this.element.parents('.column.main'),
+                images;
+
+            if (this.options.useAjax) {
+                this._debouncedLoadProductMedia();
+            }  else {
+                images = this.options.jsonConfig.images[this.getProduct()];
+
+                if (!images) {
+                    images = this.options.mediaGalleryInitial;
+                }
+
+                this.updateBaseImage(images, $main, !this.inProductList);
+            }
         },
 
         /**
@@ -498,13 +692,17 @@ define([
          * @private
          */
         _OnClick: function ($this, $widget) {
-
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
+                $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.hasClass('disabled')) {
                 return;
@@ -514,11 +712,14 @@ define([
                 $parent.removeAttr('option-selected').find('.selected').removeClass('selected');
                 $input.val('');
                 $label.text('');
+                $this.attr('aria-checked', false);
             } else {
                 $parent.attr('option-selected', $this.attr('option-id')).find('.selected').removeClass('selected');
                 $label.text($this.attr('option-label'));
                 $input.val($this.attr('option-id'));
+                $input.attr('data-attr-name', this._getAttributeCodeById(attributeId));
                 $this.addClass('selected');
+                $widget._toggleCheckedAttributes($this, $wrapper);
             }
 
             $widget._Rebuild();
@@ -529,8 +730,34 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
+        },
+
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param {Number} attributeId
+         * @returns {*}
+         * @private
+         */
+        _getAttributeCodeById: function (attributeId) {
+            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+            return attribute ? attribute.code : attributeId;
+        },
+
+        /**
+         * Toggle accessibility attributes
+         *
+         * @param {Object} $this
+         * @param {Object} $wrapper
+         * @private
+         */
+        _toggleCheckedAttributes: function ($this, $wrapper) {
+            $wrapper.attr('aria-activedescendant', $this.attr('id'))
+                    .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+            $this.attr('aria-checked', true);
         },
 
         /**
@@ -543,9 +770,13 @@ define([
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.productForm.length > 0) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.val() > 0) {
                 $parent.attr('option-selected', $this.val());
@@ -557,7 +788,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -588,7 +819,6 @@ define([
          * @private
          */
         _Rebuild: function () {
-
             var $widget = this,
                 controls = $widget.element.find('.' + $widget.options.classes.attributeClass + '[attribute-id]'),
                 selected = controls.filter('[option-selected]');
@@ -597,7 +827,7 @@ define([
             $widget._Rewind(controls);
 
             // done if nothing selected
-            if (selected.size() <= 0) {
+            if (selected.length <= 0) {
                 return;
             }
 
@@ -607,7 +837,7 @@ define([
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
+                if (selected.length === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
@@ -671,7 +901,8 @@ define([
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
-                result;
+                result,
+                tierPriceHtml;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -688,6 +919,44 @@ define([
                 }
             );
 
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
+
+            if (typeof result != 'undefined' && result.tierPrices.length) {
+                if (this.options.tierPriceTemplate) {
+                    tierPriceHtml = mageTemplate(
+                        this.options.tierPriceTemplate,
+                        {
+                            'tierPrices': result.tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.jsonConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        }
+                    );
+                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                }
+            } else {
+                $(this.options.tierPriceBlockSelector).hide();
+            }
+
+            $(this.options.normalPriceLabelSelector).hide();
+
+            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+                if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
+                    if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
+                            if ($(dropdown).val() === '0') {
+                                $(this.options.normalPriceLabelSelector).show();
+                            }
+                        }.bind(this));
+                    } else {
+                        $(this.options.normalPriceLabelSelector).show();
+                    }
+                }
+            }.bind(this));
         },
 
         /**
@@ -722,8 +991,7 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
-                productId = 0,
+                productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
 
@@ -737,43 +1005,31 @@ define([
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
-                    $widget._ProductMediaCallback($this, data);
-                    $widget._DisableProductMediaLoader($this);
+                    $widget._ProductMediaCallback($this, data, productData.isInProductView);
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
-            if ($('body.catalog-product-view').size() > 0) {
-                //Product Page
-                productId = document.getElementsByName('product')[0].value;
-            } else {
-                //Category View
-                productId = $this.parents('.product.details.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
-            }
-
             mediaCallData = {
-                'product_id': productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
+
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -793,7 +1049,7 @@ define([
         _EnableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .addClass($widget.options.classes.loader);
             } else {
@@ -812,7 +1068,7 @@ define([
         _DisableProductMediaLoader: function ($this) {
             var $widget = this;
 
-            if ($('body.catalog-product-view').size() > 0) {
+            if ($('body.catalog-product-view').length > 0) {
                 $this.parents('.column.main').find('.photo.image')
                     .removeClass($widget.options.classes.loader);
             } else {
@@ -827,11 +1083,11 @@ define([
          *
          * @param {Object} $this
          * @param {String} response
+         * @param {Boolean} isInProductView
          * @private
          */
-        _ProductMediaCallback: function ($this, response) {
-            var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
+        _ProductMediaCallback: function ($this, response, isInProductView) {
+            var $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
 
@@ -846,7 +1102,7 @@ define([
                 };
 
             if (_.size($widget) < 1 || !support(response)) {
-                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isInProductView);
 
                 return;
             }
@@ -871,7 +1127,7 @@ define([
                 });
             }
 
-            this.updateBaseImage(images, $main, isProductViewExist);
+            this.updateBaseImage(images, $main, isInProductView);
         },
 
         /**
@@ -885,7 +1141,9 @@ define([
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
-                    img.type = 'image';
+                    if (!img.type) {
+                        img.type = 'image';
+                    }
                 });
             }
 
@@ -896,33 +1154,57 @@ define([
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
-         * @param {Boolean} isProductViewExist
+         * @param {Boolean} isInProductView
          */
-        updateBaseImage: function (images, context, isProductViewExist) {
+        updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
-            if (isProductViewExist) {
+            if (isInProductView) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
-
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
                 }
+
+                imagesToUpdate = this._setImageIndex(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                } else {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                        selectedOption: this.getProduct(),
+                        dataMergeStrategy: this.options.gallerySwitchStrategy
+                    });
+                }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**
@@ -946,8 +1228,44 @@ define([
          */
         _EmulateSelected: function (selectedAttributes) {
             $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
-                this.element.find('.' + this.options.classes.attributeClass +
-                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]'),
+                    parentInput = elem.parent();
+
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
+            }, this));
+        },
+
+        /**
+         * Emulate mouse click or selection change on all swatches that should be selected
+         * @param {Object} [selectedAttributes]
+         * @private
+         */
+        _EmulateSelectedByAttributeId: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
+                    parentInput = elem.parent();
+
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
             }, this));
         },
 
@@ -964,13 +1282,41 @@ define([
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
-                    var attribute = this.options.jsonConfig.attributes[attributeId];
+                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
                     return attribute ? attribute.code : attributeId;
                 }.bind(this)));
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            var mediaCallData;
+
+            if (this.options.jsonConfig.preSelectedGallery) {
+                mediaCallData = {
+                    'product_id': this.getProduct()
+                };
+
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

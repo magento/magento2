@@ -2,17 +2,19 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Date
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
-
 
 class DateTest extends AbstractFormTestCase
 {
     /** @var \Magento\Customer\Model\Metadata\Form\Date */
     protected $date;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -47,6 +49,9 @@ class DateTest extends AbstractFormTestCase
         );
     }
 
+    /**
+     * Test extractValue
+     */
     public function testExtractValue()
     {
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
@@ -113,6 +118,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -164,12 +172,15 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->compactValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function compactAndRestoreValueDataProvider()
     {
         return [
             [1, 1],
             [false, false],
-            ['', null],
+            [null, null],
             ['test', 'test'],
             [['element1', 'element2'], ['element1', 'element2']]
         ];
@@ -186,6 +197,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->restoreValue($value));
     }
 
+    /**
+     * Test outputValue
+     */
     public function testOutputValue()
     {
         $this->assertEquals(null, $this->date->outputValue());

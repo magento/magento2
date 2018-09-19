@@ -2,11 +2,15 @@
 /**
  * Interface for output class of standard profiler driver.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
+/**
+ * Interface \Magento\Framework\Profiler\Driver\Standard\OutputInterface
+ *
+ */
 interface OutputInterface
 {
     /**

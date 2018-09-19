@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnection()
     {

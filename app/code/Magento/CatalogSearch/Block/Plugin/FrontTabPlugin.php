@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Plugin;
 
-use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front;
+use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front as ProductAttributeFrontTabBlock;
 use Magento\CatalogSearch\Model\Source\Weight;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 
+/**
+ * Plugin for Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class FrontTabPlugin
 {
     /**
@@ -26,15 +31,14 @@ class FrontTabPlugin
     }
 
     /**
-     * @param Front $subject
-     * @param callable $proceed
+     * Add Search Weight field
+     *
+     * @param ProductAttributeFrontTabBlock $subject
      * @param Form $form
-     * @return Front
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
      */
-    public function aroundSetForm(Front $subject, \Closure $proceed, Form $form)
+    public function beforeSetForm(ProductAttributeFrontTabBlock $subject, Form $form)
     {
-        $block = $proceed($form);
         /** @var Fieldset $fieldset */
         $fieldset = $form->getElement('front_fieldset');
         $fieldset->addField(
@@ -47,17 +51,8 @@ class FrontTabPlugin
             ],
             'is_searchable'
         );
-
         $subject->getChildBlock('form_after')
-            ->addFieldMap(
-                'search_weight',
-                'search_weight'
-            )
-            ->addFieldDependence(
-                'search_weight',
-                'searchable',
-                '1'
-            );
-        return $block;
+            ->addFieldMap('search_weight', 'search_weight')
+            ->addFieldDependence('search_weight', 'searchable', '1');
     }
 }

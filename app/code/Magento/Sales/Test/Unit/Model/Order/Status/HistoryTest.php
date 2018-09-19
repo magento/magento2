@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order\Status\History;
 /**
  * Class HistoryTest
  */
-class HistoryTest extends \PHPUnit_Framework_TestCase
+class HistoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -37,7 +37,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $this->order = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->storeManager = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
             [],
@@ -76,7 +76,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $status = 'pending';
         $this->assertNull($this->model->getStatusLabel());
         $this->model->setStatus($status);
-        $config = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
+        $config = $this->createMock(\Magento\Sales\Model\Order\Config::class);
         $config->expects($this->once())->method('getStatusLabel')->with($status)->willReturn($status);
         $this->order->expects($this->once())->method('getConfig')->willReturn($config);
         $this->model->setOrder($this->order);

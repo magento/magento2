@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,5 +13,10 @@
     <indexer id="catalogrule_product" view_id="catalogrule_product" class="Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer" shared_index="catalogrule">
         <title translate="true">Catalog Product Rule</title>
         <description translate="true">Indexed product/rule association</description>
+    </indexer>
+    <indexer id="catalog_product_price">
+        <dependencies>
+            <indexer id="catalogrule_rule" />
+        </dependencies>
     </indexer>
 </config>

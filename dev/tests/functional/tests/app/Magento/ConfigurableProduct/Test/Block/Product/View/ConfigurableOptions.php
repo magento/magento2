@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,8 @@ namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
@@ -32,7 +30,21 @@ class ConfigurableOptions extends CustomOptions
      *
      * @var string
      */
-    protected $priceBlock = '//*[@class="product-info-main"]//*[contains(@class,"price-box")]';
+    protected $priceBlock = '.product-info-price .price-box';
+
+    /**
+     * Selector for tier prices.
+     *
+     * @var string
+     */
+    private $tierPricesSelector = '.prices-tier li';
+
+    /**
+     * Locator for configurable option element.
+     *
+     * @var string
+     */
+    private $configurableOptionElement = '#product-options-wrapper > * > .configurable';
 
     /**
      * Get configurable product options
@@ -93,11 +105,16 @@ class ConfigurableOptions extends CustomOptions
         }
 
         $productVariations = array_keys($productVariations);
-
         $result = [];
         foreach ($productVariations as $variation) {
             $variationOptions = explode(' ', $variation);
-            $result[$variation]['price'] = $this->getOptionPrice($variationOptions, $attributesData);
+            //Select all options specified in variation
+            $this->chooseOptions($variationOptions, $attributesData);
+            $result[$variation]['price'] = $this->getOptionPrice();
+            $tierPrices = $this->getOptionTierPrices();
+            if (count($tierPrices) > 0) {
+                $result[$variation]['tierPrices'] = $tierPrices;
+            }
         }
 
         return $result;
@@ -106,23 +123,32 @@ class ConfigurableOptions extends CustomOptions
     /**
      * Get option price
      *
-     * @param array $variationOptions
-     * @param array $attributesData
      * @return null|string
      */
-    protected function getOptionPrice($variationOptions, $attributesData)
+    protected function getOptionPrice()
     {
-        //Select all options specified in variation
-        foreach ($variationOptions as $variationSelection) {
-            list ($attribute, $option) = explode(':', $variationSelection);
-            $attributeTitle = $attributesData[$attribute]['label'];
-            $optionTitle = $attributesData[$attribute]['options'][$option]['label'];
-            $this->selectOption($attributeTitle, $optionTitle);
-        }
-
         $priceBlock = $this->getPriceBlock();
         $price = ($priceBlock->isOldPriceVisible()) ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
         return $price;
+    }
+
+    /**
+     * Get tier prices of all variations
+     *
+     * @return array
+     */
+    private function getOptionTierPrices()
+    {
+        $prices = [];
+        $tierPricesNodes = $this->_rootElement->getElements($this->tierPricesSelector);
+        foreach ($tierPricesNodes as $node) {
+            preg_match('#^[^\d]+(\d+)[^\d]+(\d+(?:(?:,\d+)*)+(?:.\d+)*).*#i', $node->getText(), $matches);
+            $prices[] = [
+                'qty' => isset($matches[1]) ? $matches[1] : null,
+                'price_qty' => isset($matches[2]) ? $matches[2] : null,
+            ];
+        }
+        return $prices;
     }
 
     /**
@@ -132,13 +158,17 @@ class ConfigurableOptions extends CustomOptions
      */
     protected function getPriceBlock()
     {
-        return $this->blockFactory->create(
+        /** @var \Magento\Catalog\Test\Block\Product\Price $priceBlock */
+        $priceBlock = $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
-            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+            ['element' => $this->_rootElement->find($this->priceBlock)]
         );
+        return $priceBlock;
     }
 
     /**
+     * Select option from the select element.
+     *
      * @param string $attributeTitle
      * @param string $optionTitle
      */
@@ -146,5 +176,74 @@ class ConfigurableOptions extends CustomOptions
     {
         $this->_rootElement->find(sprintf($this->optionSelector, $attributeTitle), Locator::SELECTOR_XPATH, 'select')
             ->setValue($optionTitle);
+    }
+
+    /**
+     * Choose options of the configurable product
+     *
+     * @param $variationOptions
+     * @param $attributesData
+     * @return void
+     */
+    protected function chooseOptions($variationOptions, $attributesData)
+    {
+        //Select all options specified in variation
+        foreach ($variationOptions as $variationSelection) {
+            list ($attribute, $option) = explode(':', $variationSelection);
+            $attributeTitle = $attributesData[$attribute]['label'];
+            $optionTitle = $attributesData[$attribute]['options'][$option]['label'];
+            $this->selectOption($attributeTitle, $optionTitle);
+        }
+    }
+
+    /**
+     * Get present options
+     *
+     * @return array
+     */
+    public function getPresentOptions()
+    {
+        $options = [];
+
+        $optionElements = $this->_rootElement->getElements($this->configurableOptionElement);
+        foreach ($optionElements as $optionElement) {
+            $title = $optionElement->find($this->title)->getText();
+            $options[$title] = $optionElement;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Check if the options container is visible or not
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->_rootElement->find($this->optionsContext, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Select configurable product option by it index
+     *
+     * @param FixtureInterface $product
+     * @param string $variation
+     * @return void
+     */
+    public function selectConfigurableOption(FixtureInterface $product, $variation)
+    {
+        /** @var ConfigurableProduct $product */
+        $attributesData = [];
+        $productVariations = [];
+        if ($product->hasData('configurable_attributes_data')) {
+            $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+            $productVariations = $product->getConfigurableAttributesData()['matrix'];
+        }
+        if (array_key_exists($variation, $productVariations)) {
+            $variationOption = explode(' ', $variation);
+            //Select option specified in variation
+            $this->chooseOptions($variationOption, $attributesData);
+        }
     }
 }

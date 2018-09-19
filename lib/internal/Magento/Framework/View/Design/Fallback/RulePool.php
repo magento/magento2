@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,11 +27,7 @@ class RulePool
     const TYPE_EMAIL_TEMPLATE = 'email';
     /**#@-*/
 
-    /**
-     * File system
-     *
-     * @var \Magento\Framework\Filesystem
-     */
+    /**#@-*/
     protected $filesystem;
 
     /**

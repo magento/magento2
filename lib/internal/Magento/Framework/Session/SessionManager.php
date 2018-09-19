@@ -2,7 +2,7 @@
 /**
  * Magento session manager
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -124,9 +124,6 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
-
-        // Enable session.use_only_cookies
-        ini_set('session.use_only_cookies', '1');
         $this->start();
     }
 
@@ -183,11 +180,23 @@ class SessionManager implements SessionManagerInterface
             // Need to apply the config options so they can be ready by session_start
             $this->initIniOptions();
             $this->registerSaveHandler();
-
+            if (isset($_SESSION['new_session_id'])) {
+                // Not fully expired yet. Could be lost cookie by unstable network.
+                session_commit();
+                session_id($_SESSION['new_session_id']);
+            }
+            $sid = $this->sidResolver->getSid($this);
             // potential custom logic for session id (ex. switching between hosts)
-            $this->setSessionId($this->sidResolver->getSid($this));
+            $this->setSessionId($sid);
             session_start();
+            if (isset($_SESSION['destroyed'])
+                && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
+            ) {
+                $this->destroy(['clear_storage' => true]);
+            }
+
             $this->validator->validate($this);
+            $this->renewCookie($sid);
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -195,6 +204,38 @@ class SessionManager implements SessionManagerInterface
             \Magento\Framework\Profiler::stop('session_start');
         }
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
+        return $this;
+    }
+
+    /**
+     * Renew session cookie to prolong session
+     *
+     * @param null|string $sid If we have session id we need to use it instead of old cookie value
+     * @return $this
+     */
+    private function renewCookie($sid)
+    {
+        if (!$this->getCookieLifetime()) {
+            return $this;
+        }
+        //When we renew cookie, we should aware, that any other session client do not
+        //change cookie too
+        $cookieValue = $sid ?: $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+            $metadata->setPath($this->sessionConfig->getCookiePath());
+            $metadata->setDomain($this->sessionConfig->getCookieDomain());
+            $metadata->setDuration($this->sessionConfig->getCookieLifetime());
+            $metadata->setSecure($this->sessionConfig->getCookieSecure());
+            $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+
+            $this->cookieManager->setPublicCookie(
+                $this->getName(),
+                $cookieValue,
+                $metadata
+            );
+        }
+
         return $this;
     }
 
@@ -284,11 +325,8 @@ class SessionManager implements SessionManagerInterface
      */
     public function destroy(array $options = null)
     {
-        if (null === $options) {
-            $options = $this->defaultDestroyOptions;
-        } else {
-            $options = array_merge($this->defaultDestroyOptions, $options);
-        }
+        $options = $options ?? [];
+        $options = array_merge($this->defaultDestroyOptions, $options);
 
         if ($options['clear_storage']) {
             $this->clearStorage();
@@ -298,6 +336,7 @@ class SessionManager implements SessionManagerInterface
             return;
         }
 
+        session_regenerate_id(true);
         session_destroy();
         if ($options['send_expire_cookie']) {
             $this->expireSessionCookie();
@@ -445,7 +484,7 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _getHosts()
     {
-        return isset($_SESSION[self::HOST_KEY]) ? $_SESSION[self::HOST_KEY] : [];
+        return $_SESSION[self::HOST_KEY] ?? [];
     }
 
     /**
@@ -469,11 +508,34 @@ class SessionManager implements SessionManagerInterface
         if (headers_sent()) {
             return $this;
         }
+
         if ($this->isSessionExists()) {
-            session_regenerate_id(false);
+            // Regenerate the session
+            session_regenerate_id();
+            $newSessionId = session_id();
+            $_SESSION['new_session_id'] = $newSessionId;
+
+            // Set destroy timestamp
+            $_SESSION['destroyed'] = time();
+
+            // Write and close current session;
+            session_commit();
+
+            // Called after destroy()
+            $oldSession = $_SESSION;
+
+            // Start session with new session ID
+            session_id($newSessionId);
+            session_start();
+            $_SESSION = $oldSession;
+
+            // New session does not need them
+            unset($_SESSION['destroyed']);
+            unset($_SESSION['new_session_id']);
         } else {
             session_start();
         }
+
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
@@ -491,7 +553,7 @@ class SessionManager implements SessionManagerInterface
     {
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
-            if (strpos($this->sessionConfig->getCookieDomain(), $host) > 0) {
+            if ($this->sessionConfig->getCookieDomain() !== $host) {
                 $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
                 $metadata->setPath($this->sessionConfig->getCookiePath());
                 $metadata->setDomain($host);
@@ -531,13 +593,25 @@ class SessionManager implements SessionManagerInterface
      */
     private function initIniOptions()
     {
+        $result = ini_set('session.use_only_cookies', '1');
+        if ($result === false) {
+            $error = error_get_last();
+            throw new \InvalidArgumentException(
+                sprintf('Failed to set ini option session.use_only_cookies to value 1. %s', $error['message'])
+            );
+        }
+
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            $result = ini_set($option, $value);
-            if ($result === false) {
-                $error = error_get_last();
-                throw new \InvalidArgumentException(
-                    sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
-                );
+            if ($option=='session.save_handler') {
+                continue;
+            } else {
+                $result = ini_set($option, $value);
+                if ($result === false) {
+                    $error = error_get_last();
+                    throw new \InvalidArgumentException(
+                        sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
+                    );
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Delete.
  * 5. Perform all asserts.
  *
- * @group Widget_(PS)
+ * @group Widget
  * @ZephyrId MAGETWO-28459
  */
 class DeleteWidgetEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
@@ -18,7 +18,9 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      */
     protected $_pageFactory;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     */
     protected $cmsPageUrlPathGenerator;
 
     /**

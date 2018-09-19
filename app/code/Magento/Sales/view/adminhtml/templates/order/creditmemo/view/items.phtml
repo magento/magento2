@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,20 +10,20 @@
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 <div class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items Refunded') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items Refunded') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary order-creditmemo-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                        <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
-                        <th class="col-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
-                        <th class="col-subtotal"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
-                        <th class="col-tax"><span><?php /* @escapeNotVerified */ echo __('Tax Amount') ?></span></th>
-                        <th class="col-discount"><span><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></span></th>
-                        <th class="col-total last"><span><?php /* @escapeNotVerified */ echo __('Row Total') ?></span></th>
+                        <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                        <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                        <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                        <th class="col-tax"><span><?= /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
+                        <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
+                        <th class="col-total last"><span><?= /* @escapeNotVerified */ __('Row Total') ?></span></th>
                     </tr>
                 </thead>
                 <?php $i = 0; foreach ($_items as $_item): ?>
@@ -32,9 +32,9 @@
                     } else {
                         $i++;
                     } ?>
-                    <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
-                        <?php echo $block->getItemHtml($_item) ?>
-                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
+                        <?= $block->getItemHtml($_item) ?>
+                        <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>
                 <?php endforeach; ?>
             </table>

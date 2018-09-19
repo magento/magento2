@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -10,6 +10,7 @@ use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Quote\Model\Quote;
@@ -363,7 +364,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -375,63 +375,12 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         $payment->setAdditionalInformation($this->_isOrderPaymentActionKey, true);
-
         if ($payment->getIsFraudDetected()) {
             return $this;
         }
 
-        $order = $payment->getOrder();
-        $orderTransactionId = $payment->getTransactionId();
+        $payment->getOrder()->setActionFlag(Order::ACTION_FLAG_INVOICE, false);
 
-        $api = $this->_callDoAuthorize($amount, $payment, $orderTransactionId);
-
-        $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
-        $status = true;
-
-        $formattedPrice = $order->getBaseCurrency()->formatTxt($amount);
-        if ($payment->getIsTransactionPending()) {
-            $message = __('The ordering amount of %1 is pending approval on the payment gateway.', $formattedPrice);
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
-        } else {
-            $message = __('Ordered amount of %1', $formattedPrice);
-        }
-
-        $transaction = $this->transactionBuilder->setPayment($payment)
-            ->setOrder($order)
-            ->setTransactionId($payment->getTransactionId())
-            ->build(Transaction::TYPE_ORDER);
-        $payment->addTransactionCommentsToOrder($transaction, $message);
-
-        $this->_pro->importPaymentInfo($api, $payment);
-
-        if ($payment->getIsTransactionPending()) {
-            $message = __(
-                'We\'ll authorize the amount of %1 as soon as the payment gateway approves it.',
-                $formattedPrice
-            );
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
-            if ($payment->getIsFraudDetected()) {
-                $status = \Magento\Sales\Model\Order::STATUS_FRAUD;
-            }
-        } else {
-            $message = __('The authorized amount is %1.', $formattedPrice);
-        }
-
-        $payment->resetTransactionAdditionalInfo();
-
-        $payment->setTransactionId($api->getTransactionId());
-        $payment->setParentTransactionId($orderTransactionId);
-
-        $transaction = $this->transactionBuilder->setPayment($payment)
-            ->setOrder($order)
-            ->setTransactionId($payment->getTransactionId())
-            ->build(Transaction::TYPE_AUTH);
-        $payment->addTransactionCommentsToOrder($transaction, $message);
-
-        $order->setState($state)
-            ->setStatus($status);
-
-        $payment->setSkipOrderProcessing(true);
         return $this;
     }
 
@@ -669,22 +618,21 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);
-        
+
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        if (
-            !is_array($additionalData)
-            || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])
-        ) {
+        if (!is_array($additionalData)) {
             return $this;
         }
 
-        $this->getInfoInstance()
-            ->setAdditionalInformation(
-                ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
-                $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT]
-            );
-        
+        foreach ($additionalData as $key => $value) {
+            // Skip extension attributes
+            if ($key === \Magento\Framework\Api\ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY) {
+                continue;
+            }
+
+            $this->getInfoInstance()->setAdditionalInformation($key, $value);
+        }
         return $this;
     }
 

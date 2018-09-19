@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,6 +130,20 @@ class View extends Block
      */
     protected $itemSubInclTax = '//tr[contains (.,"%s")]/td[@class="col subtotal"]/span[@class="price-including-tax"]/span';
     // @codingStandardsIgnoreEnd
+
+    /**
+     * Order items top pager selector
+     *
+     * @var string
+     */
+    private $itemTopPagerSelector = '[data-block=order-items-pager-top]';
+
+    /**
+     * Order items bottom pager selector
+     *
+     * @var string
+     */
+    private $itemBottomPagerSelector = '[data-block=order-items-pager-bottom]';
 
     /**
      * Get item block
@@ -319,5 +333,25 @@ class View extends Block
     {
         preg_match("/^\\D*\\s*([\\d,\\.]+)\\s*\\D*$/", $price, $matches);
         return (isset($matches[1])) ? $matches[1] : null;
+    }
+
+    /**
+     * Is order items top pager displayed
+     *
+     * @return bool
+     */
+    public function isTopPagerDisplayed()
+    {
+        return $this->_rootElement->find($this->itemTopPagerSelector)->isVisible();
+    }
+
+    /**
+     * Is order items bottom pager displayed
+     *
+     * @return bool
+     */
+    public function isBottomPagerDisplayed()
+    {
+        return $this->_rootElement->find($this->itemBottomPagerSelector)->isVisible();
     }
 }

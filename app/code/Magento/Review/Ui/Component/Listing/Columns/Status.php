@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Ui\Component\Listing\Columns;
@@ -13,11 +13,15 @@ use Magento\Review\Helper\Data as StatusSource;
 
 /**
  * Class Status
+ *
+ * @api
+ * @since 100.1.0
  */
 class Status extends Column implements OptionSourceInterface
 {
     /**
      * @var StatusSource
+     * @since 100.1.0
      */
     protected $source;
 
@@ -41,6 +45,7 @@ class Status extends Column implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -62,6 +67,7 @@ class Status extends Column implements OptionSourceInterface
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function toOptionArray()
     {

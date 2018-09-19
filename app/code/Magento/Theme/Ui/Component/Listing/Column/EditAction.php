@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Ui\Component\Listing\Column;
@@ -57,7 +57,7 @@ class EditAction extends Column
                     if (isset($item['store_id'])) {
                         $scope = ScopeInterface::SCOPE_STORES;
                         $scopeId = $item['store_id'];
-                    } else if (isset($item['store_website_id'])) {
+                    } elseif (isset($item['store_website_id'])) {
                         $scope = ScopeInterface::SCOPE_WEBSITES;
                         $scopeId = $item['store_website_id'];
                     } else {

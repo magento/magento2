@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
@@ -13,7 +13,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Path to block template
      */
-    const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+    const WIZARD_TEMPLATE = 'Magento_Paypal::system/config/api_wizard.phtml';
 
     /**
      * Set template to itself

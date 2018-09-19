@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Response\QueryResponse;
@@ -15,16 +16,22 @@ use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Fulltext Collection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * @var  QueryResponse
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $queryResponse;
 
@@ -32,19 +39,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Catalog search data
      *
      * @var \Magento\Search\Model\QueryFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $queryFactory = null;
 
     /**
      * @var \Magento\Framework\Search\Request\Builder
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $requestBuilder;
 
     /**
      * @var \Magento\Search\Model\SearchEngine
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $searchEngine;
 
@@ -56,7 +63,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var string|null
      */
-    private $order = null;
+    private $relevanceOrderDirection = null;
 
     /**
      * @var string
@@ -94,6 +101,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $filterBuilder;
 
     /**
+     * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -117,9 +126,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $searchRequestName
-     * @param SearchResultFactory $searchResultFactory
+     * @param SearchResultFactory|null $searchResultFactory
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,7 +160,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container',
-        SearchResultFactory $searchResultFactory = null
+        SearchResultFactory $searchResultFactory = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->queryFactory = $catalogSearchData;
         if ($searchResultFactory === null) {
@@ -175,7 +189,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection
+            $connection,
+            $productLimitationFactory,
+            $metadataPool
         );
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -184,7 +200,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
@@ -196,9 +212,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @param \Magento\Search\Api\SearchInterface $object
      * @return void
+     * @since 100.1.0
      */
     public function setSearch(\Magento\Search\Api\SearchInterface $object)
     {
@@ -206,7 +223,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
@@ -219,9 +236,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      * @return void
+     * @since 100.1.0
      */
     public function setSearchCriteriaBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder $object)
     {
@@ -229,7 +247,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Api\FilterBuilder
      */
     private function getFilterBuilder()
@@ -241,9 +259,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @param \Magento\Framework\Api\FilterBuilder $object
      * @return void
+     * @since 100.1.0
      */
     public function setFilterBuilder(\Magento\Framework\Api\FilterBuilder $object)
     {
@@ -265,7 +284,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->getSearchCriteriaBuilder();
         $this->getFilterBuilder();
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
+        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'], true)) {
             $this->filterBuilder->setField($field);
             $this->filterBuilder->setValue($condition);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
@@ -330,7 +349,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchResult = $this->searchResultFactory->create()->setItems([]);
         } catch (NonExistingRequestNameException $e) {
             $this->_logger->error($e->getMessage());
-            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+            throw new LocalizedException(__('An error occurred. For details, see the error log.'));
         }
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
@@ -344,12 +363,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             []
         );
 
-        $this->_totalRecords = $this->searchResult->getTotalCount();
-
-        if ($this->order && 'relevance' === $this->order['field']) {
-            $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
+        if ($this->relevanceOrderDirection) {
+            $this->getSelect()->order(
+                'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
+            );
         }
         return parent::_renderFiltersBefore();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeLoad()
+    {
+        /*
+         * This order is required to force search results be the same
+         * for the same requests and products with the same relevance
+         * NOTE: this does not replace existing orders but ADDs one more
+         */
+        $this->setOrder('entity_id');
+        return parent::_beforeLoad();
     }
 
     /**
@@ -370,10 +403,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
-        $this->order = ['field' => $attribute, 'dir' => $dir];
-        if ($attribute != 'relevance') {
+        if ($attribute === 'relevance') {
+            $this->relevanceOrderDirection = $dir;
+        } else {
             parent::setOrder($attribute, $dir);
         }
+
         return $this;
     }
 
@@ -408,7 +443,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     $result[$metrics['value']] = $metrics;
                 }
             } else {
-                throw new StateException(__('Bucket does not exist'));
+                throw new StateException(__("The bucket doesn't exist."));
             }
         }
         return $result;

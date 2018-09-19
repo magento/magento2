@@ -1,17 +1,19 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.discountCode', {
         options: {
         },
+
+        /** @inheritdoc */
         _create: function () {
             this.couponCode = $(this.options.couponCodeSelector);
             this.removeCoupon = $(this.options.removeCouponSelector);

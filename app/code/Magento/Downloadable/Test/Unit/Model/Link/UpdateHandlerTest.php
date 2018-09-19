@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Link;
@@ -12,7 +12,7 @@ use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\UpdateHandler;
 use Magento\Downloadable\Model\Product\Type;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var UpdateHandler */
     protected $model;

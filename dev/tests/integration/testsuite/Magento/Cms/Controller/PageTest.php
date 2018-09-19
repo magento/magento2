@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,18 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     public function testViewAction()
     {
-        $this->dispatch('/enable-cookies/');
+        $this->dispatch('/enable-cookies');
         $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
+    }
+
+    public function testViewRedirectWithTrailingSlash()
+    {
+        $this->dispatch('/enable-cookies/');
+        $code = $this->getResponse()->getStatusCode();
+        $location = $this->getResponse()->getHeader('Location')->getFieldValue();
+
+        $this->assertEquals(301, $code, 'Invalid response code');
+        $this->assertStringEndsWith('/enable-cookies', $location, 'Invalid location header');
     }
 
     /**
@@ -22,7 +32,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddBreadcrumbs()
     {
-        $this->dispatch('/enable-cookies/');
+        $this->dispatch('/enable-cookies');
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class
         );
@@ -35,7 +45,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCreatePageWithSameModuleName()
     {
-        $this->dispatch('/shipping/');
+        $this->dispatch('/shipping');
         $content = $this->getResponse()->getBody();
         $this->assertContains('Shipping Test Page', $content);
     }

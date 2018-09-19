@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -11,27 +12,45 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class VariationHandler
 {
-    /** @var \Magento\Catalog\Model\Product\Gallery\Processor */
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @since 100.1.0
+     */
     protected $mediaGalleryProcessor;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     protected $configurableProduct;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\SetFactory */
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
     protected $attributeSetFactory;
 
-    /** @var \Magento\Eav\Model\EntityFactory */
+    /**
+     * @var \Magento\Eav\Model\EntityFactory
+     */
     protected $entityFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
+    private $attributes;
+
+    /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $stockConfiguration;
 
@@ -70,6 +89,7 @@ class VariationHandler
     public function generateSimpleProducts($parentProduct, $productsData)
     {
         $generatedProductIds = [];
+        $this->attributes = null;
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
@@ -77,7 +97,9 @@ class VariationHandler
                 $configurableAttribute = json_decode($simpleProductData['configurable_attribute'], true);
                 unset($simpleProductData['configurable_attribute']);
             } else {
-                throw new LocalizedException(__('Configuration must have specified attributes'));
+                throw new LocalizedException(
+                    __('Contribution must have attributes specified. Enter attributes and try again.')
+                );
             }
 
             $this->fillSimpleProductData(
@@ -95,7 +117,7 @@ class VariationHandler
     /**
      * Prepare attribute set comprising all selected configurable attributes
      *
-     * @deprecated since 2.1.0
+     * @deprecated 100.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -109,6 +131,7 @@ class VariationHandler
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 100.1.0
      */
     public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
     {
@@ -148,15 +171,22 @@ class VariationHandler
         \Magento\Catalog\Model\Product $parentProduct,
         $postData
     ) {
+        $typeId = isset($postData['weight']) && !empty($postData['weight'])
+            ? ProductType::TYPE_SIMPLE
+            : ProductType::TYPE_VIRTUAL;
+
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $postData['weight'] ? ProductType::TYPE_SIMPLE : ProductType::TYPE_VIRTUAL
+            $typeId
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );
 
-        foreach ($product->getTypeInstance()->getSetAttributes($product) as $attribute) {
+        if ($this->attributes === null) {
+            $this->attributes = $product->getTypeInstance()->getSetAttributes($product);
+        }
+        foreach ($this->attributes as $attribute) {
             if ($attribute->getIsUnique() ||
                 $attribute->getAttributeCode() == 'url_key' ||
                 $attribute->getFrontend()->getInputType() == 'gallery' ||

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * PAY ATTENTION: Current implementation does not support of virtual types
  */
-class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
+class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Observer interface
@@ -21,29 +21,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected static $observerClasses = [];
-
-    /**
-     * @var array
-     */
-    protected static $blackList = [
-        // not support of virtual types
-        'SalesOrderIndexGridAsyncInsertObserver',
-        'SalesInvoiceIndexGridAsyncInsertObserver',
-        'SalesShipmentIndexGridAsyncInsertObserver',
-        'SalesCreditmemoIndexGridAsyncInsertObserver',
-        'SalesOrderIndexGridSyncInsert',
-        'SalesInvoiceIndexGridSyncInsert',
-        'SalesShipmentIndexGridSyncInsert',
-        'SalesCreditmemoIndexGridSyncInsert',
-        'SalesOrderIndexGridSyncRemove',
-        'SalesInvoiceIndexGridSyncRemove',
-        'SalesShipmentIndexGridSyncRemove',
-        'SalesCreditmemoIndexGridSyncRemove',
-        'SalesOrderSendEmailsObserver',
-        'SalesOrderInvoiceSendEmailsObserver',
-        'SalesOrderShipmentSendEmailsObserver',
-        'SalesOrderCreditmemoSendEmailsObserver',
-    ];
 
     public static function setUpBeforeClass()
     {
@@ -116,9 +93,18 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+
+        $blacklistFiles = str_replace('\\', '/', realpath(__DIR__)) . '/_files/blacklist/observers*.txt';
+        $blacklistExceptions = [];
+        foreach (glob($blacklistFiles) as $fileName) {
+            $blacklistExceptions = array_merge(
+                $blacklistExceptions,
+                file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+            );
+        }
         return array_diff(
             array_unique($observerClasses),
-            self::$blackList
+            $blacklistExceptions
         );
     }
 }

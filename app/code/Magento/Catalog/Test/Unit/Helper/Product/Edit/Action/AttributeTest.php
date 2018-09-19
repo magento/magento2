@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
 /**
  * Class AttributeTest
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -53,13 +53,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 20;
 
-        $storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['getWebsiteId'],
-            [],
-            '',
-            false
-        );
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
 
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -68,7 +68,7 @@ class StockRegistryStorage
      */
     public function getStockItem($productId, $scopeId)
     {
-        return isset($this->stockItems[$productId][$scopeId]) ? $this->stockItems[$productId][$scopeId] : null;
+        return $this->stockItems[$productId][$scopeId] ?? null;
     }
 
     /**
@@ -103,7 +103,7 @@ class StockRegistryStorage
      */
     public function getStockStatus($productId, $scopeId)
     {
-        return isset($this->stockStatuses[$productId][$scopeId]) ? $this->stockStatuses[$productId][$scopeId] : null;
+        return $this->stockStatuses[$productId][$scopeId] ?? null;
     }
 
     /**
@@ -129,5 +129,17 @@ class StockRegistryStorage
         } else {
             unset($this->stockStatuses[$productId][$scopeId]);
         }
+    }
+
+    /**
+     * Clear cached entities
+     *
+     * @return void
+     */
+    public function clean()
+    {
+        $this->stockItems = [];
+        $this->stocks = [];
+        $this->stockStatuses = [];
     }
 }

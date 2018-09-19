@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Backend\App\ConfigInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Authentication;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Stdlib\DateTime;
@@ -18,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -55,18 +53,27 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     private $dateTimeMock;
 
+    /**
+     * @var \Magento\Customer\Model\CustomerAuthUpdate | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerAuthUpdate;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = new ObjectManagerHelper($this);
+
         $this->backendConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
-        $this->customerRegistryMock = $this->getMock(
+        $this->customerRegistryMock = $this->createPartialMock(
             CustomerRegistry::class,
-            ['retrieveSecureData', 'retrieve'],
-            [],
-            '',
-            false
+            ['retrieveSecureData', 'retrieve']
         );
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -80,9 +87,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->dateTimeMock->expects($this->any())
             ->method('formatDate')
             ->willReturn('formattedDate');
-        $this->customerSecureMock = $this->getMock(
-            CustomerSecure::class,
-            [
+        $this->customerSecureMock = $this->createPartialMock(CustomerSecure::class, [
                 'getId',
                 'getPasswordHash',
                 'isCustomerLocked',
@@ -92,15 +97,13 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 'setFirstFailure',
                 'setFailuresNum',
                 'setLockExpires'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->customerAuthUpdate = $this->getMockBuilder(\Magento\Customer\Model\CustomerAuthUpdate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->authentication = $objectManagerHelper->getObject(
+        $this->authentication = $this->objectManager->getObject(
             Authentication::class,
             [
                 'customerRegistry' => $this->customerRegistryMock,
@@ -109,6 +112,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 'encryptor' => $this->encryptorMock,
                 'dateTime' => $this->dateTimeMock,
             ]
+        );
+
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->authentication,
+            'customerAuthUpdate',
+            $this->customerAuthUpdate
         );
     }
 
@@ -164,16 +173,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecureMock);
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
+        $this->customerAuthUpdate->expects($this->once())
+            ->method('saveAuth')
             ->with($customerId)
-            ->willReturn($customerMock);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($customerMock);
+            ->willReturnSelf();
 
         $this->customerSecureMock->expects($this->once())->method('getFailuresNum')->willReturn($failureNum);
         $this->customerSecureMock->expects($this->once())
@@ -193,6 +196,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->authentication->processAuthenticationFailure($customerId);
     }
 
+    /**
+     * @return array
+     */
     public function processAuthenticationFailureDataProvider()
     {
         return [
@@ -210,16 +216,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecureMock);
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
+        $this->customerAuthUpdate->expects($this->once())
+            ->method('saveAuth')
             ->with($customerId)
-            ->willReturn($customerMock);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($customerMock);
+            ->willReturnSelf();
         $this->customerSecureMock->expects($this->once())->method('setFailuresNum')->with(0);
         $this->customerSecureMock->expects($this->once())->method('setFirstFailure')->with(null);
         $this->customerSecureMock->expects($this->once())->method('setLockExpires')->with(null);
@@ -264,13 +264,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $password = '1234567';
         $hash = '1b2af329dd0';
 
-        $customerMock = $this->getMock(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturn($customerMock);
@@ -312,11 +306,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 ->with($customerId)
                 ->willReturn($this->customerSecureMock);
 
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('save')
-                ->willReturn($customerMock);
+            $this->customerAuthUpdate->expects($this->once())
+                ->method('saveAuth')
+                ->with($customerId)
+                ->willReturnSelf();
 
-            $this->setExpectedException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
+            $this->expectException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
             $this->authentication->authenticate($customerId, $password);
         }
     }

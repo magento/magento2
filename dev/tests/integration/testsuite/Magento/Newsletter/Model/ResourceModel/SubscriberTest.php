@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SubscriberTest extends \PHPUnit_Framework_TestCase
+class SubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber

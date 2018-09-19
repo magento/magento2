@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 
 /**
  * Abstract test class
  */
-class AbstractTestCase extends \PHPUnit_Framework_TestCase
+class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Assertions for controller execute method
@@ -23,22 +21,12 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $outPut = "data";
-        $resultRawMock = $this->getMock(
-            \Magento\Framework\Controller\Result\Raw::class,
-            ['setContents'], [], '', false)
+        $resultRawMock = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents'])
         ;
-        $resultRawFactoryMock = $this->getMock(
-            \Magento\Framework\Controller\Result\RawFactory::class,
-            ['create'], [], '', false
-        );
-        $layoutFactoryMock = $this->getMock(
-            \Magento\Framework\View\LayoutFactory::class,
-            ['create'], [], '', false
-        );
-        $layoutMock = $this->getMock(
-            \Magento\Framework\View\Layout::class,
-            ['createBlock', 'toHtml'], [], '', false
-        );
+        $resultRawFactoryMock =
+            $this->createPartialMock(\Magento\Framework\Controller\Result\RawFactory::class, ['create']);
+        $layoutFactoryMock = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);
+        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock', 'toHtml']);
         $layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
         $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->will($this->returnSelf());
         $layoutMock->expects($this->once())->method('toHtml')->will($this->returnValue($outPut));

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
+
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -14,6 +16,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveActionRedirectsSuccessfully()
     {
@@ -22,6 +25,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         /** @var $session \Magento\Backend\Model\Session */
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([1]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
@@ -46,12 +50,58 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
+     *
+     * @dataProvider saveActionVisibilityAttrDataProvider
+     * @param array $attributes
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     */
+    public function testSaveActionChangeVisibility($attributes)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        $product = $repository->get('simple');
+        $product->setOrigData();
+        $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->save();
+
+        /** @var $session \Magento\Backend\Model\Session */
+        $session = $objectManager->get(\Magento\Backend\Model\Session::class);
+        $session->setProductIds([$product->getId()]);
+        $this->getRequest()->setParam('attributes', $attributes);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+
+        $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
+        /** @var \Magento\Catalog\Model\Category $category */
+        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\CategoryFactory::class
+        );
+        /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
+        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Block\Product\ListProduct::class
+        );
+
+        $category = $categoryFactory->create()->load(2);
+        $layer = $listProduct->getLayer();
+        $layer->setCurrentCategory($category);
+        $productCollection = $layer->getProductCollection();
+        $productItem = $productCollection->getFirstItem();
+        $this->assertEquals($session->getProductIds(), [$productItem->getId()]);
+    }
+
+    /**
+     * @param array $attributes Request parameter.
+     *
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
      *
      * @dataProvider validateActionDataProvider
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @magentoDbIsolation disabled
      */
     public function testValidateActionWithMassUpdate($attributes)
     {
@@ -95,6 +145,19 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                     'meta_description'  => 'Meta Description',
                 ],
             ]
+        ];
+    }
+
+    /**
+     * Data Provider for save with visibility attribute
+     *
+     * @return array
+     */
+    public function saveActionVisibilityAttrDataProvider()
+    {
+        return [
+            ['arguments' => ['visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH]],
+            ['arguments' => ['visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG]]
         ];
     }
 }

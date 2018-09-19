@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -11,11 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -494,7 +492,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * Returns array with results of callback for each item
      *
-     * @param string $callback
+     * @param callable $callback
      * @param array $args
      * @return array
      */
@@ -503,29 +501,42 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
+            $params = $args;
             if ($useItemCallback) {
                 $cb = [$item, $callback];
             } else {
                 $cb = $callback;
-                array_unshift($args, $item);
+                array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $args);
+            $results[$id] = call_user_func_array($cb, $params);
         }
         return $results;
     }
 
     /**
-     * @param string|array $objMethod
+     * Call method or callback on each item in the collection.
+     *
+     * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
      */
     public function each($objMethod, $args = [])
     {
-        foreach ($args->_items as $k => $item) {
-            $args->_items[$k] = call_user_func($objMethod, $item);
+        if ($objMethod instanceof \Closure) {
+            foreach ($this->getItems() as $item) {
+                $objMethod($item, ...$args);
+            }
+        } elseif (is_array($objMethod)) {
+            foreach ($this->getItems() as $item) {
+                call_user_func($objMethod, $item, ...$args);
+            }
+        } else {
+            foreach ($this->getItems() as $item) {
+                $item->$objMethod(...$args);
+            }
         }
     }
-
+    
     /**
      * Setting data for all collection items
      *
@@ -840,7 +851,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getFlag($flag)
     {
-        return isset($this->_flags[$flag]) ? $this->_flags[$flag] : null;
+        return $this->_flags[$flag] ?? null;
     }
 
     /**
@@ -869,6 +880,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return string[]
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -886,6 +898,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Init not serializable fields
      *
      * @return void
+     * @since 100.0.11
      */
     public function __wakeup()
     {

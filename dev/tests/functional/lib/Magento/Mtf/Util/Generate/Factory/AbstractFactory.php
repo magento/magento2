@@ -1,7 +1,6 @@
 <?php
 /**
- * @api
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +14,7 @@ use Magento\Framework\Filesystem\Glob;
  *
  * Abstract Factory Generator
  *
+ * @api
  */
 abstract class AbstractFactory
 {
@@ -209,7 +209,7 @@ abstract class AbstractFactory
         if ($reflectionClass->isAbstract()) {
             return;
         }
-        $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations($className);
+        $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations($className);
 
         list(, $targetClassName) = explode($location . '/', $filename);
         $targetClassName = str_replace('.php', '', $targetClassName);

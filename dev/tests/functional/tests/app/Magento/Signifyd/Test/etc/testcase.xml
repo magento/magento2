@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="CreateSignifydGuaranteeAndCancelOrderTest" firstStep="signifydLogin">
+        <step name="signifydLogin" module="Magento_Signifyd" next="signifydSetWebhookHandlers" />
+        <step name="signifydSetWebhookHandlers" module="Magento_Signifyd" next="setupConfiguration" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
+        <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="signifydObserveCase" />
+        <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
+        <step name="openOrderGrid" module="Magento_Signifyd" next="unholdAndCancelOrder" />
+        <step name="unholdAndCancelOrder" module="Magento_Signifyd" />
+    </scenario>
+    <scenario name="AcceptPaymentWithSignifydGuaranteeDeclinedTest" firstStep="signifydLogin">
+        <step name="signifydLogin" module="Magento_Signifyd" next="signifydSetWebhookHandlers" />
+        <step name="signifydSetWebhookHandlers" module="Magento_Signifyd" next="setupConfiguration" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
+        <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="signifydObserveCase" />
+        <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
+        <step name="openOrderGrid" module="Magento_Signifyd" next="acceptPayment" />
+        <step name="acceptPayment" module="Magento_Sales" />
+    </scenario>
+    <scenario name="DenyPaymentWithSignifydGuaranteeDeclinedTest" firstStep="signifydLogin">
+        <step name="signifydLogin" module="Magento_Signifyd" next="signifydSetWebhookHandlers" />
+        <step name="signifydSetWebhookHandlers" module="Magento_Signifyd" next="setupConfiguration" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
+        <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="signifydObserveCase" />
+        <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
+        <step name="openOrderGrid" module="Magento_Signifyd" next="denyPayment" />
+        <step name="denyPayment" module="Magento_Sales" />
+    </scenario>
+</config>

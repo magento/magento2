@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest" summary="Navigate through admin menu" ticketId="MAGETWO-34874">
+        <variation name="NavigateMenuTest50">
+            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="menuItem" xsi:type="string">Reports > PayPal Settlement</data>
+            <data name="pageTitle" xsi:type="string">PayPal Settlement Reports</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+        <variation name="NavigateMenuTest51">
+            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="menuItem" xsi:type="string">Sales > Billing Agreements</data>
+            <data name="pageTitle" xsi:type="string">Billing Agreements</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+    </testCase>
+</config>

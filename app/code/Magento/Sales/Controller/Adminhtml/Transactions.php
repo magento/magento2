@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml;
@@ -82,7 +82,7 @@ abstract class Transactions extends \Magento\Backend\App\Action
         );
 
         if (!$txn->getId()) {
-            $this->messageManager->addError(__('Please correct the transaction ID and try again.'));
+            $this->messageManager->addErrorMessage(__('Please correct the transaction ID and try again.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,13 @@ class ScopeResolver
         foreach ($metadata->getEntityContext() as $contextProviderClass) {
             $contextProvider =  $this->objectManager->get($contextProviderClass);
             if (!$contextProvider instanceof ScopeProviderInterface) {
-                throw new ConfigurationMismatchException(new Phrase('Wrong configuration for type %1', [$entityType]));
+                throw new ConfigurationMismatchException(
+                    new Phrase(
+                        'The configuration for the "%1" type is incorrect. '
+                        . 'Verify the type and configuration and try again.',
+                        [$entityType]
+                    )
+                );
             }
             $entityContext[] = $contextProvider->getContext($entityType, $entityData);
         }

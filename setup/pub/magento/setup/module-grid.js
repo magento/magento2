@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,13 @@ angular.module('module-grid', ['ngStorage'])
     .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService', 'paginationService',
         function ($rootScope, $scope, $http, $localStorage, $state, titleService, paginationService) {
             $rootScope.modulesProcessed = false;
-            $http.get('index.php/moduleGrid/modules').success(function(data) {
+            $http.get('index.php/moduleGrid/modules').then(function successCallback(resp) {
+                var data = resp.data;
+
                 $scope.modules = data.modules;
                 $scope.total = data.total;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
                 $rootScope.modulesProcessed = true;
             });
@@ -62,10 +64,11 @@ angular.module('module-grid', ['ngStorage'])
             $scope.enableDisable = function(type, component) {
                 $localStorage.packages = [
                     {
-                        name: component.moduleName
+                        name: component.moduleName,
+                        isComposerPackage: component.name !== 'unknown',
                     }
                 ];
-                titleService.setTitle(type, component.moduleName ? component.moduleName : component.name);
+                titleService.setTitle(type, component);
                 $localStorage.componentType = component.type;
                 $state.go('root.readiness-check-'+type);
             };

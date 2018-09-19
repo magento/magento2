@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -8,11 +8,13 @@ namespace Magento\Framework\View\Element;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
- * Base Content Block class
+ * Base class for all blocks.
  *
- * For block generation you must define Data source class, data source class method,
- * parameters array and block template
+ * Avoid inheriting from this class. Will be deprecated.
  *
+ * Marked as public API because it is actively used now.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -169,6 +171,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * @var \Magento\Framework\App\CacheInterface
+     * @since 100.2.0
      */
     protected $_cache;
 
@@ -670,6 +673,18 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
         $html = $this->_afterToHtml($html);
 
+        /** @var \Magento\Framework\DataObject */
+        $transportObject = new \Magento\Framework\DataObject(
+            [
+                'html' => $html,
+            ]
+        );
+        $this->_eventManager->dispatch('view_block_abstract_to_html_after', [
+            'block' => $this,
+            'transport' => $transportObject
+        ]);
+        $html = $transportObject->getHtml();
+
         return $html;
     }
 
@@ -792,7 +807,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve formatting date
      *
-     * @param null|string|\DateTime $date
+     * @param null|string|\DateTimeInterface $date
      * @param int $format
      * @param bool $showTime
      * @param null|string $timezone
@@ -881,6 +896,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
+     * @since 100.2.0
      */
     public function escapeJs($string)
     {
@@ -893,6 +909,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @param boolean $escapeSingleQuote
      * @return string
+     * @since 100.2.0
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -904,6 +921,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
+     * @since 100.2.0
      */
     public function escapeCss($string)
     {
@@ -942,7 +960,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function escapeXssInUrl($data)
     {
@@ -957,7 +975,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -970,7 +988,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -1056,7 +1074,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $cacheLifetime = $this->getData('cache_lifetime');
         if (false === $cacheLifetime || null === $cacheLifetime) {
-            return $cacheLifetime;
+            return null;
         }
 
         return (int)$cacheLifetime;

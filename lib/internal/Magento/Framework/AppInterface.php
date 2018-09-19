@@ -2,12 +2,17 @@
 /**
  * Application interface
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 /**
+ * Different magento entry points call corresponding applications after platform is bootstrapped.
+ * index.php in webroot calls HTTP application (implementation of this interface) as it is responsible for web requests.
+ * cron.php entry point calls cron application
+ * Implementations of this interface should implement application type specific initialization.
+ *
  * @api
  */
 interface AppInterface

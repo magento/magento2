@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Tax\Model\CalculatorFactory
  */
-class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
+class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -47,7 +47,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
         $expectedInstanceType
     ) {
         $instanceMock = $this->getMockBuilder($expectedInstanceType)->disableOriginalConstructor()->getMock();
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())

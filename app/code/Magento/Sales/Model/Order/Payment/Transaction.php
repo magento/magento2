@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Payment;
 
@@ -17,12 +15,11 @@ use Magento\Sales\Model\AbstractModel;
  * Tracks transaction history, allows to build transactions hierarchy
  * By default transactions are saved as closed.
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
-
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Transaction extends AbstractModel implements TransactionInterface
 {
@@ -209,7 +206,9 @@ class Transaction extends AbstractModel implements TransactionInterface
         $this->_verifyTxnId($parentTxnId);
         if (empty($txnId)) {
             if ('' == $this->getTxnId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The parent transaction ID must have a transaction ID.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The parent transaction ID must have a transaction ID.')
+                );
             }
         } else {
             $this->setTxnId($txnId);
@@ -448,7 +447,9 @@ class Transaction extends AbstractModel implements TransactionInterface
     public function setAdditionalInformation($key, $value)
     {
         if (is_object($value)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment transactions disallow storing objects.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment transactions disallow storing objects.')
+            );
         }
         $info = $this->_getData('additional_information');
         if (!$info) {
@@ -588,7 +589,9 @@ class Transaction extends AbstractModel implements TransactionInterface
         } elseif (!$this->getId() || $this->getOrderId() == $order->getId()) {
             $this->_order = $order;
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Set order for existing transactions not allowed'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Set order for existing transactions not allowed')
+            );
         }
 
         return $this;
@@ -734,7 +737,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     public function getOrderWebsiteId()
     {
-        if (is_null($this->_orderWebsiteId)) {
+        if ($this->_orderWebsiteId === null) {
             $this->_orderWebsiteId = (int)$this->getResource()->getOrderWebsiteId($this->getOrderId());
         }
         return $this->_orderWebsiteId;
@@ -761,7 +764,9 @@ class Transaction extends AbstractModel implements TransactionInterface
             case self::TYPE_REFUND:
                 break;
             default:
-                throw new \Magento\Framework\Exception\LocalizedException(__('We found an unsupported transaction type "%1".', $txnType));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('We found an unsupported transaction type "%1".', $txnType)
+                );
         }
     }
 
@@ -808,12 +813,15 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected function _verifyThisTransactionExists()
     {
         if (!$this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('You can\'t do this without a transaction object.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('You can\'t do this without a transaction object.')
+            );
         }
         $this->_verifyTxnType();
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns transaction_id
      *
@@ -993,5 +1001,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

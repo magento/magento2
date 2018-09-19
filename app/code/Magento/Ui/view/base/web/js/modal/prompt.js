@@ -1,24 +1,32 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
+    'mage/template',
+    'text!ui/template/modal/modal-prompt-content.html',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
-], function ($, _) {
+], function ($, _, template, promptContentTmpl) {
     'use strict';
 
     $.widget('mage.prompt', $.mage.modal, {
         options: {
             modalClass: 'prompt',
+            promptContentTmpl: promptContentTmpl,
             promptField: '[data-role="promptField"]',
             attributesForm: {},
             attributesField: {},
             value: '',
+            validation: false,
+            validationRules: [],
             actions: {
 
                 /**
@@ -64,54 +72,50 @@ define([
          */
         _create: function () {
             this.options.focus = this.options.promptField;
+            this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
-            this.modal.find(this.options.modalContent).append(this.getFieldTemplate());
+            this.modal.find(this.options.modalContent).append(this.getFormTemplate());
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+
+            if (this.options.validation) {
+                this.setValidationClasses();
+            }
+
             this.openModal();
         },
 
         /**
-         * Field template getter.
+         * Form template getter.
          *
-         * @returns {Object} Field template
+         * @returns {Object} Form template.
          */
-        getFieldTemplate: function () {
-            var input = '<input data-role="promptField" id="prompt-field" class="admin__control-text" type="text"/>',
-                form = '<form/>',
-                wrapper = '<div class="prompt-message"/>',
-                $wrapper = $(wrapper),
-                $form = $(form),
-                $input = $(input),
+        getFormTemplate: function () {
+            var formTemplate,
+                formAttr = '',
+                inputAttr = '',
                 attributeName;
-
-            for (attributeName in this.options.attributesField) {
-                if (this.options.attributesField.hasOwnProperty(attributeName)) {
-                    $input.attr(attributeName, this.options.attributesField[attributeName]);
-                }
-            }
 
             for (attributeName in this.options.attributesForm) {
                 if (this.options.attributesForm.hasOwnProperty(attributeName)) {
-                    $form.attr(attributeName, this.options.attributesForm[attributeName]);
+                    formAttr = formAttr + ' ' + attributeName + '="' +
+                        this.options.attributesForm[attributeName] + '"';
                 }
             }
 
-            $form.append($input);
-
-            return $wrapper.append($form);
-        },
-
-        /**
-         * Compile template and append to wrapper.
-         */
-        _renderModal: function () {
-            this._super();
-
-            if (this.options.label) {
-                this.element.append(this.options.label);
+            for (attributeName in this.options.attributesField) {
+                if (this.options.attributesField.hasOwnProperty(attributeName)) {
+                    inputAttr = inputAttr + ' ' + attributeName + '="' +
+                        this.options.attributesField[attributeName] + '"';
+                }
             }
 
-            this.element.wrap('<label for="prompt-field"></label>');
+            formTemplate = $(template(this.options.promptContentTmpl, {
+                data: this.options,
+                formAttr: formAttr,
+                inputAttr: inputAttr
+            }));
+
+            return formTemplate;
         },
 
         /**
@@ -119,6 +123,22 @@ define([
          */
         _remove: function () {
             this.modal.remove();
+        },
+
+        /**
+         * Validate prompt field
+         */
+        validate: function () {
+            return $.validator.validateSingleElement(this.options.promptField);
+        },
+
+        /**
+         * Add validation classes to prompt field
+         */
+        setValidationClasses: function () {
+            this.modal.find(this.options.promptField).attr('class', $.proxy(function (i, val) {
+                return val + ' ' + this.options.validationRules.join(' ');
+            }, this));
         },
 
         /**
@@ -136,11 +156,16 @@ define([
             var value;
 
             if (result) {
+                if (this.options.validation && !this.validate()) {
+                    return false;
+                }
+
                 value = this.modal.find(this.options.promptField).val();
-                this.options.actions.confirm(value);
+                this.options.actions.confirm.call(this, value);
             } else {
                 this.options.actions.cancel.call(this, result);
             }
+
             this.options.actions.always();
             this.element.bind('promptclosed', _.bind(this._remove, this));
 
@@ -149,6 +174,6 @@ define([
     });
 
     return function (config) {
-        return $('<div></div>').html(config.content).prompt(config);
+        return $('<div class="prompt-message"></div>').html(config.content).prompt(config);
     };
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\Pool
  */
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     const DEFAULT_PREPROCESSOR = 'defaul/preprocessor';
 

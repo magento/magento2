@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -163,6 +163,6 @@ abstract class AbstractCompareProductsTest extends Injectable
     protected function productCompareAssert(AbstractConstraint $assert, InjectableFixture $product)
     {
         $assert->configure(['catalogProductView' => $this->catalogProductView, 'product' => $product]);
-        \PHPUnit_Framework_Assert::assertThat($this->getName(), $assert);
+        \PHPUnit\Framework\Assert::assertThat($this->getName(), $assert);
     }
 }

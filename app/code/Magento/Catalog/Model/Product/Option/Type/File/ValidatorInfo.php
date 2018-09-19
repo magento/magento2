@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -102,7 +102,7 @@ class ValidatorInfo extends Validator
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please specify product\'s required option(s).')
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
             );
         }
         return $result;

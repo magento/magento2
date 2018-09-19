@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,6 @@ class Generator extends FrameworkGenerator
         parent::__construct($ioObject, $generatedEntities, $definedClasses);
         $this->setObjectManager($objectManagerInterface);
     }
-
 
     /**
      * Create entity generator

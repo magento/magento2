@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Css\PreProcessor\Instruction;
 
@@ -12,17 +10,21 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\NotationResolver;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
- * @import instruction preprocessor
+ * 'import' instruction preprocessor
  */
 class Import implements PreProcessorInterface
 {
     /**
-     * Pattern of @import instruction
+     * Pattern of 'import' instruction
      */
     const REPLACE_PATTERN =
-        '#@import\s+(\((?P<type>\w+)\)\s+)?[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?(?P<media>.*?);#';
+        '#@import[\s]*'
+        .'(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
+        .'(?P<path>[^\)\'\"]*?)'
+        .'(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module
@@ -56,7 +58,7 @@ class Import implements PreProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
+    public function process(Chain $chain)
     {
         $asset = $chain->getAsset();
         $contentType = $chain->getContentType();
@@ -67,7 +69,6 @@ class Import implements PreProcessorInterface
 
         $processedContent = preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content);
         $this->relatedFileGenerator->generate($this);
-
         if ($processedContent !== $content) {
             $chain->setContent($processedContent);
         }
@@ -101,6 +102,7 @@ class Import implements PreProcessorInterface
 
     /**
      * Clear the record of related files, processed so far
+     *
      * @return void
      */
     public function resetRelatedFiles()
@@ -131,11 +133,16 @@ class Import implements PreProcessorInterface
     protected function replace(array $matchedContent, LocalInterface $asset, $contentType)
     {
         $matchedFileId = $this->fixFileExtension($matchedContent['path'], $contentType);
-        $this->recordRelatedFile($matchedFileId, $asset);
+
+        $start = $matchedContent['start'];
+        $end = $matchedContent['end'];
+        if (strpos(trim($start), 'url') !== 0) {
+            $this->recordRelatedFile($matchedFileId, $asset);
+        }
+
         $resolvedPath = $this->notationResolver->convertModuleNotationToPath($asset, $matchedFileId);
-        $typeString = empty($matchedContent['type']) ? '' : '(' . $matchedContent['type'] . ') ';
-        $mediaString = empty($matchedContent['media']) ? '' : ' ' . trim($matchedContent['media']);
-        return "@import {$typeString}'{$resolvedPath}'{$mediaString};";
+
+        return "@import {$start}{$resolvedPath}{$end};";
     }
 
     /**

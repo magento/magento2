@@ -12,7 +12,6 @@ None,None
 "Too many password reset requests. Please wait and try again or contact %1.","Too many password reset requests. Please wait and try again or contact %1."
 "Incorrect Security Checker class. It has to implement SecurityCheckerInterface","Incorrect Security Checker class. It has to implement SecurityCheckerInterface"
 "some error","some error"
-"We couldn\'t logout because of an error.","We couldn\'t logout because of an error."
 "This administrator account is open in more than one location. Note that other locations might be different browsers or sessions on the same computer.","This administrator account is open in more than one location. Note that other locations might be different browsers or sessions on the same computer."
 "Concurrent session information:","Concurrent session information:"
 "IP Address","IP Address"

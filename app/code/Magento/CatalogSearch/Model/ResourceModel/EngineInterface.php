@@ -1,18 +1,38 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * CatalogSearch Index Engine Interface
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 interface EngineInterface
 {
+    const FIELD_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
+     */
+    const SCOPE_IDENTIFIER = 'scope';
+
     /**
      * Configuration path by which current indexer handler stored
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 
@@ -39,13 +59,12 @@ interface EngineInterface
      */
     public function processAttributeValue($attribute, $value);
 
-
     /**
      * Prepare index array as a string glued by separator
      *
      * @param array $index
      * @param string $separator
-     * @return string
+     * @return array
      */
     public function prepareEntityIndex($index, $separator = ' ');
 }

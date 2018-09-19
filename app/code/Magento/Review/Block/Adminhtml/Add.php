@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Review\Block\Adminhtml;
 
@@ -41,6 +39,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
         ';
 
+        // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
             require(["jquery","prototype"], function(jQuery){
             window.review = function() {
@@ -115,6 +114,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
            //]]>
         ';
+        // @codingStandardsIgnoreEnd
     }
 
     /**

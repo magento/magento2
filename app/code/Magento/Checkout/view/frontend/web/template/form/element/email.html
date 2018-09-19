@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,7 +22,8 @@
                        type="email"
                        data-bind="
                             textInput: email,
-                            hasFocus: emailFocused"
+                            hasFocus: emailFocused,
+                            mageInit: {'mage/trim-input':{}}"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
                        id="customer-email" />
@@ -39,7 +40,10 @@
                 </label>
                 <div class="control">
                     <input class="input-text"
-                           placeholder="optional"
+                           data-bind="
+                                attr: {
+                                    placeholder: $t('Password'),
+                                }"
                            type="password"
                            name="password"
                            id="customer-password"

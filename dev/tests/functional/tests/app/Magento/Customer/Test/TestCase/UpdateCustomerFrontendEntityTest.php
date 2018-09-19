@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Fill fields with test data and save.
  * 7. Perform all assertions.
  *
- * @group Customer_Account_(CS)
+ * @group Customer_Account
  * @ZephyrId MAGETWO-25925
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,7 +38,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
@@ -150,13 +149,17 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
 
-        \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
+        \PHPUnit\Framework\Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
 
-        return ['customer' => $this->prepareCustomer($customer, $initialCustomer)];
+        return [
+            'customer' => $this->prepareCustomer($customer, $initialCustomer),
+            'shippingAddress' => $address,
+            'billingAddress' => $address
+        ];
     }
 }

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
-class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit_Framework_MockObject_MockObject

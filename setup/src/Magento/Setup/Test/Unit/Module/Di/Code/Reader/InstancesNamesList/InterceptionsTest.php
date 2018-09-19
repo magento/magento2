@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
@@ -12,7 +12,7 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
  *
  * @package Magento\Setup\Module\Di\Code\Reader\Decorator
  */
-class InterceptionsTest extends \PHPUnit_Framework_TestCase
+class InterceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
@@ -39,6 +39,9 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
@@ -66,7 +69,6 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
             $this->classReaderMock,
             $this->validatorMock,
             new \Magento\Framework\Code\Validator\ConstructorIntegrity(),
-            new \Magento\Framework\Code\Validator\ContextAggregation(),
             $this->logMock
         );
     }
@@ -97,7 +99,7 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListNoValidation()
     {
-        $path = '/var/generation';
+        $path = '/generated/code';
 
         $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 

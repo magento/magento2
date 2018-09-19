@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Group;
 
-class ProxyTest extends \PHPUnit_Framework_TestCase
+class ProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Group\Proxy
@@ -19,7 +19,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Config\Model\Config\Structure\Element\Group\Proxy($this->_objectManagerMock);
     }
 
@@ -31,13 +31,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testProxyInitializesProxiedObjectOnFirstCall()
     {
-        $groupMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
 
         $groupMock->expects($this->once())->method('setData');
         $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));

@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer address model
  *
+ * @api
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -355,6 +357,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * {@inheritdoc}
+     * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
     {
@@ -364,7 +367,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Get new AttributeList dependency for application code.
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated
+     * @deprecated 100.0.6
      */
     private function getAttributeList()
     {
@@ -374,5 +377,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             );
         }
         return $this->attributeList;
+    }
+
+    /**
+     * Retrieve attribute set id for customer address.
+     *
+     * @return int
+     * @since 100.2.0
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
     }
 }

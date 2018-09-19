@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
@@ -15,7 +15,7 @@ class Selection extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'product/edit/bundle/option/selection.phtml';
+    protected $_template = 'Magento_Bundle::product/edit/bundle/option/selection.phtml';
 
     /**
      * Catalog data

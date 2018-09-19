@@ -1,12 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
-
-// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Model\ItemRepository;
@@ -14,7 +12,7 @@ use Magento\GiftMessage\Model\GuestItemRepository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
-class GuestCartRepositoryTest extends \PHPUnit_Framework_TestCase
+class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GuestItemRepository

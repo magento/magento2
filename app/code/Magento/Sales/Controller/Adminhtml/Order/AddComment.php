@@ -1,9 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
@@ -30,7 +31,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a comment.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('The comment is missing. Enter and try again.')
+                    );
                 }
 
                 $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;

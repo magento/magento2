@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -28,6 +28,8 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="vault" xsi:type="string">Magento\Braintree\Gateway\Request\VaultDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="store" xsi:type="string">Magento\Braintree\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\Braintree\Gateway\Request\MerchantAccountDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -39,14 +41,30 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="store" xsi:type="string">Magento\Braintree\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\Braintree\Gateway\Request\MerchantAccountDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
+
+    <!-- Braintree commands -->
+    <type name="BraintreeVoidCommand">
+        <arguments>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </type>
+    <type name="BraintreeRefundCommand">
+        <arguments>
+            <argument name="errorMessageMapper" xsi:type="object">Magento\Braintree\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </type>
+    <!-- END Braintree commands -->
 
     <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
                 <item name="braintree" xsi:type="object">Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+                <item name="braintree_paypal" xsi:type="object">Magento\Braintree\Model\Ui\Adminhtml\PayPal\TokenUiComponentProvider</item>
             </argument>
         </arguments>
     </type>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Sales/_files/order.php
  * @magentoDataFixture Magento/Sales/_files/order_shipping_address_different_to_billing.php
  */
-class OrderTest extends \PHPUnit_Framework_TestCase
+class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider loadDataProvider

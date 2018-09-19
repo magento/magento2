@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement implements HttpGetActionInterface
 {
     /**
      * @return void

@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
           css="_required: required"
           attr="'data-index': index">
     <legend class="admin__field-label" if="showLabel">
-        <span text="label" attr="'data-config-scope': $data.scopeLabel"/>
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
     </legend>
 
     <div class="admin__field-control" css="$data.additionalClasses">
@@ -19,7 +19,7 @@
                 <render args="elementTmpl" if="element.input_type == 'checkbox' || element.input_type == 'radio'"/>
             </if>
         </each>
-        
+
         <each args="getRegion('insideGroup')" render=""/>
 
         <each args="elems" if="validateWholeGroup">

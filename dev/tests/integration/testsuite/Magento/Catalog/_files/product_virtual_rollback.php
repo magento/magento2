@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,7 @@ try {
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
+} catch (\Magento\Framework\Exception\StateException $exception) {
 }
 
 $registry->unregister('isSecureArea');

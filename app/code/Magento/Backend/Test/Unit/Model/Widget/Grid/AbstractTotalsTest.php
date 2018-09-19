@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
-class AbstractTotalsTest extends \PHPUnit_Framework_TestCase
+class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var $_model \PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +64,7 @@ class AbstractTotalsTest extends \PHPUnit_Framework_TestCase
     protected function _getTestCollection()
     {
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $items = [new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2'])];
         foreach ($items as $item) {
@@ -99,7 +99,7 @@ class AbstractTotalsTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareParserMock()
     {
-        $this->_parserMock = $this->getMock(
+        $this->_parserMock = $this->createPartialMock(
             \Magento\Backend\Model\Widget\Grid\Parser::class,
             ['parseExpression', 'isOperation']
         );
@@ -142,15 +142,7 @@ class AbstractTotalsTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareFactoryMock()
     {
-        $this->_factoryMock = $this->getMock(
-            \Magento\Framework\DataObject\Factory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false,
-            false
-        );
+        $this->_factoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
 
         $createValueMap = [
             [

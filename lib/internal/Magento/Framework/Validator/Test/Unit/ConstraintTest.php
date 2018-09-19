@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
-class ConstraintTest extends \PHPUnit_Framework_TestCase
+class ConstraintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Validator\Constraint
@@ -17,7 +17,7 @@ class ConstraintTest extends \PHPUnit_Framework_TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_validatorMock;
 

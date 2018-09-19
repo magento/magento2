@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Block\Adminhtml\Edit;
 
 use Magento\CatalogRule\Controller\RegistryConstants;
 
-class GenericButtonTest extends \PHPUnit_Framework_TestCase
+class GenericButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Block\Adminhtml\Edit\GenericButton
@@ -26,9 +26,9 @@ class GenericButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $contextMock = $this->getMock(\Magento\Backend\Block\Widget\Context::class, [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml;
@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The edit block under test.

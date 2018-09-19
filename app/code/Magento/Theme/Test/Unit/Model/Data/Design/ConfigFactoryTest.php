@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Data\Design;
 
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 
-class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
+class ConfigFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Api\Data\DesignConfigInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigFactory;
@@ -17,16 +17,16 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigDataFactory;
-    
+
     /** @var \Magento\Theme\Api\Data\DesignConfigExtensionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $configExtensionFactory;
-    
+
     /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfig;
-    
+
     /** @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigData;
-    
+
     /** @var \Magento\Theme\Api\Data\DesignConfigExtension|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigExtension;
 
@@ -44,13 +44,9 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->designConfigFactory = $this->getMock(
+        $this->designConfigFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
         $this->metadataProvider = $this->getMockForAbstractClass(
             \Magento\Theme\Model\Design\Config\MetadataProviderInterface::class,
@@ -58,21 +54,13 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->designConfigDataFactory = $this->getMock(
+        $this->designConfigDataFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
-        $this->configExtensionFactory = $this->getMock(
+        $this->configExtensionFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigExtensionFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
         $this->designConfig = $this->getMockForAbstractClass(
             \Magento\Theme\Api\Data\DesignConfigInterface::class,

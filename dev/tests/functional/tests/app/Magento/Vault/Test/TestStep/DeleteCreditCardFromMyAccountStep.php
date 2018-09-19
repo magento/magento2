@@ -1,92 +1,93 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Payment\Test\Fixture\CreditCard;
 use Magento\Vault\Test\Constraint\AssertStoredPaymentDeletedMessage;
 use Magento\Vault\Test\Page\StoredPaymentMethods;
 
 /**
+ * Delete credit card from My Account step.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteCreditCardFromMyAccountStep implements TestStepInterface
 {
     /**
+     * Customer Fixture.
+     *
      * @var Customer
      */
     private $customer;
 
     /**
+     * Object manager.
+     *
      * @var ObjectManager
      */
     private $objectManager;
 
     /**
+     * Customer account index page.
+     *
      * @var CustomerAccountIndex
      */
     private $customerAccountIndex;
 
     /**
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
-
-    /**
-     * @var \Magento\Mtf\Fixture\FixtureInterface
+     * Credit card fixture.
+     *
+     * @var CreditCard
      */
     private $creditCard;
 
     /**
+     * Assert message of success deletion of stored payment method.
+     *
      * @var AssertStoredPaymentDeletedMessage
      */
     private $assertStoredPaymentDeletedMessage;
 
     /**
+     * Stored payment methods page.
+     *
      * @var StoredPaymentMethods
      */
     private $storedPaymentMethodsPage;
 
     /**
-     * DeleteCreditCardFromMyAccountStep constructor.
-     *
      * @param StoredPaymentMethods $storedPaymentMethodsPage
      * @param Customer $customer
      * @param ObjectManager $objectManager
      * @param CustomerAccountIndex $customerAccountIndex
-     * @param FixtureFactory $fixtureFactory
      * @param AssertStoredPaymentDeletedMessage $assertStoredPaymentDeletedMessage
-     * @param array $creditCard
-     * @param string $creditCardClass
+     * @param CreditCard $creditCard
      */
     public function __construct(
         StoredPaymentMethods $storedPaymentMethodsPage,
         Customer $customer,
         ObjectManager $objectManager,
         CustomerAccountIndex $customerAccountIndex,
-        FixtureFactory $fixtureFactory,
         AssertStoredPaymentDeletedMessage $assertStoredPaymentDeletedMessage,
-        array $creditCard,
-        $creditCardClass = 'credit_card'
+        CreditCard $creditCard
     ) {
         $this->storedPaymentMethodsPage = $storedPaymentMethodsPage;
         $this->customer = $customer;
         $this->objectManager = $objectManager;
         $this->customerAccountIndex = $customerAccountIndex;
-        $this->fixtureFactory = $fixtureFactory;
         $this->assertStoredPaymentDeletedMessage = $assertStoredPaymentDeletedMessage;
-        $this->creditCard = $fixtureFactory->createByCode($creditCardClass, ['dataset' => $creditCard['dataset']]);
+        $this->creditCard = $creditCard;
     }
 
     /**
-     * @inheritdoc
+     * Run Delete credit card from My Account step.
      *
      * @return array
      */

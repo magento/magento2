@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -16,6 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractType
 {
@@ -162,6 +164,14 @@ abstract class AbstractType
     protected $productRepository;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 101.1.0
+     */
+    protected $serializer;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -173,6 +183,7 @@ abstract class AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,7 +195,8 @@ abstract class AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -195,6 +207,8 @@ abstract class AbstractType
         $this->_filesystem = $filesystem;
         $this->_logger = $logger;
         $this->productRepository = $productRepository;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -238,7 +252,7 @@ abstract class AbstractType
     }
 
     /**
-     * Retrieve parent ids array by requered child
+     * Retrieve parent ids array by required child
      *
      * @param int|array $childId
      * @return array
@@ -278,13 +292,7 @@ abstract class AbstractType
         $sortOne = $attributeOne->getGroupSortPath() * 1000 + $attributeOne->getSortPath() * 0.0001;
         $sortTwo = $attributeTwo->getGroupSortPath() * 1000 + $attributeTwo->getSortPath() * 0.0001;
 
-        if ($sortOne > $sortTwo) {
-            return 1;
-        } elseif ($sortOne < $sortTwo) {
-            return -1;
-        }
-
-        return 0;
+        return $sortOne <=> $sortTwo;
     }
 
     /**
@@ -394,8 +402,7 @@ abstract class AbstractType
         $product->prepareCustomOptions();
         $buyRequest->unsetData('_processing_params');
         // One-time params only
-        $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
-
+        $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
         if ($options) {
             $optionIds = array_keys($options);
             $product->addCustomOption('option_ids', implode(',', $optionIds));
@@ -494,7 +501,7 @@ abstract class AbstractType
                             $rootDir->create($rootDir->getRelativePath($path));
                         } catch (\Magento\Framework\Exception\FileSystemException $e) {
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('We can\'t create writeable directory "%1".', $path)
+                                __('We can\'t create the "%1" writeable directory.', $path)
                             );
                         }
 
@@ -507,7 +514,9 @@ abstract class AbstractType
                             if (isset($queueOptions['option'])) {
                                 $queueOptions['option']->setIsValid(false);
                             }
-                            throw new \Magento\Framework\Exception\LocalizedException(__('The file upload failed.'));
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('The file upload failed. Try to upload again.')
+                            );
                         }
                         $this->_fileStorageDb->saveFile($dst);
                         break;
@@ -523,7 +532,7 @@ abstract class AbstractType
 
     /**
      * Add file to File Queue
-     * @param array $queueOptions   Array of File Queue
+     * @param array $queueOptions Array of File Queue
      *                              (eg. ['operation'=>'move',
      *                                    'src_name'=>'filename',
      *                                    'dst_name'=>'filename2'])
@@ -552,7 +561,7 @@ abstract class AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify product\'s required option(s).');
+        return __("The product's required option(s) weren't entered. Make sure the options are entered and try again.");
     }
 
     /**
@@ -566,7 +575,7 @@ abstract class AbstractType
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
-        $transport = new \StdClass();
+        $transport = new \stdClass();
         $transport->options = [];
         $options = null;
         if ($product->getHasOptions()) {
@@ -623,7 +632,7 @@ abstract class AbstractType
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
-                            __('The product has required options.')
+                            __('The product has required options. Enter the options and try again.')
                         );
                     }
                 }
@@ -645,7 +654,7 @@ abstract class AbstractType
         $optionArr = [];
         $info = $product->getCustomOption('info_buyRequest');
         if ($info) {
-            $optionArr['info_buyRequest'] = unserialize($info->getValue());
+            $optionArr['info_buyRequest'] = $this->serializer->unserialize($info->getValue());
         }
 
         $optionIds = $product->getCustomOption('option_ids');
@@ -713,8 +722,7 @@ abstract class AbstractType
     protected function _removeNotApplicableAttributes($product)
     {
         $entityType = $product->getResource()->getEntityType();
-        foreach ($this->_eavConfig->getEntityAttributeCodes($entityType, $product) as $attributeCode) {
-            $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        foreach ($this->_eavConfig->getEntityAttributes($entityType, $product) as $attribute) {
             $applyTo = $attribute->getApplyTo();
             if (is_array($applyTo) && count($applyTo) > 0 && !in_array($product->getTypeId(), $applyTo)) {
                 $product->unsetData($attribute->getAttributeCode());
@@ -927,7 +935,7 @@ abstract class AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return floatval($qty);
+        return (float)$qty;
     }
 
     /**
@@ -963,7 +971,7 @@ abstract class AbstractType
         }
 
         if (isset($config['can_use_qty_decimals'])) {
-            $this->_canUseQtyDecimals = (bool) $config['can_use_qty_decimals'];
+            $this->_canUseQtyDecimals = (bool)$config['can_use_qty_decimals'];
         }
 
         return $this;
@@ -1091,5 +1099,17 @@ abstract class AbstractType
     public function getAssociatedProducts($product)
     {
         return [];
+    }
+
+    /**
+     * Check if product can be potentially buyed from the category page or some other list
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     * @since 101.1.0
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        return !$this->hasRequiredOptions($product);
     }
 }

@@ -1,23 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Cron;
 
-class CleanCacheTest extends \PHPUnit_Framework_TestCase
+class CleanCacheTest extends \PHPUnit\Framework\TestCase
 {
     public function testCleanCache()
     {
         $cacheBackendMock = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
         $cacheFrontendMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
-        $frontendPoolMock = $this->getMock(
-            \Magento\Framework\App\Cache\Frontend\Pool::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $frontendPoolMock = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
 
         $cacheBackendMock->expects(
             $this->once()

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\ResourceModel;
 
 /**
- * Directory Country Resource Model
+ * Country Resource Model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -41,7 +44,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please correct the country code: %1.', $code)
+                    __('Please correct the country code: %1.', htmlspecialchars($code))
                 );
         }
 

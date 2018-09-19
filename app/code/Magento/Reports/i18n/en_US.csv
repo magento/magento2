@@ -14,7 +14,7 @@ No,No
 "Empty Rows","Empty Rows"
 "Invalid date specified","Invalid date specified"
 Refresh,Refresh
-"We can\'t find records for this period.","We can\'t find records for this period."
+"We can't find records for this period.","We can't find records for this period."
 "Show Reviews","Show Reviews"
 "Products Report","Products Report"
 Downloads,Downloads
@@ -104,7 +104,7 @@ Name,Name
 "Times Deleted","Times Deleted"
 "Index type is not valid","Index type is not valid"
 Reports,Reports
-"Last updated: %1. To refresh last day\'s <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","Last updated: %1. To refresh last day\'s <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>."
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>."
 "New Accounts Report","New Accounts Report"
 "Customers by Number of Orders","Customers by Number of Orders"
 "Order Count Report","Order Count Report"
@@ -140,9 +140,9 @@ Coupons,Coupons
 Statistics,Statistics
 "No report code is specified.","No report code is specified."
 "You refreshed lifetime statistics.","You refreshed lifetime statistics."
-"We can\'t refresh lifetime statistics.","We can\'t refresh lifetime statistics."
+"We can't refresh lifetime statistics.","We can't refresh lifetime statistics."
 "Recent statistics have been updated.","Recent statistics have been updated."
-"We can\'t refresh recent statistics.","We can\'t refresh recent statistics."
+"We can't refresh recent statistics.","We can't refresh recent statistics."
 "The product type filter specified is incorrect.","The product type filter specified is incorrect."
 "Order Taxes Report Grouped by Tax Rates","Order Taxes Report Grouped by Tax Rates"
 "Total Invoiced VS Paid Report","Total Invoiced VS Paid Report"
@@ -205,6 +205,7 @@ Dashboard,Dashboard
 Average,Average
 "Stock Quantity","Stock Quantity"
 "Ordered Quantity","Ordered Quantity"
+"The report displays the top 5 most viewed products for each interval.","The report displays the top 5 most viewed products for each interval."
 "For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.","For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone."
 Guest,Guest
 Action,Action

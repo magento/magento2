@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockRegistryInterface
  * @api
+ * @since 100.0.2
  */
 interface StockRegistryInterface
 {
@@ -71,7 +72,7 @@ interface StockRegistryInterface
      * @param float $qty
      * @param int $currentPage
      * @param int $pageSize
-     * @return \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface
+     * @return \Magento\CatalogInventory\Api\Data\StockItemCollectionInterface
      */
     public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0);
 

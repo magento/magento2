@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,7 +105,7 @@ class GuestCouponManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Coupon code is not valid
+     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testSetCouponThrowsExceptionIfCouponDoesNotExist()
     {

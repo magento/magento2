@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ require([
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
     var radioBoxes = $H({});
     var warning = false;
-    var userRoles = $H(<?php /* @escapeNotVerified */ echo $myBlock->getSelectedRoles(true) ?>);
+    var userRoles = $H(<?= /* @escapeNotVerified */ $myBlock->getSelectedRoles(true) ?>);
     if (userRoles.size() > 0) warning = true;
     $('user_user_roles').value = userRoles.toQueryString();
 
@@ -40,7 +40,7 @@ require([
             if(checkbox[0] && !checkbox[0].checked){
                 var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
                 if (checked && warning && radioBoxes.size() > 0) {
-                    if ( !confirm("<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
+                    if ( !confirm("<?= /* @escapeNotVerified */ __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
                         checkbox[0].checked = false;
                         for(i in radioBoxes) {
                             if( radioBoxes[i].status == 1) {
@@ -51,7 +51,7 @@ require([
                     }
                     warning = false;
                 }
-                <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.setCheckboxChecked(checkbox[0], checked);
+                <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.setCheckboxChecked(checkbox[0], checked);
             }
         }
     }
@@ -63,11 +63,26 @@ require([
         }
     }
 
-<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleRowClick;
-<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.initRowCallback = rolesRowInit;
-<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
-<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row){rolesRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)});
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.rowClickCallback = roleRowClick;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.initRowCallback = rolesRowInit;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
+<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.rows.each(function(row){rolesRowInit(<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>, row)});
 <?php endif; ?>
 
 });
 </script>
+
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
+<?php if (is_object($editBlock)): ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=delete-user]" : {
+                "deleteUserAccount" : {
+                    "message": "<?= $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
+                    "url": "<?= /* @noEscape */ $editBlock->getDeleteUrl() ?>",
+                    "objId": "<?= $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

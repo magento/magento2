@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Tax\Test\Unit\Helper;
 
@@ -12,8 +10,10 @@ use Magento\Framework\DataObject as MagentoObject;
 
 /**
  * Class DataTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -29,6 +29,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $taxConfigMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $serializer;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -42,13 +45,31 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->taxConfigMock = $this->getMockBuilder(\Magento\Tax\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
 
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
         $this->helper = $objectManager->getObject(
             \Magento\Tax\Helper\Data::class,
             [
                 'orderTaxManagement' => $this->orderTaxManagementMock,
                 'priceCurrency' => $this->priceCurrencyMock,
-                'taxConfig' => $this->taxConfigMock
+                'taxConfig' => $this->taxConfigMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -127,7 +148,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Creat OrderTaxDetails mock from array of data
+     * Create OrderTaxDetails mock from array of data
      *
      * @param $inputArray
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
@@ -148,8 +169,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $appliedTaxesMocks = [];
             foreach ($appliedTaxesData as $appliedTaxData) {
                 $appliedTaxesMock = $this->getMockBuilder(
-                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
-                    ->getMock();
+                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class
+                )->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
                     ->will($this->returnValue($appliedTaxData['amount']));
@@ -236,7 +257,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg, 2);
                     }
@@ -284,27 +306,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'invoice' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 1,
-                                                'tax_amount' => 5.00,
-                                            ]
-                                        ),
-                                    'tax_amount' => 2.50,
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 1,
+                                        'tax_amount' => 5.00,
+                                    ]
+                                ),
+                                'tax_amount' => 2.50,
+                            ]
+                        ),
                         'item2' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 2,
-                                                'tax_amount' => 0.0,
-                                            ]
-                                        ),
-                                    'tax_amount' => 0.0,
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 2,
+                                        'tax_amount' => 0.0,
+                                    ]
+                                ),
+                                'tax_amount' => 0.0,
+                            ]
+                        ),
                     ],
                 ],
                 'expected_results' => [
@@ -354,18 +376,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'invoice' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 1,
-                                                'tax_amount' => 5.00,
-                                            ]
-                                        ),
-                                    'tax_amount' => 5.0,
-                                    //half of weee tax is invoiced
-                                    'tax_ratio' => serialize(['weee' => 0.5]),
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 1,
+                                        'tax_amount' => 5.00,
+                                    ]
+                                ),
+                                'tax_amount' => 5.0,
+                                //half of weee tax is invoiced
+                                'tax_ratio' => json_encode(['weee' => 0.5]),
+                            ]
+                        ),
                     ],
                 ],
                 'expected_results' => [
@@ -458,9 +480,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * @param bool $displayPriceIncludingTax
      * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
      */
-    public function testIsCatalogPriceDisplayAffectedByTax($expected, $displayBothPrices, $priceIncludesTax,
-        $isCrossBorderTradeEnabled, $displayPriceIncludingTax)
-    {
+    public function testIsCatalogPriceDisplayAffectedByTax(
+        $expected,
+        $displayBothPrices,
+        $priceIncludesTax,
+        $isCrossBorderTradeEnabled,
+        $displayPriceIncludingTax
+    ) {
         if ($displayBothPrices == true) {
             $this->taxConfigMock->expects($this->at(0))
                 ->method('getPriceDisplayType')

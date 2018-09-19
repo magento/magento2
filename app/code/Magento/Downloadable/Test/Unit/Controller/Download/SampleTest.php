@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SampleTest extends \PHPUnit_Framework_TestCase
+class SampleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Download\Sample */
     protected $sample;
@@ -70,8 +70,8 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
@@ -83,73 +83,31 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->helperData = $this->getMock(
-            \Magento\Downloadable\Helper\Data::class,
-            [
+        $this->helperData = $this->createPartialMock(\Magento\Downloadable\Helper\Data::class, [
                 'getIsShareable'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->downloadHelper = $this->getMock(
-            \Magento\Downloadable\Helper\Download::class,
-            [
+            ]);
+        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
                 'setResource',
                 'getFilename',
                 'getContentType',
                 'getFileSize',
                 'getContentDisposition',
                 'output'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+            ]);
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 '_wakeup',
                 'load',
                 'getId',
                 'getProductUrl',
                 'getName'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->messageManager = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirect = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlInterface = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [
+            ]);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
                 'create',
                 'get'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->sample = $this->objectManagerHelper->getObject(
             \Magento\Downloadable\Controller\Download\Sample::class,
             [

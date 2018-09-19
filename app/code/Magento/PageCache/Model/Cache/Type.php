@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\PageCache\Model\Cache;
 
-/** System / Cache Management / Cache type "Full Page Cache" */
+/**
+ * System / Cache Management / Cache type "Full Page Cache"
+ *
+ */
 class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**

@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VariationHandlerTest extends \PHPUnit_Framework_TestCase
+class VariationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var VariationHandler
@@ -62,43 +61,18 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->productFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->entityFactoryMock = $this->getMock(
-            \Magento\Eav\Model\EntityFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->attributeSetFactory = $this->getMock(
+        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->entityFactoryMock = $this->createPartialMock(\Magento\Eav\Model\EntityFactory::class, ['create']);
+        $this->attributeSetFactory = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->stockConfiguration = $this->getMock(
-            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->configurableProduct = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
+        $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        $this->configurableProduct = $this->createMock(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
         );
 
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery'], [], '', false);
+        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery']);
 
         $this->model = $this->objectHelper->getObject(
             \Magento\ConfigurableProduct\Model\Product\VariationHandler::class,
@@ -162,23 +136,30 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider dataProviderTestGenerateSimpleProducts
+     * @param int|string|null $weight
+     * @param string $typeId
      */
-    public function testGenerateSimpleProducts()
+    public function testGenerateSimpleProducts($weight, $typeId)
     {
         $productsData = [
-            6 =>
-                [
-                    'image' => 'image.jpg',
-                    'name' => 'config-red',
-                    'configurable_attribute' => '{"new_attr":"6"}',
-                    'sku' => 'config-red',
-                    'quantity_and_stock_status' =>
-                        [
-                            'qty' => '',
-                        ],
-                    'weight' => '333',
-                ]
+            [
+                'image' => 'image.jpg',
+                'name' => 'config-red',
+                'configurable_attribute' => '{"new_attr":"6"}',
+                'sku' => 'config-red',
+                'quantity_and_stock_status' =>
+                    [
+                        'qty' => '',
+                    ],
+            ]
         ];
+
+        // Do not add 'weight' attribute if it's value is null!
+        if ($weight !== null) {
+            $productsData[0]['weight'] = $weight;
+        }
+
         $stockData = [
             'manage_stock' => '0',
             'use_config_enable_qty_increments' => '1',
@@ -218,7 +199,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type::class)
+        $productTypeMock = $this->getMockBuilder(Type::class)
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -236,7 +217,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('new_attr_set_id');
         $this->productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
         $newSimpleProductMock->expects($this->once())->method('setStoreId')->with(0)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setTypeId')->with('simple')->willReturnSelf();
+        $newSimpleProductMock->expects($this->once())->method('setTypeId')->with($typeId)->willReturnSelf();
         $newSimpleProductMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with('new_attr_set_id')
@@ -263,6 +244,27 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
 
         $this->assertEquals(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestGenerateSimpleProducts()
+    {
+        return [
+            [
+                'weight' => 333,
+                'type_id' => Type::TYPE_SIMPLE,
+            ],
+            [
+                'weight' => '',
+                'type_id' => Type::TYPE_VIRTUAL,
+            ],
+            [
+                'weight' => null,
+                'type_id' => Type::TYPE_VIRTUAL,
+            ],
+        ];
     }
 
     public function testProcessMediaGalleryWithImagesAndGallery()

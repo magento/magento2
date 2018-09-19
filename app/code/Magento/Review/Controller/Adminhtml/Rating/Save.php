@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Save extends RatingController
+class Save extends RatingController implements HttpPostActionInterface
 {
     /**
      * Save rating
@@ -17,7 +18,7 @@ class Save extends RatingController
      */
     public function execute()
     {
-        $this->initEnityId();
+        $this->initEntityId();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($this->getRequest()->getPostValue()) {

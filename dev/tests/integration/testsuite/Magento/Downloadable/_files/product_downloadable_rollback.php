@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -20,7 +20,6 @@ try {
     $product = $productRepository->get('downloadable-product', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
-
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

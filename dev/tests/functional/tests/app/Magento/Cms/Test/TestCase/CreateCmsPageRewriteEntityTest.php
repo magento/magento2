@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,15 +25,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Save Rewrite.
  * 8. Perform all assertions.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-24847
  */
 class CreateCmsPageRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

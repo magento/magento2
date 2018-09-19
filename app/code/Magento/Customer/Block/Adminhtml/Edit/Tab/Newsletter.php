@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -17,7 +17,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
     /**
      * @var string
      */
-    protected $_template = 'tab/newsletter.phtml';
+    protected $_template = 'Magento_Customer::tab/newsletter.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
@@ -145,7 +145,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         $form->setHtmlIdPrefix('_newsletter');
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $subscriber = $this->_subscriberFactory->create()->loadByCustomerId($customerId);
-        $this->_coreRegistry->register('subscriber', $subscriber);
+        $this->_coreRegistry->register('subscriber', $subscriber, true);
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Newsletter Information')]);
 
@@ -160,7 +160,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
             ]
         );
 
-        if ($this->customerAccountManagement->isReadOnly($customerId)) {
+        if ($this->customerAccountManagement->isReadonly($customerId)) {
             $form->getElement('subscription')->setReadonly(true, true);
         }
         $isSubscribed = $subscriber->isSubscribed();
@@ -221,24 +221,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         }
 
         return null;
-    }
-
-    /**
-     * Prepare the layout.
-     *
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        $this->setChild(
-            'grid',
-            $this->getLayout()->createBlock(
-                \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid::class,
-                'newsletter.grid'
-            )
-        );
-        parent::_prepareLayout();
-        return $this;
     }
 
     /**

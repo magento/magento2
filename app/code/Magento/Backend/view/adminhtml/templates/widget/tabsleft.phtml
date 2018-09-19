@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<dl id="dl-<?php /* @escapeNotVerified */ echo $id ?>" class="accordion">
+<dl id="dl-<?= /* @escapeNotVerified */ $id ?>" class="accordion">
 <?php foreach ($sections as $sectionId => $section): ?>
-    <dt id="dt-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $sectionId ?>">
-        <strong><?php /* @escapeNotVerified */ echo $section['title'] ?></strong>
+    <dt id="dt-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>">
+        <strong><?= /* @escapeNotVerified */ $section['title'] ?></strong>
     </dt>
-    <dd id="dd-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $section['id'] ?>" class="section-menu <?php echo !empty($section['active']) ? 'open' : '' ?>">
+    <dd id="dd-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $section['id'] ?>" class="section-menu <?= !empty($section['active']) ? 'open' : '' ?>">
         <ul>
         <?php foreach ($section['children'] as $menuId => $menuItem): ?>
-            <li id="li-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $sectionId ?>-<?php /* @escapeNotVerified */ echo $menuId ?>">
-                <a href="#" title="<?php /* @escapeNotVerified */ echo $menuItem['title'] ?>">
-                    <span><?php /* @escapeNotVerified */ echo $menuItem['label'] ?></span>
+            <li id="li-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>-<?= /* @escapeNotVerified */ $menuId ?>">
+                <a href="#" title="<?= /* @escapeNotVerified */ $menuItem['title'] ?>">
+                    <span><?= /* @escapeNotVerified */ $menuItem['label'] ?></span>
                 </a>
             </li>
         <?php endforeach ?>

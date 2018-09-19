@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -86,16 +86,12 @@ class Observer
      */
     public function emulateWelcomeBlock($block)
     {
-        $escapedName = $this->_escaper->escapeHtml(
-            $this->_customerViewHelper->getCustomerName(
-                $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId())
-            ),
-            null
+        $customerName = $this->_customerViewHelper->getCustomerName(
+            $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId())
         );
 
         $this->_applyAccountLinksPersistentData();
-        $welcomeMessage = __('Welcome, %1!', $escapedName)
-            . ' ' . $this->_layout->getBlock('header.additional')->toHtml();
+        $welcomeMessage = __('Welcome, %1!', $customerName);
         $block->setWelcome($welcomeMessage);
         return $this;
     }
@@ -121,6 +117,13 @@ class Observer
     public function emulateTopLinks($block)
     {
         $this->_applyAccountLinksPersistentData();
-        $block->removeLinkByUrl($this->_url->getUrl('customer/account/login'));
+        /** @var \Magento\Framework\View\Element\Html\Link[] $links */
+        $links = $block->getLinks();
+        $removeLink = $this->_url->getUrl('customer/account/login');
+        foreach ($links as $link) {
+            if ($link->getHref() == $removeLink) {
+                $this->_layout->unsetChild($block->getNameInLayout(), $link->getNameInLayout());
+            }
+        }
     }
 }

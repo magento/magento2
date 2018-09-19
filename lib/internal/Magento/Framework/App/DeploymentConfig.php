@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Application deployment configuration
+ *
+ * @api
  */
 class DeploymentConfig
 {
@@ -68,7 +70,7 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData;
         }
-        return isset($this->flatData[$key]) ? $this->flatData[$key] : $defaultValue;
+        return $this->flatData[$key] ?? $defaultValue;
     }
 
     /**
@@ -112,6 +114,18 @@ class DeploymentConfig
     public function resetData()
     {
         $this->data = null;
+    }
+
+    /**
+     * Check if data from deploy files is available
+     *
+     * @return bool
+     * @since 100.1.3
+     */
+    public function isDbAvailable()
+    {
+        $this->load();
+        return isset($this->data['db']);
     }
 
     /**

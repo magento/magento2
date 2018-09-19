@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
@@ -15,7 +15,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/inventory.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/inventory.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager

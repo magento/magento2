@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocator">
+        <arguments>
+            <argument name="urlLocators" xsi:type="array">
+                <item name="homePageUrlLocator" xsi:type="object">Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite\HomePageUrlLocator</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

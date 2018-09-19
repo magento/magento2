@@ -2,24 +2,23 @@
 /**
  * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\HostChecker;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Redirect
@@ -81,6 +80,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultFactory;
 
+    /**
+     * @var HostChecker | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hostChecker;
+
     protected function setUp()
     {
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
@@ -119,6 +123,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $this->urlDecoder = $this->getMockForAbstractClass(\Magento\Framework\Url\DecoderInterface::class);
 
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+            ->setMethods(['DashboardUrl', 'getAccountUrl', 'getLoginUrl', 'getLogoutUrl', 'getDashboardUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -134,18 +139,23 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->hostChecker = $this->getMockBuilder(HostChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Customer\Model\Account\Redirect::class,
             [
-                'request'               => $this->request,
-                'customerSession'       => $this->customerSession,
-                'scopeConfig'           => $this->scopeConfig,
-                'storeManager'          => $this->storeManager,
-                'url'                   => $this->url,
-                'urlDecoder'            => $this->urlDecoder,
-                'customerUrl'           => $this->customerUrl,
-                'resultFactory'         => $this->resultFactory
+                'request' => $this->request,
+                'customerSession' => $this->customerSession,
+                'scopeConfig' => $this->scopeConfig,
+                'storeManager' => $this->storeManager,
+                'url' => $this->url,
+                'urlDecoder' => $this->urlDecoder,
+                'customerUrl' => $this->customerUrl,
+                'resultFactory' => $this->resultFactory,
+                'hostChecker' => $this->hostChecker,
             ]
         );
     }
@@ -181,57 +191,31 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $redirectToDashboard
     ) {
         // Preparations for method updateLastCustomerId()
-        $this->customerSession->expects($this->once())
-            ->method('getLastCustomerId')
-            ->willReturn($customerId);
-        $this->customerSession->expects($this->any())
-            ->method('isLoggedIn')
-            ->willReturn($customerLoggedIn);
-        $this->customerSession->expects($this->any())
-            ->method('getId')
-            ->willReturn($lastCustomerId);
-        $this->customerSession->expects($this->any())
-            ->method('unsBeforeAuthUrl')
-            ->willReturnSelf();
+        $this->customerSession->expects($this->once())->method('getLastCustomerId')->willReturn($customerId);
+        $this->customerSession->expects($this->any())->method('isLoggedIn')->willReturn($customerLoggedIn);
+        $this->customerSession->expects($this->any())->method('getId')->willReturn($lastCustomerId);
+        $this->customerSession->expects($this->any())->method('unsBeforeAuthUrl')->willReturnSelf();
         $this->customerSession->expects($this->any())
             ->method('setLastCustomerId')
             ->with($lastCustomerId)
             ->willReturnSelf();
 
         // Preparations for method prepareRedirectUrl()
-        $this->store->expects($this->once())
-            ->method('getBaseUrl')
-            ->willReturn($baseUrl);
+        $this->store->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
 
-        $this->customerSession->expects($this->any())
-            ->method('getBeforeAuthUrl')
-            ->willReturn($beforeAuthUrl);
-        $this->customerSession->expects($this->any())
-            ->method('setBeforeAuthUrl')
-            ->willReturnSelf();
-        $this->customerSession->expects($this->any())
-            ->method('getAfterAuthUrl')
-            ->willReturn($afterAuthUrl);
+        $this->customerSession->expects($this->any())->method('getBeforeAuthUrl')->willReturn($beforeAuthUrl);
+        $this->customerSession->expects($this->any())->method('setBeforeAuthUrl')->willReturnSelf();
+        $this->customerSession->expects($this->any())->method('getAfterAuthUrl')->willReturn($afterAuthUrl);
         $this->customerSession->expects($this->any())
             ->method('setAfterAuthUrl')
             ->with($beforeAuthUrl)
             ->willReturnSelf();
-        $this->customerSession->expects($this->any())
-            ->method('getBeforeRequestParams')
-            ->willReturn(false);
+        $this->customerSession->expects($this->any())->method('getBeforeRequestParams')->willReturn(false);
 
-        $this->customerUrl->expects($this->any())
-            ->method('getAccountUrl')
-            ->willReturn($accountUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('getLoginUrl')
-            ->willReturn($loginUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('getLogoutUrl')
-            ->willReturn($logoutUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('DashboardUrl')
-            ->willReturn($dashboardUrl);
+        $this->customerUrl->expects($this->any())->method('getAccountUrl')->willReturn($accountUrl);
+        $this->customerUrl->expects($this->any())->method('getLoginUrl')->willReturn($loginUrl);
+        $this->customerUrl->expects($this->any())->method('getLogoutUrl')->willReturn($logoutUrl);
+        $this->customerUrl->expects($this->any())->method('getDashboardUrl')->willReturn($dashboardUrl);
 
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
@@ -243,23 +227,18 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerUrl::REFERER_QUERY_PARAM_NAME)
             ->willReturn($referer);
 
-        $this->urlDecoder->expects($this->any())
-            ->method('decode')
-            ->with($referer)
-            ->willReturn($referer);
+        $this->urlDecoder->expects($this->any())->method('decode')->with($referer)->willReturn($referer);
 
-        $this->url->expects($this->any())
-            ->method('isOwnOriginUrl')
-            ->willReturn(true);
+        $this->url->expects($this->any())->method('isOwnOriginUrl')->willReturn(true);
 
-        $this->resultRedirect->expects($this->once())
-            ->method('setUrl')
-            ->willReturnSelf();
+        $this->resultRedirect->expects($this->once())->method('setUrl')->with($beforeAuthUrl)->willReturnSelf();
 
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
+
+        $this->hostChecker->expects($this->any())->method('isOwnOrigin')->willReturn(true);
 
         $this->model->getRedirect();
     }
@@ -284,9 +263,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
          * Redirect to Dashboard flag
          */
         return [
-            // Loggend In, Redirect by Referer
+            // Logged In, Redirect by Referer
             [1, 2, 'referer', 'base', '', '', 'account', '', '', '', true, false],
-            // Loggend In, Redirect by AfterAuthUrl
+            [1, 2, 'http://referer.com/', 'http://base.com/', '', '', 'account', '', '', 'dashboard', true, false],
+            // Logged In, Redirect by AfterAuthUrl
             [1, 2, 'referer', 'base', '', 'defined', 'account', '', '', '', true, true],
             // Not logged In, Redirect by LoginUrl
             [1, 2, 'referer', 'base', '', '', 'account', 'login', '', '', false, true],
@@ -294,6 +274,21 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             [1, 2, 'referer', 'base', 'logout', '', 'account', 'login', 'logout', 'dashboard', false, true],
             // Default redirect
             [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
+            // Logout, Without Redirect to Dashboard
+            [
+                'customer_id' => 1,
+                'last_customer_id' => 2,
+                'referer' => 'http://base.com/customer/account/logoutSuccess/',
+                'base_url' => 'http://base.com/',
+                'before_auth_url' => 'http://base.com/',
+                'after_auth_url' => 'http://base.com/customer/account/',
+                'account_url' => 'account',
+                'login_url' => 'login',
+                'logout_url' => 'logout',
+                'dashboard_url' => 'dashboard',
+                'is_customer_logged_id_flag' => true,
+                'redirect_to_dashboard_flag' => false,
+            ],
         ];
     }
 

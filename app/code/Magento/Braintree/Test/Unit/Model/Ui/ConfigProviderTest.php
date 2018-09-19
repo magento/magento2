@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Customer\Model\Session;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -15,11 +17,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * Test for class \Magento\Braintree\Model\Ui\ConfigProvider
  */
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
-
     const CLIENT_TOKEN = 'token';
+    const MERCHANT_ACCOUNT_ID = '245345';
 
     /**
      * @var Config|MockObject
@@ -30,6 +32,11 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      * @var BraintreeAdapter|MockObject
      */
     private $braintreeAdapter;
+
+    /**
+     * @var Session|MockObject
+     */
+    private $session;
 
     /**
      * @var ConfigProvider
@@ -45,10 +52,24 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactoryMock->method('create')
+            ->willReturn($this->braintreeAdapter);
+
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId'])
+            ->getMock();
+        $this->session->method('getStoreId')
+            ->willReturn(null);
 
         $this->configProvider = new ConfigProvider(
             $this->config,
-            $this->braintreeAdapter
+            $adapterFactoryMock,
+            $this->session
         );
     }
 
@@ -76,11 +97,17 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
+     * @dataProvider getClientTokenDataProvider
      */
-    public function testGetClientToken()
+    public function testGetClientToken($merchantAccountId, $params)
     {
+        $this->config->expects(static::once())
+            ->method('getMerchantAccountId')
+            ->willReturn($merchantAccountId);
+
         $this->braintreeAdapter->expects(static::once())
             ->method('generate')
+            ->with($params)
             ->willReturn(self::CLIENT_TOKEN);
 
         static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
@@ -137,6 +164,23 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getClientTokenDataProvider()
+    {
+        return [
+            [
+                'merchantAccountId' => '',
+                'params' => []
+            ],
+            [
+                'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
+                'params' => ['merchantAccountId' => self::MERCHANT_ACCOUNT_ID]
             ]
         ];
     }

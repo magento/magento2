@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Plugin\Catalog;
 
-class CacheInvalidateTest extends \PHPUnit_Framework_TestCase
+class CacheInvalidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -29,27 +29,9 @@ class CacheInvalidateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->typeList = $this->getMock(
-            \Magento\Framework\App\Cache\TypeListInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->swatchHelper = $this->getMock(
-            \Magento\Swatches\Helper\Data::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->attribute = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->typeList = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->swatchHelper = $this->createMock(\Magento\Swatches\Helper\Data::class);
+        $this->attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheInvalidate = $objectManager->getObject(

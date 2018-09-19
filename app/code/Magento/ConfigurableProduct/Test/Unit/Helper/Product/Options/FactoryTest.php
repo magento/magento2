@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Options;
@@ -21,7 +21,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Configurable|MockObject
@@ -75,7 +75,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productAttributeRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
 
         $this->factory = new Factory(
             $this->configurable,
@@ -156,7 +156,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->with($eavAttribute)
             ->willReturn(true);
 
-        $option = $this->getMock(OptionValueInterface::class);
+        $option = $this->createMock(OptionValueInterface::class);
         $option->expects(static::once())
             ->method('setValueIndex')
             ->with($valueIndex)

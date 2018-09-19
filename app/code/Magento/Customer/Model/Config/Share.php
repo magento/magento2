@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config;
@@ -31,7 +31,9 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      */
     protected $_customerResource;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**

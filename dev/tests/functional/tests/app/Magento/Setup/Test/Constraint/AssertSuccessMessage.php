@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,13 +23,13 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     public function processAssert(SetupWizard $setupWizard, $package)
     {
-        $message = "You upgraded:";
-        \PHPUnit_Framework_Assert::assertContains(
+        $message = "You upgraded";
+        \PHPUnit\Framework\Assert::assertContains(
             $message,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Success message is incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $package,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Updated package is incorrect.'

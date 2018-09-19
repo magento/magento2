@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Observer;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddFieldsToResponseObserverTest extends \PHPUnit_Framework_TestCase
+class AddFieldsToResponseObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Core registry

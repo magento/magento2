@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,7 @@ class CustomerMetadataTest extends WebapiAbstract
                 Customer::FIRSTNAME,
                 [
                     AttributeMetadata::FRONTEND_INPUT   => 'text',
-                    AttributeMetadata::INPUT_FILTER     => '',
+                    AttributeMetadata::INPUT_FILTER     => 'trim',
                     AttributeMetadata::STORE_LABEL      => 'First Name',
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::VALIDATION_RULES => [

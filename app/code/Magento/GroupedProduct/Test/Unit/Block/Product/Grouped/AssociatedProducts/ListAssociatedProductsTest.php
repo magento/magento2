@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped\AssociatedProducts;
 
-class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
+class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,18 +49,12 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
-        $this->typeInstanceMock = $this->getMock(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $this->contextMock->expects(
             $this->any()
@@ -158,12 +152,9 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     protected function generateAssociatedProduct($productKey = 0)
     {
-        $associatedProduct = $this->getMock(
+        $associatedProduct = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
-            ['getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice'],
-            [],
-            '',
-            false
+            ['getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice']
         );
 
         $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue('id' . $productKey));

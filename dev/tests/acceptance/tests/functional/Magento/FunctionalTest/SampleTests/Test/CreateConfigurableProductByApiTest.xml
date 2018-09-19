@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CreateConfigurableProductByApiTest">
+        <annotations>
+            <features value="SampleTests"/>
+            <stories value="Create a Configurable Product By API"/>
+            <skip>
+                <issueId value="SAMPLE"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData stepKey="categoryHandle" entity="SimpleSubCategory" />
+            <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+            <createData stepKey="productAttributeHandle" entity="productDropDownAttribute"/>
+
+            <createData stepKey="productAttributeOption1Handle" entity="productAttributeOption1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData stepKey="productAttributeOption2Handle" entity="productAttributeOption2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData stepKey="addToAttributeSetHandle" entity="AddToDefaultSet">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData stepKey="getAttributeOption1Handle" entity="ProductAttributeOptionGetter" index="1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData stepKey="getAttributeOption2Handle" entity="ProductAttributeOptionGetter" index="2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData stepKey="childProductHandle1" entity="SimpleOne">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData stepKey="childProductHandle2" entity="SimpleOne">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData stepKey="configProductOptionHandle" entity="ConfigurableProductTwoOptions">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData stepKey="configProductHandle1" entity="ConfigurableProductAddChild">
+                <requiredEntity createDataKey="childProductHandle1"/>
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+            </createData>
+            <createData stepKey="configProductHandle2" entity="ConfigurableProductAddChild">
+                <requiredEntity createDataKey="childProductHandle2"/>
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="d2" createDataKey="childProductHandle1"/>
+            <deleteData stepKey="d3" createDataKey="childProductHandle2"/>
+            <deleteData stepKey="d7" createDataKey="baseConfigProductHandle"/>
+            <deleteData stepKey="d8" createDataKey="categoryHandle"/>
+            <deleteData stepKey="d6" createDataKey="productAttributeHandle"/>
+        </after>
+    </test>
+</tests>

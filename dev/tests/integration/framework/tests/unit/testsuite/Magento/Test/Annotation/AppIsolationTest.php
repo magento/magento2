@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Annotation;
 
-class AppIsolationTest extends \PHPUnit_Framework_TestCase
+class AppIsolationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\AppIsolation
@@ -23,13 +23,7 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_application = $this->getMock(
-            \Magento\TestFramework\Application::class,
-            ['reinitialize'],
-            [],
-            '',
-            false
-        );
+        $this->_application = $this->createPartialMock(\Magento\TestFramework\Application::class, ['reinitialize']);
         $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }
 

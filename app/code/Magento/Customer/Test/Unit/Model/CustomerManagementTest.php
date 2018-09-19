@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-class CustomerManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\CustomerManagement
@@ -19,12 +19,9 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customersFactoryMock = $this->getMock(
+        $this->customersFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->model = new \Magento\Customer\Model\CustomerManagement(
             $this->customersFactoryMock
@@ -33,13 +30,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $customersMock = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customersMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer\Collection::class);
 
         $this->customersFactoryMock
             ->expects($this->once())

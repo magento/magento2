@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class CommentLevelsSniff
@@ -18,7 +18,7 @@ use PHP_CodeSniffer_Sniff;
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#comments
  *
  */
-class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
+class CommentLevelsSniff implements Sniff
 {
     const COMMENT_STRING = '//';
 
@@ -52,7 +52,7 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
@@ -98,12 +98,12 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
     /**
      * Validate that inline comment responds to given requirements
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      * @return bool
      */
-    private function validateInlineComment(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    private function validateInlineComment(File $phpcsFile, $stackPtr, array $tokens)
     {
         if ($tokens[$stackPtr + 1]['content'] !== TokenizerSymbolsInterface::WHITESPACE) {
             $phpcsFile->addError('Inline comment should have 1 space after "//"', $stackPtr, 'SpaceMissedAfter');
@@ -116,12 +116,12 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
     /**
      * Check is it n-th level comment was found
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      * @return bool
      */
-    private function isNthLevelComment(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    private function isNthLevelComment(File $phpcsFile, $stackPtr, array $tokens)
     {
         $nthLevelCommentFound = false;
         $levelComment = 0;
@@ -151,12 +151,12 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
     /**
      * Check is it n-th level comment is correct
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      * @return bool
      */
-    private function checkNthLevelComment(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    private function checkNthLevelComment(File $phpcsFile, $stackPtr, array $tokens)
     {
         $correct = false;
 
@@ -180,7 +180,6 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
 
         $commentLinePtr = $stackPtr;
         while ($tokens[$commentLinePtr - 2]['line'] > 1) {
-
             $commentLinePtr = $phpcsFile->findPrevious(T_STRING, $commentLinePtr - 1, null, false, '//');
 
             if (false === $commentLinePtr) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class MassCancelTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassCancelTest extends \PHPUnit_Framework_TestCase
+class MassCancelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\MassCancel
@@ -85,28 +85,24 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderManagementMock;
+
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
 
-        $resultRedirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $resultRedirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
 
         $this->orderCollectionMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Collection::class)
             ->disableOriginalConstructor()
@@ -118,16 +114,10 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->sessionMock = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set'], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->resultRedirectMock = $this->getMock(
-            \Magento\Backend\Model\View\Result\Redirect::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlagMock = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set']);
+        $this->helperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirectMock = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
         $redirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
@@ -155,7 +145,7 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
-        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
+        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->orderCollectionMock)
@@ -163,12 +153,15 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderCollectionMock);
+        $this->orderManagementMock = $this->createMock(\Magento\Sales\Api\OrderManagementInterface::class);
+
         $this->massAction = $objectManagerHelper->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\MassCancel::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
-                'collectionFactory' => $this->orderCollectionFactoryMock
+                'collectionFactory' => $this->orderCollectionFactoryMock,
+                'orderManagement' => $this->orderManagementMock
             ]
         );
     }
@@ -179,6 +172,9 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteCanCancelOneOrder()
     {
+        $order1id = 100;
+        $order2id = 200;
+
         $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -193,27 +189,26 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orders);
 
         $order1->expects($this->once())
-            ->method('canCancel')
-            ->willReturn(true);
-        $order1->expects($this->once())
-            ->method('cancel');
-        $order1->expects($this->once())
-            ->method('save');
+            ->method('getEntityId')
+            ->willReturn($order1id);
+
+        $order2->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($order2id);
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
             ->willReturn($countOrders);
 
-        $order2->expects($this->once())
-            ->method('canCancel')
-            ->willReturn(false);
+        $this->orderManagementMock->expects($this->at(0))->method('cancel')->with($order1id)->willReturn(true);
+        $this->orderManagementMock->expects($this->at(1))->method('cancel')->with($order2id)->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) cannot be canceled.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('We canceled 1 order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -240,24 +235,26 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
         $orders = [$order1, $order2];
         $countOrders = count($orders);
 
+        $order1->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn(100);
+
+        $order2->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn(200);
+
         $this->orderCollectionMock->expects($this->any())
             ->method('getItems')
             ->willReturn([$order1, $order2]);
-
-        $order1->expects($this->once())
-            ->method('canCancel')
-            ->willReturn(false);
 
         $this->orderCollectionMock->expects($this->once())
             ->method('count')
             ->willReturn($countOrders);
 
-        $order2->expects($this->once())
-            ->method('canCancel')
-            ->willReturn(false);
+        $this->orderManagementMock->expects($this->atLeastOnce())->method('cancel')->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('You cannot cancel the order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -283,14 +280,13 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$order1]);
 
         $order1->expects($this->once())
-            ->method('canCancel')
-            ->willReturn(true);
-        $order1->expects($this->once())
-            ->method('cancel')
-            ->willThrowException($exception);
+            ->method('getEntityId')
+            ->willReturn(100);
+
+        $this->orderManagementMock->expects($this->atLeastOnce())->method('cancel')->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Can not cancel');
 
         $this->massAction->execute();

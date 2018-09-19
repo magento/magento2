@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="multishipping_checkout"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="checkout/address/select.phtml" cacheable="false"/>
+            <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="Magento_Multishipping::checkout/address/select.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

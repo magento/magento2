@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Page;
@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Page;
  * Test \Magento\Backend\Block\Page\Header
  * @magentoAppArea adminhtml
  */
-class HeaderTest extends \PHPUnit_Framework_TestCase
+class HeaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Page\Header

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Items;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Items;
 /**
  * @magentoAppArea adminhtml
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetItemExtraInfoHtml()
     {

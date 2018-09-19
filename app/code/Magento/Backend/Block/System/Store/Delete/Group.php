@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Delete;
@@ -19,7 +19,7 @@ class Group extends \Magento\Backend\Block\Template
     {
         $itemId = $this->getRequest()->getParam('group_id');
 
-        $this->setTemplate('system/store/delete_group.phtml');
+        $this->setTemplate('Magento_Backend::system/store/delete_group.phtml');
         $this->setAction($this->getUrl('adminhtml/*/deleteGroupPost', ['group_id' => $itemId]));
         $this->addChild(
             'confirm_deletion_button',

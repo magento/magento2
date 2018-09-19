@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,14 +8,14 @@
 
  ?>
 
-<?php /* <h4 class="icon-head fieldset-legend <?php echo $block->getHeaderCssClass() ?>"><?php echo $block->getHeaderText() ?></h4> */ ?>
+<?php /* <h4 class="icon-head fieldset-legend <?= $block->getHeaderCssClass() ?>"><?= $block->getHeaderText() ?></h4> */ ?>
 <div class="admin__field field-comment">
-    <label for="order-comment" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Order Comments') ?></span></label>
+    <label for="order-comment" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Order Comments') ?></span></label>
     <div class="admin__field-control">
         <textarea
             id="order-comment"
             name="order[comment][customer_note]"
-            class="admin__control-textarea"><?php /* @escapeNotVerified */ echo $block->getCommentNote() ?></textarea>
+            class="admin__control-textarea"><?= /* @escapeNotVerified */ $block->getCommentNote() ?></textarea>
     </div>
 </div>
 <script>

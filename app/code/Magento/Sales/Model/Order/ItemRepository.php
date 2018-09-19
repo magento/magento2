@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -61,12 +62,19 @@ class ItemRepository implements OrderItemRepositoryInterface
     protected $registry = [];
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * ItemRepository constructor.
      * @param DataObjectFactory $objectFactory
      * @param Metadata $metadata
      * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param array $processorPool
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -74,7 +82,8 @@ class ItemRepository implements OrderItemRepositoryInterface
         OrderItemSearchResultInterfaceFactory $searchResultFactory,
         ProductOptionFactory $productOptionFactory,
         ProductOptionExtensionFactory $extensionFactory,
-        array $processorPool = []
+        array $processorPool = [],
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
@@ -82,6 +91,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->processorPool = $processorPool;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -95,16 +105,19 @@ class ItemRepository implements OrderItemRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('ID required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $this->addProductOption($orderItem);
+            $this->addParentItem($orderItem);
             $this->registry[$id] = $orderItem;
         }
         return $this->registry[$id];
@@ -113,22 +126,15 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param SearchCriteria $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return OrderItemInterface[]
      */
-    public function getList(SearchCriteria $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var OrderItemSearchResultInterface $searchResult */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
-
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
         /** @var OrderItemInterface $orderItem */
         foreach ($searchResult->getItems() as $orderItem) {
             $this->addProductOption($orderItem);
@@ -212,6 +218,20 @@ class ItemRepository implements OrderItemRepositoryInterface
     }
 
     /**
+     * Set parent item.
+     *
+     * @param OrderItemInterface $orderItem
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    private function addParentItem(OrderItemInterface $orderItem)
+    {
+        if ($parentId = $orderItem->getParentItemId()) {
+            $orderItem->setParentItem($this->get($parentId));
+        }
+    }
+
+    /**
      * Set product options data
      *
      * @param OrderItemInterface $orderItem
@@ -267,5 +287,21 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
 
         return $request;
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated 100.2.0
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

@@ -1,34 +1,49 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\ChannelDataBuilder;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Payment\Gateway\Config\Config;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class PaymentDataBuilderTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ChannelDataBuilderTest extends \PHPUnit_Framework_TestCase
+class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductMetadataInterface|MockObject
      */
-    private $productMetadataMock;
+    private $productMetadata;
+
+    /**
+     * @var Config|MockObject
+     */
+    private $config;
 
     /**
      * @var ChannelDataBuilder
      */
     private $builder;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->productMetadataMock = $this->getMock(ProductMetadataInterface::class);
-        $this->builder = new ChannelDataBuilder($this->productMetadataMock);
+        $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->builder = new ChannelDataBuilder($this->productMetadata, $this->config);
     }
 
     /**
@@ -40,11 +55,37 @@ class ChannelDataBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild($edition, array $expected)
     {
         $buildSubject = [];
-        $this->productMetadataMock->expects(static::once())
-            ->method('getEdition')
+
+        $this->config->method('getValue')
+            ->with(self::equalTo('channel'))
+            ->willReturn(null);
+
+        $this->productMetadata->method('getEdition')
             ->willReturn($edition);
 
-        $this->assertEquals($expected, $this->builder->build($buildSubject));
+        self::assertEquals($expected, $this->builder->build($buildSubject));
+    }
+
+    /**
+     * Checks a case when a channel provided via payment method configuration.
+     */
+    public function testBuildWithChannelFromConfig()
+    {
+        $channel = 'Magento2_Cart_ConfigEdition_BT';
+
+        $this->config->method('getValue')
+            ->with(self::equalTo('channel'))
+            ->willReturn($channel);
+
+        $this->productMetadata->expects(self::never())
+            ->method('getEdition');
+
+        self::assertEquals(
+            [
+                'channel' => $channel
+            ],
+            $this->builder->build([])
+        );
     }
 
     /**

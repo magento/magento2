@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 
 class InvoiceCommentSenderTest extends AbstractSenderTest
 {
@@ -22,32 +22,17 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->paymentHelper = $this->getMock(
-            \Magento\Payment\Helper\Data::class,
-            ['getInfoBlockHtml'],
-            [],
-            '',
-            false
-        );
+        $this->paymentHelper = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml']);
 
-        $this->invoiceResource = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->invoiceResource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice::class);
 
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::class);
 
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
 
-        $this->invoiceMock = $this->getMock(
+        $this->invoiceMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice::class,
-            ['getStore', '__wakeup', 'getOrder'],
-            [],
-            '',
-            false
+            ['getStore', '__wakeup', 'getOrder']
         );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')

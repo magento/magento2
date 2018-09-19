@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -214,7 +214,7 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {

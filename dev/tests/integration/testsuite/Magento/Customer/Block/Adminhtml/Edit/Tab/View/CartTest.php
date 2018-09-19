@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shopping cart.

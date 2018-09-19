@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,13 @@ use Magento\Catalog\Test\Constraint\AssertProductPage;
 class AssertConfigurableProductPage extends AssertProductPage
 {
     /**
+     * Price format.
+     *
+     * @var int
+     */
+    private $priceFormat = 2;
+
+    /**
      * Verify displayed product data on product page(front-end) equals passed from fixture:
      * 1. Product Name
      * 2. Price
@@ -28,6 +35,7 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected function verify()
     {
         $errors = parent::verify();
+        $errors[] = $this->verifyPriceLabel();
         $errors[] = $this->verifyAttributes();
 
         return array_filter($errors);
@@ -47,7 +55,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
         $fixturePrice = $this->getLowestConfigurablePrice();
 
-        if ($fixturePrice != $formPrice) {
+        if ($fixturePrice != number_format($formPrice, $this->priceFormat)) {
             return "Displayed product price on product page(front-end) not equals passed from fixture. "
             . "Actual: {$formPrice}, expected: {$fixturePrice}.";
         }
@@ -125,15 +133,48 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected function getLowestConfigurablePrice()
     {
         $price = null;
-        $configurableOptions = $this->product->getConfigurableAttributesData();
-
-        foreach ($configurableOptions['matrix'] as $option) {
-            $price = $price === null ? $option['price'] : $price;
-            if ($price > $option['price']) {
-                $price = $option['price'];
+        $priceDataConfig = $this->product->getDataFieldConfig('price');
+        if (isset($priceDataConfig['source'])) {
+            $priceData = $priceDataConfig['source']->getPriceData();
+            if (isset($priceData['price_from'])) {
+                $price = $priceData['price_from'];
             }
         }
 
+        if (null === $price) {
+            $configurableOptions = $this->product->getConfigurableAttributesData();
+            foreach ($configurableOptions['matrix'] as $option) {
+                $price = $price === null ? $option['price'] : $price;
+                if ($price > $option['price']) {
+                    $price = $option['price'];
+                }
+            }
+        }
         return $price;
+    }
+
+    /**
+     * Verifies displayed product price label on a product page (front-end) equals passed from the fixture.
+     *
+     * @return string|null
+     */
+    protected function verifyPriceLabel()
+    {
+        /** @var \Magento\ConfigurableProduct\Test\Block\Product\Price $priceBlock */
+        $priceBlock = $this->productView->getPriceBlock($this->product);
+
+        if (!$priceBlock->getPriceLabel()->isVisible()) {
+            return "Product price label should be displayed.";
+        } else {
+            $expectedPriceLabel = 'As low as';
+            $actualPriceLabel = $priceBlock->getPriceLabel()->getText();
+
+            if ($expectedPriceLabel !== $actualPriceLabel) {
+                return "Displayed product price label on product page (front-end) not equals passed from fixture. "
+                    . "Actual: {$actualPriceLabel}, expected: {$expectedPriceLabel}.";
+            }
+        }
+
+        return null;
     }
 }

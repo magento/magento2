@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Autoload\Test\Unit;
@@ -9,7 +9,7 @@ use \Magento\Framework\Autoload\Populator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class PopulatorTest extends \PHPUnit_Framework_TestCase
+class PopulatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject */
     protected $mockDirectoryList;
@@ -31,22 +31,16 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockAutoloader->expects($this->at(0))
+        $mockAutoloader->expects($this->once())
             ->method('addPsr4')
             ->with(
                 'Magento\\',
-                [DirectoryList::GENERATION . '/Magento/'],
+                [DirectoryList::GENERATED_CODE . '/Magento/'],
                 true
             );
-        $mockAutoloader->expects($this->at(1))
+        $mockAutoloader->expects($this->once())
             ->method('addPsr0')
-            ->with('Cm_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(2))
-            ->method('addPsr0')
-            ->with('Credis_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(3))
-            ->method('addPsr0')
-            ->with('', [DirectoryList::GENERATION]);
+            ->with('', [DirectoryList::GENERATED_CODE]);
 
         Populator::populateMappings($mockAutoloader, $this->mockDirectoryList);
     }

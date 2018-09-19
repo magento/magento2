@@ -2,24 +2,34 @@
 /**
  * Catalog Configurable Product Attribute Collection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
+use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as Model;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     */
+    private $configurableResource;
+
     /**
      * Configurable attributes label table name
      *
@@ -31,6 +41,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product instance
      *
      * @var \Magento\Catalog\Model\Product
+     * @deprecated Now collection supports fetching options for multiple products. This field will be set to first
+     * element of products array.
      */
     protected $_product;
 
@@ -61,6 +73,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $metadataPool;
 
     /**
+     * @var \Magento\Catalog\Model\Product[]
+     */
+    private $products;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -70,6 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Attribute $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param ConfigurableResource $configurableResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -81,11 +99,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         Attribute $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ConfigurableResource $configurableResource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
+        $this->configurableResource = $configurableResource;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -111,9 +131,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setProductFilter($product)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $this->_product = $product;
-        return $this->addFieldToFilter('product_id', $product->getData($metadata->getLinkField()));
+        $this->products[] = $product;
+        $this->_product = reset($this->products);
+
+        return $this;
     }
 
     /**
@@ -145,7 +166,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function getStoreId()
     {
-        return (int)$this->_product->getStoreId();
+        return reset($this->products)->getStoreId();
+    }
+
+    /**
+     * Add product ids to `in` filter before load
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $productIds = [];
+        foreach ($this->products as $product) {
+            $productIds[] = $product->getData($metadata->getLinkField());
+        }
+        return $this->addFieldToFilter('product_id', ['in (?)' => $productIds]);
     }
 
     /**
@@ -159,9 +197,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Profiler::start('TTT1:' . __METHOD__, ['group' => 'TTT1', 'method' => __METHOD__]);
         $this->_addProductAttributes();
         \Magento\Framework\Profiler::stop('TTT1:' . __METHOD__);
-        \Magento\Framework\Profiler::start('TTT2:' . __METHOD__, ['group' => 'TTT2', 'method' => __METHOD__]);
-        $this->_addAssociatedProductFilters();
-        \Magento\Framework\Profiler::stop('TTT2:' . __METHOD__);
         \Magento\Framework\Profiler::start('TTT3:' . __METHOD__, ['group' => 'TTT3', 'method' => __METHOD__]);
         $this->_loadLabels();
         \Magento\Framework\Profiler::stop('TTT3:' . __METHOD__);
@@ -178,10 +213,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _addProductAttributes()
     {
+        /** @var Model $item */
         foreach ($this->_items as $item) {
             $productAttribute = $this->getProductType()->getAttributeById(
                 $item->getAttributeId(),
-                $this->getProduct()
+                $this->getAttributeParentProduct($item)
             );
             $item->setProductAttribute($productAttribute);
         }
@@ -189,16 +225,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Get product that has given attribute
+     *
+     * @param Model $attribute
+     * @return Product
+     */
+    private function getAttributeParentProduct($attribute)
+    {
+        $targetProduct = null;
+        foreach ($this->products as $product) {
+            if ($product->getId() === $attribute->getProductId()) {
+                $targetProduct = $product;
+            }
+        }
+        return $targetProduct ?: reset($this->products);
+    }
+
+    /**
      * Add Associated Product Filters (From Product Type Instance)
      *
      * @return $this
+     * @deprecated 100.1.1
      */
     public function _addAssociatedProductFilters()
     {
-        $this->getProductType()->getUsedProducts(
-            $this->getProduct(),
-            $this->getColumnValues('attribute_id') // Filter associated products
-        );
+        foreach ($this->products as $product) {
+            $this->getProductType()->getUsedProducts(
+                $product,
+                $this->getColumnValues('attribute_id') // Filter associated products
+            );
+        }
         return $this;
     }
 
@@ -237,8 +293,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $result = $this->getConnection()->fetchAll($select);
             foreach ($result as $data) {
-                $this->getItemById($data['product_super_attribute_id'])->setLabel($data['label']);
-                $this->getItemById($data['product_super_attribute_id'])->setUseDefault($data['use_default']);
+                $item = $this->getItemById($data['product_super_attribute_id']);
+                $item->setLabel($data['label']);
+                $item->setUseDefault($data['use_default']);
             }
         }
         return $this;
@@ -249,35 +306,31 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function loadOptions()
     {
-        $usedProducts = $this->getProductType()->getUsedProducts($this->getProduct());
-        if ($usedProducts) {
-            foreach ($this->_items as $item) {
-                $values = [];
+        /** @var ConfigurableResource $configurableResource */
+        $configurableResource = $this->getConfigurableResource();
+        /** @var Model $item */
+        foreach ($this->_items as $item) {
+            $values = [];
 
-                $productAttribute = $item->getProductAttribute();
-                if (!$productAttribute instanceof AbstractAttribute) {
-                    continue;
-                }
-                $itemId = $item->getId();
-                $options = $this->getIncludedOptions($usedProducts, $productAttribute);
-                foreach ($options as $option) {
-                    foreach ($usedProducts as $associatedProduct) {
-                        $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
-                        if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
-                                $values[$itemId . ':' . $option['value']] = [
-                                    'value_index' => $option['value'],
-                                    'label' => $option['label'],
-                                    'product_super_attribute_id' => $itemId,
-                                    'default_label' => $option['label'],
-                                    'store_label' => $option['label'],
-                                    'use_default_value' => true,
-                                ];
-                        }
-                    }
-                }
-                $values = array_values($values);
-                $item->setOptions($values);
+            $productAttribute = $item->getProductAttribute();
+
+            $itemId = $item->getId();
+            $options = $configurableResource->getAttributeOptions(
+                $productAttribute,
+                $item->getProductId()
+            );
+            foreach ($options as $option) {
+                $values[$itemId . ':' . $option['value_index']] = [
+                    'value_index' => $option['value_index'],
+                    'label' => $option['option_title'],
+                    'product_super_attribute_id' => $itemId,
+                    'default_label' => $option['default_title'],
+                    'store_label' => $option['default_title'],
+                    'use_default_value' => true
+                ];
             }
+            $values = array_values($values);
+            $item->setOptions($values);
         }
     }
 
@@ -299,17 +352,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Retrieve product instance
-     *
-     * @return \Magento\Catalog\Model\Product
-     */
-    private function getProduct()
-    {
-        return $this->_product;
-    }
-
-    /**
      * @inheritdoc
+     * @since 100.0.6
      */
     public function __sleep()
     {
@@ -321,12 +365,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 '_productTypeConfigurable',
                 '_storeManager',
                 'metadataPool',
+                'configurableResource',
             ]
         );
     }
 
     /**
      * @inheritdoc
+     * @since 100.0.6
      */
     public function __wakeup()
     {
@@ -336,10 +382,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_productTypeConfigurable = $objectManager->get(Configurable::class);
         $this->_catalogData = $objectManager->get(\Magento\Catalog\Helper\Data::class);
         $this->metadataPool = $objectManager->get(MetadataPool::class);
+        $this->configurableResource = $objectManager->get(ConfigurableResource::class);
     }
 
     /**
      * Get MetadataPool instance
+     *
+     * @deprecated 100.2.0
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -348,5 +397,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Get Configurable Resource
+     *
+     * @deprecated 100.1.1
+     * @return ConfigurableResource
+     */
+    private function getConfigurableResource()
+    {
+        if (!($this->configurableResource instanceof ConfigurableResource)) {
+            $this->configurableResource = ObjectManager::getInstance()->get(
+                ConfigurableResource::class
+            );
+        }
+        return $this->configurableResource;
     }
 }

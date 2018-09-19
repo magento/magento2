@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Code\Generator;
@@ -67,7 +67,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Get type processor
      *
      * @return \Magento\Framework\Reflection\TypeProcessor
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getTypeProcessor()
     {

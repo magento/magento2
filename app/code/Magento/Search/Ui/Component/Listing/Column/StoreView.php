@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Ui\Component\Listing\Column;
@@ -46,6 +46,7 @@ class StoreView extends Column
      *
      * @param array $dataSource
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -62,6 +63,7 @@ class StoreView extends Column
      *
      * @param array $item
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function prepareItem(array $item)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Locale;
@@ -10,7 +10,7 @@ use Magento\Framework\Locale\Resolver;
 /**
  * @magentoAppArea adminhtml
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface

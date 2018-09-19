@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -11,37 +12,47 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Catalog product Media Gallery attribute processor.
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class Processor
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 101.0.0
      */
     protected $fileStorageDb;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 101.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 101.0.0
      */
     protected $resourceModel;
 
@@ -68,6 +79,7 @@ class Processor
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     public function getAttribute()
     {
@@ -84,6 +96,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     public function validate($object)
     {
@@ -96,7 +109,9 @@ class Processor
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique.', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 
@@ -116,6 +131,7 @@ class Processor
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 101.0.0
      */
     public function addImage(
         \Magento\Catalog\Model\Product $product,
@@ -126,17 +142,19 @@ class Processor
     ) {
         $file = $this->mediaDirectory->getRelativePath($file);
         if (!$this->mediaDirectory->isFile($file)) {
-            throw new LocalizedException(__('The image does not exist.'));
+            throw new LocalizedException(__("The image doesn't exist."));
         }
 
         $pathinfo = pathinfo($file);
         $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new LocalizedException(__('Please correct the image file type.'));
+            throw new LocalizedException(
+                __('The image type for the file is invalid. Enter the correct image type and try again.')
+            );
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
@@ -157,7 +175,7 @@ class Processor
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
+            throw new LocalizedException(__('The "%1" file couldn\'t be moved.', $e->getMessage()));
         }
 
         $fileName = str_replace('\\', '/', $fileName);
@@ -179,6 +197,7 @@ class Processor
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
+            'media_type' => 'image',
             'label' => '',
             'disabled' => (int)$exclude,
         ];
@@ -199,6 +218,7 @@ class Processor
      * @param string $file
      * @param array $data
      * @return $this
+     * @since 101.0.0
      */
     public function updateImage(\Magento\Catalog\Model\Product $product, $file, $data)
     {
@@ -238,6 +258,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
      * @return $this
+     * @since 101.0.0
      */
     public function removeImage(\Magento\Catalog\Model\Product $product, $file)
     {
@@ -266,6 +287,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
      * @return array|boolean
+     * @since 101.0.0
      */
     public function getImage(\Magento\Catalog\Model\Product $product, $file)
     {
@@ -290,6 +312,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string|string[] $mediaAttribute
      * @return $this
+     * @since 101.0.0
      */
     public function clearMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute)
     {
@@ -298,11 +321,11 @@ class Processor
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $attribute) {
                 if (in_array($attribute, $mediaAttributeCodes)) {
-                    $product->setData($attribute, null);
+                    $product->setData($attribute, 'no_selection');
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
-            $product->setData($mediaAttribute, null);
+            $product->setData($mediaAttribute, 'no_selection');
         }
 
         return $this;
@@ -315,15 +338,16 @@ class Processor
      * @param string|string[] $mediaAttribute
      * @param string $value
      * @return $this
+     * @since 101.0.0
      */
     public function setMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute, $value)
     {
         $mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
 
         if (is_array($mediaAttribute)) {
-            foreach ($mediaAttribute as $atttribute) {
-                if (in_array($atttribute, $mediaAttributeCodes)) {
-                    $product->setData($atttribute, $value);
+            foreach ($mediaAttribute as $attribute) {
+                if (in_array($attribute, $mediaAttributeCodes)) {
+                    $product->setData($attribute, $value);
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
@@ -336,6 +360,7 @@ class Processor
     /**
      * get media attribute codes
      * @return array
+     * @since 101.0.0
      */
     public function getMediaAttributeCodes()
     {
@@ -345,6 +370,7 @@ class Processor
     /**
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     protected function getFilenameFromTmp($file)
     {
@@ -356,6 +382,7 @@ class Processor
      *
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     public function duplicateImageFromTmp($file)
     {
@@ -382,6 +409,7 @@ class Processor
      * @param string $file
      * @param bool $forTmp
      * @return string
+     * @since 101.0.0
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
@@ -407,6 +435,7 @@ class Processor
      * @param string $fileName
      * @param string $dispretionPath
      * @return string
+     * @since 101.0.0
      */
     protected function getNotDuplicatedFilename($fileName, $dispretionPath)
     {
@@ -437,6 +466,7 @@ class Processor
      *
      * @param  \Magento\Catalog\Model\Product $object
      * @return array
+     * @since 101.0.0
      */
     public function getAffectedFields($object)
     {
@@ -460,6 +490,7 @@ class Processor
      * Attribute value is not to be saved in a conventional way, separate table is used to store the complex value
      *
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function isScalar()
     {

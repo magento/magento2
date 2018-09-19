@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
 /**
  * Test for \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator
  */
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator
@@ -22,7 +22,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
-        $urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with('urn:magento:framework:Api/etc/extension_attributes.xsd')

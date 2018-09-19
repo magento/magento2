@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation;
 /**
  * Unit test for Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation
  */
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation
@@ -37,17 +37,14 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configurableMock = $this->getMock(
+        $this->configurableMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            ['getParentIdsByChild'],
-            [],
-            '',
-            false
+            ['getParentIdsByChild']
         );
 
-        $this->ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
-        $this->ruleConditionsMock = $this->getMock(\Magento\Rule\Model\Condition\Combine::class, [], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Framework\DataObject::class, ['getId']);
+        $this->ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
+        $this->ruleConditionsMock = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
+        $this->productMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId']);
 
         $this->validation = new Validation(
             $this->configurableMock
@@ -62,16 +59,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider dataProviderForValidateWithValidConfigurableProduct
      * @return void
      */
-    public function testAroundValidateWithValidConfigurableProduct(
+    public function testAfterValidateWithValidConfigurableProduct(
         $parentsIds,
         $validationResult,
         $runValidateAmount,
         $result
     ) {
-        $closureMock = function () {
-            return false;
-        };
-
         $this->productMock->expects($this->once())->method('getId')->willReturn('product_id');
         $this->configurableMock->expects($this->once())->method('getParentIdsByChild')->with('product_id')
             ->willReturn($parentsIds);
@@ -82,7 +75,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $result,
-            $this->validation->aroundValidate($this->ruleMock, $closureMock, $this->productMock)
+            $this->validation->afterValidate($this->ruleMock, false, $this->productMock)
         );
     }
 

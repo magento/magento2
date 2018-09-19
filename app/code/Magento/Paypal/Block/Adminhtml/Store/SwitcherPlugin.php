@@ -1,30 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Store;
 
+use Magento\Backend\Block\Store\Switcher as StoreSwitcherBlock;
+use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
+
+/**
+ * Plugin for \Magento\Backend\Block\Store\Switcher
+ */
 class SwitcherPlugin
 {
     /**
      * Remove country request param from url
      *
-     * @param \Magento\Backend\Block\Store\Switcher $subject
-     * @param \Closure $proceed
+     * @param StoreSwitcherBlock $subject
      * @param string $route
      * @param array $params
-     * @return string
+     * @return array
      */
-    public function aroundGetUrl(
-        \Magento\Backend\Block\Store\Switcher $subject,
-        \Closure $proceed,
-        $route = '',
-        $params = []
-    ) {
-        if ($subject->getRequest()->getParam(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY)) {
-            $params[\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY] = null;
+    public function beforeGetUrl(StoreSwitcherBlock $subject, $route = '', $params = [])
+    {
+        if ($subject->getRequest()->getParam(ConfigStructurePlugin::REQUEST_PARAM_COUNTRY)) {
+            $params[ConfigStructurePlugin::REQUEST_PARAM_COUNTRY] = null;
         }
-        return $proceed($route, $params);
+
+        return [$route, $params];
     }
 }

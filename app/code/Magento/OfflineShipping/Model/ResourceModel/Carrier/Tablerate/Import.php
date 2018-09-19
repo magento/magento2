@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,9 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowExcepti
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Import
 {
     /**
@@ -178,7 +181,9 @@ class Import
         // check and skip headers
         $headers = $file->readCsv();
         if ($headers === false || count($headers) < 5) {
-            throw new LocalizedException(__('Please correct Table Rates File Format.'));
+            throw new LocalizedException(
+                __('The Table Rates File Format is incorrect. Verify the format and try again.')
+            );
         }
         return $headers;
     }

@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Shipment;
 
 /**
  * Bundle Shipment Type Attribute Renderer
+ * @api
+ * @since 100.1.0
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getAllOptions()
     {
@@ -26,6 +29,7 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getOptionText($value)
     {

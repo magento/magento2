@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -182,14 +182,14 @@ class FieldsProvider
      * Retrieve connection to resource specified by $resourceName.
      *
      * @param string $resourceName
-     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface|\Zend_Exception
+     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function getConnection($resourceName)
     {
         try {
             $connection = $this->resource->getConnection($resourceName);
             return $connection;
-        } catch (\Zend_Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage() . PHP_EOL;
             return $e;
         }

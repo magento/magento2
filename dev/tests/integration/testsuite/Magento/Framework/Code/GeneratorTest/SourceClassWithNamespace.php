@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\GeneratorTest;
@@ -104,7 +104,40 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
     {
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
+     */
     final public function publicChildFinal()
+    {
+    }
+
+    /**
+     * @param mixed $arg1
+     * @param string $arg2
+     * @param int|null $arg3
+     * @param int|null $arg4
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71(
+        $arg1,
+        string $arg2,
+        ?int $arg3,
+        ?int $arg4 = null
+    ): void {
+    }
+
+    /**
+     * @param \DateTime|null $arg1
+     * @param mixed $arg2
+     *
+     * @return null|string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false): ?string
     {
     }
 }

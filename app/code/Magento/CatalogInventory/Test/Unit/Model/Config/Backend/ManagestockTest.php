@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
-class ManagestockTest extends \PHPUnit_Framework_TestCase
+class ManagestockTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject */
     protected $stockIndexerProcessor;

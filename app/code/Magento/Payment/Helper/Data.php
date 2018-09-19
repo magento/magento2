@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Helper;
 
-use Magento\Payment\Model\Method\Substitution;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
@@ -19,6 +18,9 @@ use Magento\Payment\Model\MethodInterface;
 /**
  * Payment module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -118,6 +120,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
+     * @deprecated 100.1.3
+     * @see \Magento\Payment\Api\PaymentMethodListInterface
      */
     public function getStoreMethods($store = null, $quote = null)
     {
@@ -147,15 +151,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         @uasort(
             $res,
             function (MethodInterface $a, MethodInterface $b) {
-                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
-                    return -1;
-                }
-
-                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
-                    return 1;
-                }
-
-                return 0;
+                return (int)$a->getConfigData('sort_order') <=> (int)$b->getConfigData('sort_order');
             }
         );
 
@@ -289,6 +285,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
+                    if (!isset($labelValues[$code]['value'])) {
+                        $labelValues[$code]['value'] = null;
+                    }
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
                     $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];

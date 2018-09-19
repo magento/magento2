@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
 
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Edit
  *
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Integration\Edit
@@ -118,6 +118,5 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $baseUrl = Bootstrap::getObjectManager()->get(\Magento\Framework\Url::class)->getBaseUrl();
         $this->assertContains($baseUrl, $this->editBlock->getFormActionUrl());
-
     }
 }

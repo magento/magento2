@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,10 @@ class Module implements
                 $headers->addHeaderLine('Expires', '1970-01-01');
                 $headers->addHeaderLine('X-Frame-Options: SAMEORIGIN');
                 $headers->addHeaderLine('X-Content-Type-Options: nosniff');
-                $xssHeaderValue = strpos($_SERVER['HTTP_USER_AGENT'], XssProtection::IE_8_USER_AGENT) === false
+                /** @var \Zend\Http\Header\UserAgent $userAgentHeader */
+                $userAgentHeader = $e->getRequest()->getHeader('User-Agent');
+                $xssHeaderValue = $userAgentHeader && $userAgentHeader->getFieldValue()
+                    && strpos($userAgentHeader->getFieldValue(), XssProtection::IE_8_USER_AGENT) === false
                     ? XssProtection::HEADER_ENABLED : XssProtection::HEADER_DISABLED;
                 $headers->addHeaderLine('X-XSS-Protection: ' . $xssHeaderValue);
             }

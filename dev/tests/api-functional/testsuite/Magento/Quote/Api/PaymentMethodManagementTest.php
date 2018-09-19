@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -122,7 +122,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {

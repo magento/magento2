@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Api;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -215,24 +219,47 @@ class PageRepositoryTest extends WebapiAbstract
     {
         $cmsPages = $this->prepareCmsPages();
 
-        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
-        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        $filterIdentifier = $filterBuilder
+            ->create(SearchCriteriaBuilder::class);
+
+        $filter1 = $filterBuilder
             ->setField(PageInterface::IDENTIFIER)
             ->setValue($cmsPages['first']->getIdentifier())
             ->create();
-        $searchCriteriaBuilder->addFilters([$filterIdentifier]);
-        $filterTitle = $filterBuilder
+        $filter2 = $filterBuilder
+            ->setField(PageInterface::IDENTIFIER)
+            ->setValue($cmsPages['third']->getIdentifier())
+            ->create();
+
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+
+        $filter3 = $filterBuilder
             ->setField(PageInterface::TITLE)
             ->setValue($cmsPages['second']->getTitle())
             ->create();
-        $filterStatus = $filterBuilder
+        $filter4 = $filterBuilder
             ->setField(PageInterface::IS_ACTIVE)
-            ->setValue($cmsPages['first']->isActive())
+            ->setValue(true)
             ->create();
-        $searchCriteriaBuilder->addFilters([$filterTitle, $filterStatus]);
+
+        $searchCriteriaBuilder->addFilters([$filter3, $filter4]);
+
+        /** @var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField(PageInterface::IDENTIFIER)
+            ->setDirection(SortOrder::SORT_ASC)
+            ->create();
+
+        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+
+        $searchCriteriaBuilder->setPageSize(1);
+        $searchCriteriaBuilder->setCurrentPage(2);
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -249,8 +276,24 @@ class PageRepositoryTest extends WebapiAbstract
         ];
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResult['total_count']);
-        $this->assertEquals($searchResult['items'][0][PageInterface::IDENTIFIER], $cmsPages['first']->getIdentifier());
+        $this->assertEquals(2, $searchResult['total_count']);
+        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertEquals(
+            $searchResult['items'][0][PageInterface::IDENTIFIER],
+            $cmsPages['third']->getIdentifier()
+        );
+    }
+
+    /**
+     * Create page with the same identifier after one was removed.
+     */
+    public function testCreateSamePage()
+    {
+        $pageIdentifier = 'page-' . uniqid();
+
+        $pageId = $this->createPageWithIdentifier($pageIdentifier);
+        $this->deletePageByIdentifier($pageId);
+        $this->createPageWithIdentifier($pageIdentifier);
     }
 
     /**
@@ -259,12 +302,18 @@ class PageRepositoryTest extends WebapiAbstract
     private function prepareCmsPages()
     {
         $result = [];
+
         $pagesData['first'][PageInterface::TITLE] = 'Page title 1';
         $pagesData['first'][PageInterface::IDENTIFIER] = 'page-title-1' . uniqid();
         $pagesData['first'][PageInterface::IS_ACTIVE] = true;
+
         $pagesData['second'][PageInterface::TITLE] = 'Page title 2';
         $pagesData['second'][PageInterface::IDENTIFIER] = 'page-title-2' . uniqid();
         $pagesData['second'][PageInterface::IS_ACTIVE] = false;
+
+        $pagesData['third'][PageInterface::TITLE] = 'Page title 3';
+        $pagesData['third'][PageInterface::IDENTIFIER] = 'page-title-3' . uniqid();
+        $pagesData['third'][PageInterface::IS_ACTIVE] = true;
 
         foreach ($pagesData as $key => $pageData) {
             /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
@@ -278,5 +327,56 @@ class PageRepositoryTest extends WebapiAbstract
         }
 
         return $result;
+    }
+
+    /**
+     * Create page with hard-coded identifier to test with create-delete-create flow.
+     * @param string $identifier
+     * @return string
+     */
+    private function createPageWithIdentifier($identifier)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = ['page' =>
+            [
+                PageInterface::IDENTIFIER => $identifier,
+                PageInterface::TITLE => 'Page title',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        return $result['id'];
+    }
+
+    /**
+     * Remove page with hard-coded-identifier
+     * @param string $pageId
+     * @return void
+     */
+    private function deletePageByIdentifier($pageId)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $pageId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'DeleteById',
+            ],
+        ];
+
+        $this->_webApiCall($serviceInfo, [PageInterface::PAGE_ID => $pageId]);
     }
 }

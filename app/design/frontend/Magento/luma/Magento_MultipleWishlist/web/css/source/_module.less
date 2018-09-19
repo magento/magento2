@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,6 +40,16 @@
             .items {
                 padding: 6px 0;
                 text-align: left;
+                .item {
+                    > span {
+                        display: block;
+                        padding: 5px 5px 5px 23px;
+                    }
+
+                }
+                li {
+                    padding: 0;
+                }
             }
 
             > .action {
@@ -213,7 +223,7 @@
                 &-select {
                     margin-right: @indent__base;
                 }
-                
+
                 .copy {
                     .dropdown {
                         right: 0;

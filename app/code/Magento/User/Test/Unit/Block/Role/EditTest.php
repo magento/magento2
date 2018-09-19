@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\User\Test\Unit\Block\Role;
  * Class EditTest to cover Magento\User\Block\Role\Edit
  *
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Block\Role\Edit|\PHPUnit_Framework_MockObject_MockObject */
     protected $model;

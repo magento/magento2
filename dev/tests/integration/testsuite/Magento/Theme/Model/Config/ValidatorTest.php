@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Config;
 
 use Magento\Email\Model\Template;
@@ -10,9 +11,9 @@ use Magento\Email\Model\Template;
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
-    const TEMPLATE_CODE = 'fixture';
+    const TEMPLATE_CODE = 'email_exception_fixture';
 
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
@@ -44,7 +45,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->templateModel = $objectManager->create(\Magento\Email\Model\Template::class);
         $this->templateModel->load(self::TEMPLATE_CODE, 'template_code');
-
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
         $this->model = $objectManager->create(
             \Magento\Theme\Model\Design\Config\Validator::class,
             [ 'templateFactory' => $this->templateFactoryMock ]
@@ -54,13 +57,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a
      */
     public function testValidateHasRecursiveReference()
     {
-        $this->templateFactoryMock->expects($this->once())
-            ->method("create")
-            ->willReturn($this->templateModel);
+        if (!$this->templateModel->getId()) {
+            $this->fail('Cannot load Template model');
+        }
 
         $fieldConfig = [
             'path' => 'design/email/header_template',
@@ -90,9 +92,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$designElementMock]);
         $designElementMock->expects($this->any())->method('getFieldConfig')->willReturn($fieldConfig);
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
-        $designElementMock->expects($this->once())->method('getValue')->willReturn(1);
+        $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
+
+        $this->expectExceptionMessage(
+            'The "email_header_template" template contains an incorrect configuration, with a reference to itself. '
+            . 'Remove or change the reference, then try again.'
+        );
     }
 
     /**
@@ -132,7 +139,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$designElementMock]);
         $designElementMock->expects($this->any())->method('getFieldConfig')->willReturn($fieldConfig);
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
-        $designElementMock->expects($this->once())->method('getValue')->willReturn(1);
+        $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
     }

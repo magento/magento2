@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,6 +23,3 @@ if ($store->getId()) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-/* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();

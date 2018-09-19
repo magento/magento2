@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
 use Magento\CatalogSearch\Model\Layer\Search\StateKey;
 
-class StateKeyTest extends \PHPUnit_Framework_TestCase
+class StateKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -32,15 +32,9 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->queryFactoryMock = $this->getMock(
-            \Magento\Search\Model\QueryFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->queryFactoryMock = $this->createMock(\Magento\Search\Model\QueryFactory::class);
 
         $this->model = new StateKey($this->storeManagerMock, $this->customerSessionMock, $this->queryFactoryMock);
     }
@@ -51,16 +45,16 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
+        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue('2'));
 
         $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('3'));
 
-        $queryMock = $this->getMock(\Magento\Search\Model\Query::class, ['getId'], [], '', false);
+        $queryMock = $this->createPartialMock(\Magento\Search\Model\Query::class, ['getId']);
         $queryMock->expects($this->once())->method('getId')->will($this->returnValue('4'));
         $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
 

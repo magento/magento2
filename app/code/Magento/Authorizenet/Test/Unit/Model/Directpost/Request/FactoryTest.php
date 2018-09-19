@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Directpost\Request;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Request\Factory
@@ -28,9 +28,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMock(\Magento\Authorizenet\Model\Directpost\Request::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Authorizenet\Model\Directpost\Request::class);
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Authorizenet\Model\Directpost\Request::class, [])

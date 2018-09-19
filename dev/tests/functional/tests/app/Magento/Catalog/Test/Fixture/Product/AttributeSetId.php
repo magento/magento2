@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class AttributeSetId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataset'])) {
+        if (isset($data['dataset']) && $data['dataset'] !== 'Default') {
             /** @var CatalogAttributeSet $attributeSet */
             $attributeSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataset' => $data['dataset']]);
             if (!$attributeSet->hasData('attribute_set_id')) {

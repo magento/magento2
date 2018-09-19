@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\App\Action;
 
-class ContextPluginTest extends \PHPUnit_Framework_TestCase
+class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -111,9 +111,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider beforeDispatchDataProvider
      */
-    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
+    public function testBeforeDispatch($cache, $taxEnabled, $loggedIn)
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -159,19 +159,18 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             }
 
             $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-            $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-            $expectedResult = 'expectedResult';
-            $proceed = function ($request) use ($expectedResult) {
-                return $expectedResult;
-            };
-            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+            $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+            $result = $this->contextPlugin->beforeDispatch($action, $request);
+            $this->assertNull($result);
+        } else {
+            $this->assertFalse($loggedIn);
         }
     }
 
     /**
      * @return array
      */
-    public function dataProviderAroundDispatch()
+    public function beforeDispatchDataProvider()
     {
         return [
             [false, false, false],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@
     <div class="order-history-block">
         <div class="admin__field field-row">
             <label class="admin__field-label"
-                   for="history_comment"><?php /* @escapeNotVerified */ echo __('Comment Text') ?></label>
+                   for="history_comment"><?= /* @escapeNotVerified */ __('Comment Text') ?></label>
             <div class="admin__field-control">
                 <textarea name="comment[comment]"
                           class="admin__control-textarea"
@@ -31,7 +31,7 @@
                                id="history_notify"
                                value="1" />
                         <label class="admin__field-label"
-                               for="history_notify"><?php /* @escapeNotVerified */ echo __('Notify Customer by Email') ?></label>
+                               for="history_notify"><?= /* @escapeNotVerified */ __('Notify Customer by Email') ?></label>
                     </div>
                 <?php endif; ?>
                 <div class="admin__field admin__field-option">
@@ -41,11 +41,11 @@
                            class="admin__control-checkbox"
                            value="1" />
                     <label class="admin__field-label"
-                           for="history_visible"> <?php /* @escapeNotVerified */ echo __('Visible on Storefront') ?></label>
+                           for="history_visible"> <?= /* @escapeNotVerified */ __('Visible on Storefront') ?></label>
                 </div>
             </div>
             <div class="order-history-comments-actions">
-                <?php echo $block->getChildHtml('submit_button') ?>
+                <?= $block->getChildHtml('submit_button') ?>
             </div>
         </div>
     </div>
@@ -53,17 +53,17 @@
     <ul class="note-list">
         <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
             <li>
-                <span class="note-list-date"><?php /* @noEscape */ echo $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-                <span class="note-list-time"><?php /* @noEscape */ echo $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+                <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+                <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
                 <span class="note-list-customer">
-                    <?php /* @escapeNotVerified */ echo __('Customer') ?>
+                    <?= /* @escapeNotVerified */ __('Customer') ?>
                     <?php if ($_comment->getIsCustomerNotified()): ?>
-                        <span class="note-list-customer-notified"><?php /* @escapeNotVerified */ echo __('Notified') ?></span>
+                        <span class="note-list-customer-notified"><?= /* @escapeNotVerified */ __('Notified') ?></span>
                     <?php else: ?>
-                        <span class="note-list-customer-not-notified"><?php /* @escapeNotVerified */ echo __('Not Notified') ?></span>
+                        <span class="note-list-customer-not-notified"><?= /* @escapeNotVerified */ __('Not Notified') ?></span>
                     <?php endif; ?>
                 </span>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment"><?= $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -72,7 +72,7 @@
 require(['prototype'], function(){
 
 submitComment = function() {
-    submitAndReloadArea($('comments_block').parentNode, '<?php /* @escapeNotVerified */ echo $block->getSubmitUrl() ?>')
+    submitAndReloadArea($('comments_block').parentNode, '<?= /* @escapeNotVerified */ $block->getSubmitUrl() ?>')
 }
 
 if ($('submit_comment_button')) {

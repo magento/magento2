@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(function (require) {
@@ -37,6 +37,7 @@ define(function (require) {
         bindHtml:       require('./bind-html'),
         tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
-        fastForEach:    require('knockoutjs/knockout-fast-foreach')
+        fastForEach:    require('knockoutjs/knockout-fast-foreach'),
+        colorPicker:    require('./color-picker')
     };
 });

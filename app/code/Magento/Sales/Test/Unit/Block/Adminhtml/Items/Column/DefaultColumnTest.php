@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items\Column;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DefaultColumnTest extends \PHPUnit_Framework_TestCase
+class DefaultColumnTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;

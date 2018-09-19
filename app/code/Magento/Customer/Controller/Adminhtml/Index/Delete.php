@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Customer\Controller\Adminhtml\Index
+class Delete extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * Delete customer action

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
@@ -57,7 +57,7 @@ abstract class Email extends \Magento\Backend\App\Action
             \Magento\Sales\Api\InvoiceManagementInterface::class
         )->notify($invoice->getEntityId());
 
-        $this->messageManager->addSuccess(__('You sent the message.'));
+        $this->messageManager->addSuccessMessage(__('You sent the message.'));
         return $this->resultRedirectFactory->create()->setPath(
             'sales/invoice/view',
             ['order_id' => $invoice->getOrder()->getId(), 'invoice_id' => $invoiceId]

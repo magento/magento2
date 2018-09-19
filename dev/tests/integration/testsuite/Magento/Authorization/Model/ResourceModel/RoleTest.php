@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model\ResourceModel;
@@ -10,7 +10,7 @@ namespace Magento\Authorization\Model\ResourceModel;
  *
  * @magentoAppArea adminhtml
  */
-class RoleTest extends \PHPUnit_Framework_TestCase
+class RoleTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRoleUsers()
     {

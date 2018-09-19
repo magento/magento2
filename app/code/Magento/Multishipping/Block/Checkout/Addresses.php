@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -10,6 +10,9 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 /**
  * Class Addresses
  * Multishipping checkout choose item addresses block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {

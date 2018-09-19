@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -200,7 +200,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue($params);
         $this->dispatch('backend/admin/auth/login');
         $this->assertSessionMessages(
-            $this->equalTo(['You did not sign in correctly or your account is temporarily disabled.']),
+            $this->equalTo(
+                [
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                ]
+            ),
             MessageInterface::TYPE_ERROR
         );
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

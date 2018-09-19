@@ -2,7 +2,7 @@
 /**
  * Test VS backwards-incompatible changes in widget.xml
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 namespace Magento\Test\Legacy\Magento\Widget;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     public function testClassFactoryNames()
     {

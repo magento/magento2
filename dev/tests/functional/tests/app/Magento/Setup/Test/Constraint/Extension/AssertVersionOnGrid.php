@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertVersionOnGrid extends AbstractConstraint
     /*#@-*/
 
     /**
-     * Assert that that version of extension is correct.
+     * Assert that version of extension is correct.
      *
      * @param Grid $grid
      * @param Extension $extension
@@ -45,7 +45,7 @@ class AssertVersionOnGrid extends AbstractConstraint
                 $version = '';
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $grid->getVersion($extension) === $version,
             'Version of extension is not correct.'
         );

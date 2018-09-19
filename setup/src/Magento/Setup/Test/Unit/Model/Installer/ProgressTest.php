@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model\Installer;
 
 use \Magento\Setup\Model\Installer\Progress;
 
-class ProgressTest extends \PHPUnit_Framework_TestCase
+class ProgressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param int $total

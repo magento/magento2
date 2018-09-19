@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
+class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter|\PHPUnit_Framework_MockObject_MockObject

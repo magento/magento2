@@ -1,18 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
+use Magento\Framework\DataObject;
 
 /**
  * Grid widget massaction block
  *
+ * @api
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
@@ -54,7 +58,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeHtml(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -73,26 +77,40 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *      'complete' => string, // Only for ajax enabled grid (optional)
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
-     *      'additional' => string // (optional)
+     *      'additional' => string, // (optional)
+     *      'visible' => object // instance of VisibilityCheckerInterface (optional)
      * );
      *
      * @param string $itemId
-     * @param array|\Magento\Framework\DataObject $item
+     * @param array|DataObject $item
      * @return $this
      */
     public function addItem($itemId, $item)
     {
         if (is_array($item)) {
-            $item = new \Magento\Framework\DataObject($item);
+            $item = new DataObject($item);
         }
 
-        if ($item instanceof \Magento\Framework\DataObject) {
+        if ($item instanceof DataObject && $this->isVisible($item)) {
             $item->setId($itemId);
             $item->setUrl($this->getUrl($item->getUrl()));
             $this->_items[$itemId] = $item;
         }
 
         return $this;
+    }
+
+    /**
+     * Check that item can be added to list
+     *
+     * @param DataObject $item
+     * @return bool
+     */
+    private function isVisible(DataObject $item)
+    {
+        /** @var VisibilityChecker $checker */
+        $checker = $item->getData('visible');
+        return (!$checker instanceof VisibilityChecker) || $checker->isVisible();
     }
 
     /**
@@ -205,9 +223,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
-        } else {
-            return '';
         }
+        return '';
     }
 
     /**
@@ -220,9 +237,8 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
-        } else {
-            return [];
         }
+        return [];
     }
 
     /**
@@ -259,11 +275,16 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         if (!$this->getUseSelectAll()) {
             return '';
         }
-
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
 
+        if ($this->getMassactionIdField()) {
+            $massActionIdField = $this->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+        }
+
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
         if (!empty($gridIds)) {
             return join(",", $gridIds);
         }

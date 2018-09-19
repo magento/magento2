@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,6 +12,7 @@
 
 @product-info-price: @color-gray34;
 @product-h1-margin-bottom-desktop: @indent__s + @indent__xs;
+@product-price__muted__color: @color-gray40;
 
 //
 //  Common
@@ -22,7 +23,7 @@
     //  Category view
     .old-price,
     .old.price {
-        .lib-css(color, @text__color__muted);
+        .lib-css(color, @product-price__muted__color);
     }
 
     .prices-tier {
@@ -335,6 +336,11 @@
                 .lib-css(margin-top, @indent__xs);
             }
         }
+        .field {
+            .note.mage-error {
+                color: @error__color;
+            }
+        }
     }
 
     .product-options-bottom .price-box,
@@ -565,6 +571,16 @@
             }
         }
     }
+
+    //
+    //  Category page 1 column layout
+    //  ---------------------------------------------
+
+    .catalog-category-view.page-layout-1column {
+        .column.main {
+            min-height: inherit;
+        }
+    }
 }
 
 //
@@ -731,6 +747,16 @@
             }
         }
     }
+
+    //
+    //  Category page 1 column layout
+    //  ---------------------------------------------
+
+    .catalog-category-view.page-layout-1column {
+        .column.main {
+            min-height: inherit;
+        }
+    }
 }
 
 //
@@ -778,7 +804,7 @@
         clear: both;
         max-width: 100%;
         overflow-x: auto;
-        position: relative; // Needed for Safari(iOS) to properly render "overflow-x" rule.
+        position: relative; // Needed for Safari(iOS) to properly render 'overflow-x' rule.
 
         .table-comparison > tbody > tr {
             > th,
@@ -1013,7 +1039,7 @@
             left: 0;
             position: absolute;
             top: 2px;
-    
+
             .label {
                 &:extend(.abs-visually-hidden all);
             }

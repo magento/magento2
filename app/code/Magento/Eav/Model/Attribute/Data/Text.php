@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
@@ -61,7 +62,6 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -69,6 +69,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         }
 
         if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -76,17 +77,9 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return true;
         }
 
-        // validate length
-        $length = $this->_string->strlen(trim($value));
-
-        $validateRules = $attribute->getValidateRules();
-        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
-            $v = $validateRules['min_text_length'];
-            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
-        }
-        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
-            $v = $validateRules['max_text_length'];
-            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+        $result = $this->validateLength($attribute, $value);
+        if (count($result) !== 0) {
+            $errors = array_merge($errors, $result);
         }
 
         $result = $this->_validateInputRule($value);
@@ -127,7 +120,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array
@@ -139,5 +132,34 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         $value = $this->_applyOutputFilter($value);
 
         return $value;
+    }
+
+    /**
+     * Validates value length by attribute rules
+     *
+     * @param \Magento\Eav\Model\Attribute $attribute
+     * @param string $value
+     * @return array errors
+     */
+    private function validateLength(\Magento\Eav\Model\Attribute $attribute, $value): array
+    {
+        $errors = [];
+        $length = $this->_string->strlen(trim($value));
+        $validateRules = $attribute->getValidateRules();
+
+        if (!empty($validateRules['input_validation'])) {
+            if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['min_text_length'];
+                $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
+            }
+            if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['max_text_length'];
+                $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+            }
+        }
+
+        return $errors;
     }
 }

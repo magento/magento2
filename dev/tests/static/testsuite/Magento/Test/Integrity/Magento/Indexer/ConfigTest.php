@@ -5,7 +5,7 @@
  * Find "indexer.xml" files in code tree and validate them.  Also verify schema fails on an invalid xml and
  * passes on a valid xml.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Indexer;
@@ -78,7 +78,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     protected function _getFileXsd()
     {
         return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
-
     }
 
     /**

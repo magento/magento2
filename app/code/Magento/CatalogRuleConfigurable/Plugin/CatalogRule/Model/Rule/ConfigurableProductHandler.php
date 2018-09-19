@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
@@ -14,10 +14,14 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProduct
  */
 class ConfigurableProductHandler
 {
-    /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     */
     private $configurable;
 
-    /** @var ConfigurableProductsProvider */
+    /**
+     * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
+     */
     private $configurableProductsProvider;
 
     /**

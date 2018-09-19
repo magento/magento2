@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack;
@@ -71,7 +71,8 @@ class Generator
         $locale = $this->factory->createLocale($locale);
         $dictionary = $this->dictionaryLoader->load($dictionaryPath);
 
-        if (!count($dictionary->getPhrases())) {
+        $phrases = $dictionary->getPhrases();
+        if (!is_array($phrases) || !count($phrases)) {
             throw new \UnexpectedValueException('No phrases have been found by the specified path.');
         }
 

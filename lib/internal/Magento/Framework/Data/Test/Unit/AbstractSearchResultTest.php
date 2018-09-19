@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit;
@@ -10,7 +10,7 @@ use \Magento\Framework\Data\AbstractSearchResult;
 /**
  * Class AbstractSearchResultTest
  */
-class AbstractSearchResultTest extends \PHPUnit_Framework_TestCase
+class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractSearchResult

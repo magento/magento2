@@ -1,87 +1,93 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Model\Customer\NotificationStorage;
 
-/**
- * Class NotificationStorageTest
- *
- * Test for class \Magento\Customer\Model\Customer\NotificationStorage
- */
-class NotificationStorageTest extends \PHPUnit_Framework_TestCase
+class NotificationStorageTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotificationStorage
      */
-    protected $model;
+    private $notificationStorage;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cache;
+    private $cacheMock;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
+    private $serializerMock;
+
     protected function setUp()
     {
-        $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
-            ->getMockForAbstractClass();
-        $this->model = new NotificationStorage($this->cache);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->notificationStorage = $objectManager->getObject(
+            NotificationStorage::class,
+            ['cache' => $this->cacheMock]
+        );
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'serializer', $this->serializerMock);
     }
 
     public function testAdd()
     {
         $customerId = 1;
         $notificationType = 'some_type';
-        $this->cache->expects($this->once())
+        $data = [
+            'customer_id' => $customerId,
+            'notification_type' => $notificationType
+        ];
+        $serializedData = 'serialized data';
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($data)
+            ->willReturn($serializedData);
+        $this->cacheMock->expects($this->once())
             ->method('save')
             ->with(
-                serialize([
-                    'customer_id' => $customerId,
-                    'notification_type' => $notificationType
-                ]),
+                $serializedData,
                 $this->getCacheKey($notificationType, $customerId)
             );
-        $this->model->add($notificationType, $customerId);
+        $this->notificationStorage->add($notificationType, $customerId);
     }
 
     public function testIsExists()
     {
         $customerId = 1;
         $notificationType = 'some_type';
-        $this->cache->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('test')
             ->with($this->getCacheKey($notificationType, $customerId))
             ->willReturn(true);
-        $this->assertTrue($this->model->isExists($notificationType, $customerId));
+        $this->assertTrue($this->notificationStorage->isExists($notificationType, $customerId));
     }
 
     public function testRemove()
     {
         $customerId = 1;
         $notificationType = 'some_type';
-        $this->cache->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('remove')
             ->with($this->getCacheKey($notificationType, $customerId));
-        $this->model->remove($notificationType, $customerId);
+        $this->notificationStorage->remove($notificationType, $customerId);
     }
 
     /**
-     * Retrieve cache key
+     * Get cache key
      *
      * @param string $notificationType
      * @param string $customerId
      * @return string
      */
-    protected function getCacheKey($notificationType, $customerId)
+    private function getCacheKey($notificationType, $customerId)
     {
         return 'notification_' . $notificationType . '_' . $customerId;
     }

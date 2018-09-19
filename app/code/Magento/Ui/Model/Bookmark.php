@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model;
@@ -23,8 +23,14 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
 {
     /**
      * @var DecoderInterface
+     * @deprecated
      */
     protected $jsonDecoder;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param Context $context
@@ -35,6 +41,8 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * @param Collection $resourceCollection
      * @param DecoderInterface $jsonDecoder
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Context $context,
@@ -44,9 +52,12 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
         ResourceBookmark $resource,
         Collection $resourceCollection,
         DecoderInterface $jsonDecoder,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->jsonDecoder = $jsonDecoder;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -127,7 +138,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
     {
         $config = $this->getData(self::CONFIG);
         if ($config) {
-            return $this->jsonDecoder->decode($config);
+            return $this->serializer->unserialize($config);
         }
         return [];
     }

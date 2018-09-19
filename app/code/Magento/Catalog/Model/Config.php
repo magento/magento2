@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model;
+
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -132,6 +132,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param SerializerInterface $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -147,7 +148,8 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        SerializerInterface $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_configFactory = $configFactory;
@@ -157,7 +159,14 @@ class Config extends \Magento\Eav\Model\Config
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
 
-        parent::__construct($cache, $entityTypeFactory, $entityTypeCollectionFactory, $cacheState, $universalFactory);
+        parent::__construct(
+            $cache,
+            $entityTypeFactory,
+            $entityTypeCollectionFactory,
+            $cacheState,
+            $universalFactory,
+            $serializer
+        );
     }
 
     /**
@@ -372,7 +381,7 @@ class Config extends \Magento\Eav\Model\Config
 
         $this->loadProductTypes();
 
-        return isset($this->_productTypesById[$id]) ? $this->_productTypesById[$id] : false;
+        return $this->_productTypesById[$id] ?? false;
     }
 
     /**
@@ -397,7 +406,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getProductAttributes()
     {
-        if (is_null($this->_productAttributes)) {
+        if ($this->_productAttributes === null) {
             $this->_productAttributes = array_keys($this->getAttributesUsedInProductListing());
         }
         return $this->_productAttributes;
@@ -420,7 +429,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getAttributesUsedInProductListing()
     {
-        if (is_null($this->_usedInProductListing)) {
+        if ($this->_usedInProductListing === null) {
             $this->_usedInProductListing = [];
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->setStoreId($this->getStoreId())->getAttributesUsedInListing();
@@ -443,7 +452,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getAttributesUsedForSortBy()
     {
-        if (is_null($this->_usedForSortBy)) {
+        if ($this->_usedForSortBy === null) {
             $this->_usedForSortBy = [];
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->getAttributesUsedForSortBy();
@@ -481,6 +490,10 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getProductListDefaultSortBy($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_LIST_DEFAULT_SORT_BY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_LIST_DEFAULT_SORT_BY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
@@ -41,7 +41,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This sitemap no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This sitemap no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }

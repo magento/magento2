@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -86,7 +86,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      */
     protected function getCacheLifetime()
     {
-        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : self::DEFAULT_LIFETIME;
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : null;
     }
     
     /**

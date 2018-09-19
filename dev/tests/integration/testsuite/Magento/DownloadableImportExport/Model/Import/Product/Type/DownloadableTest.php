@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
 
 /**
  * @magentoAppArea adminhtml
  */
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Downloadable product test Name

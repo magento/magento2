@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@ namespace Magento\Reports\Block\Adminhtml;
 /**
  * Backend report grid block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
@@ -125,8 +127,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                  * Validate from and to date
                  */
                 try {
-                    $from = $this->_localeDate->scopeDate(null, $this->getFilter('report_from'), false);
-                    $to = $this->_localeDate->scopeDate(null, $this->getFilter('report_to'), false);
+                    $from = $this->_localeDate->date($this->getFilter('report_from'), null, false, false);
+                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, false, false);
 
                     $collection->setInterval($from, $to);
                 } catch (\Exception $e) {
@@ -213,8 +215,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return visibility of store switcher
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -225,8 +227,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return store switcher html
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getStoreSwitcherHtml()
@@ -248,8 +250,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return visibility of date filter
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -260,8 +262,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return date filter html
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getDateFilterHtml()
@@ -291,8 +293,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return refresh button html
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getRefreshButtonHtml()
@@ -344,8 +346,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return sub-report rows count
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @return int
      */
     public function getSubReportSize()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,6 +33,13 @@ class SynonymGroupGrid extends DataGrid
         'scope_id' => [
             'selector' => '[name="scope_id"]',
             'input' => 'simplifiedselect'
+        ],
+        'group_id' => [
+            'selector' => '[name="group_id"]',
+        ],
+        'website_id' => [
+            'selector' => '[name="website_id"]',
+            'input' => 'select',
         ],
     ];
 

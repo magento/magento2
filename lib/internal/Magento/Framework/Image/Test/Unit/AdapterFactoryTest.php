@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Test\Unit;
 
 use \Magento\Framework\Image\AdapterFactory;
 
-class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
+class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Image\Adapter\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -16,12 +16,9 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(
+        $this->configMock = $this->createPartialMock(
             \Magento\Framework\Image\Adapter\ConfigInterface::class,
-            ['getAdapterAlias', 'getAdapters'],
-            [],
-            '',
-            false
+            ['getAdapterAlias', 'getAdapters']
         );
 
         $this->configMock->expects(
@@ -47,14 +44,9 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($alias, $class)
     {
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $imageAdapterMock = $this->getMock($class, ['checkDependencies'], [], '', false);
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
+        $imageAdapterMock = $this->createPartialMock($class, ['checkDependencies']);
         $imageAdapterMock->expects($this->once())->method('checkDependencies');
 
         $objectManagerMock->expects(
@@ -94,14 +86,9 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue($adapterAlias));
 
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $imageAdapterMock = $this->getMock($adapterClass, ['checkDependencies'], [], '', false);
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
+        $imageAdapterMock = $this->createPartialMock($adapterClass, ['checkDependencies']);
         $imageAdapterMock->expects($this->once())->method('checkDependencies');
 
         $objectManagerMock->expects(
@@ -127,13 +114,8 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInvalidArgumentException()
     {
         $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue(''));
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
         $adapterFactory->create();
     }
@@ -146,13 +128,8 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     public function testNonAdapterClass()
     {
         $alias = 'test';
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
         $adapterFactory->create($alias);
@@ -167,14 +144,9 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $alias = 'wrongInstance';
         $class = 'stdClass';
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $imageAdapterMock = $this->getMock($class, ['checkDependencies']);
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
+        $imageAdapterMock = $this->createPartialMock($class, ['checkDependencies']);
 
         $objectManagerMock->expects(
             $this->once()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Translation\Test\Unit\Model;
 
 use Magento\Translation\Model\FileManager;
 
-class FileManagerTest extends \PHPUnit_Framework_TestCase
+class FileManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Translation\Model\FileManager|\PHPUnit_Framework_MockObject_MockObject
@@ -33,15 +33,9 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->assetRepoMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->directoryListMock = $this->getMock(
-            \Magento\Framework\App\Filesystem\DirectoryList::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->driverFileMock = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
+        $this->assetRepoMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $this->driverFileMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
 
         $this->model = $objectManager->getObject(
             \Magento\Translation\Model\FileManager::class,
@@ -57,7 +51,7 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'relative path';
         $expectedPath = $path . '/' . FileManager::TRANSLATION_CONFIG_FILE_NAME;
-        $fileMock = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $fileMock = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $contextMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Asset\ContextInterface::class,
             [],
@@ -80,7 +74,6 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTranslationFileTimestamp()
     {
-
         $path = 'path';
         $contextMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Asset\ContextInterface::class,
@@ -121,6 +114,5 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($contextMock);
         $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
         $this->assertEquals($path, $this->model->getTranslationFilePath());
-
     }
 }

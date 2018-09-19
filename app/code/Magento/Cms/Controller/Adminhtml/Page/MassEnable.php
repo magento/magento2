@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
@@ -15,6 +15,13 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
  */
 class MassEnable extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
     /**
      * @var Filter
      */
@@ -52,7 +59,9 @@ class MassEnable extends \Magento\Backend\App\Action
             $item->save();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been enabled.', $collection->getSize()));
+        $this->messageManager->addSuccessMessage(
+            __('A total of %1 record(s) have been enabled.', $collection->getSize())
+        );
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

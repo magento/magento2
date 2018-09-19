@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -141,19 +141,17 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
                     ->getMetadata(ProductInterface::class)
                     ->getLinkField();
 
-                $select = $this->getConnection()->select()->from(
-                    $attribute->getEntity()->getEntityTable(),
-                    $linkField
-                )->where(
-                    'attribute_set_id = ?',
-                    $result['attribute_set_id']
-                );
+                $backendLinkField = $attribute->getBackend()->getEntityIdField();
 
-                $clearCondition = [
-                    'attribute_id =?' => $attribute->getId(),
-                    $linkField . ' IN (?)' => $select,
-                ];
-                $this->getConnection()->delete($backendTable, $clearCondition);
+                $select = $this->getConnection()->select()
+                    ->from(['b' => $backendTable])
+                    ->join(
+                        ['e' => $attribute->getEntity()->getEntityTable()],
+                        "b.$backendLinkField = e.$linkField"
+                    )->where('b.attribute_id = ?', $attribute->getId())
+                    ->where('e.attribute_set_id = ?', $result['attribute_set_id']);
+
+                $this->getConnection()->query($select->deleteFromSelect('b'));
             }
         }
 

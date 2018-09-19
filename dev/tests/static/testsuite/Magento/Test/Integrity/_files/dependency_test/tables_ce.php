@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -300,4 +300,6 @@ return [
     'theme_files'                                 => 'Magento\Theme',
     'variable'                                    => 'Magento\Variable',
     'variable_value'                              => 'Magento\Variable',
+    'job_queue'                                   => 'Magento\Queue',
+    'catalogsearch_recommendations'               => 'Magento\AdvancedSearch',
 ];

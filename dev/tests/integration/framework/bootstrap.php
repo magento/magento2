@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
@@ -15,6 +15,10 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
+if (!defined('INTEGRATION_TESTS_DIR')) {
+    define('INTEGRATION_TESTS_DIR', $testsBaseDir);
+}
+
 $testFrameworkDir = __DIR__;
 require_once 'deployTestModules.php';
 
@@ -25,11 +29,15 @@ try {
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
-        $logWriter = new \Zend_Log_Writer_Stream('php://output');
-        $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
+        $loggerHandlers = [
+            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+        ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
-            new \Zend_Log($logWriter)
+            new \Monolog\Logger('main', $loggerHandlers)
         );
     } else {
         $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
@@ -70,7 +78,7 @@ try {
         $application->cleanup();
     }
     if (!$application->isInstalled()) {
-        $application->install();
+        $application->install($settings->getAsBoolean('TESTS_CLEANUP'));
     }
     $application->initialize([]);
 
@@ -123,7 +131,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

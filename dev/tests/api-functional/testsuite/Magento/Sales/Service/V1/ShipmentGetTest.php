@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -57,7 +59,18 @@ class ShipmentGetTest extends WebapiAbstract
         unset($data['tracks']);
         foreach ($data as $key => $value) {
             if (!empty($value)) {
-                $this->assertEquals($shipment->getData($key), $value, $key);
+                if ($key === ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY) {
+                    foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
+                        $methodName = 'get' .
+                            SimpleDataObjectConverter::snakeCaseToUpperCamelCase($extensionAttributeKey);
+                        $this->assertEquals(
+                            $shipment->getExtensionAttributes()->$methodName(),
+                            $extensionAttributeValue
+                        );
+                    }
+                } else {
+                    $this->assertEquals($shipment->getData($key), $value, $key);
+                }
             }
         }
         $shipmentItem = $this->objectManager->get(\Magento\Sales\Model\Order\Shipment\Item::class);

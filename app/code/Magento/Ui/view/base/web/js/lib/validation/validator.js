@@ -1,6 +1,10 @@
 /*
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -27,12 +31,16 @@ define([
                 message: ''
             };
 
+        if (_.isObject(params)) {
+            message = params.message || '';
+        }
+
         if (!rulesList[id]) {
             return result;
         }
 
         rule    = rulesList[id];
-        message = rule.message;
+        message = message || rule.message;
         valid   = rule.handler(value, params, additionalParams);
 
         if (!valid) {
@@ -68,7 +76,7 @@ define([
             };
 
             _.every(rules, function (ruleParams, id) {
-                if (ruleParams !== false || additionalParams) {
+                if (ruleParams.validate || ruleParams !== false || additionalParams) {
                     result = validate(id, value, ruleParams, additionalParams);
 
                     return result.passed;

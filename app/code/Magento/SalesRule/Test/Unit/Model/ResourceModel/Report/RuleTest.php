@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test table name
@@ -41,7 +41,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, ['from'], [$dbAdapterMock, $selectRenderer]);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->setMethods(['from'])
+            ->setConstructorArgs([$dbAdapterMock, $selectRenderer])
+            ->getMock();
         $select->expects(
             $this->once()
         )->method(
@@ -53,12 +56,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($select)
         );
 
-        $connectionMock = $this->getMock(
+        $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'fetchAll'],
-            [],
-            '',
-            false
+            ['select', 'fetchAll']
         );
         $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
         $connectionMock->expects(
@@ -71,30 +71,18 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'fetchAllCallback'])
         );
 
-        $resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
 
-        $flagFactory = $this->getMock(\Magento\Reports\Model\FlagFactory::class, [], [], '', false);
-        $createdatFactoryMock = $this->getMock(
+        $flagFactory = $this->createMock(\Magento\Reports\Model\FlagFactory::class);
+        $createdatFactoryMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $updatedatFactoryMock = $this->getMock(
+        $updatedatFactoryMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

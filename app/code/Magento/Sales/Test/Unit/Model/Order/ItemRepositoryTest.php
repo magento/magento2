@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\ItemRepository;
@@ -10,7 +11,7 @@ use Magento\Sales\Model\Order\ItemRepository;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -43,6 +44,11 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $extensionFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @var array
      */
     protected $productOptionData = [];
@@ -72,6 +78,10 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+        );
+
         $this->extensionFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionExtensionFactory::class)
             ->setMethods([
                 'create',
@@ -82,7 +92,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage ID required
+     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetWithNoId()
     {
@@ -91,7 +101,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->metadata,
             $this->searchResultFactory,
             $this->productOptionFactory,
-            $this->extensionFactory
+            $this->extensionFactory,
+            [],
+            $this->collectionProcessor
         );
 
         $model->get(null);
@@ -99,7 +111,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested entity doesn't exist
+     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEmptyEntity()
     {
@@ -125,7 +137,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->metadata,
             $this->searchResultFactory,
             $this->productOptionFactory,
-            $this->extensionFactory
+            $this->extensionFactory,
+            [],
+            $this->collectionProcessor
         );
 
         $model->get($orderItemId);
@@ -164,52 +178,17 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $productType = 'configurable';
-        $field = 'field';
-        $value = 'value';
-
         $this->productOptionData = ['option1' => 'value1'];
-
-        $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterMock->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn(null);
-        $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn($field);
-        $filterMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($value);
-
-        $filterGroupMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filterMock]);
-
         $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchCriteriaMock->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroupMock]);
-
         $this->getProductOptionExtensionMock();
         $productOption = $this->getProductOptionMock();
         $orderItemMock = $this->getOrderMock($productType, $productOption);
 
-        $searchResultMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemSearchResultInterface::class)
-            ->setMethods([
-                'addFieldToFilter',
-                'getItems',
-            ])
-            ->getMockForAbstractClass();
-        $searchResultMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with($field, ['eq' => $value])
-            ->willReturnSelf();
+        $searchResultMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
@@ -310,8 +289,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->extensionFactory,
             [
                 $productType => $this->productOptionProcessorMock,
-                'custom_options' => $this->productOptionProcessorMock,
-            ]
+                'custom_options' => $this->productOptionProcessorMock
+            ],
+            $this->collectionProcessor
         );
         return $model;
     }

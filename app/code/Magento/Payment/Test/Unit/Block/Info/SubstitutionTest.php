@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Payment\Test\Unit\Block\Info;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubstitutionTest extends \PHPUnit_Framework_TestCase
+class SubstitutionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -28,6 +26,9 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -142,11 +143,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\View\Element\Template::class,
             '',
             ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
-        )->will(
-                $this->returnValue(
-                    $fakeBlock
-                )
-            );
+        )->will($this->returnValue($fakeBlock));
 
         $childAbstractBlock->expects(
             $this->any()

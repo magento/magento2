@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
 
@@ -16,7 +14,8 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Downlaodable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 {
@@ -37,6 +36,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 
     /**
      * @var \Magento\Framework\Url
+     * @since 100.1.0
      */
     protected $frontendUrlBuilder;
 
@@ -68,12 +68,12 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     public function getLinks()
     {
         $this->_purchased = $this->_purchasedFactory->create()->load(
-            $this->getItem()->getId(),
+            $this->getItem()->getOrderItemId(),
             'order_item_id'
         );
         $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter(
             'order_item_id',
-            $this->getItem()->getId()
+            $this->getItem()->getOrderItemId()
         );
         $this->_purchased->setPurchasedItems($purchasedLinks);
 

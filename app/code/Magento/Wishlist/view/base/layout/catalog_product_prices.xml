@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,20 @@
                     <item name="wishlist_configured_price" xsi:type="array">
                         <item name="render_class" xsi:type="string">Magento\Wishlist\Pricing\Render\ConfiguredPriceBox</item>
                         <item name="render_template" xsi:type="string">Magento_Catalog::product/price/configured_price.phtml</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="configurable" xsi:type="array">
+                <item name="prices" xsi:type="array">
+                    <item name="wishlist_configured_price" xsi:type="array">
+                        <item name="render_template" xsi:type="string">Magento_Wishlist::product/price/configurable/configured_price.phtml</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="bundle" xsi:type="array">
+                <item name="prices" xsi:type="array">
+                    <item name="wishlist_configured_price" xsi:type="array">
+                        <item name="render_template" xsi:type="string">Magento_Wishlist::product/price/bundle/configured_price.phtml</item>
                     </item>
                 </item>
             </argument>

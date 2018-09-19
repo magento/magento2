@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email;
@@ -23,6 +23,7 @@ abstract class Template extends \Magento\Backend\App\Action
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     protected $_coreRegistry = null;
 
@@ -48,12 +49,6 @@ abstract class Template extends \Magento\Backend\App\Action
         $model = $this->_objectManager->create(\Magento\Email\Model\BackendTemplate::class);
         if ($id) {
             $model->load($id);
-        }
-        if (!$this->_coreRegistry->registry('email_template')) {
-            $this->_coreRegistry->register('email_template', $model);
-        }
-        if (!$this->_coreRegistry->registry('current_email_template')) {
-            $this->_coreRegistry->register('current_email_template', $model);
         }
         return $model;
     }

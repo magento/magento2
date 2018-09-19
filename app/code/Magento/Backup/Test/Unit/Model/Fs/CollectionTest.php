@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Model\Fs;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {
@@ -26,9 +26,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $directoryWrite->expects($this->any())->method('create')->with('backups');
         $directoryWrite->expects($this->any())->method('getAbsolutePath')->with('backups');
 
-        $helper->getObject(
+        $classObject = $helper->getObject(
             \Magento\Backup\Model\Fs\Collection::class,
             ['filesystem' => $filesystem, 'backupData' => $backupData]
         );
+        $this->assertNotNull($classObject);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model;
@@ -21,6 +21,15 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
             ],
+            'configurable-product-12345' => [
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable_12345.php'
+                ],
+                [
+                    '12345',
+                ],
+                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
+            ],
         ];
     }
 
@@ -30,20 +39,17 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getUsedProducts($expectedProduct);
-        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getUsedProducts($actualProduct);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType */
+        $productType = $expectedProduct->getTypeInstance();
+        $expectedAssociatedProducts = $productType->getUsedProductCollection($expectedProduct);
+        $actualAssociatedProducts = iterator_to_array($productType->getUsedProductCollection($actualProduct));
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
-        $i = 0;
-        foreach ($expectedAssociatedProducts as $associatedProduct) {
+        foreach ($expectedAssociatedProducts as $i => $associatedProduct) {
             $expectedAssociatedProductSkus[] = $associatedProduct->getSku();
             $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
-            $i++;
         }
-
-        sort($expectedAssociatedProductSkus);
-        sort($actualAssociatedProductSkus);
 
         $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
 

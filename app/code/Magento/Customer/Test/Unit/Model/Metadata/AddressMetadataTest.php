@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
@@ -14,7 +14,7 @@ use Magento\Customer\Model\Metadata\AddressMetadata;
 use Magento\Customer\Model\ResourceModel\Form\Attribute\Collection;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
-class AddressMetadataTest extends \PHPUnit_Framework_TestCase
+class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressMetadata */
     protected $model;

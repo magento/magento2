@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
@@ -30,7 +30,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/links.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/links.phtml';
 
     /**
      * Downloadable file

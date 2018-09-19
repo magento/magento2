@@ -4,7 +4,7 @@
  *
  * Format: array(<namespace>[, <replacement>])
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -197,5 +197,7 @@ return [
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super',
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations',
     ],
-    ['Magento\BraintreeTwo', 'Magento\Braintree']
+    ['Magento\BraintreeTwo', 'Magento\Braintree'],
+    ['Magento\MysqlMq\Model\Resource', 'Magento\MysqlMq\Model\ResourceModel'],
+    ['Magento\BulkOperations', 'Magento\AsynchronousOperations'],
 ];

@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Api;
 
@@ -210,13 +208,16 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            if (isset($optionDataPost['title']) && empty($optionDataPost['title'])) {
-                $this->setExpectedException('SoapFault', 'Missed values for option required fields');
+            if ($optionDataPost['title'] === null || $optionDataPost['title'] === '') {
+                $this->expectException('SoapFault');
+                $this->expectExceptionMessage('Missed values for option required fields');
             } else {
-                $this->setExpectedException('SoapFault', 'Invalid option');
+                $this->expectException('SoapFault');
+                $this->expectExceptionMessage('Invalid option');
             }
         } else {
-            $this->setExpectedException('Exception', '', 400);
+            $this->expectException('Exception');
+            $this->expectExceptionCode(400);
         }
         $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
     }
@@ -388,9 +389,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @dataProvider optionNegativeUpdateDataProvider
      * @param array $optionData
      * @param string $message
+     * @param int $exceptionCode
      */
-    public function testUpdateNegative($optionData, $message)
+    public function testUpdateNegative($optionData, $message, $exceptionCode)
     {
+        $this->_markTestAsRestOnly();
         $productSku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(ProductRepository::class);
@@ -403,18 +406,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'resourcePath' => '/V1/products/options/' . $optionId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault');
-        } else {
-            $this->setExpectedException('Exception', $message, 400);
-        }
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($message);
+        $this->expectExceptionCode($exceptionCode);
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Js;
@@ -10,7 +10,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
 
-class PreProcessorTest extends \PHPUnit_Framework_TestCase
+class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreProcessor
@@ -34,22 +34,22 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
-        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
+        $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
         $this->model = new PreProcessor($this->configMock, $this->areaListMock, $this->translateMock);
     }
 
     public function testGetData()
     {
-        $asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $chain = $this->getMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
+        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
         $originalContent = 'content$.mage.__("hello1")content';
         $translatedContent = 'content"hello1"content';
         $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
         $areaCode = 'adminhtml';
-        $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $area = $this->createMock(\Magento\Framework\App\Area::class);
 
         $chain->expects($this->once())
             ->method('getAsset')

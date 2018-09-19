@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -50,6 +50,16 @@
 
     body {
         .lib-css(background-color, @page__background-color);
+    }
+
+    .page-wrapper {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        min-height: 100vh; // Stretch content area for sticky footer
+    }
+
+    .page-main {
+        .lib-vendor-prefix-flex-grow(1);
     }
 
     //
@@ -110,6 +120,11 @@
             width: 100%;
             z-index: 15;
         }
+    }
+
+    .action-skip-wrapper {
+        height: 0;
+        position: relative;
     }
 
     //
@@ -274,17 +289,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-
-    html,
-    body {
-        height: 100%; // Stretch screen area for sticky footer
-    }
-
     .page-wrapper {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
-        min-height: 100%; // Stretch content area for sticky footer
-
         > .breadcrumbs,
         > .top-container,
         > .widget {
@@ -292,7 +297,6 @@
             width: 100%;
         }
 
-        .ie10 &,
         .ie11 & {
             height: 100%;
         }

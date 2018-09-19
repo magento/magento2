@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,6 +24,11 @@ $productCollection = Bootstrap::getObjectManager()->create(
 foreach ($productCollection as $product) {
     $product->delete();
 }
+
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->clean();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

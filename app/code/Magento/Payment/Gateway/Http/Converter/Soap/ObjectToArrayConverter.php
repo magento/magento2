@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Http\Converter\Soap;
@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Http\ConverterInterface;
  * Class ObjectToArrayConverter
  * @package Magento\Payment\Gateway\Http\Converter\Soap
  * @api
+ * @since 100.0.2
  */
 class ObjectToArrayConverter implements ConverterInterface
 {

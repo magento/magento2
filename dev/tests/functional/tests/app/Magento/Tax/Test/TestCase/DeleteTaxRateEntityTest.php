@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Delete Rate
  * 5. Perform all assertions
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-23295
  */
 class DeleteTaxRateEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

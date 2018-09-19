@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
 /**
  * Vault Details Handler
@@ -22,7 +24,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 class VaultDetailsHandler implements HandlerInterface
 {
     /**
-     * @var PaymentTokenInterfaceFactory
+     * @var PaymentTokenFactoryInterface
      */
     protected $paymentTokenFactory;
 
@@ -42,23 +44,32 @@ class VaultDetailsHandler implements HandlerInterface
     protected $config;
 
     /**
-     * Constructor
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * VaultDetailsHandler constructor.
      *
-     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
+     * @param PaymentTokenFactoryInterface $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @param Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
-        PaymentTokenInterfaceFactory $paymentTokenFactory,
+        PaymentTokenFactoryInterface $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        Json $serializer = null
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -93,7 +104,7 @@ class VaultDetailsHandler implements HandlerInterface
         }
 
         /** @var PaymentTokenInterface $paymentToken */
-        $paymentToken = $this->paymentTokenFactory->create();
+        $paymentToken = $this->paymentTokenFactory->create(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD);
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
 
@@ -133,7 +144,7 @@ class VaultDetailsHandler implements HandlerInterface
      */
     private function convertDetailsToJSON($details)
     {
-        $json = \Zend_Json::encode($details);
+        $json = $this->serializer->serialize($details);
         return $json ? $json : '{}';
     }
 
@@ -146,7 +157,7 @@ class VaultDetailsHandler implements HandlerInterface
     private function getCreditCardType($type)
     {
         $replaced = str_replace(' ', '-', strtolower($type));
-        $mapper = $this->config->getCctypesMapper();
+        $mapper = $this->config->getCcTypesMapper();
 
         return $mapper[$replaced];
     }

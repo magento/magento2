@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="persistent_session" resource="default" engine="innodb" comment="Persistent Session">
+        <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Session id"/>
+        <column xsi:type="varchar" name="key" nullable="false" length="50" comment="Unique cookie key"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer id"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Website ID"/>
+        <column xsi:type="text" name="info" nullable="true" comment="Session Data"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="persistent_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="PERSISTENT_SESSION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="persistent_session" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="PERSISTENT_SESSION_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+                    table="persistent_session" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="PERSISTENT_SESSION_KEY">
+            <column name="key"/>
+        </constraint>
+        <constraint xsi:type="unique" name="PERSISTENT_SESSION_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+        <index name="PERSISTENT_SESSION_UPDATED_AT" indexType="btree">
+            <column name="updated_at"/>
+        </index>
+    </table>
+    <table name="quote" resource="checkout" comment="Sales Flat Quote">
+        <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Is Quote Persistent"/>
+    </table>
+</schema>

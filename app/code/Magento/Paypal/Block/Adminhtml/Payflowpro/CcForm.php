@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Payflowpro;
@@ -82,7 +82,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,13 +29,13 @@
             }
         }
 
-        var cartUrl = '<?php echo $block->escapeUrl($block->getUrl('checkout/cart')); ?>',
-            successUrl = '<?php echo $block->escapeUrl($block->getUrl('checkout/onepage/success')); ?>',
-            goToSuccessPage = '<?php echo $block->escapeUrl($block->getGotoSuccessPage()); ?>',
+        var cartUrl = '<?= $block->escapeUrl($block->getUrl('checkout/cart')) ?>',
+            successUrl = '<?= $block->escapeUrl($block->getUrl('checkout/onepage/success')) ?>',
+            goToSuccessPage = '<?= $block->escapeUrl($block->getGotoSuccessPage()) ?>',
             require = window.top.require,
             windowContext = window,
             errorMessage = {
-                message: '<?php echo $block->escapeHtml($block->getErrorMsg()); ?>'
+                message: '<?= $block->escapeHtml($block->getErrorMsg()) ?>'
             };
 
         if(typeof(require) == "undefined") {

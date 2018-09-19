@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
     ->getArea('adminhtml')
@@ -35,10 +33,10 @@ foreach ($productIds as $productId) {
         new \Magento\Framework\Event\Observer(
             [
                 'event' => new \Magento\Framework\DataObject(
-                        [
-                            'product' => new \Magento\Framework\DataObject(['id' => $productId]),
+                    [
+                        'product' => new \Magento\Framework\DataObject(['id' => $productId]),
                         ]
-                    ),
+                ),
             ]
         )
     );

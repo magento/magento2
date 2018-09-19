@@ -1,9 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Api\Data\ImageContentInterface;
@@ -237,8 +238,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $targetProduct = $this->getTargetSimpleProduct();
         $this->assertEquals('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
-        $this->assertNull($targetProduct->getData('image'));
-        $this->assertNull($targetProduct->getData('small_image'));
+        $this->assertEquals('no_selection', $targetProduct->getData('image'));
+        $this->assertEquals('no_selection', $targetProduct->getData('small_image'));
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
@@ -384,7 +385,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -433,7 +434,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -457,7 +458,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -481,7 +482,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -497,7 +498,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -609,10 +610,59 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => $productSku,
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault', 'Requested product doesn\'t exist');
+            $this->expectException('SoapFault');
+            $this->expectExceptionMessage(
+                "The product that was requested doesn't exist. Verify the product and try again."
+            );
         } else {
-            $this->setExpectedException('Exception', '', 404);
+            $this->expectException('Exception');
+            $this->expectExceptionCode(404);
         }
         $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testAddProductVideo()
+    {
+        $videoContent = [
+            'media_type' => 'external-video',
+            'video_provider' => 'vimeo',
+            'video_url' => 'https://vimeo.com/testUrl',
+            'video_title' => 'Vimeo Test Title',
+            'video_description' => 'test description',
+            'video_metadata' => 'video meta data'
+        ];
+
+        $requestData = [
+            'id' => null,
+            'media_type' => 'external-video',
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => null,
+            'disabled' => false,
+            'content' => [
+                ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
+                ImageContentInterface::TYPE => 'image/jpeg',
+                ImageContentInterface::NAME => 'test_image.jpg'
+            ],
+            'extension_attributes' => [
+                'video_content' => $videoContent
+            ]
+        ];
+
+        $actualResult = $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        $targetProduct = $this->getTargetSimpleProduct();
+        $mediaGallery = $targetProduct->getData('media_gallery');
+
+        $this->assertCount(1, $mediaGallery['images']);
+        $updatedImage = array_shift($mediaGallery['images']);
+        $this->assertEquals($actualResult, $updatedImage['value_id']);
+        $this->assertEquals('Image Text', $updatedImage['label']);
+        $this->assertEquals(1, $updatedImage['position']);
+        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
+        $this->assertEquals($videoContent, array_intersect($updatedImage, $videoContent));
     }
 }

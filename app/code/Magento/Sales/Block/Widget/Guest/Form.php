@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Sales\Block\Widget\Guest;
 
 use Magento\Customer\Model\Context;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**

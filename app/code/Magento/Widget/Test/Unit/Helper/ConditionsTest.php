@@ -1,51 +1,71 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 
 /**
  * Class ConditionsTest
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Helper\Conditions
      */
     protected $conditions;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * @var Normalizer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $normalizer;
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->conditions = $objectManagerHelper->getObject(\Magento\Widget\Helper\Conditions::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->normalizer = $this->createMock(Normalizer::class);
+        $this->conditions = (new ObjectManager($this))->getObject(
+            \Magento\Widget\Helper\Conditions::class,
+            [
+                'serializer' => $this->serializer,
+                'normalizer' => $this->normalizer
+            ]
+        );
     }
 
     public function testEncodeDecode()
     {
-        $value = [
-            '1' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
-                "aggregator" => "all",
-                "value" => "1",
-                "new_child" => "",
-            ],
-            '1--1' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
-                "attribute" => "attribute_set_id",
-                "value" => "4",
-                "operator" => "==",
-            ],
-            '1--2' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
-                "attribute" => "category_ids",
-                "value" => "2",
-                "operator" => "==",
-            ],
-        ];
+        $value = ['string'];
+        $serializedValue = 'serializedString';
+        $normalizedValue = 'normalizedValue';
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($value)
+            ->willReturn($serializedValue);
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedValue)
+            ->willReturn($value);
+        $this->normalizer->expects($this->once())
+            ->method('replaceReservedCharacters')
+            ->with($serializedValue)
+            ->willReturn($normalizedValue);
+        $this->normalizer->expects($this->once())
+            ->method('restoreReservedCharacters')
+            ->with($normalizedValue)
+            ->willReturn($serializedValue);
         $encoded = $this->conditions->encode($value);
         $this->assertEquals($value, $this->conditions->decode($encoded));
     }

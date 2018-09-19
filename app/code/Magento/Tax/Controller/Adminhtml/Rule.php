@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,10 +30,14 @@ abstract class Rule extends \Magento\Backend\App\Action
      */
     protected $_coreRegistry = null;
 
-    /** @var \Magento\Tax\Api\TaxRuleRepositoryInterface */
+    /**
+     * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
+     */
     protected $ruleService;
 
-    /** @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory */
+    /**
+     * @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory
+     */
     protected $taxRuleDataObjectFactory;
 
     /**

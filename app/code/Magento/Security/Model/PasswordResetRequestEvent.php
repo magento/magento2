@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -15,6 +15,9 @@ namespace Magento\Security\Model;
  * @method PasswordResetRequestEvent setRequestType(int $requestType)
  * @method string getIp()
  * @method PasswordResetRequestEvent setIp(int $ip)
+ *
+ * @api
+ * @since 100.1.0
  */
 class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
 {
@@ -36,6 +39,7 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {

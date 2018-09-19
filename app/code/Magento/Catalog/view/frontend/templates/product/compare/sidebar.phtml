@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 <div class="block block-compare" data-bind="scope: 'compareProducts'" data-role="compare-products-sidebar">
     <div class="block-title">
-        <strong id="block-compare-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('Compare Products') ?></strong>
+        <strong id="block-compare-heading" role="heading" aria-level="2"><?= /* @escapeNotVerified */ __('Compare Products') ?></strong>
         <span class="counter qty no-display" data-bind="text: compareProducts().countCaption, css: {'no-display': !compareProducts().count}"></span>
     </div>
     <!-- ko if: compareProducts().count -->
@@ -20,29 +20,29 @@
                     <strong class="product-item-name">
                         <a data-bind="attr: {href: product_url}, html: name" class="product-item-link"></a>
                     </strong>
-                    <a href="#" data-bind="attr: {'data-post': remove_url}" title="<?php /* @escapeNotVerified */ echo __('Remove This Item') ?>" class="action delete">
-                        <span><?php /* @escapeNotVerified */ echo __('Remove This Item') ?></span>
+                    <a href="#" data-bind="attr: {'data-post': remove_url}" title="<?= /* @escapeNotVerified */ __('Remove This Item') ?>" class="action delete">
+                        <span><?= /* @escapeNotVerified */ __('Remove This Item') ?></span>
                     </a>
                 </li>
         </ol>
         <div class="actions-toolbar">
             <div class="primary">
-                <a data-bind="attr: {'href': compareProducts().listUrl}" class="action compare primary"><span><?php /* @escapeNotVerified */ echo __('Compare') ?></span></a>
+                <a data-bind="attr: {'href': compareProducts().listUrl}" class="action compare primary"><span><?= /* @escapeNotVerified */ __('Compare') ?></span></a>
             </div>
             <div class="secondary">
                 <a id="compare-clear-all" href="#" class="action clear" data-post="<?=$block->escapeHtml(
                     $this->helper('Magento\Catalog\Helper\Product\Compare')->getPostDataClearList()
                 ) ?>">
-                    <span><?php /* @escapeNotVerified */ echo __('Clear All') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Clear All') ?></span>
                 </a>
             </div>
         </div>
     </div>
     <!-- /ko -->
     <!-- ko ifnot: compareProducts().count -->
-    <div class="empty"><?php /* @escapeNotVerified */ echo __('You have no items to compare.') ?></div>
+    <div class="empty"><?= /* @escapeNotVerified */ __('You have no items to compare.') ?></div>
     <!-- /ko -->
 </div>
 <script type="text/x-magento-init">
-{"[data-role=compare-products-sidebar]": {"Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>}}
+{"[data-role=compare-products-sidebar]": {"Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>}}
 </script>

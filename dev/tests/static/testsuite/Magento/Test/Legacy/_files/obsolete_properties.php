@@ -4,11 +4,11 @@
  *
  * Format: array(<attribute_name>[, <class_scope> = ''[, <replacement>]])
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],

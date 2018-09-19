@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Grid;
@@ -19,11 +19,6 @@ class Extension
     private $composerInformation;
 
     /**
-     * @var TypeMapper
-     */
-    private $typeMapper;
-
-    /**
      * @var PackagesData
      */
     private $packagesData;
@@ -31,16 +26,13 @@ class Extension
     /**
      * @param ComposerInformation $composerInformation
      * @param PackagesData $packagesData
-     * @param TypeMapper $typeMapper
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        PackagesData $packagesData,
-        TypeMapper $typeMapper
+        PackagesData $packagesData
     ) {
         $this->composerInformation = $composerInformation;
         $this->packagesData = $packagesData;
-        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -56,8 +48,7 @@ class Extension
         foreach ($extensions as &$extension) {
             $extension['update'] = array_key_exists($extension['name'], $packagesForUpdate);
             $extension['uninstall'] = true;
-            if (
-                $extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+            if ($extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                 || !$this->composerInformation->isPackageInComposerJson($extension['name'])
             ) {
                 $extension['uninstall'] = false;
@@ -89,7 +80,6 @@ class Extension
     {
         foreach ($extensions as &$extension) {
             $extension['vendor'] = ucfirst(current(explode('/', $extension['name'])));
-            $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
         }
         return array_values($extensions);
     }

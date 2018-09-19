@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\CustomerExtractor;
 
-class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
+class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CustomerExtractor */
     protected $customerExtractor;
@@ -74,9 +74,9 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
-        $this->customerForm = $this->getMock(\Magento\Customer\Model\Metadata\Form::class, [], [], '', false);
+        $this->customerForm = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
         $this->customerData = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\CustomerInterface::class,
             [],

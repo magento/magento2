@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -267,7 +267,7 @@
     }
 
     .cart.table-wrapper {
-        .action-towishlist {
+        .towishlist {
             .lib-icon-font(
             @icon-wishlist-full,
             @_icon-font-size: 18px,
@@ -277,6 +277,9 @@
             @_icon-font-color-hover: @primary__color,
             @_icon-font-color-active: @minicart-icons-color
             );
+            &:before {
+                overflow: visible;
+            }
         }
     }
 }
@@ -366,9 +369,8 @@
 
             .lib-css(background, @color-white);
             .lib-css(border, @border-width__base solid @color-gray-light2);
-            border-top: none;
             .lib-css(box-shadow, @_shadow);
-            display: none;
+            border-top: none;
             left: 0;
             margin: 9px 0 0 -1px;
             padding: 0 9px 9px;

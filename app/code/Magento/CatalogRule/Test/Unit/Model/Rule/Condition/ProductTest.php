@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogRule\Model\Rule\Condition\Product */
     protected $product;
@@ -28,36 +28,33 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 
+    /** @var \Magento\Catalog\Model\ProductCategoryList|\PHPUnit_Framework_MockObject_MockObject */
+    private $productCategoryList;
+
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
-        $this->productModel = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->config = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getAttribute']);
+        $this->productModel = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 '__wakeup',
-                'getAvailableInCategories',
                 'hasData',
                 'getData',
                 'getId',
                 'getStoreId',
                 'getResource',
                 'addAttributeToSelect',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->productResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['loadAllAttributes',
-                'getAttributesByCode',
-                'getAttribute'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->eavAttributeResource = $this->getMock(
+                'getAttributesByCode'
+            ]);
+
+        $this->productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->setMethods(['loadAllAttributes', 'getAttributesByCode', 'getAttribute', 'getConnection', 'getTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->eavAttributeResource = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
@@ -67,11 +64,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'getFrontendLabel',
                 'isScopeGlobal',
                 'getBackendType',
-                'getFrontendInput'
-            ],
-            [],
-            '',
-            false
+                'getFrontendInput',
+                'getAttributesByCode'
+            ]
         );
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')
@@ -93,7 +88,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => $this->config,
                 'product' => $this->productModel,
-                'productResource' => $this->productResource
+                'productResource' => $this->productResource,
+                'productCategoryList' => $this->productCategoryList
             ]
         );
     }
@@ -103,12 +99,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateMeetsCategory()
     {
+        $categoryIdList = [1, 2, 3];
+
+        $this->productCategoryList->method('getCategoryIds')->willReturn($categoryIdList);
         $this->product->setData('attribute', 'category_ids');
         $this->product->setData('value_parsed', '1');
-        $this->product->setData('operator', '>=');
+        $this->product->setData('operator', '{}');
 
-        $this->productModel->expects($this->once())->method('getAvailableInCategories')
-            ->will($this->returnValue('2'));
         $this->assertTrue($this->product->validate($this->productModel));
     }
 

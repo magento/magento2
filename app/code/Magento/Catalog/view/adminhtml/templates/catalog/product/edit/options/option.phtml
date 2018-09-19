@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
-<?php echo $block->getTemplatesHtml() ?>
+<?= $block->getTemplatesHtml() ?>
 <script id="custom-option-base-template" type="text/x-magento-template">
     <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="option_<%- data.id %>">
         <div class="fieldset-wrapper-title">
@@ -19,30 +19,30 @@
                 <span id="option_<%- data.id %>_header_title"><%- data.title %></span>
             </strong>
             <div class="actions">
-                <button type="button" title="<?php /* @escapeNotVerified */ echo __('Delete Custom Option'); ?>" class="action-delete" id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_delete">
-                    <span><?php /* @escapeNotVerified */ echo __('Delete Custom Option'); ?></span>
+                <button type="button" title="<?= /* @escapeNotVerified */ __('Delete Custom Option') ?>" class="action-delete" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_delete">
+                    <span><?= /* @escapeNotVerified */ __('Delete Custom Option') ?></span>
                 </button>
             </div>
-            <div id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_move" data-role="draggable-handle" class="draggable-handle"
-                 title="<?php /* @escapeNotVerified */ echo __('Sort Custom Options'); ?>"></div>
+            <div id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_move" data-role="draggable-handle" class="draggable-handle"
+                 title="<?= /* @escapeNotVerified */ __('Sort Custom Options') ?>"></div>
         </div>
         <div class="fieldset-wrapper-content in collapse" id="<%- data.id %>-content">
             <fieldset class="fieldset">
-                <fieldset class="fieldset-alt" id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>">
-                    <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_is_delete" name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][is_delete]" type="hidden" value=""/>
-                    <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_previous_type" name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][previous_type]" type="hidden" value="<%- data.type %>"/>
-                    <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_previous_group" name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][previous_group]" type="hidden" value=""/>
-                    <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_id" name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][id]" type="hidden" value="<%- data.id %>"/>
-                    <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_option_id" name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][option_id]" type="hidden" value="<%- data.option_id %>"/>
-                    <input name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][sort_order]" type="hidden" value="<%- data.sort_order %>"/>
+                <fieldset class="fieldset-alt" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>">
+                    <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_is_delete" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][is_delete]" type="hidden" value=""/>
+                    <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_previous_type" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][previous_type]" type="hidden" value="<%- data.type %>"/>
+                    <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_previous_group" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][previous_group]" type="hidden" value=""/>
+                    <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_id" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][id]" type="hidden" value="<%- data.id %>"/>
+                    <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_option_id" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][option_id]" type="hidden" value="<%- data.option_id %>"/>
+                    <input name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][sort_order]" type="hidden" value="<%- data.sort_order %>"/>
 
                     <div class="field field-option-title required">
-                        <label class="label" for="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_title">
-                            <?php /* @escapeNotVerified */ echo __('Option Title') ?>
+                        <label class="label" for="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_title">
+                            <?= /* @escapeNotVerified */ __('Option Title') ?>
                         </label>
                         <div class="control">
-                            <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_title"
-                                   name="<?php /* @escapeNotVerified */ echo $block->getFieldName() ?>[<%- data.id %>][title]"
+                            <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_title"
+                                   name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.id %>][title]"
                                    class="required-entry input-text"
                                    type="text"
                                    value="<%- data.title %>"
@@ -54,21 +54,21 @@
                     </div>
 
                     <div class="field field-option-input-type required">
-                        <label class="label" for="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_title">
-                            <?php /* @escapeNotVerified */ echo __('Input Type') ?>
+                        <label class="label" for="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_title">
+                            <?= /* @escapeNotVerified */ __('Input Type') ?>
                         </label>
                         <div class="control opt-type">
-                            <?php echo $block->getTypeSelectHtml() ?>
+                            <?= $block->getTypeSelectHtml() ?>
                         </div>
                     </div>
 
                     <div class="field field-option-req">
                         <div class="control">
-                            <input id="<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>_<%- data.id %>_required" class="is-required" type="checkbox" checked="checked"/>
+                            <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.id %>_required" class="is-required" type="checkbox" checked="checked"/>
                             <label for="field-option-req">
-                                <?php /* @escapeNotVerified */ echo __('Required')?>
+                                <?= /* @escapeNotVerified */ __('Required') ?>
                             </label>
-                            <span style="display:none"><?php echo $block->getRequireSelectHtml() ?></span>
+                            <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                         </div>
                     </div>
                 </fieldset>
@@ -103,7 +103,7 @@ jQuery(function ($) {
     //adding data to templates
     <?php /** @var $_value \Magento\Framework\DataObject */ ?>
     <?php foreach ($block->getOptionValues() as $_value): ?>
-        fieldSet.customOptions('addOption', <?php /* @escapeNotVerified */ echo $_value->toJson() ?>);
+        fieldSet.customOptions('addOption', <?= /* @escapeNotVerified */ $_value->toJson() ?>);
     <?php endforeach; ?>
 });
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,7 +50,7 @@ class AssertGiftMessageInFrontendOrder extends AbstractConstraint
         $orderHistory->open();
         $orderHistory->getOrderHistoryBlock()->openOrderById($orderId);
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedData,
             $customerOrderView->getGiftMessageForOrderBlock()->getGiftMessage(),
             'Wrong gift message is displayed on order.'

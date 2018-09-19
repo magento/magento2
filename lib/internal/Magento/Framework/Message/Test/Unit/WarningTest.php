@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message\Test\Unit;
@@ -10,7 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * \Magento\Framework\Message\Warning test case
  */
-class WarningTest extends \PHPUnit_Framework_TestCase
+class WarningTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Warning

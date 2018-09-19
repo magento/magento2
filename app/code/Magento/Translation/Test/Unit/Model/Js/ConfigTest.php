@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Translation\Model\Js\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->dictionaryEnabled());
     }
 
-    public function testgetPatterns()
+    public function testGetPatterns()
     {
         $this->assertEquals($this->patterns, $this->model->getPatterns());
     }

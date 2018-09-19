@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
+
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
@@ -45,6 +47,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testGlobalSearchAction()
     {
         $this->getRequest()->setParam('isAjax', 'true');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('query', 'dummy');
         $this->dispatch('backend/admin/index/globalSearch');
 

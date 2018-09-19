@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Image extends AbstractHelper
 {
@@ -126,21 +128,31 @@ class Image extends AbstractHelper
     protected $attributes = [];
 
     /**
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
+     */
+    private $viewAssetPlaceholderFactory;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\ConfigInterface $viewConfig
+        \Magento\Framework\View\ConfigInterface $viewConfig,
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
+        $this->viewAssetPlaceholderFactory = $placeholderFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
     }
 
     /**
@@ -195,7 +207,6 @@ class Image extends AbstractHelper
     protected function setImageProperties()
     {
         $this->_getModel()->setDestinationSubdir($this->getType());
-
         $this->_getModel()->setWidth($this->getWidth());
         $this->_getModel()->setHeight($this->getHeight());
 
@@ -241,25 +252,25 @@ class Image extends AbstractHelper
     {
         $this->setWatermark(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
+                "design/watermark/{$this->getType()}_image",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
+                "design/watermark/{$this->getType()}_imageOpacity",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
+                "design/watermark/{$this->getType()}_position",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
+                "design/watermark/{$this->getType()}_size",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
@@ -433,8 +444,8 @@ class Image extends AbstractHelper
      *
      * @param null|string $placeholder
      * @return string
-     * 
-     * @deprecated Returns only default placeholder.
+     *
+     * @deprecated 101.1.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)
@@ -500,10 +511,7 @@ class Image extends AbstractHelper
     protected function isScheduledActionsAllowed()
     {
         $model = $this->_getModel();
-        if ($model->isBaseFilePlaceholder()
-            && $model->getNewFile() === true
-            || $model->isCached()
-        ) {
+        if ($model->isBaseFilePlaceholder() || $model->isCached()) {
             return false;
         }
         return true;
@@ -547,14 +555,16 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * 
-     * @deprecated Returns only default placeholder.
-     * Does not take into account custom placeholders set in Configuration.
      */
     public function getDefaultPlaceholderUrl($placeholder = null)
     {
         try {
-            $url = $this->_assetRepo->getUrl($this->getPlaceholder($placeholder));
+            $imageAsset = $this->viewAssetPlaceholderFactory->create(
+                [
+                    'type' => $placeholder ?: $this->_getModel()->getDestinationSubdir(),
+                ]
+            );
+            $url = $imageAsset->getUrl();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $url = $this->_urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
@@ -835,10 +845,10 @@ class Image extends AbstractHelper
     public function getFrame()
     {
         $frame = $this->getAttribute('frame');
-        if (empty($frame)) {
+        if ($frame === null) {
             $frame = $this->getConfigView()->getVarValue('Magento_Catalog', 'product_image_white_borders');
         }
-        return $frame;
+        return (bool)$frame;
     }
 
     /**
@@ -849,7 +859,7 @@ class Image extends AbstractHelper
      */
     protected function getAttribute($name)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return $this->attributes[$name] ?? null;
     }
 
     /**

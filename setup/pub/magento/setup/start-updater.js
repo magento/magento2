@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,18 +31,19 @@ angular.module('start-updater', ['ngStorage'])
             var payLoad = {
                 'packages': $scope.packages,
                 'type': $state.current.type,
-                'headerTitle': $scope.title,
+                'headerTitle': $scope.packages.size == 1 ? $scope.title : 'Process extensions',
                 'dataOption': $localStorage.dataOption
             };
             $http.post('index.php/start-updater/update', payLoad)
-                .success(function (data) {
-                    if (data['success']) {
+                .then(function successCallback(resp) {
+                    var data = resp.data;
+
+                    if (data.success) {
                         $window.location.href = '../update/index.php';
                     } else {
-                        $scope.errorMessage = data['message'];
+                        $scope.errorMessage = data.message;
                     }
-                })
-                .error(function (data) {
+                }, function errorCallback() {
                     $scope.errorMessage = 'Something went wrong. Please try again.';
                 });
         };

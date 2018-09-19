@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model;
@@ -22,7 +22,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
- * @method \Magento\CatalogSearch\Model\ResourceModel\Advanced getResource()
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()
@@ -42,6 +41,10 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
@@ -225,7 +228,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
         } else {
-            throw new LocalizedException(__('Please specify at least one search term.'));
+            throw new LocalizedException(__('Enter a search term and try again.'));
         }
 
         return $this;
@@ -368,9 +371,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 $value = $value['label'];
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
-            $value = $value == 1
-                ? __('Yes')
-                : __('No');
+            if (is_numeric($value)) {
+                $value = $value == 1 ? __('Yes') : __('No');
+            } else {
+                $value = false;
+            }
         }
 
         return $value;

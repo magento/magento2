@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,6 +44,13 @@ class Matrix extends Form
             'strategy' => Locator::SELECTOR_CSS,
         ],
     ];
+
+    /**
+     * Selector for product attribute.
+     *
+     * @var string
+     */
+    protected $attribute = 'div[data-index="attributes"] span[data-index="attributes"]';
 
     /**
      * Selector for variation row by number.
@@ -155,6 +162,16 @@ class Matrix extends Form
         }
 
         return $data;
+    }
+
+    /**
+     * Get product attribute.
+     *
+     * @return string
+     */
+    public function getProductAttribute()
+    {
+        return $this->_rootElement->find($this->attribute)->getText();
     }
 
     /**

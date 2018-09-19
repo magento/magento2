@@ -1,18 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
@@ -132,7 +133,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $attributesData[$attributeCode] = $value;
                     } elseif ($attribute->getFrontendInput() == 'multiselect') {
                         // Check if 'Change' checkbox has been checked by admin for this attribute
-                        $isChanged = (bool)$this->getRequest()->getPost($attributeCode . '_checkbox');
+                        $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
                         if (!$isChanged) {
                             unset($attributesData[$attributeCode]);
                             continue;
@@ -162,7 +163,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $this->attributeHelper->getStoreWebsiteId($storeId)
                     );
                     if (!$stockItemDo->getProductId()) {
-                        $inventoryData[] = $productId;
+                        $inventoryData['product_id'] = $productId;
                     }
 
                     $stockItemId = $stockItemDo->getId();
@@ -192,7 +193,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) were updated.', count($this->attributeHelper->getProductIds()))
             );
 
@@ -205,9 +206,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->_productPriceIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );

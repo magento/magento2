@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -31,5 +31,8 @@
     </type>
     <type name="Magento\Checkout\Model\DefaultConfigProvider">
         <plugin name="mask_quote_id_substitutor" type="Magento\Persistent\Model\Checkout\ConfigProviderPlugin" />
+    </type>
+    <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
+        <plugin name="inject_guest_address_for_nologin" type="Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin" />
     </type>
 </config>

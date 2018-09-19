@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -94,7 +94,7 @@
                         <field id="content_type">N</field>
                     </depends>
                 </field>
-                <field id="ready_time" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Ready time</label>
                     <comment>Package ready time after order submission (in hours)</comment>
                 </field>

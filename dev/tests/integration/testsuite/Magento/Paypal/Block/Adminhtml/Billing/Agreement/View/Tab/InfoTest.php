@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
@@ -20,18 +20,21 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);
 
-        $this->assertSelectCount(
-            'a[name="billing_agreement_info"]',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//a[@name="billing_agreement_info"]',
+                $this->getResponse()->getBody()
+            ),
             'Response for billing agreement info doesn\'t contain billing agreement info tab'
         );
 
-        $this->assertSelectRegExp(
-            'a',
-            '/customer\@example.com/',
+        $this->assertEquals(
             1,
-            $this->getResponse()->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//a[contains(text(), "customer@example.com")]',
+                $this->getResponse()->getBody()
+            ),
             'Response for billing agreement info doesn\'t contain Customer info'
         );
     }

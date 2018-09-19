@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Edit;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Email\Model\Source\Variables
+     * @var \Magento\Variable\Model\Source\Variables
      */
     protected $_variables;
 
@@ -22,23 +22,33 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_variableFactory;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Variable\Model\VariableFactory $variableFactory
-     * @param \Magento\Email\Model\Source\Variables $variables
+     * @param \Magento\Variable\Model\Source\Variables $variables
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Variable\Model\VariableFactory $variableFactory,
-        \Magento\Email\Model\Source\Variables $variables,
-        array $data = []
+        \Magento\Variable\Model\Source\Variables $variables,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_variableFactory = $variableFactory;
         $this->_variables = $variables;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -60,6 +70,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @return \Magento\Backend\Block\Widget\Form
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
@@ -100,7 +111,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'variables',
             'hidden',
-            ['name' => 'variables', 'value' => \Zend_Json::encode($this->getVariables())]
+            ['name' => 'variables', 'value' => $this->serializer->serialize($this->getVariables())]
         );
         $fieldset->addField('template_variables', 'hidden', ['name' => 'template_variables']);
 
@@ -163,7 +174,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getEmailTemplate()
     {
-        return $this->_coreRegistry->registry('current_email_template');
+        return $this->getData('email_template');
     }
 
     /**
@@ -173,16 +184,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getVariables()
     {
-        $variables = [];
-        $variables[] = $this->_variables->toOptionArray(true);
+        $variables = $this->_variables->toOptionArray(true);
         $customVariables = $this->_variableFactory->create()->getVariablesOptionArray(true);
         if ($customVariables) {
-            $variables[] = $customVariables;
+            $variables = array_merge_recursive($variables, $customVariables);
         }
-        /* @var $template \Magento\Email\Model\Template */
-        $template = $this->_coreRegistry->registry('current_email_template');
+        $template = $this->getEmailTemplate();
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables[] = $templateVariables;
+            $variables = array_merge_recursive($variables, $templateVariables);
         }
         return $variables;
     }

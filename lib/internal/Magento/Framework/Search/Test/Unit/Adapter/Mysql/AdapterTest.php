@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject

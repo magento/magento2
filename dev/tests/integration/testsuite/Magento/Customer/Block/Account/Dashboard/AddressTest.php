@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Customer\Block\Account\Dashboard;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Address
@@ -97,8 +97,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryShippingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
 
         return [
             '0' => [0, 'You have not set a default shipping address.'],
@@ -124,8 +124,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryBillingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         return [
             '0' => [0, 'You have not set a default billing address.'],
             '1' => [1, $expected],

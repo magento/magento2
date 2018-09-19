@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -16,6 +16,11 @@ use Magento\Sales\Api\OrderManagementInterface;
  */
 class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::hold';
+
     /**
      * @var OrderManagementInterface
      */
@@ -57,13 +62,13 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
         $countNonHoldOrder = $collection->count() - $countHoldOrder;
 
         if ($countNonHoldOrder && $countHoldOrder) {
-            $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
+            $this->messageManager->addErrorMessage(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
         } elseif ($countNonHoldOrder) {
-            $this->messageManager->addError(__('No order(s) were put on hold.'));
+            $this->messageManager->addErrorMessage(__('No order(s) were put on hold.'));
         }
 
         if ($countHoldOrder) {
-            $this->messageManager->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
+            $this->messageManager->addSuccessMessage(__('You have put %1 order(s) on hold.', $countHoldOrder));
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

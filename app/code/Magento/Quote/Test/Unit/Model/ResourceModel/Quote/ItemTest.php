@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
-use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\ResourceModel\Quote\Item;
 
 /**
  * Class ItemTest
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item
@@ -57,11 +57,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $this->connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [
                 'describeTable',
                 'insert',
                 'lastInsertId',
@@ -70,33 +68,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'commit',
                 'quoteInto',
                 'update'
-            ],
-            [],
-            '',
-            false
+            ]);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
+        $this->relationCompositeMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class
         );
-        $this->relationCompositeMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class,
-            [],
-            [],
-            '',
-            false
+        $this->objectRelationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
         );
-        $this->objectRelationProcessorMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')

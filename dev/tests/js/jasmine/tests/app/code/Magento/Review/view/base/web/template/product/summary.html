@@ -1,0 +1,54 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<if args="hasReviews()">
+    <div class="product-reviews-summary no-rating"
+         itemprop="aggregateRating"
+         itemscope
+         itemtype="http://schema.org/AggregateRating">
+        <if args="hasRating()">
+            <div class="rating-summary">
+                <span class="label">
+                    <span translate="'Rating'"/>
+                </span>
+                <div class="rating-result"
+                     atrr="title: ratingAmount">
+                    <span style="width: 0">
+                        <span>
+                            <span itemprop="ratingValue" text="ratingAmount"/>% of
+                            <span itemprop="bestRating" text="maxRatingAmount"/>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </if>
+        <if args="showReviewsActions()">
+            <div class="reviews-actions">
+                <a if="showViewReviewAction()"
+                   class="action view"
+                   href="">
+                    <span itemprop="reviewCount" text="reviewsCount()"/>
+                    <span text="reviewsCountText()"/>
+                </a>
+                <a if="showAddReviewAction()"
+                   class="action add"
+                   href=""
+                   translate="'Add Your Review'"/>
+            </div>
+        </if>
+    </div>
+</if>
+
+<ifnot args="hasReviews() && showEmpty">
+    <div class="product-reviews-summary short empty">
+        <div class="reviews-actions">
+            <a class="action add"
+               href=""
+               translate="'Be the first to review this product'"/>
+        </div>
+    </div>
+</ifnot>

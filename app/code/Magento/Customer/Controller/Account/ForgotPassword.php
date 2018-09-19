@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
+class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var PageFactory

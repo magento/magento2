@@ -2,7 +2,7 @@
 /**
  * Validation configuration files handler
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
@@ -21,9 +21,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
     const CONSTRAINT_TYPE_PROPERTY = 'property';
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $_defaultBuilderClass = \Magento\Framework\Validator\Builder::class;
 
     /**

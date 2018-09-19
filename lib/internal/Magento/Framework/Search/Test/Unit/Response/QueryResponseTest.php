@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Response;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class QueryResponseTest extends \PHPUnit_Framework_TestCase
+class QueryResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\Search\Document[]

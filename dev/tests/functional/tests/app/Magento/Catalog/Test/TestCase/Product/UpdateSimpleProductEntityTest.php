@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Precondition:
@@ -25,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-23544, MAGETWO-21125
  */
 class UpdateSimpleProductEntityTest extends Injectable
@@ -33,7 +35,6 @@ class UpdateSimpleProductEntityTest extends Injectable
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -58,18 +59,28 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
+     * Fixture Factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
-        CatalogProductEdit $editProductPage
+        CatalogProductEdit $editProductPage,
+        FixtureFactory $fixtureFactory
     ) {
         $this->productGrid = $productGrid;
         $this->editProductPage = $editProductPage;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -77,20 +88,25 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
+     * @param Store|null $store
      * @param string $configData
      * @return array
      */
-    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData = '')
-    {
+    public function test(
+        CatalogProductSimple $initialProduct,
+        CatalogProductSimple $product,
+        Store $store = null,
+        $configData = ''
+    ) {
         $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
-        $initialCategory = $initialProduct->hasData('category_ids')
-            ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
-            : null;
-        $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
-            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
-            : $initialCategory;
+        $category = $this->getCategory($initialProduct, $product);
+
+        if ($store) {
+            $store->persist();
+            $productName[$store->getStoreId()] = $product->getName();
+        }
 
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
@@ -102,10 +118,34 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
+        if ($store) {
+            $this->editProductPage->getFormPageActions()->changeStoreViewScope($store);
+        }
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
-        return ['category' => $category];
+        return [
+            'category' => $category,
+            'stores' => isset($store) ? [$store] : [],
+            'productNames' => isset($productName) ? $productName : [],
+        ];
+    }
+
+    /**
+     * Get Category instance.
+     *
+     * @param CatalogProductSimple $initialProduct
+     * @param CatalogProductSimple $product
+     * @return Category
+     */
+    protected function getCategory(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
+    {
+        $initialCategory = $initialProduct->hasData('category_ids')
+            ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
+        return $product->hasData('category_ids') && $product->getCategoryIds()[0]
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : $initialCategory;
     }
 
     /**

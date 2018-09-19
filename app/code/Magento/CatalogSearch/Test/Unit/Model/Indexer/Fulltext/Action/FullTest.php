@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Action;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $searchRequestConfig;

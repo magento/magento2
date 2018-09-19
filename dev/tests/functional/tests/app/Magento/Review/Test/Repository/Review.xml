@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -57,6 +57,21 @@
             <field name="entity_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">catalogProductSimple::default</item>
             </field>
+            <field name="type" xsi:type="string">Administrator</field>
+        </dataset>
+
+        <dataset name="frontend_guest">
+            <field name="status_id" xsi:type="string">Pending</field>
+            <field name="select_stores" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
+            </field>
+            <field name="nickname" xsi:type="string">Guest customer %isolation%</field>
+            <field name="title" xsi:type="string">Summary review %isolation%</field>
+            <field name="detail" xsi:type="string">Text review %isolation%</field>
+            <field name="entity_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+            <field name="type" xsi:type="string">Guest</field>
         </dataset>
     </repository>
 </config>

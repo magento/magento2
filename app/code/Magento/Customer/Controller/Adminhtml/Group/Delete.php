@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Delete extends \Magento\Customer\Controller\Adminhtml\Group
+class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * Delete customer group.

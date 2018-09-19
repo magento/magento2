@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
 
 namespace Magento\Framework\Config;
 
 /**
  * Deployment configuration options constant storage
+ * @api
  */
 class ConfigOptionsListConstants
 {
@@ -30,14 +33,29 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB = 'db';
     const CONFIG_PATH_RESOURCE = 'resource';
     const CONFIG_PATH_CACHE_TYPES = 'cache_types';
+    const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
+    const CONFIG_PATH_DB_LOGGER_OUTPUT = 'db_logger/output';
+    const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
+    const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
+    const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
     /**#@-*/
+
+    /**
+     * Parameter for disabling/enabling static content deployment on demand in production mode
+     * Can contains 0/1 value
+     */
+    const CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION = 'static_content_on_demand_in_production';
+
+    /**
+     * Paramater for forcing HTML minification even if file is already minified.
+     */
+    const CONFIG_PATH_FORCE_HTML_MINIFICATION = 'force_html_minification';
 
     /**#@+
      * Input keys for the options
      */
     const INPUT_KEY_ENCRYPTION_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session-save';
-    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
     const INPUT_KEY_DB_HOST = 'db-host';
     const INPUT_KEY_DB_NAME = 'db-name';
     const INPUT_KEY_DB_USER = 'db-user';
@@ -50,6 +68,15 @@ class ConfigOptionsListConstants
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
     /**#@-*/
+
+    /**#@+
+     * Input keys for cache configuration
+     */
+    const KEY_CACHE_FRONTEND = 'cache/frontend';
+    const CONFIG_PATH_BACKEND_OPTIONS = 'backend_options';
+
+    /** @deprecated */
+    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
 
     /**#@+
      * Values for session-save
@@ -68,6 +95,7 @@ class ConfigOptionsListConstants
      * Array keys for Database configuration
      */
     const KEY_HOST = 'host';
+    const KEY_PORT = 'port';
     const KEY_NAME = 'dbname';
     const KEY_USER = 'username';
     const KEY_PASSWORD = 'password';
@@ -101,5 +129,5 @@ class ConfigOptionsListConstants
     /**
      * Size of random string generated for store's encryption key
      */
-    const STORE_KEY_RANDOM_STRING_SIZE = 32;
+    const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
 }

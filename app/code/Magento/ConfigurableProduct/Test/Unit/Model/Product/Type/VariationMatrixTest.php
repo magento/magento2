@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class VariationMatrixTest extends \PHPUnit_Framework_TestCase
+class VariationMatrixTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix */
     protected $model;

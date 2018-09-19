@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -234,7 +238,10 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
             && $attribute->isValueEmpty($value)
             && $attribute->isValueEmpty($attribute->getDefaultValue())
         ) {
-            throw new LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
+            $label = $attribute->getFrontend()->getLabel();
+            throw new LocalizedException(
+                __('The "%1" attribute value is empty. Set the attribute and try again.', $label)
+            );
         }
 
         if ($attribute->getIsUnique()
@@ -247,7 +254,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         if ($attribute->getIsUnique()) {
             if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 $label = $attribute->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 

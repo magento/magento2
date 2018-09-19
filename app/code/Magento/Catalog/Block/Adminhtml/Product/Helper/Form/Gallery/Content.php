@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,15 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Block for gallery content.
+ */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/helper/gallery.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/helper/gallery.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
@@ -39,11 +42,6 @@ class Content extends \Magento\Backend\Block\Widget
      * @var \Magento\Catalog\Helper\Image
      */
     private $imageHelper;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    private $assetRepo;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -63,6 +61,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare layout.
+     *
      * @return AbstractBlock
      */
     protected function _prepareLayout()
@@ -108,6 +108,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns js object name
+     *
      * @return string
      */
     public function getJsObjectName()
@@ -116,6 +118,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns buttons for add image action.
+     *
      * @return string
      */
     public function getAddImagesButton()
@@ -129,6 +133,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image json
+     *
      * @return string
      */
     public function getImagesJson()
@@ -147,13 +153,8 @@ class Content extends \Magento\Backend\Block\Widget
                     $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
                     $image['size'] = $fileHandler['size'];
                 } catch (FileSystemException $e) {
-                    $staticDir = $this->_filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('thumbnail');
-                    $fileHandler = $staticDir->stat(
-                        $this->getAssetRepo()
-                            ->createAsset($this->getImageHelper()->getPlaceholder('thumbnail'))->getPath()
-                    );
-                    $image['size'] = $fileHandler['size'];
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+                    $image['size'] = 0;
                     $this->_logger->warning($e);
                 }
             }
@@ -179,6 +180,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image values json
+     *
      * @return string
      */
     public function getImagesValuesJson()
@@ -203,9 +206,11 @@ class Content extends \Magento\Backend\Block\Widget
         $imageTypes = [];
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            $value = $this->getElement()->getDataObject()->getData($attribute->getAttributeCode())
+                ?: $this->getElement()->getImageValue($attribute->getAttributeCode());
             $imageTypes[$attribute->getAttributeCode()] = [
                 'code' => $attribute->getAttributeCode(),
-                'value' => $this->getElement()->getDataObject()->getData($attribute->getAttributeCode()),
+                'value' => $value,
                 'label' => $attribute->getFrontend()->getLabel(),
                 'scope' => __($this->getElement()->getScopeLabel($attribute)),
                 'name' => $this->getElement()->getAttributeFieldName($attribute),
@@ -251,8 +256,10 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns image helper object.
+     *
      * @return \Magento\Catalog\Helper\Image
-     * @deprecated
+     * @deprecated 101.0.3
      */
     private function getImageHelper()
     {
@@ -261,19 +268,5 @@ class Content extends \Magento\Backend\Block\Widget
                 ->get(\Magento\Catalog\Helper\Image::class);
         }
         return $this->imageHelper;
-    }
-
-    /**
-     * @return \Magento\Framework\View\Asset\Repository
-     * @deprecated
-     */
-    private function getAssetRepo()
-    {
-        if ($this->assetRepo === null) {
-            $this->assetRepo = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\View\Asset\Repository::class);
-        }
-
-        return $this->assetRepo;
     }
 }

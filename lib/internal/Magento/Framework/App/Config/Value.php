@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\ResourceModel\Db\AbstractDb getResource()
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -10,9 +10,10 @@
 @collapsible-nav-background: @sidebar__background-color;
 @collapsible-nav-color: @color-gray34;
 @collapsible-nav-current-border: 3px solid transparent;
-@collapsible-nav-current-border-color: @color-orange-red1;
+@collapsible-nav-current-border-color: @active__color;
 @collapsible-nav-current-color: @color-black;
 @collapsible-nav-current-font-weight: @font-weight__semibold;
+@collapsible-nav-delimiter__border-color: @color-gray82;
 @collapsible-nav-item-hover: @color-gray91;
 
 //
@@ -63,6 +64,12 @@
                 a {
                     .lib-css(border-color, @collapsible-nav-current-border-color);
                 }
+            }
+
+            .delimiter {
+                border-top: 1px solid @collapsible-nav-delimiter__border-color;
+                display: block;
+                margin: @indent__s 1.8rem;
             }
         }
     }

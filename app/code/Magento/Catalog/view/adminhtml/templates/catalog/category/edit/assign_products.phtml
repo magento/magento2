@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,14 +10,14 @@
 $blockGrid = $block->getBlockGrid();
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
-<?php  echo $block->getGridHtml(); ?>
+<?= $block->getGridHtml() ?>
 <input type="hidden" name="category_products" id="in_category_products" data-form-part="category_form" value="" />
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Catalog/catalog/category/assign-products": {
-                "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getProductsJson(); ?>,
-                "gridJsObjectName": <?php /* @escapeNotVerified */ echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+                "selectedProducts": <?= /* @escapeNotVerified */ $block->getProductsJson() ?>,
+                "gridJsObjectName": <?= /* @escapeNotVerified */ '"' . $gridJsObjectName . '"' ?: '{}' ?>
             }
         }
     }

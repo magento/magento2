@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
@@ -14,7 +14,7 @@ use Zend\View\Model\ViewModel;
 /**
  * Class UpdateExtensionGridTest
  */
-class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
+class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Extension|MockObject
@@ -30,7 +30,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->gridExtensionMock = $this->getMock(Extension::class, [], [], '', false);
+        $this->gridExtensionMock = $this->createMock(Extension::class);
 
         $this->controller = new UpdateExtensionGrid(
             $this->gridExtensionMock
@@ -50,6 +50,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
         $extensionData = [
             [
                 'name' => 'magento-package-1',
+                'product_name' => 'magento/package-1',
                 'type' => 'magento2-module',
                 'version' => '1.0.0',
                 'latestVersion' => '2.0.5',

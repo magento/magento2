@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Block\Component\StepsWizard;
 
+/**
+ * Abstract block for multi-step wizard UI
+ */
 abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements StepInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -16,7 +19,7 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParentComponentName()
     {
@@ -24,7 +27,7 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName()
     {

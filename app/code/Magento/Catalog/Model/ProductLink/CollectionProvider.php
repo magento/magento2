@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,15 +42,27 @@ class CollectionProvider
     public function getCollection(\Magento\Catalog\Model\Product $product, $type)
     {
         if (!isset($this->providers[$type])) {
-            throw new NoSuchEntityException(__('Collection provider is not registered'));
+            throw new NoSuchEntityException(__("The collection provider isn't registered."));
         }
 
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
         $output = [];
+        $sorterItems = [];
         foreach ($products as $item) {
             $output[$item->getId()] = $converter->convert($item);
         }
-        return $output;
+
+        foreach ($output as $item) {
+            $itemPosition = $item['position'];
+            if (!isset($sorterItems[$itemPosition])) {
+                $sorterItems[$itemPosition] = $item;
+            } else {
+                $newPosition = $itemPosition + 1;
+                $sorterItems[$newPosition] = $item;
+            }
+        }
+        ksort($sorterItems);
+        return $sorterItems;
     }
 }

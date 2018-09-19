@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Compiler;
 
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 
-class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
+class ArgumentsResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Compiler\ArgumentsResolver
@@ -22,13 +22,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->diContainerConfig = $this->getMock(
-            \Magento\Framework\ObjectManager\ConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->diContainerConfig = $this->createMock(\Magento\Framework\ObjectManager\ConfigInterface::class);
         $this->model = new \Magento\Setup\Module\Di\Compiler\ArgumentsResolver($this->diContainerConfig);
     }
 

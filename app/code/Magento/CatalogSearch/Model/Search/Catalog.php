@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Search;
@@ -9,6 +9,9 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search model for backend search
+ *
+ * @deprecated 100.2.0
+ * @see ElasticSearch module is default search engine starting from 2.3. CatalogSearch would be removed in 2.4
  */
 class Catalog extends \Magento\Framework\DataObject
 {

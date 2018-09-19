@@ -1,24 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Block\Role\Tab;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 
 /**
  * Rolesedit Tab Display Block.
  *
+ * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string
      */
-    protected $_template = 'role/edit.phtml';
+    protected $_template = 'Magento_User::role/edit.phtml';
 
     /**
      * Root ACL Resource
@@ -48,13 +49,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     protected $_aclResourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     */
     protected $_integrationData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 100.1.0
      */
     protected $coreRegistry = null;
 
@@ -89,11 +93,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
     {
-
         $this->coreRegistry = $coreRegistry;
     }
 
@@ -101,11 +105,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get core registry
      *
      * @return \Magento\Framework\Registry
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function getCoreRegistry()
     {
-
         if (!($this->coreRegistry instanceof \Magento\Framework\Registry)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
         } else {
@@ -169,6 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get selected resources
      *
      * @return array|mixed|\string[]
+     * @since 100.1.0
      */
     public function getSelectedResources()
     {
@@ -198,10 +203,25 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function getTree()
     {
+        return $this->_integrationData->mapResources($this->getAclResources());
+    }
+
+    /**
+     * Get lit of all ACL resources declared in the system.
+     *
+     * @return array
+     */
+    private function getAclResources()
+    {
         $resources = $this->_aclResourceProvider->getAclResources();
-        $rootArray = $this->_integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+        $configResource = array_filter(
+            $resources,
+            function ($node) {
+                return isset($node['id'])
+                    && $node['id'] == 'Magento_Backend::admin';
+            }
         );
-        return $rootArray;
+        $configResource = reset($configResource);
+        return isset($configResource['children']) ? $configResource['children'] : [];
     }
 }

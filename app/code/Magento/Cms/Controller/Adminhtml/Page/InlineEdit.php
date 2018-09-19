@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
@@ -17,13 +17,24 @@ use Magento\Cms\Api\Data\PageInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
-    /** @var PostDataProcessor */
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
+     * @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor
+     */
     protected $dataProcessor;
 
-    /** @var PageRepository  */
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
     protected $pageRepository;
 
-    /** @var JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $jsonFactory;
 
     /**
@@ -46,6 +57,7 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

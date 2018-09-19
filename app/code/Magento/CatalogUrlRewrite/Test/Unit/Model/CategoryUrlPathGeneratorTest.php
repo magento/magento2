@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
+class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
     protected $categoryUrlPathGenerator;
@@ -43,10 +42,10 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             'getName',
             'isObjectNew'
         ];
-        $this->category = $this->getMock(\Magento\Catalog\Model\Category::class, $categoryMethods, [], '', false);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, $categoryMethods);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
 
         $this->categoryUrlPathGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class,
@@ -144,7 +143,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->category->expects($this->any())->method('isObjectNew')->will($this->returnValue($isCategoryNew));
 
         $methods = ['__wakeup', 'getUrlPath', 'getParentId', 'getLevel', 'dataHasChangedFor', 'load'];
-        $parentCategory = $this->getMock(\Magento\Catalog\Model\Category::class, $methods, [], '', false);
+        $parentCategory = $this->createPartialMock(\Magento\Catalog\Model\Category::class, $methods);
         $parentCategory->expects($this->any())->method('getParentId')
             ->will($this->returnValue($parentCategoryParentId));
         $parentCategory->expects($this->any())->method('getLevel')->will($this->returnValue($parentLevel));
@@ -210,7 +209,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->category->expects($this->exactly(2))->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->once())->method('getId')->will($this->returnValue($currentStoreId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $this->scopeConfig->expects($this->once())->method('getValue')

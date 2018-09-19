@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
+use Magento\CatalogInventory\Api\RevertProductSaleInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
@@ -14,9 +16,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
- * Class StockManagement
+ * Implements a few interfaces for backward compatibility
  */
-class StockManagement implements StockManagementInterface
+class StockManagement implements StockManagementInterface, RegisterProductSaleInterface, RevertProductSaleInterface
 {
     /**
      * @var StockRegistryProviderInterface
@@ -49,12 +51,18 @@ class StockManagement implements StockManagementInterface
     private $qtyCounter;
 
     /**
+     * @var StockRegistryStorage
+     */
+    private $stockRegistryStorage;
+
+    /**
      * @param ResourceStock $stockResource
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockState $stockState
      * @param StockConfigurationInterface $stockConfiguration
      * @param ProductRepositoryInterface $productRepository
      * @param QtyCounterInterface $qtyCounter
+     * @param StockRegistryStorage|null $stockRegistryStorage
      */
     public function __construct(
         ResourceStock $stockResource,
@@ -62,7 +70,8 @@ class StockManagement implements StockManagementInterface
         StockState $stockState,
         StockConfigurationInterface $stockConfiguration,
         ProductRepositoryInterface $productRepository,
-        QtyCounterInterface $qtyCounter
+        QtyCounterInterface $qtyCounter,
+        StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->stockState = $stockState;
@@ -70,11 +79,13 @@ class StockManagement implements StockManagementInterface
         $this->productRepository = $productRepository;
         $this->qtyCounter = $qtyCounter;
         $this->resource = $stockResource;
+        $this->stockRegistryStorage = $stockRegistryStorage ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StockRegistryStorage::class);
     }
 
     /**
      * Subtract product qtys from stock.
-     * Return array of items that require full save
+     * Return array of items that require full save.
      *
      * @param string[] $items
      * @param int $websiteId
@@ -92,9 +103,12 @@ class StockManagement implements StockManagementInterface
         $fullSaveItems = $registeredItems = [];
         foreach ($lockedItems as $lockedItemRecord) {
             $productId = $lockedItemRecord['product_id'];
+            $this->stockRegistryStorage->removeStockItem($productId, $websiteId);
+
             /** @var StockItemInterface $stockItem */
             $orderedQty = $items[$productId];
             $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+            $stockItem->setQty($lockedItemRecord['qty']); // update data from locked item
             $canSubtractQty = $stockItem->getItemId() && $this->canSubtractQty($stockItem);
             if (!$canSubtractQty || !$this->stockConfiguration->isQty($lockedItemRecord['type_id'])) {
                 continue;
@@ -122,6 +136,7 @@ class StockManagement implements StockManagementInterface
         }
         $this->qtyCounter->correctItemsQty($registeredItems, $websiteId, '-');
         $this->getResource()->commit();
+        
         return $fullSaveItems;
     }
 
@@ -180,7 +195,7 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return Stock
+     * @return ResourceStock
      */
     protected function getResource()
     {

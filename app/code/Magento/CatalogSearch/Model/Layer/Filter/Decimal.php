@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -9,6 +9,9 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer decimal filter
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Decimal extends AbstractFilter
 {
@@ -115,7 +118,7 @@ class Decimal extends AbstractFilter
             }
             $label = $this->renderRangeLabel(
                 empty($from) ? 0 : $from,
-                empty($to) ? $to : $to
+                empty($to) ? 0 : $to
             );
             $value = $from . '-' . $to;
 

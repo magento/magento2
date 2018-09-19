@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 
-class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
+class Edit extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * Edit integration action.

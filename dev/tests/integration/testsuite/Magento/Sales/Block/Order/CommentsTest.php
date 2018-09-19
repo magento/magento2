@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
 
-class CommentsTest extends \PHPUnit_Framework_TestCase
+class CommentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\Comments

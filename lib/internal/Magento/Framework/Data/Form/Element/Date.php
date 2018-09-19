@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,6 @@
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class Date extends AbstractElement
@@ -167,6 +166,8 @@ class Date extends AbstractElement
                         'buttonImage' => $this->getImage(),
                         'buttonText' => 'Select Date',
                         'disabled' => $this->getDisabled(),
+                        'minDate' => $this->getMinDate(),
+                        'maxDate' => $this->getMaxDate(),
                     ],
                 ]
             )

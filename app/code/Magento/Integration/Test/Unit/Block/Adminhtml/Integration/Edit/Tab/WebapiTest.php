@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-class WebapiTest extends \PHPUnit_Framework_TestCase
+class WebapiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -83,6 +83,9 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->canShowTab());
     }
 
+    /**
+     * @return array
+     */
     public function canShowTabProvider()
     {
         return [
@@ -127,6 +130,9 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isEverythingAllowedProvider()
     {
         return [
@@ -155,7 +161,8 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
-            1 => [ 'children' => [1, 2, 3] ]
+            ['id' => 'Magento_Backend::admin', 'children' => ['resource1', 'resource2', 'resource3']],
+            ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -163,7 +170,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $rootArray = "rootArrayValue";
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
-            ->with([1, 2, 3])
+            ->with(['resource1', 'resource2', 'resource3'])
             ->will($this->returnValue($rootArray));
         $this->assertEquals($rootArray, $this->webapiBlock->getTree());
     }
@@ -197,7 +204,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         return [
             'root resource in array' => [
                 2,
-                ['all_resources' => 0, 'resource'=>[2, 3]],
+                ['all_resources' => 0, 'resource' => [2, 3]],
                 true
             ],
             'root resource not in array' => [

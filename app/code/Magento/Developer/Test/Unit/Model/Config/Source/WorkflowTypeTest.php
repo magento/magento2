@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Source;
@@ -12,7 +12,7 @@ use Magento\Developer\Model\Config\Source\WorkflowType;
  *
  * @package Magento\Backend\Model\Config\Source\Dev
  */
-class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
+class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WorkflowType

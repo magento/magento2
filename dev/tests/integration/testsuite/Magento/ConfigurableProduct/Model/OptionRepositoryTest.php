@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
 
-class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
+class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetListWithExtensionAttributes()
     {
-        $this->markTestSkipped('Test skipped due to MAGETWO-45654');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $productSku = 'configurable';
         /** @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository */
@@ -25,9 +25,10 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $joinedEntity = $objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
         $joinedEntity->load($options[0]->getId());
         $joinedExtensionAttributeValue = $joinedEntity->getAttributeCode();
+        $result = $options[0]->getExtensionAttributes()->__toArray();
         $this->assertEquals(
             $joinedExtensionAttributeValue,
-            $options[0]->getExtensionAttributes()->getTestDummyAttribute(),
+            $result['test_dummy_attribute'],
             "Extension attributes were not loaded correctly"
         );
     }

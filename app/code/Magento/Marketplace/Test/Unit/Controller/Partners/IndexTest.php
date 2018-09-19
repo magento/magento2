@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Marketplace\Test\Unit\Controller\Partners;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Controller\Adminhtml\Partners\Index
@@ -75,7 +75,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function getControllerIndexMock($methods = null)
     {
-        return $this->getMock(\Magento\Marketplace\Controller\Adminhtml\Partners\Index::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Marketplace\Controller\Adminhtml\Partners\Index::class, $methods);
     }
 
     /**
@@ -83,7 +83,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function getLayoutFactoryMock($methods = null)
     {
-        return $this->getMock(\Magento\Framework\View\LayoutFactory::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, $methods, []);
     }
 
     /**
@@ -99,7 +99,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function getResponseMock($methods = null)
     {
-        return $this->getMock(\Magento\Framework\HTTP\PhpEnvironment\Response::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\HTTP\PhpEnvironment\Response::class, $methods, []);
     }
 
     /**
@@ -107,7 +107,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function getRequestMock($methods = null)
     {
-        return $this->getMock(\Magento\Framework\App\Request\Http::class, $methods, [], '', false);
+        return $this->createPartialMock(\Magento\Framework\App\Request\Http::class, $methods, []);
     }
 
     /**

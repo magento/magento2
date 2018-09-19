@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
@@ -14,6 +12,9 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * Order item render block
+ *
+ * @api
+ * @since 100.0.2
  */
 class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {
@@ -172,7 +173,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         $result = ['value' => $truncatedValue];
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
+            $result['value'] = $result['value']
+                . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, ['full_view' => $optionValue]);
         }

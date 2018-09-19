@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category\Link;
@@ -119,7 +119,9 @@ class SaveHandler implements ExtensionInterface
 
             if ($key === false) {
                 $result[] = $newCategoryPosition;
-            } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
+            } elseif (isset($oldCategoryPositions[$key])
+                && $oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']
+            ) {
                 $result[] = $newCategoryPositions[$key];
                 unset($oldCategoryPositions[$key]);
             }

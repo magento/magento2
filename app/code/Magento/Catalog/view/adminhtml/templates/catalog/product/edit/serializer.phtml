@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,4 +9,4 @@
 ?>
 
 <?php $_id = 'id_' . md5(microtime()) ?>
-<input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getInputElementName()?>"  value="" id="<?php /* @escapeNotVerified */ echo $_id?>" />
+<input type="hidden" name="<?= /* @escapeNotVerified */ $block->getInputElementName() ?>"  value="" id="<?= /* @escapeNotVerified */ $_id ?>" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ use Magento\Framework\Mview\View\Collection as MviewCollection;
  * Class FulltextFilterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FulltextFilterTest extends \PHPUnit_Framework_TestCase
+class FulltextFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FulltextFilter
@@ -70,12 +70,12 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(EntityFactory::class, [], [], '', false);
-        $this->loggerMock = $this->getMock(LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMock(FetchStrategyInterface::class, [], [], '', false);
-        $this->resourceModelAbstractDb = $this->getMock(FetchStrategyInterface::class, [], [], '', false);
-        $this->connectionMock = $this->getMock(Mysql::class, ['select', 'getIndexList'], [], '', false);
-        $this->selectMock = $this->getMock(Select::class, ['getPart', 'where'], [], '', false);
+        $this->entityFactoryMock = $this->createMock(EntityFactory::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->resourceModelAbstractDb = $this->createMock(FetchStrategyInterface::class);
+        $this->connectionMock = $this->createPartialMock(Mysql::class, ['select', 'getIndexList']);
+        $this->selectMock = $this->createPartialMock(Select::class, ['getPart', 'where']);
 
         $this->resourceModelAbstractDb = $this->getMockBuilder(ResourceModelAbstractDb::class)
             ->disableOriginalConstructor()

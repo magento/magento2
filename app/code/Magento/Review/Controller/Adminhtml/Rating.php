@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml;
@@ -41,9 +41,18 @@ abstract class Rating extends Action
     }
 
     /**
-     * @return void
+     * @deprecated Misspelled method
+     * @see initEntityId
      */
     protected function initEnityId()
+    {
+        $this->initEntityId();
+    }
+
+    /**
+     * @return void
+     */
+    protected function initEntityId()
     {
         $this->coreRegistry->register(
             'entityId',

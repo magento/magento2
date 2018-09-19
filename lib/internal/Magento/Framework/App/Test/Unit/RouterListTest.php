@@ -2,12 +2,12 @@
 /**
  * RouterList model test class
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
 
-class RouterListTest extends \PHPUnit_Framework_TestCase
+class RouterListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RouterList
@@ -34,7 +34,7 @@ class RouterListTest extends \PHPUnit_Framework_TestCase
             'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15],
         ];
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\App\RouterList($this->objectManagerMock, $this->routerList);
     }
 

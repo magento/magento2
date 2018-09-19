@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+         extends="parent_component">
+    <columns name="columns" component="Magento_Test/js/grid/listing" template="Magento_Test/grid/listing">
+        <column name="created_at" component="Magento_Test/js/grid/columns/message" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true"/>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+    </columns>
+</listing>

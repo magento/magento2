@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,12 +22,14 @@
                 <tax_including>1</tax_including>
             </minimum_order>
             <orders>
+                <items_per_page>20</items_per_page>
                 <delete_pending_after>480</delete_pending_after>
             </orders>
         </sales>
         <sales_email>
             <general>
                 <async_sending>0</async_sending>
+                <sending_limit>50</sending_limit>
             </general>
             <order>
                 <enabled>1</enabled>

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -33,7 +33,7 @@
         }
 
         .subtotal {
-            margin: 0 @indent__s;
+            margin: 0 @indent__s @indent__s;
             text-align: right;
 
             .label {
@@ -109,6 +109,11 @@
         .lib-dropdown(
         @_toggle-selector: ~'.action.showcart',
         @_options-selector: ~'.block-minicart',
+        @_dropdown-list-width: 320px,
+        @_dropdown-list-position-right: 0px,
+        @_dropdown-list-pointer-position: right,
+        @_dropdown-list-pointer-position-left-right: 26px,
+        @_dropdown-list-z-index: 101,              
         @_dropdown-toggle-icon-content: @icon-cart,
         @_dropdown-toggle-active-icon-content: @icon-cart,
         @_dropdown-list-item-padding: false,
@@ -124,23 +129,12 @@
 
         .block-minicart {
             .lib-css(padding, 25px @minicart__padding-horizontal);
-            right: 0;
-            width: 320px;
-
+            
             .block-title {
                 display: none;
             }
-
-            &:after {
-                left: auto;
-                right: 25px;
-            }
-
-            &:before {
-                left: auto;
-                right: 26px;
-            }
         }
+
         .product {
             .actions {
                 float: right;
@@ -206,6 +200,10 @@
                     }
                 }
 
+                .counter-number {
+                    text-shadow: 0 0 7px rgba(0, 0, 0, 1);
+                }
+
                 .counter-label {
                     &:extend(.abs-visually-hidden all);
                 }
@@ -251,7 +249,6 @@
         .product-item-pricing {
             .label {
                 display: inline-block;
-                width: 4.5rem;
             }
         }
 

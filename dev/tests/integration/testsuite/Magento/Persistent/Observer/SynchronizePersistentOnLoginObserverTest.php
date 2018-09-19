@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Persistent\Observer;
 /**
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class SynchronizePersistentOnLoginObserverTest extends \PHPUnit_Framework_TestCase
+class SynchronizePersistentOnLoginObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver

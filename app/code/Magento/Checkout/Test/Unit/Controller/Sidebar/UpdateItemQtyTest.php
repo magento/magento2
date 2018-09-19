@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UpdateItemQtyTest extends \PHPUnit_Framework_TestCase
+class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Checkout\Controller\Sidebar\UpdateItemQty */
     protected $updateItemQty;
@@ -33,10 +33,10 @@ class UpdateItemQtyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sidebarMock = $this->getMock(\Magento\Checkout\Model\Sidebar::class, [], [], '', false);
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->responseMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\ResponseInterface::class,
             [],

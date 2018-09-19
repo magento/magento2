@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
@@ -15,7 +15,7 @@ namespace Magento\Framework\Session\Test\Unit {
      * Test SessionManager
      *
      */
-    class SessionManagerTest extends \PHPUnit_Framework_TestCase
+    class SessionManagerTest extends \PHPUnit\Framework\TestCase
     {
         const SESSION_USE_ONLY_COOKIES = 'session.use_only_cookies';
         const SESSION_USE_ONLY_COOKIES_ENABLE = '1';
@@ -61,7 +61,7 @@ namespace Magento\Framework\Session\Test\Unit {
             $this->mockSessionConfig = $this->getMockBuilder(\Magento\Framework\Session\Config\ConfigInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->mockCookieManager = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+            $this->mockCookieManager = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
             $this->mockCookieMetadataFactory = $this->getMockBuilder(
                 \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
             )

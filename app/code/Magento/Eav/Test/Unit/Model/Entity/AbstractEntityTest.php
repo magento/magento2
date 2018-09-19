@@ -1,17 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AbstractEntityTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class AbstractEntityTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AbstractEntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Entity model to be tested
-     * @var \Magento\Eav\Model\Entity\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -21,13 +29,13 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $arguments =  $objectManager->getConstructArguments(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             ['eavConfig' => $this->eavConfig]
         );
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             $arguments
         );
     }
@@ -46,13 +54,16 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompareAttributes($attribute1Sort, $attribute2Sort, $expected)
     {
-        $attribute1 = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup'], [], '', false);
+        $attribute1 = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
         $attribute1->setAttributeSetInfo([0 => $attribute1Sort]);
-        $attribute2 = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup'], [], '', false);
+        $attribute2 = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
         $attribute2->setAttributeSetInfo([0 => $attribute2Sort]);
         $this->assertEquals($expected, $this->_model->attributesCompare($attribute1, $attribute2));
     }
 
+    /**
+     * @return array
+     */
     public static function compareAttributesDataProvider()
     {
         return [
@@ -84,17 +95,14 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $attributes = [];
         $codes = ['entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id'];
         foreach ($codes as $code) {
-            $mock = $this->getMock(
+            $mock = $this->createPartialMock(
                 \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-                ['getBackend', 'getBackendTable', '__wakeup'],
-                [],
-                '',
-                false
+                ['getBackend', 'getBackendTable', '__wakeup']
             );
             $mock->setAttributeId($code);
 
             /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
-            $backendModel = $this->getMock(
+            $backendModel = $this->createPartialMock(
                 \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
                 ['getBackend', 'getBackendTable']
             );
@@ -113,13 +121,11 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     /**
      * Get adapter mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function _getConnectionMock()
     {
-        $connection = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [
+        $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [
                 'describeTable',
                 'getIndexList',
                 'lastInsertId',
@@ -128,26 +134,13 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
                 'select',
                 'query',
                 'delete'
-            ],
-            [],
-            '',
-            false
-        );
-        $statement = $this->getMock(
+            ]);
+        $statement = $this->createPartialMock(
             \Zend_Db_Statement::class,
-            ['closeCursor', 'columnCount', 'errorCode', 'errorInfo', 'fetch', 'nextRowset', 'rowCount'],
-            [],
-            '',
-            false
+            ['closeCursor', 'columnCount', 'errorCode', 'errorInfo', 'fetch', 'nextRowset', 'rowCount']
         );
 
-        $select = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $select->expects($this->any())
             ->method('from')
             ->willReturnSelf();
@@ -202,12 +195,9 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAttributeMock($attributeCode, $attributeSetId)
     {
-        $attribute = $this->getMock(
+        $attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode', '__wakeup']
         );
         $attribute->setAttributeId($attributeCode);
 
@@ -244,12 +234,9 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
     {
-        $object = $this->getMock(
+        $object = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave'],
-            [],
-            '',
-            false
+            ['getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave']
         );
         $object->setEntityTypeId(1);
         foreach ($productData as $key => $value) {
@@ -267,7 +254,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
         /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
-        $backendModel = $this->getMock(
+        $backendModel = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [
                 'getBackend',
@@ -298,9 +285,9 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
-        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $arguments =  $objectManager->getConstructArguments(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             [
                 'eavConfig' => $eavConfig,
                 'data' => [
@@ -310,8 +297,8 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
+        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
@@ -329,6 +316,9 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $model->save($object);
     }
 
+    /**
+     * @return array
+     */
     public function productAttributesDataProvider()
     {
         $attributeSetId = 10;
@@ -336,21 +326,57 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => null],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => null,
+                    'store_id' => 1
+                ],
                 null,
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => 12345,
+                    'store_id' => 1
+                ],
                 ['test_attr' => 'test_attr']
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345, 'store_id' => 1],
                 ['test_attr' => '99.9900']
             ]
         ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     */
+    public function testDuplicateExceptionProcessingOnSave()
+    {
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->expects($this->once())->method('rollback');
+
+        /** @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject $model */
+        $model = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection'])
+            ->getMockForAbstractClass();
+        $model->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $object->expects($this->once())->method('beforeSave')->willThrowException(new DuplicateException());
+        $object->expects($this->once())->method('setHasDataChanges')->with(true);
+
+        $model->save($object);
     }
 }

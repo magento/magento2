@@ -1,16 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Catalog Product Website Model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Website _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Website getResource()
  * @method int getWebsiteId()
  * @method \Magento\Catalog\Model\Product\Website setWebsiteId(int $value)
  *
@@ -28,16 +24,6 @@ class Website extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Website::class);
-    }
-
-    /**
-     * Retrieve Resource instance wrapper
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Website
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

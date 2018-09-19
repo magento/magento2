@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Handler\BundleProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Webapi as SimpleProductWebapi;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Config\DataInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
@@ -64,25 +62,9 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                     'title' => $bundleOption['title'],
                     'type' => $bundleOption['type'],
                     'required' => $bundleOption['required'],
-                    'product_links' => [],
+                    'position' => isset($bundleOption['position']) ? (int)$bundleOption['position'] : $key,
+                    'product_links' => $this->prepareLinksInfo($bundleSelections, $key)
                 ];
-
-                $productLinksInfo = $bundleOption['assigned_products'];
-                $products = $bundleSelections['products'][$key];
-                foreach ($productLinksInfo as $linkKey => $productLink) {
-                    $product = $products[$linkKey];
-                    $bundleProductOptions[$key]['product_links'][] = [
-                        'sku' => $product->getSku(),
-                        'qty' => $productLink['data']['selection_qty'],
-                        'is_default' => false,
-                        'price' => isset($productLink['data']['selection_price_value'])
-                            ? $productLink['data']['selection_price_value']
-                            : null,
-                        'price_type' => isset($productLink['data']['selection_price_type'])
-                            ? $productLink['data']['selection_price_type']
-                            : null,
-                    ];
-                }
             }
         }
 
@@ -90,6 +72,40 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
         unset($this->fields['bundle_options']);
         unset($this->fields['bundle_selections']);
         unset($this->fields['product']['bundle_selections']);
+    }
+
+    /**
+     * Prepare links info field.
+     *
+     * @param array $bundleSelections
+     * @param int $key
+     * @return array
+     */
+    private function prepareLinksInfo(array $bundleSelections, $key)
+    {
+        $result = [];
+        $productLinksInfo = $bundleSelections['bundle_options'][$key]['assigned_products'];
+        $products = $bundleSelections['products'][$key];
+        foreach ($productLinksInfo as $linkKey => $productLink) {
+            $product = $products[$linkKey];
+            $result[] = [
+                'sku' => $product->getSku(),
+                'qty' => $productLink['data']['selection_qty'],
+                'is_default' => false,
+                'price' => isset($productLink['data']['selection_price_value'])
+                    ? $productLink['data']['selection_price_value']
+                    : null,
+                'price_type' => isset($productLink['data']['selection_price_type'])
+                    ? $productLink['data']['selection_price_type']
+                    : null,
+                'can_change_quantity' => isset($productLink['data']['user_defined'])
+                    ? $productLink['data']['user_defined']
+                    : 0,
+                'position' => $linkKey,
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -119,7 +135,6 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                     'selection_id' => (int)$optionValue['id'],
                     'option_id' => $option['option_id']
                 ];
-
             }
         }
 

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
@@ -12,6 +10,10 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Backup\Archive;
+
+use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class Tar extends \Magento\Framework\Archive\Tar
 {
@@ -23,25 +25,29 @@ class Tar extends \Magento\Framework\Archive\Tar
     protected $_skipFiles = [];
 
     /**
-     * Overridden \Magento\Framework\Archive\Tar::_createTar method that does the same actions as it's parent but filters
-     * files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
+     * Overridden \Magento\Framework\Archive\Tar::_createTar method that does the same actions as it's parent but
+     * filters files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
      *
      * @param bool $skipRoot
      * @param bool $finalize
      * @return void
      *
      * @see \Magento\Framework\Archive\Tar::_createTar()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
         $path = $this->_getCurrentFile();
 
-        $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::SELF_FIRST
+        $filesystemIterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_skipFiles);
+        $iterator = new Filter(
+            $filesystemIterator,
+            $this->_skipFiles
+        );
 
         foreach ($iterator as $item) {
             $this->_setCurrentFile($item->getPathname());

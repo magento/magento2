@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -10,7 +10,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RemoveTrackTest extends \PHPUnit_Framework_TestCase
+class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -69,42 +69,24 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getParam'], [], '', false);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->shipmentTrackMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->shipmentTrackMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment\Track::class,
-            ['load', 'getId', 'delete', '__wakeup'],
-            [],
-            '',
-            false
+            ['load', 'getId', 'delete', '__wakeup']
         );
-        $this->shipmentMock = $this->getMock(
+        $this->shipmentMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['getIncrementId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getIncrementId', '__wakeup']
         );
-        $this->viewMock = $this->getMock(
+        $this->viewMock = $this->createPartialMock(
             \Magento\Framework\App\View::class,
-            ['loadLayout', 'getLayout', 'getPage'],
-            [],
-            '',
-            false
+            ['loadLayout', 'getLayout', 'getPage']
         );
-        $this->responseMock = $this->getMock(
-            \Magento\Framework\App\Response\Http::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->shipmentLoaderMock = $this->getMock(
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
@@ -116,12 +98,9 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->getMock(
+        $contextMock = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getObjectManager', 'getTitle', 'getView', 'getResponse'],
-            [],
-            '',
-            false
+            ['getRequest', 'getObjectManager', 'getTitle', 'getView', 'getResponse']
         );
 
         $this->objectManagerMock->expects($this->once())
@@ -206,7 +185,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
      */
     protected function representJson(array $errors)
     {
-        $jsonHelper = $this->getMock(\Magento\Framework\Json\Helper\Data::class, ['jsonEncode'], [], '', false);
+        $jsonHelper = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonEncode']);
         $jsonHelper->expects($this->once())
             ->method('jsonEncode')
             ->with($errors)
@@ -235,13 +214,10 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->will($this->returnSelf());
 
-        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false);
-        $trackingBlockMock = $this->getMock(
+        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
+        $trackingBlockMock = $this->createPartialMock(
             \Magento\Shipping\Block\Adminhtml\Order\Tracking::class,
-            ['toHtml'],
-            [],
-            '',
-            false
+            ['toHtml']
         );
 
         $trackingBlockMock->expects($this->once())

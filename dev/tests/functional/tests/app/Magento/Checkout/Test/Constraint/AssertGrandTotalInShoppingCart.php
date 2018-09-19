@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class AssertGrandTotalInShoppingCart extends AbstractConstraint
 
         $fixtureGrandTotal = number_format($cart->getGrandTotal(), 2);
         $pageGrandTotal = $checkoutCart->getTotalsBlock()->getGrandTotal();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $fixtureGrandTotal,
             $pageGrandTotal,
             'Grand total price in the shopping cart not equals to grand total price from fixture.'

@@ -1,16 +1,21 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -20,12 +25,14 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Customer\Controller\AbstractAccount;
+use Magento\Framework\Phrase;
 
 /**
  * Class EditPost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditPost extends \Magento\Customer\Controller\AbstractAccount
+class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Form code for data extractor
@@ -57,13 +64,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $session;
 
-    /** @var EmailNotificationInterface */
-    private $emailNotification;
-
     /**
-     * @var ScopeConfigInterface
+     * @var \Magento\Customer\Model\EmailNotificationInterface
      */
-    private $scopeConfig;
+    private $emailNotification;
 
     /**
      * @var AuthenticationInterface
@@ -120,7 +124,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -131,6 +135,30 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         } else {
             return $this->emailNotification;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('*/*/edit');
+
+        return new InvalidRequestException(
+            $resultRedirect,
+            [new Phrase('Invalid Form Key. Please refresh the page.')]
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return null;
     }
 
     /**
@@ -171,8 +199,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -192,23 +220,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         }
 
-        return $resultRedirect->setPath('*/*/edit');
-    }
-
-    /**
-     * Get scope config
-     *
-     * @return ScopeConfigInterface
-     */
-    private function getScopeConfig()
-    {
-        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Config\ScopeConfigInterface::class
-            );
-        } else {
-            return $this->scopeConfig;
-        }
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('*/*/edit');
+        return $resultRedirect;
     }
 
     /**
@@ -307,7 +322,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->getRequest()->getPost('current_password')
                 );
             } catch (InvalidEmailOrPasswordException $e) {
-                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+                throw new InvalidEmailOrPasswordException(
+                    __("The password doesn't match this account. Verify the password and try again.")
+                );
             }
         }
     }
@@ -317,7 +334,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return Mapper
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getCustomerMapper()
     {

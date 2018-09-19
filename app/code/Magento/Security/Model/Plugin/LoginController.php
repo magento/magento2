@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\Plugin;
@@ -53,7 +53,7 @@ class LoginController
     {
         $logoutReasonCode = $this->securityCookie->getLogoutReasonCookie();
         if ($this->isLoginForm($login) && $logoutReasonCode >= 0) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 $this->sessionsManager->getLogoutReasonMessageByStatus($logoutReasonCode)
             );
             $this->securityCookie->deleteLogoutReasonCookie();

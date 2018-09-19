@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider\Modifier;
 
+/**
+ * Interface \Magento\Ui\DataProvider\Modifier\PoolInterface
+ *
+ */
 interface PoolInterface
 {
     /**

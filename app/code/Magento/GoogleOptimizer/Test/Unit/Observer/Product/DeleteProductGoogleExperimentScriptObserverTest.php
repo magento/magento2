@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
 
-class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
+class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,17 +27,11 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit_Framework
         $entityId = 3;
         $storeId = 0;
 
-        $this->_codeMock = $this->getMock(\Magento\GoogleOptimizer\Model\Code::class, [], [], '', false);
-        $event = $this->getMock(\Magento\Framework\Event::class, ['getProduct'], [], '', false);
-        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
+        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
-        $product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getId', 'getStoreId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getStoreId', '__wakeup']);
         $product->expects($this->once())->method('getId')->will($this->returnValue($entityId));
         $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
         $event->expects($this->once())->method('getProduct')->will($this->returnValue($product));

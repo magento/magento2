@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Pricing\Render;
 
 use Magento\Wishlist\Pricing\Render\ConfiguredPriceBox;
 
-class ConfiguredPriceBoxTest extends \PHPUnit_Framework_TestCase
+class ConfiguredPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject

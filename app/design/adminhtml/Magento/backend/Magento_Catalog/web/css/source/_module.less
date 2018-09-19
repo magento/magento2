@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -76,5 +76,21 @@
 .admin__field-use-config {
     .admin__field + {
         margin-top: -@indent__base;
+    }
+}
+
+//
+//  Advanced Price panel
+//  ---------------------------------------------
+
+.admin__control-fields {
+    .control-grouped {
+        .lib-vendor-prefix-display(inline-flex);
+        .lib-vendor-prefix-flex-direction(row);
+
+        .admin__field + .admin__field {
+            margin-left: @indent__s;
+            margin-top: 0;
+        }
     }
 }

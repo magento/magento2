@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,15 +9,18 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
+ */
 class Product extends AbstractPlugin
 {
     /**
-     * Reindex on product save
-     *
      * @param ResourceProduct $productResource
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
+     * @throws \Exception
      */
     public function aroundSave(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
@@ -31,6 +34,7 @@ class Product extends AbstractPlugin
      * @param \Closure $proceed
      * @param AbstractModel $product
      * @return ResourceProduct
+     * @throws \Exception
      */
     public function aroundDelete(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {

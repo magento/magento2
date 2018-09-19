@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     /**
      * @var string
      */
-    protected $_template = 'toolbar/rate/save.phtml';
+    protected $_template = 'Magento_Tax::toolbar/rate/save.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
