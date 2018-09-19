@@ -235,6 +235,7 @@ class Gallery extends AbstractView
     }
 
     /**
+     * @param string $size
      * @return string
      */
     public function getMainProductImage($size = 'medium_image_url')
