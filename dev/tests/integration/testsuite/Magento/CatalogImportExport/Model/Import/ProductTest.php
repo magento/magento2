@@ -1573,9 +1573,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testImportWithoutUrlKeys()
     {
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        
         /**
          * Products `simple1` and `simple2` are created by fixture so already
          * have a URL Key, whereas `new-simple` is a new product so the import
@@ -1605,8 +1602,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
-            $this->assertEquals($productUrlKey, $productRepository->get($productSku, false, null, true)->getUrlKey());
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
 
