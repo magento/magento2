@@ -10,9 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateApiConfigurableProductActionGroup">
         <!-- Create the configurable product based on the data in the /data folder -->
-            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
+        <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
 
-        <!-- Make the configurable product have two options, that are children of the default attribute set -->
+        <!-- Create attribute with 2 options to be used in children products -->
         <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
         <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
             <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -20,7 +20,7 @@
         <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
             <requiredEntity createDataKey="createConfigProductAttribute"/>
         </createData>
-        <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+        <createData entity="AddToDefaultSet" stepKey="addAttributeToAttributeSet">
             <requiredEntity createDataKey="createConfigProductAttribute"/>
         </createData>
         <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
