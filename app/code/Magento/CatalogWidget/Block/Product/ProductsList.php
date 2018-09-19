@@ -199,6 +199,13 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
             /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
+        if (!$priceRender) {
+            $priceRender = $this->getLayout()->createBlock(
+                \Magento\Framework\Pricing\Render::class,
+                'product.price.render.default',
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
+            );
+        }
 
         $price = '';
         if ($priceRender) {
