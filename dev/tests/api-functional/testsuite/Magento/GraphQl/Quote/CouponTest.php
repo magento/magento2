@@ -92,6 +92,7 @@ class CouponTest extends GraphQlAbstract
      */
     public function testApplyCouponToCartWithNoItems()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/191');
         $couponCode = '2?ds5!2d';
 
         $this->quoteResource->load($this->quote, 'test_order_1', 'reserved_order_id');
