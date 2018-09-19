@@ -78,6 +78,7 @@ class CustomerChangePasswordTest extends GraphQlAbstract
      */
     public function testChangeWeakPassword()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/190');
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'weakpass';
@@ -96,6 +97,7 @@ class CustomerChangePasswordTest extends GraphQlAbstract
      */
     public function testCannotChangeWithIncorrectPassword()
     {
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/190');
         $customerEmail = 'customer@example.com';
         $oldCustomerPassword = 'password';
         $newCustomerPassword = 'anotherPassword1';
