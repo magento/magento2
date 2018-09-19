@@ -15,8 +15,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 
@@ -46,11 +44,6 @@ class Products implements ResolverInterface
     private $searchFilter;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var Layer\DataProvider\Filters
      */
     private $filtersDataProvider;
@@ -60,7 +53,6 @@ class Products implements ResolverInterface
      * @param Search $searchQuery
      * @param Filter $filterQuery
      * @param SearchFilter $searchFilter
-     * @param ValueFactory $valueFactory
      * @param Filters $filtersDataProvider
      */
     public function __construct(
@@ -68,14 +60,12 @@ class Products implements ResolverInterface
         Search $searchQuery,
         Filter $filterQuery,
         SearchFilter $searchFilter,
-        ValueFactory $valueFactory,
         Filters $filtersDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
         $this->searchFilter = $searchFilter;
-        $this->valueFactory = $valueFactory;
         $this->filtersDataProvider = $filtersDataProvider;
     }
 
@@ -88,7 +78,7 @@ class Products implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ) {
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
@@ -132,10 +122,6 @@ class Products implements ResolverInterface
             'filters' => $this->filtersDataProvider->getData($layerType)
         ];
 
-        $result = function () use ($data) {
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+        return $data;
     }
 }

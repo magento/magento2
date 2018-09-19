@@ -13,5 +13,9 @@
         <element name="productItemName" type="text" selector=".product-item-name"/>
         <element name="productItemQty" type="text" selector=".value"/>
         <element name="productItemPrice" type="text" selector=".price"/>
+        <element name="orderNumber" type="text" selector="//div[@class='checkout-success']//a"/>
+        <element name="shippingAddress" type="textarea" selector="//*[@class='box box-address-shipping']//address"/>
+        <element name="billingAddress" type="textarea" selector="//*[@class='box box-address-billing']//address"/>
+        <element name="additionalAddress" type="text" selector=".block.block-addresses-list"/>
     </section>
 </sections>
