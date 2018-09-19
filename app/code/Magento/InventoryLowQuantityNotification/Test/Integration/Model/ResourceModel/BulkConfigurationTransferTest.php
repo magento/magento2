@@ -87,6 +87,27 @@ class BulkConfigurationTransferTest extends TestCase
         $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', true);
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
 
-        self::assertNull($sourceConfig->getId(), 'Low stock notification not removed after unassign');
+        // 1 is the value return when there is not a defined configuration
+        self::assertEquals(1, $sourceConfig->getNotifyStockQty(), 'Low stock notification not removed after unassign');
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
+     * @magentoDbIsolation enabled
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testTransferFromUnassignedSource()
+    {
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'us-1', 'eu-1', false);
+        $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
+
+        self::assertEquals(
+            5.6,
+            $sourceConfig->getNotifyStockQty(),
+            'Low stock notification was overwritten by an unassigned source'
+        );
     }
 }

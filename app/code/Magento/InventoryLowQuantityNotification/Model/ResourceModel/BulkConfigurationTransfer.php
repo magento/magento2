@@ -98,7 +98,7 @@ class BulkConfigurationTransfer
 
                         $res = $connection->fetchOne($qry);
 
-                        $notifyStockQty = $res === null ? null : (float)$res;
+                        $notifyStockQty = ($res === null || $res === false) ? null : (float) $res;
                         try {
                             $connection->insert(
                                 $tableName,
@@ -109,12 +109,15 @@ class BulkConfigurationTransfer
                                 ]
                             );
                         } catch (DuplicateException $e) {
-                            $connection->update(
-                                $tableName,
-                                ['notify_stock_qty' => $notifyStockQty],
-                                $connection->quoteInto('sku = ?', $sku) . ' AND ' .
-                                $connection->quoteInto('source_code = ?', $destinationSource)
-                            );
+                            // Do not overwrite an existing configuration if the item was not assigned to the source
+                            if ($res !== false) {
+                                $connection->update(
+                                    $tableName,
+                                    ['notify_stock_qty' => $notifyStockQty],
+                                    $connection->quoteInto('sku = ?', $sku) . ' AND ' .
+                                    $connection->quoteInto('source_code = ?', $destinationSource)
+                                );
+                            }
                         }
                     }
                 }
