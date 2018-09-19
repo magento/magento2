@@ -37,7 +37,7 @@ class ScopeCodeResolver
      * @param null|string $scopeCode
      * @return string
      */
-    public function resolve($scopeType, $scopeCode = null)
+    public function resolve($scopeType, $scopeCode)
     {
         if (isset($this->resolvedScopeCodes[$scopeType][$scopeCode])) {
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
