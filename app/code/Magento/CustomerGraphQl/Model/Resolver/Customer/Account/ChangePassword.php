@@ -62,9 +62,16 @@ class ChangePassword implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = $this->userContext->getUserId();
+        if (!isset($args['currentPassword'])) {
+            throw new GraphQlInputException(__('"currentPassword" value should be specified'));
+        }
 
-        if ($customerId === 0 || $customerId === null) {
+        if (!isset($args['newPassword'])) {
+            throw new GraphQlInputException(__('"newPassword" value should be specified'));
+        }
+
+        $customerId = (int)$this->userContext->getUserId();
+        if ($customerId === 0) {
             throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',
@@ -72,12 +79,7 @@ class ChangePassword implements ResolverInterface
                 )
             );
         }
-        if (!isset($args['currentPassword'])) {
-            throw new GraphQlInputException(__('"currentPassword" value should be specified'));
-        }
-        if (!isset($args['newPassword'])) {
-            throw new GraphQlInputException(__('"newPassword" value should be specified'));
-        }
+
         $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
         $data = $this->customerResolver->getCustomerById($customerId);
 
