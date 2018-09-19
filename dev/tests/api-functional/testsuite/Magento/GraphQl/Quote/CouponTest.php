@@ -121,7 +121,7 @@ class CouponTest extends GraphQlAbstract
         $this->quoteResource->save($this->quote);
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
 
-        self::expectExceptionMessage('The current user cannot perform operations on the selected cart');
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
         $this->graphQlQuery($query);
     }
 
@@ -178,7 +178,7 @@ class CouponTest extends GraphQlAbstract
         $this->quoteResource->save($this->quote);
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
 
-        self::expectExceptionMessage('The current user cannot perform operations on the selected cart');
+        self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
         $this->graphQlQuery($query);
     }
 
