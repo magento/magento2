@@ -45,6 +45,6 @@ class BulkAssign extends Action
      */
     public function execute()
     {
-        return $this->processBulkPage->execute(__('Bulk source assignment'));
+        return $this->processBulkPage->execute(__('Bulk source assignment'), false);
     }
 }

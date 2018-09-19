@@ -45,6 +45,6 @@ class BulkTransfer extends Action
      */
     public function execute()
     {
-        return $this->processBulkPage->execute(__('Bulk Inventory Transfer'));
+        return $this->processBulkPage->execute(__('Bulk Inventory Transfer'), true);
     }
 }

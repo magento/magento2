@@ -12,7 +12,12 @@
 /** @var Magento\Backend\Block\Template $block */
 /** @var \Magento\InventoryCatalogAdminUi\ViewModel\SourcesSelection $viewModel */
 $viewModel = $block->getViewModel();
-$sources = $viewModel->getSources();
+
+if ($block->getData('show_only_assigned_sources')) {
+    $sources = $viewModel->getAssignedSources();
+} else {
+    $sources = $viewModel->getSources();
+}
 ?>
 <div class="page-main-actions">
     <div class="page-actions">

@@ -80,23 +80,23 @@ class BulkInventoryTransfer
     /**
      * @param string $sku
      * @param string $source
-     * @return float|null
+     * @return array|null
      */
-    private function getQuantityFromSource(string $sku, string $source): ?float
+    private function getSourceItemData(string $sku, string $source): ?array
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
-        $query = $connection->select()->from($tableName, SourceItemInterface::QUANTITY)
+        $query = $connection->select()->from($tableName)
             ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $source)
             ->where(SourceItemInterface::SKU . ' = ?', $sku);
 
-        $res = $connection->fetchOne($query);
+        $res = $connection->fetchRow($query);
         if ($res === false) {
             return null;
         }
 
-        return (float) $res;
+        return $res;
     }
 
     /**
@@ -113,27 +113,34 @@ class BulkInventoryTransfer
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
-        $originQuantity = $this->getQuantityFromSource($sku, $originSource);
-        $destinationQuantity = $this->getQuantityFromSource($sku, $destinationSource);
+        $orgSourceItem = $this->getSourceItemData($sku, $originSource);
+        $dstSourceItem = $this->getSourceItemData($sku, $destinationSource);
 
-        $finalQuantity = (float) $originQuantity + (float) $destinationQuantity;
+        $orgSourceItemQty = $orgSourceItem === null ? 0.0 : (float) $orgSourceItem[SourceItemInterface::QUANTITY];
+        $dstSourceItemQty = $dstSourceItem === null ? 0.0 : (float) $dstSourceItem[SourceItemInterface::QUANTITY];
 
-        $status = $finalQuantity > 0 ?
-            SourceItemInterface::STATUS_IN_STOCK :
-            SourceItemInterface::STATUS_OUT_OF_STOCK;
+        $finalQuantity = $orgSourceItemQty + $dstSourceItemQty;
 
-        $infoUpdate = [
+        if ($orgSourceItem !== null) {
+            $status = (int) $orgSourceItem[SourceItemInterface::STATUS];
+        } elseif ($dstSourceItemQty !== null) {
+            $status = (int) $dstSourceItem[SourceItemInterface::STATUS];
+        } else {
+            $status = (int) SourceItemInterface::STATUS_OUT_OF_STOCK;
+        }
+
+        $updateOperation = [
             SourceItemInterface::QUANTITY => $finalQuantity,
             SourceItemInterface::STATUS => $status,
         ];
 
-        if ($destinationQuantity === null) {
-            $infoUpdate[SourceItemInterface::SOURCE_CODE] = $destinationSource;
-            $infoUpdate[SourceItemInterface::SKU] = $sku;
+        if ($dstSourceItem === null) {
+            $updateOperation[SourceItemInterface::SOURCE_CODE] = $destinationSource;
+            $updateOperation[SourceItemInterface::SKU] = $sku;
 
-            $connection->insert($tableName, $infoUpdate);
-        } elseif ($originQuantity !== null) {
-            $connection->update($tableName, $infoUpdate, [
+            $connection->insert($tableName, $updateOperation);
+        } elseif ($orgSourceItem !== null) {
+            $connection->update($tableName, $updateOperation, [
                 SourceItemInterface::SOURCE_CODE . '=?' => $destinationSource,
                 SourceItemInterface::SKU . '=?' => $sku,
             ]);

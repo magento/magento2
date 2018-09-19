@@ -45,6 +45,6 @@ class BulkUnassign extends Action
      */
     public function execute()
     {
-        return $this->processBulkPage->execute(__('Bulk source unassignment'));
+        return $this->processBulkPage->execute(__('Bulk source unassignment'), true);
     }
 }
