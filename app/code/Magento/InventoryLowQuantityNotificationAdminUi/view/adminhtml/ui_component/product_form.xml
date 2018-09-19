@@ -18,13 +18,14 @@
                 </item>
             </argument>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
-                <field name="notify_stock_qty" formElement="input" sortOrder="60">
+                <field name="notify_stock_qty" formElement="input" sortOrder="60" component="Magento_InventoryLowQuantityNotificationAdminUi/js/components/notify-stock-qty">
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>notify_stock_qty</dataScope>
                         <label translate="true">Notify Quantity</label>
                         <imports>
-                            <link name="disabled">${$.parentName}.notify_stock_qty_use_default:checked</link>
+                            <link name="notifyStockQtyUseDefault">${$.parentName}.notify_stock_qty_use_default:checked</link>
+                            <link name="manageStock">!${ $.provider }:data.product.stock_data.manage_stock</link>
                         </imports>
                     </settings>
                 </field>
@@ -42,6 +43,9 @@
                         <links>
                             <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
                         </links>
+                        <imports>
+                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\InventoryLowQuantityNotificationAdminUi\Ui\Component\Product\Form\Element\UseConfigSettings">
