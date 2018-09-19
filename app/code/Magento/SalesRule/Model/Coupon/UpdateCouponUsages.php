@@ -45,14 +45,14 @@ class UpdateCouponUsages
     private $customerRuleUsage;
 
     /**
-     * @param RuleFactory     $ruleFactory
+     * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
-     * @param Coupon          $coupon
-     * @param Usage           $couponUsage
-     * @param Customer        $customerRuleUsage
+     * @param Coupon $coupon
+     * @param Usage $couponUsage
+     * @param Customer $customerRuleUsage
      */
     public function __construct(
-        RuleFactory     $ruleFactory,
+        RuleFactory $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
         Coupon $coupon,
         Usage $couponUsage,
