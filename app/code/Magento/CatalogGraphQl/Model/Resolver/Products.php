@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
@@ -58,7 +59,9 @@ class Products implements ResolverInterface
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
+     * @param SearchFilter $searchFilter
      * @param ValueFactory $valueFactory
+     * @param Filters $filtersDataProvider
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
@@ -66,7 +69,7 @@ class Products implements ResolverInterface
         Filter $filterQuery,
         SearchFilter $searchFilter,
         ValueFactory $valueFactory,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
+        Filters $filtersDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
@@ -77,7 +80,7 @@ class Products implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
