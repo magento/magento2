@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Helper\ExpressRedirect;
 use Magento\Checkout\Model\Type\Onepage;
@@ -19,7 +20,7 @@ use Magento\Framework\App\ObjectManager;
  * Class GetToken
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetToken extends AbstractExpress
+class GetToken extends AbstractExpress implements HttpGetActionInterface
 {
     /**
      * Config mode type
