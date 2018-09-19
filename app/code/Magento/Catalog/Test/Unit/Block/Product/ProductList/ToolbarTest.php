@@ -67,13 +67,16 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'getLimit',
                 'getCurrentPage'
             ]);
-        $this->memorizer = $this->createPartialMock(\Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer::class, [
+        $this->memorizer = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer::class,
+            [
                 'getDirection',
                 'getOrder',
                 'getMode',
                 'getLimit',
                 'isMemorizingAllowed'
-            ]);
+            ]
+        );
         $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
         $this->pagerBlock = $this->createPartialMock(\Magento\Theme\Block\Html\Pager::class, [
                 'setUseContainer',
