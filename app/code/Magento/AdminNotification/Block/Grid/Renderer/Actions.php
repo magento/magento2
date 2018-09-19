@@ -9,7 +9,7 @@
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
 /**
- * Class Actions
+ * Renderer class for action in the admin notifications grid
  *
  * @package Magento\AdminNotification\Block\Grid\Renderer
  */
