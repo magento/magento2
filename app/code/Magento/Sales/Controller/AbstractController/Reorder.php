@@ -46,7 +46,6 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * Action for reorder
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @throws NotFoundException
      */
     public function execute()
     {
