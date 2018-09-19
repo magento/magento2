@@ -1578,19 +1578,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         
         /**
          * Products `simple1` and `simple2` are created by fixture so already
-         * have a URL Key, whereas `simple3` is a new product so won't have one.
-         * Therefore we delete `simple3` to ensure other tests do not impact this.
+         * have a URL Key, whereas `new-simple` is a new product so the import
+         * will generate it's URL Key from the name provided in the CSV.
          */
-        try {
-            $productRepository->deleteById('simple3');
-        } catch (\Exception $e) {
-            // nothing to do, the product already does not exist
-        }
-        
         $products = [
-            'simple1' => 'url-key',
-            'simple2' => 'url-key2',
-            'simple3' => 'simple-3',
+            'simple1'    => 'url-key',
+            'simple2'    => 'url-key2',
+            'new-simple' => 'new-simple',
         ];
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
