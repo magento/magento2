@@ -96,7 +96,7 @@ class BulkTransferPost extends Action
         bool $unassignSource
     ): void {
         $count = $this->bulkInventoryTransfer->execute($skus, $originSource, $destinationSource, $unassignSource);
-        $this->messageManager->addSuccessMessage(__('Bulk operation was successful: %count unassignments.', [
+        $this->messageManager->addSuccessMessage(__('Bulk operation was successful: %count inventory transfers.', [
             'count' => $count
         ]));
     }
