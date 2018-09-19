@@ -13,7 +13,7 @@ use Magento\Customer\Model\Customer;
 use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -61,8 +61,8 @@ class ChangePassword implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
-        $customerId = (int) $this->userContext->getUserId();
+    ) {
+        $customerId = (int)$this->userContext->getUserId();
 
         if ($customerId === 0) {
             throw new GraphQlAuthorizationException(
@@ -81,6 +81,6 @@ class ChangePassword implements ResolverInterface
         $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
         $data = $this->customerResolver->getCustomerById($customerId);
 
-        return !empty($data) ? $data : [];
+        return $data;
     }
 }
