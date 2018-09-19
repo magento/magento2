@@ -45,7 +45,7 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.1.0
      */
     public function modifyData(array $data)
@@ -54,8 +54,11 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * Add tier price info to meta array. {@inheritdoc}
+     *
      * @since 101.1.0
+     * @param array $meta
+     * @return array
      */
     public function modifyMeta(array $meta)
     {
@@ -150,7 +153,9 @@ class TierPrice extends AbstractModifier
                                     'dataType' => Price::NAME,
                                     'addbefore' => '%',
                                     'validation' => [
+                                        'required-entry' => true,
                                         'validate-number' => true,
+                                        'validate-greater-than-zero' => true,
                                         'less-than-equals-to' => 100
                                     ],
                                     'visible' => $firstOption
