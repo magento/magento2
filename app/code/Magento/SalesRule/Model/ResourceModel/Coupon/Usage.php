@@ -45,7 +45,7 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
         if ($timesUsed !== false) {
-            $updatedValue    = $increment ? 1 : -1;
+            $updatedValue = $increment ? 1 : -1;
             $updatedTimeUsed = $timesUsed + $updatedValue;
             $this->getConnection()->update(
                 $this->getMainTable(),

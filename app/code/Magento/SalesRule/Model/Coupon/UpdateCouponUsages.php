@@ -54,15 +54,15 @@ class UpdateCouponUsages
     public function __construct(
         RuleFactory     $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
-        Coupon          $coupon,
-        Usage           $couponUsage,
-        Customer        $customerRuleUsage = null
+        Coupon $coupon,
+        Usage $couponUsage,
+        Customer $customerRuleUsage = null
     ) {
-        $this->ruleFactory         = $ruleFactory;
+        $this->ruleFactory = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon              = $coupon;
-        $this->couponUsage         = $couponUsage;
-        $this->customerRuleUsage   = $customerRuleUsage ? : ObjectManager::getInstance()->get(Customer::class);
+        $this->coupon = $coupon;
+        $this->couponUsage = $couponUsage;
+        $this->customerRuleUsage = $customerRuleUsage ? : ObjectManager::getInstance()->get(Customer::class);
     }
 
     /**
