@@ -31,6 +31,24 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
 
+    <!--Navigate to create order page (New Order -> Select Customer)-->
+    <actionGroup name="navigateToNewOrderPageExistingCustomer">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
+        <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+
     <!--Check the required fields are actually required-->
     <actionGroup name="checkRequiredFieldsNewOrderForm">
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
