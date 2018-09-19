@@ -32,8 +32,8 @@ class CartItemTypeResolver implements TypeResolverInterface
 
     /**
      * Resolve GraphQl types to retrieve product type specific information about cart items
-     *
      * {@inheritdoc}
+     *
      * @throws GraphQlInputException
      */
     public function resolveType(array $data) : string

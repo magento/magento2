@@ -81,6 +81,7 @@ class AddSimpleProductToCartProcessor
 
     /**
      * Resolve adding simple product to cart for customers/guests
+     *
      * @param CartInterface|Quote $cart
      * @param array $cartItemData
      * @return QuoteItem|string
@@ -97,6 +98,7 @@ class AddSimpleProductToCartProcessor
 
     /**
      * Format GraphQl input data to a shape that buy request has
+     *
      * @param array $cartItem
      * @return DataObject
      */

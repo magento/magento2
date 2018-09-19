@@ -40,6 +40,7 @@ class CustomizableOption
 
     /**
      * Retrieve custom option data
+     *
      * @param QuoteItem $cartItem
      * @param int $optionId
      * @return array
@@ -146,6 +147,7 @@ class CustomizableOption
 
     /**
      * Retrieve price value unit
+     *
      * @param string $priceType
      * @return string
      * @throws NoSuchEntityException
@@ -161,6 +163,7 @@ class CustomizableOption
 
     /**
      * Get currency symbol
+     *
      * @return string
      * @throws NoSuchEntityException
      */

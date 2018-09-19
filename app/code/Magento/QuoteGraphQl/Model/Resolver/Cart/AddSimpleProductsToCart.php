@@ -155,6 +155,7 @@ class AddSimpleProductsToCart implements ResolverInterface
 
     /**
      * Collecting cart errors
+     *
      * @param CartInterface|Quote $cart
      * @return string
      */
@@ -172,6 +173,7 @@ class AddSimpleProductsToCart implements ResolverInterface
 
     /**
      * Retrieving quote mode based on customer authorization
+     *
      * @param string $cartHash
      * @return CartInterface|Quote
      * @throws NoSuchEntityException

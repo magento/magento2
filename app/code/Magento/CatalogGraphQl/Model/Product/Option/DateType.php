@@ -32,6 +32,7 @@ class DateType extends ProductDateOptionType
 
     /**
      * Format date value from string to date array
+     *
      * @param [] $values
      * @return []
      * @throws LocalizedException
