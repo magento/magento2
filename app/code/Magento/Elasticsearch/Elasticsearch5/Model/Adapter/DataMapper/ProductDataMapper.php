@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -14,6 +15,10 @@ use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Framework\App\ObjectManager;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
+    as FieldNameResolver;
 
 /**
  * @deprecated 100.2.0
@@ -79,6 +84,16 @@ class ProductDataMapper implements DataMapperInterface
     protected $mediaGalleryRoles;
 
     /**
+     * @var AttributeProvider
+     */
+    private $attributeAdapterProvider;
+
+    /**
+     * @var FieldNameResolver
+     */
+    private $fieldNameResolver;
+
+    /**
      * Construction for DocumentDataMapper
      *
      * @param Builder $builder
@@ -87,6 +102,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param FieldMapperInterface $fieldMapper
      * @param StoreManagerInterface $storeManager
      * @param DateFieldType $dateFieldType
+     * @param AttributeProvider|null $attributeAdapterProvider
+     * @param FieldNameResolver|null $fieldNameResolver
      */
     public function __construct(
         Builder $builder,
@@ -94,7 +111,9 @@ class ProductDataMapper implements DataMapperInterface
         Index $resourceIndex,
         FieldMapperInterface $fieldMapper,
         StoreManagerInterface $storeManager,
-        DateFieldType $dateFieldType
+        DateFieldType $dateFieldType,
+        AttributeProvider $attributeAdapterProvider = null,
+        FieldNameResolver $fieldNameResolver = null
     ) {
         $this->builder = $builder;
         $this->attributeContainer = $attributeContainer;
@@ -102,6 +121,10 @@ class ProductDataMapper implements DataMapperInterface
         $this->fieldMapper = $fieldMapper;
         $this->storeManager = $storeManager;
         $this->dateFieldType = $dateFieldType;
+        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
+            ->get(AttributeProvider::class);
+        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
+            ->get(FieldNameResolver::class);
 
         $this->mediaGalleryRoles = [
             self::MEDIA_ROLE_IMAGE,
@@ -232,14 +255,14 @@ class ProductDataMapper implements DataMapperInterface
         if (!empty($data)) {
             $i = 0;
             foreach ($data as $tierPrice) {
-                $result['tier_price_id_'.$i] = $tierPrice['price_id'];
-                $result['tier_website_id_'.$i] = $tierPrice['website_id'];
-                $result['tier_all_groups_'.$i] = $tierPrice['all_groups'];
-                $result['tier_cust_group_'.$i] = $tierPrice['cust_group'] == GroupInterface::CUST_GROUP_ALL
+                $result['tier_price_id_' . $i] = $tierPrice['price_id'];
+                $result['tier_website_id_' . $i] = $tierPrice['website_id'];
+                $result['tier_all_groups_' . $i] = $tierPrice['all_groups'];
+                $result['tier_cust_group_' . $i] = $tierPrice['cust_group'] == GroupInterface::CUST_GROUP_ALL
                     ? '' : $tierPrice['cust_group'];
-                $result['tier_price_qty_'.$i] = $tierPrice['price_qty'];
-                $result['tier_website_price_'.$i] = $tierPrice['website_price'];
-                $result['tier_price_'.$i] = $tierPrice['price'];
+                $result['tier_price_qty_' . $i] = $tierPrice['price_qty'];
+                $result['tier_website_price_' . $i] = $tierPrice['website_price'];
+                $result['tier_price_' . $i] = $tierPrice['price'];
                 $i++;
             }
         }
@@ -395,13 +418,21 @@ class ProductDataMapper implements DataMapperInterface
         if (array_key_exists($productId, $categoryIndexData)) {
             $indexData = $categoryIndexData[$productId];
             foreach ($indexData as $categoryData) {
-                $categoryIds[] = (int) $categoryData['id'];
+                $categoryIds[] = (int)$categoryData['id'];
             }
             if (count($categoryIds)) {
                 $result = ['category_ids' => implode(' ', $categoryIds)];
+                $positionAttribute = $this->attributeAdapterProvider->getByAttributeCode('position');
+                $categoryNameAttribute = $this->attributeAdapterProvider->getByAttributeCode('category_name');
                 foreach ($indexData as $data) {
-                    $categoryPositionKey = $this->fieldMapper->getFieldName('position', ['categoryId' => $data['id']]);
-                    $categoryNameKey = $this->fieldMapper->getFieldName('category_name', ['categoryId' => $data['id']]);
+                    $categoryPositionKey = $this->fieldNameResolver->getFieldName(
+                        $positionAttribute,
+                        ['categoryId' => $data['id']]
+                    );
+                    $categoryNameKey = $this->fieldNameResolver->getFieldName(
+                        $categoryNameAttribute,
+                        ['categoryId' => $data['id']]
+                    );
                     $result[$categoryPositionKey] = $data['position'];
                     $result[$categoryNameKey] = $data['name'];
                 }

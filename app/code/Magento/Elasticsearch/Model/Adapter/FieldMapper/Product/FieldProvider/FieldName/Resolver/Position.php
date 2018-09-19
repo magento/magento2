@@ -4,16 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver;
+namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Resolver field name for position attribute.
  */
-class Position extends Resolver implements ResolverInterface
+class Position implements ResolverInterface
 {
     /**
      * @var StoreManager
@@ -26,30 +28,29 @@ class Position extends Resolver implements ResolverInterface
     private $coreRegistry;
 
     /**
-     * @param ResolverInterface $resolver
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
      */
     public function __construct(
-        ResolverInterface $resolver,
-        StoreManager $storeManager,
-        Registry $coreRegistry
+        StoreManager $storeManager = null,
+        Registry $coreRegistry = null
     ) {
-        parent::__construct($resolver);
-        $this->storeManager = $storeManager;
-        $this->coreRegistry = $coreRegistry;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManager::class);
+        $this->coreRegistry = $coreRegistry ?: ObjectManager::getInstance()
+            ->get(Registry::class);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = []): string
+    public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {
-        if ($attributeCode === 'position') {
+        if ($attribute->getAttributeCode() === 'position') {
             return 'position_category_' . $this->resolveCategoryId($context);
         }
 
-        return $this->getNext()->getFieldName($attributeCode, $context);
+        return null;
     }
 
     /**
@@ -57,6 +58,7 @@ class Position extends Resolver implements ResolverInterface
      *
      * @param array $context
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function resolveCategoryId($context)
     {

@@ -6,15 +6,23 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface;
 
 /**
  * Class FieldType
+ *
  * @api
  * @since 100.1.0
+ *
+ * @deprecated This class provide not full data about field type. Only basic rules apply on this class.
+ * @see ResolverInterface
  */
 class FieldType
 {
     /**#@+
+     * @deprecated
+     * @see \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+     *
      * Text flags for Elasticsearch field types
      */
     const ES_DATA_TYPE_STRING = 'string';
@@ -27,12 +35,15 @@ class FieldType
     /**#@-*/
 
     /**
+     * @deprecated
+     * @see ResolverInterface::getFieldType
+     *
      * @param AbstractAttribute $attribute
      * @return string
-     * @since 100.1.0
      */
     public function getFieldType($attribute)
     {
+        trigger_error('Class is deprecated', E_USER_DEPRECATED);
         $backendType = $attribute->getBackendType();
         $frontendInput = $attribute->getFrontendInput();
 

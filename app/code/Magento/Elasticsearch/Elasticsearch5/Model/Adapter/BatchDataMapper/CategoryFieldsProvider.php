@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper;
 
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Framework\App\ObjectManager;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
+    as FieldNameResolver;
 
 /**
  * Provide data mapping for categories fields
@@ -20,18 +24,30 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
     private $resourceIndex;
 
     /**
-     * @var FieldMapperInterface
+     * @var AttributeProvider
      */
-    private $fieldMapper;
+    private $attributeAdapterProvider;
+
+    /**
+     * @var FieldNameResolver
+     */
+    private $fieldNameResolver;
 
     /**
      * @param Index $resourceIndex
-     * @param FieldMapperInterface $fieldMapper
+     * @param AttributeProvider|null $attributeAdapterProvider
+     * @param FieldNameResolver|null $fieldNameResolver
      */
-    public function __construct(Index $resourceIndex, FieldMapperInterface $fieldMapper)
-    {
+    public function __construct(
+        Index $resourceIndex,
+        AttributeProvider $attributeAdapterProvider = null,
+        FieldNameResolver $fieldNameResolver = null
+    ) {
         $this->resourceIndex = $resourceIndex;
-        $this->fieldMapper = $fieldMapper;
+        $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
+            ->get(AttributeProvider::class);
+        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
+            ->get(FieldNameResolver::class);
     }
 
     /**
@@ -55,6 +71,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
      * @param int $productId
      * @param array $categoryIndexData
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getProductCategoryData($productId, array $categoryIndexData)
     {
@@ -66,9 +83,17 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 
             if (count($categoryIds)) {
                 $result = ['category_ids' => $categoryIds];
+                $positionAttribute = $this->attributeAdapterProvider->getByAttributeCode('position');
+                $categoryNameAttribute = $this->attributeAdapterProvider->getByAttributeCode('category_name');
                 foreach ($indexData as $data) {
-                    $categoryPositionKey = $this->fieldMapper->getFieldName('position', ['categoryId' => $data['id']]);
-                    $categoryNameKey = $this->fieldMapper->getFieldName('category_name', ['categoryId' => $data['id']]);
+                    $categoryPositionKey = $this->fieldNameResolver->getFieldName(
+                        $positionAttribute,
+                        ['categoryId' => $data['id']]
+                    );
+                    $categoryNameKey = $this->fieldNameResolver->getFieldName(
+                        $categoryNameAttribute,
+                        ['categoryId' => $data['id']]
+                    );
                     $result[$categoryPositionKey] = $data['position'];
                     $result[$categoryNameKey] = $data['name'];
                 }

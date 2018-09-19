@@ -4,58 +4,57 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\Resolver;
+namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
-use Magento\Eav\Model\Config;
-use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldName\ResolverInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
+    as FieldTypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
 
 /**
  * Default name resolver.
  */
-class DefaultResolver extends Resolver implements ResolverInterface
+class DefaultResolver implements ResolverInterface
 {
     /**
-     * @var Config
+     * @var FieldTypeResolver
      */
-    private $eavConfig;
+    private $fieldTypeResolver;
 
     /**
-     * @var FieldType
+     * @var FieldTypeConverterInterface
      */
-    private $fieldType;
+    private $fieldTypeConverter;
 
     /**
-     * @param ResolverInterface $resolver
-     * @param Config $eavConfig
-     * @param FieldType $fieldType
+     * @param FieldTypeResolver $fieldTypeResolver
+     * @param FieldTypeConverterInterface $fieldTypeConverter
      */
     public function __construct(
-        ResolverInterface $resolver,
-        Config $eavConfig,
-        FieldType $fieldType
+        FieldTypeResolver $fieldTypeResolver,
+        FieldTypeConverterInterface $fieldTypeConverter
     ) {
-        parent::__construct($resolver);
-        $this->eavConfig = $eavConfig;
-        $this->fieldType = $fieldType;
+        $this->fieldTypeResolver = $fieldTypeResolver;
+        $this->fieldTypeConverter = $fieldTypeConverter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFieldName($attributeCode, $context = []): string
+    public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {
-        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-        $fieldType = $this->fieldType->getFieldType($attribute);
+        $fieldType = $this->fieldTypeResolver->getFieldType($attribute);
+        $attributeCode = $attribute->getAttributeCode();
         $frontendInput = $attribute->getFrontendInput();
         if (empty($context['type'])) {
             $fieldName = $attributeCode;
         } elseif ($context['type'] === FieldMapperInterface::TYPE_FILTER) {
-            if (in_array($fieldType, ['string', FieldType::ES_DATA_TYPE_TEXT], true)) {
+            if ($this->isStringServiceFieldType($fieldType)) {
                 return $this->getFieldName(
-                    $attributeCode,
+                    $attribute,
                     array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
                 );
             }
@@ -67,6 +66,19 @@ class DefaultResolver extends Resolver implements ResolverInterface
         }
 
         return $fieldName;
+    }
+
+    /**
+     * Check if service field type for field set as 'string'
+     *
+     * @param string $serviceFieldType
+     * @return bool
+     */
+    private function isStringServiceFieldType(string $serviceFieldType): bool
+    {
+        $stringTypeKey = $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING);
+
+        return $serviceFieldType === $stringTypeKey;
     }
 
     /**
@@ -95,7 +107,7 @@ class DefaultResolver extends Resolver implements ResolverInterface
     {
         switch ($frontendInput) {
             case 'select':
-                return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
+                return in_array($fieldType, ['text', 'integer'], true) ? $attributeCode . '_value' : $attributeCode;
             case 'boolean':
                 return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
             default:
