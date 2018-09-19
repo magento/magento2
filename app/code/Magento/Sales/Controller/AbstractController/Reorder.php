@@ -7,15 +7,15 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Reorder
  *
  * @package Magento\Sales\Controller\AbstractController
  */
-abstract class Reorder extends Action\Action
+abstract class Reorder extends Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
@@ -50,10 +50,6 @@ abstract class Reorder extends Action\Action
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new NotFoundException(__('Page not Found'));
-        }
-
         $result = $this->orderLoader->load($this->_request);
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
             return $result;
