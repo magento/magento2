@@ -34,6 +34,7 @@ class GetSourceItemsDataBySku
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
@@ -47,8 +48,8 @@ class GetSourceItemsDataBySku
 
     /**
      * @param string $sku
-     *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(string $sku): array
     {
@@ -59,8 +60,14 @@ class GetSourceItemsDataBySku
             ->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
+        $sourcesCache = [];
         foreach ($sourceItems as $sourceItem) {
-            $source = $this->sourceRepository->get($sourceItem->getSourceCode());
+            $sourceCode = $sourceItem->getSourceCode();
+            if (!isset($sourcesCache[$sourceCode])) {
+                $sourcesCache[$sourceCode] = $this->sourceRepository->get($sourceCode);
+            }
+
+            $source = $sourcesCache[$sourceCode];
 
             $sourceItemsData[] = [
                 SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
