@@ -47,3 +47,9 @@ $coupon->setRuleId($salesRule->getId())
     ->setCode('CART_FIXED_DISCOUNT_15')
     ->setType(0);
 $objectManager->get(CouponRepositoryInterface::class)->save($coupon);
+
+/** @var Magento\Framework\Registry $registry */
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+
+$registry->unregister('cart_rule_fixed_discount_coupon');
+$registry->register('cart_rule_fixed_discount_coupon', $salesRule);

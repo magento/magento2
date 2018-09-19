@@ -43,7 +43,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      */
     public function testApplyCouponToGuestCartWithItems()
     {
@@ -64,7 +64,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      */
     public function testApplyCouponTwice()
     {
@@ -88,7 +88,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      */
     public function testApplyCouponToCartWithNoItems()
     {
@@ -104,7 +104,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testGuestCustomerAttemptToChangeCustomerCart()
@@ -127,7 +127,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      */
     public function testRemoveCoupon()
     {
@@ -158,7 +158,7 @@ class CouponTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_40_percent_off.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testRemoveCouponFromCustomerCartByGuest()
