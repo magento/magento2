@@ -43,7 +43,7 @@ class BulkConfigurationTransferTest extends TestCase
     public function testTransfer()
     {
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', false);
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2');
         $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
 
         self::assertEquals(
@@ -64,7 +64,7 @@ class BulkConfigurationTransferTest extends TestCase
     public function testTransferWithUnassign()
     {
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', true);
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2');
         $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
 
         self::assertEquals(
@@ -82,26 +82,9 @@ class BulkConfigurationTransferTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testTransferUnassign()
-    {
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2', true);
-        $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-
-        // 1 is the value return when there is not a defined configuration
-        self::assertEquals(1, $sourceConfig->getNotifyStockQty(), 'Low stock notification not removed after unassign');
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @magentoDbIsolation enabled
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function testTransferFromUnassignedSource()
     {
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'us-1', 'eu-1', false);
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'us-1', 'eu-1');
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
 
         self::assertEquals(
@@ -121,7 +104,7 @@ class BulkConfigurationTransferTest extends TestCase
      */
     public function testTransferToUnassignedSource()
     {
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'us-1', false);
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'us-1');
         $sourceConfig = $this->getSourceItemConfiguration->execute('us-1', 'SKU-1');
 
         self::assertEquals(

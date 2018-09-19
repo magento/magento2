@@ -9,6 +9,7 @@ namespace Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi;
 
 use Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface;
 use Magento\InventoryLowQuantityNotification\Model\ResourceModel\BulkConfigurationTransfer;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\BulkConfigurationUnassign;
 
 class BulkConfigurationTransferInterfacePlugin
 {
@@ -18,13 +19,21 @@ class BulkConfigurationTransferInterfacePlugin
     private $bulkConfigurationTransfer;
 
     /**
+     * @var BulkConfigurationUnassign
+     */
+    private $bulkConfigurationUnassign;
+
+    /**
      * @param BulkConfigurationTransfer $bulkConfigurationTransfer
+     * @param BulkConfigurationUnassign $bulkConfigurationUnassign
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        BulkConfigurationTransfer $bulkConfigurationTransfer
+        BulkConfigurationTransfer $bulkConfigurationTransfer,
+        BulkConfigurationUnassign $bulkConfigurationUnassign
     ) {
         $this->bulkConfigurationTransfer = $bulkConfigurationTransfer;
+        $this->bulkConfigurationUnassign = $bulkConfigurationUnassign;
     }
 
     /**
@@ -45,12 +54,11 @@ class BulkConfigurationTransferInterfacePlugin
         string $destinationSource,
         bool $unassignFromOrigin
     ): bool {
-        // Low stock configuration must be migrated before the inventory itself
-        // There is foreign key from inventory_low_stock_notification_configuration to inventory_source_item
-        // Otherwise, the unassignment may produce unexpected behaviours because it will erase the previous value of
-        // inventory_low_stock_notification_configuration
-        $this->bulkConfigurationTransfer->execute($skus, $originSource, $destinationSource, $unassignFromOrigin);
+        $this->bulkConfigurationTransfer->execute($skus, $originSource, $destinationSource);
         $res = $proceed($skus, $originSource, $destinationSource, $unassignFromOrigin);
+        if ($unassignFromOrigin) {
+            $this->bulkConfigurationUnassign->execute($skus, [$originSource]);
+        }
         return $res;
     }
 }
