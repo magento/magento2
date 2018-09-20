@@ -59,6 +59,11 @@ class Cli extends Console\Application
     private $objectManager;
 
     /**
+     * @var array
+     */
+    private $configuration;
+    
+    /**
      * @param string $name the application name
      * @param string $version the application version
      * @SuppressWarnings(PHPMD.ExitExpression)
@@ -66,9 +71,9 @@ class Cli extends Console\Application
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
-            $configuration = require BP . '/setup/config/application.config.php';
+            $this->configuration = require BP . '/setup/config/application.config.php';
             $bootstrapApplication = new Application();
-            $application = $bootstrapApplication->bootstrap($configuration);
+            $application = $bootstrapApplication->bootstrap($this->configuration);
             $this->serviceManager = $application->getServiceManager();
 
             $this->assertCompilerPreparation();
@@ -157,6 +162,21 @@ class Cli extends Console\Application
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $params = $this->documentRootResolver($params);
+
+        /**
+         * Workaround for CLI not respecting pub document root described in MAGETWO-84709
+         */
+        if (isset($this->configuration['document_root']) 
+            && $this->configuration['document_root'] === \Magento\Framework\App\Filesystem\DirectoryList::PUB) {
+
+            $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
+                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+                DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+                DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+                DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
+            ];
+            
+        }
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 

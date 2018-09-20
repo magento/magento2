@@ -32,5 +32,6 @@ return [
     // list of Magento specific required services, like default abstract factory
     'required_services' => [
         DiAbstractServiceFactory::class
-    ]
+    ],
+    'document_root' => ''
 ];
