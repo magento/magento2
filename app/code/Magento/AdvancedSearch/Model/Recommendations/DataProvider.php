@@ -53,14 +53,14 @@ class DataProvider implements SuggestedQueriesInterface
      */
     private $recommendationsFactory;
 
-	/**
-	 * DataProvider constructor.
-	 *
-	 * @param ScopeConfigInterface $scopeConfig
-	 * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-	 * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
-	 * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
-	 */
+    /**
+     * DataProvider constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param \Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory $recommendationsFactory
+     * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
@@ -86,13 +86,13 @@ class DataProvider implements SuggestedQueriesInterface
         );
     }
 
-	/**
-	 * Get Items
-	 *
-	 * @param QueryInterface $query
-	 *
-	 * @return array|\Magento\Search\Model\QueryResult[]
-	 */
+    /**
+     * Get Items
+     *
+     * @param QueryInterface $query
+     *
+     * @return array|\Magento\Search\Model\QueryResult[]
+     */
     public function getItems(QueryInterface $query)
     {
         $recommendations = [];

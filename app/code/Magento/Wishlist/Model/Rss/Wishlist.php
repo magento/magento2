@@ -11,7 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Wishlist implements DataProviderInterface

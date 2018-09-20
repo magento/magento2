@@ -9,6 +9,9 @@ namespace Magento\Framework\Session;
 
 use Magento\Framework\App\State;
 
+/**
+ * Class SidResolver
+ */
 class SidResolver implements SidResolverInterface
 {
     /**
@@ -85,12 +88,14 @@ class SidResolver implements SidResolverInterface
         $this->appState = $appState ?: \Magento\Framework\App\ObjectManager::getInstance()->get(State::class);
     }
 
-	/**
-	 * @param SessionManagerInterface $session
-	 *
-	 * @return string|null
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Get Sid
+     *
+     * @param SessionManagerInterface $session
+     *
+     * @return string|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getSid(SessionManagerInterface $session)
     {
         if ($this->appState->getAreaCode() !== \Magento\Framework\App\Area::AREA_FRONTEND) {

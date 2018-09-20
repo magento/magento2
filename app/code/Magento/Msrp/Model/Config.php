@@ -42,13 +42,13 @@ class Config
      */
     protected $storeId;
 
-	/**
-	 * Config constructor.
-	 *
-	 * @param ScopeConfigInterface $scopeConfig
-	 * @param StoreManagerInterface $storeManager
-	 * @param Escaper $escaper
-	 */
+    /**
+     * Config constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param Escaper $escaper
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,

@@ -131,14 +131,14 @@ class Configuration implements StockConfigurationInterface
      */
     protected $storeManager;
 
-	/**
-	 * Configuration constructor.
-	 *
-	 * @param ConfigInterface $config
-	 * @param ScopeConfigInterface $scopeConfig
-	 * @param MinsaleqtyHelper $minsaleqtyHelper
-	 * @param StoreManagerInterface $storeManager
-	 */
+    /**
+     * Configuration constructor.
+     *
+     * @param ConfigInterface $config
+     * @param ScopeConfigInterface $scopeConfig
+     * @param MinsaleqtyHelper $minsaleqtyHelper
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
         ConfigInterface $config,
         ScopeConfigInterface $scopeConfig,
@@ -151,11 +151,11 @@ class Configuration implements StockConfigurationInterface
         $this->storeManager = $storeManager;
     }
 
-	/**
-	 * Default Scope Id
-	 *
-	 * @return int
-	 */
+    /**
+     * Default Scope Id
+     *
+     * @return int
+     */
     public function getDefaultScopeId()
     {
         // TODO: should be fixed in MAGETWO-46043
@@ -380,8 +380,7 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
-     * Get 'Display product stock status' option value
-     * Shows if it is necessary to show product stock status ('in stock'/'out of stock')
+     * Display product stock status. Shows if it is necessary to show product stock status in stock/out of stock.
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool

@@ -98,14 +98,12 @@ class Suggestions implements SuggestedQueriesInterface
      * Get Items
      *
      * @param QueryInterface $query
-     * @param null           $limit
-     * @param null           $additionalFilters
      *
      * @return array|\Magento\Search\Model\QueryResult[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getItems(QueryInterface $query, $limit = null, $additionalFilters = null)
+    public function getItems(QueryInterface $query)
     {
         $result = [];
         if ($this->isSuggestionsAllowed()) {

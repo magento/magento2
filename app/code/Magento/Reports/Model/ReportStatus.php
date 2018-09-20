@@ -20,11 +20,11 @@ class ReportStatus
      */
     private $scopeConfig;
 
-	/**
-	 * ReportStatus constructor.
-	 *
-	 * @param ScopeConfigInterface $scopeConfig
-	 */
+    /**
+     * ReportStatus constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;

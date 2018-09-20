@@ -10,8 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 
 /**
- * Class AccountConfirmation.
- * Checks if email confirmation required for customer.
+ * Class AccountConfirmation. Checks if email confirmation required for customer.
  */
 class AccountConfirmation
 {
@@ -30,12 +29,12 @@ class AccountConfirmation
      */
     private $registry;
 
-	/**
-	 * AccountConfirmation constructor.
-	 *
-	 * @param ScopeConfigInterface $scopeConfig
-	 * @param Registry $registry
-	 */
+    /**
+     * AccountConfirmation constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Registry $registry
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Registry $registry

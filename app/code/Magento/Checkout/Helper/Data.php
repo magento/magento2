@@ -58,19 +58,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private $paymentFailures;
 
-	/**
-	 * Data constructor.
-	 *
-	 * @param \Magento\Framework\App\Helper\Context $context
-	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-	 * @param \Magento\Checkout\Model\Session $checkoutSession
-	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-	 * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-	 * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-	 * @param PriceCurrencyInterface $priceCurrency
-	 * @param PaymentFailuresInterface|null $paymentFailures
-	 * @codeCoverageIgnore
-	 */
+    /**
+     * Data constructor.
+     *
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param PaymentFailuresInterface|null $paymentFailures
+     * @codeCoverageIgnore
+     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -116,6 +116,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Format Price
+     *
      * @param float $price
      * @return string
      */
@@ -253,8 +254,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Check is allowed Guest Checkout
-     * Use config settings and observer
+     * Check is allowed Guest Checkout. Use config settings and observer
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param int|Store $store
@@ -311,8 +311,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Checks if display billing address on payment method is available, otherwise
-     * billing address should be display on payment page
+     * If display billing address on payment method is available, otherwise should be display on payment page
      *
      * @return bool
      */

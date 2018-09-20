@@ -87,17 +87,17 @@ class StoreManager implements
      */
     protected $isSingleStoreAllowed;
 
-	/**
-	 * StoreManager constructor.
-	 *
-	 * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-	 * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
-	 * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param StoreResolverInterface $storeResolver
-	 * @param \Magento\Framework\Cache\FrontendInterface $cache
-	 * @param bool $isSingleStoreAllowed
-	 */
+    /**
+     * StoreManager constructor.
+     *
+     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
+     * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param StoreResolverInterface $storeResolver
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param bool $isSingleStoreAllowed
+     */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
@@ -116,54 +116,54 @@ class StoreManager implements
         $this->isSingleStoreAllowed = $isSingleStoreAllowed;
     }
 
-	/**
-	 * Set current default store
-	 *
-	 * @param string $store
-	 */
+    /**
+     * Set current default store
+     *
+     * @param string $store
+     */
     public function setCurrentStore($store)
     {
         $this->currentStoreId = $store;
     }
 
-	/**
-	 * Allow or disallow single store mode
-	 *
-	 * @param bool $value
-	 */
+    /**
+     * Allow or disallow single store mode
+     *
+     * @param bool $value
+     */
     public function setIsSingleStoreModeAllowed($value)
     {
         $this->isSingleStoreAllowed = $value;
     }
 
-	/**
-	 * Check if store has only one store view
-	 *
-	 * @return bool
-	 */
+    /**
+     * Check if store has only one store view
+     *
+     * @return bool
+     */
     public function hasSingleStore()
     {
         // TODO: MAGETWO-39902 add cache, move value to consts
         return $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
     }
 
-	/**
-	 * Check if system is run in the single store mode
-	 *
-	 * @return bool
-	 */
+    /**
+     * Check if system is run in the single store mode
+     *
+     * @return bool
+     */
     public function isSingleStoreMode()
     {
         return $this->isSingleStoreModeEnabled() && $this->hasSingleStore();
     }
 
-	/**
-	 * Retrieve application store object
-	 *
-	 * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
-	 * @return \Magento\Store\Api\Data\StoreInterface
-	 * @throws NoSuchEntityException If given store doesn't exist.
-	 */
+    /**
+     * Retrieve application store object
+     *
+     * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
+     * @return \Magento\Store\Api\Data\StoreInterface
+     * @throws NoSuchEntityException If given store doesn't exist.
+     */
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
@@ -185,13 +185,13 @@ class StoreManager implements
         return $store;
     }
 
-	/**
-	 * Retrieve stores array
-	 *
-	 * @param bool $withDefault
-	 * @param bool $codeKey
-	 * @return \Magento\Store\Api\Data\StoreInterface[]
-	 */
+    /**
+     * Retrieve stores array
+     *
+     * @param bool $withDefault
+     * @param bool $codeKey
+     * @return \Magento\Store\Api\Data\StoreInterface[]
+     */
     public function getStores($withDefault = false, $codeKey = false)
     {
         $stores = [];
@@ -208,13 +208,13 @@ class StoreManager implements
         return $stores;
     }
 
-	/**
-	 * Retrieve application website object
-	 *
-	 * @param null|bool|int|string|\Magento\Store\Api\Data\WebsiteInterface $websiteId
-	 * @return \Magento\Store\Api\Data\WebsiteInterface
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Retrieve application website object
+     *
+     * @param null|bool|int|string|\Magento\Store\Api\Data\WebsiteInterface $websiteId
+     * @return \Magento\Store\Api\Data\WebsiteInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getWebsite($websiteId = null)
     {
         if ($websiteId === null || $websiteId === '') {
@@ -232,13 +232,13 @@ class StoreManager implements
         return $website;
     }
 
-	/**
-	 * Get loaded websites
-	 *
-	 * @param bool $withDefault
-	 * @param bool $codeKey
-	 * @return \Magento\Store\Api\Data\WebsiteInterface[]
-	 */
+    /**
+     * Get loaded websites
+     *
+     * @param bool $withDefault
+     * @param bool $codeKey
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
         $websites = [];
@@ -255,11 +255,11 @@ class StoreManager implements
         return $websites;
     }
 
-	/**
-	 * Reinitialize store list
-	 *
-	 * @return void
-	 */
+    /**
+     * Reinitialize store list
+     *
+     * @return void
+     */
     public function reinitStores()
     {
         $this->currentStoreId = null;
@@ -270,12 +270,12 @@ class StoreManager implements
         $this->groupRepository->clean();
     }
 
-	/**
-	 * Retrieve default store for default group and website
-	 *
-	 * @return \Magento\Store\Api\Data\StoreInterface|null
-	 * @throws NoSuchEntityException
-	 */
+    /**
+     * Retrieve default store for default group and website
+     *
+     * @return \Magento\Store\Api\Data\StoreInterface|null
+     * @throws NoSuchEntityException
+     */
     public function getDefaultStoreView()
     {
         $defaultWebsite = $this->websiteRepository->getDefault();
@@ -283,14 +283,14 @@ class StoreManager implements
         return $defaultStore ?: null;
     }
 
-	/**
-	 * Retrieve application store group object
-	 *
-	 * @param null|\Magento\Store\Api\Data\GroupInterface|string $groupId
-	 *
-	 * @return \Magento\Store\Api\Data\GroupInterface
-	 * @throws NoSuchEntityException
-	 */
+    /**
+     * Retrieve application store group object
+     *
+     * @param null|\Magento\Store\Api\Data\GroupInterface|string $groupId
+     *
+     * @return \Magento\Store\Api\Data\GroupInterface
+     * @throws NoSuchEntityException
+     */
     public function getGroup($groupId = null)
     {
         if (null === $groupId) {
@@ -303,12 +303,12 @@ class StoreManager implements
         return $group;
     }
 
-	/**
-	 * Prepare array of store groups
-	 *
-	 * @param bool $withDefault
-	 * @return \Magento\Store\Api\Data\GroupInterface[]
-	 */
+    /**
+     * Prepare array of store groups
+     *
+     * @param bool $withDefault
+     * @return \Magento\Store\Api\Data\GroupInterface[]
+     */
     public function getGroups($withDefault = false)
     {
         $groups = $this->groupRepository->getList();
@@ -338,6 +338,8 @@ class StoreManager implements
     }
 
     /**
+     * Get Store Website Relation
+     *
      * @deprecated 100.2.0
      * @return StoreWebsiteRelation
      */
@@ -346,13 +348,13 @@ class StoreManager implements
         return ObjectManager::getInstance()->get(StoreWebsiteRelation::class);
     }
 
-	/**
-	 * Get assigned to website store
-	 *
-	 * @param int $websiteId
-	 *
-	 * @return array
-	 */
+    /**
+     * Get assigned to website store
+     *
+     * @param int $websiteId
+     *
+     * @return array
+     */
     public function getStoreByWebsiteId($websiteId)
     {
         return $this->getStoreWebsiteRelation()->getStoreByWebsiteId($websiteId);

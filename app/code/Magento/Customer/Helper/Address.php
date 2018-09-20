@@ -175,7 +175,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Return customer address config value by key and store
      *
-     * @param string                                $key
+     * @param string $key
      * @param \Magento\Store\Model\Store|int|string $store
      *
      * @return string|null

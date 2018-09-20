@@ -171,9 +171,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add attribute to filter
      *
-     * @param int    $storeId
+     * @param int $storeId
      * @param string $attributeCode
-     * @param mixed  $value
+     * @param mixed $value
      * @param string $type
      *
      * @return \Magento\Framework\DB\Select|bool
@@ -220,7 +220,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Join attribute by code
      *
-     * @param int    $storeId
+     * @param int $storeId
      * @param string $attributeCode
      * @param string $column Add attribute value to given column
      *
@@ -361,7 +361,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Prepare product
      *
      * @param array $productRow
-     * @param int   $storeId
+     * @param int $storeId
      *
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -492,7 +492,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Return Use Categories Path for Product URLs config value
      *
-     * @param $storeId
+     * @param null|string $storeId
      *
      * @return bool
      */
