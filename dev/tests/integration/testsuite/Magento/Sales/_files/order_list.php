@@ -5,6 +5,7 @@
  */
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 require 'order.php';
 /** @var Order $order */
@@ -47,6 +48,8 @@ $orders = [
     ],
 ];
 
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 /** @var array $orderData */
 foreach ($orders as $orderData) {
     /** @var $order \Magento\Sales\Model\Order */
@@ -60,13 +63,16 @@ foreach ($orders as $orderData) {
     $billingAddress->setAddressType('billing');
 
     /** @var Order\Address $shippingAddress */
-    $shippingAddress = clone $billingAddress;
-    $shippingAddress->setId(null)->setAddressType('shipping');
+    $shippingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
+    $shippingAddress->setAddressType('shipping');
 
     $order
         ->setData($orderData)
         ->addItem($orderItem)
         ->setBillingAddress($billingAddress)
         ->setShippingAddress($shippingAddress)
-        ->save();
+        ->setCustomerIsGuest(true)
+        ->setCustomerEmail('customer@null.com');
+
+    $orderRepository->save($order);
 }
