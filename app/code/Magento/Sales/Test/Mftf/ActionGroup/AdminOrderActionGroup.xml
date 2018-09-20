@@ -39,7 +39,7 @@
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
-        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewOrder"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
