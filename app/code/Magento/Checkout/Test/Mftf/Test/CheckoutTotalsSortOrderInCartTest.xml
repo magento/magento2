@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CheckoutTotalsSortOrderInCartTest">
+        <annotations>
+            <title value="Checkout Totals Sort Order configuration and displaying in cart"/>
+            <stories value="MAGETWO-91658: Wrong Checkout Totals Sort Order in cart"/>
+            <description value="Checkout Totals Sort Order configuration and displaying in cart"/>
+            <features value="Checkout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-94944"/>
+            <group value="Checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+
+            <createData entity="ApiCartRule" stepKey="cartRule"/>
+
+            <createData entity="CheckoutShippingTotalsSortOrder" stepKey="setConfigShippingTotalsSortOrder"/>
+        </before>
+
+        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
+            <argument name="productUrl" value="$$simpleProduct.sku$$.html"/>
+            <argument name="quantity" value="1"/>
+            <argument name="expectedDiscount" value="-$61.50"/>
+        </actionGroup>
+
+        <actionGroup ref="CheckTotalsSortOrderInSummarySection" stepKey="checkTotalsSortOrderInSummarySection">
+            <argument name="elementName" value="Shipping (Flat Rate - Fixed)"/>
+            <argument name="positionNumber" value="3"/>
+        </actionGroup>
+
+        <after>
+            <createData entity="DefaultCheckoutTotalsSortOrder" stepKey="setDefaultTotalsSortOrder"/>
+
+            <deleteData createDataKey="cartRule" stepKey="deleteCartRule"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+    </test>
+</tests>

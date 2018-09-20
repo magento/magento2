@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CheckoutShippingTotalsSortOrder" type="checkout_totals_sort_order">
+        <requiredEntity type="shipping">ShippingTotalsSortOrder</requiredEntity>
+    </entity>
+
+    <entity name="ShippingTotalsSortOrder" type="shipping">
+        <data key="value">27</data>
+    </entity>
+
+    <entity name="DefaultCheckoutTotalsSortOrder" type="default_checkout_totals_sort_order">
+        <requiredEntity type="checkoutTotalFlagZero">DefaultTotalFlagZero</requiredEntity>
+    </entity>
+    <entity name="DefaultTotalFlagZero" type="checkoutTotalFlagZero">
+        <data key="value">0</data>
+    </entity>
+</entities>

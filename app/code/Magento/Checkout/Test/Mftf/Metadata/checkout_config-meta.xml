@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="SetCheckoutTotalsSortOrder" dataType="checkout_totals_sort_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST">
+        <object key="groups" dataType="checkout_totals_sort_order">
+            <object key="totals_sort" dataType="checkout_totals_sort_order">
+                <object key="fields" dataType="checkout_totals_sort_order">
+                    <object key="subtotal" dataType="subtotal">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="discount" dataType="discount">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="shipping" dataType="shipping">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="tax" dataType="tax">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="weee" dataType="weee">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="grand_total" dataType="grand_total">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="giftcardaccount" dataType="giftcardaccount">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="customerbalance" dataType="customerbalance">
+                        <field key="value">integer</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+
+    <operation name="DefaultCheckoutTotalsSortOrder" dataType="default_checkout_totals_sort_order" type="create" auth="adminFormKey" url="/admin/system_config/save/section/sales/" method="POST">
+        <object key="groups" dataType="default_checkout_totals_sort_order">
+            <object key="totals_sort" dataType="default_checkout_totals_sort_order">
+                <object key="fields" dataType="default_checkout_totals_sort_order">
+                    <object key="subtotal" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="discount" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="shipping" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="tax" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="weee" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="grand_total" dataType="default_checkout_totals_sort_order">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="giftcardaccount" dataType="giftcardaccount">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="customerbalance" dataType="customerbalance">
+                        <field key="value">integer</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

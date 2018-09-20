@@ -86,6 +86,14 @@
         <see userInput="${{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
    </actionGroup>
 
+    <actionGroup name="CheckTotalsSortOrderInSummarySection">
+        <arguments>
+            <argument name="elementName" type="string"/>
+            <argument name="positionNumber" type="integer"/>
+        </arguments>
+        <see userInput="{{elementName}}" selector="{{CheckoutCartSummarySection.elementPosition(positionNumber)}}" stepKey="assertElementPosition"/>
+    </actionGroup>
+
     <!-- Check ship to information in checkout -->
     <actionGroup name="CheckShipToInformationInCheckoutActionGroup">
         <arguments>
