@@ -82,7 +82,7 @@ class Save extends Attribute implements HttpPostActionInterface
     /**
      * @var FormData|null
      */
-    private $dataSerializer;
+    private $formDataSerializer;
 
     /**
      * @param Context $context
@@ -97,7 +97,7 @@ class Save extends Attribute implements HttpPostActionInterface
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
      * @param Presentation|null $presentation
-     * @param FormData|null $dataSerializer
+     * @param FormData|null $formDataSerializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +113,7 @@ class Save extends Attribute implements HttpPostActionInterface
         Product $productHelper,
         LayoutFactory $layoutFactory,
         Presentation $presentation = null,
-        FormData $dataSerializer = null
+        FormData $formDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -124,7 +124,7 @@ class Save extends Attribute implements HttpPostActionInterface
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
         $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
-        $this->dataSerializer = $dataSerializer
+        $this->formDataSerializer = $formDataSerializer
             ?: ObjectManager::getInstance()->get(FormData::class);
     }
 
@@ -140,7 +140,7 @@ class Save extends Attribute implements HttpPostActionInterface
     public function execute()
     {
         try {
-            $optionData = $this->dataSerializer
+            $optionData = $this->formDataSerializer
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
             $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
@@ -150,7 +150,7 @@ class Save extends Attribute implements HttpPostActionInterface
         }
 
         $data = $this->getRequest()->getPostValue();
-        $data = array_merge_recursive(
+        $data = array_replace_recursive(
             $data,
             $optionData
         );

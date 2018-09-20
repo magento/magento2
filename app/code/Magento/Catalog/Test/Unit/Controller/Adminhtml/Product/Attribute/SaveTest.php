@@ -87,7 +87,7 @@ class SaveTest extends AttributeTest
     /**
      * @var FormData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dataSerializerMock;
+    private $formDataSerializerMock;
 
     /**
      * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -135,7 +135,7 @@ class SaveTest extends AttributeTest
         $this->inputTypeValidatorMock = $this->getMockBuilder(InputTypeValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataSerializerMock = $this->getMockBuilder(FormData::class)
+        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -170,7 +170,7 @@ class SaveTest extends AttributeTest
             'validatorFactory' => $this->validatorFactoryMock,
             'groupCollectionFactory' => $this->groupCollectionFactoryMock,
             'layoutFactory' => $this->layoutFactoryMock,
-            'dataSerializer' => $this->dataSerializerMock,
+            'formDataSerializer' => $this->formDataSerializerMock,
         ]);
     }
 
@@ -182,7 +182,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
             ]);
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with('')
@@ -213,7 +213,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
             ]);
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with('')
@@ -273,7 +273,7 @@ class SaveTest extends AttributeTest
                 ['isAjax', null, true],
                 ['serialized_options', '[]', $serializedOptions],
             ]);
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)

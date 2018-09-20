@@ -65,7 +65,7 @@ class ValidateTest extends AttributeTest
     /**
      * @var FormData|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dataSerializerMock;
+    private $formDataSerializerMock;
 
     protected function setUp()
     {
@@ -92,7 +92,7 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
-        $this->dataSerializerMock = $this->getMockBuilder(FormData::class)
+        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,7 +116,7 @@ class ValidateTest extends AttributeTest
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'layoutFactory' => $this->layoutFactoryMock,
                 'multipleAttributeList' => ['select' => 'option'],
-                'dataSerializer' => $this->dataSerializerMock,
+                'formDataSerializer' => $this->formDataSerializerMock,
             ]
         );
     }
@@ -184,7 +184,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
@@ -319,7 +319,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
@@ -431,7 +431,7 @@ class ValidateTest extends AttributeTest
                 ['serialized_options', '[]', $serializedOptions],
             ]);
 
-        $this->dataSerializerMock
+        $this->formDataSerializerMock
             ->expects($this->once())
             ->method('unserialize')
             ->with($serializedOptions)
