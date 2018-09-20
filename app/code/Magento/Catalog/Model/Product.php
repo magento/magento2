@@ -958,7 +958,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setQty($qty)
     {
         if ($this->getData('qty') != $qty) {
-            $this->setData('qty', (float)$qty);
+            $this->setData('qty', $qty);
             $this->reloadPriceInfo();
         }
         return $this;
@@ -971,7 +971,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return (float)$this->getData('qty');
     }
 
     /**
