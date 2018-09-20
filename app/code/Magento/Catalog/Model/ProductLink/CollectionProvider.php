@@ -58,15 +58,15 @@ class CollectionProvider
     }
 
     /**
-     * Compare item by key 'position'
+     * Compare item by key 'position'.
      *
-     * @param array $a
-     * @param array $b
-     * @return int It returns -1, 0 or 1 when $a['position'] is respectively less than,
-     * equal to, or greater than $a['position']
+     * @param array $itemA
+     * @param array $itemB
+     * @return int Return -1, 0 or 1 when $itemA['position'] is
+     * respectively less than, equal to, or greater than $itemB['position']
      */
-    public function comparePosition(array $a, array $b): int
+    public function comparePosition(array $itemA, array $itemB): int
     {
-        return (int)$a['position'] <=> (int)$b['position'];
+        return (int)$itemA['position'] <=> (int)$itemB['position'];
     }
 }
