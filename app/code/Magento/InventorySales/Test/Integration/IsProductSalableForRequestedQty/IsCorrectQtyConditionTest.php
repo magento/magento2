@@ -78,6 +78,7 @@ class IsCorrectQtyConditionTest extends TestCase
      *
      * @return void
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @dataProvider executeWithMissingConfigurationDataProvider
      *
      * @magentoDbIsolation disabled
@@ -121,6 +122,51 @@ class IsCorrectQtyConditionTest extends TestCase
      * @dataProvider executeWithUseConfigMinSaleQtyDataProvider
      *
      * @magentoDbIsolation disabled
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testExecuteWithDecimalQty(
+        string $sku,
+        int $stockId,
+        int $requestedQty,
+        bool $expectedResult
+    ): void {
+        $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
+        $this->assertEquals($expectedResult, $result->isSalable());
+    }
+
+    /**
+     * @return array
+     */
+    public function executeWithDecimalQtyDataProvider(): array
+    {
+        return [
+            ['SKU-1', 0.5, 1, true],
+            ['SKU-1', 5.5, 1, true],
+            ['SKU-2', 0.5, 1, false],
+            ['SKU-2', 5.5, 7, false],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @magentoConfigFixture current_store cataloginventory/item_options/min_sale_qty 7
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param int $requestedQty
+     * @param bool $expectedResult
+     *
+     * @return void
+     *
+     * @dataProvider executeWithUseConfigMinSaleQtyDataProvider
+     *
+     * @magentoDbIsolation disabled
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteWithUseConfigMinSaleQty(
         string $sku,
@@ -175,6 +221,8 @@ class IsCorrectQtyConditionTest extends TestCase
      * @param bool $expectedResult
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException
      * @dataProvider executeWithMinSaleQtyDataProvider
      *
      * @magentoDbIsolation disabled
@@ -237,6 +285,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @dataProvider executeWithUseConfigMaxSaleQtyDataProvider
      *
      * @magentoDbIsolation disabled
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteWithUseConfigMaxSaleQty(
         string $sku,
@@ -294,6 +343,8 @@ class IsCorrectQtyConditionTest extends TestCase
      *
      * @return void
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException
      * @dataProvider executeWithMaxSaleQtyDataProvider
      *
      * @magentoDbIsolation disabled
@@ -359,6 +410,7 @@ class IsCorrectQtyConditionTest extends TestCase
      * @dataProvider executeWithUseConfigQtyIncrementsDataProvider
      *
      * @magentoDbIsolation disabled
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteWithUseConfigQtyIncrements(
         string $sku,
@@ -418,6 +470,8 @@ class IsCorrectQtyConditionTest extends TestCase
      *
      * @return void
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\InventoryConfigurationApi\Exception\SkuIsNotAssignedToStockException
      * @dataProvider executeWithQtyIncrementsDataProvider
      *
      * @magentoDbIsolation disabled

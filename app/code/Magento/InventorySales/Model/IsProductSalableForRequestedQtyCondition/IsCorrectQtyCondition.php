@@ -112,6 +112,13 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             );
         }
 
+        if ($this->isValidDecimalQty($stockItemConfiguration, $requestedQty)) {
+            return $this->createErrorResult(
+                'is_correct_qty-is_qty_decimal',
+                __('You cannot use decimal quantity for this product.')
+            );
+        }
+
         return $this->productSalableResultFactory->create(['errors' => []]);
     }
 
@@ -131,6 +138,18 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             ])
         ];
         return $this->productSalableResultFactory->create(['errors' => $errors]);
+    }
+
+    /**
+     * @param StockItemConfigurationInterface $stockItemConfiguration
+     * @param float $requestedQty
+     * @return bool
+     */
+    private function isValidDecimalQty(
+        StockItemConfigurationInterface $stockItemConfiguration,
+        float $requestedQty
+    ): bool {
+        return (!$stockItemConfiguration->isQtyDecimal() && (floor($requestedQty) !== $requestedQty));
     }
 
     /**
