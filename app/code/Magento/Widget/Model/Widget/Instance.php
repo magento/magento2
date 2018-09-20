@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
