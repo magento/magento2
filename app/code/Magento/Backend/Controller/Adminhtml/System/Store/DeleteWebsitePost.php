@@ -6,9 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
+class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -23,11 +24,11 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$model) {
-            $this->messageManager->addError(__('Something went wrong. Please try again.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
-            $this->messageManager->addError(__('This website cannot be deleted.'));
+            $this->messageManager->addErrorMessage(__('This website cannot be deleted.'));
             return $redirectResult->setPath('adminhtml/*/editWebsite', ['website_id' => $model->getId()]);
         }
 
@@ -37,12 +38,12 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
 
         try {
             $model->delete();
-            $this->messageManager->addSuccess(__('You deleted the website.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the website.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete the website. Please try again later.'));
+            $this->messageManager->addExceptionMessage($e, __('Unable to delete the website. Please try again later.'));
         }
         return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }

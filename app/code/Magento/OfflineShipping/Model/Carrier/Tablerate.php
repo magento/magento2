@@ -82,6 +82,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Collect rates.
+     *
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -129,8 +131,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif ($item->getFreeShipping()) {
-                    $freeShipping = is_numeric($item->getFreeShipping()) ? $item->getFreeShipping() : 0;
+                } elseif ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) {
+                    $freeShipping = $item->getFreeShipping() ?
+                        $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
+                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
@@ -199,6 +203,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get rate.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
@@ -208,6 +214,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get code.
+     *
      * @param string $type
      * @param string $code
      * @return array

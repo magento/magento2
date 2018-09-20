@@ -11,6 +11,9 @@ use Magento\Framework\Search\Request\Dimension;
 
 /**
  * Resolves name of a temporary table for indexation
+ *
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class TemporaryResolver implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {
