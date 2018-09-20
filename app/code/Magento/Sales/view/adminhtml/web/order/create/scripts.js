@@ -1170,9 +1170,10 @@ define([
 
         submit : function()
         {
-            if(jQuery('#edit_form').valid()) {
-                jQuery('#edit_form').trigger('processStart');
-                jQuery('#edit_form').trigger('submitOrder');
+            var $editForm = jQuery('#edit_form');
+            if ($editForm.valid()) {
+                $editForm.trigger('processStart');
+                $editForm.trigger('submitOrder');
             }
         },
 
