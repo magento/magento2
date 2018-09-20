@@ -227,13 +227,14 @@ class Config extends \Magento\Framework\DataObject
      * Get field path
      *
      * @param Field $field
+     * @param string $fieldId Need for support of clone_field feature
      * @param array &$oldConfig Need for compatibility with _processGroup()
      * @param array &$extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
-    private function getFieldPath(Field $field, array &$oldConfig, array &$extraOldGroups): string
+    private function getFieldPath(Field $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
     {
-        $path = $field->getGroupPath() . '/' . $field->getId();
+        $path = $field->getGroupPath() . '/' . $fieldId;
 
         /**
          * Look for custom defined field path
@@ -293,7 +294,7 @@ class Config extends \Magento\Framework\DataObject
         if (isset($groupData['fields'])) {
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
                 $field = $this->getField($sectionId, $groupId, $fieldId);
-                $path = $this->getFieldPath($field, $oldConfig, $extraOldGroups);
+                $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
                     $changedPaths[] = $path;
                 }
@@ -374,7 +375,7 @@ class Config extends \Magento\Framework\DataObject
                 $backendModel->addData($data);
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                $path = $this->getFieldPath($field, $extraOldGroups, $oldConfig);
+                $path = $this->getFieldPath($field, $fieldId, $extraOldGroups, $oldConfig);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
                 $inherit = !empty($fieldData['inherit']);
