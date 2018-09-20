@@ -110,7 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getExtensionByType($type)
     {
         $extensions = $this->getExtensions();
-        return isset($extensions[$type]) ? $extensions[$type] : '';
+        return $extensions[$type] ?? '';
     }
 
     /**

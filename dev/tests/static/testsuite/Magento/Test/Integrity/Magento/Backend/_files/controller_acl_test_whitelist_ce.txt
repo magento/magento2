@@ -28,4 +28,8 @@ Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin\Save
 Magento\Ui\Controller\Adminhtml\Export\GridToCsv
 Magento\Ui\Controller\Adminhtml\Export\GridToXml
 Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter
+Magento\Inventory\Controller\Adminhtml\Source\SourceCarrierDataProcessor
+Magento\Inventory\Controller\Adminhtml\Source\SourceHydrator
+Magento\Inventory\Controller\Adminhtml\Stock\StockSaveProcessor
+Magento\Inventory\Controller\Adminhtml\Stock\StockSourceLinkProcessor
 Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\BulkPageProcessor

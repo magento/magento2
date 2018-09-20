@@ -210,7 +210,7 @@
             overflow: hidden;
         }
 
-        label {
+        span {
             display: inline-block;
             line-height: @field-label__line-height;
             vertical-align: middle;
@@ -228,7 +228,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        > span {
+        span {
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -515,7 +515,7 @@
                 position: absolute;
                 top: 0;
 
-                label {
+                span {
                     &:before {
                         display: block;
                     }
@@ -530,7 +530,7 @@
         }
 
         & > .admin__field-label {
-            label {
+            span {
                 &:before {
                     display: none;
                 }

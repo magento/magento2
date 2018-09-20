@@ -152,7 +152,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
             ->will($this->returnValue($maxPrice));
-        $this->assertSame(floatval($maxPrice), $this->target->getMaxPrice());
+        $this->assertSame((float)$maxPrice, $this->target->getMaxPrice());
     }
 
     /**

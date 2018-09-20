@@ -7,9 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductWithEmptyAttributeTest">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Create products"/>
             <title value="Product attribute is not visible on storefront if it is empty"/>
             <description value="Product attribute should not be visible on storefront if it is empty"/>
             <severity value="MAJOR"/>

@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="swatchOptionByLabel" type="button" selector="div.swatch-option[option-label={{opt}}]" parameterized="true"/>
         <element name="nthSwatchOption" type="button" selector="div.swatch-option:nth-of-type({{var}})" parameterized="true"/>

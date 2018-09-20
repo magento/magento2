@@ -25,7 +25,7 @@ interface ResolverInterface
      * @param array|null $value
      * @param array|null $args
      * @throws \Exception
-     * @return Value
+     * @return mixed|Value
      */
     public function resolve(
         Field $field,
@@ -33,5 +33,5 @@ interface ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value;
+    );
 }
