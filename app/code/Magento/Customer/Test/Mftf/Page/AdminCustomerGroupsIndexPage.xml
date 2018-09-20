@@ -10,6 +10,5 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminCustomerGroupsIndexPage" url="/customer/group/" area="admin" module="Magento_Customer">
         <section name="AdminCustomerGroupGridActionsSection"/>
-        <section name="AdminCustomerGroupFiltersSection"/>
     </page>
 </pages>
