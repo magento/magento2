@@ -124,10 +124,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Context $context
      * @param Config $configCacheType
      * @param Collection $countryCollection
-     * @param CollectionFactory $regCollectionFactory,
+     * @param CollectionFactory $regCollectionFactory
      * @param JsonData $jsonHelper
      * @param StoreManagerInterface $storeManager
-     * @param CurrencyFactory currencyFactory
+     * @param CurrencyFactory $currencyFactory
      */
     public function __construct(
         Context $context,
@@ -317,8 +317,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBaseCurrencyCode()
     {
         return $this->scopeConfig->getValue(
-        	Currency::XML_PATH_CURRENCY_BASE,
-	        'default'
+            Currency::XML_PATH_CURRENCY_BASE,
+            'default'
         );
     }
 
