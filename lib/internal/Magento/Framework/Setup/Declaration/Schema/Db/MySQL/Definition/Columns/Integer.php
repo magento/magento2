@@ -89,7 +89,7 @@ class Integer implements DbDefinitionProcessorInterface
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
-                sprintf('DEFAULT %s', (string) intval($column->getDefault())) : '',
+                sprintf('DEFAULT %s', (string) (int)$column->getDefault()) : '',
             $this->identity->toDefinition($column),
             $this->comment->toDefinition($column)
         );
