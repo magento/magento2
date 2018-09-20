@@ -23,6 +23,7 @@ use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -52,6 +53,11 @@ class FormTest extends TestCase
     private $block;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -60,6 +66,10 @@ class FormTest extends TestCase
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $context->method('getStoreManager')
+            ->willReturn($this->storeManager);
+
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId', 'getQuoteId', 'getStoreId', 'getStore', 'getQuote'])
@@ -119,6 +129,8 @@ class FormTest extends TestCase
             'quote_id' => $quoteId
         ];
 
+        $this->storeManager->method('setCurrentStore')
+            ->with($storeId);
         $this->quoteSession->method('getCustomerId')
             ->willReturn($customerId);
         $this->quoteSession->method('getStoreId')
