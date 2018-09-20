@@ -15,6 +15,7 @@ class TextBlobDefinition implements DefinitionConverterInterface
 {
     /**
      * Parse text size.
+     *
      * Returns max allowed size if value great it.
      *
      * @param string|int $size

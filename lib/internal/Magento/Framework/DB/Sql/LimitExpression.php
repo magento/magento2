@@ -41,7 +41,7 @@ class LimitExpression extends Expression
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __toString()
     {

@@ -43,7 +43,7 @@ class CompositeConverter implements ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {

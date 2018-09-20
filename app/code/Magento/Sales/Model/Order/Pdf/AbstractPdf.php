@@ -158,8 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
-     * Returns the total width in points of the string using the specified font and
-     * size.
+     * Returns the total width in points of the string using the specified font and size.
      *
      * This is not the most efficient way to perform this calculation. I'm
      * concentrating optimization efforts on the upcoming layout manager class.
@@ -230,7 +229,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert logo to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -285,7 +284,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert address to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      */
     protected function insertAddress(&$page, $store = null)

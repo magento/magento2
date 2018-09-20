@@ -110,6 +110,8 @@ class ImporterPool
     }
 
     /**
+     * Retrieves sections names
+     *
      * Retrieves names of sections for configuration files whose data is read from these files for import
      * to appropriate application sources.
      *
