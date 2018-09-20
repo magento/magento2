@@ -206,14 +206,12 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             );
         }
 
-        $price = '';
-        if ($priceRender) {
-            $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
-                $product,
-                $arguments
-            );
-        }
+        $price = $priceRender->render(
+            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+            $product,
+            $arguments
+        );
+        
         return $price;
     }
 
