@@ -110,24 +110,23 @@ class IsCorrectQtyConditionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoConfigFixture current_store cataloginventory/item_options/min_sale_qty 7
      *
      * @param string $sku
      * @param int $stockId
-     * @param int $requestedQty
+     * @param float $requestedQty
      * @param bool $expectedResult
      *
      * @return void
      *
-     * @dataProvider executeWithUseConfigMinSaleQtyDataProvider
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @dataProvider executeWithDecimalQtyDataProvider
      *
      * @magentoDbIsolation disabled
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteWithDecimalQty(
         string $sku,
         int $stockId,
-        int $requestedQty,
+        float $requestedQty,
         bool $expectedResult
     ): void {
         $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
@@ -140,10 +139,10 @@ class IsCorrectQtyConditionTest extends TestCase
     public function executeWithDecimalQtyDataProvider(): array
     {
         return [
-            ['SKU-1', 0.5, 1, true],
-            ['SKU-1', 5.5, 1, true],
-            ['SKU-2', 0.5, 1, false],
-            ['SKU-2', 5.5, 7, false],
+            ['SKU-1', 10, 2.5, true],
+            ['SKU-1', 10, 2, true],
+            ['SKU-2', 30, 2.5, false],
+            ['SKU-2', 30, 2, true]
         ];
     }
 
