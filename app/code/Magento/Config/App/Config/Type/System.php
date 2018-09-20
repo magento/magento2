@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -102,6 +103,11 @@ class System implements ConfigTypeInterface
     private $availableDataScopes = null;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
      * @param Fallback $fallback
@@ -110,6 +116,7 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
+     * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
         ConfigSourceInterface $source,
@@ -119,7 +126,8 @@ class System implements ConfigTypeInterface
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null
+        Reader $reader = null,
+        EncryptorInterface $encryptor = null
     ) {
         $this->source = $source;
         $this->postProcessor = $postProcessor;
@@ -129,6 +137,8 @@ class System implements ConfigTypeInterface
         $this->fallback = $fallback;
         $this->configType = $configType;
         $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()
+            ->get(EncryptorInterface::class);
     }
 
     /**
@@ -193,7 +203,8 @@ class System implements ConfigTypeInterface
         if ($cachedData === false) {
             $data = $this->reader->read();
         } else {
-            $data = unserialize($cachedData);
+
+            $data = unserialize($this->encryptor->decrypt($cachedData));
         }
 
         return $data;
@@ -212,7 +223,11 @@ class System implements ConfigTypeInterface
             $data = $this->reader->read();
             $this->cacheData($data);
         } else {
-            $data = [$scopeType => unserialize($cachedData)];
+            $data = [
+                $scopeType => unserialize(
+                    $this->encryptor->decrypt($cachedData)
+                )
+            ];
         }
 
         return $data;
@@ -232,7 +247,9 @@ class System implements ConfigTypeInterface
             if ($this->availableDataScopes === null) {
                 $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                 if ($cachedScopeData !== false) {
-                    $this->availableDataScopes = unserialize($cachedScopeData);
+                    $this->availableDataScopes = unserialize(
+                        $this->encryptor->decrypt($cachedScopeData)
+                    );
                 }
             }
             if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
@@ -241,7 +258,13 @@ class System implements ConfigTypeInterface
             $data = $this->reader->read();
             $this->cacheData($data);
         } else {
-            $data = [$scopeType => [$scopeId => unserialize($cachedData)]];
+            $data = [
+                $scopeType => [
+                    $scopeId => unserialize(
+                        $this->encryptor->decrypt($cachedData)
+                    )
+                ]
+            ];
         }
 
         return $data;
@@ -257,12 +280,12 @@ class System implements ConfigTypeInterface
     private function cacheData(array $data)
     {
         $this->cache->save(
-            serialize($data),
+            $this->encryptor->encrypt(serialize($data)),
             $this->configType,
             [self::CACHE_TAG]
         );
         $this->cache->save(
-            serialize($data['default']),
+            $this->encryptor->encrypt(serialize($data['default'])),
             $this->configType . '_default',
             [self::CACHE_TAG]
         );
@@ -271,14 +294,14 @@ class System implements ConfigTypeInterface
             foreach ($data[$curScopeType] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
                 $this->cache->save(
-                    serialize($curScopeData),
+                    $this->encryptor->encrypt(serialize($curScopeData)),
                     $this->configType . '_' . $curScopeType . '_' . $curScopeId,
                     [self::CACHE_TAG]
                 );
             }
         }
         $this->cache->save(
-            serialize($scopes),
+            $this->encryptor->encrypt(serialize($scopes)),
             $this->configType . "_scopes",
             [self::CACHE_TAG]
         );

@@ -13,7 +13,7 @@
         "magento/module-ui": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.8",
+    "version": "100.1.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

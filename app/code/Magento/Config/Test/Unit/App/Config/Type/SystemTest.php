@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Config\App\Config\Type\System\Reader;
 
@@ -55,6 +56,11 @@ class SystemTest extends \PHPUnit_Framework_TestCase
      */
     private $reader;
 
+    /**
+     * @var EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $encryptorMock;
+
     public function setUp()
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
@@ -71,6 +77,9 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->encryptorMock = $this->getMockBuilder(EncryptorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->configType = new System(
             $this->source,
@@ -80,7 +89,8 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             $this->preProcessor,
             1,
             'system',
-            $this->reader
+            $this->reader,
+            $this->encryptorMock
         );
     }
 
@@ -99,6 +109,9 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         $this->cache->expects($this->once())
             ->method('load')
             ->willReturn(serialize($data));
+        $this->encryptorMock->expects($this->once())
+            ->method('decrypt')
+            ->willReturnArgument(0);
         $this->assertEquals($url, $this->configType->get($path));
     }
 
@@ -116,6 +129,9 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         $this->cache->expects($this->once())
             ->method('load')
             ->willReturn(serialize($data));
+        $this->encryptorMock->expects($this->once())
+            ->method('decrypt')
+            ->willReturnArgument(0);
         $this->assertEquals($data, $this->configType->get(''));
     }
 
@@ -147,6 +163,9 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn($data);
+        $this->encryptorMock->expects($this->atLeastOnce())
+            ->method('encrypt')
+            ->willReturnArgument(0);
 
         $this->assertEquals($url, $this->configType->get($path));
     }
