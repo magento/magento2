@@ -64,15 +64,17 @@ class ProductImage implements ResolverInterface
         /** @var \Magento\Catalog\Helper\Image $catalogImageHelper */
         $catalogImageHelper = $this->catalogImageHelperFactory->create();
 
-        $imageUrl = $catalogImageHelper->init(
+        /** @var \Magento\Catalog\Helper\Image $image */
+        $image = $catalogImageHelper->init(
             $product,
             'product_' . $imageType,
             ['type' => $imageType]
-        )->getUrl();
+        );
 
         $imageData = [
-            'url' => $imageUrl,
-            'path' => $product->getData($imageType)
+            'url'   => $image->getUrl(),
+            'path'  => $product->getData($imageType),
+            'label' => $image->getLabel()
         ];
 
         return $imageData;

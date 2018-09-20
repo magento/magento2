@@ -264,9 +264,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached")
     options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page")
-    image_label: String @doc(description: "The label assigned to a product image")
-    small_image_label: String @doc(description: "The label assigned to a product's small image")
-    thumbnail_label: String @doc(description: "The label assigned to a product's thumbnail image")
     created_at: String @doc(description: "Timestamp indicating when the product was created")
     updated_at: String @doc(description: "Timestamp indicating when the product was updated")
     country_of_manufacture: String @doc(description: "The product's country of origin")
@@ -352,9 +349,10 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     image_size_y: Int @doc(description: "The maximum height of an image")
 }
 
-type ProductImage @doc(description: "Product image information. Contains image relative path and URL") {
+type ProductImage @doc(description: "Product image information. Contains image relative path, URL and label") {
     url: String
     path: String
+    label: String
 }
 
 interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
