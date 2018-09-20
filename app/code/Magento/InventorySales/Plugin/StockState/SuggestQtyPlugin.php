@@ -80,7 +80,7 @@ class SuggestQtyPlugin
         \Closure $proceed,
         $productId,
         $qty,
-        $scopeId
+        $scopeId = null
     ): float {
         try {
             $skus = $this->getSkusByProductIds->execute([$productId]);

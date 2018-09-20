@@ -106,7 +106,7 @@ class CheckQuoteItemQtyPlugin
         $itemQty,
         $qtyToCheck,
         $origQty,
-        $scopeId
+        $scopeId = null
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
