@@ -235,6 +235,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Get main product image
+     *
      * @param string $size
      * @return string
      */
