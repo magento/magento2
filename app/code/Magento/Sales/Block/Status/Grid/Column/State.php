@@ -6,6 +6,8 @@
 namespace Magento\Sales\Block\Status\Grid\Column;
 
 /**
+ * Order State grid column widget
+ *
  * @api
  * @since 100.0.2
  */

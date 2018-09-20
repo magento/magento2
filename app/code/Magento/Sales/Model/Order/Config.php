@@ -73,6 +73,8 @@ class Config
     }
 
     /**
+     * Return Collection of available states
+     *
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected function _getCollection()
@@ -84,6 +86,8 @@ class Config
     }
 
     /**
+     * Return state model by state code
+     *
      * @param string $state
      * @return Status|null
      */
@@ -119,6 +123,7 @@ class Config
      *
      * @param   string $code
      * @return  string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStatusLabel($code)
     {
