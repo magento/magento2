@@ -47,22 +47,26 @@ class CollectionProvider
 
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
-        $output = [];
         $sorterItems = [];
         foreach ($products as $item) {
-            $output[$item->getId()] = $converter->convert($item);
+            $sorterItems[$item->getId()] = $converter->convert($item);
         }
 
-        foreach ($output as $item) {
-            $itemPosition = $item['position'];
-            if (!isset($sorterItems[$itemPosition])) {
-                $sorterItems[$itemPosition] = $item;
-            } else {
-                $newPosition = $itemPosition + 1;
-                $sorterItems[$newPosition] = $item;
-            }
-        }
-        ksort($sorterItems);
+        usort($sorterItems, [$this, 'comparePosition']);
+
         return $sorterItems;
+    }
+
+    /**
+     * Compare item by key 'position'
+     *
+     * @param array $a
+     * @param array $b
+     * @return int It returns -1, 0 or 1 when $a['position'] is respectively less than,
+     * equal to, or greater than $a['position']
+     */
+    public function comparePosition(array $a, array $b): int
+    {
+        return (int)$a['position'] <=> (int)$b['position'];
     }
 }
