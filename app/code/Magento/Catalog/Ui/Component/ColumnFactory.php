@@ -46,14 +46,16 @@ class ColumnFactory
         $this->componentFactory = $componentFactory;
     }
 
-	/**
-	 * @param \Magento\Catalog\Api\Data\ProductAttributeInterface          $attribute
-	 * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-	 * @param array                                                        $config
-	 *
-	 * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Create Factory
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+     * @param array $config
+     *
+     * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function create($attribute, $context, array $config = [])
     {
         $columnName = $attribute->getAttributeCode();

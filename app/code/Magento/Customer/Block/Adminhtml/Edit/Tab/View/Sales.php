@@ -166,15 +166,15 @@ class Sales extends \Magento\Backend\Block\Template
         return $this->_collection->getTotals();
     }
 
-	/**
-	 * Format price by specified website
-	 *
-	 * @param float    $price
-	 * @param null|int $websiteId
-	 *
-	 * @return string
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
+    /**
+     * Format price by specified website
+     *
+     * @param float $price
+     * @param null|int $websiteId
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function formatCurrency($price, $websiteId = null)
     {
         return $this->_storeManager->getWebsite($websiteId)->getBaseCurrency()->format($price);

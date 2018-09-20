@@ -26,7 +26,7 @@ class ObjectRegistry
     }
 
     /**
-     * Get
+     * Get Entity
      *
      * @param int $entityId
      * @return \Magento\Framework\DataObject|null
@@ -37,7 +37,7 @@ class ObjectRegistry
     }
 
     /**
-     * List
+     * List Entities
      *
      * @return \Magento\Framework\DataObject[]
      */

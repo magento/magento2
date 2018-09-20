@@ -982,12 +982,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
     }
 
-	/**
-	 * Return FeDex currency ISO code by Magento Base Currency Code
-	 *
-	 * @return string 3-digit currency code
-	 * @throws \Magento\Framework\Exception\NoSuchEntityException
-	 */
+    /**
+     * Return FeDex currency ISO code by Magento Base Currency Code
+     *
+     * @return string 3-digit currency code
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function getCurrencyCode()
     {
         $codes = [
