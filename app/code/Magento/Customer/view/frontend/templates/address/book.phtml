@@ -79,7 +79,6 @@
                         <th scope="col" class="col streetaddress"><?= /* @escapeNotVerified */ __('Street Address') ?></th>
                         <th scope="col" class="col city"><?= /* @escapeNotVerified */ __('City') ?></th>
                         <th scope="col" class="col country"><?= /* @escapeNotVerified */ __('Country') ?></th>
-                        <th scope="col" class="col state"><?= /* @escapeNotVerified */ __('State') ?></th>
                         <th scope="col" class="col zip"><?= /* @escapeNotVerified */ __('Zip/Postal Code') ?></th>
                         <th scope="col" class="col phone"><?= /* @escapeNotVerified */ __('Phone') ?></th>
                         <th scope="col" class="col actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
@@ -94,7 +93,6 @@
                             <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->getStreetAddress($address->getStreet()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= /* @escapeNotVerified */ $address->getCity() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= /* @escapeNotVerified */ $address->getCountryId() ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion()->getRegion() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= /* @escapeNotVerified */ $address->getPostcode() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= /* @escapeNotVerified */ $address->getTelephone() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
@@ -106,6 +104,9 @@
                     </tbody>
                 </table>
             </div>
+            <?php if ($block->getPagerHtml()): ?>
+                <div class="customer-addresses-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
+            <?php endif ?>
         <?php else: ?>
             <p class="empty"><?= $block->escapeHtml(__('You have no other address entries in your address book.')) ?></p>
         <?php endif ?>

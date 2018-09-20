@@ -44,6 +44,11 @@ class Book extends \Magento\Framework\View\Element\Template
     protected $addressMapper;
 
     /**
+     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
+     */
+    private $addressesCollectionFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressRepositoryInterface $addressRepository
@@ -51,6 +56,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param Mapper $addressMapper
      * @param array $data
+     * @param \Magento\Customer\Model\ResourceModel\Address\Collection $addressesCollection
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -59,13 +65,26 @@ class Book extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
-        array $data = []
+        array $data = [],
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
+        $this->addressesCollectionFactory = $addressesCollectionFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
+        );
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+
         parent::__construct($context, $data);
     }
 
@@ -75,7 +94,20 @@ class Book extends \Magento\Framework\View\Element\Template
     protected function _prepareLayout()
     {
         $this->pageConfig->getTitle()->set(__('Address Book'));
-        return parent::_prepareLayout();
+        parent::_prepareLayout();
+        if ($this->getAddresses()) {
+            $pager = $this->getLayout()->createBlock(
+                \Magento\Theme\Block\Html\Pager::class,
+                'customer.addresses.pager'
+            )
+                ->setCollection(
+                $this->getAddresses()
+            )
+            ;
+            $this->setChild('pager', $pager);
+            $this->getAddresses()->load();
+        }
+        return $this;
     }
 
     /**
@@ -128,7 +160,10 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getAdditionalAddresses()
     {
         try {
-            $addresses = $this->customerRepository->getById($this->currentCustomer->getCustomerId())->getAddresses();
+            //$addresses = $this->customerRepository->getById($this->currentCustomer->getCustomerId())->getAddresses();
+
+            $addresses = $this->getAddresses();
+            // continue work here!!!
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return false;
         }
@@ -223,5 +258,81 @@ class Book extends \Magento\Framework\View\Element\Template
             $street = implode(', ', $street);
         }
         return $street;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
+    }
+
+    /**
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     */
+    private $addressesCollection;
+
+
+    /**
+     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
+     */
+    private $addressCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    private function getAddresses()
+    {
+        $customerId = $this->currentCustomer->getCustomerId();
+
+        if (!($customerId)) {
+            return false;
+        }
+        if (!$this->addressesCollection) {
+
+            $filter = $this->filterBuilder->setField('parent_id')
+                ->setValue($customerId)
+                ->setConditionType('eq')
+                ->create();
+
+
+            $searchCriteria = $this->searchCriteriaBuilder->addFilters([$filter])->create();
+
+            //$listtt = $this->addressRepository->getList($searchCriteria);
+
+            /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
+            $collection = $this->addressesCollectionFactory->create();
+            $this->extensionAttributesJoinProcessor->process(
+                $collection,
+                \Magento\Customer\Api\Data\AddressInterface::class
+            );
+
+            $this->collectionProcessor->process($searchCriteria, $collection);
+            $collection->setOrder(
+                'created_at',
+                'desc'
+            );
+            $this->addressesCollection = $collection;
+        }
+
+        return $this->addressesCollection;
     }
 }
