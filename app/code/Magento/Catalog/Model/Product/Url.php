@@ -80,16 +80,6 @@ class Url extends \Magento\Framework\DataObject
     }
 
     /**
-     * Retrieve URL Instance
-     *
-     * @return \Magento\Framework\UrlInterface
-     */
-    private function getUrlInstance()
-    {
-        return $this->urlFactory->create();
-    }
-
-    /**
      * Retrieve URL in current store
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -213,6 +203,7 @@ class Url extends \Magento\Framework\DataObject
             $routeParams['_query'] = [];
         }
 
-        return $this->getUrlInstance()->setScope($storeId)->getUrl($routePath, $routeParams);
+        $url = $this->urlFactory->create()->setScope($storeId);
+        return $url->getUrl($routePath, $routeParams);
     }
 }
