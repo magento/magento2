@@ -34,20 +34,19 @@ class BulkSourceAssignInterfacePlugin
      * Keep database consistency while bulk assign items
      *
      * @param BulkSourceAssignInterface $subject
-     * @param callable $proceed
+     * @param int $result
      * @param array $skus
      * @param array $sources
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         BulkSourceAssignInterface $subject,
-        callable $proceed,
+        int $result,
         array $skus,
         array $sources
     ): int {
-        $res = $proceed($skus, $sources);
         $this->bulkConfigurationAssign->execute($skus, $sources);
-        return $res;
+        return $result;
     }
 }

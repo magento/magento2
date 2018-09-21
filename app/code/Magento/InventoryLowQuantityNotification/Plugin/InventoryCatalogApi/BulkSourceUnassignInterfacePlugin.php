@@ -34,20 +34,19 @@ class BulkSourceUnassignInterfacePlugin
      * Keep database consistency while bulk unassign items
      *
      * @param BulkSourceUnassignInterface $subject
-     * @param callable $proceed
+     * @param int $result
      * @param array $skus
      * @param array $sources
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         BulkSourceUnassignInterface $subject,
-        callable $proceed,
+        int $result,
         array $skus,
         array $sources
     ): int {
-        $res = $proceed($skus, $sources);
         $this->bulkConfigurationUnassign->execute($skus, $sources);
-        return $res;
+        return $result;
     }
 }

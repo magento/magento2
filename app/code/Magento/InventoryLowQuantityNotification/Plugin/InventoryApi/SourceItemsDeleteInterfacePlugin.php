@@ -34,17 +34,15 @@ class SourceItemsDeleteInterfacePlugin
      * Keep database consistency while a source item is removed
      *
      * @param SourceItemsDeleteInterface $subject
-     * @param callable $proceed
+     * @param $result
      * @param array $sourceItems
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         SourceItemsDeleteInterface $subject,
-        callable $proceed,
+        $result,
         array $sourceItems
     ) {
-        $proceed($sourceItems);
-
         foreach ($sourceItems as $sourceItem) {
             /** @var SourceItemInterface $sourceItem */
             $this->delete->execute($sourceItem->getSourceCode(), $sourceItem->getSku());
