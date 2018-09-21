@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateApiDynamicBundleProductActionGroup">
+        <arguments>
+            <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
+        </arguments>
         <!--Create 4 simple products-->
         <createData entity="SimpleProduct2" stepKey="simpleProduct1">
             <field key="price">4.99</field>
@@ -23,7 +26,9 @@
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->
-        <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+        <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
+            <field key="name">{{productName}}</field>
+        </createData>
         <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
             <requiredEntity createDataKey="createBundleProduct"/>
             <field key="required">false</field>
@@ -53,6 +58,9 @@
         </createData>
     </actionGroup>
     <actionGroup name="AdminCreateApiFixedBundleProductActionGroup">
+        <arguments>
+            <argument name="productName" defaultValue="Api Fixed Bundle Product" type="string"/>
+        </arguments>
         <!--Create 4 simple products-->
         <createData entity="SimpleProduct2" stepKey="simpleProduct1">
             <field key="price">4.99</field>
@@ -67,7 +75,9 @@
             <field key="price">18.25</field>
         </createData>
         <!-- Create the bundle product based -->
-        <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+        <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct">
+            <field key="name">{{productName}}</field>
+        </createData>
         <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
             <requiredEntity createDataKey="createBundleProduct"/>
             <field key="required">false</field>
