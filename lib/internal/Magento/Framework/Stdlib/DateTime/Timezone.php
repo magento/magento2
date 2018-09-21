@@ -85,7 +85,9 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return path to default timezone
+     *
+     * @return string
      */
     public function getDefaultTimezonePath()
     {
@@ -93,7 +95,9 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve timezone code
+     *
+     * @return string
      */
     public function getDefaultTimezone()
     {
@@ -101,7 +105,11 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the scope config timezone
+     *
+     * @param string $scopeType
+     * @param string $scopeCode
+     * @return string
      */
     public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
@@ -113,7 +121,10 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve ISO date format
+     *
+     * @param   int $type
+     * @return  string
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -125,7 +136,9 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve short date format with 4-digit year
+     *
+     * @return  string
      */
     public function getDateFormatWithLongYear()
     {
@@ -137,7 +150,10 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve ISO time format
+     *
+     * @param   string $type
+     * @return  string
      */
     public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -149,7 +165,10 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve ISO datetime format
+     *
+     * @param   string $type
+     * @return  string
      */
     public function getDateTimeFormat($type)
     {
@@ -157,7 +176,13 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create \DateTime object for current locale
+     *
+     * @param mixed $date
+     * @param string $locale
+     * @param bool $useTimezone
+     * @param bool $includeTime
+     * @return \DateTime
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
@@ -191,7 +216,12 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create \DateTime object with date converted to scope timezone and scope Locale
+     *
+     * @param   mixed $scope Information about scope
+     * @param   string|integer|\DateTime|array|null $date date in UTC
+     * @param   boolean $includeTime flag for including time to date
+     * @return  \DateTime
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
@@ -204,7 +234,12 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Format date using current locale options and time zone.
+     *
+     * @param \DateTime|null $date
+     * @param int $format
+     * @param bool $showTime
+     * @return string
      */
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
@@ -218,7 +253,12 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get scope timestamp
+     *
+     * Timestamp will be built with scope timezone settings
+     *
+     * @param   mixed $scope
+     * @return  int
      */
     public function scopeTimeStamp($scope = null)
     {
@@ -231,7 +271,12 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if current date of the given scope (in the scope timezone) is within the range
+     *
+     * @param int|string|\Magento\Framework\App\ScopeInterface $scope
+     * @param string|null $dateFrom
+     * @param string|null $dateTo
+     * @return bool
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
@@ -300,6 +345,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * Convert date from config timezone to Utc.
+     *
      * If pass \DateTime object as argument be sure that timezone is the same with config timezone
      *
      * @param string|\DateTimeInterface $date
@@ -315,6 +361,7 @@ class Timezone implements TimezoneInterface
 
     /**
      * Convert date from config timezone to Utc.
+     *
      * If pass \DateTime object as argument be sure that timezone is the same with config timezone
      *
      * @param string|\DateTimeInterface $date

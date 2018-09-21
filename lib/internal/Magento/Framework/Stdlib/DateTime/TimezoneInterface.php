@@ -80,6 +80,7 @@ interface TimezoneInterface
 
     /**
      * Get scope timestamp
+     *
      * Timestamp will be built with scope timezone settings
      *
      * @param   mixed $scope
@@ -121,6 +122,7 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
+     *
      * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
@@ -139,19 +141,29 @@ interface TimezoneInterface
     );
 
     /**
+     * Convert date from config timezone to Utc.
+     *
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
      * @param string|\DateTimeInterface $date
      * @param string $format
+     * @throws LocalizedException
      * @return string
-     * @since 100.1.0
      * @deprecated
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
 
     /**
-     * @param $date
+     * Convert date from config timezone to Utc.
+     *
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
      * @param string $format
      * @param string $pattern
-     * @return mixed
+     * @throws LocalizedException
+     * @return string
+     * @deprecated
      */
     public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = 'Y-m-d H:i:s');
 }
