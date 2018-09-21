@@ -92,16 +92,16 @@ class Repository
 
     /**
      * Repository constructor.
-     * @param UrlInterface                                       $baseUrl
-     * @param \Magento\Framework\View\DesignInterface            $design
+     * @param UrlInterface $baseUrl
+     * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param \Magento\Framework\View\Asset\Source               $assetSource
-     * @param \Magento\Framework\App\Request\Http                $request
-     * @param FileFactory                                        $fileFactory
-     * @param File\FallbackContextFactory                        $fallbackContextFactory
-     * @param File\ContextFactory                                $contextFactory
-     * @param RemoteFactory                                      $remoteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface         $storeManager
+     * @param \Magento\Framework\View\Asset\Source $assetSource
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param FileFactory $fileFactory
+     * @param File\FallbackContextFactory $fallbackContextFactory
+     * @param File\ContextFactory $contextFactory
+     * @param RemoteFactory $remoteFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
@@ -204,7 +204,7 @@ class Repository
      * Create a file asset that's subject of fallback system
      *
      * @param string $fileId
-     * @param array  $params
+     * @param array $params
      * @return File
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -280,9 +280,9 @@ class Repository
      */
     private function getFallbackContext($urlType, $isSecure, $area, $themePath, $locale)
     {
-        $secureKey   = null === $isSecure ? 'null' : (int)$isSecure;
+        $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
-        $cacheId     = implode('|', [
+        $cacheId = implode('|', [
             $baseDirType,
             $urlType,
             $secureKey,
@@ -323,7 +323,7 @@ class Repository
     /**
      * Create a file asset similar to an existing local asset by using its context
      *
-     * @param string         $fileId
+     * @param string $fileId
      * @param LocalInterface $similarTo
      * @return File
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -401,7 +401,7 @@ class Repository
     /**
      * Create a file asset with path relative to specified local asset
      *
-     * @param string         $fileId
+     * @param string $fileId
      * @param LocalInterface $relativeTo
      * @return File
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -449,7 +449,7 @@ class Repository
      * To omit parameters and have them automatically determined from application state, use getUrl()
      *
      * @param string $fileId
-     * @param array  $params
+     * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
