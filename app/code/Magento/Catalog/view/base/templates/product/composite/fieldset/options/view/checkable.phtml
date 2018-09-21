@@ -21,7 +21,7 @@ if ($option) : ?>
 
 <div class="options-list nested" id="options-<?php echo /* @noEscape */
 $option->getId() ?>-list">
-    <?php if ($optionType === Option::OPTION_TYPE_RADIO) : ?>
+    <?php if ($optionType === Option::OPTION_TYPE_RADIO && !$option->getIsRequire()): ?>
     <div class="field choice admin__field admin__field-option">
         <input type="radio"
                id="options_<?php echo /* @noEscape */
@@ -69,7 +69,7 @@ $option->getId() ?>-list">
                    $optionType === Option::OPTION_TYPE_RADIO ?
                        'radio admin__control-radio' :
                        'checkbox admin__control-checkbox' ?> <?php echo /* @noEscape */
-                   $option->getIsRequire() ?>
+                   $option->getIsRequire() ? 'required': '' ?>
                        product-custom-option
                         <?php echo $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                    name="options[<?php echo $option->getId() ?>]<?php echo /* @noEscape */
