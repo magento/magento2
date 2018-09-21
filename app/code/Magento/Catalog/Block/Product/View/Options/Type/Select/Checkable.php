@@ -13,8 +13,7 @@ use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
 use Magento\Catalog\Model\Product\Option;
 
 /**
- * Represent needed logic for checkbox and radio button
- * option types
+ * Represent needed logic for checkbox and radio button option types
  */
 class Checkable extends AbstractOptions
 {
@@ -24,6 +23,8 @@ class Checkable extends AbstractOptions
     protected $_template = 'Magento_Catalog::product/composite/fieldset/options/view/checkable.phtml';
 
     /**
+     * Returns formated price
+     *
      * @param ProductCustomOptionValuesInterface $value
      * @return string
      */
@@ -39,6 +40,8 @@ class Checkable extends AbstractOptions
     }
 
     /**
+     * Returns current currency for store
+     *
      * @param ProductCustomOptionValuesInterface $value
      * @return float|string
      */
@@ -53,6 +56,8 @@ class Checkable extends AbstractOptions
     }
 
     /**
+     * Returns preconfigured value for given option
+     *
      * @param Option $option
      * @return string|array|null
      */

@@ -18,6 +18,8 @@ use Magento\Framework\View\Element\Html\Select;
 class Multiple extends AbstractOptions
 {
     /**
+     * @inheritdoc
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -54,6 +56,8 @@ class Multiple extends AbstractOptions
     }
 
     /**
+     * Returns select with inserted option give as a parameter
+     *
      * @param Select $select
      * @param Option $option
      * @return Select
@@ -72,6 +76,8 @@ class Multiple extends AbstractOptions
     }
 
     /**
+     * Returns select with formated option prices
+     *
      * @param Select $select
      * @param Option $option
      * @return Select
