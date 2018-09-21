@@ -71,15 +71,10 @@ class CompositeReader implements ReaderInterface
                 if (isset($firstItem['sortOrder'])) {
                     $firstValue = intval($firstItem['sortOrder']);
                 }
-
                 if (isset($secondItem['sortOrder'])) {
                     $secondValue = intval($secondItem['sortOrder']);
                 }
-
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
+                return $firstValue <=> $secondValue;
             }
         );
         return $readers;

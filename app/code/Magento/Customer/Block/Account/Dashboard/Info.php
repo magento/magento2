@@ -102,7 +102,7 @@ class Info extends \Magento\Framework\View\Element\Template
             $this->_subscription = $this->_createSubscriber();
             $customer = $this->getCustomer();
             if ($customer) {
-                $this->_subscription->loadByEmail($customer->getEmail());
+                $this->_subscription->loadByCustomerId($customer->getId());
             }
         }
         return $this->_subscription;

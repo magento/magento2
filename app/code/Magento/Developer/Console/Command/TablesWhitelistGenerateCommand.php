@@ -43,10 +43,15 @@ class TablesWhitelistGenerateCommand extends Command
     private $jsonPersistor;
 
     /**
+     * @var array
+     */
+    private $primaryDbSchema;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
      * @param ReaderComposite $readerComposite
      * @param JsonPersistor $jsonPersistor
-     * @param null $name
+     * @param string|null $name
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -104,18 +109,21 @@ class TablesWhitelistGenerateCommand extends Command
         if (file_exists($whiteListFileName)) {
             $content = json_decode(file_get_contents($whiteListFileName), true);
         }
-        $newContent = $this->readerComposite->read($moduleName);
 
-        //Do merge between what we have before, and what we have now.
+        $newContent = $this->filterPrimaryTables($this->readerComposite->read($moduleName));
+
+        //Do merge between what we have before, and what we have now and filter to only certain attributes.
         $content = array_replace_recursive(
             $content,
-            $this->selectNamesFromContent($newContent)
+            $this->filterAttributeNames($newContent)
         );
-        $this->jsonPersistor->persist($content, $whiteListFileName);
+        if (!empty($content)) {
+            $this->jsonPersistor->persist($content, $whiteListFileName);
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -144,7 +152,7 @@ class TablesWhitelistGenerateCommand extends Command
      * @param array $content
      * @return array
      */
-    private function selectNamesFromContent(array $content)
+    private function filterAttributeNames(array $content)
     {
         $names = [];
         $types = ['column', 'index', 'constraint'];
@@ -162,5 +170,36 @@ class TablesWhitelistGenerateCommand extends Command
         }
 
         return $names;
+    }
+
+    /**
+     * Load db_schema content from the primary scope app/etc/db_schema.xml.
+     *
+     * @return array
+     */
+    private function getPrimaryDbSchema()
+    {
+        if (!$this->primaryDbSchema) {
+            $this->primaryDbSchema = $this->readerComposite->read('primary');
+        }
+        return $this->primaryDbSchema;
+    }
+
+    /**
+     * Filter tables from module db_schema.xml as they should not contain the primary system tables.
+     *
+     * @param array $moduleDbSchema
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function filterPrimaryTables(array $moduleDbSchema)
+    {
+        $primaryDbSchema = $this->getPrimaryDbSchema();
+        if (isset($moduleDbSchema['table']) && isset($primaryDbSchema['table'])) {
+            foreach ($primaryDbSchema['table'] as $tableNameKey => $tableContents) {
+                unset($moduleDbSchema['table'][$tableNameKey]);
+            }
+        }
+        return $moduleDbSchema;
     }
 }

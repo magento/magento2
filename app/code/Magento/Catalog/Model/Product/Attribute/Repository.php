@@ -119,16 +119,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
 
-            if (is_array($attribute->getFrontendLabels())) {
-                $defaultFrontendLabel = $attribute->getDefaultFrontendLabel();
-                $frontendLabel[0] = !empty($defaultFrontendLabel)
-                    ? $defaultFrontendLabel
-                    : $existingModel->getDefaultFrontendLabel();
-                foreach ($attribute->getFrontendLabels() as $item) {
-                    $frontendLabel[$item->getStoreId()] = $item->getLabel();
-                }
-                $attribute->setDefaultFrontendLabel($frontendLabel);
-            }
+            $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
             $attribute->setAttributeId(null);
 
@@ -136,22 +127,10 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw InputException::requiredField('frontend_label');
             }
 
-            $frontendLabels = [];
-            if ($attribute->getDefaultFrontendLabel()) {
-                $frontendLabels[0] = $attribute->getDefaultFrontendLabel();
-            }
-            if ($attribute->getFrontendLabels() && is_array($attribute->getFrontendLabels())) {
-                foreach ($attribute->getFrontendLabels() as $label) {
-                    $frontendLabels[$label->getStoreId()] = $label->getLabel();
-                }
-                if (!isset($frontendLabels[0]) || !$frontendLabels[0]) {
-                    throw InputException::invalidFieldValue('frontend_label', null);
-                }
+            $frontendLabel = $this->updateDefaultFrontendLabel($attribute, null);
 
-                $attribute->setDefaultFrontendLabel($frontendLabels);
-            }
             $attribute->setAttributeCode(
-                $attribute->getAttributeCode() ?: $this->generateCode($frontendLabels[0])
+                $attribute->getAttributeCode() ?: $this->generateCode($frontendLabel)
             );
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
@@ -274,5 +253,53 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         if (!$validator->isValid($frontendInput)) {
             throw InputException::invalidFieldValue('frontend_input', $frontendInput);
         }
+    }
+
+    /**
+     * This method sets default frontend value using given default frontend value or frontend value from admin store
+     * if default frontend value is not presented.
+     * If both default frontend label and admin store frontend label are not given it throws exception
+     * for attribute creation process or sets existing attribute value for attribute update action.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface|null $existingModel
+     * @return string|null
+     * @throws InputException
+     */
+    private function updateDefaultFrontendLabel($attribute, $existingModel)
+    {
+        $frontendLabel = $attribute->getDefaultFrontendLabel();
+        if (empty($frontendLabel)) {
+            $frontendLabel = $this->extractAdminStoreFrontendLabel($attribute);
+            if (empty($frontendLabel)) {
+                if ($existingModel) {
+                    $frontendLabel = $existingModel->getDefaultFrontendLabel();
+                } else {
+                    throw InputException::invalidFieldValue('frontend_label', null);
+                }
+            }
+            $attribute->setDefaultFrontendLabel($frontendLabel);
+        }
+        return $frontendLabel;
+    }
+
+    /**
+     * This method extracts frontend label from FrontendLabel object for admin store.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return string|null
+     */
+    private function extractAdminStoreFrontendLabel($attribute)
+    {
+        $frontendLabel = [];
+        $frontendLabels = $attribute->getFrontendLabels();
+        if (isset($frontendLabels[0])
+            && $frontendLabels[0] instanceof \Magento\Eav\Api\Data\AttributeFrontendLabelInterface
+        ) {
+            foreach ($attribute->getFrontendLabels() as $label) {
+                $frontendLabel[$label->getStoreId()] = $label->getLabel();
+            }
+        }
+        return $frontendLabel[0] ?? null;
     }
 }

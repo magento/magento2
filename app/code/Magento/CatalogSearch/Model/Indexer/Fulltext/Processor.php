@@ -12,6 +12,8 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
  * Class Processor
  * @api
  * @since 100.1.0
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class Processor extends AbstractProcessor
 {
