@@ -5,8 +5,11 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Theme\Block\Html\Breadcrumbs;
 
 /**
  * @magentoAppArea frontend
@@ -14,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Block\Html\Breadcrumbs
+     * @var Breadcrumbs
      */
     private $block;
 
@@ -25,10 +28,10 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        Bootstrap::getObjectManager()->get(State::class)->setAreaCode('frontend');
         $this->block = Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\View\LayoutInterface::class)
-            ->createBlock(\Magento\Theme\Block\Html\Breadcrumbs::class);
+            ->get(LayoutInterface::class)
+            ->createBlock(Breadcrumbs::class);
         $this->serializer = Bootstrap::getObjectManager()->get(SerializerInterface::class);
     }
 
