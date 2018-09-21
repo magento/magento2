@@ -21,6 +21,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Replace legacy quote item check
+ */
 class CheckQuoteItemQtyPlugin
 {
     /**
@@ -145,6 +148,8 @@ class CheckQuoteItemQtyPlugin
     }
 
     /**
+     * Convert quantity to a valid float
+     *
      * @param string|float|int|null $qty
      *
      * @return float|null

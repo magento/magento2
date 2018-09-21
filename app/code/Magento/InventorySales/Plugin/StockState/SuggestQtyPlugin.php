@@ -16,6 +16,9 @@ use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Replace legacy suggest quantity
+ */
 class SuggestQtyPlugin
 {
     /**
