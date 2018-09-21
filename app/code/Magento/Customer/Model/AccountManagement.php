@@ -327,6 +327,11 @@ class AccountManagement implements AccountManagementInterface
     private $accountConfirmation;
 
     /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -356,6 +361,7 @@ class AccountManagement implements AccountManagementInterface
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
+     * @param AddressRegistry|null $addressRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -387,7 +393,8 @@ class AccountManagement implements AccountManagementInterface
         AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null
+        CollectionFactory $visitorCollectionFactory = null,
+        AddressRegistry $addressRegistry
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -423,6 +430,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->addressRegistry = $addressRegistry
+            ?: ObjectManager::getInstance()->get(AddressRegistry::class);
     }
 
     /**
@@ -567,6 +576,12 @@ class AccountManagement implements AccountManagementInterface
         }
         // load customer by email
         $customer = $this->customerRepository->get($email, $websiteId);
+
+        foreach ($customer->getAddresses() as $address) {
+            // No need to validate customer address while saving customer reset password token
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
 
         $newPasswordToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newPasswordToken);
