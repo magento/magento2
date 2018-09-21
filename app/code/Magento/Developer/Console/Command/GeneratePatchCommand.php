@@ -48,6 +48,8 @@ class GeneratePatchCommand extends Command
     }
 
     /**
+     * Configure command
+     *
      * @inheritdoc
      * @throws InvalidArgumentException
      */
