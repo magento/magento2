@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Subscriber;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
 /**
- * Customers unsubscribe controller.
+ * Controller for unsubscribing customers.
  */
 class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
