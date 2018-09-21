@@ -1720,7 +1720,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ) {
                                     $labelsForUpdate[] = [
                                         'label' => $rowLabels[$column][$columnImageKey],
-                                        'imageData' => $currentFileData
+                                        'imageData' => $currentFileData,
                                     ];
                                 }
 
@@ -1729,7 +1729,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ) {
                                     $imagesForChangeVisibility[] = [
                                         'disabled' => $imageHiddenStates[$uploadedFile],
-                                        'imageData' => $currentFileData
+                                        'imageData' => $currentFileData,
                                     ];
                                 }
                             } else {
@@ -1884,11 +1884,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @return array
      */
-    private function getImagesHiddenStates($rowData)
+    private function getImagesHiddenStates(array $rowData): array
     {
         $statesArray = [];
         $mappingArray = [
-            '_media_is_disabled' => '1'
+            '_media_is_disabled' => '1',
         ];
 
         foreach ($mappingArray as $key => $value) {
@@ -2834,7 +2834,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $images
      * @return $this
      */
-    private function updateMediaGalleryVisibility(array $images)
+    private function updateMediaGalleryVisibility(array $images): Product
     {
         if (!empty($images)) {
             $this->mediaProcessor->updateMediaGalleryVisibility($images);
