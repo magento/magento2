@@ -243,7 +243,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'quantity' => 1,
-                'error_regexp' => '/The fewest you may purchase is 500\./'
+                'error_regexp' => '/The fewest you may purchase is 500/'
             ],
             [
                 'quantity' => 501,
