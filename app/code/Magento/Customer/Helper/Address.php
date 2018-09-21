@@ -127,6 +127,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve edit url.
+     *
      * @return void
      */
     public function getEditUrl()
@@ -134,6 +136,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve delete url.
+     *
      * @return void
      */
     public function getDeleteUrl()
@@ -141,6 +145,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve create url.
+     *
      * @return void
      */
     public function getCreateUrl()
@@ -148,6 +154,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve block renderer.
+     *
      * @param string $renderer
      * @return \Magento\Framework\View\Element\BlockInterface
      */
@@ -204,6 +212,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve address format.
+     *
      * @param string $code
      * @return Format|string
      */
