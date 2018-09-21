@@ -143,7 +143,7 @@
         <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
                                   stepKey="waitForElementNotDiscountVisible1"/>
 
-        <!-- Step: 17. Open another browser Reset Cookie -->
+        <!-- Step: 17. Reset Cookie -->
         <resetCookie userInput="PHPSESSID" stepKey="resetCookie"/>
 
         <!-- Step: 18-19. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
