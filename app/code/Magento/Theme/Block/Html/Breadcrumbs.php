@@ -135,7 +135,6 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
         $keys = array_keys($this->_crumbs);
         $offset = array_search($before, $keys);
 
-        # add before first
         if ($offset) {
             $this->addCrumbAfter($crumbName, $crumbInfo, $keys[$offset - 1]);
             return $this;
@@ -146,6 +145,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
                 $crumbInfo[$key] = null;
             }
         }
+
         $this->_crumbs = array($crumbName => $crumbInfo) + $this->_crumbs;
 
         return $this;
