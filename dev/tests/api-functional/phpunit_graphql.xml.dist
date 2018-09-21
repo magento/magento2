@@ -27,7 +27,7 @@
         <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="config/config-global.php"/>
         <!-- Webserver URL -->
-        <const name="TESTS_BASE_URL" value="http://magento.url"/>
+        <const name="TESTS_BASE_URL" value="http://magento2.travis"/>
         <!-- Webserver API user -->
         <const name="TESTS_WEBSERVICE_USER" value="admin"/>
         <!-- Webserver API key -->
