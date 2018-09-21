@@ -92,12 +92,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $crumbs['test1']);
         $this->block->addCrumb('test2', $crumbs['test2']);
         $this->block->addCrumbAfter('test3', $crumbs['test3'], 'na');
-
-        $result = [];
-        $result['test1'] = $crumbs['test1'];
-        $result['test2'] = $crumbs['test2'];
-        $result['test3'] = $crumbs['test3'];
-        $this->assertEquals($this->block->getCrumbs(), $result);
+        $this->assertEquals($this->block->getCrumbs(), $crumbs);
     }
 
     public function testAddCrumbBeforeExisting()
@@ -140,12 +135,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $crumbs['test1']);
         $this->block->addCrumb('test2', $crumbs['test2']);
         $this->block->addCrumbBefore('test3', $crumbs['test3'], 'na');
-
-        $result = [];
-        $result['test1'] = $crumbs['test1'];
-        $result['test2'] = $crumbs['test2'];
-        $result['test3'] = $crumbs['test3'];
-        $this->assertEquals($this->block->getCrumbs(), $result);
+        $this->assertEquals($this->block->getCrumbs(), $crumbs);
     }
 
     public function testRemoveCrumb()
