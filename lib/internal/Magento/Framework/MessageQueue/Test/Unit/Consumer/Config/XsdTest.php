@@ -239,4 +239,3 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         // @codingStandardsIgnoreEnd
     }
 }
-
