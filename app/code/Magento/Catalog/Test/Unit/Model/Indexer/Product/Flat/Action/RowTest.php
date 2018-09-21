@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,6 +62,8 @@ class RowTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
+        $attributeTable = 'catalog_product_entity_int';
+        $statusId = 22;
         $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')
@@ -68,12 +73,41 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
-        $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
         $this->flatItemWriter = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class);
         $this->flatTableBuilder = $this->createMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class
         );
+        $this->productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productIndexerHelper->expects($this->any())->method('getAttribute')
+            ->with('status')
+            ->willReturn($statusAttributeMock);
+        $backendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $backendMock->expects($this->any())->method('getTable')->willReturn($attributeTable);
+        $statusAttributeMock->expects($this->any())->method('getBackend')->willReturn(
+            $backendMock
+        );
+        $statusAttributeMock->expects($this->any())->method('getId')->willReturn($statusId);
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('from')->with(
+            $attributeTable,
+            ['value']
+        )->willReturnSelf();
+        $selectMock->expects($this->any())->method('where')->willReturnSelf();
+        $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
+        $this->connection->expects($this->any())
+            ->method('query')
+            ->with($selectMock)
+            ->will($this->returnValue($pdoMock));
+        $pdoMock->expects($this->any())->method('fetch')->will($this->returnValue(['value' => 1]));
 
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,

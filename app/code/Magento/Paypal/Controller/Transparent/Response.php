@@ -6,6 +6,8 @@
 namespace Magento\Paypal\Controller\Transparent;
 
 use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\LayoutFactory;
@@ -17,8 +19,6 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

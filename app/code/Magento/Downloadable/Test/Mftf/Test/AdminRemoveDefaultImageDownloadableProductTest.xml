@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRemoveDefaultImageDownloadableProductTest">
         <annotations>
             <features value="Downloadable"/>
@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-201"/>
             <group value="Downloadable"/>
+            <skip>
+                <issueId value="MC-4063"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

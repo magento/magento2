@@ -45,7 +45,7 @@
 		},
 
 		/**
-		 * Returns a control by id or undefined it it wasn't found.
+		 * Returns a control by id or undefined it wasn't found.
 		 *
 		 * @method get
 		 * @param {String} id Control instance name.

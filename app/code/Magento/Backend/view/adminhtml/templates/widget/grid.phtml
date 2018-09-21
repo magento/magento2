@@ -107,7 +107,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                                 <?= /* @escapeNotVerified */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
                             <?php if ($_curPage < $_lastPage): ?>
-                                <button title="<?= /* @escapeNotVerified */ __('Next page') ?>"
+                                <button type="button" title="<?= /* @escapeNotVerified */ __('Next page') ?>"
                                         class="action-next"
                                         onclick="<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setPage('<?= /* @escapeNotVerified */ ($_curPage + 1) ?>');return false;">
                                     <span><?= /* @escapeNotVerified */ __('Next page') ?></span>

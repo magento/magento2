@@ -5,6 +5,7 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
@@ -14,7 +15,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
-class JsonProductInfo extends ProductController
+class JsonProductInfo extends ProductController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface

@@ -51,6 +51,9 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteUpdater;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -99,6 +102,10 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecute()
     {
         $details = $this->getDetails();
@@ -121,6 +128,9 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
         $this->quoteUpdater->execute(self::TEST_NONCE, $details, $quoteMock);
     }
 
+    /**
+     * @return void
+     */
     private function disabledQuoteAddressValidationStep()
     {
         $this->billingAddressMock->expects(self::once())
@@ -300,7 +310,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->setMethods(['setShippingAssignments'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quoteMock->expects(self::any())
             ->method('getExtensionAttributes')

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Helper\Formatter;
@@ -427,6 +429,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
                 if (isset($this->_lineItemTotalExportMap[$key])) {
                     // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
+                    $total = round($total, 2);
                     $request[$privateKey] = $this->formatPrice($total);
                 }
             }

@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewCatalogPriceRule">
         <element name="saveAndApply" type="button" selector="#save_and_apply" timeout="30"/>
         <element name="save" type="button" selector="#save" timeout="30"/>
@@ -35,6 +35,14 @@
         <element name="apply" type="select" selector="[name='simple_action']"/>
         <element name="discountAmount" type="input" selector="[name='discount_amount']"/>
         <element name="disregardRules" type="select" selector="[name='stop_rules_processing']"/>
+    </section>
+
+    <section name="AdminNewCatalogPriceRuleConditions">
+        <element name="newCondition" type="button" selector="span.rule-param-new-child"/>
+        <element name="conditionSelect" type="select" selector="select#conditions__{{var}}__new_child" parameterized="true"/>
+        <element name="targetEllipsis" type="button" selector="//li[{{var}}]//a[@class='label'][text() = '...']" parameterized="true"/>
+        <element name="targetInput" type="input" selector="input#conditions__{{var1}}--{{var2}}__value" parameterized="true"/>
+        <element name="applyButton" type="button" selector="#conditions__{{var1}}__children li:nth-of-type({{var2}}) a.rule-param-apply" parameterized="true"/>
     </section>
 
     <section name="AdminCatalogPriceRuleGrid">
