@@ -21,6 +21,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Replace legacy quote item check
+ */
 class CheckQuoteItemQtyPlugin
 {
     /**
@@ -66,6 +69,7 @@ class CheckQuoteItemQtyPlugin
      * @param StockResolverInterface $stockResolver
      * @param StoreManagerInterface $storeManager
      * @param BackOrderNotifyCustomerCondition $backOrderNotifyCustomerCondition
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ObjectFactory $objectFactory,
@@ -86,6 +90,8 @@ class CheckQuoteItemQtyPlugin
     }
 
     /**
+     * Replace legacy quote item check
+     *
      * @param StockStateInterface $subject
      * @param \Closure $proceed
      * @param int $productId
@@ -106,7 +112,7 @@ class CheckQuoteItemQtyPlugin
         $itemQty,
         $qtyToCheck,
         $origQty,
-        $scopeId
+        $scopeId = null
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
@@ -142,6 +148,8 @@ class CheckQuoteItemQtyPlugin
     }
 
     /**
+     * Convert quantity to a valid float
+     *
      * @param string|float|int|null $qty
      *
      * @return float|null
