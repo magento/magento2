@@ -391,9 +391,11 @@ class EavAttribute
                     return $this->dependencyArray[$optionId];
                 }
             }
+
+            return null;
         }
 
-        return null;
+        return $optionId;
     }
 
     /**
