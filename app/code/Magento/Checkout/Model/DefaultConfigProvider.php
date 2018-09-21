@@ -642,7 +642,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Returns array of payment methods.
      *
-     * @return array $paymentMethods
+     * @return array
      */
     private function getPaymentMethods()
     {
@@ -663,7 +663,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Set Labels to custom Attributes.
      *
      * @param array $customAttributes
-     * @return array $customAttributes
+     * @return array
      */
     private function setLabelsToAttributes(array $customAttributes) : array
     {
@@ -684,7 +684,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      *
      * @param array $customAttribute
      * @param string $customAttributeCode
-     * @return array $attributeOptionLabels
+     * @return array
      */
     private function getAttributeLabels(array $customAttribute, string $customAttributeCode) : array
     {
