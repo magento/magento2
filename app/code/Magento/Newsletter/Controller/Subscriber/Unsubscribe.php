@@ -6,7 +6,9 @@
  */
 namespace Magento\Newsletter\Controller\Subscriber;
 
-class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
     /**
      * Unsubscribe newsletter.
