@@ -55,7 +55,7 @@ class Total extends \Magento\Framework\DataObject
     public function setTotalAmount($code, $amount)
     {
         /* (Fixes issue #18027) Round the total amount to 4 decimal places, to avoid floating point overflows */
-        $amount = number_format($amount, 4);
+        $amount = is_float($amount) ? number_format($amount, 4) : $amount;
 
         $this->totalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
