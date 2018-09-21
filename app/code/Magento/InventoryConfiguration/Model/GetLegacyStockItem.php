@@ -78,6 +78,7 @@ class GetLegacyStockItem
 
         // Stock::DEFAULT_STOCK_ID is used until we have proper multi-stock item configuration
         $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, Stock::DEFAULT_STOCK_ID);
+        $searchCriteria->setLimit(1, 1);
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
