@@ -267,8 +267,7 @@ class Config
     }
 
     /**
-     * Get existing order statuses
-     * Visible or invisible on frontend according to passed param
+     * Get existing order statuses visible or invisible on frontend according to passed param
      *
      * @param bool $visibility
      * @return array
