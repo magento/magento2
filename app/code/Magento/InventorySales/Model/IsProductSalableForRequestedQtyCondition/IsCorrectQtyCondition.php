@@ -59,6 +59,17 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
      */
     private $productSalableResultFactory;
 
+    /**
+     * IsCorrectQtyCondition constructor.
+     *
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
+     * @param StockConfigurationInterface $configuration
+     * @param GetReservationsQuantityInterface $getReservationsQuantity
+     * @param GetStockItemDataInterface $getStockItemData
+     * @param MathDivision $mathDivision
+     * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
+     * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
+     */
     public function __construct(
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         StockConfigurationInterface $configuration,
@@ -112,7 +123,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             );
         }
 
-        if ($this->isValidDecimalQty($stockItemConfiguration, $requestedQty)) {
+        if ($this->isDecimalQtyCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-is_qty_decimal',
                 __('You cannot use decimal quantity for this product.')
@@ -141,11 +152,13 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     }
 
     /**
+     * Check if decimal quantity is valid
+     *
      * @param StockItemConfigurationInterface $stockItemConfiguration
      * @param float $requestedQty
      * @return bool
      */
-    private function isValidDecimalQty(
+    private function isDecimalQtyCheckFailed(
         StockItemConfigurationInterface $stockItemConfiguration,
         float $requestedQty
     ): bool {
@@ -153,6 +166,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     }
 
     /**
+     * Check if min sale condition is satisfied
+     *
      * @param StockItemConfigurationInterface $stockItemConfiguration
      * @param float $requestedQty
      * @return bool
@@ -169,6 +184,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     }
 
     /**
+     * Check if max sale condition is satisfied
+     *
      * @param StockItemConfigurationInterface $stockItemConfiguration
      * @param float $requestedQty
      * @return bool
@@ -185,6 +202,8 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     }
 
     /**
+     * Check if increment quantity condition is satisfied
+     *
      * @param StockItemConfigurationInterface $stockItemConfiguration
      * @param float $requestedQty
      * @return bool
