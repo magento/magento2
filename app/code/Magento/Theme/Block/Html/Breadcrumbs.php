@@ -129,6 +129,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     {
         if (!isset($this->_crumbs[$before])) {
             $this->addCrumb($crumbName, $crumbInfo);
+            return $this;
         }
 
         $keys = array_keys($this->_crumbs);
