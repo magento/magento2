@@ -17,8 +17,7 @@
                     value="[Cart Price Rule] Auto generated coupon code considers 'Uses per Coupon' and 'Uses per Customer' options"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MAGETWO-59323"/>
-            <group value="test"/>
-            <!--<group value="salesRule"/>-->
+            <group value="salesRule"/>
         </annotations>
 
         <before>
