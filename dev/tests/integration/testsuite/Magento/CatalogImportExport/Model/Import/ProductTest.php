@@ -1607,6 +1607,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
+     * @return void
      */
     public function testImportWithUrlKeysWithSpaces()
     {
@@ -1620,7 +1621,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_with_url_keys_with_spaces.csv',
-                'directory' => $directory
+                'directory' => $directory,
             ]
         );
 
