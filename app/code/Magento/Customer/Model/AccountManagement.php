@@ -661,7 +661,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function resetPassword(?string $email, string $resetToken, string $newPassword): bool
+    public function resetPassword($email, $resetToken, $newPassword): bool
     {
         if (!$email) {
             $customer = $this->matchCustomerByRpToken($resetToken);
