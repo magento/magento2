@@ -198,10 +198,12 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
             'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14']
         ];
+        $specialFromDate = '2018-03-03 19:30:00';
         $productData = [
             'stock_data' => ['stock_data'],
             'options' => $optionsData,
-            'website_ids' => $websiteIds
+            'website_ids' => $websiteIds,
+            'special_from_date' => $specialFromDate,
         ];
         if (!empty($tierPrice)) {
             $productData = array_merge($productData, ['tier_price' => $tierPrice]);
@@ -306,6 +308,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($expectedLinks, $resultLinks);
+        $this->assertEquals($specialFromDate, $productData['special_from_date']);
     }
 
     /**

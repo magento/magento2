@@ -176,6 +176,14 @@
             <argument name="batchSizeAdjusters" xsi:type="array">
                 <item name="configurable" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjuster</item>
             </argument>
+            <!--
+            real batch size will be smaller.
+            It depends on amount configurable product variations.
+            E.g for 100 variations real batch size will be 50000/100=500
+            -->
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="configurable" xsi:type="number">50000</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable">
@@ -212,5 +220,12 @@
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array">
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+            </argument>
+        </arguments>
     </type>
 </config>

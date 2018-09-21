@@ -57,6 +57,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     private $catalogRuleProcessor;
 
     /**
+     * @var array
+     */
+    private $optionsPosition = [];
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -172,6 +177,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             }
             $optionId = $optionItem->getId();
             $options[$optionId] = $this->getOptionItemData($optionItem, $currentProduct, $position);
+            $this->optionsPosition[$position] = $optionId;
 
             // Add attribute default value (if set)
             if ($preConfiguredFlag) {
@@ -368,6 +374,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = [
             'options' => $options,
             'selected' => $this->selectedOptions,
+            'positions' => $this->optionsPosition,
             'bundleId' => $product->getId(),
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => [

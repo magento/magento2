@@ -324,7 +324,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $reflectionOfExtension = new \ReflectionClass(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
         $method->setAccessible(true);
-        $method->invokeArgs($groupExtension, array('qty', 1));
+        $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputGroupLink->setProductSku("Simple Product 1");
