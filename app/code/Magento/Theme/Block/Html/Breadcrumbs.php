@@ -103,14 +103,15 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
         }
 
         if ((!isset($this->_crumbs[$crumbName])) || (!$this->_crumbs[$crumbName]['readonly'])) {
-            if (isset($this->_crumbs[$after])) {
-                $offset = array_search($after, array_keys($this->_crumbs)) + 1;
-                $crumbsBefore = array_slice($this->_crumbs, 0, $offset, true);
-                $crumbsAfter = array_slice($this->_crumbs, $offset, null, true);
-                $this->_crumbs = $crumbsBefore + array($crumbName => $crumbInfo) + $crumbsAfter;
-            } else {
-                $this->_crumbs[$crumbName] = $crumbInfo;
+            if (!isset($this->_crumbs[$after])) {
+                $this->addCrumb($crumbName, $crumbInfo);
+                return $this;
             }
+
+            $offset = array_search($after, array_keys($this->_crumbs)) + 1;
+            $crumbsBefore = array_slice($this->_crumbs, 0, $offset, true);
+            $crumbsAfter = array_slice($this->_crumbs, $offset, null, true);
+            $this->_crumbs = $crumbsBefore + array($crumbName => $crumbInfo) + $crumbsAfter;
         }
 
         return $this;
@@ -126,23 +127,26 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      */
     public function addCrumbBefore($crumbName, $crumbInfo, $before)
     {
-        if (isset($this->_crumbs[$before])) {
-            $keys = array_keys($this->_crumbs);
-            $offset = array_search($before, $keys);
-            # add before first
-            if (!$offset) {
-                foreach ($this->_properties as $key) {
-                    if (!isset($crumbInfo[$key])) {
-                        $crumbInfo[$key] = null;
-                    }
-                }
-                $this->_crumbs = array($crumbName => $crumbInfo) + $this->_crumbs;
-            } else {
-                $this->addCrumbAfter($crumbName, $crumbInfo, $keys[$offset-1]);
-            }
-        } else {
+        if (!isset($this->_crumbs[$before])) {
             $this->addCrumb($crumbName, $crumbInfo);
         }
+
+        $keys = array_keys($this->_crumbs);
+        $offset = array_search($before, $keys);
+
+        # add before first
+        if ($offset) {
+            $this->addCrumbAfter($crumbName, $crumbInfo, $keys[$offset - 1]);
+            return $this;
+        }
+
+        foreach ($this->_properties as $key) {
+            if (!isset($crumbInfo[$key])) {
+                $crumbInfo[$key] = null;
+            }
+        }
+        $this->_crumbs = array($crumbName => $crumbInfo) + $this->_crumbs;
+
         return $this;
     }
 

@@ -49,7 +49,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->block->getCrumbs(), []);
         $info = ['label' => '1', 'title' => '1', 'link' => '1', 'first' => null, 'last' => null, 'readonly' => null];
         $this->block->addCrumb('test', $info);
-        $html = $this->block->toHtml();
         $this->assertEquals($this->block->getCrumbs(), $info);
     }
 
@@ -62,7 +61,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbAfter('test3', $info3, 'test1');
-        $html = $this->block->toHtml();
         $this->assertEquals($this->block->getCrumbs(), $info1 + $info3 + $info2);
     }
 
@@ -75,7 +73,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbAfter('test3', $info3, 'na');
-        $html = $this->block->toHtml();
         $this->assertEquals($this->block->getCrumbs(), $info1 + $info2 + $info3);
     }
 
@@ -88,7 +85,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbBefore('test3', $info3, 'test2');
-        $html = $this->block->toHtml();
         $this->assertEquals($this->block->getCrumbs(), $info1 + $info3 + $info1);
     }
 
@@ -101,7 +97,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbBefore('test3', $info3, 'na');
-        $html = $this->block->toHtml();
         $this->assertEquals($this->block->getCrumbs(), $info1 + $info2 + $info3);
     }
 
@@ -110,7 +105,6 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->block->toHtml());
         $info = ['label' => 'test label', 'title' => 'test title', 'link' => 'test link'];
         $this->block->addCrumb('test', $info);
-        $html = $this->block->toHtml();
         $this->block->removeCrumb('test');
         $this->assertEmpty($this->block->toHtml());
     }
