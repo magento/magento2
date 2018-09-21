@@ -768,6 +768,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if ($this->_itemsPerPage === null) {
             $memoryLimitConfigValue = trim(ini_get('memory_limit'));
             $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
+            $memoryUsage =  memory_get_usage(true);
             $memoryLimit = (int) $memoryLimitConfigValue;
             switch ($lastMemoryLimitLetter) {
                 case 'g':
@@ -793,7 +794,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
-            $this->_itemsPerPage = (int)($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct;
+            $this->_itemsPerPage = (int)($memoryLimit * $memoryUsagePercent - $memoryUsage) / $memoryPerProduct;
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
             }
