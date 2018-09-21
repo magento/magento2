@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template;
 
@@ -14,7 +18,7 @@ use Magento\Framework\View\Element\Template;
  * @api
  * @since 100.0.2
  */
-class Breadcrumbs extends \Magento\Framework\View\Element\Template
+class Breadcrumbs extends Template
 {
     /**
      * Current template name
@@ -60,8 +64,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
         Json $serializer = null
     ) {
         parent::__construct($context, $data);
-        $this->serializer =
-            $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -71,7 +74,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param array $crumbInfo Crumb data
      * @return $this
      */
-    public function addCrumb($crumbName, $crumbInfo)
+    public function addCrumb(string $crumbName, array $crumbInfo): self
     {
         foreach ($this->_properties as $key) {
             if (!isset($crumbInfo[$key])) {
@@ -94,7 +97,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param string $after Name of the crumb to insert after
      * @return $this
      */
-    public function addCrumbAfter($crumbName, $crumbInfo, $after)
+    public function addCrumbAfter(string $crumbName, array $crumbInfo, string $after): self
     {
         foreach ($this->_properties as $key) {
             if (!isset($crumbInfo[$key])) {
@@ -125,7 +128,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param string $before ame of the crumb to insert before
      * @return $this
      */
-    public function addCrumbBefore($crumbName, $crumbInfo, $before)
+    public function addCrumbBefore(string $crumbName, array $crumbInfo, string $before): self
     {
         if (!isset($this->_crumbs[$before])) {
             $this->addCrumb($crumbName, $crumbInfo);
@@ -157,7 +160,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @param string $crumbName Name of the crumb
      * @return $this
      */
-    public function removeCrumb($crumbName)
+    public function removeCrumb(string $crumbName): self
     {
         if (isset($this->_crumbs[$crumbName])) {
             unset($this->_crumbs[$crumbName]);
@@ -170,7 +173,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
 
      * @return array
      */
-    public function getCrumbs()
+    public function getCrumbs(): array
     {
         return $this->_crumbs;
     }
@@ -182,7 +185,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @return array
      */
-    public function getCacheKeyInfo()
+    public function getCacheKeyInfo(): array
     {
         if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + [
@@ -198,7 +201,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         if (is_array($this->_crumbs)) {
             reset($this->_crumbs);
