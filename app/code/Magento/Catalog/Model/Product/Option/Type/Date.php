@@ -209,7 +209,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     \IntlDateFormatter::MEDIUM,
                     \IntlDateFormatter::NONE,
                     null,
-                    'UTC'
+                    null
                 );
             } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
@@ -217,7 +217,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     \IntlDateFormatter::SHORT,
                     \IntlDateFormatter::SHORT,
                     null,
-                    'UTC'
+                    null
                 );
             } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
@@ -225,7 +225,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     \IntlDateFormatter::NONE,
                     \IntlDateFormatter::SHORT,
                     null,
-                    'UTC'
+                    null
                 );
             } else {
                 $result = $optionValue;
