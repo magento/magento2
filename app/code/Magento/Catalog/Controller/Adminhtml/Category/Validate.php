@@ -5,10 +5,14 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Catalog\Controller\Adminhtml\Category as CategoryAction;
+
 /**
  * Catalog category validate
  */
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
+class Validate extends CategoryAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
