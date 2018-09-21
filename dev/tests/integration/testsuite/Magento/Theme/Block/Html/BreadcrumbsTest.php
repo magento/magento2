@@ -61,7 +61,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbAfter('test3', $info3, 'test1');
-        $this->assertEquals($this->block->getCrumbs(), $info1 + $info3 + $info2);
+        $result = [];
+        $result['test1'] = $info1;
+        $result['test3'] = $info3;
+        $result['test2'] = $info2;
+        $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbAfterNonExisting()
@@ -73,7 +77,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbAfter('test3', $info3, 'na');
-        $this->assertEquals($this->block->getCrumbs(), $info1 + $info2 + $info3);
+        $result = [];
+        $result['test1'] = $info1;
+        $result['test2'] = $info2;
+        $result['test3'] = $info3;
+        $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbBeforeExisting()
@@ -85,7 +93,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbBefore('test3', $info3, 'test2');
-        $this->assertEquals($this->block->getCrumbs(), $info1 + $info3 + $info1);
+        $result = [];
+        $result['test1'] = $info1;
+        $result['test3'] = $info3;
+        $result['test2'] = $info2;
+        $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbBeforeNonExisting()
@@ -97,7 +109,11 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test1', $info1);
         $this->block->addCrumb('test2', $info2);
         $this->block->addCrumbBefore('test3', $info3, 'na');
-        $this->assertEquals($this->block->getCrumbs(), $info1 + $info2 + $info3);
+        $result = [];
+        $result['test1'] = $info1;
+        $result['test2'] = $info2;
+        $result['test3'] = $info3;
+        $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testRemoveCrumb()
@@ -107,6 +123,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $this->block->addCrumb('test', $info);
         $this->block->removeCrumb('test');
         $this->assertEmpty($this->block->toHtml());
+        $this->assertEquals($this->block->getCrumbs(), []);
     }
 
     public function testGetCacheKeyInfo()
