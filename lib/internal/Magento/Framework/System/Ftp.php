@@ -189,7 +189,7 @@ class Ftp
         if (empty($data[1])) {
             return false;
         }
-        if ((int)$data[0])!= 257) {
+        if ((int)$data[0] != 257) {
             return false;
         }
         $out = trim($data[1], '"');
