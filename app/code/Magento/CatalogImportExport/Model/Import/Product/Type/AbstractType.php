@@ -543,10 +543,9 @@ abstract class AbstractType
                 } else {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 }
-            } elseif (array_key_exists($attrCode, $rowData)) {
+            } elseif (array_key_exists($attrCode, $rowData) && empty($rowData['_store'])) {
                 $resultAttrs[$attrCode] = $rowData[$attrCode];
-            } elseif ($withDefaultValue && null !== $attrParams['default_value']
-                && 'select' == $attrParams['type'] && null === $rowData['_store']) {
+            } elseif ($withDefaultValue && null !== $attrParams['default_value'] && empty($rowData['_store'])) {
                 $resultAttrs[$attrCode] = $attrParams['default_value'];
             }
         }
