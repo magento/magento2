@@ -75,6 +75,8 @@ class CacheCleaner
     }
 
     /**
+     * Clean cache by product ids.
+     *
      * @param array $productIds
      * @param callable $reindex
      * @return void
@@ -92,6 +94,8 @@ class CacheCleaner
     }
 
     /**
+     * Get current stock statuses for product ids.
+     *
      * @param array $productIds
      * @return array
      */
@@ -158,6 +162,8 @@ class CacheCleaner
     }
 
     /**
+     * Get database connection.
+     *
      * @return AdapterInterface
      */
     private function getConnection()
