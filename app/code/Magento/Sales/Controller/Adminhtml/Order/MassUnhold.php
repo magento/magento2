@@ -13,7 +13,7 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 
 /**
- * Class MassUnhold
+ * Class MassUnhold, change status for select orders
  *
  * @package Magento\Sales\Controller\Adminhtml\Order
  */
