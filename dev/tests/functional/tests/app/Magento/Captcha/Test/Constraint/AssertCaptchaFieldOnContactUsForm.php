@@ -20,7 +20,7 @@ class AssertCaptchaFieldOnContactUsForm extends AbstractConstraint
      * @param ContactIndex $contactIndex
      * @return void
      */
-    public function processAssertRegisterForm(ContactIndexCaptcha $contactIndex)
+    public function processAssertRegisterForm(ContactIndex $contactIndex)
     {
         \PHPUnit\Framework\Assert::assertTrue(
             $contactIndex->getContactUs()->isVisibleCaptcha(),
