@@ -111,7 +111,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
             $offset = array_search($after, array_keys($this->_crumbs)) + 1;
             $crumbsBefore = array_slice($this->_crumbs, 0, $offset, true);
             $crumbsAfter = array_slice($this->_crumbs, $offset, null, true);
-            $this->_crumbs = $crumbsBefore + array($crumbName => $crumbInfo) + $crumbsAfter;
+            $this->_crumbs = $crumbsBefore + [$crumbName => $crumbInfo] + $crumbsAfter;
         }
 
         return $this;
@@ -146,7 +146,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
             }
         }
 
-        $this->_crumbs = array($crumbName => $crumbInfo) + $this->_crumbs;
+        $this->_crumbs = [$crumbName => $crumbInfo] + $this->_crumbs;
 
         return $this;
     }

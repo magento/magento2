@@ -55,64 +55,96 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     public function testAddCrumbAfterExisting()
     {
         $this->assertEmpty($this->block->toHtml());
-        $info1 = ['label' => '1', 'title' => '1', 'link' => '1', 'first' => null, 'last' => null, 'readonly' => null];
-        $info2 = ['label' => '2', 'title' => '2', 'link' => '2', 'first' => null, 'last' => null, 'readonly' => null];
-        $info3 = ['label' => '3', 'title' => '3', 'link' => '3', 'first' => null, 'last' => null, 'readonly' => null];
-        $this->block->addCrumb('test1', $info1);
-        $this->block->addCrumb('test2', $info2);
-        $this->block->addCrumbAfter('test3', $info3, 'test1');
+
+        $crumbs = [];
+        $crumbs['test1'] = ['label' => '1', 'title' => '1', 'link' => '1'];
+        $crumbs['test2'] = ['label' => '2', 'title' => '2', 'link' => '2'];
+        $crumbs['test3'] = ['label' => '3', 'title' => '3', 'link' => '3'];
+
+        foreach ($crumbs as &$crumb) {
+            $crumb += ['first' => null, 'last' => null, 'readonly' => null];
+        }
+
+        $this->block->addCrumb('test1', $crumbs['test1']);
+        $this->block->addCrumb('test2', $crumbs['test2']);
+        $this->block->addCrumbAfter('test3', $crumbs['test3'], 'test1');
+
         $result = [];
-        $result['test1'] = $info1;
-        $result['test3'] = $info3;
-        $result['test2'] = $info2;
+        $result['test1'] = $crumbs['test1'];
+        $result['test3'] = $crumbs['test3'];
+        $result['test2'] = $crumbs['test2'];
         $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbAfterNonExisting()
     {
         $this->assertEmpty($this->block->toHtml());
-        $info1 = ['label' => '1', 'title' => '1', 'link' => '1', 'first' => null, 'last' => null, 'readonly' => null];
-        $info2 = ['label' => '2', 'title' => '2', 'link' => '2', 'first' => null, 'last' => null, 'readonly' => null];
-        $info3 = ['label' => '3', 'title' => '3', 'link' => '3', 'first' => null, 'last' => null, 'readonly' => null];
-        $this->block->addCrumb('test1', $info1);
-        $this->block->addCrumb('test2', $info2);
-        $this->block->addCrumbAfter('test3', $info3, 'na');
+
+        $crumbs = [];
+        $crumbs['test1'] = ['label' => '1', 'title' => '1', 'link' => '1'];
+        $crumbs['test2'] = ['label' => '2', 'title' => '2', 'link' => '2'];
+        $crumbs['test3'] = ['label' => '3', 'title' => '3', 'link' => '3'];
+
+        foreach ($crumbs as &$crumb) {
+            $crumb += ['first' => null, 'last' => null, 'readonly' => null];
+        }
+
+        $this->block->addCrumb('test1', $crumbs['test1']);
+        $this->block->addCrumb('test2', $crumbs['test2']);
+        $this->block->addCrumbAfter('test3', $crumbs['test3'], 'na');
+
         $result = [];
-        $result['test1'] = $info1;
-        $result['test2'] = $info2;
-        $result['test3'] = $info3;
+        $result['test1'] = $crumbs['test1'];
+        $result['test2'] = $crumbs['test2'];
+        $result['test3'] = $crumbs['test3'];
         $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbBeforeExisting()
     {
         $this->assertEmpty($this->block->toHtml());
-        $info1 = ['label' => '1', 'title' => '1', 'link' => '1', 'first' => null, 'last' => null, 'readonly' => null];
-        $info2 = ['label' => '2', 'title' => '2', 'link' => '2', 'first' => null, 'last' => null, 'readonly' => null];
-        $info3 = ['label' => '3', 'title' => '3', 'link' => '3', 'first' => null, 'last' => null, 'readonly' => null];
-        $this->block->addCrumb('test1', $info1);
-        $this->block->addCrumb('test2', $info2);
-        $this->block->addCrumbBefore('test3', $info3, 'test2');
+
+        $crumbs = [];
+        $crumbs['test1'] = ['label' => '1', 'title' => '1', 'link' => '1'];
+        $crumbs['test2'] = ['label' => '2', 'title' => '2', 'link' => '2'];
+        $crumbs['test3'] = ['label' => '3', 'title' => '3', 'link' => '3'];
+
+        foreach ($crumbs as &$crumb) {
+            $crumb += ['first' => null, 'last' => null, 'readonly' => null];
+        }
+
+        $this->block->addCrumb('test1', $crumbs['test1']);
+        $this->block->addCrumb('test2', $crumbs['test2']);
+        $this->block->addCrumbBefore('test3', $crumbs['test3'], 'test2');
+
         $result = [];
-        $result['test1'] = $info1;
-        $result['test3'] = $info3;
-        $result['test2'] = $info2;
+        $result['test1'] = $crumbs['test1'];
+        $result['test3'] = $crumbs['test3'];
+        $result['test2'] = $crumbs['test2'];
         $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
     public function testAddCrumbBeforeNonExisting()
     {
         $this->assertEmpty($this->block->toHtml());
-        $info1 = ['label' => '1', 'title' => '1', 'link' => '1', 'first' => null, 'last' => null, 'readonly' => null];
-        $info2 = ['label' => '2', 'title' => '2', 'link' => '2', 'first' => null, 'last' => null, 'readonly' => null];
-        $info3 = ['label' => '3', 'title' => '3', 'link' => '3', 'first' => null, 'last' => null, 'readonly' => null];
-        $this->block->addCrumb('test1', $info1);
-        $this->block->addCrumb('test2', $info2);
-        $this->block->addCrumbBefore('test3', $info3, 'na');
+
+        $crumbs = [];
+        $crumbs['test1'] = ['label' => '1', 'title' => '1', 'link' => '1'];
+        $crumbs['test2'] = ['label' => '2', 'title' => '2', 'link' => '2'];
+        $crumbs['test3'] = ['label' => '3', 'title' => '3', 'link' => '3'];
+
+        foreach ($crumbs as &$crumb) {
+            $crumb += ['first' => null, 'last' => null, 'readonly' => null];
+        }
+
+        $this->block->addCrumb('test1', $crumbs['test1']);
+        $this->block->addCrumb('test2', $crumbs['test2']);
+        $this->block->addCrumbBefore('test3', $crumbs['test3'], 'na');
+
         $result = [];
-        $result['test1'] = $info1;
-        $result['test2'] = $info2;
-        $result['test3'] = $info3;
+        $result['test1'] = $crumbs['test1'];
+        $result['test2'] = $crumbs['test2'];
+        $result['test3'] = $crumbs['test3'];
         $this->assertEquals($this->block->getCrumbs(), $result);
     }
 
