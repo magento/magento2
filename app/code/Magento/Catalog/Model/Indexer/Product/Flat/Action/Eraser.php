@@ -11,6 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Model\Store;
 
+/**
+ * Flat item eraser. Used to clear items from the catalog flat table.
+ */
 class Eraser
 {
     /**
