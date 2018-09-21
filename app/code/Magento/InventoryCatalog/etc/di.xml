@@ -140,4 +140,8 @@
         <plugin name="adapt_verify_stock_to_negative_min_qty"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Spi\StockStateProvider\AdaptVerifyStockToNegativeMinQtyPlugin"/>
     </type>
+    <type name="Magento\Setup\Model\FixtureGenerator\EntityGeneratorFactory">
+        <plugin name="update_custom_table_map"
+                type="Magento\InventoryCatalog\Plugin\Setup\Model\FixtureGenerator\EntityGeneratorFactory\UpdateCustomTableMapPlugin"/>
+    </type>
 </config>
