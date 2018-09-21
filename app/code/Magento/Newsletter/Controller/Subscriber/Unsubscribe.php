@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,9 @@ namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ * Customers unsubscribe controller.
+ */
 class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements HttpGetActionInterface
 {
     /**
