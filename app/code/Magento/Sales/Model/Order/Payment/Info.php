@@ -11,8 +11,8 @@ use Magento\Payment\Model\Method\Substitution;
 use Magento\Payment\Model\InfoInterface;
 
 /**
- *
  * Payment information model
+ *
  * @api
  * @since 100.0.2
  */
@@ -41,7 +41,7 @@ class Info extends AbstractModel implements InfoInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -219,8 +219,7 @@ class Info extends AbstractModel implements InfoInterface
     }
 
     /**
-     * Initialize additional information container with data from model
-     * if property empty
+     * Initialize additional information container with data from model if property empty
      *
      * @return void
      */

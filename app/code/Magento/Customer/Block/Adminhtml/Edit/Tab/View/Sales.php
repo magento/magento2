@@ -151,6 +151,8 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Returns Grouped Collection Rows
+     *
      * @return array
      */
     public function getRows()
@@ -159,6 +161,8 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return totals data
+     *
      * @return \Magento\Framework\DataObject
      */
     public function getTotals()

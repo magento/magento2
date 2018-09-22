@@ -271,7 +271,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Enforce format of the street field or other multiline custom attributes
      *
      * @param array|string $key
-     * @param null $value
+     * @param array|string|null $value
+     *
      * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
@@ -286,6 +287,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Check that address can have multiline attribute by this code (as street or some custom attribute)
+     *
      * @param string $code
      * @return bool
      */
@@ -403,6 +405,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Return Region ID
+     *
      * @return int
      */
     public function getRegionId()
@@ -425,6 +429,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Return Country
+     *
      * @return int
      */
     public function getCountry()
@@ -502,6 +508,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Processing object before save data
+     *
      * @return $this
      */
     public function beforeSave()
@@ -516,10 +524,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @param int|null $defaultBillingAddressId
      * @param int|null $defaultShippingAddressId
+     *
      * @return AddressInterface
      * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -591,6 +601,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create Region Instance
+     *
      * @return \Magento\Directory\Model\Region
      */
     protected function _createRegionInstance()
@@ -599,6 +611,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Create Country Instance
+     *
      * @return \Magento\Directory\Model\Country
      */
     protected function _createCountryInstance()
@@ -608,6 +622,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /**
      * Unset Region from address
+     *
      * @return $this
      * @since 100.2.0
      */
@@ -617,8 +632,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is Company Required
+     *
      * @return bool
      * @since 100.2.0
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isCompanyRequired()
     {
@@ -626,8 +644,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is Telephone Required
+     *
      * @return bool
      * @since 100.2.0
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isTelephoneRequired()
     {
@@ -635,8 +656,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Is Fax Required
+     *
      * @return bool
      * @since 100.2.0
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isFaxRequired()
     {

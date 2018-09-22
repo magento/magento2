@@ -48,9 +48,9 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve layout updates by handle
      *
-     * @param string                                        $handle
+     * @param string $handle
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Framework\App\ScopeInterface         $store
+     * @param \Magento\Framework\App\ScopeInterface store
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

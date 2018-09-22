@@ -412,6 +412,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Magic method called during class serialization
+     *
      * @return string[]
      */
     public function __sleep()
@@ -792,6 +794,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Return is URL should be secure
+     *
      * @return bool
      */
     public function isUrlSecure()
@@ -1363,6 +1367,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Return Store Path
+     *
      * @return string
      */
     public function getStorePath()
@@ -1372,6 +1378,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Get scope type
+     *
      * {@inheritdoc}
      * @since 100.1.0
      */
@@ -1381,6 +1389,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Get Scope Type Name
+     *
      * {@inheritdoc}
      * @since 100.1.0
      */
@@ -1390,6 +1400,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
      * {@inheritdoc}
      */
     public function getExtensionAttributes()
@@ -1398,6 +1410,8 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Set an extension attributes object.
+     *
      * @param \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
      * @return $this
      */

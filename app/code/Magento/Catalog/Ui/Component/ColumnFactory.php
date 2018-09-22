@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\Component;
 
 /**
+ * Column Factory
+ *
  * @api
  * @since 100.0.2
  */
@@ -86,7 +88,10 @@ class ColumnFactory
     }
 
     /**
+     * Get Js Component
+     *
      * @param string $dataType
+     *
      * @return string
      */
     protected function getJsComponent($dataType)
@@ -95,7 +100,10 @@ class ColumnFactory
     }
 
     /**
+     * Get Data Type
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     *
      * @return string
      */
     protected function getDataType($attribute)

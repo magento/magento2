@@ -65,7 +65,7 @@ class IntegrationFactory
     /**
      * Reads value from config.
      *
-     * @param $config
+     * @param array $config
      * @param string $field
      * @param string $default
      * @return string

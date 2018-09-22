@@ -173,7 +173,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * Enforce format of the street field
      *
      * @param array|string $key
-     * @param null $value
+     * @param array|string $value
      * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
@@ -508,7 +508,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Set Parent ID
+     *
+     * @param int $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setParentId($id)
     {
@@ -516,7 +520,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the country address ID for the order address.
+     *
+     * @param int $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setCustomerAddressId($id)
     {
@@ -524,7 +532,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the region ID for the order address.
+     *
+     * @param int $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setRegionId($id)
     {
@@ -532,7 +544,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the customer ID for the order address.
+     *
+     * @param int $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setStreet($street)
     {
@@ -540,7 +556,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the fax number for the order address.
+     *
+     * @param string $fax
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setCustomerId($id)
     {
@@ -548,7 +568,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the region for the order address.
+     *
+     * @param string $region
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setFax($fax)
     {
@@ -556,7 +580,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the postal code for the order address.
+     *
+     * @param string $postcode
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setRegion($region)
     {
@@ -564,7 +592,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the last name for the order address.
+     *
+     * @param string $lastname
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setPostcode($postcode)
     {
@@ -572,7 +604,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the street values, if any, for the order address.
+     *
+     * @param string|string[] $street
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setLastname($lastname)
     {
@@ -580,7 +616,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the city for the order address.
+     *
+     * @param string $city
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setCity($city)
     {
@@ -588,7 +628,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the email address for the order address.
+     *
+     * @param string $email
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setEmail($email)
     {
@@ -596,7 +640,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the telephone number for the order address.
+     *
+     * @param string $telephone
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setTelephone($telephone)
     {
@@ -604,7 +652,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the country ID for the order address.
+     *
+     * @param string $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setCountryId($id)
     {
@@ -612,7 +664,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the first name for the order address.
+     *
+     * @param string $firstname
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setFirstname($firstname)
     {
@@ -620,7 +676,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the address type for the order address.
+     *
+     * @param string $addressType
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setAddressType($addressType)
     {
@@ -628,7 +688,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the prefix for the order address.
+     *
+     * @param string $prefix
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setPrefix($prefix)
     {
@@ -636,7 +700,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the middle name for the order address.
+     *
+     * @param string $middlename
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setMiddlename($middlename)
     {
@@ -644,7 +712,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the suffix for the order address.
+     *
+     * @param string $suffix
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setSuffix($suffix)
     {
@@ -652,7 +724,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the company for the order address.
+     *
+     * @param string $company
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setCompany($company)
     {
@@ -660,7 +736,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the VAT ID for the order address.
+     *
+     * @param string $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setVatId($id)
     {
@@ -668,7 +748,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the VAT-is-valid flag value for the order address.
+     *
+     * @param int $vatIsValid
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setVatIsValid($vatIsValid)
     {
@@ -676,7 +760,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the VAT request ID for the order address.
+     *
+     * @param string $id
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setVatRequestId($id)
     {
@@ -684,7 +772,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Set region code
+     *
+     * @param string $regionCode
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setRegionCode($regionCode)
     {
@@ -692,7 +784,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the VAT request date for the order address.
+     *
+     * @param string $vatRequestDate
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setVatRequestDate($vatRequestDate)
     {
@@ -700,7 +796,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the VAT-request-success flag value for the order address.
+     *
+     * @param int $vatRequestSuccess
+     *
+     * @return \Magento\Framework\DataObject|Address
      */
     public function setVatRequestSuccess($vatRequestSuccess)
     {
@@ -708,7 +808,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressExtensionInterface|null
      */
@@ -718,7 +818,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * Set an extension attributes object.
      *
      * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
      * @return $this

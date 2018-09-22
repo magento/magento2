@@ -132,10 +132,12 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -193,8 +195,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Parent transaction ID setter
-     * Can set the transaction id as well
+     * Parent transaction ID setter Can set the transaction id as well
      *
      * @param string $parentTxnId
      * @param string $txnId
@@ -229,8 +230,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Parent transaction getter
-     * May attempt to load it.
+     * Parent transaction getter. May attempt to load it.
      *
      * @param bool $shouldLoad
      * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
@@ -366,8 +366,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Close a capture transaction
-     * Logic is similar to closeAuthorization(), but for a capture transaction
+     * Close a capture transaction. Logic is similar to closeAuthorization(), but for a capture transaction
      *
      * @param bool $shouldSave
      * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
@@ -395,6 +394,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Check whether authorization in current hierarchy can be voided completely
+     *
      * Basically checks whether the authorization exists and it is not affected by a capture or void
      *
      * @return bool
@@ -536,6 +536,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Order ID getter
+     *
      * Attempts to get ID from set order payment object, if any, or from data by key 'order_id'
      *
      * @return int|null
@@ -572,6 +573,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Set order instance for transaction depends on transaction behavior
+     *
      * If $order equals to true, method isn't loading new order instance.
      *
      * @param \Magento\Sales\Model\Order|null|boolean $order
@@ -695,7 +697,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Check whether this transaction is voided
      *
-     * TODO: implement that there should be only one void per authorization
      * @return bool
      */
     protected function _isVoided()
@@ -805,7 +806,6 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Make sure this object is a valid transaction
-     * TODO for more restriction we can check for data consistency
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -833,7 +833,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set Transaction ID
+     *
+     * @param int $id
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setTransactionId($id)
     {
@@ -942,7 +946,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets an array of child transactions for the transaction.
+     *
+     * @param string $createdAt
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setCreatedAt($createdAt)
     {
@@ -950,7 +958,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the parent ID for the transaction.
+     *
+     * @param int $id
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setParentId($id)
     {
@@ -958,7 +970,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the order ID for the transaction.
+     *
+     * @param int $id
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setOrderId($id)
     {
@@ -966,7 +982,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the payment ID for the transaction.
+     *
+     * @param int $id
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setPaymentId($id)
     {
@@ -974,7 +994,11 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the parent transaction business ID for the transaction.
+     *
+     * @param string $id
+     *
+     * @return TransactionInterface|Transaction
      */
     public function setIsClosed($isClosed)
     {
@@ -982,7 +1006,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
      */
@@ -992,7 +1016,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set an extension attributes object.
      *
      * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
      * @return $this

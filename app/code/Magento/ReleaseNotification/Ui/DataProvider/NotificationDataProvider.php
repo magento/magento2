@@ -82,7 +82,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get data
+     *
+     * @return mixed
      */
     public function getData()
     {
@@ -95,7 +97,10 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Meta
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMeta()
     {
@@ -107,7 +112,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Data Provider name
+     *
+     * @return string
      */
     public function getName()
     {
@@ -115,7 +122,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get config data
+     *
+     * @return mixed
      */
     public function getConfigData()
     {
@@ -123,7 +132,11 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set config data
+     *
+     * @param mixed $config
+     *
+     * @return bool
      */
     public function setConfigData($config)
     {
@@ -133,7 +146,12 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Field Meta Info
+     * 
+     * @param string $fieldSetName
+     * @param string $fieldName
+     *
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
@@ -142,7 +160,11 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Field Set Meta Info
+     *
+     * @param string $fieldSetName
+     *
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldSetMetaInfo($fieldSetName)
@@ -151,7 +173,11 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Fields Meta Info
+     *
+     * @param string $fieldSetName
+     *
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsMetaInfo($fieldSetName)
@@ -160,7 +186,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Primary Field Name
+     *
+     * @return string
      */
     public function getPrimaryFieldName()
     {
@@ -168,7 +196,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Request Field Name
+     *
+     * @return string
      */
     public function getRequestFieldName()
     {
@@ -176,7 +206,11 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Add Filter
+     *
+     * @param \Magento\Framework\Api\Filter $filter
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
@@ -184,7 +218,12 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Add Order
+     *
+     * @param string $field
+     * @param string $direction
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addOrder($field, $direction)
@@ -192,7 +231,12 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set Limit
+     *
+     * @param int $offset
+     * @param int $size
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setLimit($offset, $size)
@@ -200,7 +244,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Search Criteria
+     *
+     * @return SearchCriteriaInterface
      */
     public function getSearchCriteria()
     {
@@ -208,7 +254,9 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Search Result
+     *
+     * @return SearchResultInterface
      */
     public function getSearchResult()
     {
