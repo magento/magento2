@@ -9,7 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class FormatFactory
+class FormatList
 {
     /**
      * @var ObjectManagerInterface
@@ -17,27 +17,31 @@ class FormatFactory
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @var string
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
+    private $formats;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param array $formats
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        array $formats
+    ) {
         $this->objectManager = $objectManager;
+        $this->formats = $formats;
     }
 
     /**
      * @param string $formatIdentifier
-     * @param array $data
      * @return FormatInterface
      */
-    public function create(string $formatIdentifier, $data = []) : FormatInterface
+    public function create(string $formatIdentifier) : FormatInterface
     {
-        $formatClassName = 'Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextareaAttribute\\' . ucfirst($formatIdentifier);
-        $formatInstance = $this->objectManager->create($formatClassName, $data);
-        if (false == $formatInstance instanceof FormatInterface) {
-            throw new \InvalidArgumentException(
-                $formatInstance . ' is not instance of \Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextareaAttribute\FormatInterface'
-            );
-        }
+        $formatClassName = 'Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute\\' . ucfirst($formatIdentifier);
+        $formatInstance = $this->objectManager->get($formatClassName);
+
         return $formatInstance;
     }
 }

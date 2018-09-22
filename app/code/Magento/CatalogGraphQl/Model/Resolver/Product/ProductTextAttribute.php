@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextareaAttribute\FormatFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute\FormatList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -18,9 +18,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 /**
  * Resolve rendered content for attributes where HTML content is allowed
  */
-class ProductTextareaAttribute implements ResolverInterface
+class ProductTextAttribute implements ResolverInterface
 {
-    const DEFAULT_CONTENT_FORMAT_IDENTIFIER = 'html';
+    /**
+     * @var FormatList
+     */
+    private $formatList;
 
     /**
      * @var ValueFactory
@@ -28,20 +31,20 @@ class ProductTextareaAttribute implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var FormatFactory
+     * @var string
      */
-    private $formatFactory;
+    private $defaultFormat = 'html';
 
     /**
      * @param ValueFactory $valueFactory
-     * @param FormatFactory $formatFactory
+     * @param FormatList $formatFactory
      */
     public function __construct(
         ValueFactory $valueFactory,
-        FormatFactory $formatFactory
+        FormatList $formatFactory
     ) {
         $this->valueFactory = $valueFactory;
-        $this->formatFactory = $formatFactory;
+        $this->formatList = $formatFactory;
     }
 
     /**
@@ -55,22 +58,16 @@ class ProductTextareaAttribute implements ResolverInterface
         array $args = null
     ): Value {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
+            $result = [];
             return $this->valueFactory->create($result);
         }
 
         /* @var $product Product */
         $product = $value['model'];
         $fieldName = $field->getName();
-        $formatIdentifier = $args['format'] ?? self::DEFAULT_CONTENT_FORMAT_IDENTIFIER;
-        $format = $this->formatFactory->create($formatIdentifier);
-        $attribute = ['content' => $format->getContent($product, $fieldName)];
-
-        $result = function () use ($attribute) {
-            return $attribute;
-        };
+        $formatIdentifier = $args['format'] ?? $this->defaultFormat;
+        $format = $this->formatList->create($formatIdentifier);
+        $result = ['content' => $format->getContent($product, $fieldName)];
 
         return $this->valueFactory->create($result);
     }
