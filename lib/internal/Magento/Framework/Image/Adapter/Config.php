@@ -16,9 +16,9 @@ class Config implements ConfigInterface, UploadConfigInterface
 
     const XML_PATH_IMAGE_ADAPTERS = 'dev/image/adapters';
 
-    const XML_PATH_MAX_WIDTH_IMAGE = 'system/upload_configuration/max_width';
+    const XML_PATH_MAX_WIDTH_IMAGE = 'dev/image/max_width';
 
-    const XML_PATH_MAX_HEIGHT_IMAGE = 'system/upload_configuration/max_height';
+    const XML_PATH_MAX_HEIGHT_IMAGE = 'dev/image/max_height';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
