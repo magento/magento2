@@ -1,10 +1,82 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Query {
+    getAvailableShippingMethodsOnCart(input: AvailableShippingMethodsOnCartInput): AvailableShippingMethodsOnCartOutput @doc(description:"Returns available shipping methods for cart by address/address_id")
+}
+
 type Mutation {
     createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\ApplyCouponToCart")
     removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\RemoveCouponFromCart")
+    setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput
+    setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput
+    setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput
+}
+
+input SetShippingAddressesOnCartInput {
+    cart_id: String!
+    customer_address_id: Int # Can be provided in one-page checkout and is required for multi-shipping checkout
+    address: CartAddressInput
+    cart_items: [CartItemQuantityInput!]
+}
+
+input CartItemQuantityInput {
+    cart_item_id: Int!
+    quantity: Float!
+}
+
+input SetBillingAddressOnCartInput {
+    cart_id: String!
+    customer_address_id: Int
+    address: CartAddressInput
+    # TODO: consider adding "Same as shipping" option
+}
+
+input CartAddressInput {
+    firstname: String!
+    lastname: String!
+    company: String
+    street: [String!]!
+    city: String!
+    region: String
+    postcode: String
+    country_code: String!
+    telephone: String!
+    save_in_address_book: Boolean!
+}
+
+input SetShippingMethodsOnCartInput {
+    shipping_methods: [ShippingMethodForAddressInput!]!
+}
+
+input ShippingMethodForAddressInput {
+    cart_address_id: String!
+    shipping_method_code: String!
+}
+
+type SetBillingAddressOnCartOutput {
+    cart: Cart!
+}
+
+type SetShippingAddressesOnCartOutput {
+    cart: Cart!
+}
+
+type SetShippingMethodsOnCartOutput {
+    cart: Cart!
+}
+
+# If no address is provided, the system get address assigned to a quote
+# If there's no address at all - the system returns all shipping methods
+type AvailableShippingMethodsOnCartInput {
+    cart_id: String!
+    customer_address_id: Int
+    address: CartAddressInput
+}
+
+type AvailableShippingMethodsOnCartOutput {
+    available_shipping_methods: [CheckoutShippingMethod]
 }
 
 input ApplyCouponToCartInput {
@@ -18,10 +90,54 @@ type ApplyCouponToCartOutput {
 
 type Cart {
     applied_coupon: AppliedCoupon
+    addresses: [CartAddress]!
 }
 
 type CartAddress {
+    firstname: String!
+    lastname: String!
+    company: String
+    street: [String!]!
+    city: String!
+    region: CartAddressRegion
+    postcode: String
+    country: CartAddressCountry!
+    telephone: String!
+    address_type: AdressTypeEnum!
+    selected_shipping_method: CheckoutShippingMethod
+    available_shipping_methods: [CheckoutShippingMethod]!
+    items_weight: Float
+    customer_notes: String
+    cart_items: [CartItemQuantity]
     applied_coupon: AppliedCoupon
+}
+
+type CartItemQuantity {
+    cart_item_id: String!
+    quantity: Float!
+}
+
+type CartAddressRegion {
+    code: String
+    label: String
+}
+
+type CartAddressCountry {
+    code: String
+    label: String
+}
+
+type CheckoutShippingMethod {
+    code: String
+    label: String
+    free_shipping: Boolean!
+    error_message: String
+    # TODO: Add more complex structure for shipping rates
+}
+
+enum AdressTypeEnum {
+    SHIPPING
+    BILLING
 }
 
 type AppliedCoupon {
