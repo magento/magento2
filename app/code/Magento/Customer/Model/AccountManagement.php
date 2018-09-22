@@ -394,7 +394,7 @@ class AccountManagement implements AccountManagementInterface
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null,
-        AddressRegistry $addressRegistry
+        AddressRegistry $addressRegistry = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
