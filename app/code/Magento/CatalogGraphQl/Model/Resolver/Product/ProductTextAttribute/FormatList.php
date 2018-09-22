@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextareaAttribute;
+namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute;
 
 use Magento\Framework\ObjectManagerInterface;
 
