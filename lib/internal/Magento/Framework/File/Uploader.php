@@ -140,14 +140,14 @@ class Uploader
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 'dev/image/max_width';
+    const MAX_IMAGE_WIDTH = 4096;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated
      * @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 'dev/image/max_height';
+    const MAX_IMAGE_HEIGHT = 2160;
 
     /**
      * Resulting of uploaded file

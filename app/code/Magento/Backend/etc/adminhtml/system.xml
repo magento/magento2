@@ -203,11 +203,6 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
                     <comment>When the adapter was changed, please flush Catalog Images Cache.</comment>
                 </field>
-                <field id="max_quality" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Maximum Quality</label>
-                    <validate>validate-greater-than-zero validate-number required-entry</validate>
-                    <comment>Maximum allowed width for uploaded image.</comment>
-                </field>
                 <field id="max_width" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Width</label>
                     <validate>validate-greater-than-zero validate-number required-entry</validate>

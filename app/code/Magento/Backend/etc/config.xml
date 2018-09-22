@@ -45,9 +45,8 @@
         </web>
         <dev>
             <image>
-                <max_quality>4096</max_quality>
-                <max_width>4096</max_width>
-                <max_height>2160</max_height>
+                <max_width>1920</max_width>
+                <max_height>1200</max_height>
             </image>
         </dev>
     </default>
