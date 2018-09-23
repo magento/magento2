@@ -147,7 +147,7 @@ class NotificationDataProvider implements DataProviderInterface
 
     /**
      * Get Field Meta Info
-     * 
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      *

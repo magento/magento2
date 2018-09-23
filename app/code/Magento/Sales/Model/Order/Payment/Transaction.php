@@ -994,9 +994,9 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Sets the parent transaction business ID for the transaction.
+     * Sets the value of the is-closed flag for the transaction.
      *
-     * @param string $id
+     * @param int $isClosed
      *
      * @return TransactionInterface|Transaction
      */

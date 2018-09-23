@@ -544,9 +544,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the customer ID for the order address.
+     * Sets the street values, if any, for the order address.
      *
-     * @param int $id
+     * @param string|string[] $street
      *
      * @return \Magento\Framework\DataObject|Address
      */
@@ -556,9 +556,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the fax number for the order address.
+     * Sets the customer ID for the order address.
      *
-     * @param string $fax
+     * @param int $id
      *
      * @return \Magento\Framework\DataObject|Address
      */
@@ -568,9 +568,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the region for the order address.
+     * Sets the fax number for the order address.
      *
-     * @param string $region
+     * @param string $fax
      *
      * @return \Magento\Framework\DataObject|Address
      */
@@ -580,9 +580,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the postal code for the order address.
+     * Sets the region for the order address.
      *
-     * @param string $postcode
+     * @param string $region
      *
      * @return \Magento\Framework\DataObject|Address
      */
@@ -592,9 +592,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the last name for the order address.
+     * Sets the postal code for the order address.
      *
-     * @param string $lastname
+     * @param string $postcode
      *
      * @return \Magento\Framework\DataObject|Address
      */
@@ -604,9 +604,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Sets the street values, if any, for the order address.
+     * Sets the last name for the order address.
      *
-     * @param string|string[] $street
+     * @param string $lastname
      *
      * @return \Magento\Framework\DataObject|Address
      */
