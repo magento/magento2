@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Quote\Address;
 
 /**
+ * Class Total
  * @method string getCode()
  *
  * @api
@@ -75,6 +76,9 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setBaseTotalAmount($code, $amount)
     {
+        /* (Fixes issue #18027) Round the total amount to 4 decimal places, to avoid floating point overflows */
+        $amount = is_float($amount) ? number_format($amount, 4) : $amount;
+
         $this->baseTotalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
@@ -170,6 +174,7 @@ class Total extends \Magento\Framework\DataObject
 
     /**
      * Set the full info, which is used to capture tax related information.
+     *
      * If a string is used, it is assumed to be serialized.
      *
      * @param array|string $info
