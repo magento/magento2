@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Provides a collection of linked product items (crosssells, related, upsells, ...)
+ */
 class CollectionProvider
 {
     /**
