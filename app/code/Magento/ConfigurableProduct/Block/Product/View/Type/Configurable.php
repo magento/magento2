@@ -2,7 +2,7 @@
 /**
  * Catalog super product configurable part block
  *
- * Copyright Â© Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
@@ -248,21 +248,22 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         return $this->jsonEncoder->encode($config);
     }
 	
-	/**
+    /**
      * Get product stock status for configurable variations
      *
      * @return array
      * @since 100.2.0
      */
-     protected function getStockStatus(){
+    protected function getStockStatus()
+    {
 	$stockStatus = [];
         foreach ($this->getAllowProducts() as $product) {
             $productStockObject = $this->stockStatusData->getStockItem($product->getId());
             $isInStock = $productStockObject['is_in_stock'];
-			$stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
+	    $stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
         }
         return $stockStatus;
-     }	
+    }	
 
     /**
      * Get product images for configurable variations

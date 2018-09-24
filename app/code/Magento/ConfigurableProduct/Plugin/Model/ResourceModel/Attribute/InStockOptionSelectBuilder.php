@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright Â© Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute;
@@ -31,10 +31,12 @@ class InStockOptionSelectBuilder
     /**
      * @param Status $stockStatusResource
      */
-    public function __construct(Status $stockStatusResource, StockConfigurationInterface $stockConfiguration)
-    {
+    public function __construct(
+        Status $stockStatusResource,
+        StockConfigurationInterface $stockConfiguration
+    ) {
         $this->stockStatusResource = $stockStatusResource;
-		$this->stockConfiguration = $stockConfiguration;
+	$this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -46,19 +48,16 @@ class InStockOptionSelectBuilder
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
+    public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select) 
     {
-		if (!$this->stockConfiguration->isShowOutOfStock()) {
-			$select->joinInner(
-				['stock' => $this->stockStatusResource->getMainTable()],
-				'stock.product_id = entity.entity_id',
-				[]
-			)->where(
-				'stock.stock_status = ?',
-				\Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
-			);
-		}
-        
+        if (!$this->stockConfiguration->isShowOutOfStock()) {
+            $select->joinInner(
+                    ['stock' => $this->stockStatusResource->getMainTable()], 'stock.product_id = entity.entity_id', []
+            )->where(
+                    'stock.stock_status = ?', \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
+            );
+        }
         return $select;
     }
+
 }
