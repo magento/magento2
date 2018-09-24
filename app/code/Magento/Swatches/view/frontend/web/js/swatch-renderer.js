@@ -1,5 +1,5 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright Â© Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -309,7 +309,7 @@ define([
                 this._sortAttributes();
                 this._RenderControls();
                 this._setPreSelectedGallery();
-	        this._setStockStatus();
+	          this._setStockStatus();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -754,7 +754,7 @@ define([
 
             $widget._loadMedia();
             $input.trigger('change');
-	    $widget._setStockStatus();
+	      $widget._setStockStatus();
         },
 
         /**
