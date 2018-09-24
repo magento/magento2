@@ -154,9 +154,7 @@ class TierPrice extends AbstractModifier
                                     'addbefore' => '%',
                                     'validation' => [
                                         'required-entry' => true,
-                                        'validate-number' => true,
-                                        'validate-greater-than-zero' => true,
-                                        'less-than-equals-to' => 100
+                                        'validate-positive-percent-decimal' => true
                                     ],
                                     'visible' => $firstOption
                                         && $firstOption['value'] == ProductPriceOptionsInterface::VALUE_PERCENT,
