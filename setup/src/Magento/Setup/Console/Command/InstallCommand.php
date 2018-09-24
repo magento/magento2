@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\Request;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
@@ -45,20 +46,20 @@ class InstallCommand extends AbstractSetupCommand
      * List of comma-separated module names. That must be enabled during installation.
      * Available magic param all.
      */
-    const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
+    const INPUT_KEY_ENABLE_MODULES = 'enable-modules';
 
     /**
      * List of comma-separated module names. That must be avoided during installation.
      * List of comma-separated module names. That must be avoided during installation.
      * Available magic param all.
      */
-    const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
+    const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
 
     /**
      * If this flag is enabled, than all your old scripts with format:
      * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
      */
-    const CONVERT_OLD_SCRIPTS_KEY = 'convert_old_scripts';
+    const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
 
     /**
      * Parameter indicating command for interactive setup
@@ -129,7 +130,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -154,12 +155,6 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Use sample data'
-            ),
-            new InputOption(
-                Request::DUMP_ENABLE_OPTIONS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Should removed columns be dumped or recovered columns data reverted.'
             ),
             new InputOption(
                 self::INPUT_KEY_ENABLE_MODULES,
@@ -215,7 +210,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -230,7 +225,7 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -277,11 +272,11 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[] Array of error messages
      */
-    public function validate(InputInterface $input)
+    public function validate(InputInterface $input) : array
     {
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
-        if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
+        if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, (string) $value) != 1) {
             $errors[] = 'Validation failed, ' . self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX
                 . ' must be 20 characters or less';
         }
@@ -297,7 +292,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return string[] Array of inputs
      */
-    private function interactiveQuestions(InputInterface $input, OutputInterface $output)
+    private function interactiveQuestions(InputInterface $input, OutputInterface $output) : array
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];
