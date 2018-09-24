@@ -48,6 +48,15 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">secondStoreGroup</requiredEntity>
     </entity>
+    <entity name="secondStoreUnique" type="store">
+        <data key="name" unique="suffix">Second Store View </data>
+        <data key="code" unique="suffix">second_store_view_</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">secondStoreGroup</requiredEntity>
+    </entity>
     <entity name="staticStore" type="store">
         <data key="name">Second Store View</data>
         <data key="code">store123</data>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateWebsite" dataType="website" type="create"
+               auth="adminFormKey" url="/admin/system_store/save" method="POST" successRegex="/messages-message-success/" returnRegex="">
+        <object dataType="website" key="website">
+            <field key="website_id">string</field>
+            <field key="name">string</field>
+            <field key="code">string</field>
+            <field key="sort_order">integer</field>
+        </object>
+        <field key="store_action">string</field>
+        <field key="store_type">string</field>
+    </operation>
+</operations>
