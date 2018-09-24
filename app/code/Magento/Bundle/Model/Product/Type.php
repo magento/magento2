@@ -539,7 +539,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
+                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -561,7 +561,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int) $qty;
     }
 
     /**
