@@ -9,6 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategoryMainSection">
+        <element name="perPage" type="select" selector="//*[@id='authenticationPopup']/following-sibling::div[3]//*[@id='limiter']"/>
+        <element name="sortedBy" type="select" selector="//*[@id='authenticationPopup']/following-sibling::div[1]//*[@id='sorter']"/>
+        <element name="modeGridIsActive" type="text" selector="//*[@id='authenticationPopup']/following-sibling::div[1]//*[@class='modes']/strong[@class='modes-mode active mode-grid']/span"/>
         <element name="modeListButton" type="button" selector="#mode-list"/>
         <element name="CategoryTitle" type="text" selector="#page-title-heading span"/>
         <element name="ProductItemInfo" type="button" selector=".product-item-info"/>
