@@ -34,7 +34,7 @@ class SourceItemsDeleteInterfacePlugin
      * Keep database consistency while a source item is removed
      *
      * @param SourceItemsDeleteInterface $subject
-     * @param $result
+     * @param void $result
      * @param array $sourceItems
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
