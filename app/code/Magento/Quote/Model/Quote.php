@@ -2302,7 +2302,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getIsVirtual()
     {
-        return intval($this->isVirtual());
+        return (int) $this->isVirtual();
     }
 
     /**
