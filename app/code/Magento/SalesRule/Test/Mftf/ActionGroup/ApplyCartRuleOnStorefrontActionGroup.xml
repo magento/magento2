@@ -13,13 +13,13 @@
             <argument name="couponCode" type="string"/>
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
-        <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForText"/>
+        <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForProductAddToShoppingCart"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageIsOpened"/>
         <click selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" stepKey="clickToDiscountTab"/>
         <fillField selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" userInput="{{couponCode}}"
                    stepKey="fillCouponCode"/>
         <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForApplyCode"/>
     </actionGroup>
 </actionGroups>

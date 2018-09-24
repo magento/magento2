@@ -41,7 +41,7 @@
 
         <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForCartPriceRulesIndexPageIsOpened"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createSalesRule.name$$"
                    stepKey="fillFieldFilterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchButton"/>
@@ -68,12 +68,12 @@
 
         <!-- Step: 6-7. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
         </actionGroup>
-        <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForText"/>
+        <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{$couponCode}"'
              stepKey="seeSuccessMessage1"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
@@ -93,12 +93,12 @@
 
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened1"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule1">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
         </actionGroup>
-        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForText1"/>
+        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages"/>
         <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
@@ -110,12 +110,12 @@
 
         <!-- Step: 12-13. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened2"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule2">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
         </actionGroup>
-        <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForText2"/>
+        <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForSuccessMessage1"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{$couponCode}"'
              stepKey="seeSuccessMessage2"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
@@ -130,14 +130,14 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage1"/>
 
-        <!-- Step; 15-16. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
+        <!-- Step: 15-16. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage3"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened3"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule3">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
         </actionGroup>
-        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForText3"/>
+        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage1"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages1"/>
         <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
@@ -148,12 +148,12 @@
 
         <!-- Step: 18-19. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage4"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageIsOpened4"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule4">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
         </actionGroup>
-        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForText4"/>
+        <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage2"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages2"/>
         <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
