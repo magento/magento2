@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Template;
 
@@ -14,7 +18,7 @@ use Magento\Framework\View\Element\Template;
  * @api
  * @since 100.0.2
  */
-class Breadcrumbs extends \Magento\Framework\View\Element\Template
+class Breadcrumbs extends Template
 {
     /**
      * Current template name
@@ -35,7 +39,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_crumbs;
+    protected $_crumbs = [];
 
     /**
      * Cache key info
@@ -60,18 +64,17 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
         Json $serializer = null
     ) {
         parent::__construct($context, $data);
-        $this->serializer =
-            $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
      * Add crumb
      *
-     * @param string $crumbName
-     * @param array $crumbInfo
+     * @param string $crumbName Name of the crumb
+     * @param array $crumbInfo Crumb data
      * @return $this
      */
-    public function addCrumb($crumbName, $crumbInfo)
+    public function addCrumb(string $crumbName, array $crumbInfo): self
     {
         foreach ($this->_properties as $key) {
             if (!isset($crumbInfo[$key])) {
@@ -87,13 +90,102 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Add crumb after another
+     *
+     * @param string $crumbName Name of the crumb
+     * @param array $crumbInfo Crumb data
+     * @param string $after Name of the crumb to insert after
+     * @return $this
+     */
+    public function addCrumbAfter(string $crumbName, array $crumbInfo, string $after): self
+    {
+        foreach ($this->_properties as $key) {
+            if (!isset($crumbInfo[$key])) {
+                $crumbInfo[$key] = null;
+            }
+        }
+
+        if ((!isset($this->_crumbs[$crumbName])) || (!$this->_crumbs[$crumbName]['readonly'])) {
+            if (!isset($this->_crumbs[$after])) {
+                $this->addCrumb($crumbName, $crumbInfo);
+                return $this;
+            }
+
+            $offset = array_search($after, array_keys($this->_crumbs)) + 1;
+            $crumbsBefore = array_slice($this->_crumbs, 0, $offset, true);
+            $crumbsAfter = array_slice($this->_crumbs, $offset, null, true);
+            $this->_crumbs = $crumbsBefore + [$crumbName => $crumbInfo] + $crumbsAfter;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add crumb before another
+     *
+     * @param string $crumbName Name of the crumb
+     * @param array $crumbInfo Crumb data
+     * @param string $before ame of the crumb to insert before
+     * @return $this
+     */
+    public function addCrumbBefore(string $crumbName, array $crumbInfo, string $before): self
+    {
+        if (!isset($this->_crumbs[$before])) {
+            $this->addCrumb($crumbName, $crumbInfo);
+            return $this;
+        }
+
+        $keys = array_keys($this->_crumbs);
+        $offset = array_search($before, $keys);
+
+        if ($offset) {
+            $this->addCrumbAfter($crumbName, $crumbInfo, $keys[$offset - 1]);
+            return $this;
+        }
+
+        foreach ($this->_properties as $key) {
+            if (!isset($crumbInfo[$key])) {
+                $crumbInfo[$key] = null;
+            }
+        }
+
+        $this->_crumbs = [$crumbName => $crumbInfo] + $this->_crumbs;
+
+        return $this;
+    }
+
+    /**
+     * Remove crumb
+     *
+     * @param string $crumbName Name of the crumb
+     * @return $this
+     */
+    public function removeCrumb(string $crumbName): self
+    {
+        if (isset($this->_crumbs[$crumbName])) {
+            unset($this->_crumbs[$crumbName]);
+        }
+        return $this;
+    }
+
+    /**
+     * Get all crumbs
+
+     * @return array
+     */
+    public function getCrumbs(): array
+    {
+        return $this->_crumbs;
+    }
+
+    /**
      * Get cache key informative items
      *
      * Provide string array key to share specific info item with FPC placeholder
      *
      * @return array
      */
-    public function getCacheKeyInfo()
+    public function getCacheKeyInfo(): array
     {
         if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + [
@@ -109,7 +201,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         if (is_array($this->_crumbs)) {
             reset($this->_crumbs);
