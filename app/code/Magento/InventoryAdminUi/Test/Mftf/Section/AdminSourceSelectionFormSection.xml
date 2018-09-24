@@ -16,7 +16,7 @@
     </section>
     <section name="AdminSourceSelectionOrderedItemsGrid">
         <element name="rowProductSku" type="text" selector=".data-row[data-repeat-index='{{productRow}}'] div[data-index='sku']" parameterized="true"/>
-        <element name="rowQtyToShip" type="text" selector=".data-row[data-repeat-index='{{productRow}}'] span[data-index='qtyToShip']" parameterized="true"/>
+        <element name="rowQtyToShip" type="text" selector=".data-row[data-repeat-index='{{productRow}}'] div[data-index='qtyToShip']" parameterized="true"/>
         <element name="rowAvailableSourcesName" type="text" selector=".data-row[data-repeat-index='{{productRow}}'] td[data-index='sources'] .data-row[data-repeat-index='{{sourceRow}}'] span[data-index='sourceName']" parameterized="true"/>
         <element name="rowAvailableSourcesQtyToDeduct" type="input" selector=".data-row[data-repeat-index='{{productRow}}'] td[data-index='sources'] input[name='items[{{productRow}}][sources][{{sourceRow}}][qtyToDeduct]']" parameterized="true"/>
     </section>
