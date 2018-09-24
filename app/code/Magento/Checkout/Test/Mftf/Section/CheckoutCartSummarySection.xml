@@ -17,5 +17,6 @@
         <element name="postcode" type="text" selector="#block-summary input[name='postcode']" timeout="30"/>
         <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
         <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
+        <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
     </section>
 </sections>
