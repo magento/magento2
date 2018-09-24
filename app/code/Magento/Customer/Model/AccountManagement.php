@@ -956,6 +956,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get EAV validator
+     *
      * @return Backend
      */
     private function getEavValidator()
@@ -1154,6 +1156,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get template types
+     *
      * @return array
      * @deprecated 100.1.0
      */
