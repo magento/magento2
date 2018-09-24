@@ -9,19 +9,22 @@
             "add_date": true,
             "last_send_date": true,
             "send_count": true,
-            "status": true
+            "status": true,
+            "store_id": true
         },
         "index": {
             "PRODUCT_ALERT_PRICE_CUSTOMER_ID": true,
             "PRODUCT_ALERT_PRICE_PRODUCT_ID": true,
-            "PRODUCT_ALERT_PRICE_WEBSITE_ID": true
+            "PRODUCT_ALERT_PRICE_WEBSITE_ID": true,
+            "PRODUCT_ALERT_PRICE_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
             "PRODUCT_ALERT_PRICE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
             "PRODUCT_ALERT_PRICE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
             "PRODUCT_ALERT_PRICE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
-            "PRODUCT_ALERT_PRICE_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true
+            "PRODUCT_ALERT_PRICE_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true,
+            "PRODUCT_ALERT_PRICE_STORE_ID_STORE_STORE_ID": true
         }
     },
     "product_alert_stock": {
@@ -33,19 +36,22 @@
             "add_date": true,
             "send_date": true,
             "send_count": true,
-            "status": true
+            "status": true,
+            "store_id": true
         },
         "index": {
             "PRODUCT_ALERT_STOCK_CUSTOMER_ID": true,
             "PRODUCT_ALERT_STOCK_PRODUCT_ID": true,
-            "PRODUCT_ALERT_STOCK_WEBSITE_ID": true
+            "PRODUCT_ALERT_STOCK_WEBSITE_ID": true,
+            "PRODUCT_ALERT_STOCK_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
             "PRODUCT_ALERT_STOCK_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
             "PRODUCT_ALERT_STOCK_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
             "PRODUCT_ALERT_STOCK_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
-            "PRODUCT_ALERT_STOCK_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true
+            "PRODUCT_ALERT_STOCK_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE": true,
+            "PRODUCT_ALERT_STOCK_STORE_ID_STORE_STORE_ID": true
         }
     }
 }
