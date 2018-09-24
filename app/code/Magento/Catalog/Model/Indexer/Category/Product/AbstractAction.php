@@ -499,7 +499,7 @@ abstract class AbstractAction
             'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
                 ',',
                 $rootCatIds
-            ) . ')',
+            ) . ') AND cc2.store_id = ' . $store->getId(),
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
@@ -586,6 +586,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get temporary table name
+     *
      * Get temporary table name for concurrent indexing in persistent connection
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
@@ -629,6 +631,12 @@ abstract class AbstractAction
             null,
             ['nullable' => false, 'unsigned' => true]
         );
+        $temporaryTable->addColumn(
+            'store_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
         // Each entry will be unique.
         $temporaryTable->addIndex(
             'idx_primary',
@@ -642,6 +650,11 @@ abstract class AbstractAction
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
         );
 
+        $temporaryTable->addIndex(
+            'store_id',
+            ['store_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
+        );
         // Drop the temporary table in case it already exists on this (persistent?) connection.
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
@@ -659,11 +672,23 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryLinkField = $categoryMetadata->getLinkField();
         $selects = $this->prepareSelectsByRange(
             $this->connection->select()
                 ->from(
                     ['c' => $this->getTable('catalog_category_entity')],
                     ['entity_id', 'path']
+                )->joinInner(
+                    ['ccei' => $this->getTable('catalog_category_entity_int')],
+                    'ccei.' . $categoryLinkField . ' = c.' . $categoryLinkField .
+                    ' AND ccei.attribute_id = ' . $isActiveAttributeId .
+                    ' AND ccei.value = 1',
+                    ['store_id']
                 ),
             'entity_id'
         );
@@ -674,13 +699,13 @@ abstract class AbstractAction
             foreach ($this->connection->fetchAll($select) as $category) {
                 foreach (explode('/', $category['path']) as $parentId) {
                     if ($parentId !== $category['entity_id']) {
-                        $values[] = [$parentId, $category['entity_id']];
+                        $values[] = [$parentId, $category['entity_id'], $category['store_id']];
                     }
                 }
             }
 
             if (count($values) > 0) {
-                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
+                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id', 'store_id'], $values);
             }
         }
     }
