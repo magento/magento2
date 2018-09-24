@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Catalog\Helper\ImageFactory as CatalogImageHelperFactory;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\ImageFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -20,17 +19,19 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class Image implements ResolverInterface
 {
     /**
-     * @var CatalogImageHelperFactory
+     * Product image factory
+     *
+     * @var ImageFactory
      */
-    private $catalogImageHelperFactory;
+    private $productImageFactory;
 
     /**
-     * @param CatalogImageHelperFactory $catalogImageHelperFactory
+     * @param ImageFactory $productImageFactory
      */
     public function __construct(
-        CatalogImageHelperFactory $catalogImageHelperFactory
+        ImageFactory $productImageFactory
     ) {
-        $this->catalogImageHelperFactory = $catalogImageHelperFactory;
+        $this->productImageFactory = $productImageFactory;
     }
 
     /**
@@ -44,22 +45,21 @@ class Image implements ResolverInterface
         array $args = null
     ): array {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new \LogicException(__('"model" value should be specified'));
         }
         /** @var Product $product */
         $product = $value['model'];
         $imageType = $field->getName();
+        $path = $product->getData($imageType);
 
-        $catalogImageHelper = $this->catalogImageHelperFactory->create();
-        $imageUrl = $catalogImageHelper->init(
-            $product,
-            'product_' . $imageType,
-            ['type' => $imageType]
-        )->getUrl();
+        $image = $this->productImageFactory->create();
+        $image->setDestinationSubdir($imageType)
+            ->setBaseFile($path);
+        $imageUrl = $image->getUrl();
 
         return [
             'url' => $imageUrl,
-            'path' => $product->getData($imageType)
+            'path' => $path,
         ];
     }
 }
