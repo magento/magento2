@@ -127,8 +127,8 @@ class ButtonList
      */
     public function sortButtons(Item $itemA, Item $itemB)
     {
-        $sortOrderA = intval($itemA->getSortOrder());
-        $sortOrderB = intval($itemB->getSortOrder());
+        $sortOrderA = (int) $itemA->getSortOrder();
+        $sortOrderB = (int) $itemB->getSortOrder();
 
         if ($sortOrderA == $sortOrderB) {
             return 0;
