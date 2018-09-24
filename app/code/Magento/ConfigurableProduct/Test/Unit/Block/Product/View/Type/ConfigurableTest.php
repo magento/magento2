@@ -394,6 +394,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'productId' => $productId,
+			'stockStatus' => [],
             'chooseText' => __('Choose an Option...'),
             'images' => [],
             'index' => [],

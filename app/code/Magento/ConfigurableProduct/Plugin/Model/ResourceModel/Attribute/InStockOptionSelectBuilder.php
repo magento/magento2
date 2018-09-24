@@ -36,7 +36,7 @@ class InStockOptionSelectBuilder
         StockConfigurationInterface $stockConfiguration
     ) {
         $this->stockStatusResource = $stockStatusResource;
-	$this->stockConfiguration = $stockConfiguration;
+	  $this->stockConfiguration = $stockConfiguration;
     }
 
     /**

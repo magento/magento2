@@ -114,7 +114,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
-	$this->stockStatusData = ObjectManager::getInstance()->get('Magento\CatalogInventory\Api\StockRegistryInterface');
+	  $this->stockStatusData = ObjectManager::getInstance()->get('Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
@@ -233,7 +233,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
-	    'stockStatus'=> $this->getStockStatus(),
+	      'stockStatus'=> $this->getStockStatus(),
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
