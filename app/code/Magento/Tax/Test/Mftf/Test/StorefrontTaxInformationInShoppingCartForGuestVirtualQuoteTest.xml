@@ -16,10 +16,11 @@
             <description value="Tax information are updating/recalculating on fly in shopping cart for Guest (virtual quote)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-41931"/>
-            <!--Skip because of issue MAGETWO-90966 on 4 step-->
-            <group value="skip"/>
             <group value="checkout"/>
             <group value="tax"/>
+            <skip>
+                <issueId value="MAGETWO-90966"/>
+            </skip>
          </annotations>
          <before>
              <!-- Preconditions  -->
