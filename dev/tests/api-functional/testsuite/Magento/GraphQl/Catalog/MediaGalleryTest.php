@@ -31,9 +31,9 @@ class MediaGalleryTest extends GraphQlAbstract
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
-   		small_image {
-   		    url
-   		}
+        small_image {
+            url
+        }
     }
   }    
 }
