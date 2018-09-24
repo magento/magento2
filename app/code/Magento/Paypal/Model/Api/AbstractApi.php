@@ -582,7 +582,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int) $value;
     }
 
     /**
