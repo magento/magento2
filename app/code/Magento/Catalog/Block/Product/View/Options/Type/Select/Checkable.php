@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Block\Product\View\Options\Select;
+namespace Magento\Catalog\Block\Product\View\Options\Type\Select;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Block\Product\View\Options\AbstractOptions;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Pricing\Helper\Data;
-use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Represent necessary logic for checkbox and radio button option type
