@@ -187,19 +187,11 @@ define([
 
             if (optionPanel.hasClass(activePanelClass)) {
                 optionContainer.find('input')
-                    .each(function () {
-                        if (this.disabled) {
-                            return;
-                        }
-
-                        if (this.type === 'checkbox' || this.type === 'radio') {
-                            if (this.checked) {
-                                optionsValues.push(this.name + '=' + jQuery(this).val());
-                            }
-                        } else {
-                            optionsValues.push(this.name + '=' + jQuery(this).val());
-                        }
+                    .serializeArray()
+                    .map(function (el) {
+                        swatchValues.push(el.name + '=' + el.value);
                     });
+
                 jQuery('<input>')
                     .attr({
                         type: 'hidden',

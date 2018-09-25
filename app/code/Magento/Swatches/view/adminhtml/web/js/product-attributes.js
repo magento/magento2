@@ -447,8 +447,9 @@ define([
                 if (activePanel.hasClass(activePanelClass)) {
                     optionContainer
                         .find('input')
-                        .each(function () {
-                            swatchValues.push(this.name + '=' + $(this).val());
+                        .serializeArray()
+                        .map(function (el) {
+                            swatchValues.push(el.name + '=' + el.value);
                         });
 
                     $('<input>')
