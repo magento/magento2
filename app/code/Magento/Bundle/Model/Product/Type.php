@@ -8,13 +8,13 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 
 /**
  * Bundle Type Model
