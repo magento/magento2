@@ -10,6 +10,6 @@
        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="CheckoutCartPage" url="/checkout/cart" area="storefront" module="Magento_Checkout">
         <section name="CheckoutCartProductSection"/>
-        <section name="CheckoutCartSummarySection"/>
+        <section name="StorefrontCheckoutCartSummarySection"/>
     </page>
 </pages>
