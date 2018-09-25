@@ -327,7 +327,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _initSitemapItems()
     {
         $sitemapItems = $this->itemProvider->getItems($this->getStoreId());
-        $mappedItems = $this->mapToSitemapItem();
+        $mappedItems = $this->mapToMSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
         $this->_tags = [

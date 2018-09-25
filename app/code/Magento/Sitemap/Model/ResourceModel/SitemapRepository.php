@@ -114,7 +114,7 @@ class SitemapRepository implements SitemapRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(SitemapInterface $sitemap)
+    public function delete(SitemapInterface $sitemap): bool
     {
         try {
             $this->sitemapResource->save($sitemap);

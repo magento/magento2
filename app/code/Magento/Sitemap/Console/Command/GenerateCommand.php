@@ -4,6 +4,7 @@ namespace Magento\Sitemap\Console\Command;
 
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Sitemap\Api\SitemapRepositoryInterface;
+use Magento\Sitemap\Model\XmlGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,6 +27,10 @@ class GenerateCommand extends Command
      * @var SearchCriteriaFactory
      */
     private $criteriaFactory;
+    /**
+     * @var XmlGenerator
+     */
+    private $xmlGenerator;
 
     /**
      * GenerateSitemapCommand constructor.
@@ -34,12 +39,14 @@ class GenerateCommand extends Command
     public function __construct(
         \Magento\Framework\App\State $state,
         \Magento\Sitemap\Api\SitemapRepositoryInterface\Proxy $sitemapRepository,
-        SearchCriteriaFactory $criteriaFactory
+        SearchCriteriaFactory $criteriaFactory,
+        XmlGenerator $xmlGenerator
     ) {
         $this->sitemapRepository = $sitemapRepository;
         $this->state = $state;
         parent::__construct();
         $this->criteriaFactory = $criteriaFactory;
+        $this->xmlGenerator = $xmlGenerator;
     }
 
     /**
@@ -64,16 +71,16 @@ class GenerateCommand extends Command
         $progressbar = new ProgressBar($output, $sitemaps->getTotalCount());
         $progressbar->setFormat("<info>%message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed%");
 
-        $output->writeln('<info>Generation was started.</info>');
-        $progressbar->start();
+//        $output->writeln('<info>Generation was started.</info>');
+//        $progressbar->start();
 
         foreach ($sitemaps->getItems() as $sitemap) {
-            $progressbar->setMessage('Generating sitemap ' . $sitemap->getId() . ' ...');
-            $progressbar->display();
-            $sitemap->generateXml();
-            $progressbar->advance();
+//            $progressbar->setMessage('Generating sitemap ' . $sitemap->getId() . ' ...');
+//            $progressbar->display();
+            echo $this->xmlGenerator->execute($sitemap);
+//            $progressbar->advance();
         }
-        $progressbar->finish();
+//        $progressbar->finish();
         $output->writeln('');
         $output->writeln('<info>Generated store sitemaps successfully.</info>');
 

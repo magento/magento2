@@ -10,7 +10,7 @@
     <preference for="Magento\Sitemap\Api\Data\SitemapInterface" type="Magento\Sitemap\Model\Sitemap" />
     <preference for="Magento\Sitemap\Api\SitemapRepositoryInterface" type="Magento\Sitemap\Model\ResourceModel\SitemapRepository" />
     <preference for="Magento\Sitemap\Api\Data\SitemapSearchResultsInterface" type="Magento\Sitemap\Model\SitemapSearchResults" />
-
+    <preference for="Magento\Sitemap\Api\XmlGeneratorInterface" type="Magento\Sitemap\Model\XmlGenerator" />
     <preference for="Magento\Sitemap\Model\ItemProvider\ItemProviderInterface" type="Magento\Sitemap\Model\ItemProvider\Composite" />
     <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader" />
 

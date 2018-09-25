@@ -51,66 +51,75 @@ interface SitemapInterface
 
 
     /**
-     * @return string
+     * Get sitemap type
+     *
+     * @return string|null
      */
     public function getSitemapType();
 
     /**
      * @param string $type
-     * @return mixed
+     * @return $this
      */
     public function setSitemapType(string $type): SitemapInterface;
 
     /**
-     * @return mixed
+     * Get sitemap filename
+     *
+     * @return string|null
      */
     public function getSitemapFilename();
 
     /**
-     * @return mixed
+     * Set sitemap filename
+     *
+     * @return $this
      */
     public function setSitemapFilename(string $filename): SitemapInterface;
 
     /**
-     * @return mixed
+     * Get sitemap path
+     *
+     * @return string|null
      */
     public function getSitemapPath();
 
     /**
+     * Set sitemap path
+     *
      * @param string $path
-     * @return mixed
+     * @return $this
      */
     public function setSitemapPath(string $path): SitemapInterface;
 
     /**
-     * @return mixed
+     * Get sitemap time
+     *
+     * @return string|null
      */
     public function getSitemapTime();
 
     /**
+     * Set sitemap time
+     *
      * @param string $datetime
-     * @return mixed
+     * @return $this
      */
     public function setSitemapTime(string $datetime): SitemapInterface;
 
     /**
-     * @return mixed
+     * Get store id
+     *
+     * @return int
      */
     public function getStoreId();
 
     /**
+     * Set store id
+     *
      * @param int $id
-     * @return mixed
+     * @return SitemapInterface
      */
     public function setStoreId(int $id): SitemapInterface;
-
-    /**
-     * Generate XML file
-     *
-     * @see http://www.sitemaps.org/protocol.html
-     *
-     * @return $this
-     */
-    public function generateXml();
 
 }

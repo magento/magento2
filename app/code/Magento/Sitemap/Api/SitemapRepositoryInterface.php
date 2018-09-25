@@ -27,6 +27,7 @@ interface SitemapRepositoryInterface
      * Get single sitemap by id
      *
      * @param int $sitemapId
+     * @throws NoSuchEntityException
      * @return SitemapInterface
      */
     public function getById($sitemapId): SitemapInterface;
@@ -56,5 +57,5 @@ interface SitemapRepositoryInterface
      * @throws CouldNotDeleteException
      * @return boolean
      */
-    public function delete(SitemapInterface $sitemap);
+    public function delete(SitemapInterface $sitemap): bool;
 }
