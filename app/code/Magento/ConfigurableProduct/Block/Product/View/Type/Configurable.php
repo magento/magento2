@@ -114,7 +114,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
-	  $this->stockStatusData = ObjectManager::getInstance()->get('Magento\CatalogInventory\Api\StockRegistryInterface');
+        $this->stockStatusData = ObjectManager::getInstance()->get('Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
@@ -233,7 +233,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
-	      'stockStatus'=> $this->getStockStatus(),
+            'stockStatus' => $this->getStockStatus(),
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
@@ -247,7 +247,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
         return $this->jsonEncoder->encode($config);
     }
-	
+
     /**
      * Get product stock status for configurable variations
      *
@@ -256,14 +256,14 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     protected function getStockStatus()
     {
-	$stockStatus = [];
+        $stockStatus = [];
         foreach ($this->getAllowProducts() as $product) {
             $productStockObject = $this->stockStatusData->getStockItem($product->getId());
             $isInStock = $productStockObject['is_in_stock'];
-	    $stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
+            $stockStatus[$product->getId()] = [$this->localeFormat->getNumber($isInStock)];
         }
         return $stockStatus;
-    }	
+    }
 
     /**
      * Get product images for configurable variations
@@ -279,15 +279,15 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             foreach ($productImages as $image) {
                 $images[$product->getId()][] =
                     [
-                        'thumb' => $image->getData('small_image_url'),
-                        'img' => $image->getData('medium_image_url'),
-                        'full' => $image->getData('large_image_url'),
-                        'caption' => $image->getLabel(),
-                        'position' => $image->getPosition(),
-                        'isMain' => $image->getFile() == $product->getImage(),
-                        'type' => str_replace('external-', '', $image->getMediaType()),
-                        'videoUrl' => $image->getVideoUrl(),
-                    ];
+                    'thumb' => $image->getData('small_image_url'),
+                    'img' => $image->getData('medium_image_url'),
+                    'full' => $image->getData('large_image_url'),
+                    'caption' => $image->getLabel(),
+                    'position' => $image->getPosition(),
+                    'isMain' => $image->getFile() == $product->getImage(),
+                    'type' => str_replace('external-', '', $image->getMediaType()),
+                    'videoUrl' => $image->getVideoUrl(),
+                ];
             }
         }
 
@@ -303,7 +303,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         foreach ($this->getAllowProducts() as $product) {
             $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
-            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPriceModel = $priceInfo->getPrice('tier_price');
             $tierPricesList = $tierPriceModel->getTierPriceList();
             foreach ($tierPricesList as $tierPrice) {
                 $tierPrices[] = [
@@ -317,23 +317,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $prices[$product->getId()] =
                 [
-                    'oldPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('regular_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'basePrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
-                        ),
-                    ],
-                    'finalPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'tierPrices' => $tierPrices,
-                 ];
+                'oldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getValue()
+                    ),
+                ],
+                'basePrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
+                'finalPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getValue()
+                    ),
+                ],
+                'tierPrices' => $tierPrices,
+            ];
         }
         return $prices;
     }

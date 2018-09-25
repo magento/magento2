@@ -309,18 +309,18 @@ define([
                 this._sortAttributes();
                 this._RenderControls();
                 this._setPreSelectedGallery();
-	          this._setStockStatus();
+                this._setStockStatus();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
             this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
-		
-	/**
+        
+	    /**
          * @private
          */
-	_setStockStatus: function () {
+         _setStockStatus: function () {
             var $widget = this, result, i;
             result = $widget.options.jsonConfig.stockStatus;
             for (var i = 0; i < this.options.jsonConfig.attributes[0].options.length; i++) {
@@ -329,7 +329,7 @@ define([
                     var optionId = this.options.jsonConfig.attributes[0].options[i].id;
                     $('.swatch-attribute').find('[option-id]').each(function () {
                         var $element = $(this),
-                                option = $element.attr('option-id');
+                        option = $element.attr('option-id');
                         if (option == optionId) {
                             $element.addClass('disabled');
                         }
@@ -754,7 +754,7 @@ define([
 
             $widget._loadMedia();
             $input.trigger('change');
-	      $widget._setStockStatus();
+            $widget._setStockStatus();
         },
 
         /**

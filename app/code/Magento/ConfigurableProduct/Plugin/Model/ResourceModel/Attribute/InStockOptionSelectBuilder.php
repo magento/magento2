@@ -21,13 +21,13 @@ class InStockOptionSelectBuilder
      * @var Status
      */
     private $stockStatusResource;
-    
-	/**
+
+    /**
      *
      * @var Configuration
      */
     private $stockConfiguration;
-	
+
     /**
      * @param Status $stockStatusResource
      */
@@ -36,7 +36,7 @@ class InStockOptionSelectBuilder
         StockConfigurationInterface $stockConfiguration
     ) {
         $this->stockStatusResource = $stockStatusResource;
-	  $this->stockConfiguration = $stockConfiguration;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -48,13 +48,13 @@ class InStockOptionSelectBuilder
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select) 
+    public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
     {
         if (!$this->stockConfiguration->isShowOutOfStock()) {
             $select->joinInner(
-                    ['stock' => $this->stockStatusResource->getMainTable()], 'stock.product_id = entity.entity_id', []
+                ['stock' => $this->stockStatusResource->getMainTable()], 'stock.product_id = entity.entity_id', []
             )->where(
-                    'stock.stock_status = ?', \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
+                'stock.stock_status = ?', \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
             );
         }
         return $select;
