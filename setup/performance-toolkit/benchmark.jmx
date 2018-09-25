@@ -1433,7 +1433,7 @@ productList.add(productMap);</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-
+  
     <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract configurable products for edit" enabled="true">
   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_configurable_products_for_edit.jmx</stringProp>
 </TestFragmentController>
@@ -1642,7 +1642,7 @@ editProductList.add(editProductMap);</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-
+  
     <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract simple products for edit" enabled="true">
   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_simple_products_for_edit.jmx</stringProp>
 </TestFragmentController>
@@ -1865,7 +1865,7 @@ editProductList.add(editProductMap);</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-
+  
     <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract simple products" enabled="true">
   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_simple_products.jmx</stringProp>
 </TestFragmentController>
