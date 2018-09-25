@@ -27,9 +27,15 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
         $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
 
+        $collection = $this->createPartialMock(
+            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
+            ['getSize']
+        );
+        $collection->expects($this->once())->method('getSize')->will($this->returnValue(1));
+
         $catalogSearchAdvanced = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Advanced::class,
-            ['addFilters', '__wakeup']
+            ['addFilters', '__wakeup', 'getProductCollection']
         );
         $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
             $this->returnCallback(
@@ -38,6 +44,8 @@ class ResultTest extends \PHPUnit\Framework\TestCase
                 }
             )
         );
+        $catalogSearchAdvanced->expects($this->once())->method('getProductCollection')
+            ->will($this->returnValue($collection));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectManager->getObject(
@@ -137,5 +145,44 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->assertEquals($redirectResultMock, $instance->execute());
+    }
+
+    public function testNoResultsHandle()
+    {
+        $expectedQuery = 'notExistTerm';
+
+        $view = $this->createPartialMock(\Magento\Framework\App\View::class, ['loadLayout', 'renderLayout']);
+        $view->expects($this->once())->method('loadLayout')
+            ->with([\Magento\CatalogSearch\Controller\Advanced\Result::DEFAULT_NO_RESULT_HANDLE]);
+
+        $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
+        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
+
+        $collection = $this->createPartialMock(
+            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
+            ['getSize']
+        );
+        $collection->expects($this->once())->method('getSize')->will($this->returnValue(0));
+
+        $catalogSearchAdvanced = $this->createPartialMock(
+            \Magento\CatalogSearch\Model\Advanced::class,
+            ['addFilters', '__wakeup', 'getProductCollection']
+        );
+
+        $catalogSearchAdvanced->expects($this->once())->method('getProductCollection')
+            ->will($this->returnValue($collection));
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $context = $objectManager->getObject(
+            \Magento\Framework\App\Action\Context::class,
+            ['view' => $view, 'request' => $request]
+        );
+
+        /** @var \Magento\CatalogSearch\Controller\Advanced\Result $instance */
+        $instance = $objectManager->getObject(
+            \Magento\CatalogSearch\Controller\Advanced\Result::class,
+            ['context' => $context, 'catalogSearchAdvanced' => $catalogSearchAdvanced]
+        );
+        $instance->execute();
     }
 }

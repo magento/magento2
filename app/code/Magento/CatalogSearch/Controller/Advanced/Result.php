@@ -11,11 +11,15 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
 
 /**
+ * Catalog advanced search result
+ *
  * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
  *             will replace it as the default search engine.
  */
 class Result extends \Magento\Framework\App\Action\Action
 {
+    const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_advanced_result_noresults';
+
     /**
      * Url factory
      *
@@ -48,13 +52,22 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Run action
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
-            $this->_view->loadLayout();
+            $size = $this->_catalogSearchAdvanced->getProductCollection()->getSize();
+
+            $handles = null;
+            if ($size == 0) {
+                $handles = [static::DEFAULT_NO_RESULT_HANDLE];
+            }
+
+            $this->_view->loadLayout($handles);
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
@@ -65,5 +78,15 @@ class Result extends \Magento\Framework\App\Action\Action
             $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
             return $resultRedirect;
         }
+    }
+
+    /**
+     * Returns no result handle
+     *
+     * @return string
+     */
+    private function getNoResultsHandle()
+    {
+        return self::DEFAULT_NO_RESULT_HANDLE;
     }
 }
