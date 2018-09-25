@@ -124,6 +124,11 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
+     * @var int
+     */
+    private $currentStoreId = 0;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -164,6 +169,7 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+                $this->currentStoreId = $store->getId();
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
@@ -499,7 +505,7 @@ abstract class AbstractAction
             'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
                 ',',
                 $rootCatIds
-            ) . ') AND cc2.store_id = ' . $store->getId(),
+            ) . ')',
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
@@ -631,12 +637,6 @@ abstract class AbstractAction
             null,
             ['nullable' => false, 'unsigned' => true]
         );
-        $temporaryTable->addColumn(
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['nullable' => false, 'unsigned' => true]
-        );
         // Each entry will be unique.
         $temporaryTable->addIndex(
             'idx_primary',
@@ -647,12 +647,6 @@ abstract class AbstractAction
         $temporaryTable->addIndex(
             'child_id',
             ['child_id'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
-        );
-
-        $temporaryTable->addIndex(
-            'store_id',
-            ['store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
         );
         // Drop the temporary table in case it already exists on this (persistent?) connection.
@@ -684,11 +678,19 @@ abstract class AbstractAction
                     ['c' => $this->getTable('catalog_category_entity')],
                     ['entity_id', 'path']
                 )->joinInner(
-                    ['ccei' => $this->getTable('catalog_category_entity_int')],
-                    'ccei.' . $categoryLinkField . ' = c.' . $categoryLinkField .
-                    ' AND ccei.attribute_id = ' . $isActiveAttributeId .
-                    ' AND ccei.value = 1',
-                    ['store_id']
+                    ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                    'ccacd.' . $categoryLinkField . ' = c.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                    ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                    []
+                )->joinLeft(
+                    ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                    'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
+                    . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
+                    $this->currentStoreId,
+                    []
+                )->where(
+                    $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                    1
                 ),
             'entity_id'
         );
@@ -699,13 +701,13 @@ abstract class AbstractAction
             foreach ($this->connection->fetchAll($select) as $category) {
                 foreach (explode('/', $category['path']) as $parentId) {
                     if ($parentId !== $category['entity_id']) {
-                        $values[] = [$parentId, $category['entity_id'], $category['store_id']];
+                        $values[] = [$parentId, $category['entity_id']];
                     }
                 }
             }
 
             if (count($values) > 0) {
-                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id', 'store_id'], $values);
+                $this->connection->insertArray($temporaryName, ['parent_id', 'child_id'], $values);
             }
         }
     }
