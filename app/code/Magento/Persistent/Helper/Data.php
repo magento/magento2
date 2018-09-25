@@ -136,12 +136,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLifeTime($store = null)
     {
-        $lifeTime = (int)
-            $this->scopeConfig->getValue(
-                self::XML_PATH_LIFE_TIME,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            );
+        $lifeTime = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_LIFE_TIME,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
         return $lifeTime < 0 ? 0 : $lifeTime;
     }
 
