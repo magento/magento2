@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EditCustomerAddressesFromAdminActionGroup" >
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddresses}}" stepKey="addNewAddresses"/>
+        <fillField  stepKey="fillPrefixName" userInput="{{CustomerAddressSimple.prefix}}" selector="{{AdminEditCustomerAddressesSection.prefixName}}"/>
+        <fillField  stepKey="fillFirstName" userInput="{{CustomerAddressSimple.firstname}}" selector="{{AdminEditCustomerAddressesSection.firstName}}"/>
+        <fillField  stepKey="fillMiddleName" userInput="{{CustomerAddressSimple.middlename}}" selector="{{AdminEditCustomerAddressesSection.middleName}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{CustomerAddressSimple.lastname}}" selector="{{AdminEditCustomerAddressesSection.lastName}}"/>
+        <fillField  stepKey="fillSuffixName" userInput="{{CustomerAddressSimple.suffix}}" selector="{{AdminEditCustomerAddressesSection.suffixName}}"/>
+        <fillField  stepKey="fillCompany" userInput="{{CustomerAddressSimple.company}}" selector="{{AdminEditCustomerAddressesSection.company}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{CustomerAddressSimple.street}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{CustomerAddressSimple.city}}" selector="{{AdminEditCustomerAddressesSection.city}}"/>
+        <selectOption stepKey="selectCountry" selector="{{AdminEditCustomerAddressesSection.country}}" userInput="{{US_Address_CA.country_id}}"/>
+        <selectOption stepKey="selectState" selector="{{AdminEditCustomerAddressesSection.state}}" userInput="{{US_Address_CA.state}}"/>
+        <fillField  stepKey="fillZipCode" userInput="{{CustomerAddressSimple.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
+        <fillField  stepKey="fillPhone" userInput="{{CustomerAddressSimple.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
+        <fillField  stepKey="fillVAT" userInput="{{CustomerAddressSimple.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
+        <click selector="{{CustomerAccountSection.save}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <click selector="{{CustomerAccountSection.save}}" stepKey="saveCustomer"/>
+        <waitForPageLoad stepKey="waitForCustomerSaved"/>
+        <see stepKey="seeSaveMessage" userInput="You saved the customer."/>
+    </actionGroup>
+</actionGroups>

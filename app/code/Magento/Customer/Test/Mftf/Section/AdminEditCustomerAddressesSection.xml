@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditCustomerAddressesSection">
+        <element name="addresses" type="button" selector="//span[text()='Addresses']" timeout="30"/>
+        <element name="addNewAddresses" type="button" selector="//span[text()='Add New Addresses']"/>
+        <element name="defaultBillingAddress" type="text" selector="input[name='address[new_0][default_billing]']"/>
+        <element name="defaultShippingAddress" type="text" selector="input[name='address[new_0][default_shipping]']"/>
+        <element name="prefixName" type="text" selector="input[name='address[new_0][prefix]']"/>
+        <element name="firstName" type="text" selector="input[name='address[new_0][firstname]']" />
+        <element name="middleName" type="text" selector="input[name='address[new_0][middlename]']" />
+        <element name="lastName" type="text" selector="input[name='address[new_0][lastname]']" />
+        <element name="suffixName" type="text" selector="input[name='address[new_0][suffix]']" />
+        <element name="company" type="text" selector="input[name='address[new_0][company]']" />
+        <element name="streetAddress" type="text" selector="input[name='address[new_0][street][0]']" />
+        <element name="city" type="text" selector="input[name='address[new_0][city]']" />
+        <element name="country" type="select" selector="select[name='address[new_0][country_id]']" />
+        <element name="state" type="select" selector="select[name='address[new_0][region_id]']" />
+        <element name="zipCode" type="text" selector="input[name='address[new_0][postcode]']" />
+        <element name="phone" type="text" selector="input[name='address[new_0][telephone]']" />
+        <element name="vat" type="text" selector="input[name='address[new_0][vat_id]']" />
+    </section>
+
+</sections>
