@@ -134,7 +134,7 @@ abstract class AbstractConfig implements ConfigInterface
      * Returns payment configuration value
      *
      * @param string $key
-     * @param null $storeId
+     * @param null|int $storeId
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -254,7 +254,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Check whether method available for checkout or not
      *
-     * @param null $methodCode
+     * @param null|string $methodCode
      *
      * @return bool
      */

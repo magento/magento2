@@ -11,6 +11,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Responsible for Select object creation, works as a builder. Returns Select as result;
+ *
  * Used in SQL assemblers.
  */
 class SelectBuilder
