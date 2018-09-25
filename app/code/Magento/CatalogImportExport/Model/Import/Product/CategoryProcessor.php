@@ -114,6 +114,7 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
+        $category->setStoreId(0); // Set to 0 to generate URL Keys global
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($this->unquoteDelimiter($name));
