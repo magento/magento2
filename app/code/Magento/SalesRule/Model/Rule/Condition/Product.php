@@ -39,7 +39,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attribute = $this->getData('attribute');
         if (strpos($attribute, '::') !== false) {
-            list (, $attribute) = explode('::', $attribute);
+            list(, $attribute) = explode('::', $attribute);
         }
 
         return $attribute;
@@ -113,7 +113,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 'value' => $this->getAttributeScope(),
                 'no_span' => true,
                 'class' => 'hidden',
-                'data-form-part' => $this->getFormName()
+                'data-form-part' => $this->getFormName(),
             ]
         );
     }
@@ -141,7 +141,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function loadArray($arr)
     {
         parent::loadArray($arr);
-        $this->setAttributeScope(isset($arr['attribute_scope']) ? $arr['attribute_scope'] : null);
+        $this->setAttributeScope($arr['attribute_scope'] ?? null);
+
         return $this;
     }
 
@@ -152,6 +153,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $out = parent::asArray($arrAttributes);
         $out['attribute_scope'] = $this->getAttributeScope();
+
         return $out;
     }
 

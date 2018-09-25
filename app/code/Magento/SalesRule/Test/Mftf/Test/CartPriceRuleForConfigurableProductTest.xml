@@ -16,7 +16,7 @@
             <description value="Checking Cart Price Rule for configurable products"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-95121"/>
-            <group value="SalesRule"/>
+            <group value="sales_rule"/>
         </annotations>
 
         <before>
@@ -79,7 +79,7 @@
                 <argument name="attributeCode" value="sku"/>
             </actionGroup>
             <click selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
-            <scrollTo selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="ScrollToUseForPromoRuleConditions"/>
+            <scrollTo selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="scrollToUseForPromoRuleConditions"/>
             <selectOption selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="Yes" stepKey="changeAttributeProperty"/>
             <click selector="{{AdminMainActionsSection.save}}" stepKey="saveAttribute"/>
             <waitForPageLoad stepKey="waitForAttributeIsSaved"/>
@@ -95,8 +95,8 @@
             <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{SalesRuleWithSkuInActions.coupon_code}}" stepKey="fillCouponCOde"/>
             <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
             <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{SalesRuleWithSkuInActions.discount_amount}}" stepKey="fillDiscountAmount"/>
-            <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ScrollToApplyRuleForConditions"/>
-            <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="AddConditionForRule"/>
+            <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="scrollToApplyRuleForConditions"/>
+            <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="addConditionForRule"/>
             <waitForPageLoad stepKey="waitForDropDownOpened"/>
             <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="SKU(Children Only)" stepKey="selectAttribute"/>
             <waitForPageLoad stepKey="waitForOperatorOpened"/>
@@ -121,7 +121,7 @@
                 <argument name="attributeCode" value="sku"/>
             </actionGroup>
             <click selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab1"/>
-            <scrollTo selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="ScrollToUseForPromoRuleConditions"/>
+            <scrollTo selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="scrollToUseForPromoRuleConditions"/>
             <selectOption selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="No" stepKey="changeAttributeProperty"/>
             <click selector="{{AdminMainActionsSection.save}}" stepKey="saveAttribute"/>
             <waitForPageLoad stepKey="waitForAttributeIsSaved"/>
@@ -153,10 +153,10 @@
 
         <!--View and edit cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="storefrontOpenCartFromMinicart"/>
-        <scrollTo selector="{{DiscountSection.discountTab}}" stepKey="scrollToDiscountTab"/>
-        <click selector="{{DiscountSection.discountTab}}" stepKey="openDiscountTab" />
-        <fillField selector="{{DiscountSection.couponInput}}" userInput="{{SalesRuleWithSkuInActions.coupon_code}}" stepKey="fillCouponCode" />
-        <click selector="{{DiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
+        <scrollTo selector="{{StorefrontDiscountSection.discountTab}}" stepKey="scrollToDiscountTab"/>
+        <click selector="{{StorefrontDiscountSection.discountTab}}" stepKey="openDiscountTab" />
+        <fillField selector="{{StorefrontDiscountSection.couponInput}}" userInput="{{SalesRuleWithSkuInActions.coupon_code}}" stepKey="fillCouponCode" />
+        <click selector="{{StorefrontDiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoaded1"/>
         <see userInput="You used coupon code" stepKey="assertText"/>
         <!--Verify values-->

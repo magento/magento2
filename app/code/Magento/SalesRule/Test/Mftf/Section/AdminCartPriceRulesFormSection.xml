@@ -27,8 +27,8 @@
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="conditions" type="button" selector=".rule-param.rule-param-new-child > a"/>
         <element name="condition" type="text" selector="//span[@class='rule-param']/a[text()='{{arg}}']" parameterized="true"/>
-        <element name="operator" type="select" selector="//select[contains(@name, '[operator]')]"/>
-        <element name="childAttribute" type="select" selector="//select[contains(@name, 'new_child')]"/>
-        <element name="optionInput" type="input" selector="//ul[contains(@class, 'rule-param-children')]//input[contains(@name, '[value]')]"/>
+        <element name="operator" type="select" selector="select[name*='[operator]']"/>
+        <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
+        <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
     </section>
 </sections>

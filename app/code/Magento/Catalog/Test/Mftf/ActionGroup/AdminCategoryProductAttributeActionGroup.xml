@@ -33,9 +33,9 @@
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
-        <fillField selector="{{AdminProductAttributeGridSection.filterByAttributeCode}}" userInput="{{attributeCode}}" stepKey="fillBillToNameFilter"/>
+        <fillField selector="{{AdminProductAttributeGridSection.filterByAttributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCodeFilter"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="navigateToAttributeEditPage1" />
+        <click selector="{{AdminProductAttributeGridSection.attributeCode(attributeCode)}}" stepKey="navigateToAttributeEditPage" />
         <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
     </actionGroup>
 </actionGroups>
