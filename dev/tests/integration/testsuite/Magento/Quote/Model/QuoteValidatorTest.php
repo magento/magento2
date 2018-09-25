@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * @magentoDbIsolation disabled
@@ -25,7 +22,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var QuoteValidator
      */
-    private $validator;
+    private $quoteValidator;
 
     /**
      * @inheritdoc
@@ -33,39 +30,139 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->validator = $this->objectManager->get(QuoteValidator::class);
+        $this->quoteValidator = $this->objectManager->create(QuoteValidator::class);
     }
 
     /**
-     * Checks a case when the default website has country restrictions and the quote created
-     * for the another website with different country restrictions.
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please check the shipping address information.
      *
-     * @magentoDataFixture Magento/Quote/Fixtures/quote_sec_website.php
+     * @return void
      */
-    public function testValidateBeforeSubmit()
+    public function testValidateBeforeSubmitShippingAddressInvalid()
     {
-        $quote = $this->getQuote('0000032134');
-        $this->validator->validateBeforeSubmit($quote);
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getShippingAddress()->setPostcode('');
+
+        $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
     /**
-     * Gets quote entity by reserved order id.
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      *
-     * @param string $reservedOrderId
-     * @return Quote
+     * @return void
      */
-    private function getQuote(string $reservedOrderId): Quote
+    public function testValidateBeforeSubmitCountryIsNotAllowed()
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
-            ->create();
+        /** @magentoConfigFixture does not allow to change the value for the website scope */
+        $this->objectManager->get(
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
+        )->setValue(
+            'general/country/allow',
+            'US',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
+        );
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getShippingAddress()->setCountryId('AF');
 
-        /** @var CartRepositoryInterface $repository */
-        $repository = $this->objectManager->get(CartRepositoryInterface::class);
-        $items = $repository->getList($searchCriteria)
-            ->getItems();
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
 
-        return array_pop($items);
+    /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage The shipping method is missing. Select the shipping method and try again.
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitShippingMethodInvalid()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getShippingAddress()->setShippingMethod('NONE');
+
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please check the billing address information.
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitBillingAddressInvalid()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getBillingAddress()->setTelephone('');
+
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Enter a valid payment method and try again.
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitPaymentMethodInvalid()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getPayment()->setMethod('');
+
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/active 1
+     * @magentoConfigFixture current_store sales/minimum_order/amount 100
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitMinimumAmountInvalid()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getShippingAddress()
+            ->setBaseSubtotal(0);
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitWithoutMinimumOrderAmount()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/active 1
+     * @magentoConfigFixture current_store sales/minimum_order/amount 100
+     * @magentoDataFixture Magento/Quote/_files/quote_tx_flat.php
+     *
+     * @return void
+     */
+    public function testValidateBeforeSubmitWithMinimumOrderAmount()
+    {
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('quote123', 'reserved_order_id');
+        $quote->getShippingAddress()
+            ->setBaseSubtotal(200);
+        $this->quoteValidator->validateBeforeSubmit($quote);
     }
 }
