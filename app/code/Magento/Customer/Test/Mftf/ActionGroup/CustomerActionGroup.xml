@@ -18,4 +18,9 @@
         <fillField stepKey="fillPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
     </actionGroup>
+
+    <actionGroup name="CustomerLogoutStorefrontActionGroup">
+        <amOnPage url="customer/account/logout/" stepKey="storefrontSignOut"/>
+        <waitForPageLoad time="30" stepKey="waitForLogOut"/>
+    </actionGroup>
 </actionGroups>
