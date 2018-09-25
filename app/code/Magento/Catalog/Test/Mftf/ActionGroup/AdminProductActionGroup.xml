@@ -99,7 +99,7 @@
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="selectWebsite"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
     </actionGroup>
 
@@ -122,21 +122,9 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <waitForPageLoad stepKey="waitForProductSave"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad time="60" stepKey="waitForProductSave1"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
-    </actionGroup>
-
-    <!--Select Product In Websites-->
-    <actionGroup name="SelectProductInWebsitesActionGroup">
-        <arguments>
-            <argument name="website" type="string"/>
-        </arguments>
-        <scrollTo selector="{{CreateProductSection.productInWebsite}}" stepKey="scrollToWebsites"/>
-        <click selector="{{CreateProductSection.productInWebsite}}" stepKey="clickToOpenProductInWebsite"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
-        <click selector="{{CreateProductSection.isSelected(website)}}" stepKey="selectWebsite"/>
-        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct"/>
     </actionGroup>
 
     <!--Switch to New Store view-->

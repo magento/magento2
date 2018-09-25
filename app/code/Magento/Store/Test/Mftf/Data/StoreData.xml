@@ -48,7 +48,7 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">secondStoreGroup</requiredEntity>
     </entity>
-    <entity name="secondStoreUnique" type="store">
+    <entity name="SecondStoreUnique" type="store">
         <data key="name" unique="suffix">Second Store View </data>
         <data key="code" unique="suffix">second_store_view_</data>
         <data key="is_active">1</data>

@@ -14,7 +14,7 @@
         <element name="email" type="input" selector="input[name='customer[email]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
-        <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
-        <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
+        <element name="associateToWebsite" type="select" selector="select[name='customer[website_id]']"/>
+        <element name="storeView" type="select" selector="select[name='customer[sendemail_store_id]']"/>
     </section>
 </sections>

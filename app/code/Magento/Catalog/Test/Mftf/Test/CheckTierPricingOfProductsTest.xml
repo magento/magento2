@@ -16,7 +16,7 @@
             <description value="Checking 'Tier Pricing' of Products and 'Price' (without discount) in the Order of B2B Store View"/>
             <testCaseId value="MAGETWO-95117"/>
             <severity value="CRITICAL"/>
-            <group value="Shopping Cart"/>
+            <group value="tierPrice"/>
         </annotations>
 
         <before>
@@ -44,21 +44,21 @@
         </before>
 
         <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
-            <argument name="newWebsiteName" value="{{secondWebsite.name}}"/>
-            <argument name="websiteCode" value="{{secondWebsite.code}}"/>
+            <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+            <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
         </actionGroup>
         <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
-            <argument name="website" value="{{secondWebsite.name}}"/>
-            <argument name="storeGroupName" value="{{secondStoreGroupUnique.name}}"/>
-            <argument name="storeGroupCode" value="{{secondStoreGroupUnique.code}}"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
         </actionGroup>
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
-            <argument name="storeGroup" value="secondStoreGroupUnique"/>
-            <argument name="customStore" value="secondStoreUnique"/>
+            <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+            <argument name="customStore" value="SecondStoreUnique"/>
         </actionGroup>
 
         <!--Set Configuration-->
-        <createData entity="catalogPriceScopeWebsite" stepKey="setPriceScopePerWebsite"/>
+        <createData entity="CatalogPriceScopeWebsite" stepKey="setPriceScopePerWebsite"/>
 
         <!--Set advanced pricing for all 4 products-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
@@ -68,10 +68,10 @@
             <argument name="product" value="$$createProduct1$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct1">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct1">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
@@ -81,10 +81,10 @@
             <argument name="product" value="$$createProduct2$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct2">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct2">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct3">
@@ -94,10 +94,10 @@
             <argument name="product" value="$$createProduct3$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct3">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct3">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct4">
@@ -107,10 +107,10 @@
             <argument name="product" value="$$createProduct4$$"/>
         </actionGroup>
         <actionGroup ref="ProductSetWebsite" stepKey="setWebsiteForProduct4">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct4">
-            <argument name="website" value="secondWebsite"/>
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
@@ -124,7 +124,7 @@
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="openCustomerAccountInformationSection"/>
         <waitForPageLoad stepKey="waitCustomerAccountInformationSectionOpened"/>
         <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Retailer" stepKey="setCustomerGroup"/>
-        <selectOption selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{secondStoreUnique.name}}" stepKey="selectCustomerStore"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{SecondStoreUnique.name}}" stepKey="selectCustomerStore"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoadAfterSave"/>
         <see userInput="You saved the customer." stepKey="checkCustomerIsSaved"/>
@@ -139,7 +139,7 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <waitForPageLoad stepKey="waitForNewCartPriceRulePageIsLoaded"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="ship" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{secondWebsite.name}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{SecondWebsite.name}}" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ship" stepKey="setCode"/>
@@ -156,7 +156,7 @@
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormSelectWebsiteSection.website(secondStoreUnique.name)}}" stepKey="selectStore"/>
+        <click selector="{{AdminOrderFormSelectWebsiteSection.website(SecondStoreUnique.name)}}" stepKey="selectStore"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <click  selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
@@ -176,19 +176,19 @@
         <!--Verify tier price values-->
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice1"/>
         <assertEquals stepKey="verifyPrice1">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice1</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice2"/>
         <assertEquals stepKey="verifyPrice2">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice2</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice3"/>
         <assertEquals stepKey="verifyPrice3">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice3</actualResult>
         </assertEquals>
 
@@ -201,18 +201,18 @@
         <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice4"/>
         <assertEquals stepKey="verifyPrice4">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice2}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice2}}</expectedResult>
             <actualResult type="variable">$checkProductPrice4</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice5"/>
         <assertEquals stepKey="verifyPrice5">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice5</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice6"/>
         <assertEquals stepKey="verifyPrice6">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice3</actualResult>
         </assertEquals>
 
@@ -241,19 +241,19 @@
         <!--Verify tier price values-->
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice7"/>
         <assertEquals stepKey="verifyPrice7">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice7</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice8"/>
         <assertEquals stepKey="verifyPrice8">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice8</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice9"/>
         <assertEquals stepKey="verifyPrice9">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice9</actualResult>
         </assertEquals>
 
@@ -267,25 +267,25 @@
         <waitForLoadingMaskToDisappear stepKey="wait9"/>
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct4.name$$)}}" stepKey="checkProductPrice10"/>
         <assertEquals stepKey="verifyPrice10">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice10</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice11"/>
         <assertEquals stepKey="verifyPrice11">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice11</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct2.name$$)}}" stepKey="checkProductPrice12"/>
         <assertEquals stepKey="verifyPrice12">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice12</actualResult>
         </assertEquals>
 
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct3.name$$)}}" stepKey="checkProductPrice13"/>
         <assertEquals stepKey="verifyPrice13">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice13</actualResult>
         </assertEquals>
 
@@ -311,11 +311,11 @@
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct1.name$$)}}" stepKey="checkProductPrice14"/>
         <grabTextFrom selector="{{AdminOrderFormItemsSection.productPrice($$createProduct4.name$$)}}" stepKey="checkProductPrice15"/>
         <assertEquals stepKey="verifyPrice14">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice14</actualResult>
         </assertEquals>
         <assertEquals stepKey="verifyPrice15">
-            <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
+            <expectedResult type="string">{{TestDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice15</actualResult>
         </assertEquals>
 
@@ -327,10 +327,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <createData entity="defaultConfigCatalogPrice" stepKey="resetPriceScopeConfiguration"/>
+            <createData entity="DefaultConfigCatalogPrice" stepKey="resetPriceScopeConfiguration"/>
 
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                <argument name="websiteName" value="{{secondWebsite.name}}"/>
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="ship"/>

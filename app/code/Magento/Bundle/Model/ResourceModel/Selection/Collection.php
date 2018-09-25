@@ -145,16 +145,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Set store id for each collection item when collection was loaded
-     *
-     * @return $this
-     */
-    public function _afterLoad()
-    {
-        return parent::_afterLoad();
-    }
-
-    /**
      * Initialize collection select
      *
      * @return $this|void

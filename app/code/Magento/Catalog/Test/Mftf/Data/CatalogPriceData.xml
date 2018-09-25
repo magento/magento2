@@ -8,24 +8,24 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="catalogPriceScopeWebsite" type="catalog_price_config_state">
-        <requiredEntity type="scope">scopeWebsite</requiredEntity>
-        <requiredEntity type="default_product_price">defaultProductPrice</requiredEntity>
+    <entity name="CatalogPriceScopeWebsite" type="catalog_price_config_state">
+        <requiredEntity type="scope">ScopeWebsite</requiredEntity>
+        <requiredEntity type="default_product_price">DefaultProductPrice</requiredEntity>
     </entity>
-    <entity name="scopeWebsite" type="scope">
+    <entity name="ScopeWebsite" type="scope">
         <data key="value">1</data>
     </entity>
-    <entity name="defaultProductPrice" type="default_product_price">
+    <entity name="DefaultProductPrice" type="default_product_price">
         <data key="value">0</data>
     </entity>
-    <entity name="defaultConfigCatalogPrice" type="catalog_price_config_state">
-        <requiredEntity type="scope">scopeGlobal</requiredEntity>
-        <requiredEntity type="default_product_price">defaultProductPrice</requiredEntity>
+    <entity name="DefaultConfigCatalogPrice" type="catalog_price_config_state">
+        <requiredEntity type="scope">ScopeGlobal</requiredEntity>
+        <requiredEntity type="default_product_price">DefaultProductPrice</requiredEntity>
     </entity>
-    <entity name="scopeGlobal" type="scope">
+    <entity name="ScopeGlobal" type="scope">
         <data key="value">0</data>
     </entity>
-    <entity name="defaultProductPrice" type="default_product_price">
+    <entity name="DefaultProductPrice" type="default_product_price">
         <data key="value"/>
     </entity>
 </entities>
