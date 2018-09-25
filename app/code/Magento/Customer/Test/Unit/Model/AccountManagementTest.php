@@ -1361,7 +1361,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->prepareDateTimeFactory();
         $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['destroy', 'start', 'writeClose'])
             ->getMockForAbstractClass();
         $this->visitorCollectionFactory = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
@@ -1494,8 +1493,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($customer);
 
-        $this->sessionManager->expects($this->atLeastOnce())->method('start');
-        $this->sessionManager->expects($this->atLeastOnce())->method('writeClose');
         $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
 
         $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
@@ -1551,8 +1548,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
 
         $this->sessionManager->expects($this->atLeastOnce())->method('destroy');
-        $this->sessionManager->expects($this->atLeastOnce())->method('start');
-        $this->sessionManager->expects($this->atLeastOnce())->method('writeClose');
         $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
         $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
             ->disableOriginalConstructor()

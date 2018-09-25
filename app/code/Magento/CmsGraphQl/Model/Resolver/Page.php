@@ -12,8 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -28,20 +26,12 @@ class Page implements ResolverInterface
     private $pageDataProvider;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param PageDataProvider $pageDataProvider
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        PageDataProvider $pageDataProvider,
-        ValueFactory $valueFactory
+        PageDataProvider $pageDataProvider
     ) {
         $this->pageDataProvider = $pageDataProvider;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -53,15 +43,11 @@ class Page implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ) {
+        $pageId = $this->getPageId($args);
+        $pageData = $this->getPageData($pageId);
 
-        $result = function () use ($args) {
-            $pageId = $this->getPageId($args);
-            $pageData = $this->getPageData($pageId);
-
-            return $pageData;
-        };
-        return $this->valueFactory->create($result);
+        return $pageData;
     }
 
     /**

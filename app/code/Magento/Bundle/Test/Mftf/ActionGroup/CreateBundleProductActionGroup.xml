@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateBasicBundleProduct">
         <!--Prereq: Go to bundle product creation page-->
         <!--Product name and SKU-->
@@ -15,11 +15,12 @@
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
         <!--Trigger SEO drop down-->
-        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.seoDependent}}" visible="false" stepKey="OpenDropDownIfClosed"/>
-        <waitForPageLoad stepKey="WaitForDropDownSEO"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSeoDropDown"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
+        <waitForPageLoad stepKey="waitForDropDownSEO"/>
 
         <!--Fill URL input-->
-        <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension"/>
+        <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="fillsInSeoLinkExtension"/>
     </actionGroup>
 
     <actionGroup name="addBundleOptionWithTwoProducts">

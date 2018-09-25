@@ -2,8 +2,39 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    createEmptyCart: String @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\ApplyCouponToCart")
+    removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\RemoveCouponFromCart")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\AddSimpleProductsToCart")
+}
+
+input ApplyCouponToCartInput {
+    cart_id: String!
+    coupon_code: String!
+}
+
+type ApplyCouponToCartOutput {
+    cart: Cart!
+}
+
+type Cart {
+    applied_coupon: AppliedCoupon
+}
+
+type CartAddress {
+    applied_coupon: AppliedCoupon
+}
+
+type AppliedCoupon {
+    code: String!
+}
+
+input RemoveCouponFromCartInput {
+    cart_id: String!
+}
+
+type RemoveCouponFromCartOutput {
+    cart: Cart
 }
 
 input AddSimpleProductsToCartInput {
@@ -27,10 +58,6 @@ type AddSimpleProductsToCartOutput {
 
 type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
     customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItem\\CustomizableOptions")
-}
-
-type Cart {
-    items: [CartItemInterface]
 }
 
 input CartItemDetailsInput {

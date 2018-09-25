@@ -39,6 +39,7 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
+            this.timerId = null;
             jQuery.async('#order-items', (function(){
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
@@ -189,14 +190,27 @@ define([
         bindAddressFields : function(container) {
             var fields = $(container).select('input', 'select', 'textarea');
             for(var i=0;i<fields.length;i++){
-                Event.observe(fields[i], 'change', this.changeAddressField.bind(this));
+                Event.observe(fields[i], 'change', this.triggerChangeEvent.bind(this));
             }
+        },
+
+        /**
+         * Calls changing address field handler after timeout to prevent multiple simultaneous calls.
+         *
+         * @param {Event} event
+         */
+        triggerChangeEvent: function (event) {
+            if (this.timerId) {
+                window.clearTimeout(this.timerId);
+            }
+
+            this.timerId = window.setTimeout(this.changeAddressField.bind(this), 500, event);
         },
 
         /**
          * Triggers on each form's element changes.
          *
-         * @param {Object} event
+         * @param {Event} event
          */
         changeAddressField: function (event) {
             var field = Event.element(event),
@@ -619,7 +633,7 @@ define([
                     }
                     else if (((elms[i].type == 'checkbox' || elms[i].type == 'radio') && elms[i].checked)
                         || ((elms[i].type == 'file' || elms[i].type == 'text' || elms[i].type == 'textarea' || elms[i].type == 'hidden')
-                        && Form.Element.getValue(elms[i]))
+                            && Form.Element.getValue(elms[i]))
                     ) {
                         if (this._isSummarizePrice(elms[i])) {
                             productPrice += getPrice(elms[i]);
@@ -907,6 +921,7 @@ define([
                     qtyElement.value = confirmedCurrentQty.value;
                 }
                 this.productConfigureAddFields['item['+itemId+'][configured]'] = 1;
+                this.itemsUpdate();
 
             }.bind(this));
             productConfigure.setShowWindowCallback(listType, function() {
@@ -1131,7 +1146,7 @@ define([
          */
         isPaymentValidationAvailable : function(){
             return ((typeof this.paymentMethod) == 'undefined'
-            || this.excludedPaymentMethods.indexOf(this.paymentMethod) == -1);
+                || this.excludedPaymentMethods.indexOf(this.paymentMethod) == -1);
         },
 
         serializeData : function(container){
