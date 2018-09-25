@@ -58,7 +58,9 @@ class UpgradeData implements UpgradeDataInterface
             $relatedProductTypes = $this->getRelatedProductTypes('manufacturer', $eavSetup);
             if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
                 $relatedProductTypes[] = Configurable::TYPE_CODE;
-                $this->updateRelatedProductTypes('manufacturer', $relatedProductTypes, $eavSetup);
+                if ($eavSetup->getAttribute('catalog_product', 'manufacturer')) {
+                    $this->updateRelatedProductTypes('manufacturer', $relatedProductTypes, $eavSetup);
+                }
             }
         }
 
