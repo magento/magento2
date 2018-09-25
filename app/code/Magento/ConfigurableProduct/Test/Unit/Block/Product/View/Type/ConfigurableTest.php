@@ -336,7 +336,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $expectedArray = $this->getExpectedArray($productId, $amount, $priceQty, $percentage);
+        $stockStatus = $productTypeMock->expects($this->once())
+            ->method('getStockStatus')
+            ->with($productMock)
+            ->willReturn([]);
+
+        $expectedArray = $this->getExpectedArray($productId, $amount, $priceQty, $percentage, $stockStatus);
         $expectedJson = json_encode($expectedArray);
 
         $this->jsonEncoder->expects($this->once())->method('encode')->with($expectedArray)->willReturn($expectedJson);
@@ -355,7 +360,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param int $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage): array
+    private function getExpectedArray($productId, $amount, $priceQty, $percentage, $stockStatus): array
     {
         $expectedArray = [
             'attributes' => [],
@@ -394,7 +399,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'productId' => $productId,
-            'stockStatus' => [],
+            'stockStatus' => $stockStatus,
             'chooseText' => __('Choose an Option...'),
             'images' => [],
             'index' => [],

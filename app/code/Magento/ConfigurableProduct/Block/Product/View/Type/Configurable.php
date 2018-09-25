@@ -7,6 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
@@ -114,7 +115,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
-        $this->stockStatusData = ObjectManager::getInstance()->get('Magento\CatalogInventory\Api\StockRegistryInterface');
+        $this->stockStatusData = ObjectManager::getInstance()->get(StockRegistryInterface::class);
         $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
@@ -254,7 +255,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @return array
      * @since 100.2.0
      */
-    protected function getStockStatus()
+    public function getStockStatus()
     {
         $stockStatus = [];
         foreach ($this->getAllowProducts() as $product) {
