@@ -15,5 +15,6 @@
         <section name="AdminOrderFormPaymentSection"/>
         <section name="AdminOrderFormItemsSection"/>
         <section name="AdminOrderFormTotalSection"/>
+        <section name="AdminOrderCustomersGridSection"/>
     </page>
 </pages>

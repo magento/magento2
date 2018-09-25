@@ -30,4 +30,9 @@
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <seeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
+
+    <actionGroup name="StorefrontSwitchCategoryViewToListMode">
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="switchCategoryViewToListMode"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryTitle"/>
+    </actionGroup>
 </actionGroups>

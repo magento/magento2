@@ -45,12 +45,15 @@ class Save extends TermController
                 $model->addData($data);
                 $model->setIsProcessed(0);
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the search term.'));
+                $this->messageManager->addSuccessMessage(__('You saved the search term.'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->proceedToEdit($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the search query.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the search query.')
+                );
                 return $this->proceedToEdit($data);
             }
         }

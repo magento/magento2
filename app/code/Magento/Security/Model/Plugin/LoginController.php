@@ -53,7 +53,7 @@ class LoginController
     {
         $logoutReasonCode = $this->securityCookie->getLogoutReasonCookie();
         if ($this->isLoginForm($login) && $logoutReasonCode >= 0) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 $this->sessionsManager->getLogoutReasonMessageByStatus($logoutReasonCode)
             );
             $this->securityCookie->deleteLogoutReasonCookie();
