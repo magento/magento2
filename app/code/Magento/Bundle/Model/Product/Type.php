@@ -1014,10 +1014,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $secondItem->getPosition(),
             $secondItem->getSelectionId(),
         ];
-        if ($aPosition == $bPosition) {
-            return 0;
-        }
-        return $aPosition < $bPosition ? -1 : 1;
+
+        return $aPosition <=> $bPosition;
     }
 
     /**
