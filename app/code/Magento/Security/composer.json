@@ -11,7 +11,7 @@
         "magento/module-customer": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.4",
+    "version": "100.1.5",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
