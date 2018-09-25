@@ -28,12 +28,14 @@ $stockData = [
     'SKU-1' => [
         'qty' => 8.5,
         'is_in_stock' => true,
-        'manage_stock' => true
+        'manage_stock' => true,
+        'is_qty_decimal' => true
     ],
     'SKU-2' => [
         'qty' => 5,
         'is_in_stock' => true,
-        'manage_stock' => true
+        'manage_stock' => true,
+        'is_qty_decimal' => false
     ],
     'SKU-3' => [
         'qty' => 0,
