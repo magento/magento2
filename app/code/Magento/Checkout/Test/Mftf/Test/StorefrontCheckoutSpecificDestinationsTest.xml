@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutSpecificDestinationsTest">
+        <annotations>
+            <title value="Check that top destinations can be removed after a selection was previously saved"/>
+            <stories value="MAGETWO-87971: Top destinations cannot be removed after a selection was previously saved"/>
+            <description value="Check that top destinations can be removed after a selection was previously saved"/>
+            <features value="Checkout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-94906"/>
+            <group value="Checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!--Select top destinations countries-->
+        <actionGroup ref="SelectTopDestinationsCountry" stepKey="selectTopDestinationsCountry">
+            <argument name="countries" value="TopDestinationCountries"/>
+        </actionGroup>
+
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!--Add product to cart-->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to shopping cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+
+        <!--Verify country options in checkout top destination section-->
+        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
+            <argument name="country" value="Bahamas"/>
+            <argument name="placeNumber" value="2"/>
+        </actionGroup>
+
+        <!--Unselect top destinations countries-->
+        <actionGroup ref="UnSelectTopDestinationsCountry" stepKey="unSelectTopDestinationsCountry">
+            <argument name="countries" value="TopDestinationCountries"/>
+        </actionGroup>
+
+        <!--Go to shopping cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
+
+        <!--Verify country options is shown by default-->
+        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
+            <argument name="country" value="Afghanistan"/>
+            <argument name="placeNumber" value="2"/>
+        </actionGroup>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteCategory"/>
+        </after>
+    </test>
+</tests>
