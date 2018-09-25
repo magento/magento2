@@ -56,8 +56,8 @@ class Installer
     /**#@+
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable_modules';
-    const DISABLE_MODULES = 'disable_modules';
+    const ENABLE_MODULES = 'enable-modules';
+    const DISABLE_MODULES = 'disable-modules';
     /**#@- */
 
     /**#@+
