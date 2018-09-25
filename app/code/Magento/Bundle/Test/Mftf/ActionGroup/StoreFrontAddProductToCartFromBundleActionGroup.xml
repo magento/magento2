@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup">
+        <arguments>
+            <argument name="product"/>
+            <argument name="currency" type="string" defaultValue="US Dollar"/>
+        </arguments>
+        <click selector="{{StorefrontBundledSection.currencyTrigger}}" stepKey="openCurrencyTrigger"/>
+        <click selector="{{StorefrontBundledSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <waitForPageLoad stepKey="waitForBundleOpen"/>
+        <checkOption selector="{{StorefrontBundledSection.productInBundle(product.name)}}" stepKey="chooseProduct"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="addToCartProduct"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+    </actionGroup>
+</actionGroups>
