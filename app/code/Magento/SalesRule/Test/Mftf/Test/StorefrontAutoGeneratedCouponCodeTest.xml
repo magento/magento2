@@ -76,11 +76,11 @@
         <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{$couponCode}"'
              stepKey="seeSuccessMessage1"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
                                stepKey="waitForElementDiscountVisible"/>
 
         <!-- Step 8. Go to Checkout and Click Place Order button -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}"
                stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -101,7 +101,7 @@
         <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages"/>
-        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
+        <waitForElementNotVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
                                   stepKey="waitForElementNotDiscountVisible"/>
 
         <!-- Step 11. Log out from storefront -->
@@ -118,11 +118,11 @@
         <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForSuccessMessage1"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{$couponCode}"'
              stepKey="seeSuccessMessage2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
                                stepKey="waitForElementDiscountVisible1"/>
 
         <!-- Step 14. Go to Checkout and Click Place Order button -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout1"/>
+        <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout1"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
@@ -140,7 +140,7 @@
         <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage1"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages1"/>
-        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
+        <waitForElementNotVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
                                   stepKey="waitForElementNotDiscountVisible1"/>
 
         <!-- Step: 17. Reset Cookie -->
@@ -156,7 +156,7 @@
         <waitForText userInput='The coupon code "{$couponCode}" is not valid.' stepKey="waitForErrorMessage2"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='The coupon code "{$couponCode}" is not valid.'
              stepKey="seeErrorMessages2"/>
-        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30"
+        <waitForElementNotVisible selector="{{StorefrontCheckoutCartSummarySection.discountAmount}}" time="30"
                                   stepKey="waitForElementNotDiscountVisible2"/>
     </test>
 </tests>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToConfigurationGeneralPage">
+        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToConfigGeneralPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="SelectTopDestinationsCountry">
+        <arguments>
+            <argument name="countries"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToConfigurationSectionPage"/>
+        <selectOption selector="{{AdminConfigurationGeneralSectionCountryOptionsGroupSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="selectTopDestinationsCountry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfiguration"/>
+        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="UnSelectTopDestinationsCountry">
+        <arguments>
+            <argument name="countries"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigurationGeneralSectionPage.url('#general_country-link')}}" stepKey="goToConfigurationSectionPage"/>
+        <unselectOption selector="{{AdminConfigurationGeneralSectionCountryOptionsGroupSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="unSelectTopDestinationsCountry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfiguration"/>
+        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
