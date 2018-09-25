@@ -48,7 +48,7 @@ define([
                         if (typeof controlButtonArea != 'undefined') {
                             var buttons = controlButtonArea.childElements();
                             for (var i = 0; i < buttons.length; i++) {
-                                if (buttons[i].innerHTML.include(button.label)) {
+                                if (buttons[i].innerHTML.include(button.getLabel())) {
                                     return;
                                 }
                             }
@@ -1431,6 +1431,10 @@ define([
             node.update('<span>' + this._label + '</span>');
             content[position] = node;
             Element.insert(element, content);
+        },
+
+        getLabel: function(){
+            return this._label;
         }
     };
 
