@@ -189,7 +189,7 @@ define([
                 optionContainer.find('input,select,textarea')
                     .serializeArray()
                     .map(function (el) {
-                        swatchValues.push(el.name + '=' + el.value);
+                        optionsValues.push(el.name + '=' + el.value);
                     });
 
                 jQuery('<input>')
