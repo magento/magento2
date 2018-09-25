@@ -9,6 +9,9 @@ namespace Magento\Quote\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoDbIsolation disabled
+ */
 class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
