@@ -1378,10 +1378,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Get scope type
-     *
-     * @return string
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeType()
     {

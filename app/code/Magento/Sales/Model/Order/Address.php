@@ -508,11 +508,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Set Parent ID
-     *
-     * @param int $id
-     *
-     * @return \Magento\Framework\DataObject|Address
+     * @inheritdoc
      */
     public function setParentId($id)
     {

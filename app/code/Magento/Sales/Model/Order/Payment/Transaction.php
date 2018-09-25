@@ -833,11 +833,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Set Transaction ID
-     *
-     * @param int $id
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setTransactionId($id)
     {
