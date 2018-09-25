@@ -666,7 +666,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return (int) $counts;
+        return (int)$counts;
     }
 
     /**
