@@ -79,14 +79,4 @@ class Result extends \Magento\Framework\App\Action\Action
             return $resultRedirect;
         }
     }
-
-    /**
-     * Returns no result handle
-     *
-     * @return string
-     */
-    private function getNoResultsHandle()
-    {
-        return self::DEFAULT_NO_RESULT_HANDLE;
-    }
 }
