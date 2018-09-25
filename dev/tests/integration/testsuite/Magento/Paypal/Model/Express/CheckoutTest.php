@@ -490,6 +490,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * Initialize a checkout model mock.
      *
      * @param Quote $quote
+     * @param string $prefix
      * @return void
      */
     private function prepareCheckoutModel(Quote $quote, $prefix = '')
@@ -533,7 +534,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 'city'       => 'Denver',
                 'street'     => '66 Pearl St',
                 'postcode'   => '80203',
-                'telephone'  => '555-555-555'
+                'telephone'  => '555-555-555',
             ],
             'billing' => [
                 'email'      => 'customer@example.com',
@@ -545,7 +546,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 'city'       => 'Austin',
                 'street'     => '1100 Congress Ave',
                 'postcode'   => '78701',
-                'telephone'  => '555-555-555'
+                'telephone'  => '555-555-555',
             ]
         ];
     }

@@ -371,7 +371,7 @@ class Checkout
      *
      * @return string
      */
-    public function getCheckoutShortcutImageUrl(): string
+    public function getCheckoutShortcutImageUrl()
     {
         // get "pal" thing from cache or lookup it via API
         $pal = null;
