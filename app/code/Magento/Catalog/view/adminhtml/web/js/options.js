@@ -186,7 +186,7 @@ define([
                 optionContainer = optionPanel.find('table tbody');
 
             if (optionPanel.hasClass(activePanelClass)) {
-                optionContainer.find('input')
+                optionContainer.find('input,select,textarea')
                     .serializeArray()
                     .map(function (el) {
                         swatchValues.push(el.name + '=' + el.value);
