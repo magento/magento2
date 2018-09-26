@@ -257,10 +257,10 @@
         <arguments>
             <argument name="website" type="string"/>
         </arguments>
-        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
-        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickTpOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
-        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="SelectWebsite"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
 
     <!--Switch to New Store view-->

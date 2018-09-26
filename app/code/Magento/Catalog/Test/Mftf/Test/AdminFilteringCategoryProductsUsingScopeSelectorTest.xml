@@ -11,7 +11,6 @@
     <test name="AdminFilteringCategoryProductsUsingScopeSelectorTest">
         <annotations>
             <features value="Catalog"/>
-            <group value="Catalog"/>
             <title value="Filtering Category Products using scope selector"/>
             <description value="Filtering Category Products using scope selector"/>
             <severity value="MAJOR"/>
@@ -21,16 +20,16 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create website, Sore adn Store View-->
-            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
                 <argument name="websiteCode" value="second_website"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateStore">
                 <argument name="website" value="secondWebsite"/>
                 <argument name="storeGroupName" value="secondStore"/>
                 <argument name="storeGroupCode" value="second_store"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
                 <argument name="StoreGroup" value="customStoreTierPrice"/>
                 <argument name="customStore" value="customStoreView"/>
             </actionGroup>
@@ -64,6 +63,8 @@
             <waitForPageLoad stepKey="waitForToOpenedWebsiteSection"/>
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeAssertSuccessMessage"/>
 
             <!-- Set filter to product name and product2 in website 2 only -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
@@ -77,6 +78,8 @@
             </actionGroup>
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite1"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct1"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeAssertSuccessMessage1"/>
 
             <!-- Set filter to product name and product12 assigned to both websites 1 and 2 -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
@@ -89,11 +92,14 @@
                 <argument name="website" value="secondWebsite"/>
             </actionGroup>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
+            <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
+                 stepKey="seeAssertSuccessMessage2"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <deleteData createDataKey="createProduct0" stepKey="deleteProduct"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
