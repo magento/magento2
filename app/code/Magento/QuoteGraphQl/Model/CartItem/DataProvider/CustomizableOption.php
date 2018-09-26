@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem;
+namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -16,17 +16,17 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 class CustomizableOption
 {
     /**
-     * @var CustomOptionValueComposite
+     * @var CustomizableOptionValueInterface
      */
-    private $customOptionValueDataProvider;
+    private $customizableOptionValue;
 
     /**
-     * @param CustomOptionValueComposite $customOptionValueDataProvider
+     * @param CustomizableOptionValueInterface $customOptionValueDataProvider
      */
     public function __construct(
-        CustomOptionValueComposite $customOptionValueDataProvider
+        CustomizableOptionValueInterface $customOptionValueDataProvider
     ) {
-        $this->customOptionValueDataProvider = $customOptionValueDataProvider;
+        $this->customizableOptionValue = $customOptionValueDataProvider;
     }
 
     /**
@@ -41,7 +41,6 @@ class CustomizableOption
     {
         $product = $cartItem->getProduct();
         $option = $product->getOptionById($optionId);
-        $optionType = $option->getType();
 
         if (!$option) {
             return [];
@@ -49,8 +48,7 @@ class CustomizableOption
 
         $selectedOption = $cartItem->getOptionByCode('option_' . $option->getId());
 
-        $selectedOptionValueData = $this->customOptionValueDataProvider->getData(
-            $optionType,
+        $selectedOptionValueData = $this->customizableOptionValue->getData(
             $cartItem,
             $option,
             $selectedOption
@@ -62,6 +60,7 @@ class CustomizableOption
             'type' => $option->getType(),
             'values' => $selectedOptionValueData,
             'sort_order' => $option->getSortOrder(),
+            'is_required' => $option->getIsRequire(),
         ];
     }
 }

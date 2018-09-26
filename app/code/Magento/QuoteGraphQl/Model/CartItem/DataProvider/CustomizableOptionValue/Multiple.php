@@ -5,44 +5,40 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem\CustomOptionValue;
+namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue;
 
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
-use Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem\CustomOptionPriceUnitLabel;
+use Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface;
 
 /**
  * Multiple Option Value Data provider
  */
-class MultipleCustomOptionValue implements CustomOptionValueInterface
+class Multiple implements CustomizableOptionValueInterface
 {
     /**
-     * @var CustomOptionPriceUnitLabel
+     * @var PriceUnitLabel
      */
-    private $customOptionPriceUnitLabel;
+    private $priceUnitLabel;
 
     /**
-     * @param CustomOptionPriceUnitLabel $customOptionPriceUnitLabel
+     * @param PriceUnitLabel $priceUnitLabel
      */
     public function __construct(
-        CustomOptionPriceUnitLabel $customOptionPriceUnitLabel
+        PriceUnitLabel $priceUnitLabel
     ) {
-        $this->customOptionPriceUnitLabel = $customOptionPriceUnitLabel;
+        $this->priceUnitLabel = $priceUnitLabel;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getData(
         QuoteItem $cartItem,
         Option $option,
-        SelectedOption $selectedOption,
-        DefaultType $optionTypeRenderer
+        SelectedOption $selectedOption
     ): array {
         $selectedOptionValueData = [];
         $optionIds = explode(',', $selectedOption->getValue());
@@ -53,7 +49,7 @@ class MultipleCustomOptionValue implements CustomOptionValueInterface
 
         foreach ($optionIds as $optionId) {
             $optionValue = $option->getValueById($optionId);
-            $priceValueUnits = $this->customOptionPriceUnitLabel->getData($optionValue->getPriceType());
+            $priceValueUnits = $this->priceUnitLabel->getData($optionValue->getPriceType());
 
             $selectedOptionValueData[] = [
                 'id' => $selectedOption->getId(),

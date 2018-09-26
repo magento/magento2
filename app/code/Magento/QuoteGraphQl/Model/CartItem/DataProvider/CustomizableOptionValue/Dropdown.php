@@ -5,60 +5,61 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem\CustomOptionValue;
+namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType as DefaultOptionType;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Product\Option\Type\Select as SelectOptionType;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
-use Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem\CustomOptionPriceUnitLabel;
+use Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface;
 
 /**
- * Dropdown Custom Option Value Data provider
+ * @inheritdoc
  */
-class DropdownCustomOptionValue implements CustomOptionValueInterface
+class Dropdown implements CustomizableOptionValueInterface
 {
     /**
-     * @var CustomOptionPriceUnitLabel
+     * @var PriceUnitLabel
      */
-    private $customOptionPriceUnitLabel;
+    private $priceUnitLabel;
 
     /**
-     * @param CustomOptionPriceUnitLabel $customOptionPriceUnitLabel
+     * @param PriceUnitLabel $priceUnitLabel
      */
     public function __construct(
-        CustomOptionPriceUnitLabel $customOptionPriceUnitLabel
+        PriceUnitLabel $priceUnitLabel
     ) {
-        $this->customOptionPriceUnitLabel = $customOptionPriceUnitLabel;
+        $this->priceUnitLabel = $priceUnitLabel;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getData(
         QuoteItem $cartItem,
         Option $option,
-        SelectedOption $selectedOption,
-        DefaultOptionType $optionTypeRenderer
+        SelectedOption $selectedOption
     ): array {
+        /** @var SelectOptionType $optionTypeRenderer */
+        $optionTypeRenderer = $option->groupFactory($option->getType())
+            ->setOption($option)
+            ->setConfigurationItemOption($selectedOption);
+
         $selectedValue = $selectedOption->getValue();
         $optionValue = $option->getValueById($selectedValue);
-        $optionPriceType = (string) $optionValue->getPriceType();
-        $priceValueUnits = $this->customOptionPriceUnitLabel->getData($optionPriceType);
+        $optionPriceType = (string)$optionValue->getPriceType();
+        $priceValueUnits = $this->priceUnitLabel->getData($optionPriceType);
 
         $selectedOptionValueData = [
             'id' => $selectedOption->getId(),
             'label' => $optionTypeRenderer->getFormattedOptionValue($selectedValue),
+            'value' => $selectedValue,
             'price' => [
                 'type' => strtoupper($optionPriceType),
                 'units' => $priceValueUnits,
                 'value' => $optionValue->getPrice(),
             ]
         ];
-
         return [$selectedOptionValueData];
     }
 }

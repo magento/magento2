@@ -5,31 +5,28 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem\CustomOptionValue;
+namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
 
 /**
- * Custom Option Value Data provider
+ * Customizable Option Value Data provider
  */
-interface CustomOptionValueInterface
+interface CustomizableOptionValueInterface
 {
     /**
-     * Custom Option Type Data Provider
+     * Customizable Option Value Data Provider
      *
      * @param QuoteItem $cartItem
      * @param Option $option
      * @param SelectedOption $selectedOption
-     * @param DefaultType $optionTypeRenderer
      * @return array
      */
     public function getData(
         QuoteItem $cartItem,
         Option $option,
-        SelectedOption $selectedOption,
-        DefaultType $optionTypeRenderer
+        SelectedOption $selectedOption
     ): array;
 }

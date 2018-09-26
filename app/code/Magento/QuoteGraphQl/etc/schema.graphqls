@@ -2,10 +2,10 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
-    applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\ApplyCouponToCart")
-    removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\RemoveCouponFromCart")
-    addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\Cart\\AddSimpleProductsToCart")
+    createEmptyCart: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates empty shopping cart for guest or logged in user")
+    applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart")
+    removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart")
+    addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
 
 input ApplyCouponToCartInput {
@@ -18,6 +18,7 @@ type ApplyCouponToCartOutput {
 }
 
 type Cart {
+    items: [CartItemInterface]
     applied_coupon: AppliedCoupon
 }
 
@@ -43,7 +44,7 @@ input AddSimpleProductsToCartInput {
 }
 
 input SimpleProductCartItemInput {
-    details: CartItemDetailsInput!
+    data: CartItemInput!
     customizable_options:[CustomizableOptionInput!]
 }
 
@@ -57,15 +58,15 @@ type AddSimpleProductsToCartOutput {
 }
 
 type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItem\\CustomizableOptions")
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
 }
 
-input CartItemDetailsInput {
+input CartItemInput {
     sku: String!
     qty: Float!
 }
 
-interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolverComposite") {
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
     id: String!
     qty: Float!
     product: ProductInterface!
@@ -75,6 +76,7 @@ type SelectedCustomizableOption {
     id: Int!
     label: String!
     type: String!
+    is_required: Int!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
 }
@@ -82,6 +84,7 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int
     label: String!
+    value: String!
     price: CartItemSelectedOptionValuePrice!
     sort_order: Int!
 }

@@ -5,23 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\Cart;
+namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
- * Cart Hydrator class
+ * Extract data from cart
  */
-class CartHydrator
+class ExtractDataFromCart
 {
     /**
-     * Hydrate cart to plain array
-     * @param CartInterface|Quote $cart
+     * Extract data from cart
+     *
+     * @param Quote $cart
      * @return array
      */
-    public function hydrate(CartInterface $cart): array
+    public function execute(Quote $cart): array
     {
         $items = [];
 

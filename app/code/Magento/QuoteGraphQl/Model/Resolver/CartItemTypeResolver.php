@@ -7,53 +7,49 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * Resolver for cart item types that vary by product types
- *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class CartItemTypeResolver implements TypeResolverInterface
 {
     /**
-     * @var string[]
+     * @var array
      */
-    private $cartItemTypes = [];
+    private $supportedTypes = [];
 
     /**
-     * @param TypeResolverInterface[] $cartItemTypes
+     * @param array $supportedTypes
      */
-    public function __construct(array $cartItemTypes = [])
+    public function __construct(array $supportedTypes = [])
     {
-        $this->cartItemTypes = $cartItemTypes;
+        $this->supportedTypes = $supportedTypes;
     }
 
     /**
-     * Resolve GraphQl types to retrieve product type specific information about cart items
      * {@inheritdoc}
      *
-     * @throws GraphQlInputException
+     * @throws LocalizedException
      */
     public function resolveType(array $data) : string
     {
         if (!isset($data['product'])) {
-            return '';
+            throw new LocalizedException(__('Missing key "product" in cart data'));
         }
-
         $productData = $data['product'];
 
         if (!isset($productData['type_id'])) {
-            return '';
+            throw new LocalizedException(__('Missing key "type_id" in product data'));
         }
-
         $productTypeId = $productData['type_id'];
 
-        if (!isset($this->cartItemTypes[$productTypeId])) {
-            return '';
+        if (!isset($this->supportedTypes[$productTypeId])) {
+            throw new LocalizedException(
+                __('Product "%product_type" type is not supported', ['product_type' => $productTypeId])
+            );
         }
-
-        return $this->cartItemTypes[$productTypeId];
+        return $this->supportedTypes[$productTypeId];
     }
 }

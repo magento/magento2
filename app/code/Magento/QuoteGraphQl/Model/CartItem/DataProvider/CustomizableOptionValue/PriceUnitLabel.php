@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\DataProvider\CartItem;
+namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue;
 
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Custom Option Data provider
  */
-class CustomOptionPriceUnitLabel
+class PriceUnitLabel
 {
     /**
      * @var StoreManagerInterface
@@ -37,7 +37,6 @@ class CustomOptionPriceUnitLabel
      *
      * @param string $priceType
      * @return string
-     * @throws NoSuchEntityException
      */
     public function getData(string $priceType): string
     {
