@@ -60,13 +60,18 @@ define([
                     this.resolveBillingAddress();
                 }
             }
-
         },
 
         /**
          * Resolve shipping address. Used local storage
          */
         resolveShippingAddress: function () {
+            if (!checkoutData.getShippingAddressFromData() &&
+                window.checkoutConfig.shippingAddressFromData
+            ) {
+                checkoutData.setShippingAddressFromData(window.checkoutConfig.shippingAddressFromData);
+            }
+
             var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
 
             if (newCustomerShippingAddress) {
@@ -196,6 +201,12 @@ define([
          * Resolve billing address. Used local storage
          */
         resolveBillingAddress: function () {
+            if (!checkoutData.getBillingAddressFromData() &&
+                window.checkoutConfig.billingAddressFromData
+            ) {
+                checkoutData.setBillingAddressFromData(window.checkoutConfig.billingAddressFromData);
+            }
+
             var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
                 newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
 

@@ -17,6 +17,13 @@ define([
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
+    if (!checkoutData.getValidatedEmailValue() &&
+        window.checkoutConfig.validatedEmailValue
+    ) {
+        checkoutData.setInputFieldEmailValue(window.checkoutConfig.validatedEmailValue);
+        checkoutData.setValidatedEmailValue(window.checkoutConfig.validatedEmailValue);
+    }
+
     var validatedEmail = checkoutData.getValidatedEmailValue();
 
     if (validatedEmail && !customer.isLoggedIn()) {
