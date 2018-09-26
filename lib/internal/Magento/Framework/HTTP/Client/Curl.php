@@ -437,8 +437,8 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected function parseHeaders($ch, $data)
     {
         if ($this->_headerCount == 0) {
-            $line = explode(" ", trim($data), 3);
-            if (count($line) != 3) {
+            $line = explode(" ", trim($data), 2);
+            if (count($line) != 2) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
             $this->_responseStatus = (int)$line[1];
