@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontCheckoutCartSummarySection">
@@ -19,5 +18,8 @@
         <element name="flatRateShippingMethod" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="itemDiscount" type="text" selector="tr[class='totals'] td.amount > span"/>
         <element name="subtotal" type="text" selector="tr.totals.sub td.amount > span"/>
+        <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
+        <element name="shippingHeading" type="button" selector="#block-shipping-heading"/>
+        <element name="blockSummary" type="button" selector="#block-summary"/>
     </section>
 </sections>

@@ -86,7 +86,7 @@
         <!--  Step 3: Go to Shopping Cart -->
         <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
-        <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
         <see selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="$$createCustomer.country_id$$" stepKey="checkCustomerCountry" />
         <see selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="$$createCustomer.state$$" stepKey="checkCustomerRegion" />
         <see selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="$$createCustomer.postcode$$" stepKey="checkCustomerPostcode" />
