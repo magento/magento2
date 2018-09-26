@@ -258,13 +258,10 @@ class Address implements ResolverInterface
             $address->setVatId($addressInput[AddressInterface::VAT_ID]);
         }
         if (isset($addressInput[AddressInterface::DEFAULT_BILLING])) {
-            $address->setIsDefaultBilling($addressInput[AddressInterface::DEFAULT_BILLING]);
+            $address->setIsDefaultBilling((bool)$addressInput[AddressInterface::DEFAULT_BILLING]);
         }
         if (isset($addressInput[AddressInterface::DEFAULT_SHIPPING])) {
-            $address->setIsDefaultShipping($addressInput[AddressInterface::DEFAULT_SHIPPING]);
-        }
-        if (isset($addressInput[AddressInterface::DEFAULT_SHIPPING])) {
-            $address->setIsDefaultShipping($addressInput[AddressInterface::DEFAULT_SHIPPING]);
+            $address->setIsDefaultShipping((bool)$addressInput[AddressInterface::DEFAULT_SHIPPING]);
         }
         if (isset($addressInput[self::CUSTOM_ATTRIBUTE_KEY])) {
             foreach ($addressInput[self::CUSTOM_ATTRIBUTE_KEY] as $attribute) {
