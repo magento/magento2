@@ -11,7 +11,7 @@ type Mutation {
     removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Coupon\\RemoveCouponFromCart")
     setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput
-    setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput
+    setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingMethod\\SetShippingMethodsOnCart")
 }
 
 input SetShippingAddressesOnCartInput {
@@ -47,11 +47,12 @@ input CartAddressInput {
 }
 
 input SetShippingMethodsOnCartInput {
+    cart_id: String!
     shipping_methods: [ShippingMethodForAddressInput!]!
 }
 
 input ShippingMethodForAddressInput {
-    cart_address_id: String!
+    cart_address_id: String! # todo: int?
     shipping_method_code: String!
 }
 
@@ -64,12 +65,12 @@ type SetShippingAddressesOnCartOutput {
 }
 
 type SetShippingMethodsOnCartOutput {
-    cart: Cart!
+    cart: String
 }
 
 # If no address is provided, the system get address assigned to a quote
 # If there's no address at all - the system returns all shipping methods
-type AvailableShippingMethodsOnCartInput {
+input AvailableShippingMethodsOnCartInput {
     cart_id: String!
     customer_address_id: Int
     address: CartAddressInput
