@@ -30,5 +30,12 @@
         <element name="operator" type="select" selector="select[name*='[operator]']"/>
         <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
         <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
+
+        <!-- Manage Coupon Codes sub-form -->
+        <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>
+        <element name="successMessage" type="text" selector="div.message.message-success.success"/>
+        <element name="couponQty" type="input" selector="#coupons_qty"/>
+        <element name="generateCouponsButton" type="button" selector="#coupons_generate_button" timeout="30"/>
+        <element name="generatedCouponByIndex" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-code" parameterized="true"/>
     </section>
 </sections>
