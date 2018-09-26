@@ -24,7 +24,7 @@ class DateType extends ProductDateOptionType
      * {@inheritdoc}
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
-     * @return $this
+     * @return ProductDateOptionType
      */
     public function validateUserValue($values)
     {
