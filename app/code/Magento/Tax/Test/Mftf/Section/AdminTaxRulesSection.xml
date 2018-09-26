@@ -19,6 +19,7 @@
         <element name="country" type="select" selector="#tax_country_id"/>
         <element name="rate" type="input" selector="#rate"/>
         <element name="save" type="button" selector=".action-save" timeout="30"/>
+        <element name="saveRule" type="button" selector="#save" timeout="30"/>
         <element name="additionalSettings" type="button" selector="#details-summarybase_fieldset"/>
         <element name="productAddNewTaxClass" type="button" selector="//*[@id='tax_product_class']/following-sibling::section//*[contains(text(),'Add New Tax Class')]"/>
         <element name="fieldProdNewTaxClass" type="input" selector="//*[@id='tax_product_class']/following-sibling::section//input[@class='mselect-input']"/>

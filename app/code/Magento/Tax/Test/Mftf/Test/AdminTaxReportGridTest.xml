@@ -35,8 +35,8 @@
             </actionGroup>
 
             <click stepKey="disableDefaultProdTaxClass" selector="{{AdminTaxRulesSection.defaultTaxClass}}"/>
-
-            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <waitForPageLoad stepKey="waitForTaxRulePage"/>
+            <click stepKey="clickSave" selector="{{AdminTaxRulesSection.saveRule}}"/>
             <waitForPageLoad stepKey="waitForNewTaxRuleCreated"/>
 
             <!-- Go to tax rule page to create second Tax Rule-->
@@ -52,7 +52,8 @@
             </actionGroup>
 
             <click stepKey="disableSecondProdTaxClass" selector="{{AdminTaxRulesSection.defaultTaxClass}}"/>
-            <click stepKey="clickSaveBtn" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <waitForPageLoad stepKey="waitForTaxRulePage2"/>
+            <click stepKey="clickSaveBtn" selector="{{AdminTaxRulesSection.saveRule}}"/>
             <waitForPageLoad stepKey="waitForSecondTaxRuleCreated"/>
 
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -97,7 +98,7 @@
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
-
+        <waitForPageLoad stepKey="waitForPage" time="60"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seeNewOrderPageTitle"/>
         <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
@@ -145,7 +146,7 @@
 
         <!--click "here" to refresh last day's statistics -->
         <click stepKey="clickRefrashStatisticsHere" selector="{{AdminTaxReportsSection.refreshStatistics}}"/>
-        <waitForPageLoad stepKey="waitForRefrash"/>
+        <waitForPageLoad stepKey="waitForRefresh"/>
 
         <!--Select Dates-->
         <fillField selector="{{AdminTaxReportsSection.fromDate}}" userInput="05/16/2018" stepKey="fillDateFrom"/>
@@ -153,23 +154,23 @@
         <click selector="{{AdminTaxReportsSection.goTodayButton}}" stepKey="clickGoTodayDate"/>
         <!--Click "Show report" in the upper right corner.-->
         <click selector="{{AdminTaxReportsSection.showReportButton}}" stepKey="clickShowReportButton"/>
-
+        <waitForPageLoad time="60" stepKey="waitForReload"/>
         <!--Tax Report Grid displays Tax amount in rows. "Total" and "Subtotal" is a sum of all tax amounts-->
-        <grabTextFrom selector="{{AdminTaxReportsSection.taxRuleAmount('TaxRate1')}}" stepKey="amountOfFirstTaxRate"/>
-        <grabTextFrom selector="{{AdminTaxReportsSection.taxRuleAmount('TaxRate2')}}" stepKey="amountOfSecondTaxRate"/>
+        <grabTextFrom selector="{{AdminTaxReportsSection.taxRuleAmount('Texas-0.125')}}" stepKey="amountOfFirstTaxRate"/>
+        <grabTextFrom selector="{{AdminTaxReportsSection.taxRuleAmount('Texas-7.25')}}" stepKey="amountOfSecondTaxRate"/>
         <grabTextFrom selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" stepKey="amountOfSubtotalTaxRate"/>
         <assertEquals stepKey="assertSubtotalFirstField">
-            <expectedResult type="string">$0.87</expectedResult>
+            <expectedResult type="string">$0.15</expectedResult>
             <actualResult type="variable">amountOfFirstTaxRate</actualResult>
         </assertEquals>
 
         <assertEquals stepKey="assertSubtotalSecondField">
-            <expectedResult type="string">$0.02</expectedResult>
+            <expectedResult type="string">$8.92</expectedResult>
             <actualResult type="variable">amountOfSecondTaxRate</actualResult>
         </assertEquals>
 
         <assertEquals stepKey="assertSubtotalField">
-            <expectedResult type="string">$0.89</expectedResult>
+            <expectedResult type="string">$9.07</expectedResult>
             <actualResult type="variable">amountOfSubtotalTaxRate</actualResult>
         </assertEquals>
 
