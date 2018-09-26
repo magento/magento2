@@ -282,16 +282,6 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
         }
     }
 
-    public function getId()
-    {
-        return $this->getData($this->getIdFieldName());
-    }
-
-    public function setId($value)
-    {
-        return $this->setData($this->getIdFieldName());
-    }
-
     public function addSitemapItem(DataObject $sitemapItem)
     {
         $this->_sitemapItems[] = $sitemapItem;
