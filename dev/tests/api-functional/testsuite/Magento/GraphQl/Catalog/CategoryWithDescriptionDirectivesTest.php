@@ -23,6 +23,9 @@ class CategoryWithDescriptionDirectivesTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
