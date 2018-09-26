@@ -23,6 +23,8 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
+ * Product gallery block
+ *
  * @api
  * @since 100.0.2
  */
@@ -139,7 +141,7 @@ class Gallery extends AbstractView
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption'  => $image->getData('label'),
+                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
                 'type' => str_replace('external-', '', $image->getMediaType()),
@@ -196,6 +198,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image attribute
+     *
      * @param string $imageId
      * @param string $attributeName
      * @param string $default
@@ -205,7 +209,7 @@ class Gallery extends AbstractView
     {
         $attributes =
             $this->getConfigView()->getMediaAttributes('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId);
-        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+        return $attributes[$attributeName] ?? $default;
     }
 
     /**
@@ -222,6 +226,8 @@ class Gallery extends AbstractView
     }
 
     /**
+     * Returns image gallery config object
+     *
      * @return Collection
      */
     private function getGalleryImagesConfig()

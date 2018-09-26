@@ -4,28 +4,37 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="billing-address-details" data-bind="if: isAddressDetailsVisible() && currentBillingAddress()">
-    <!-- ko text: currentBillingAddress().prefix --><!-- /ko --> <!-- ko text: currentBillingAddress().firstname --><!-- /ko --> <!-- ko text: currentBillingAddress().middlename --><!-- /ko -->
-    <!-- ko text: currentBillingAddress().lastname --><!-- /ko --> <!-- ko text: currentBillingAddress().suffix --><!-- /ko --><br/>
-    <!-- ko text: _.values(currentBillingAddress().street).join(", ") --><!-- /ko --><br/>
-    <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <span data-bind="html: currentBillingAddress().region"></span> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
-    <!-- ko text: getCountryName(currentBillingAddress().countryId) --><!-- /ko --><br/>
-    <!-- ko if: (currentBillingAddress().telephone) -->
-    <a data-bind="text: currentBillingAddress().telephone, attr: {'href': 'tel:' + currentBillingAddress().telephone}"></a>
-    <!-- /ko --><br/>
-    <!-- ko foreach: { data: currentBillingAddress().customAttributes, as: 'element' } -->
-        <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
-            <!-- ko if: (typeof element[attribute] === "object") -->
-                <!-- ko text: element[attribute].value --><!-- /ko -->
-            <!-- /ko -->
-            <!-- ko if: (typeof element[attribute] === "string") -->
-                <!-- ko text: element[attribute] --><!-- /ko -->
-            <!-- /ko --><br/>
-        <!-- /ko -->
-    <!-- /ko -->
-    <button type="button"
+<div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
+    <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
+    <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+    <text args="currentBillingAddress().city "/>, <span html="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
+    <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
+    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
+
+    <each args="data: currentBillingAddress().customAttributes, as: 'element'">
+        <each args="data: Object.keys(element), as: 'attribute'">
+            <if args="typeof element[attribute] === 'object'">
+                <if args="element[attribute].label">
+                    <text args="element[attribute].label"/>
+                </if>
+                <ifnot args="element[attribute].label">
+                    <if args="element[attribute].value">
+                        <text args="element[attribute].value"/>
+                    </if>
+                </ifnot>
+            </if>
+            <if args="typeof element[attribute] === 'string'">
+                <text args="element[attribute]"/>
+            </if><br/>
+        </each>
+    </each>
+
+    <button visible="!isAddressSameAsShipping()"
+            type="button"
             class="action action-edit-address"
-            data-bind="visible: !isAddressSameAsShipping(), click: editAddress">
-        <span data-bind="i18n: 'Edit'"></span>
+            click="editAddress">
+        <span translate="'Edit'"></span>
     </button>
 </div>
+
