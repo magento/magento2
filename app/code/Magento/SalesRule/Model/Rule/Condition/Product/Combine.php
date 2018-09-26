@@ -141,12 +141,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * Retrieve entities for validation by attribute scope
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
-     * @param string $attributeScope
+     * @param string|null $attributeScope
      * @return \Magento\Framework\Model\AbstractModel[]
      */
     private function retrieveValidateEntities(
         \Magento\Framework\Model\AbstractModel $entity,
-        string $attributeScope
+        $attributeScope
     ): array {
         if ($attributeScope === 'parent') {
             $validateEntities = [$entity];
