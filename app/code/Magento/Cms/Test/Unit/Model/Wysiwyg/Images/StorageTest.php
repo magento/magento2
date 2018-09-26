@@ -440,7 +440,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
         $type = 'image';
         $result = [
-            'result',
+            'result'
         ];
         $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()

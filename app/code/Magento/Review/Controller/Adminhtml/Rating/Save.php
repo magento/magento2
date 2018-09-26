@@ -5,10 +5,11 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Save extends RatingController
+class Save extends RatingController implements HttpPostActionInterface
 {
     /**
      * Save rating
