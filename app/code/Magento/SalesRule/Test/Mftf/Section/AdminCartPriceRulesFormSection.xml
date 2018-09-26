@@ -32,5 +32,12 @@
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="freeShipping" type="select" selector="select[name='simple_free_shipping']"/>
+
+        <!-- Manage Coupon Codes sub-form -->
+        <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>
+        <element name="successMessage" type="text" selector="div.message.message-success.success"/>
+        <element name="couponQty" type="input" selector="#coupons_qty"/>
+        <element name="generateCouponsButton" type="button" selector="#coupons_generate_button" timeout="30"/>
+        <element name="generatedCouponByIndex" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-code" parameterized="true"/>
     </section>
 </sections>
