@@ -64,7 +64,7 @@
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
             <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
-                 stepKey="seeAssertSuccessMessage"/>
+                 stepKey="seeSuccessMessage"/>
 
             <!-- Set filter to product name and product2 in website 2 only -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
@@ -79,7 +79,7 @@
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite1"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct1"/>
             <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
-                 stepKey="seeAssertSuccessMessage1"/>
+                 stepKey="seeSuccessMessage1"/>
 
             <!-- Set filter to product name and product12 assigned to both websites 1 and 2 -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
@@ -93,7 +93,7 @@
             </actionGroup>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
             <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
-                 stepKey="seeAssertSuccessMessage2"/>
+                 stepKey="seeSuccessMessage2"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
