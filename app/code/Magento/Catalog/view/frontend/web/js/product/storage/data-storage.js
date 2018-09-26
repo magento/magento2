@@ -118,7 +118,7 @@ define([
             if (_.isEmpty(data)) {
                 this.localStorage.removeAll();
             } else {
-                this.localStorage.set(data);
+                window.localStorage.setItem(this.namespace, JSON.stringify(data));
             }
         },
 

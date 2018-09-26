@@ -94,11 +94,7 @@ define([
          * Initializes handler to "data" property update
          */
         internalDataHandler: function (data) {
-            var localStorage = this.localStorage.get();
-
-            if (!utils.compare(data, localStorage).equal) {
-                this.localStorage.set(data);
-            }
+            window.localStorage.setItem(this.namespace, JSON.stringify(data));
         },
 
         /**
