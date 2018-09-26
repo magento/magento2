@@ -61,13 +61,15 @@ define([
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
-                    customer = customerData.get('customer');
+                    customer = customerData.get('customer'),
+                    element = $(this.options.button.checkout);
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
 
                     if (this.options.url.isRedirectRequired) {
+                        element.prop('disabled', true);
                         location.href = this.options.url.loginUrl;
                     } else {
                         authenticationPopup.showModal();
@@ -75,6 +77,7 @@ define([
 
                     return false;
                 }
+                element.prop('disabled', true);
                 location.href = this.options.url.checkout;
             }, this);
 
@@ -223,7 +226,7 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:updateCartItemQty', productData['product_sku']);
+                $(document).trigger('ajax:updateCartItemQty');
             }
             this._hideItemButton(elem);
         },
@@ -250,7 +253,9 @@ define([
             var productData = this._getProductById(Number(elem.data('cart-item')));
 
             if (!_.isUndefined(productData)) {
-                $(document).trigger('ajax:removeFromCart', productData['product_sku']);
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
             }
         },
 

@@ -7,16 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontPurchaseProductWithCustomOptionsWithLongValuesTitle">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Custom options"/>
             <group value="Catalog"/>
             <title value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <description value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-3043"/>
-            <group value="skip"/>
-            <!-- Skip due to MQE-1128 -->
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
@@ -101,6 +101,6 @@
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>

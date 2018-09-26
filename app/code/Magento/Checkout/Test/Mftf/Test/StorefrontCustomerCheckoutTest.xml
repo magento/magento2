@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCustomerCheckoutTest">
         <annotations>
             <features value="Checkout"/>
@@ -85,9 +85,15 @@
     </test>
     <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRates">
         <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer checkout"/>
             <title value="Customer Checkout with multiple addresses and tax rates"/>
             <description value="Should be able to place an order as a customer with multiple addresses and tax rates."/>
             <testCaseId value="MAGETWO-93109"/>
+            <severity value="AVERAGE"/>
+            <skip>
+                <issueId value="MQE-1187" />
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>

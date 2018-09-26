@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CheckoutSpecificDestinationsTest">
+        <annotations>
+            <title value="Check that top destinations can be removed after a selection was previously saved"/>
+            <stories value="MAGETWO-91511: Top destinations cannot be removed after a selection was previously saved"/>
+            <description value="Check that top destinations can be removed after a selection was previously saved"/>
+            <features value="Checkout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-94195"/>
+            <group value="Checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!--Go to configuration general page-->
+        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage"/>
+
+        <!--Open country options section-->
+        <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation"/>
+
+        <!--Select top destinations country-->
+        <actionGroup ref="SelectTopDestinationsCountry" stepKey="selectTopDestinationsCountry">
+            <argument name="countries" value="Countries"/>
+        </actionGroup>
+
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!--Add product to cart-->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCart">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to shopping cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+
+        <!--Verify country options in checkout top destination section-->
+        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
+            <argument name="country" value="Bahamas"/>
+            <argument name="placeNumber" value="2"/>
+        </actionGroup>
+
+        <!--Go to configuration general page-->
+        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage2"/>
+
+        <!--Open country options section-->
+        <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation2"/>
+
+        <!--Deselect top destinations country-->
+        <actionGroup ref="UnSelectTopDestinationsCountry" stepKey="unSelectTopDestinationsCountry">
+            <argument name="countries" value="Countries"/>
+        </actionGroup>
+
+        <!--Go to shopping cart-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+
+        <!--Verify country options is shown by default-->
+        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
+            <argument name="country" value="Afghanistan"/>
+            <argument name="placeNumber" value="2"/>
+        </actionGroup>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+        </after>
+    </test>
+</tests>

@@ -89,7 +89,7 @@ class CategoryTree
      */
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
-        $categoryQuery = $resolveInfo->fieldASTs[0];
+        $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);

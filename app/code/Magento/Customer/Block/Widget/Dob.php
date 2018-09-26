@@ -66,7 +66,7 @@ class Dob extends AbstractWidget
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('widget/dob.phtml');
+        $this->setTemplate('Magento_Customer::widget/dob.phtml');
     }
 
     /**

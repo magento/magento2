@@ -41,6 +41,9 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     /** @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject */
     private $formattedPriceInfoBuilder;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
@@ -50,14 +53,16 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
             ->setMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
@@ -74,6 +79,9 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCollect()
     {
         $productMock = $this->getMockBuilder(Product::class)

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Developer\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -18,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command that allows to generate whitelist, that will be used, when declaration data is installed.
+ *
  * If whitelist already exists, new values will be added to existing whitelist.
  */
 class TablesWhitelistGenerateCommand extends Command
@@ -43,10 +46,15 @@ class TablesWhitelistGenerateCommand extends Command
     private $jsonPersistor;
 
     /**
+     * @var array
+     */
+    private $primaryDbSchema;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
      * @param ReaderComposite $readerComposite
      * @param JsonPersistor $jsonPersistor
-     * @param null $name
+     * @param string|null $name
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -67,7 +75,7 @@ class TablesWhitelistGenerateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('declaration:generate:whitelist')
+        $this->setName('setup:db-declaration:generate-whitelist')
             ->setDescription(
                 'Generate whitelist of tables and columns that are allowed to be edited by declaration installer'
             )
@@ -104,20 +112,23 @@ class TablesWhitelistGenerateCommand extends Command
         if (file_exists($whiteListFileName)) {
             $content = json_decode(file_get_contents($whiteListFileName), true);
         }
-        $newContent = $this->readerComposite->read($moduleName);
 
-        //Do merge between what we have before, and what we have now.
+        $newContent = $this->filterPrimaryTables($this->readerComposite->read($moduleName));
+
+        //Do merge between what we have before, and what we have now and filter to only certain attributes.
         $content = array_replace_recursive(
             $content,
-            $this->selectNamesFromContent($newContent)
+            $this->filterAttributeNames($newContent)
         );
-        $this->jsonPersistor->persist($content, $whiteListFileName);
+        if (!empty($content)) {
+            $this->jsonPersistor->persist($content, $whiteListFileName);
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $moduleName = $input->getOption(self::MODULE_NAME_KEY);
 
@@ -138,13 +149,14 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * As for whitelist we do not need any specific attributes like nullable or indexType,
-     * we need to choose only names.
+     * Filter attribute names
+     *
+     * As for whitelist we do not need any specific attributes like nullable or indexType, we need to choose only names.
      *
      * @param array $content
      * @return array
      */
-    private function selectNamesFromContent(array $content)
+    private function filterAttributeNames(array $content) : array
     {
         $names = [];
         $types = ['column', 'index', 'constraint'];
@@ -162,5 +174,36 @@ class TablesWhitelistGenerateCommand extends Command
         }
 
         return $names;
+    }
+
+    /**
+     * Load db_schema content from the primary scope app/etc/db_schema.xml.
+     *
+     * @return array
+     */
+    private function getPrimaryDbSchema()
+    {
+        if (!$this->primaryDbSchema) {
+            $this->primaryDbSchema = $this->readerComposite->read('primary');
+        }
+        return $this->primaryDbSchema;
+    }
+
+    /**
+     * Filter tables from module db_schema.xml as they should not contain the primary system tables.
+     *
+     * @param array $moduleDbSchema
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function filterPrimaryTables(array $moduleDbSchema)
+    {
+        $primaryDbSchema = $this->getPrimaryDbSchema();
+        if (isset($moduleDbSchema['table']) && isset($primaryDbSchema['table'])) {
+            foreach ($primaryDbSchema['table'] as $tableNameKey => $tableContents) {
+                unset($moduleDbSchema['table'][$tableNameKey]);
+            }
+        }
+        return $moduleDbSchema;
     }
 }

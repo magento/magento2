@@ -188,6 +188,8 @@ define([
 
                     if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionList.attr('disabled', 'disabled');
+                    } else {
+                        regionList.removeAttr('disabled');
                     }
                 }
 
