@@ -210,7 +210,7 @@ define([
             }
             tableBody = optionContainer.detach();
         });
-        editForm.on('afterValidate.error', function () {
+        editForm.on('afterValidate.error highlight.validate', function () {
             if (optionPanel.hasClass(activePanelClass)) {
                 optionPanel.find('table').append(tableBody);
                 jQuery('input[name="serialized_options"]').remove();

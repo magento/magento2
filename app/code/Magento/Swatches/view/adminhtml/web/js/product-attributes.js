@@ -463,7 +463,7 @@ define([
                 tableBody = optionContainer.detach();
             });
 
-            editForm.on('afterValidate.error', function () {
+            editForm.on('afterValidate.error highlight.validate', function () {
                 if (activePanel.hasClass(activePanelClass)) {
                     activePanel.find('table').append(tableBody);
                     $('input[name="serialized_options"]').remove();
