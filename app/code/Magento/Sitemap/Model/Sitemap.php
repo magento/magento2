@@ -7,9 +7,13 @@
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Api\Data\SitemapExtensionInterface;
@@ -21,7 +25,7 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @api
  * @since 100.0.2
  */
-class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface, SitemapInterface
+class Sitemap extends AbstractExtensibleModel implements IdentityInterface, SitemapInterface
 {
     const OPEN_TAG_KEY = 'start';
 
@@ -183,30 +187,36 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param ResourceModel\Catalog\CategoryFactory $categoryFactory
-     * @param ResourceModel\Catalog\ProductFactory $productFactory
-     * @param ResourceModel\Cms\PageFactory $cmsFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
-     * @param DocumentRoot|null $documentRoot
-     * @param ItemProviderInterface|null $itemProvider
-     * @param SitemapConfigReaderInterface|null $configReader
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param ExtensionAttributesFactory                              $extensionFactory
+     * @param AttributeValueFactory                                   $customAttributeFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null      $resourceCollection
+     * @param \Magento\Framework\Escaper                              $escaper
+     * @param \Magento\Sitemap\Helper\Data                            $sitemapData
+     * @param \Magento\Framework\Filesystem                           $filesystem
+     * @param ResourceModel\Catalog\CategoryFactory                   $categoryFactory
+     * @param ResourceModel\Catalog\ProductFactory                    $productFactory
+     * @param ResourceModel\Cms\PageFactory                           $cmsFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime             $modelDate
+     * @param \Magento\Store\Model\StoreManagerInterface              $storeManager
+     * @param \Magento\Framework\App\RequestInterface                 $request
+     * @param \Magento\Framework\Stdlib\DateTime                      $dateTime
+     * @param array                                                   $data
+     * @param DocumentRoot|null                                       $documentRoot
+     * @param ItemProviderInterface|null                              $itemProvider
+     * @param SitemapConfigReaderInterface|null                       $configReader
      * @param \Magento\Sitemap\Model\SitemapItemInterfaceFactory|null $sitemapItemFactory
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Escaper $escaper,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Framework\Filesystem $filesystem,
@@ -224,7 +234,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         ItemProviderInterface $itemProvider = null,
         SitemapConfigReaderInterface $configReader = null,
         \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
-    ) {
+
+) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
         $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
@@ -241,8 +252,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
             \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
         );
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $resource,
+            $resourceCollection, $data);
     }
+
 
     /**
      * Init model
