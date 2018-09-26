@@ -3,24 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Customer\Api\Data\AddressExtensionInterfaceFactory;
-use Magento\Framework\Api\AttributeInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -29,7 +26,7 @@ use Magento\CustomerGraphQl\Model\Resolver\Address\AddressDataProvider;
 use Magento\Eav\Model\Config;
 
 /**
- * Customers Address Update
+ * Customers Address, used for GraphQL request processing.
  */
 class Address implements ResolverInterface
 {
@@ -68,10 +65,11 @@ class Address implements ResolverInterface
     const MUTATION_ADDRESS_UPDATE = 'customerAddressUpdate';
     const MUTATION_ADDRESS_DELETE = 'customerAddressDelete';
 
+
     /**
      * @var CustomerRepositoryInterface
      */
-    private $customerRepository;
+    private $customerRepositoryInterface;
 
     /**
      * @var AddressRepositoryInterface
@@ -84,21 +82,6 @@ class Address implements ResolverInterface
     private $addressInterfaceFactory;
 
     /**
-     * @var RegionInterfaceFactory
-     */
-    private $regionInterfaceFactory;
-
-    /**
-     * @var AttributeInterfaceFactory
-     */
-    private $attributeInterfaceFactory;
-
-    /**
-     * @var AddressExtensionInterfaceFactory
-     */
-    private $addressExtensionInterfaceFactory;
-
-    /**
      * @var Config
      */
     private $eavConfig;
@@ -109,37 +92,35 @@ class Address implements ResolverInterface
     private $addressDataProvider;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * @param AddressRepositoryInterface $addressRepositoryInterface
      * @param AddressInterfaceFactory $addressInterfaceFactory
-     * @param RegionInterfaceFactory $regionInterfaceFactory
-     * @param AttributeInterfaceFactory $attributeInterfaceFactory
-     * @param AddressExtensionInterfaceFactory $addressExtensionInterfaceFactory
      * @param Config $eavConfig
      * @param AddressDataProvider $addressDataProvider
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
+        CustomerRepositoryInterface $customerRepositoryInterface,
         AddressRepositoryInterface $addressRepositoryInterface,
         AddressInterfaceFactory $addressInterfaceFactory,
-        RegionInterfaceFactory $regionInterfaceFactory,
-        AttributeInterfaceFactory $attributeInterfaceFactory,
-        AddressExtensionInterfaceFactory $addressExtensionInterfaceFactory,
         Config $eavConfig,
-        AddressDataProvider $addressDataProvider
+        AddressDataProvider $addressDataProvider,
+        DataObjectHelper $dataObjectHelper
     ) {
-        $this->customerRepository = $customerRepository;
+        $this->customerRepositoryInterface = $customerRepositoryInterface;
         $this->addressRepositoryInterface = $addressRepositoryInterface;
         $this->addressInterfaceFactory = $addressInterfaceFactory;
-        $this->regionInterfaceFactory = $regionInterfaceFactory;
-        $this->attributeInterfaceFactory = $attributeInterfaceFactory;
-        $this->addressExtensionInterfaceFactory = $addressExtensionInterfaceFactory;
         $this->eavConfig = $eavConfig;
         $this->addressDataProvider = $addressDataProvider;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -148,7 +129,7 @@ class Address implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
+        /** @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
             throw new GraphQlAuthorizationException(
                 __(
@@ -158,7 +139,7 @@ class Address implements ResolverInterface
             );
         }
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->customerRepository->getById($context->getUserId());
+        $customer = $this->customerRepositoryInterface->getById($context->getUserId());
         switch ($field->getName()) {
             case self::MUTATION_ADDRESS_CREATE:
                 return $this->addressDataProvider->processCustomerAddress(
@@ -177,10 +158,10 @@ class Address implements ResolverInterface
 
     /**
      * Get input address attribute errors
-     * @param $addressInput
+     * @param array $addressInput
      * @return bool|string
      */
-    private function getAddressInputError($addressInput)
+    private function getAddressInputError(array $addressInput)
     {
         foreach (self::ADDRESS_ATTRIBUTES as $attribute) {
             if ($this->isAttributeRequired($attribute) && !isset($addressInput[$attribute])) {
@@ -192,7 +173,7 @@ class Address implements ResolverInterface
 
     /**
      * Check if attribute is set as required
-     * @param $attributeName
+     * @param string $attributeName
      * @return bool
      */
     private function isAttributeRequired($attributeName)
@@ -204,81 +185,18 @@ class Address implements ResolverInterface
     }
 
     /**
+     * Add $addressInput array information to a $address object
      * @param AddressInterface $address
      * @param array $addressInput
      * @return AddressInterface
      */
-    private function fillAddress($address, $addressInput)
+    private function fillAddress(AddressInterface $address, array $addressInput) : AddressInterface
     {
-        if (isset($addressInput[AddressInterface::REGION])) {
-            /** @var \Magento\Customer\Api\Data\RegionInterface $newRegion */
-            $newRegion = $this->regionInterfaceFactory->create($addressInput[AddressInterface::REGION]);
-            $address->setRegion($newRegion);
-        }
-        if (isset($addressInput[AddressInterface::REGION_ID])) {
-            $address->setRegionId($addressInput[AddressInterface::REGION_ID]);
-        }
-        if (isset($addressInput[AddressInterface::COUNTRY_ID])) {
-            $address->setCountryId($addressInput[AddressInterface::COUNTRY_ID]);
-        }
-        if (isset($addressInput[AddressInterface::STREET])) {
-            $address->setStreet($addressInput[AddressInterface::STREET]);
-        }
-        if (isset($addressInput[AddressInterface::COMPANY])) {
-            $address->setCompany($addressInput[AddressInterface::COMPANY]);
-        }
-        if (isset($addressInput[AddressInterface::TELEPHONE])) {
-            $address->setTelephone($addressInput[AddressInterface::TELEPHONE]);
-        }
-        if (isset($addressInput[AddressInterface::FAX])) {
-            $address->setFax($addressInput[AddressInterface::FAX]);
-        }
-        if (isset($addressInput[AddressInterface::POSTCODE])) {
-            $address->setPostcode($addressInput[AddressInterface::POSTCODE]);
-        }
-        if (isset($addressInput[AddressInterface::CITY])) {
-            $address->setCity($addressInput[AddressInterface::CITY]);
-        }
-        if (isset($addressInput[AddressInterface::FIRSTNAME])) {
-            $address->setFirstname($addressInput[AddressInterface::FIRSTNAME]);
-        }
-        if (isset($addressInput[AddressInterface::LASTNAME])) {
-            $address->setLastname($addressInput[AddressInterface::LASTNAME]);
-        }
-        if (isset($addressInput[AddressInterface::MIDDLENAME])) {
-            $address->setMiddlename($addressInput[AddressInterface::MIDDLENAME]);
-        }
-        if (isset($addressInput[AddressInterface::PREFIX])) {
-            $address->setPrefix($addressInput[AddressInterface::PREFIX]);
-        }
-        if (isset($addressInput[AddressInterface::SUFFIX])) {
-            $address->setSuffix($addressInput[AddressInterface::SUFFIX]);
-        }
-        if (isset($addressInput[AddressInterface::VAT_ID])) {
-            $address->setVatId($addressInput[AddressInterface::VAT_ID]);
-        }
-        if (isset($addressInput[AddressInterface::DEFAULT_BILLING])) {
-            $address->setIsDefaultBilling((bool)$addressInput[AddressInterface::DEFAULT_BILLING]);
-        }
-        if (isset($addressInput[AddressInterface::DEFAULT_SHIPPING])) {
-            $address->setIsDefaultShipping((bool)$addressInput[AddressInterface::DEFAULT_SHIPPING]);
-        }
-        if (isset($addressInput[self::CUSTOM_ATTRIBUTE_KEY])) {
-            foreach ($addressInput[self::CUSTOM_ATTRIBUTE_KEY] as $attribute) {
-                $address->setCustomAttribute($attribute['attribute_code'], $attribute['value']);
-            }
-        }
-        if (isset($addressInput[self::EXTENSION_ATTRIBUTE_KEY])) {
-            $extensionAttributes = $address->getExtensionAttributes();
-            if (!$extensionAttributes) {
-                /** @var \Magento\Customer\Api\Data\AddressExtensionInterface $newExtensionAttribute */
-                $extensionAttributes = $this->addressExtensionInterfaceFactory->create();
-            }
-            foreach ($addressInput[self::EXTENSION_ATTRIBUTE_KEY] as $attribute) {
-                $extensionAttributes->setData($attribute['attribute_code'], $attribute['value']);
-            }
-            $address->setExtensionAttributes($extensionAttributes);
-        }
+        $this->dataObjectHelper->populateWithArray(
+            $address,
+            $addressInput,
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
         return $address;
     }
 
@@ -289,7 +207,7 @@ class Address implements ResolverInterface
      * @return AddressInterface
      * @throws GraphQlInputException
      */
-    private function processCustomerAddressCreate($customer, $addressInput)
+    private function processCustomerAddressCreate(CustomerInterface $customer, array $addressInput) : AddressInterface
     {
         $errorInput = $this->getAddressInputError($addressInput);
         if ($errorInput) {
@@ -313,7 +231,7 @@ class Address implements ResolverInterface
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    private function processCustomerAddressUpdate($customer, $addressId, $addressInput)
+    private function processCustomerAddressUpdate(CustomerInterface $customer, $addressId, array $addressInput)
     {
         try {
             /** @var AddressInterface $address */
@@ -341,7 +259,7 @@ class Address implements ResolverInterface
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    private function processCustomerAddressDelete($customer, $addressId)
+    private function processCustomerAddressDelete(CustomerInterface $customer, $addressId)
     {
         try {
             /** @var AddressInterface $address */

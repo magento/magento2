@@ -12,6 +12,9 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Customer Address field data provider, used for GraphQL request processing.
+ */
 class AddressDataProvider
 {
     /**
