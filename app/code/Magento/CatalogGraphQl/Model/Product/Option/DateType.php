@@ -19,8 +19,6 @@ use Magento\Framework\Stdlib\DateTime;
 class DateType extends ProductDateOptionType
 {
     /**
-     * {@inheritdoc}
-     *
      * Make valid string as a value of date option type for GraphQl queries
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
