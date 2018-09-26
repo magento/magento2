@@ -87,6 +87,8 @@ class AddProductsToCart
     }
 
     /**
+     * Get cart
+     *
      * @param string $cartHash
      * @return Quote
      * @throws GraphQlNoSuchEntityException

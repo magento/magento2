@@ -13,13 +13,18 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Catalog product option date validator
+ *
  * {@inheritdoc}
  */
 class DateType extends ProductDateOptionType
 {
     /**
      * Make valid string as a value of date option type for GraphQl queries
+     *
      * {@inheritdoc}
+     *
+     * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
+     * @return $this
      */
     public function validateUserValue($values)
     {

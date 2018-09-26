@@ -92,7 +92,7 @@ class AddSimpleProductToCart
     {
         $sku = $this->arrayManager->get('data/sku', $cartItemData);
         if (!isset($sku)) {
-            throw new GraphQlInputException( __('Missing key "sku" in cart item data'));
+            throw new GraphQlInputException(__('Missing key "sku" in cart item data'));
         }
         return (string)$sku;
     }
@@ -108,7 +108,7 @@ class AddSimpleProductToCart
     {
         $qty = $this->arrayManager->get('data/qty', $cartItemData);
         if (!isset($qty)) {
-            throw new GraphQlInputException( __('Missing key "qty" in cart item data'));
+            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
         }
         return (float)$qty;
     }
