@@ -905,7 +905,7 @@ class Sitemap extends AbstractExtensibleModel implements IdentityInterface, Site
     /**
      * {@inheritdoc}
      */
-    public function getStoreId(): int
+    public function getStoreId(): ?int
     {
         return $this->getData(self::STORE_ID);
     }

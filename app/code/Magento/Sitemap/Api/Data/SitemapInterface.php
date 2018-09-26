@@ -90,9 +90,9 @@ interface SitemapInterface extends SitemapExtensionInterface
     /**
      * Get store id
      *
-     * @return int
+     * @return int|null
      */
-    public function getStoreId(): int;
+    public function getStoreId(): ?int;
 
     /**
      * Set store id
