@@ -10,8 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductTextAttribute\FormatList;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -26,25 +25,17 @@ class ProductTextAttribute implements ResolverInterface
     private $formatList;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var string
      */
     private $defaultFormat = 'html';
 
     /**
-     * @param ValueFactory $valueFactory
-     * @param FormatList $formatFactory
+     * @param FormatList $formatList
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        FormatList $formatFactory
+        FormatList $formatList
     ) {
-        $this->valueFactory = $valueFactory;
-        $this->formatList = $formatFactory;
+        $this->formatList = $formatList;
     }
 
     /**
@@ -56,10 +47,9 @@ class ProductTextAttribute implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = [];
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /* @var $product Product */
@@ -69,6 +59,6 @@ class ProductTextAttribute implements ResolverInterface
         $format = $this->formatList->create($formatIdentifier);
         $result = ['content' => $format->getContent($product, $fieldName)];
 
-        return $this->valueFactory->create($result);
+        return $result;
     }
 }
