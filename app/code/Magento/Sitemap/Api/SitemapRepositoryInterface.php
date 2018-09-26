@@ -30,7 +30,7 @@ interface SitemapRepositoryInterface
      * @throws NoSuchEntityException
      * @return SitemapInterface
      */
-    public function getById($sitemapId): SitemapInterface;
+    public function get($sitemapId): SitemapInterface;
 
     /**
      * Fetch list of sitemaps according to search criteria

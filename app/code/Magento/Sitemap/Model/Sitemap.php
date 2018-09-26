@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
+use Magento\Sitemap\Api\Data\SitemapExtensionInterface;
 use Magento\Sitemap\Api\Data\SitemapInterface;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
@@ -327,7 +328,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _initSitemapItems()
     {
         $sitemapItems = $this->itemProvider->getItems($this->getStoreId());
-        $mappedItems = $this->mapToMSitemapItem();
+        $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
         $this->_tags = [
@@ -398,7 +399,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     }
 
     /**
-     * {@inheritdoc}
+     * Generate XML file
+     *
+     * @see http://www.sitemaps.org/protocol.html
+     *
+     * @return $this
      */
     public function generateXml()
     {
@@ -730,7 +735,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * {@inheritdoc}
      */
-    public function getSitemapUrl($sitemapPath, $sitemapFileName)
+    public function getSitemapUrl($sitemapPath, $sitemapFileName): ?string
     {
         return $this->_getStoreBaseDomain() . str_replace('//', '/', $sitemapPath . '/' . $sitemapFileName);
     }
@@ -833,7 +838,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * {@inheritdoc}
      */
-    public function getSitemapType()
+    public function getSitemapType(): ?string
     {
         return $this->getData(self::SITEMAP_TYPE);
     }
@@ -849,7 +854,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * {@inheritdoc}
      */
-    public function getSitemapFilename()
+    public function getSitemapFilename(): ?string
     {
         return $this->getData(self::SITEMAP_FILENAME);
     }
@@ -865,7 +870,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * {@inheritdoc}
      */
-    public function getSitemapPath()
+    public function getSitemapPath(): ?string
     {
         return $this->getData(self::SITEMAP_PATH);
     }
@@ -881,7 +886,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * {@inheritdoc}
      */
-    public function getSitemapTime()
+    public function getSitemapTime(): ?string
     {
         return $this->getData(self::SITEMAP_TIME);
     }
@@ -909,4 +914,21 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     {
         return $this->setData(self::STORE_ID, $id);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes(): ?SitemapExtensionInterface
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(SitemapExtensionInterface $extensionAttributes): SitemapInterface
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
 }

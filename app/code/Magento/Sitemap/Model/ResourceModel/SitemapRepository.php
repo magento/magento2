@@ -61,7 +61,7 @@ class SitemapRepository implements SitemapRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getById($sitemapId): SitemapInterface
+    public function get($sitemapId): SitemapInterface
     {
         $sitemap = $this->sitemapFactory->create();
         $this->sitemapResource->load($sitemap, $sitemapId);
@@ -90,7 +90,7 @@ class SitemapRepository implements SitemapRepositoryInterface
         $sitemaps = [];
         /** @var SitemapInterface $sitemap */
         foreach ($collection->getItems() as $sitemap) {
-            $sitemaps[] = $this->getById($sitemap->getId());
+            $sitemaps[] = $this->get($sitemap->getId());
         }
         $searchResults->setItems($sitemaps);
 

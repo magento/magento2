@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Api\Data;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-interface SitemapInterface
+interface SitemapInterface extends SitemapExtensionInterface
 {
 
     /**#@+
@@ -26,28 +23,13 @@ interface SitemapInterface
 
 
     /**
-     * Identifier getter
-     *
-     * @return int|null
-     */
-    public function getId();
-
-    /**
-     * Identifier setter
-     *
-     * @param int $value
-     * @return $this
-     */
-    public function setId($id);
-
-    /**
      * Get sitemap.xml URL according to all config options
      *
      * @param string $sitemapPath
      * @param string $sitemapFileName
      * @return string
      */
-    public function getSitemapUrl($sitemapPath, $sitemapFileName);
+    public function getSitemapUrl($sitemapPath, $sitemapFileName): ?string;
 
 
     /**
@@ -55,7 +37,7 @@ interface SitemapInterface
      *
      * @return string|null
      */
-    public function getSitemapType();
+    public function getSitemapType(): ?string;
 
     /**
      * @param string $type
@@ -68,7 +50,7 @@ interface SitemapInterface
      *
      * @return string|null
      */
-    public function getSitemapFilename();
+    public function getSitemapFilename(): ?string;
 
     /**
      * Set sitemap filename
@@ -82,7 +64,7 @@ interface SitemapInterface
      *
      * @return string|null
      */
-    public function getSitemapPath();
+    public function getSitemapPath(): ?string;
 
     /**
      * Set sitemap path
@@ -97,7 +79,7 @@ interface SitemapInterface
      *
      * @return string|null
      */
-    public function getSitemapTime();
+    public function getSitemapTime(): ?string;
 
     /**
      * Set sitemap time
@@ -112,7 +94,7 @@ interface SitemapInterface
      *
      * @return int
      */
-    public function getStoreId();
+    public function getStoreId(): int;
 
     /**
      * Set store id
@@ -121,5 +103,23 @@ interface SitemapInterface
      * @return SitemapInterface
      */
     public function setStoreId(int $id): SitemapInterface;
+
+    /**
+     * Retrieve existing extension attributes object or create a new one
+     *
+     * @return \Magento\Sitemap\Api\Data\SitemapExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ?\Magento\Sitemap\Api\Data\SitemapExtensionInterface;
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\Sitemap\Api\Data\SitemapExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sitemap\Api\Data\SitemapExtensionInterface $extensionAttributes
+    ): SitemapInterface;
+
 
 }
