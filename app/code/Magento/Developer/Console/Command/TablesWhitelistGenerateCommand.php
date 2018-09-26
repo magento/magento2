@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Developer\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -18,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command that allows to generate whitelist, that will be used, when declaration data is installed.
+ *
  * If whitelist already exists, new values will be added to existing whitelist.
  */
 class TablesWhitelistGenerateCommand extends Command
@@ -72,7 +75,7 @@ class TablesWhitelistGenerateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('declaration:generate:whitelist')
+        $this->setName('setup:db-declaration:generate-whitelist')
             ->setDescription(
                 'Generate whitelist of tables and columns that are allowed to be edited by declaration installer'
             )
@@ -125,7 +128,7 @@ class TablesWhitelistGenerateCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $moduleName = $input->getOption(self::MODULE_NAME_KEY);
 
@@ -146,13 +149,14 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * As for whitelist we do not need any specific attributes like nullable or indexType,
-     * we need to choose only names.
+     * Filter attribute names
+     *
+     * As for whitelist we do not need any specific attributes like nullable or indexType, we need to choose only names.
      *
      * @param array $content
      * @return array
      */
-    private function filterAttributeNames(array $content)
+    private function filterAttributeNames(array $content) : array
     {
         $names = [];
         $types = ['column', 'index', 'constraint'];
