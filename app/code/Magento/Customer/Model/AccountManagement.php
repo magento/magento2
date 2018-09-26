@@ -970,6 +970,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get attribute validator
+     *
      * @return Backend
      */
     private function getEavValidator()
@@ -1168,6 +1170,8 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Get available email template types
+     *
      * @return array
      * @deprecated 100.1.0
      */

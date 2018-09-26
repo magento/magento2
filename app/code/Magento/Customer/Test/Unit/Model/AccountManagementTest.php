@@ -1079,9 +1079,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $websiteId = 1;
         $addressId = 5;
-
         $datetime = $this->prepareDateTimeFactory();
-
         $customerData = ['key' => 'value'];
         $customerName = 'Customer Name';
 
@@ -1091,7 +1089,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
-
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -1121,7 +1118,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customer->expects($this->any())
             ->method('getAddresses')
             ->willReturn([$address]);
-
         $this->customerRepository->expects($this->once())
             ->method('get')
             ->willReturn($customer);
@@ -1132,7 +1128,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $addressModel->expects($this->once())
             ->method('setShouldIgnoreValidation')
             ->with(true);
-
         $this->customerRepository->expects($this->once())
             ->method('get')
             ->with($email, $websiteId)
@@ -1141,16 +1136,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($customer)
             ->willReturnSelf();
-
         $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($hash);
-
         $this->customerViewHelper->expects($this->any())
             ->method('getCustomerName')
             ->with($customer)
             ->willReturn($customerName);
-
         $this->customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($hash)
@@ -1167,12 +1159,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setData')
             ->with('name', $customerName)
             ->willReturnSelf();
-
         $this->customerRegistry->expects($this->any())
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
-
         $this->dataObjectProcessor->expects($this->any())
             ->method('buildOutputDataArray')
             ->with($customer, \Magento\Customer\Api\Data\CustomerInterface::class)
