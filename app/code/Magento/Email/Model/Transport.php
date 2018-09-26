@@ -32,7 +32,7 @@ class Transport implements TransportInterface
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
-     * Configuration of whether return path should be set or no.
+     * Whether return path should be set or no.
      *
      * Possible values are:
      * 0 - no
