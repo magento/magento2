@@ -15,9 +15,9 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sitemap\Api\Data\SitemapInterface;
 use Magento\Sitemap\Api\Data\SitemapSearchResultsInterface;
 use Magento\Sitemap\Api\SitemapRepositoryInterface;
-use Magento\Sitemap\Api\Data\SitemapInterface;
 use Magento\Sitemap\Model\SitemapFactory;
 
 class SitemapRepository implements SitemapRepositoryInterface
@@ -51,7 +51,6 @@ class SitemapRepository implements SitemapRepositoryInterface
         \Magento\Sitemap\Api\Data\SitemapSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-
         $this->sitemapResource = $sitemapResource;
         $this->sitemapFactory = $sitemapFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -95,7 +94,6 @@ class SitemapRepository implements SitemapRepositoryInterface
         $searchResults->setItems($sitemaps);
 
         return $searchResults;
-
     }
 
     /**

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Api;
 
-
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;

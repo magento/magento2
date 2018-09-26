@@ -13,5 +13,4 @@ namespace Magento\Sitemap\Api\Data;
  */
 interface SitemapExtensionInterface extends \Magento\Framework\Api\ExtensionAttributesInterface
 {
-
 }

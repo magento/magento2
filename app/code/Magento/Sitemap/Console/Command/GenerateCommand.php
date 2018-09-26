@@ -4,7 +4,6 @@ namespace Magento\Sitemap\Console\Command;
 
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Sitemap\Api\SitemapRepositoryInterface;
-use Magento\Sitemap\Model\XmlGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -77,7 +76,5 @@ class GenerateCommand extends Command
         $progressbar->finish();
         $output->writeln('');
         $output->writeln('<info>Generated store sitemaps successfully.</info>');
-
     }
-
 }

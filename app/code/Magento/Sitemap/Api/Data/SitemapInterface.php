@@ -21,7 +21,6 @@ interface SitemapInterface extends SitemapExtensionInterface
     const STORE_ID          = 'store_id';
     /**#@-*/
 
-
     /**
      * Get sitemap.xml URL according to all config options
      *
@@ -30,7 +29,6 @@ interface SitemapInterface extends SitemapExtensionInterface
      * @return string
      */
     public function getSitemapUrl($sitemapPath, $sitemapFileName): ?string;
-
 
     /**
      * Get sitemap type
@@ -120,6 +118,4 @@ interface SitemapInterface extends SitemapExtensionInterface
     public function setExtensionAttributes(
         \Magento\Sitemap\Api\Data\SitemapExtensionInterface $extensionAttributes
     ): SitemapInterface;
-
-
 }

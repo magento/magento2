@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Api\Data;
 
-
 /**
  * Interface SitemapSearchResultsInterface
  * @package Magento\Sitemap\Api\Data
@@ -29,5 +28,4 @@ interface SitemapSearchResultsInterface extends \Magento\Framework\Api\SearchRes
      * @return $this
      */
     public function setItems(array $items);
-
 }
