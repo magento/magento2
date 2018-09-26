@@ -22,41 +22,39 @@
             </skip>
         </annotations>
 
-
         <before>
             <!--Login As Admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!--CreateNewProduct-->
             <actionGroup ref="CreateNewProductActionGroup" stepKey="CreateNewProduct"/>
-
             <!--Create New Customer-->
             <actionGroup ref="CreateCustomerActionGroup" stepKey="CreateCustomer"/>
-
         </before>
-
 
         <!--Configure Braintree-->
         <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
-        <actionGroup ref="AdminCreateRole" stepKey="AdminCreateNewRole"/>
+        <actionGroup ref="AdminCreateRoleActionGroup" stepKey="adminCreateRole">
+            <argument name="restrictedRole" value="Sales"/>
+            <argument name="User" value="adminRole"/>
+        </actionGroup>
 
-        <!--Create New User With Specific Role-->
-        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
-        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+        <!--Create new admin user-->
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="adminCreateUser">
+            <argument name="role" value="adminRole"/>
+        </actionGroup>
 
-        <!--SignOut-->
-        <actionGroup ref="SignOut" stepKey="signOutFromAdmin"/>
-
-        <!--SignIn New User-->
-        <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
-        <waitForPageLoad stepKey="waitForLogin" time="3"/>
+        <!--Log out-->
+        <actionGroup ref="SignOut" stepKey="SignOut"/>
+        <!--Log in as new user-->
+        <actionGroup ref="LoginAsAnyUser" stepKey="LoginActionGroup">
+            <argument name="uname" value="{{newAdmin.username}}"/>
+            <argument name="passwd" value="{{newAdmin.password}}"/>
+        </actionGroup>
 
         <!--Create New Order-->
         <actionGroup ref="CreateNewOrderActionGroup" stepKey="createNewOrder"/>
-
 
         <after>
             <!--SignOut-->
@@ -73,15 +71,16 @@
                 <argument name="lastName" value="NewCustomerData.LastName"/>
             </actionGroup>
 
-            <!--Delete User -->
-            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
-            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
-
-            <!--Delete Role-->
-            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
-            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
-
+            <!--Delete created user-->
+            <actionGroup ref="DeleteCreatedUserActionGroup" stepKey="AdminDeleteUserActionGroup">
+                <argument name="user" value="adminRole"/>
+            </actionGroup>
+            <!--Delete created role-->
+            <actionGroup ref="AdminDeleteCreatedRoleActionGroup" stepKey="AdminDeleteRoleActionGroup">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <!--Log Out-->
+            <actionGroup ref="logout" stepKey="logOut2"/>
         </after>
-
     </test>
 </tests>
