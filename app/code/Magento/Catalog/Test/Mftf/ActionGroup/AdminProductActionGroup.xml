@@ -111,6 +111,7 @@
             <argument name="price" type="string" defaultValue="Discount"/>
             <argument name="amount" type="string" defaultValue="45"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePagePreventHeaderOverlap"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
