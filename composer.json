@@ -64,6 +64,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-zip": "*",
+        "ext-fileinfo": "*",
         "sjparkinson/static-review": "~4.1"
     },
     "require-dev": {
