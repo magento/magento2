@@ -160,8 +160,8 @@
         <waitForPageLoad stepKey="waitForPageLoaded1"/>
         <see userInput="You used coupon code" stepKey="assertText"/>
         <!--Verify values-->
-        <grabTextFrom selector="{{CheckoutCartSummarySection.itemDiscount}}" stepKey="getDiscount"/>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="getSubtotal"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.itemDiscount}}" stepKey="getDiscount"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartSummarySection.subtotal}}" stepKey="getSubtotal"/>
         <assertEquals stepKey="checkDescount">
             <expectedResult type="string">-$7.00</expectedResult>
             <actualResult type="variable">$getDiscount</actualResult>

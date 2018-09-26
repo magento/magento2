@@ -102,7 +102,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
         foreach ($this->getConditions() as $cond) {
             if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
-                $validated = $this->validateEntity($cond, $entity);
+                $validated = $this->validateEntity($entity, $cond);
             } else {
                 $validated = $cond->validateByEntityId($entity);
             }
@@ -123,7 +123,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return bool
      */
-    private function validateEntity($cond, \Magento\Framework\Model\AbstractModel $entity): bool
+    private function validateEntity(\Magento\Framework\Model\AbstractModel $entity, $cond): bool
     {
         $true = (bool)$this->getValue();
         $validated = !$true;
