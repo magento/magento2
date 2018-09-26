@@ -66,16 +66,16 @@
         </actionGroup>
 
         <!--Proceed to shipment-->
-        <click selector="{{ProductCardSection.showCard}}" stepKey="clickToOpenCard"/>
-        <click selector="{{ProductCardSection.proceed}}" stepKey="clickToProceedToCheckout"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickToOpenCard"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickToProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
 
         <!--Fill shipping form-->
         <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
 
-        <click selector="{{ProductCardSection.addCoupon}}" stepKey="clickToAddDiscount"/>
-        <fillField selector="{{ProductCardSection.addCode}}" userInput="{{_defaultCoupon.code}}" stepKey="TypeDiscountCode"/>
-        <click selector="{{ProductCardSection.applyDiscount}}" stepKey="clickToApplyDiscount"/>
+        <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToAddDiscount"/>
+        <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{_defaultCoupon.code}}" stepKey="TypeDiscountCode"/>
+        <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
         <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
         <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
 

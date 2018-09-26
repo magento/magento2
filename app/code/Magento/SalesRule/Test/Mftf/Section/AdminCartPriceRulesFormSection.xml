@@ -20,7 +20,6 @@
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
         <element name="couponCode" type="input" selector="input[name='coupon_code']"/>
-        <element name="userPerCoupon" type="input" selector="input[name='uses_per_coupon']"/>
         <element name="useAutoGeneration" type="checkbox" selector="input[name='use_auto_generation']"/>
         <element name="userPerCoupon" type="input" selector="//input[@name='uses_per_coupon']"/>
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
