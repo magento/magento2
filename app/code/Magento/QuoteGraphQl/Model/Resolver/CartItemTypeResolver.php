@@ -30,12 +30,7 @@ class CartItemTypeResolver implements TypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param array $data
-     * @return string
-     * @throws GraphQlInputException
-     * @throws LocalizedException
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {
