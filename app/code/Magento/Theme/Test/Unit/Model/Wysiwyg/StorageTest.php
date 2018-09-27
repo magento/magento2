@@ -152,8 +152,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
 
         $expectedResult = [
-            'not_empty',
-            'cookie' => ['name' => null, 'value' => null, 'lifetime' => null, 'path' => null, 'domain' => null],
+            'not_empty'
         ];
 
         $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
