@@ -11,6 +11,21 @@ define([
 ], function ($, _, ko, utils) {
     'use strict';
 
+    /**
+     * Set data to localStorage with support check.
+     *
+     * @param {String} namespace
+     * @param {Object} data
+     */
+    function setLocalStorageItem(namespace, data) {
+        try {
+            window.localStorage.setItem(namespace, JSON.stringify(data));
+        } catch (e) {
+            console.warn('localStorage is unavailable - skipping local caching of product data');
+            console.error(e);
+        }
+    }
+
     return {
 
         /**
@@ -94,7 +109,7 @@ define([
          * Initializes handler to "data" property update
          */
         internalDataHandler: function (data) {
-            window.localStorage.setItem(this.namespace, JSON.stringify(data));
+            setLocalStorageItem(this.namespace, data);
         },
 
         /**

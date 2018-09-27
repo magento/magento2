@@ -34,6 +34,21 @@ define([
         };
     }
 
+    /**
+     * Set data to localStorage with support check.
+     *
+     * @param {String} namespace
+     * @param {Object} data
+     */
+    function setLocalStorageItem(namespace, data) {
+        try {
+            window.localStorage.setItem(namespace, JSON.stringify(data));
+        } catch (e) {
+            console.warn('localStorage is unavailable - skipping local caching of product data');
+            console.error(e);
+        }
+    }
+
     return {
 
         /**
@@ -118,7 +133,7 @@ define([
             if (_.isEmpty(data)) {
                 this.localStorage.removeAll();
             } else {
-                window.localStorage.setItem(this.namespace, JSON.stringify(data));
+                setLocalStorageItem(this.namespace, data);
             }
         },
 
