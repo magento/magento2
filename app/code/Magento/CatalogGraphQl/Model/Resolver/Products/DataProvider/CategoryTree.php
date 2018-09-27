@@ -83,9 +83,12 @@ class CategoryTree
     }
 
     /**
+     * Returns categories tree starting from parent $rootCategoryId
+     *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
      * @return array
+     * @throws \Exception
      */
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
@@ -107,6 +110,8 @@ class CategoryTree
     }
 
     /**
+     * Iterates through category tree
+     *
      * @param \Iterator $iterator
      * @return array
      */
@@ -129,6 +134,8 @@ class CategoryTree
     }
 
     /**
+     * Joins EAV attributes recursively
+     *
      * @param Collection $collection
      * @param FieldNode $fieldNode
      * @return void
