@@ -28,6 +28,8 @@ class FieldType
     /**#@-*/
 
     /**
+     * Get field type by attribute
+     *
      * @param AbstractAttribute $attribute
      * @return string
      * @since 100.1.0
