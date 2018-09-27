@@ -2021,11 +2021,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getConnection()->quoteInto('cat_index.store_id=?', $filters['store_id'], 'int'),
         ];
         if (isset($filters['visibility']) && !isset($filters['store_table'])) {
-            $conditions[] = $this->getConnection()->quoteInto(
-                'cat_index.visibility IN(?)',
-                $filters['visibility'],
-                'int'
-            );
+            $conditions[] = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility'], 'int');
         }
         $conditions[] = $this->getConnection()->quoteInto('cat_index.category_id=?', $filters['category_id'], 'int');
         if (isset($filters['category_is_anchor'])) {

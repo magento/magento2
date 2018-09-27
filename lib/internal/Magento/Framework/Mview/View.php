@@ -284,8 +284,8 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
 
                 for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
                     // Don't go past the current version for atomicy.
-                    $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-                    $ids = array_map('intval', $this->getChangelog()->getList($vsFrom, $versionTo));
+                    $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
+                    $ids = array_map('intval', $this->getChangelog()->getList($versionFrom, $versionTo));
 
                     // We run the actual indexer in batches.
                     // Chunked AFTER loading to avoid duplicates in separate chunks.
