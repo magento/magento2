@@ -259,10 +259,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                 );
             }
 
-            array_shift($dirFiles);
-            /* remove  './'*/
-            array_shift($dirFiles);
-            /* remove  '../'*/
+            $dirFiles = array_diff($dirFiles, ['..', '.']);
 
             foreach ($dirFiles as $item) {
                 $this->_setCurrentFile($file . $item)->_createTar();
