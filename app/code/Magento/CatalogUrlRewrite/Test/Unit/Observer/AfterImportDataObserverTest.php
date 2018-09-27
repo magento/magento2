@@ -315,12 +315,14 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(1))
             ->method('getStoreIdByCode')
             ->will($this->returnValueMap($map));
+
         $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getId',
                 'setId',
                 'getSku',
                 'setStoreId',
                 'getStoreId',
+                'getCategoryIds'
             ]);
         $product
             ->expects($this->exactly($productsCount))
@@ -338,6 +340,10 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 $newSku[1]['entity_id'],
                 $newSku[1]['entity_id']
             );
+        $product
+            ->expects($this->any())
+            ->method('getCategoryIds')
+            ->willReturn([]);
         $product
             ->expects($this->exactly($productsCount))
             ->method('getSku')
