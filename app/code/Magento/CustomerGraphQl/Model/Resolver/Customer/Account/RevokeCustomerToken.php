@@ -61,7 +61,10 @@ class RevokeCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ): Value {
-        if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
+
+        $customerId = (int) $this->userContext->getUserId();
+
+        if ($customerId === 0) {
             throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',
@@ -69,7 +72,6 @@ class RevokeCustomerToken implements ResolverInterface
                 )
             );
         }
-        $customerId = $context->getUserId();
 
         $result = function () use ($customerId) {
             return $this->customerTokenService->revokeCustomerAccessToken($customerId);
