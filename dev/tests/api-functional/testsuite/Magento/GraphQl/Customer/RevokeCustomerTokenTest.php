@@ -54,6 +54,6 @@ QUERY;
             'GraphQL response contains errors: Current customer' . ' ' .
             'does not have access to the resource "customer"'
         );
-        $response = $this->graphQlQuery($query, [], '');
+        $this->graphQlQuery($query, [], '');
     }
 }
