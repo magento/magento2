@@ -11,7 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
- * Class Reorder
+ * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
  *
  * @package Magento\Sales\Controller\AbstractController
  */
