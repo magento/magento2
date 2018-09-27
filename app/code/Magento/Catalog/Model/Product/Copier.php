@@ -8,6 +8,7 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * The copier creates product duplicates.
@@ -52,7 +53,7 @@ class Copier
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
-    public function copy(\Magento\Catalog\Model\Product $product)
+    public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
@@ -81,8 +82,8 @@ class Copier
             $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
                 ? $matches[1] . '-' . ($matches[2] + 1)
                 : $urlKey . '-1';
-            $duplicate->setUrlKey($urlKey)
-                ->setUrlPath(null);
+            $duplicate->setUrlKey($urlKey);
+            $duplicate->setData(Product::URL_PATH, null);
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
