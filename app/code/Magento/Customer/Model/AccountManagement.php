@@ -259,7 +259,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @var CollectionFactory
      */
-    private $visitorCollectionFactory;
+    private $visitorColFactory;
 
     /**
      * @var DataObjectProcessor
@@ -360,7 +360,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AccountConfirmation|null $accountConfirmation
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
-     * @param CollectionFactory|null $visitorCollectionFactory
+     * @param CollectionFactory|null $visitorColFactory
      * @param AddressRegistry|null $addressRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -393,7 +393,7 @@ class AccountManagement implements AccountManagementInterface
         AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null,
+        CollectionFactory $visitorColFactory = null,
         AddressRegistry $addressRegistry = null
     ) {
         $this->customerFactory = $customerFactory;
@@ -428,7 +428,7 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SessionManagerInterface::class);
         $this->saveHandler = $saveHandler
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
-        $this->visitorCollectionFactory = $visitorCollectionFactory
+        $this->visitorColFactory = $visitorColFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->addressRegistry = $addressRegistry
             ?: ObjectManager::getInstance()->get(AddressRegistry::class);
@@ -1480,7 +1480,7 @@ class AccountManagement implements AccountManagementInterface
         $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
             ->format(DateTime::DATETIME_PHP_FORMAT);
         /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
-        $visitorCollection = $this->visitorCollectionFactory->create();
+        $visitorCollection = $this->visitorColFactory->create();
         $visitorCollection->addFieldToFilter('customer_id', $customerId);
         $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
         $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
