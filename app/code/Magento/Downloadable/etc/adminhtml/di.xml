@@ -9,13 +9,6 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="Downloadable" type="Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable" sortOrder="70" />
     </type>
-    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
-        <arguments>
-            <argument name="constructors" xsi:type="array">
-                <item name="downloadable" xsi:type="string">Magento\Downloadable\Model\Product\CopyConstructor\Downloadable</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">

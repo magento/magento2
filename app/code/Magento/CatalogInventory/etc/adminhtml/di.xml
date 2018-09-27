@@ -7,13 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogInventory\Model\Stock\Item" type="Magento\CatalogInventory\Model\Adminhtml\Stock\Item" />
-    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
-        <arguments>
-            <argument name="constructors" xsi:type="array">
-                <item name="catalog_inventory" xsi:type="string">Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
         <arguments>
             <argument name="qtyCheckApplicable" xsi:type="boolean">false</argument>

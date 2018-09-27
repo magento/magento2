@@ -136,4 +136,11 @@
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
     </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="catalog_inventory" xsi:type="string">Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1143,4 +1143,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="crossSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\CrossSell</item>
+                <item name="upSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\UpSell</item>
+                <item name="related" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\Related</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <arguments>
+            <argument name="copyConstructor" xsi:type="object">Magento\Catalog\Model\Product\CopyConstructor\Composite</argument>
+        </arguments>
+    </type>
 </config>

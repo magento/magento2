@@ -157,4 +157,11 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="downloadable" xsi:type="string">Magento\Downloadable\Model\Product\CopyConstructor\Downloadable</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
