@@ -330,6 +330,7 @@ class Save extends Attribute implements HttpPostActionInterface
         if (isset($data['serialized_options'])) {
             $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
             foreach ($serializedOptions as $serializedOption) {
+                $serializedOption = str_replace(array('&','+'), array('%26','%2B'), $serializedOption);
                 $option = [];
                 parse_str($serializedOption, $option);
                 $data = array_replace_recursive($data, $option);
