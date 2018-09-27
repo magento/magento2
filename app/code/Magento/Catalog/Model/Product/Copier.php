@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * The copier creates product duplicates.
+ */
 class Copier
 {
     /**
@@ -95,6 +98,8 @@ class Copier
     }
 
     /**
+     * Returns product option repository.
+     *
      * @return Option\Repository
      * @deprecated 101.0.0
      */
@@ -108,6 +113,8 @@ class Copier
     }
 
     /**
+     * Returns metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
      */
