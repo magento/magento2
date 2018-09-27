@@ -7,7 +7,6 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestBillingAddressManagementInterface;
 use Magento\Quote\Api\BillingAddressManagementInterface;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
