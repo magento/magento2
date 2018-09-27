@@ -185,8 +185,6 @@ class Data extends \Magento\Framework\View\Element\Template
         return $collection;
     }
 
-    
-    
     /**
      * @param null|string $defValue
      * @param string $name
