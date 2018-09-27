@@ -1595,7 +1595,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $selectionItemMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->setMethods(['getSku', '__wakeup'])
+            ->setMethods(['getSku', 'getEntityId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1623,9 +1623,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($serializeIds));
         $selectionMock = $this->getSelectionsByIdsMock($selectionIds, $productMock, 5, 6);
         $selectionMock->expects(($this->any()))
-            ->method('getItems')
-            ->will($this->returnValue([$selectionItemMock]));
-        $selectionItemMock->expects($this->any())
+            ->method('getItemByColumnValue')
+            ->will($this->returnValue($selectionItemMock));
+        $selectionItemMock->expects($this->at(0))
+            ->method('getEntityId')
+            ->will($this->returnValue(1));
+        $selectionItemMock->expects($this->once())
             ->method('getSku')
             ->will($this->returnValue($itemSku));
 

@@ -308,8 +308,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
-                    foreach ($selections->getItems() as $selection) {
-                        $skuParts[] = $selection->getSku();
+                    foreach ($selectionIds as $selectionId) {
+                        $entity = $selections->getItemByColumnValue('selection_id', $selectionId);
+                        if ($entity->getEntityId()) {
+                            $skuParts[] = $entity->getSku();
+                        }
                     }
                 }
             }
