@@ -8,6 +8,8 @@ namespace Magento\Reports\Model\ResourceModel\Quote;
 use Magento\Store\Model\Store;
 
 /**
+ * Collection of abandoned quotes with reports join.
+ *
  * @api
  * @since 100.0.2
  */
