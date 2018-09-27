@@ -81,13 +81,15 @@ abstract class Sender
 
         try {
             $sender->send();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+        try {
             $sender->sendCopyTo();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return false;
         }
-
         return true;
     }
 
