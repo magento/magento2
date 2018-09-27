@@ -119,8 +119,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * Validate entity.
      *
-     * @param mixed $cond
      * @param \Magento\Framework\Model\AbstractModel $entity
+     * @param mixed $cond
      * @return bool
      */
     private function validateEntity(\Magento\Framework\Model\AbstractModel $entity, $cond): bool
