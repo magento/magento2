@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 
 /**
@@ -24,36 +22,20 @@ class CreateDefaultSource
     private $defaultSourceProvider;
 
     /**
-     * @var SourceInterfaceFactory
+     * @var ResourceConnection
      */
-    private $sourceFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
-     * @var SourceRepositoryInterface
-     */
-    private $sourceRepository;
+    private $resource;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SourceInterfaceFactory $sourceFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param SourceRepositoryInterface $sourceRepository
+     * @param ResourceConnection $resource
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
-        SourceInterfaceFactory $sourceFactory,
-        DataObjectHelper $dataObjectHelper,
-        SourceRepositoryInterface $sourceRepository
+        ResourceConnection $resource
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->sourceFactory = $sourceFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->sourceRepository = $sourceRepository;
+        $this->resource = $resource;
     }
 
     /**
@@ -63,7 +45,8 @@ class CreateDefaultSource
      */
     public function execute()
     {
-        $data = [
+        $connection = $this->resource->getConnection();
+        $sourceData = [
             SourceInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
@@ -71,10 +54,8 @@ class CreateDefaultSource
             SourceInterface::LATITUDE => 0,
             SourceInterface::LONGITUDE => 0,
             SourceInterface::COUNTRY_ID => 'US',
-            SourceInterface::POSTCODE => '00000'
+            SourceInterface::POSTCODE => '00000',
         ];
-        $source = $this->sourceFactory->create();
-        $this->dataObjectHelper->populateWithArray($source, $data, SourceInterface::class);
-        $this->sourceRepository->save($source);
+        $connection->insert($this->resource->getTableName('inventory_source'), $sourceData);
     }
 }
