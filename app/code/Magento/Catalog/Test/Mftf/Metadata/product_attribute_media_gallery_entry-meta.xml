@@ -7,7 +7,7 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductAttributeMediaGalleryEntry" dataType="ProductAttributeMediaGalleryEntry" type="create" auth="adminOauth" url="/V1/products/{sku}/media" method="POST">
         <contentType>application/json</contentType>
         <object key="entry" dataType="ProductAttributeMediaGalleryEntry">

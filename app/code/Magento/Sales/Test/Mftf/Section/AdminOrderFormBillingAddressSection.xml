@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormBillingAddressSection">
         <element name="NamePrefix" type="input" selector="#order-billing_address_prefix" timeout="30"/>
         <element name="FirstName" type="input" selector="#order-billing_address_firstname" timeout="30"/>
