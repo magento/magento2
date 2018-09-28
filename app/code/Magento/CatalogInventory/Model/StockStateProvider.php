@@ -11,9 +11,9 @@ namespace Magento\CatalogInventory\Model;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
-use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider
@@ -115,13 +115,13 @@ class StockStateProvider implements StockStateProviderInterface
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
         if (!$stockItem->getIsQtyDecimal()) {
             $result->setHasQtyOptionUpdate(true);
-            $qty = intval($qty);
+            $qty = (int)$qty;
             /**
              * Adding stock data to quote item
              */
             $result->setItemQty($qty);
             $qty = $this->getNumber($qty);
-            $origQty = intval($origQty);
+            $origQty = (int)$origQty;
             $result->setOrigQty($origQty);
         }
 
