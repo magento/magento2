@@ -2266,4 +2266,52 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportProductWithUpdateUrlKey()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_for_update_url_key.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        /**
+         * @var $repository \Magento\Catalog\Model\ProductRepository
+         */
+        $repository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+
+        $repUrlRewriteCol = $this->objectManager->create(
+            \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class
+        );
+        $collUrlRewrite = $repUrlRewriteCol->addFieldToSelect(['request_path', 'entity_id', 'entity_type'])
+            ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
+            ->addFieldToFilter('entity_type', ['eq'=> 'product'])
+            ->load();
+
+        $this->assertEquals(1, count($collUrlRewrite));
+
+        $this->assertEquals(
+            sprintf('%s.html', $product->getUrlKey()),
+            $collUrlRewrite->getFirstItem()->getRequestPath()
+        );
+    }
 }
