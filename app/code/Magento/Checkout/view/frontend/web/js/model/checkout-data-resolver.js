@@ -219,17 +219,30 @@ define([
          */
         applyBillingAddress: function () {
             var shippingAddress;
+            var isBillingAddressInitialized;
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
 
                 return;
             }
-            shippingAddress = quote.shippingAddress();
+            shippingAddress = quote.billingAddress();
 
-            if (shippingAddress &&
+            if(quote.isVirtual()) {
+                isBillingAddressInitialized = addressList.some(function (addrs) {
+                    if (addrs.isDefaultBilling()) {
+                        selectBillingAddress(addrs);
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
+
+            if (!isBillingAddressInitialized &&
+                shippingAddress &&
                 shippingAddress.canUseForBilling() &&
-                (shippingAddress.isDefaultShipping() || !quote.isVirtual())
+                (shippingAddress.isDefaultBilling() || !quote.isVirtual())
             ) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
