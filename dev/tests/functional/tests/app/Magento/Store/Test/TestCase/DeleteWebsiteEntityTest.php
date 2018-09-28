@@ -119,4 +119,19 @@ class DeleteWebsiteEntityTest extends Injectable
         $this->deleteWebsite->getDeleteWebsiteForm()->fillForm(['create_backup' => $createBackup]);
         $this->deleteWebsite->getFormPageActions()->delete();
     }
+
+    /**
+     * Reset config settings to default.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        /** @var SetupConfigurationStep $enableBackupsStep */
+        $enableBackupsStep = $this->objectManager->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_backups_functionality', 'rollback' => true]
+        );
+        $enableBackupsStep->run();
+    }
 }
