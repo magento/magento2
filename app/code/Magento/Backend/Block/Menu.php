@@ -75,7 +75,7 @@ class Menu extends \Magento\Backend\Block\Template
     private $anchorRenderer;
 
     /**
-     * @var ConfigInterface
+     * @var \Magento\Framework\App\Route\ConfigInterface
      */
     private $routeConfig;
 
@@ -216,7 +216,7 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $routeId = $this->routeConfig->getRouteByFrontName($match[1]);
         return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
-            $routeId,
+            $routeId ?: $match[1],
             $match[2],
             $match[3]
         );
