@@ -661,7 +661,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function resetPassword($email, $resetToken, $newPassword): bool
+    public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
             $customer = $this->matchCustomerByRpToken($resetToken);
@@ -1093,7 +1093,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
      * @throws LocalizedException
      */
-    private function validateResetPasswordToken(?int $customerId, ?string $resetPasswordLinkToken) : bool
+    private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if ($customerId !== null && $customerId <= 0) {
             throw new InputException(
