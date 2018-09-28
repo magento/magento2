@@ -117,4 +117,19 @@ class DeleteStoreEntityTest extends Injectable
         $this->storeDelete->getStoreForm()->fillForm(['create_backup' => $createBackup]);
         $this->storeDelete->getFormPageActions()->delete();
     }
+
+    /**
+     * Reset config settings to default.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        /** @var SetupConfigurationStep $enableBackupsStep */
+        $enableBackupsStep = $this->objectManager->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_backups_functionality', 'rollback' => true]
+        );
+        $enableBackupsStep->run();
+    }
 }

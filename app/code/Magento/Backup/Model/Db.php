@@ -7,7 +7,7 @@ namespace Magento\Backup\Model;
 
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Database backup model
@@ -149,11 +149,12 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 
     /**
      * @inheritDoc
+     * @throws LocalizedException
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup)
     {
         if (!$this->helper->isEnabled()) {
-            throw new RuntimeException(__('Backup functionality is disabled'));
+            throw new LocalizedException(__('Backup functionality is disabled'));
         }
 
         $backup->open(true);
