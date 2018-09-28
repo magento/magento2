@@ -279,9 +279,13 @@ class Extended extends \Magento\Backend\Block\Widget
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
 
-        $allIdsCollection->clear();
-        $allIdsCollection->setPageSize(0);
-        $gridIds = $allIdsCollection->getColumnValues($massActionIdField);
+
+        $gridIds = [];
+        if ($allIdsCollection) {
+            $allIdsCollection->clear();
+            $allIdsCollection->setPageSize(0);
+            $gridIds = $allIdsCollection->getColumnValues($massActionIdField);
+        }
 
         if (!empty($gridIds)) {
             return join(",", $gridIds);

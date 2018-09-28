@@ -45,7 +45,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     {
         $this->_gridMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid::class,
-            ['getId', 'getCollection']
+            ['getId', 'getUnloadedCollection']
         );
         $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
@@ -137,7 +137,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->_gridMock->expects($this->once())
-            ->method('getCollection')
+            ->method('getUnloadedCollection')
             ->willReturn($collectionMock);
 
         $collectionMock->expects($this->once())
