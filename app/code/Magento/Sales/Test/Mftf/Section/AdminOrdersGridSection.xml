@@ -17,5 +17,6 @@
         <element name="idFilter" type="input" selector=".admin__data-grid-filters input[name='increment_id']"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
+        <element name="enabledFilters" type="block" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
     </section>
 </sections>

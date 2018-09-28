@@ -20,4 +20,9 @@
             <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
             <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
         </actionGroup>
+        <actionGroup name="AdminOrdersGridClearFiltersActionGroup">
+            <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
+            <waitForPageLoad stepKey="waitForPageToLoad"/>
+            <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        </actionGroup>
 </actionGroups>
