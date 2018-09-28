@@ -2,7 +2,7 @@
     "name": "magento/module-braintree",
     "description": "N/A",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/framework": "100.1.*",
         "magento/magento-composer-installer": "*",
         "magento/module-config": "100.1.*",
@@ -18,13 +18,13 @@
         "magento/module-paypal": "100.1.*",
         "magento/module-theme": "100.1.*",
         "magento/module-ui": "100.1.*",
-        "braintree/braintree_php": "3.7.0"
+        "braintree/braintree_php": "3.22.0"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.9",
+    "version": "100.1.10",
     "license": [
         "proprietary"
     ],

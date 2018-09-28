@@ -10,10 +10,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
- * Class VoidTest
+ * Class VoidActionTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  */
-class VoidTest extends \PHPUnit_Framework_TestCase
+class VoidActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -179,7 +179,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->controller = $objectManager->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Invoice\Void',
+            'Magento\Sales\Controller\Adminhtml\Order\Invoice\VoidAction',
             [
                 'context' => $contextMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
