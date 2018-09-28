@@ -15,6 +15,7 @@
 <?php if (!$block->getCategory()) {
     return;
 } ?>
+<?php if($block->canShowBlock()):?>
 <?php $_categories = $block->getCurrentChildCategories(); ?>
 <?php $_count = is_array($_categories) ? count($_categories) : $_categories->count(); ?>
 <?php if ($_count): ?>
@@ -42,4 +43,5 @@
             </dl>
         </div>
     </div>
+<?php endif; ?>
 <?php endif; ?>

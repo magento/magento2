@@ -236,6 +236,14 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Check availability display left block
+     */
+    public function canShowBlock()
+    {
+        return $this->getCurrentCategory()->getDisplayMode() !== \Magento\Catalog\Model\Category::DM_PAGE;
+    }
+
+    /**
      * Return identifiers for produced content
      *
      * @return array
