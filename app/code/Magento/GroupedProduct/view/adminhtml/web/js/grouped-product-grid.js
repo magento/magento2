@@ -1,0 +1,209 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+define([
+    'underscore',
+    'uiRegistry',
+    'Magento_Ui/js/dynamic-rows/dynamic-rows-grid'
+], function (_, registry, dynamicRowsGrid) {
+    'use strict';
+    return dynamicRowsGrid.extend({
+
+        /**
+         * Set max element position
+         *
+         * @param {Number} position - element position
+         * @param {Object} elem - instance
+         */
+        setMaxPosition: function (position, elem) {
+
+            if (position || position === 0) {
+                this.checkMaxPosition(position);
+                this.sort(position, elem);
+                if (~~position === this.maxPosition && ~~position > this.getDefaultPageBoundary() + 1) {
+                    this.shiftNextPagesPositions(position);
+                }
+            } else {
+                this.maxPosition += 1;
+            }
+        },
+
+        /**
+         * Shift positions for next page elements
+         *
+         * @param position
+         */
+        shiftNextPagesPositions: function (position) {
+            console.log("todo: shifting positions to right on next pages related data");
+        },
+
+
+        /**
+         * Update position for element after position from another page is entered
+         *
+         * @param data
+         * @param event
+         */
+        updateGridPosition: function (data, event) {
+            var inputValue = ~~event.target.value,
+                recordData = this.recordData(),
+                record,
+                updatedRecord;
+
+            record = this.elems().find(function (obj) {
+                return obj.dataScope === data.parentScope
+            }).data();
+
+            if (inputValue === ~~record.positionCalculated) {
+                return false;
+            }
+
+            this.elems([]);
+
+            updatedRecord = this.getUpdatedRecordIndex(recordData, record.id);
+
+            if (inputValue >= this.recordData().size() - 1) {
+                recordData[updatedRecord].position = this.getGlobalMaxPosition() + 1;
+            } else {
+                recordData[updatedRecord].position = inputValue;
+                recordData.forEach(function (value, index) {
+                    if (~~value.id !== ~~record.id) {
+                        recordData[index].position = (index !== inputValue) ? index : index + 1;
+                    }
+                });
+            }
+
+            this.reloadGridData(recordData);
+
+        },
+
+        /**
+         * Get updated record index
+         *
+         * @param recordData
+         * @param recordId
+         * @return {number}
+         */
+        getUpdatedRecordIndex: function (recordData, recordId) {
+            return recordData.map(function (o) {
+                return ~~o.id
+            }).indexOf(~~recordId);
+        },
+
+        /**
+         *
+         * @param recordData to reprocess
+         */
+        reloadGridData: function (recordData) {
+            this.recordData(recordData.sort(function (a, b) {
+                return ~~a.position - ~~b.position;
+            }));
+            this._updateCollection();
+            this.reload();
+        },
+
+        /**
+         * Event handler for "Send to bottom" button
+         *
+         * @param positionObj
+         * @return {boolean}
+         */
+        sendToBottom: function (positionObj) {
+
+            var objectToUpdate = this.getObjectToUpdate(positionObj),
+                recordData = this.recordData(),
+                updatedRecord;
+
+            if (~~this.currentPage() === this.pages) {
+                objectToUpdate.position = this.maxPosition;
+            } else {
+                this.elems([]);
+                updatedRecord = this.getUpdatedRecordIndex(recordData, objectToUpdate.data().id);
+                recordData[updatedRecord].position = this.getGlobalMaxPosition() + 1;
+                this.reloadGridData(recordData);
+            }
+
+            return false;
+        },
+
+        /**
+         * Event handler for "Send to top" button
+         *
+         * @param positionObj
+         * @returns {boolean}
+         */
+        sendToTop: function (positionObj) {
+            var objectToUpdate = this.getObjectToUpdate(positionObj),
+                recordData = this.recordData(),
+                updatedRecord;
+
+            //isFirst
+            if (~~this.currentPage() === 1) {
+                objectToUpdate.position = 0;
+            } else {
+                this.elems([]);
+                updatedRecord = this.getUpdatedRecordIndex(recordData, objectToUpdate.data().id);
+                recordData.forEach(function (value, index) {
+                    recordData[index].position = (index === updatedRecord) ? 0 : value.position + 1;
+                });
+                this.reloadGridData(recordData);
+            }
+            return false;
+        },
+
+        /**
+         * Get element from grid for update
+         *
+         * @param object
+         * @return {*}
+         */
+        getObjectToUpdate: function (object) {
+            return this.elems().filter(function (item) {
+                return item.name === object.parentName;
+            })[0];
+        },
+
+        /**
+         * Value function for position input
+         *
+         * @param data
+         * @return {number}
+         */
+        getCalculatedPosition: function (data) {
+            return (~~this.currentPage() - 1) * this.pageSize + this.elems().pluck("name").indexOf(data.name);
+        },
+
+        /**
+         * Returns start index for current page
+         *
+         * @return {number}
+         */
+        getStartIndex() {
+            return (~~this.currentPage() - 1) * this.pageSize;
+        },
+
+        /**
+         * Return Page Boundary
+         *
+         * @return {number}
+         */
+        getDefaultPageBoundary: function () {
+            return (~~this.currentPage() * this.pageSize) - 1;
+        },
+
+        /**
+         * Returns position for last element to be moved after
+         *
+         * @return {number}
+         */
+        getGlobalMaxPosition() {
+            return _.max(this.recordData().map(function (r) {
+                return ~~r.position
+            }));
+        }
+
+
+    });
+});
