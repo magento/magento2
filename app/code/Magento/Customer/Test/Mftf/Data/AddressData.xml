@@ -106,4 +106,11 @@
         <data key="country_id">GB</data>
         <data key="telephone">444-44-444-44</data>
     </entity>
+    <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="state">California</data>
+    </entity>
 </entities>

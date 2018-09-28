@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomerGroupActionGroup">
+        <arguments>
+            <argument name="groupName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="navigateToCustomersGroupPage"/>
+        <waitForPageLoad stepKey="waitForPageOpened"/>
+        <click stepKey="clickFiltersBtn" selector="{{AdminCustomerGroupMainSection.filterBtn}}"/>
+        <fillField selector="{{AdminCustomerGroupMainSection.groupField}}" userInput="{{groupName}}" stepKey="fillFieldGroupName"/>
+        <click stepKey="clickApplyBtn" selector="{{AdminCustomerGroupMainSection.applyFiltersBtn}}"/>
+        <!--Here we need to use Implicit wait.-->
+        <wait stepKey="waitForFilteringFinished" time="2"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminCustomerGroupMainSection.selectFirstRow}}"/>
+        <wait stepKey="waitForDropDownOpened" time="2"/>
+        <click stepKey="clickDeleteBtn" selector="{{AdminCustomerGroupMainSection.deleteBtn}}"/>
+        <waitForPageLoad stepKey="waitForConfirmationAlert"/>
+        <click stepKey="accept" selector="{{AdminCustomerGridMainActionsSection.ok}}"/>
+        <see stepKey="seeSuccessMessage" userInput="You deleted the customer group."/>
+        <wait stepKey="waitForClearAllBtnVisible" time="2"/>
+        <click stepKey="clearAllBtn" selector="{{AdminCustomerGroupMainSection.clearAllBtn}}"/>
+        <waitForElementNotVisible selector="{{AdminCustomerGroupMainSection.clearAllBtn}}" stepKey="waitForElementNotVisible"/>
+    </actionGroup>
+</actionGroups>
