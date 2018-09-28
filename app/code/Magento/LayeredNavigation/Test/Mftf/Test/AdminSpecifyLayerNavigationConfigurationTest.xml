@@ -31,6 +31,8 @@
         <fillField selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102" stepKey="fillAdmin1"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
         <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
+        <waitForElementVisible selector="#catalog_layered_navigation" stepKey="waitForLayeredNav" />
+        <scrollTo selector="#catalog_layered_navigation" x="0" y="-80" stepKey="scrollToLayeredNavigation" />
         <seeInField stepKey="seeThatValueWasSaved" selector="{{LayeredNavigationSection.PriceNavigationStep}}" userInput="102"/>
         <checkOption selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="setToDefaultValue1"/>
         <checkOption selector="{{LayeredNavigationSection.PriceNavigationStepSystemValue}}" stepKey="setToDefaultValue2"/>
