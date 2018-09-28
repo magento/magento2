@@ -66,7 +66,7 @@ abstract class Sender
 
     /**
      * Send order email if it is enabled in configuration.
-     * 
+     *
      * @param Order $order
      * @return bool
      */
