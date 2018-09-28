@@ -173,7 +173,7 @@ class LocationDirectory
      * @param string $regionCode
      * @return array
      */
-    public function getRegionIds($countryId, $regionCode)
+    public function getRegionIds($countryId, $regionCode): array
     {
         $this->loadRegions();
 
