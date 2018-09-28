@@ -64,6 +64,7 @@
 
         <!--Submit Order and verify information-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskTodisappear"/>
         <waitForPageLoad stepKey="waitForOrderToProcess"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
@@ -122,7 +123,8 @@
         <!--Update Qty of items to be refunded and submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="fillQtyOfItemsToRefund" after="scrollToItemsToRefund"/>
-        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>
+
+        <!--<click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>-->
         <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
