@@ -2622,20 +2622,23 @@ if (props.get("category_names_list") == null) {
       <stringProp name="filename"/>
       <stringProp name="cacheKey"/>
       <stringProp name="script">var cacheHitPercent = vars.get("cache_hits_percentage");
+                                vars.put("shouldBeCached", true);
 
-if (
-	cacheHitPercent &lt; 100 &amp;&amp;
-	sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
-) {
-	doCache();
-}
+                                if (
+                                	cacheHitPercent &lt; 100 &amp;&amp;
+                                	sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+                                ) {
+                                	doCache();
+                                }
 
-function doCache(){
-	var random = Math.random() * 100;
-	if (cacheHitPercent &lt; random) {
-		sampler.setPath(sampler.getPath() + "?cacheModifier=" + Math.random().toString(36).substring(2, 13));
-	}
-}
+                                function doCache(){
+                                	var random = Math.random() * 100;
+
+                                	if (cacheHitPercent &lt; random) {
+                                		sampler.setPath(sampler.getPath() + "?cacheModifier=" + Math.random().toString(36).substring(2, 13));
+                                		vars.put("shouldBeCached", false);
+                                	}
+                                }
 </stringProp>
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/cache_hit_miss.jmx</stringProp></JSR223PreProcessor>
     <hashTree/>
@@ -2938,6 +2941,25 @@ vars.put("customer_email", customerUser);
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category" enabled="true">
@@ -2990,6 +3012,25 @@ vars.put("customer_email", customerUser);
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="View Simple Products" enabled="true">
@@ -3057,6 +3098,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   
@@ -3125,6 +3185,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   
@@ -3291,6 +3370,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category" enabled="true">
@@ -3343,6 +3441,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="View Simple Products" enabled="true">
@@ -3410,6 +3527,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   
@@ -3478,6 +3614,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -3532,20 +3687,23 @@ if (testLabel
       <stringProp name="filename"/>
       <stringProp name="cacheKey"/>
       <stringProp name="script">var cacheHitPercent = vars.get("cache_hits_percentage");
+                                vars.put("shouldBeCached", true);
 
-if (
-	cacheHitPercent &lt; 100 &amp;&amp;
-	sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
-) {
-	doCache();
-}
+                                if (
+                                	cacheHitPercent &lt; 100 &amp;&amp;
+                                	sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+                                ) {
+                                	doCache();
+                                }
 
-function doCache(){
-	var random = Math.random() * 100;
-	if (cacheHitPercent &lt; random) {
-		sampler.setPath(sampler.getPath() + "?cacheModifier=" + Math.random().toString(36).substring(2, 13));
-	}
-}
+                                function doCache(){
+                                	var random = Math.random() * 100;
+
+                                	if (cacheHitPercent &lt; random) {
+                                		sampler.setPath(sampler.getPath() + "?cacheModifier=" + Math.random().toString(36).substring(2, 13));
+                                		vars.put("shouldBeCached", false);
+                                	}
+                                }
 </stringProp>
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/cache_hit_miss.jmx</stringProp></JSR223PreProcessor>
     <hashTree/>
@@ -3635,6 +3793,25 @@ if (testLabel
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Search" enabled="true">
@@ -3816,6 +3993,25 @@ vars.put("product_url_key", product);
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -3906,6 +4102,25 @@ if (testLabel
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Search" enabled="true">
@@ -4240,6 +4455,25 @@ vars.put("product_url_key", product);
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -4330,6 +4564,25 @@ if (testLabel
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
 
@@ -4559,6 +4812,25 @@ vars.put("product_url_key", product);
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -4696,6 +4968,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category" enabled="true">
@@ -4748,6 +5039,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Cart" enabled="true">
@@ -4829,6 +5139,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -5052,6 +5381,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SetUp - Get Configurable Product Options" enabled="true">
@@ -5659,6 +6007,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Wishlist" enabled="true">
@@ -6030,6 +6397,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
         <stringProp name="Scope.variable">random_product_compare_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Compare" enabled="true">
@@ -6111,6 +6497,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Comparison Add" enabled="true">
@@ -6289,6 +6694,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product ${_counter} Comparison Add" enabled="true">
@@ -6577,6 +7001,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category" enabled="true">
@@ -6629,6 +7072,25 @@ vars.put("category_name", props.get("category_names_list").get(number));
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Cart" enabled="true">
@@ -6710,6 +7172,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -6933,6 +7414,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SetUp - Get Configurable Product Options" enabled="true">
@@ -7742,6 +8242,25 @@ vars.put("customer_email", customerUser);
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Login Page" enabled="true">
@@ -7947,6 +8466,25 @@ vars.put("customer_email", customerUser);
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Cart" enabled="true">
@@ -8028,6 +8566,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -8251,6 +8808,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SetUp - Get Configurable Product Options" enabled="true">
@@ -9239,6 +9815,25 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 Rate and Review" enabled="true">
@@ -9719,6 +10314,25 @@ vars.put("customer_email", customerUser);
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category" enabled="true">
@@ -9771,6 +10385,25 @@ vars.put("customer_email", customerUser);
         <stringProp name="Scope.variable">category_id</stringProp>
       </ResponseAssertion>
       <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                  <stringProp name="BeanShellAssertion.filename"/>
+                  <stringProp name="BeanShellAssertion.parameters"/>
+                  <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
     </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Cart" enabled="true">
@@ -9852,6 +10485,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -10075,6 +10727,25 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+                          <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                                    FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+                            <stringProp name="BeanShellAssertion.filename"/>
+                            <stringProp name="BeanShellAssertion.parameters"/>
+                            <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                          </BeanShellAssertion>
+                          <hashTree/>
         </hashTree>
     
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SetUp - Get Configurable Product Options" enabled="true">
@@ -10686,6 +11357,25 @@ vars.put("customer_email", customerUser);
           <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Cache mis assertion" enabled="true">
+<stringProp name="BeanShellAssertion.query">int cacheHitPercent =  Integer.parseInt(vars.get("cache_hits_percentage"));
+
+                                            if (cacheHitPercent &lt; 100) {
+
+                                            	shouldBeCached = vars.get("shouldBeCached").toString();
+                                            	pageIsCached = (ResponseHeaders.contains("X-Cache: MISS, HIT") || ResponseHeaders.contains("X-Cache: HIT")).toString();
+
+                                            	if ((pageIsCached != shouldBeCached) &amp;&amp; (shouldBeCached == "false")) {
+                                            		Failure = true;
+                                            		FailureMessage = "This request should be cached but it isn't";
+                                            	}
+                                            }
+          </stringProp>
+              <stringProp name="BeanShellAssertion.filename"/>
+              <stringProp name="BeanShellAssertion.parameters"/>
+              <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
       </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Login Page" enabled="true">
