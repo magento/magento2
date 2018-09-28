@@ -2957,7 +2957,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface|null
      */
-    private function retrieveProductBySku($sku)
+    private function retrieveProductBySku(string $sku)
     {
         try {
             $product = $this->productRepository->get($sku);
