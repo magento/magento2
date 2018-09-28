@@ -37,5 +37,6 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{option}}" stepKey="changeOption"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
 </actionGroups>
