@@ -88,7 +88,6 @@ class CategoryTree
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
      * @return array
-     * @throws \Exception
      */
     public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
