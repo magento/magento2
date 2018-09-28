@@ -15,5 +15,6 @@
         <section name="StorefrontProductImageSection" />
         <section name="StorefrontMessagesSection" />
         <section name="StorefrontProductRelatedProductsSection"/>
+        <section name="StorefrontCreateRequisitionListSection"/>
     </page>
 </pages>

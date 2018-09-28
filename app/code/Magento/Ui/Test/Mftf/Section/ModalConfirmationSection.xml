@@ -11,6 +11,5 @@
     <section name="ModalConfirmationSection">
         <element name="CancelButton" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action-dismiss')]"/>
         <element name="OkButton" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action-accept')]"/>
-        <element name="saveButton" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action primary confirm')]" timeout="30"/>
     </section>
 </sections>
