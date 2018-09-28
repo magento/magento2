@@ -141,7 +141,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             [
                 'filter_action' => 'report',
                 'order_id' => '100000004',
-                'expected_order_state' => Order::STATE_PROCESSING
+                'expected_order_state' => Order::STATE_COMPLETE
             ],
         ];
     }
