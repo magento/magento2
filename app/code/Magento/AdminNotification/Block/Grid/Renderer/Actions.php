@@ -39,7 +39,8 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' . __(
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
+            $this->escapeHtml($row->getUrl()) . '">' . __(
             'Read Details'
         ) . '</a> | ' : '';
 
