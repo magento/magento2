@@ -15,8 +15,8 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class AggregationResolver implements AggregationResolverInterface
 {

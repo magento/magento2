@@ -19,8 +19,8 @@ namespace Magento\CatalogSearch\Model\Indexer\Scope;
  *   which means that default indexer table should be left unchanged during indexation
  *   and temporary table should be used instead.
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class State
 {

@@ -11,8 +11,8 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class General implements GeneratorInterface
 {

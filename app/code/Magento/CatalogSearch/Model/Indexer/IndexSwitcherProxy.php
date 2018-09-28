@@ -12,8 +12,8 @@ use Magento\Framework\Search\EngineResolverInterface;
 /**
  * Proxy for adapter-specific index switcher
  *
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class IndexSwitcherProxy implements IndexSwitcherInterface
 {
