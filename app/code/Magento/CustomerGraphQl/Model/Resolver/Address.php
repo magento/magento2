@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\DataObjectHelper;
@@ -19,6 +19,10 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\CustomerGraphQl\Model\Resolver\Address\AddressDataProvider;
 use Magento\Eav\Model\Config;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customers Address, used for GraphQL request processing.
@@ -26,22 +30,11 @@ use Magento\Eav\Model\Config;
 class Address implements ResolverInterface
 {
     /**
-     * Input data key
-     */
-    const CUSTOM_ATTRIBUTE_KEY = 'custom_attributes';
-    const EXTENSION_ATTRIBUTE_KEY = 'extension_attributes';
-
-    /**
      * Mutation Address type
      */
     const MUTATION_ADDRESS_CREATE = 'customerAddressCreate';
     const MUTATION_ADDRESS_UPDATE = 'customerAddressUpdate';
     const MUTATION_ADDRESS_DELETE = 'customerAddressDelete';
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepositoryInterface;
 
     /**
      * @var AddressRepositoryInterface
@@ -64,7 +57,7 @@ class Address implements ResolverInterface
     private $addressDataProvider;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     private $dataObjectHelper;
 
@@ -74,7 +67,6 @@ class Address implements ResolverInterface
     private $addressAttributes;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepositoryInterface
      * @param AddressRepositoryInterface $addressRepositoryInterface
      * @param AddressInterfaceFactory $addressInterfaceFactory
      * @param Config $eavConfig
@@ -82,21 +74,19 @@ class Address implements ResolverInterface
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepositoryInterface,
         AddressRepositoryInterface $addressRepositoryInterface,
         AddressInterfaceFactory $addressInterfaceFactory,
         Config $eavConfig,
         AddressDataProvider $addressDataProvider,
         DataObjectHelper $dataObjectHelper
     ) {
-        $this->customerRepositoryInterface = $customerRepositoryInterface;
         $this->addressRepositoryInterface = $addressRepositoryInterface;
         $this->addressInterfaceFactory = $addressInterfaceFactory;
         $this->eavConfig = $eavConfig;
         $this->addressDataProvider = $addressDataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->addressAttributes = $this->eavConfig->getEntityAttributes(
-            \Magento\Customer\Api\AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS
+            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS
         );
     }
 
@@ -112,40 +102,58 @@ class Address implements ResolverInterface
     ) {
         /** @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == UserContextInterface::USER_TYPE_GUEST) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException(
+            throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',
-                    [\Magento\Customer\Model\Customer::ENTITY]
+                    [AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS]
                 )
             );
         }
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->customerRepositoryInterface->getById($context->getUserId());
+        $customerId = $context->getUserId();
         switch ($field->getName()) {
             case self::MUTATION_ADDRESS_CREATE:
                 return $this->addressDataProvider->processCustomerAddress(
-                    $this->processCustomerAddressCreate($customer, $args['input'])
+                    $this->processCustomerAddressCreate($customerId, $args['input'])
                 );
             case self::MUTATION_ADDRESS_UPDATE:
                 return $this->addressDataProvider->processCustomerAddress(
-                    $this->processCustomerAddressUpdate($customer, $args['id'], $args['input'])
+                    $this->processCustomerAddressUpdate($customerId, $args['id'], $args['input'])
                 );
             case self::MUTATION_ADDRESS_DELETE:
-                return $this->processCustomerAddressDelete($customer, $args['id']);
+                return $this->processCustomerAddressDelete($customerId, $args['id']);
             default:
                 return [];
         }
     }
 
     /**
-     * Get input address attribute errors
+     * Get new address attribute input errors
+     *
      * @param array $addressInput
      * @return bool|string
      */
-    private function getAddressInputError(array $addressInput)
+    private function getNewAddressInputError(array $addressInput)
     {
         foreach ($this->addressAttributes as $attributeName => $attributeInfo) {
-            if ($attributeInfo->getIsRequired() && !isset($addressInput[$attributeName])) {
+            if ($attributeInfo->getIsRequired()
+                && (!isset($addressInput[$attributeName]) || empty($addressInput[$attributeName]))) {
+                return $attributeName;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get update address attribute input errors
+     *
+     * @param array $addressInput
+     * @return bool|string
+     */
+    private function getUpdateAddressInputError(array $addressInput)
+    {
+        foreach ($this->addressAttributes as $attributeName => $attributeInfo) {
+            if ($attributeInfo->getIsRequired()
+                && (isset($addressInput[$attributeName]) && empty($addressInput[$attributeName]))) {
                 return $attributeName;
             }
         }
@@ -154,6 +162,7 @@ class Address implements ResolverInterface
 
     /**
      * Add $addressInput array information to a $address object
+     *
      * @param AddressInterface $address
      * @param array $addressInput
      * @return AddressInterface
@@ -170,16 +179,17 @@ class Address implements ResolverInterface
 
     /**
      * Process customer address create
-     * @param CustomerInterface $customer
+     *
+     * @param int $customerId
      * @param array $addressInput
      * @return AddressInterface
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
+     * @throws GraphQlInputException
      */
-    private function processCustomerAddressCreate(CustomerInterface $customer, array $addressInput) : AddressInterface
+    private function processCustomerAddressCreate($customerId, array $addressInput) : AddressInterface
     {
-        $errorInput = $this->getAddressInputError($addressInput);
+        $errorInput = $this->getNewAddressInputError($addressInput);
         if ($errorInput) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlInputException(
+            throw new GraphQlInputException(
                 __('Required parameter %1 is missing', [$errorInput])
             );
         }
@@ -188,32 +198,40 @@ class Address implements ResolverInterface
             $this->addressInterfaceFactory->create(),
             $addressInput
         );
-        $newAddress->setCustomerId($customer->getId());
+        $newAddress->setCustomerId($customerId);
         return $this->addressRepositoryInterface->save($newAddress);
     }
 
     /**
      * Process customer address update
-     * @param CustomerInterface $customer
+     *
+     * @param int $customerId
      * @param int $addressId
      * @param array $addressInput
      * @return AddressInterface
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
+     * @throws GraphQlInputException
      */
-    private function processCustomerAddressUpdate(CustomerInterface $customer, $addressId, array $addressInput)
+    private function processCustomerAddressUpdate($customerId, $addressId, array $addressInput)
     {
         try {
             /** @var AddressInterface $address */
             $address = $this->addressRepositoryInterface->getById($addressId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException(
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(
                 __('Address id %1 does not exist.', [$addressId])
             );
         }
-        if ($address->getCustomerId() != $customer->getId()) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException(
+        if ($address->getCustomerId() != $customerId) {
+            throw new GraphQlAuthorizationException(
                 __('Current customer does not have permission to update address id %1', [$addressId])
+            );
+        }
+        $errorInput = $this->getUpdateAddressInputError($addressInput);
+        if ($errorInput) {
+            throw new GraphQlInputException(
+                __('Required parameter %1 is missing', [$errorInput])
             );
         }
         return $this->addressRepositoryInterface->save(
@@ -223,34 +241,35 @@ class Address implements ResolverInterface
 
     /**
      * Process customer address delete
-     * @param CustomerInterface $customer
+     *
+     * @param int $customerId
      * @param int $addressId
      * @return bool
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlNoSuchEntityException
      */
-    private function processCustomerAddressDelete(CustomerInterface $customer, $addressId)
+    private function processCustomerAddressDelete($customerId, $addressId)
     {
         try {
             /** @var AddressInterface $address */
             $address = $this->addressRepositoryInterface->getById($addressId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException(
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(
                 __('Address id %1 does not exist.', [$addressId])
             );
         }
-        if ($address->getCustomerId() != $customer->getId()) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException(
+        if ($customerId != $address->getCustomerId()) {
+            throw new GraphQlAuthorizationException(
                 __('Current customer does not have permission to delete address id %1', [$addressId])
             );
         }
         if ($address->isDefaultBilling()) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException(
+            throw new GraphQlAuthorizationException(
                 __('Customer Address %1 is set as default billing address and can not be deleted', [$addressId])
             );
         }
         if ($address->isDefaultShipping()) {
-            throw new \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException(
+            throw new GraphQlAuthorizationException(
                 __('Customer Address %1 is set as default shipping address and can not be deleted', [$addressId])
             );
         }
