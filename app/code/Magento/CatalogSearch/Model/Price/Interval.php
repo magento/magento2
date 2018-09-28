@@ -7,10 +7,6 @@ namespace Magento\CatalogSearch\Model\Price;
 
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
-/**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
- */
 class Interval implements IntervalInterface
 {
     /**

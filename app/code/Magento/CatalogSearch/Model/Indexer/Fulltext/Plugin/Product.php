@@ -9,10 +9,6 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
-/**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
- */
 class Product extends AbstractPlugin
 {
     /**
