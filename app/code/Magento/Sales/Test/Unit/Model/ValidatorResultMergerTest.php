@@ -62,13 +62,13 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
     public function testMerge()
     {
         $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $validationResult = $this->createMock(ValidatorResultInterface::class);
+        $cmValidationResult = $this->createMock(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);
-        $orderValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test01', 'test02']);
-        $creditmemoValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test03']);
+        $validationResult->expects($this->once())->method('getMessages')->willReturn(['test01', 'test02']);
+        $cmValidationResult->expects($this->once())->method('getMessages')->willReturn(['test03']);
 
         $validatorResultMock->expects($this->at(0))->method('addMessage')->with('test01');
         $validatorResultMock->expects($this->at(1))->method('addMessage')->with('test02');
@@ -78,8 +78,8 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
         $validatorResultMock->expects($this->at(5))->method('addMessage')->with('test06');
         $expected = $validatorResultMock;
         $actual = $this->validatorResultMerger->merge(
-            $orderValidationResultMock,
-            $creditmemoValidationResultMock,
+            $validationResult,
+            $cmValidationResult,
             ...$itemsValidationMessages
         );
         $this->assertEquals($expected, $actual);
