@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<container name="templates" provider="product_form.product_form_data_source" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <container name="group_template" template="Magento_InventoryConfigurableProductAdminUi/container" component="Magento_Ui/js/form/components/group">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="formElement" xsi:type="string">container</item>
+                <item name="dataType" xsi:type="string">text</item>
+                <item name="additionalForGroup" xsi:type="boolean">true</item>
+                <item name="dataScope" xsi:type="string"/>
+                <item name="name" xsi:type="string">${$.dynamicData.name}</item>
+                <item name="fieldTemplate" xsi:type="string"/>
+            </item>
+        </argument>
+    </container>
+    <button name="button_template" template="ui/form/components/button/container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string">${$.dynamicData.label}</item>
+                <item name="labelVisible" xsi:type="boolean">true</item>
+                <item name="additionalClasses" xsi:type="string">button-assign-sources required</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">${$.dynamicData.targetName}</item>
+                        <item name="actionName" xsi:type="string">handleToggleSourcesModal</item>
+                        <item name="params" xsi:type="array">
+                            <item name="0" xsi:type="string">${$.dynamicData.param}</item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="targetName" xsi:type="string">product_form.product_form.assign_sources_configurable_modal</item>
+                        <item name="actionName" xsi:type="string">toggleModal</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <dataScope/>
+            <title translate="true">Assign Sources</title>
+        </settings>
+    </button>
+    <dynamicRows name="dynamic_rows_template" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" template="ui/dynamic-rows/templates/grid">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="deleteButtonLabel" xsi:type="string">Remove</item>
+                <item name="identificationDRProperty" xsi:type="string">source_code</item>
+                <item name="dataProvider" xsi:type="string">${$.dynamicData.dataProvider}</item>
+                <item name="name" xsi:type="string">${$.dynamicData.name}</item>
+                <item name="map" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                    <item name="source_code" xsi:type="string">source_code</item>
+                    <item name="source_status" xsi:type="string">source_status</item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <componentType>dynamicRows</componentType>
+            <identificationProperty>source_code</identificationProperty>
+            <addButton>false</addButton>
+            <dataScope>${$.dynamicData.dataScope}</dataScope>
+            <dndConfig>
+                <param name="enabled" xsi:type="boolean">false</param>
+            </dndConfig>
+            <links>
+                <link name="insertData">${$.provider}:${$.dynamicData.dataProvider}</link>
+            </links>
+            <exports>
+                <link name="recordData">${$.dynamicData.exportTo}</link>
+            </exports>
+        </settings>
+        <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="isTemplate" xsi:type="boolean">true</item>
+                    <item name="is_collection" xsi:type="boolean">true</item>
+                    <item name="componentType" xsi:type="string">container</item>
+                    <item name="positionProvider" xsi:type="string">position</item>
+                    <item name="dataScope" xsi:type="string"/>
+                </item>
+            </argument>
+            <field name="source" formElement="input">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Source</label>
+                    <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                </settings>
+            </field>
+            <field name="source_status" formElement="input">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Source Status</label>
+                    <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                </settings>
+            </field>
+            <field name="quantity_per_source" formElement="input">
+                <settings>
+                    <label translate="true">Quantity Per Source</label>
+                    <dataType>text</dataType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+            <actionDelete name="actionDelete" component="Magento_Ui/js/dynamic-rows/action-delete" template="ui/dynamic-rows/cells/action-delete">
+                <settings>
+                    <dataType>text</dataType>
+                    <label>Action</label>
+                    <componentType>actionDelete</componentType>
+                </settings>
+            </actionDelete>
+        </container>
+    </dynamicRows>
+</container>

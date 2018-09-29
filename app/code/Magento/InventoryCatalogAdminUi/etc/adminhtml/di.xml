@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Product form configurations -->
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="source_items" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier\SourceItems</item>
+                    <item name="sortOrder" xsi:type="number">200</item>
+                </item>
+                <item name="quantity" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier\Quantity</item>
+                    <item name="sortOrder" xsi:type="number">400</item>
+                </item>
+                <item name="stock_status" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier\StockStatus</item>
+                    <item name="sortOrder" xsi:type="number">500</item>
+                </item>
+                <item name="advanced_inventory" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory</item>
+                    <item name="sortOrder" xsi:type="number">600</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="quantity_per_source" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalogAdminUi\Ui\DataProvider\Product\Listing\Modifier\QuantityPerSource</item>
+                    <item name="sortOrder" xsi:type="number">300</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <plugin name="copy_source_items" type="Magento\InventoryCatalogAdminUi\Plugin\Catalog\CopySourceItemsPlugin"/>
+    </type>
+    <type name="Magento\InventoryAdminUi\Model\Stock\StockSourceLinkProcessor">
+        <plugin name="prevent_process_for_default_stock" type="Magento\InventoryCatalogAdminUi\Plugin\InventoryAdminUi\Stock\StockSaveProcessor\PreventProcessDefaultStockLinksPlugin"/>
+    </type>
+    <type name="Magento\InventoryAdminUi\Ui\DataProvider\SourceDataProvider">
+        <plugin name="prevent_disabling_default_source" type="Magento\InventoryCatalogAdminUi\Plugin\InventoryAdminUi\DataProvider\PreventDisablingDefaultSourcePlugin"/>
+    </type>
+</config>

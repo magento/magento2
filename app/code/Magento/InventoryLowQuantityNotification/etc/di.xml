@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration"/>
+    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\SaveMultiple"/>
+    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Get"/>
+    <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Delete"/>
+
+    <type name="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface">
+        <plugin name="inventory_bulk_transfer_low_quantity_notification"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkConfigurationTransferInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface">
+        <plugin name="inventory_bulk_source_assign_low_quantity_notification"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceAssignInterfacePlugin"/>
+    </type>
+</config>

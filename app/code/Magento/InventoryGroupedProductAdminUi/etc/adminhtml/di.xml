@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="inventoryGroupedPanel" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryGroupedProductAdminUi\Ui\DataProvider\Product\Form\Modifier\InventoryGroupedPanel</item>
+                    <item name="sortOrder" xsi:type="number">310</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider">
+        <plugin name="append_quantity_per_source" type="Magento\InventoryGroupedProductAdminUi\Plugin\Ui\DataProvider\Product\Form\AddQuantityPerSourceToProductsData" sortOrder="10"/>
+        <plugin name="append_column_quantity_per_source" type="Magento\InventoryGroupedProductAdminUi\Plugin\Ui\DataProvider\Product\Form\AddColumnQuantityPerSource" sortOrder="10"/>
+    </type>
+</config>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexHandlerInterface" type="Magento\InventoryIndexer\Indexer\IndexHandler"/>
+    <preference for="Magento\InventoryMultiDimensionalIndexerApi\Model\IndexStructureInterface" type="Magento\InventoryIndexer\Indexer\IndexStructure"/>
+    <type name="Magento\InventoryIndexer\Indexer\IndexHandler">
+        <arguments>
+            <argument name="batchSize" xsi:type="string">100</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <arguments>
+            <argument name="indexStructureHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <arguments>
+            <argument name="indexStructureHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
+        <arguments>
+            <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryIndexer\Indexer\SelectBuilder">
+        <arguments>
+            <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>
+        </arguments>
+    </type>
+    <!-- Source Item -->
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="reindex_after_source_items_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsDeletePlugin"/>
+    </type>
+    <!-- Source -->
+    <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
+        <plugin name="invalidate_after_enabling_or_disabling_source" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterEnablingOrDisablingSourcePlugin"/>
+    </type>
+    <!-- StockSourceLink -->
+    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
+        <plugin name="invalidate_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterStockSourceLinksSavePlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
+        <plugin name="invalidate_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\InvalidateAfterStockSourceLinksDeletePlugin"/>
+    </type>
+    <!-- Stock Item -->
+    <preference for="Magento\InventorySalesApi\Model\GetStockItemDataInterface" type="Magento\InventoryIndexer\Model\ResourceModel\GetStockItemData"/>
+    <preference for="Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface" type="Magento\InventoryIndexer\Model\StockIndexTableNameResolver"/>
+    <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
+        <arguments>
+            <argument name="dimensionName" xsi:type="string">stock_</argument>
+        </arguments>
+    </type>
+</config>

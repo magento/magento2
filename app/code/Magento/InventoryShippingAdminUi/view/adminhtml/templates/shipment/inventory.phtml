@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\InventoryShippingAdminUi\Block\Adminhtml\Shipment\Inventory $block */
+
+$sourceCode = $block->getSourceCode();
+?>
+
+<?php if ($sourceCode): ?>
+<section class="admin__page-section inventory">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Inventory')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <?= $block->escapeHtml(__('Source:')) ?>
+        <?= $block->escapeHtml($block->getSourceName($sourceCode)) ?>
+    </div>
+</section>
+<input name="sourceCode" type="hidden" value="<?= /* @escapeNotVerified */ $sourceCode ?>">
+<?php endif; ?>

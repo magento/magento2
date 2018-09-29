@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="sources">
+        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="map" xsi:type="array">
+                        <item name="notify_stock_qty" xsi:type="string">notify_stock_qty</item>
+                        <item name="notify_stock_qty_use_default" xsi:type="string">notify_stock_qty_use_default_value</item>
+                    </item>
+                    <item name="identificationDRProperty" xsi:type="string">source_code</item>
+                </item>
+            </argument>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <field name="notify_stock_qty" formElement="input" sortOrder="60" component="Magento_InventoryLowQuantityNotificationAdminUi/js/components/notify-stock-qty">
+                    <settings>
+                        <dataType>text</dataType>
+                        <dataScope>notify_stock_qty</dataScope>
+                        <label translate="true">Notify Quantity</label>
+                        <imports>
+                            <link name="notifyStockQtyUseDefault">${$.parentName}.notify_stock_qty_use_default:checked</link>
+                            <link name="manageStock">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
+                    </settings>
+                </field>
+                <field name="notify_stock_qty_use_default" component="Magento_InventoryLowQuantityNotificationAdminUi/js/components/use-config-settings" formElement="checkbox" sortOrder="70">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
+                            <item name="default" xsi:type="number">1</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataScope>notify_stock_qty_use_default</dataScope>
+                        <label translate="true">Notify Quantity Use Default</label>
+                        <links>
+                            <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
+                        </links>
+                        <imports>
+                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <checkbox class="Magento\InventoryLowQuantityNotificationAdminUi\Ui\Component\Product\Form\Element\UseConfigSettings">
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+            </container>
+        </dynamicRows>
+    </fieldset>
+</form>

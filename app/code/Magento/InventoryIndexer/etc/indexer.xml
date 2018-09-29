@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="inventory" view_id="inventory" class="Magento\InventoryIndexer\Indexer\InventoryIndexer">
+        <title translate="true">Inventory</title>
+        <description translate="true">Inventory index (MSI)</description>
+    </indexer>
+    <indexer id="catalog_product_price">
+        <dependencies>
+            <indexer id="inventory"/>
+        </dependencies>
+    </indexer>
+</config>

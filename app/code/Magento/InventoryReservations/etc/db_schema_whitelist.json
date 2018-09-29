@@ -1,0 +1,26 @@
+{
+  "inventory_reservation": {
+    "column": {
+      "reservation_id": true,
+      "stock_id": true,
+      "sku": true,
+      "quantity": true,
+      "metadata": true
+    },
+    "index": {
+      "INVENTORY_RESERVATION_STOCK_ID_SKU_QUANTITY": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  },
+  "patch_list": {
+    "column": {
+      "patch_id": true,
+      "patch_name": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
