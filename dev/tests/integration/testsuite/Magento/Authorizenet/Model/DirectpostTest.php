@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class contains tests for Direct Post integration
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectpostTest extends \PHPUnit\Framework\TestCase
