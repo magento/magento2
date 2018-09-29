@@ -79,7 +79,7 @@ class PlaceReservationsForSalesEvent implements PlaceReservationsForSalesEventIn
     /**
      * @inheritdoc
      */
-    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent)
+    public function execute(array $items, SalesChannelInterface $salesChannel, SalesEventInterface $salesEvent): void
     {
         if (empty($items)) {
             return;

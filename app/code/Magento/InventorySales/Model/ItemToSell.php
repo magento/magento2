@@ -53,7 +53,7 @@ class ItemToSell implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function setSku(string $sku)
+    public function setSku(string $sku): void
     {
         $this->sku = $sku;
     }
@@ -61,7 +61,7 @@ class ItemToSell implements ItemToSellInterface
     /**
      * @inheritdoc
      */
-    public function setQuantity(float $qty)
+    public function setQuantity(float $qty): void
     {
         $this->qty = $qty;
     }

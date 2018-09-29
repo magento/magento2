@@ -53,7 +53,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(SourceInterface $source)
+    public function save(SourceInterface $source): void
     {
         $this->commandSave->execute($source);
     }

@@ -30,15 +30,25 @@ interface SalesEventInterface
     const OBJECT_TYPE_ORDER = 'order';
     /**#@-*/
 
+    /**
+     * @return string
+     */
     public function getType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectType(): string;
 
+    /**
+     * @return string
+     */
     public function getObjectId(): string;
 
     /**
      * Convert this object to an associative array whose keys represent object properties.
      * This method is used to facilitate object serialization.
+     * @return array
      */
     public function toArray(): array;
 }

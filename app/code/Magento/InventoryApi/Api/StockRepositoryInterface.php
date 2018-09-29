@@ -65,5 +65,5 @@ interface StockRepositoryInterface
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function deleteById(int $stockId);
+    public function deleteById(int $stockId): void;
 }

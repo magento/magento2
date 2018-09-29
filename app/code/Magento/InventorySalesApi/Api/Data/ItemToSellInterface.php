@@ -29,11 +29,11 @@ interface ItemToSellInterface
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku);
+    public function setSku(string $sku): void;
 
     /**
      * @param float $qty
      * @return void
      */
-    public function setQuantity(float $qty);
+    public function setQuantity(float $qty): void;
 }

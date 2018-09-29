@@ -33,7 +33,7 @@ class GetAssignedStockIdForWebsite implements GetAssignedStockIdForWebsiteInterf
     /**
      * @inheritdoc
      */
-    public function execute(string $websiteCode)
+    public function execute(string $websiteCode): ?int
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
