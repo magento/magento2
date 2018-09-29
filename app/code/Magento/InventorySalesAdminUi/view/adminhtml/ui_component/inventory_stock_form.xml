@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <settings>
+        <buttons>
+            <button name="delete" class="Magento\InventorySalesAdminUi\Ui\Component\Control\Stock\DeleteButton"/>
+        </buttons>
+    </settings>
+    <fieldset name="sales_channels" sortOrder="30">
+        <settings>
+            <label translate="true">Sales Channels</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>sales_channels</dataScope>
+        </settings>
+        <field name="website" formElement="multiselect" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Websites</label>
+                <dataScope>website</dataScope>
+                <notice>Use Ctrl+Click for check several values or uncheck value. All unassigned sales channels will be assigned to the Default Stock.</notice>
+                <tooltip>
+                    <description>Notice that only one Stock can be mapped to each Sales Channel. Any previous assignation would be removed for each selected Sales Channel.</description>
+                </tooltip>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\InventorySalesAdminUi\Model\OptionSource\WebsiteSource"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

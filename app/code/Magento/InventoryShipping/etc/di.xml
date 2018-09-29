@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Model\Order\ShipmentFactory">
+        <plugin name="assign_source_code_to_shipment" type="Magento\InventoryShipping\Plugin\Sales\Shipment\AssignSourceCodeToShipmentPlugin"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment">
+        <plugin name="SaveSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\SaveSourceForShipmentPlugin"/>
+        <plugin name="LoadSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\LoadSourceForShipmentPlugin"/>
+        <plugin name="DeleteSourceForShipment" type="Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment\DeleteSourceForShipmentPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Model\SourceValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="carrier_links" xsi:type="object">Magento\InventoryShipping\Model\Source\Validator\CarrierLinksValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Return Processor -->
+    <type name="Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsChain">
+        <arguments>
+            <argument name="sourceDeductedItemsSelector" xsi:type="array">
+                <item name="source_deducted_shipping_items" xsi:type="object">Magento\InventoryShipping\Model\ReturnProcessor\GetShippedItemsPerSourceByPriority</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction" type="Magento\InventoryShipping\Controller\Adminhtml\Order\Shipment\NewAction"/>
+</config>

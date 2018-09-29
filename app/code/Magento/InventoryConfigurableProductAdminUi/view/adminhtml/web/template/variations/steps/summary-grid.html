@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="admin__collapsible-block-wrapper opened">
+    <div class="fieldset-wrapper-title">
+        <strong class="admin__collapsible-title" data-toggle="collapse" data-bind="attr:{'data-target': '#'+id}">
+            <span data-bind="text: title"></span>
+        </strong>
+    </div>
+
+    <div class="fieldset-wrapper-content in collapse" data-collapsed="true" data-bind="attr: {id: id}">
+        <!-- ko template: {
+            name: "ui/grid/paging/paging", data: paging
+            } -->
+        <!-- /ko -->
+        <div class="note" data-bind="text: note"></div>
+        <table class="data-grid data-grid-configurable">
+            <thead>
+            <tr>
+                <th repeat="foreach: grid.columns, item: '$column'" class="data-grid-th" data-bind="text: $column"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr repeat="foreach: grid, item: '$product'">
+                <!-- ko foreach: { data: $product(), as: 'property' } -->
+                <td if="property && property.preview" class="data-grid-thumbnail-cell">
+                    <div class="images-uploaded">
+                        <img data-bind="attr: {src: property.preview}"/>
+                        <span data-bind="text: property.images.length"></span>
+                    </div>
+                </td>
+                <td if="property && Array.isArray(property)">
+                    <!-- ko foreach: { data: property, as: 'item' } -->
+                    <div>
+                        <span text="item.source"></span>: <span text="item.quantity_per_source"></span>
+                    </div>
+                    <!-- /ko -->
+                </td>
+                <td if="typeof property === 'string' || typeof property === 'number'">
+                    <span data-bind='text: property'></span>
+                </td>
+                <!-- /ko -->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">inventory_stock_form.inventory_stock_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <label translate="true">Stock Information</label>
+        <dataScope>data</dataScope>
+        <namespace>inventory_stock_form</namespace>
+        <deps>
+            <dep>inventory_stock_form.inventory_stock_form_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="back">
+                <url path="*/*/index"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="reset">
+                <class>reset</class>
+                <label translate="true">Reset</label>
+            </button>
+            <button name="delete" class="Magento\InventoryAdminUi\Ui\Component\Control\Stock\DeleteButton"/>
+            <button name="save" class="Magento\InventoryAdminUi\Ui\Component\Control\Stock\SaveSplitButton"/>
+        </buttons>
+    </settings>
+    <dataSource name="inventory_stock_form_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="*/*/save"/>
+        </settings>
+        <dataProvider class="Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider" name="inventory_stock_form_data_source">
+            <settings>
+                <requestFieldName>stock_id</requestFieldName>
+                <primaryFieldName>stock_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label translate="true">General</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>general</dataScope>
+        </settings>
+        <field name="name" formElement="input" sortOrder="10">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="sources" sortOrder="50">
+        <settings>
+            <label translate="true">Sources</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <dataScope>sources</dataScope>
+        </settings>
+        <container name="assign_sources_container" component="Magento_Ui/js/form/components/group" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="string" />
+                    <item name="label" xsi:type="string" />
+                </item>
+            </argument>
+            <button name="assign_sources_button" template="ui/form/components/button/container">
+                <settings>
+                    <title translate="true">Assign Sources</title>
+                    <dataScope />
+                </settings>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">inventory_stock_form.inventory_stock_form.sources.assign_sources_modal</item>
+                                <item name="actionName" xsi:type="string">toggleModal</item>
+                            </item>
+                        </item>
+                        <item name="additionalForGroup" xsi:type="boolean">true</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
+                    </item>
+                </argument>
+            </button>
+        </container>
+        <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
+                    <item name="map" xsi:type="array">
+                        <item name="source_code" xsi:type="string">source_code</item>
+                        <item name="name" xsi:type="string">name</item>
+                    </item>
+                    <item name="identificationDRProperty" xsi:type="string">source_code</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Assigned Sources</label>
+                <defaultRecord>false</defaultRecord>
+                <addButton>false</addButton>
+                <deleteProperty>true</deleteProperty>
+                <recordTemplate>record</recordTemplate>
+                <identificationProperty>source_code</identificationProperty>
+                <links>
+                    <link name="insertData">${ $.provider }:${ $.dataProvider }</link>
+                </links>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">true</param>
+                    <param name="template" xsi:type="string">ui/dynamic-rows/cells/dnd</param>
+                </dndConfig>
+                <columnsHeader>true</columnsHeader>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="dataScope" xsi:type="string" />
+                        <item name="positionProvider" xsi:type="string">priority</item>
+                    </item>
+                </argument>
+                <field name="source_code" formElement="input" sortOrder="10">
+                    <settings>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <dataType>text</dataType>
+                        <dataScope>source_code</dataScope>
+                        <label translate="true">Code</label>
+                        <labelVisible>false</labelVisible>
+                    </settings>
+                </field>
+                <field name="name" formElement="input" sortOrder="20">
+                    <settings>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <dataType>text</dataType>
+                        <dataScope>name</dataScope>
+                        <label translate="true">Name</label>
+                        <labelVisible>false</labelVisible>
+                    </settings>
+                </field>
+                <field name="priority" formElement="input" sortOrder="30">
+                    <settings>
+                        <elementTmpl>ui/form/element/input</elementTmpl>
+                        <dataType>number</dataType>
+                        <dataScope>priority</dataScope>
+                        <label translate="true">Priority</label>
+                        <visible>false</visible>
+                    </settings>
+                </field>
+                <field name="actionDelete" formElement="actionDelete" sortOrder="40">
+                    <settings>
+                        <label translate="true">Unassign</label>
+                    </settings>
+                </field>
+            </container>
+        </dynamicRows>
+        <modal name="assign_sources_modal">
+            <settings>
+                <options>
+                    <option name="title" xsi:type="string" translate="true">Assign Sources</option>
+                    <option name="buttons" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="text" xsi:type="string">Cancel</item>
+                            <item name="class" xsi:type="string">action-secondary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
+                                </item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="text" xsi:type="string" translate="true">Done</item>
+                            <item name="class" xsi:type="string">action-primary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">index = assign_sources_grid</item>
+                                    <item name="actionName" xsi:type="string">save</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionDone</item>
+                                </item>
+                            </item>
+                        </item>
+                    </option>
+                </options>
+            </settings>
+            <insertListing name="assign_sources_grid">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="cssclass" xsi:type="string">noclass</item>
+                    </item>
+                </argument>
+                <settings>
+                    <autoRender>true</autoRender>
+                    <dataScope>assign_sources_grid</dataScope>
+                    <ns>inventory_source_listing</ns>
+                    <externalProvider>inventory_source_listing.inventory_source_listing_data_source</externalProvider>
+                    <selectionsProvider>inventory_source_listing.inventory_source_listing.inventory_source_listing_columns.ids</selectionsProvider>
+                    <dataLinks>
+                        <imports>false</imports>
+                        <exports>true</exports>
+                    </dataLinks>
+                    <externalFilterMode>true</externalFilterMode>
+                </settings>
+            </insertListing>
+        </modal>
+    </fieldset>
+</form>

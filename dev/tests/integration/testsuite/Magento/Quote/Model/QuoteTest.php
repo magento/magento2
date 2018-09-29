@@ -363,7 +363,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         // TODO: fix test or implementation as described in https://github.com/magento-engcom/msi/issues/1037
-//        $this->expectExceptionMessage('The requested qty is not available');
+        // $this->expectExceptionMessage('The requested qty is not available');
         $updateParams['qty'] = $productStockQty + 1;
         $quote->updateItem($updateParams['id'], $updateParams);
     }

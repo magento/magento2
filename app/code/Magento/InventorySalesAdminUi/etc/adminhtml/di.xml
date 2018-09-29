@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventorySalesAdminUi\Model\SalesChannelNameResolverInterface" type="Magento\InventorySalesAdminUi\Model\WebsiteNameResolver"/>
+    <!-- Stock delete button -->
+    <type name="Magento\InventorySalesAdminUi\Ui\Component\Control\Stock\DeleteButton">
+        <arguments>
+            <argument name="deleteButton" xsi:type="object">Magento\InventoryAdminUi\Ui\Component\Control\Stock\DeleteButton</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryAdminUi\Ui\DataProvider\StockDataProvider">
+        <plugin name="sales_channel_data" type="Magento\InventorySalesAdminUi\Plugin\InventoryAdminUi\Ui\StockDataProvider\SalesChannels" />
+    </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="salable_quantity" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventorySalesAdminUi\Ui\DataProvider\Product\Form\Modifier\SalableQuantity</item>
+                    <item name="sortOrder" xsi:type="number">300</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
+        <plugin name="add_notice_for_unassigned_sales_channels" type="Magento\InventorySalesAdminUi\Plugin\InventoryApi\StockRepository\AddNoticeForUnassignedSalesChannels" sortOrder="10"/>
+    </type>
+</config>

@@ -1,0 +1,7 @@
+source_code,sku,status,quantity
+eu-1,SKU-1,1,5.5000
+eu-2,SKU-1,1,3.0000
+eu-3,SKU-1,0,10.0000
+eu-disabled,SKU-1,1,10.0000
+us-1,SKU-2,1,5.0000
+eu-2,SKU-3,0,6.0000

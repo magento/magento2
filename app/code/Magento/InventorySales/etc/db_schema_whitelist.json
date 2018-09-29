@@ -1,0 +1,22 @@
+{
+  "inventory_stock_sales_channel": {
+    "column": {
+      "type": true,
+      "code": true,
+      "stock_id": true
+    },
+    "constraint": {
+      "INVENTORY_STOCK_SALES_CHANNEL_STOCK_ID_INVENTORY_STOCK_STOCK_ID": true,
+      "PRIMARY": true
+    }
+  },
+  "patch_list": {
+    "column": {
+      "patch_id": true,
+      "patch_name": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}

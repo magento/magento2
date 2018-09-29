@@ -1,0 +1,4 @@
+# Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
+
+app/code/Magento/Inventory*
+dev/tests/static/testsuite/Magento/Test/Integrity/Xml/SchemaTest.php

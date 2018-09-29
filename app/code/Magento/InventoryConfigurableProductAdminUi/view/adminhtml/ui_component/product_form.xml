@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <modal name="assign_sources_configurable_modal">
+        <settings>
+            <options>
+                <option name="title" xsi:type="string" translate="true">Assign Sources</option>
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string">Cancel</item>
+                        <item name="class" xsi:type="string">action-secondary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.name }</item>
+                                <item name="actionName" xsi:type="string">actionCancel</item>
+                            </item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Done</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">index = assign_sources_configurable_grid</item>
+                                <item name="actionName" xsi:type="string">save</item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.name }</item>
+                                <item name="actionName" xsi:type="string">actionDone</item>
+                            </item>
+                        </item>
+                    </item>
+                </option>
+            </options>
+        </settings>
+        <insertListing name="assign_sources_configurable_grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="cssclass" xsi:type="string">noclass</item>
+                </item>
+            </argument>
+            <settings>
+                <autoRender>true</autoRender>
+                <dataScope>data.sources.assign_sources_configurable_grid</dataScope>
+                <ns>inventory_source_listing</ns>
+                <externalProvider>inventory_source_listing.inventory_source_listing_data_source</externalProvider>
+                <selectionsProvider>inventory_source_listing.inventory_source_listing.inventory_source_listing_columns.ids</selectionsProvider>
+                <dataLinks>
+                    <imports>false</imports>
+                    <exports>true</exports>
+                </dataLinks>
+                <externalFilterMode>true</externalFilterMode>
+            </settings>
+        </insertListing>
+        <component name="sources_visibility_checker" component="Magento_InventoryConfigurableProductAdminUi/js/components/sources-visibility-checker">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sourcesIndex" xsi:type="string">sources</item>
+                </item>
+            </argument>
+            <settings>
+                <listens>
+                    <link name="${$.namespace}.${$.namespace}.configurable.configurable-matrix:visible">applySourcesConfiguration</link>
+                </listens>
+            </settings>
+        </component>
+    </modal>
+</form>

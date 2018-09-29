@@ -1,0 +1,39 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="control-table-text" attr="'data-tooltip-trigger': ++ko.uid">
+    <!-- ko foreach: { data: $data.items, as: 'item' } -->
+    <div>
+        <span visible="false" text="item.source_code"></span>
+        <span text="item.source"></span>:
+        <span text="item.quantity_per_source"></span>
+    </div>
+    <!-- /ko -->
+    <div if="$data.isFullList()">
+        <a href="#" attr="'data-tooltip-trigger': ++ko.uid" text="$data.showFullListDescription"/>
+    </div>
+</div>
+<div tooltip="
+    trigger: '[data-tooltip-trigger=' + ko.uid + ']',
+    action: 'click',
+    closeOnScroll: false,
+    delay: 0,
+    position: 'top',
+    step: 30,
+    track: false,
+    strict: true,
+    closeButton: true">
+    <div>
+        <div class="data-tooltip-title">Sources</div>
+        <div class="data-tooltip-content">
+            <!-- ko foreach: { data: value, as: 'item' } -->
+            <div><span text="item.source"></span>: <span text="item.quantity_per_source"></span></div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+

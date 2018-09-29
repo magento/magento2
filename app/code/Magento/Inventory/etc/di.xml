@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Source -->
+    <preference for="Magento\InventoryApi\Api\SourceRepositoryInterface" type="Magento\Inventory\Model\SourceRepository"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
+    <preference for="Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface" type="Magento\Inventory\Model\Source\Command\GetSourcesAssignedToStockOrderedByPriority"/>
+    <preference for="Magento\InventoryApi\Api\GetSourceItemsBySkuInterface" type="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySku"/>
+    <preference for="Magento\InventoryApi\Model\GetSourceCodesBySkusInterface" type="Magento\Inventory\Model\GetSourceCodesBySkus"/>
+    <preference for="Magento\InventoryApi\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
+    <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
+    <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
+    <type name="Magento\InventoryApi\Model\SourceValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="name" xsi:type="object">Magento\Inventory\Model\Source\Validator\NameValidator</item>
+                <item name="code" xsi:type="object">Magento\Inventory\Model\Source\Validator\CodeValidator</item>
+                <item name="postcode" xsi:type="object">Magento\Inventory\Model\Source\Validator\PostcodeValidator</item>
+                <item name="country" xsi:type="object">Magento\Inventory\Model\Source\Validator\CountryValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Source Item -->
+    <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
+    <preference for="Magento\InventoryApi\Api\SourceItemsSaveInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave"/>
+    <preference for="Magento\InventoryApi\Api\SourceItemsDeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsDelete"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
+    <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
+    <preference for="Magento\Inventory\Model\SourceItem\Command\GetListInterface" type="Magento\Inventory\Model\SourceItem\Command\GetList"/>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\StatusValidator">
+        <arguments>
+            <argument name="allowedSourceItemStatuses" xsi:type="array">
+                <item xsi:type="const" name="in_stock">Magento\InventoryApi\Api\Data\SourceItemInterface::STATUS_IN_STOCK</item>
+                <item xsi:type="const" name="out_of_stock">Magento\InventoryApi\Api\Data\SourceItemInterface::STATUS_OUT_OF_STOCK</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryApi\Model\SourceItemValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sku" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SkuValidator</item>
+                <item name="source_code" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SourceCodeValidator</item>
+                <item name="quantity" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\QuantityValidator</item>
+                <item name="status" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\StatusValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Stock -->
+    <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository"/>
+    <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock"/>
+    <preference for="Magento\InventoryApi\Api\Data\StockSearchResultsInterface" type="Magento\Inventory\Model\StockSearchResults"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\DeleteByIdInterface" type="Magento\Inventory\Model\Stock\Command\DeleteById"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\GetInterface" type="Magento\Inventory\Model\Stock\Command\Get"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\GetListInterface" type="Magento\Inventory\Model\Stock\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\SaveInterface" type="Magento\Inventory\Model\Stock\Command\Save"/>
+    <type name="Magento\InventoryApi\Model\StockValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="name" xsi:type="object">Magento\Inventory\Model\Stock\Validator\NameValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- StockSourceLink -->
+    <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
+    <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
+    <preference for="Magento\InventoryApi\Api\GetStockSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetStockSourceLinks"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
+    <type name="Magento\InventoryApi\Model\StockSourceLinkValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="source_code" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\SourceCodeValidator</item>
+                <item name="stock_id" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\StockIdValidator</item>
+                <item name="priority" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\PriorityValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator">
+        <arguments>
+            <argument name="stockSourceLinkValidator"
+                      xsi:type="object">Magento\InventoryApi\Model\StockSourceLinkValidatorChain</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\InventoryApi\Model\IsProductAssignedToStockInterface" type="Magento\Inventory\Model\ResourceModel\IsProductAssignedToStock"/>
+</config>

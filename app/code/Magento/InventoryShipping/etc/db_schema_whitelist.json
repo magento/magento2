@@ -1,0 +1,20 @@
+{
+  "inventory_shipment_source": {
+    "column": {
+      "shipment_id":true,
+      "source_code":true
+    },
+    "constraint": {
+      "PRIMARY":true
+    }
+  },
+  "patch_list": {
+    "column": {
+      "patch_id":true,
+      "patch_name":true
+    },
+    "constraint": {
+      "PRIMARY":true
+    }
+  }
+}
