@@ -44,7 +44,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-        ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->validatorResultMerger = $this->objectManager->getObject(
             ValidatorResultMerger::class,
@@ -64,7 +64,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
         $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
         $validationResult = $this->createMock(ValidatorResultInterface::class);
         $cmValidationResult = $this->createMock(ValidatorResultInterface::class);
-        $itemsValidationMessages = [['test04', 'test05'], ['test06']];
+        $validationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);
         $validationResult->expects($this->once())->method('getMessages')->willReturn(['test01', 'test02']);
@@ -80,7 +80,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
         $actual = $this->validatorResultMerger->merge(
             $validationResult,
             $cmValidationResult,
-            ...$itemsValidationMessages
+            ...$validationMessages
         );
         $this->assertEquals($expected, $actual);
     }
