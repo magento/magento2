@@ -135,7 +135,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory
      */
-    private $visitorColFactory;
+    private $visitorCollectionFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SaveHandlerInterface
@@ -200,7 +200,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
 
-        $this->visitorColFactory = $this->getMockBuilder(
+        $this->visitorCollectionFactory = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
         )
             ->disableOriginalConstructor()
@@ -244,7 +244,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'accountConfirmation' => $this->accountConfirmation,
                 'sessionManager' => $this->sessionManager,
                 'saveHandler' => $this->saveHandler,
-                'visitorColFactory' => $this->visitorColFactory,
+                'visitorCollectionFactory' => $this->visitorCollectionFactory,
                 'addressRegistry' => $this->addressRegistryMock,
             ]
         );
@@ -1385,7 +1385,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->visitorColFactory = $this->getMockBuilder(
+        $this->visitorCollectionFactory = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
         )
             ->disableOriginalConstructor()
@@ -1431,7 +1431,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'stringHelper' => $this->string,
                 'scopeConfig' => $this->scopeConfig,
                 'sessionManager' => $this->sessionManager,
-                'visitorColFactory' => $this->visitorColFactory,
+                'visitorCollectionFactory' => $this->visitorCollectionFactory,
                 'saveHandler' => $this->saveHandler,
                 'encryptor' => $this->encryptor,
                 'dataProcessor' => $this->dataObjectProcessor,
@@ -1530,7 +1530,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods(['addFieldToFilter', 'getItems'])->getMock();
         $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
         $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
-        $this->visitorColFactory->expects($this->atLeastOnce())->method('create')
+        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($visitorCollection);
         $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
             ->withConsecutive(
@@ -1584,7 +1584,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods(['addFieldToFilter', 'getItems'])->getMock();
         $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
         $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
-        $this->visitorColFactory->expects($this->atLeastOnce())->method('create')
+        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($visitorCollection);
         $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
             ->withConsecutive(
