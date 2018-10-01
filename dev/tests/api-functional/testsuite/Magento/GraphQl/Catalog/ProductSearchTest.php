@@ -552,7 +552,6 @@ QUERY;
      * Verify the items in the second page is correct after sorting their name in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterProductsInNextPageSortedByNameASC()
     {
@@ -562,44 +561,27 @@ QUERY;
     products(
         filter:
         {
-            price:{gt: "5", lt: "50"}
-            or:
-            {
-                sku:{eq:"simple1"}
-                name:{like:"configurable%"}
-            }
+            sku:{in:["simple2", "simple1"]}
         }
-         pageSize:4
+         pageSize:1
          currentPage:2
          sort:
          {
-          name:ASC
+             name:ASC
          }
     )
     {
       items
       {
         sku
-        price {
-            minimalPrice {
-                amount {
-                    value
-                    currency
-                }
-            }
-        }
         name
-        type_id
-        ... on PhysicalProductInterface {
-            weight
-           }
-           attribute_set_id
-         }
-        total_count
-        page_info
-        {
+      }
+      total_count
+      page_info
+      {
           page_size
-        }
+          current_page
+      }
     }
 }
 QUERY;
@@ -607,13 +589,15 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple1');
-        $filteredProducts = [$product];
+        $product = $productRepository->get('simple2');
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-        $this->assertProductItems($filteredProducts, $response);
-        $this->assertEquals(4, $response['products']['page_info']['page_size']);
+        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(['page_size' => 1, 'current_page' => 2], $response['products']['page_info']);
+        $this->assertEquals(
+            [['sku' => $product->getSku(), 'name' => $product->getName()]],
+            $response['products']['items']
+        );
     }
 
     /**
