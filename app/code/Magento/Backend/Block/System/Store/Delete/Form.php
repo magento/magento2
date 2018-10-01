@@ -35,7 +35,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         BackupHelper $backup = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
-        $this->backup = $backup ?? ObjectManager::getInstance()->get(BackupHelper::class);
+        $this->backup = $backup ?: ObjectManager::getInstance()->get(BackupHelper::class);
     }
 
     /**
