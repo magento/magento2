@@ -85,9 +85,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Return path to default timezone
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDefaultTimezonePath()
     {
@@ -95,9 +93,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Retrieve timezone code
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDefaultTimezone()
     {
@@ -105,11 +101,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Gets the scope config timezone
-     *
-     * @param string $scopeType
-     * @param string $scopeCode
-     * @return string
+     * @inheritdoc
      */
     public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
@@ -121,10 +113,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Retrieve ISO date format
-     *
-     * @param   int $type
-     * @return  string
+     * @inheritdoc
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -136,9 +125,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Retrieve short date format with 4-digit year
-     *
-     * @return  string
+     * @inheritdoc
      */
     public function getDateFormatWithLongYear()
     {
@@ -150,10 +137,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Retrieve ISO time format
-     *
-     * @param   string $type
-     * @return  string
+     * @inheritdoc
      */
     public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -165,10 +149,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Retrieve ISO datetime format
-     *
-     * @param   string $type
-     * @return  string
+     * @inheritdoc
      */
     public function getDateTimeFormat($type)
     {
@@ -176,13 +157,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Create \DateTime object for current locale
-     *
-     * @param mixed $date
-     * @param string $locale
-     * @param bool $useTimezone
-     * @param bool $includeTime
-     * @return \DateTime
+     * @inheritdoc
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
@@ -216,12 +191,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Create \DateTime object with date converted to scope timezone and scope Locale
-     *
-     * @param   mixed $scope Information about scope
-     * @param   string|integer|\DateTime|array|null $date date in UTC
-     * @param   boolean $includeTime flag for including time to date
-     * @return  \DateTime
+     * @inheritdoc
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
@@ -234,12 +204,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Format date using current locale options and time zone.
-     *
-     * @param \DateTime|null $date
-     * @param int $format
-     * @param bool $showTime
-     * @return string
+     * @inheritdoc
      */
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
@@ -253,12 +218,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Get scope timestamp
-     *
-     * Timestamp will be built with scope timezone settings
-     *
-     * @param   mixed $scope
-     * @return  int
+     * @inheritdoc
      */
     public function scopeTimeStamp($scope = null)
     {
@@ -271,12 +231,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Checks if current date of the given scope (in the scope timezone) is within the range
-     *
-     * @param int|string|\Magento\Framework\App\ScopeInterface $scope
-     * @param string|null $dateFrom
-     * @param string|null $dateTo
-     * @return bool
+     * @inheritdoc
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
@@ -302,13 +257,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param string|\DateTimeInterface $date
-     * @param int $dateType
-     * @param int $timeType
-     * @param string|null $locale
-     * @param string|null $timezone
-     * @param string|null $pattern
-     * @return string
+     * @inheritdoc
      */
     public function formatDateTime(
         $date,
@@ -344,56 +293,15 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Convert date from config timezone to Utc.
-     *
-     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
-     *
-     * @param string|\DateTimeInterface $date
-     * @param string $format
-     * @throws LocalizedException
-     * @return string
-     * @deprecated
+     * @inheritdoc
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
-    {
-        return $this->convertConfigTimeToUtcWithPattern($date, $format);
-    }
-
-    /**
-     * Convert date from config timezone to Utc.
-     *
-     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
-     *
-     * @param string|\DateTimeInterface $date
-     * @param string $format
-     * @param string $pattern
-     * @throws LocalizedException
-     * @return string
-     * @deprecated
-     */
-    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = null)
     {
         if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
-                $locale = $this->_localeResolver->getLocale();
-                if ($locale === null) {
-                    $pattern = 'Y-M-dd HH:mm:ss';
-                }
-                $formatter = new \IntlDateFormatter(
-                    $locale,
-                    \IntlDateFormatter::MEDIUM,
-                    \IntlDateFormatter::MEDIUM,
-                    $this->getConfigTimezone(),
-                    null,
-                    $pattern
-                );
-                $unixTime = $formatter->parse($date);
-                $dateTime = new DateTime($this);
-
-                $dateUniversal = $dateTime->gmtDate(null, $unixTime);
-                $date = new \DateTime($dateUniversal, new \DateTimeZone($this->getConfigTimezone()));
+                $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
             }
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
@@ -405,12 +313,9 @@ class Timezone implements TimezoneInterface
                 );
             }
         }
-
         $date->setTimezone(new \DateTimeZone('UTC'));
-
         return $date->format($format);
     }
-
 
     /**
      * Retrieve date with time
