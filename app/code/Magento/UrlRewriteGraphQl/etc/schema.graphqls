@@ -23,7 +23,3 @@ type HttpQueryParameter @doc(description: "The object details of target path par
     name: String @doc(description: "Parameter name")
     value: String @doc(description: "Parameter value")
 }
-
-interface ProductInterface {
-    url_rewrites: [UrlRewrite] @doc(description: "URL rewrites list") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
-}
