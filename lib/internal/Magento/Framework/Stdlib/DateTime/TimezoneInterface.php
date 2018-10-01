@@ -149,7 +149,6 @@ interface TimezoneInterface
      * @param string $format
      * @throws LocalizedException
      * @return string
-     * @deprecated
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
 }
