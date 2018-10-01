@@ -387,79 +387,6 @@ QUERY;
     }
 
     /**
-     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage = 2
-     * Expected result is to get the second product on the list on the second page
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
-     */
-    public function testSearchWithFilterPageSizeLessThanCurrentPage()
-    {
-
-        $query
-            = <<<QUERY
-{
-    products(
-     search : "simple"
-        filter:
-        {
-          special_price:{neq:"null"}
-          price:{lt:"60"}
-          or:
-          {
-           sku:{like:"%simple%"}
-           name:{like:"%configurable%"}
-          }
-           weight:{eq:"1"}
-        }
-        pageSize:1
-        currentPage:2
-        sort:
-       {
-        price:DESC
-       }
-    )
-    {
-        items
-         {
-           sku
-           price {
-            minimalPrice {
-                amount {
-                    value
-                    currency
-                }
-            }
-           }
-           name
-           ... on PhysicalProductInterface {
-            weight
-           }
-           type_id
-           attribute_set_id
-         }
-        total_count
-        page_info
-        {
-          page_size
-        }
-    }
-}
-QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // when pageSize = 1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
-        // since sorting is done on price in the DESC order
-        $product = $productRepository->get('simple1');
-        $filteredProducts = [$product];
-
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-        $this->assertProductItems($filteredProducts, $response);
-    }
-
-    /**
      * Requesting for items that match a specific SKU or NAME within a certain price range sorted by Price in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -549,11 +476,11 @@ QUERY;
     }
 
     /**
-     * Verify the items in the second page is correct after sorting their name in ASC order
+     * Verify the items is correct after sorting their name in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testFilterProductsInNextPageSortedByNameASC()
+    public function testFilterProductsByNameASC()
     {
         $query
             = <<<QUERY
