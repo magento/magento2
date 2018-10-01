@@ -9,9 +9,8 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
-use Magento\Catalog\Model\Entity\GetProductCustomAttributeCodes;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
+use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -283,6 +282,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @deprecated Not used anymore due to performance issue (loaded all product attributes)
      */
     protected $metadataService;
 
@@ -350,12 +350,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $linkTypeProvider;
 
     /**
-     * @var GetCustomAttributeCodesInterface
+     * @var \Magento\Eav\Model\Config
      */
-    private $getCustomAttributeCodes;
+    private $eavConfig;
+    /**
+     * @var FilterProductCustomAttribute|null
+     */
+    private $filterCustomAttribute;
 
     /**
-     * Product constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -391,7 +394,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
-     * @param GetCustomAttributeCodesInterface|null $getCustomAttributeCodes
+     * @param \Magento\Eav\Model\Config|null $config
+     * @param FilterProductCustomAttribute|null $filterCustomAttribute
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -431,7 +435,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
-        GetCustomAttributeCodesInterface $getCustomAttributeCodes = null
+        \Magento\Eav\Model\Config $config = null,
+        FilterProductCustomAttribute $filterCustomAttribute = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -460,9 +465,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
-        $this->getCustomAttributeCodes = $getCustomAttributeCodes ?? ObjectManager::getInstance()->get(
-            GetProductCustomAttributeCodes::class
-        );
         parent::__construct(
             $context,
             $registry,
@@ -473,6 +475,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $resourceCollection,
             $data
         );
+        $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->filterCustomAttribute = $filterCustomAttribute
+            ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
     }
 
     /**
@@ -498,11 +503,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * Get a list of custom attribute codes that belongs to product attribute set. If attribute set not specified for
+     * product will return all product attribute codes
+     *
+     * @return string[]
      */
     protected function getCustomAttributesCodes()
     {
-        return $this->getCustomAttributeCodes->execute($this->metadataService);
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = array_keys($this->eavConfig->getEntityAttributes(
+                self::ENTITY,
+                $this
+            ));
+
+            $this->customAttributesCodes = $this->filterCustomAttribute->execute($this->customAttributesCodes);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+        }
+
+        return $this->customAttributesCodes;
     }
 
     /**

@@ -42,7 +42,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
-        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="createFolder1"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" stepKey="waitForPopUp1" />
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
@@ -63,7 +62,6 @@
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.confirmDelete}}" stepKey="confirmDelete1" />
         <waitForElementNotVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForImageDeleted1" />
         <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="dontSeeImage1" />
-        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn1" />
         <attachFile selector="{{ProductDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading6" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage2" />
@@ -92,7 +90,6 @@
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected2" />
         <waitForText userInput="OK" stepKey="waitForConfirm3" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.confirmDelete}}" stepKey="confirmDelete2" />
-        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading10" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />

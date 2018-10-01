@@ -87,7 +87,7 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class
         );
         $this->categoryCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
+            \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory::class,
             ['create']
         );
 

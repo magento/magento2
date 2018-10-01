@@ -48,7 +48,7 @@ define([
                         if (typeof controlButtonArea != 'undefined') {
                             var buttons = controlButtonArea.childElements();
                             for (var i = 0; i < buttons.length; i++) {
-                                if (buttons[i].innerHTML.include(button.label)) {
+                                if (buttons[i].innerHTML.include(button.getLabel())) {
                                     return;
                                 }
                             }
@@ -921,6 +921,7 @@ define([
                     qtyElement.value = confirmedCurrentQty.value;
                 }
                 this.productConfigureAddFields['item['+itemId+'][configured]'] = 1;
+                this.itemsUpdate();
 
             }.bind(this));
             productConfigure.setShowWindowCallback(listType, function() {
@@ -1431,6 +1432,10 @@ define([
             node.update('<span>' + this._label + '</span>');
             content[position] = node;
             Element.insert(element, content);
+        },
+
+        getLabel: function(){
+            return this._label;
         }
     };
 

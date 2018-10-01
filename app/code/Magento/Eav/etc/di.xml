@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
     <preference for="Magento\Eav\Model\Entity\AttributeLoaderInterface" type="Magento\Eav\Model\Entity\AttributeLoader" />
-    <preference for="Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface" type="Magento\Eav\Model\Entity\GetCustomAttributeCodes" />
     <preference for="Magento\Eav\Api\Data\AttributeInterface" type="Magento\Eav\Model\Entity\Attribute" />
     <preference for="Magento\Eav\Api\AttributeRepositoryInterface" type="Magento\Eav\Model\AttributeRepository" />
     <preference for="Magento\Eav\Api\Data\AttributeGroupInterface" type="Magento\Eav\Model\Entity\Attribute\Group" />
