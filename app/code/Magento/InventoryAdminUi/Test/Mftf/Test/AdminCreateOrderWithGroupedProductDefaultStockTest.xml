@@ -18,9 +18,6 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="MSI-1631"/>
-            </skip>
         </annotations>
 
         <before>
@@ -88,6 +85,7 @@
         </actionGroup>
 
         <comment userInput="Add simple and virtual products to grouped product." stepKey="assignSimpleAndVirtualToGroupedProductComment"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
@@ -111,7 +109,7 @@
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
 
@@ -132,8 +130,7 @@
             <argument name="quantity" value="2"/>
         </actionGroup>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
-
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
         <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductVirtualOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$virtualProduct$$"/>
