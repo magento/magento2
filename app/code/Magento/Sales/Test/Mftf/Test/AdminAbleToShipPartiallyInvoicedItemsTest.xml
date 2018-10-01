@@ -120,10 +120,9 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
 
-        <!--Update Qty of items to be refunded and submit refund-->
+        <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
-        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="fillQtyOfItemsToRefund" after="scrollToItemsToRefund"/>
-
+        <!--<fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="fillQtyOfItemsToRefund" after="scrollToItemsToRefund"/>-->
         <!--<click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>-->
         <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
