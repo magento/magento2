@@ -104,6 +104,7 @@ interface TimezoneInterface
 
     /**
      * Gets the scope config timezone
+     * 
      * @param string $scopeType
      * @param string $scopeCode
      * @return string
