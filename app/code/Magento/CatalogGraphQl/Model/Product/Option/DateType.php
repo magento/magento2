@@ -12,9 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime;
 
 /**
- * Catalog product option date validator
- *
- * {@inheritdoc}
+ * @inheritdoc
  */
 class DateType extends ProductDateOptionType
 {
