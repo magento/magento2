@@ -181,4 +181,7 @@
     <section name="AdminChooseAffectedAttributeSetPopup">
         <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
     </section>
+    <section name="AdminAddRelatedProductsModalSection">
+        <element name="addSelectedProductsButton" type="button" selector="//aside[contains(@class, 'product_form_product_form_related_related_modal')]//button/span[contains(text(), 'Add Selected Products')]" timeout="30"/>
+    </section>
 </sections>

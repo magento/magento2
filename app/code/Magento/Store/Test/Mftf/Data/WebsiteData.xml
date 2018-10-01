@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultWebsite" type="group">
+        <data key="name">Main Website</data>
+        <data key="code">base</data>
+        <data key="sort_order">1</data>
+    </entity>
+    <entity name="CustomWebSite" type="website">
+        <data key="name" unique="suffix">website</data>
+        <data key="code" unique="suffix">website</data>
+        <data key="sort_order">2</data>
+    </entity>
+    <entity name="SecondCustomWebSite" type="website">
+        <data key="name" unique="suffix">website</data>
+        <data key="code" unique="suffix">website</data>
+        <data key="sort_order">3</data>
+    </entity>
+</entities>
