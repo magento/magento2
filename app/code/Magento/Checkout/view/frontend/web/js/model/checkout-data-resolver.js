@@ -231,13 +231,16 @@ define([
                 isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);
+
                         return true;
                     }
+
                     return false;
                 });
             }
 
             shippingAddress = quote.shippingAddress();
+
             if (!isBillingAddressInitialized &&
                 shippingAddress &&
                 shippingAddress.canUseForBilling() &&
