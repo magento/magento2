@@ -8,9 +8,9 @@ type Query {
 type Mutation {
     generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\GenerateCustomerToken") @doc(description:"Retrieve Customer token")
     changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Customer\\Account\\ChangePassword") @doc(description:"Changes password for logged in customer")
-    customerAddressCreate(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Address") @doc(description: "Create customer address")
-    customerAddressUpdate(id: Int!, input: CustomerAddressInput): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Address") @doc(description: "Update customer address")
-    customerAddressDelete(id: Int!): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Address") @doc(description: "Delete customer address")
+    customerAddressCreate(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\AddressCreate") @doc(description: "Create customer address")
+    customerAddressUpdate(id: Int!, input: CustomerAddressInput): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\AddressUpdate") @doc(description: "Update customer address")
+    customerAddressDelete(id: Int!): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\AddressDelete") @doc(description: "Delete customer address")
 }
 
 input CustomerAddressInput {
