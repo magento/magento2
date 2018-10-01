@@ -327,7 +327,7 @@ class Timezone implements TimezoneInterface
         }
 
         $date->setTimezone(new \DateTimeZone('UTC'));
-        
+
         return $date->format($format);
     }
 
