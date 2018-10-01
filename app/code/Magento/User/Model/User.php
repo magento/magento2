@@ -178,7 +178,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null,
-        ?DeploymentConfig $deploymentConfig = null,
+        DeploymentConfig $deploymentConfig = null,
         ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
@@ -229,6 +229,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 '_storeManager',
                 '_validatorBeforeSave',
                 'validationRules',
+                'serializer',
                 'deploymentConfig',
                 'notificator'
             ]
