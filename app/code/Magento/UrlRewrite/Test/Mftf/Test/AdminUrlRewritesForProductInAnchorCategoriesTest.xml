@@ -15,7 +15,7 @@
             <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69826"/>
-            <group value="UrlRewrite"/>
+            <group value="urlRewrite"/>
         </annotations>
 
         <!-- Preconditions-->
@@ -47,7 +47,7 @@
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathSearchField}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminUrlRewriteIndexSection.search}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue1"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue2"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue3"/>
@@ -69,7 +69,7 @@
         <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathSearchField}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
-        <click selector="{{AdminUrlRewriteIndexSection.search}}" stepKey="clickSearchButton2"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue1"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue2"/>
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue3"/>
