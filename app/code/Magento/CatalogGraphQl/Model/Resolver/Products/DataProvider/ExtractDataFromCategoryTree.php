@@ -11,7 +11,7 @@ use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
- * Extarct data from category tree
+ * Extract data from category tree
  */
 class ExtractDataFromCategoryTree
 {
@@ -30,6 +30,8 @@ class ExtractDataFromCategoryTree
     }
 
     /**
+     * Extract data from category tree
+     *
      * @param \Iterator $iterator
      * @return array
      */
