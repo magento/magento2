@@ -58,8 +58,8 @@ class NumberTest extends \PHPUnit\Framework\TestCase
         return [
             'integer' => [10, 10],
             'float' => [10.5, 10.5],
-            'string numeric (integer)' => ['10', '10'],
-            'string numeric (float)' => ['10.5', '10.5']
+            'string numeric (integer)' => ['10', 10],
+            'string numeric (float)' => ['10.5', 10.5]
         ];
     }
 }
