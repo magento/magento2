@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
-use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -55,40 +54,34 @@ class CategoryTree
     private $metadata;
 
     /**
-     * @var Hydrator
-     */
-    private $hydrator;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
      * @param LevelCalculator $levelCalculator
      * @param MetadataPool $metadata
-     * @param Hydrator $hydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
         DepthCalculator $depthCalculator,
         LevelCalculator $levelCalculator,
-        MetadataPool $metadata,
-        Hydrator $hydrator
+        MetadataPool $metadata
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->depthCalculator = $depthCalculator;
         $this->levelCalculator = $levelCalculator;
         $this->metadata = $metadata;
-        $this->hydrator = $hydrator;
     }
 
     /**
+     * Get category tree
+     *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
-     * @return array
+     * @return \Iterator
      */
-    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
+    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId): \Iterator
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
@@ -113,28 +106,7 @@ class CategoryTree
             $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
             $rootCategoryId
         );
-        return $this->processTree($collection->getIterator());
-    }
-
-    /**
-     * @param \Iterator $iterator
-     * @return array
-     */
-    private function processTree(\Iterator $iterator) : array
-    {
-        $tree = [];
-        while ($iterator->valid()) {
-            /** @var CategoryInterface $category */
-            $category = $iterator->current();
-            $iterator->next();
-            $nextCategory = $iterator->current();
-            $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
-            if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
-                $tree[$category->getId()]['children'] = $this->processTree($iterator);
-            }
-        }
-
-        return $tree;
+        return $collection->getIterator();
     }
 
     /**
