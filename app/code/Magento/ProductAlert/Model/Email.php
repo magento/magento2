@@ -359,7 +359,6 @@ class Email extends AbstractModel
 
         $storeId = $this->storeId ?: (int) $this->_customer->getStoreId();
         $store = $this->getStore($storeId);
-        $storeId = $store->getId();
 
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 
@@ -406,6 +405,18 @@ class Email extends AbstractModel
         )->getTransport()->sendMessage();
 
         return true;
+    }
+
+    /**
+     * Retrieve the store for the email
+     *
+     * @param int $storeId
+     * @return StoreInterface
+     * @throws NoSuchEntityException
+     */
+    private function getStore(int $storeId): StoreInterface
+    {
+        return $this->_storeManager->getStore($storeId);
     }
 
     /**
