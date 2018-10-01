@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Helper\Output as OutputHelper;
@@ -21,24 +20,16 @@ use Magento\Catalog\Helper\Output as OutputHelper;
 class CategoryHtmlAttribute implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var OutputHelper
      */
     private $outputHelper;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param OutputHelper $outputHelper
      */
     public function __construct(
-        ValueFactory $valueFactory,
         OutputHelper $outputHelper
     ) {
-        $this->valueFactory = $valueFactory;
         $this->outputHelper = $outputHelper;
     }
 
@@ -51,12 +42,9 @@ class CategoryHtmlAttribute implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /* @var $category Category */
@@ -64,10 +52,6 @@ class CategoryHtmlAttribute implements ResolverInterface
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->categoryAttribute($category, $category->getData($fieldName), $fieldName);
 
-        $result = function () use ($renderedValue) {
-            return $renderedValue;
-        };
-
-        return $this->valueFactory->create($result);
+        return $renderedValue;
     }
 }
