@@ -152,18 +152,4 @@ interface TimezoneInterface
      * @deprecated
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
-
-    /**
-     * Convert date from config timezone to Utc.
-     *
-     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
-     *
-     * @param string|\DateTimeInterface $date
-     * @param string $format
-     * @param string $pattern
-     * @throws LocalizedException
-     * @return string
-     * @deprecated
-     */
-    public function convertConfigTimeToUtcWithPattern($date, $format = 'Y-m-d H:i:s', $pattern = 'Y-m-d H:i:s');
 }

@@ -257,7 +257,13 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string|\DateTimeInterface $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param string|null $locale
+     * @param string|null $timezone
+     * @param string|null $pattern
+     * @return string
      */
     public function formatDateTime(
         $date,
@@ -293,7 +299,13 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @inheritdoc
+     * Convert date from config timezone to Utc.
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @throws LocalizedException
+     * @return string
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
