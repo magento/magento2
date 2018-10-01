@@ -480,7 +480,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testFilterProductsByNameASC()
+    public function testQueryProductsSortedByNameASC()
     {
         $query
             = <<<QUERY
