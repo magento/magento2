@@ -110,6 +110,8 @@ class CategoryTree
     }
 
     /**
+     * Join attributes recursively
+     *
      * @param Collection $collection
      * @param FieldNode $fieldNode
      * @return void
