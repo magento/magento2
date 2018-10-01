@@ -25,6 +25,8 @@ define([
                     totals: ko.observable({
                         'base_grand_total': 0
                     }),
+
+                    /** Stub */
                     isVirtual: function () {
                         return false;
                     }
