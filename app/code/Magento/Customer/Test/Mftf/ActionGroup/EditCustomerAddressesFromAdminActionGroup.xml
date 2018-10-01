@@ -8,21 +8,24 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EditCustomerAddressesFromAdminActionGroup" >
+        <arguments>
+            <argument name="customerAddress"/>
+        </arguments>
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
         <click selector="{{AdminEditCustomerAddressesSection.addNewAddresses}}" stepKey="addNewAddresses"/>
-        <fillField  stepKey="fillPrefixName" userInput="{{CustomerAddressSimple.prefix}}" selector="{{AdminEditCustomerAddressesSection.prefixName}}"/>
-        <fillField  stepKey="fillFirstName" userInput="{{CustomerAddressSimple.firstname}}" selector="{{AdminEditCustomerAddressesSection.firstName}}"/>
-        <fillField  stepKey="fillMiddleName" userInput="{{CustomerAddressSimple.middlename}}" selector="{{AdminEditCustomerAddressesSection.middleName}}"/>
-        <fillField  stepKey="fillLastName" userInput="{{CustomerAddressSimple.lastname}}" selector="{{AdminEditCustomerAddressesSection.lastName}}"/>
-        <fillField  stepKey="fillSuffixName" userInput="{{CustomerAddressSimple.suffix}}" selector="{{AdminEditCustomerAddressesSection.suffixName}}"/>
-        <fillField  stepKey="fillCompany" userInput="{{CustomerAddressSimple.company}}" selector="{{AdminEditCustomerAddressesSection.company}}"/>
-        <fillField  stepKey="fillStreetAddress" userInput="{{CustomerAddressSimple.street}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
-        <fillField  stepKey="fillCity" userInput="{{CustomerAddressSimple.city}}" selector="{{AdminEditCustomerAddressesSection.city}}"/>
+        <fillField  stepKey="fillPrefixName" userInput="{{customerAddress.prefix}}" selector="{{AdminEditCustomerAddressesSection.prefixName}}"/>
+        <fillField  stepKey="fillFirstName" userInput="{{customerAddress.firstname}}" selector="{{AdminEditCustomerAddressesSection.firstName}}"/>
+        <fillField  stepKey="fillMiddleName" userInput="{{customerAddress.middlename}}" selector="{{AdminEditCustomerAddressesSection.middleName}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{customerAddress.lastname}}" selector="{{AdminEditCustomerAddressesSection.lastName}}"/>
+        <fillField  stepKey="fillSuffixName" userInput="{{customerAddress.suffix}}" selector="{{AdminEditCustomerAddressesSection.suffixName}}"/>
+        <fillField  stepKey="fillCompany" userInput="{{customerAddress.company}}" selector="{{AdminEditCustomerAddressesSection.company}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{customerAddress.street}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{customerAddress.city}}" selector="{{AdminEditCustomerAddressesSection.city}}"/>
         <selectOption stepKey="selectCountry" selector="{{AdminEditCustomerAddressesSection.country}}" userInput="{{US_Address_CA.country_id}}"/>
         <selectOption stepKey="selectState" selector="{{AdminEditCustomerAddressesSection.state}}" userInput="{{US_Address_CA.state}}"/>
-        <fillField  stepKey="fillZipCode" userInput="{{CustomerAddressSimple.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
-        <fillField  stepKey="fillPhone" userInput="{{CustomerAddressSimple.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
-        <fillField  stepKey="fillVAT" userInput="{{CustomerAddressSimple.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
+        <fillField  stepKey="fillZipCode" userInput="{{customerAddress.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
+        <fillField  stepKey="fillPhone" userInput="{{customerAddress.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
+        <fillField  stepKey="fillVAT" userInput="{{customerAddress.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
         <click selector="{{CustomerAccountSection.save}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForStorefrontPage"/>
         <click selector="{{CustomerAccountSection.save}}" stepKey="saveCustomer"/>
