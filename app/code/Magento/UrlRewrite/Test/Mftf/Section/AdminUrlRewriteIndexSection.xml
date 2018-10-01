@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminUrlRewriteIndexSection">
+        <element name="requestPathSearchField" type="input" selector="#urlrewriteGrid_filter_request_path"/>
+        <element name="requestPathColumns" type="text" selector="//td[@data-column='request_path'][not(input)]"/>
+        <element name="search" type="button" selector="[data-action='grid-filter-apply']" timeout="10"/>
+    </section>
+</sections>
