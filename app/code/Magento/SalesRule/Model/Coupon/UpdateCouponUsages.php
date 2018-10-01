@@ -11,7 +11,7 @@ use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
-use Magento\SalesRule\Model\ResourceModel\Rule\Customer;
+use Magento\SalesRule\Model\ResourceModel\Rule\DeleteCustomerUsage;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -40,29 +40,29 @@ class UpdateCouponUsages
     private $couponUsage;
 
     /**
-     * @var Customer
+     * @var DeleteCustomerUsage
      */
-    private $customerRuleUsage;
+    private $deleteCustomerRuleUsage;
 
     /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
      * @param Coupon $coupon
      * @param Usage $couponUsage
-     * @param Customer $customerRuleUsage
+     * @param DeleteCustomerUsage $deleteCustomerRuleUsage
      */
     public function __construct(
         RuleFactory $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
         Coupon $coupon,
         Usage $couponUsage,
-        Customer $customerRuleUsage = null
+        DeleteCustomerUsage $deleteCustomerRuleUsage = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
         $this->coupon = $coupon;
         $this->couponUsage = $couponUsage;
-        $this->customerRuleUsage = $customerRuleUsage ? : ObjectManager::getInstance()->get(Customer::class);
+        $this->deleteCustomerRuleUsage = $deleteCustomerRuleUsage ? : ObjectManager::getInstance()->get(DeleteCustomerUsage::class);
     }
 
     /**
@@ -135,7 +135,7 @@ class UpdateCouponUsages
                 /** Delete the rules from salesrule_customer table when time used updated to 0 */
                 $updatedTimeUsed = $ruleCustomer->getTimesUsed();
                 if ($updatedTimeUsed == 0) {
-                    $this->customerRuleUsage->deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed);
+                    $this->deleteCustomerRuleUsage->deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed);
                 }
             }
         } elseif ($increment) {

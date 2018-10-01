@@ -48,22 +48,4 @@ class Customer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $rule->setData($data);
         return $this;
     }
-
-    /**
-     * Delete the time Usage from salesrule_customer table when times_used is 0
-     * @param int $ruleId
-     * @param int $customerId
-     * @param int $updatedTimeUsed
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed)
-    {
-        $connection = $this->getConnection();
-        if ($updatedTimeUsed == 0) {
-            $connection->delete(
-                $this->getMainTable(),
-                ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
-            );
-        }
-    }
 }
