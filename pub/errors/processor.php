@@ -265,7 +265,8 @@ class Processor
             $host = 'localhost';
         }
 
-        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
+        // HTTP_X_FORWARDED_PROTO to check whether a webserver using HTTP is behind a load balancer serving HTTPS
+        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off') || $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
         if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
