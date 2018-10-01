@@ -126,7 +126,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     public function testPlaceOrderWithInStockProduct()
     {
-        $sku = 'SKU-1';
+        $sku = 'SKU-2';
         $stockId = 30;
         $quoteItemQty = 2.2;
 
@@ -189,9 +189,9 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     public function testPlaceOrderWithOutOffStockProductAndBackOrdersTurnedOn()
     {
-        $sku = 'SKU-1';
+        $sku = 'SKU-2';
         $stockId = 30;
-        $quoteItemQty = 10.5;
+        $quoteItemQty = 6.5;
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
@@ -223,9 +223,9 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      */
     public function testPlaceOrderWithOutOffStockProductAndManageStockTurnedOff()
     {
-        $sku = 'SKU-1';
+        $sku = 'SKU-2';
         $stockId = 30;
-        $quoteItemQty = 10.5;
+        $quoteItemQty = 6.5;
 
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
