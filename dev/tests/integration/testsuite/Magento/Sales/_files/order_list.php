@@ -5,13 +5,14 @@
  */
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 
 require 'order.php';
 /** @var Order $order */
-/** @var  Order\Payment $payment */
-/** @var  Order\Item $orderItem */
-/** @var  Order\Address $billingAddress */
-/** @var  Order\Address $shippingAddress */
+/** @var Order\Payment $payment */
+/** @var Order\Item $orderItem */
+/** @var array $addressData Data for creating addresses for the orders. */
 $orders = [
     [
         'increment_id' => '100000002',
@@ -48,16 +49,30 @@ $orders = [
     ],
 ];
 
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 /** @var array $orderData */
 foreach ($orders as $orderData) {
     /** @var $order \Magento\Sales\Model\Order */
     $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
         \Magento\Sales\Model\Order::class
     );
+
+    // Reset addresses
+    /** @var Order\Address $billingAddress */
+    $billingAddress = $objectManager->create(OrderAddress::class, ['data' => $addressData]);
+    $billingAddress->setAddressType('billing');
+
+    $shippingAddress = clone $billingAddress;
+    $shippingAddress->setId(null)->setAddressType('shipping');
+
     $order
         ->setData($orderData)
         ->addItem($orderItem)
+        ->setCustomerIsGuest(true)
+        ->setCustomerEmail('customer@null.com')
         ->setBillingAddress($billingAddress)
-        ->setBillingAddress($shippingAddress)
-        ->save();
+        ->setShippingAddress($shippingAddress);
+
+    $orderRepository->save($order);
 }

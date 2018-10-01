@@ -161,6 +161,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Authorization: Basic header
+     *
      * Login credentials support
      *
      * @param string $login username
@@ -209,6 +210,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Clear cookies
+     *
      * @return void
      */
     public function removeCookies()
@@ -293,6 +295,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Get cookies array with details
      * (domain, expire time etc)
+     *
      * @return array
      */
     public function getCookiesFull()
@@ -327,6 +330,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Get response status code
+     *
      * @see lib\Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
@@ -345,6 +349,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $method
      * @param string $uri
      * @param array|string $params - use $params as a string in case of JSON or XML POST request.
+     *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -410,6 +415,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Throw error exception
+     *
      * @param string $string
      * @return void
      * @throws \Exception
@@ -435,7 +441,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             if (count($line) != 3) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
-            $this->_responseStatus = intval($line[1]);
+            $this->_responseStatus = (int)$line[1];
         } else {
             $name = $value = '';
             $out = explode(": ", trim($data), 2);
@@ -474,6 +480,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set curl options array directly
+     *
      * @param array $arr
      * @return void
      */
@@ -484,6 +491,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set CURL options overrides array
+     *
      * @param array $arr
      * @return void
      */
