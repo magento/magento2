@@ -10,8 +10,6 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Customer\Account;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -32,23 +30,15 @@ class RevokeCustomerToken implements ResolverInterface
     private $customerTokenService;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param UserContextInterface $userContext
      * @param CustomerTokenServiceInterface $customerTokenService
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
         UserContextInterface $userContext,
-        CustomerTokenServiceInterface $customerTokenService,
-        ValueFactory $valueFactory
+        CustomerTokenServiceInterface $customerTokenService
     ) {
         $this->userContext = $userContext;
         $this->customerTokenService = $customerTokenService;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -60,9 +50,8 @@ class RevokeCustomerToken implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
-
-        $customerId = (int) $this->userContext->getUserId();
+    ) {
+        $customerId = (int)$this->userContext->getUserId();
 
         if ($customerId === 0) {
             throw new GraphQlAuthorizationException(
@@ -73,10 +62,6 @@ class RevokeCustomerToken implements ResolverInterface
             );
         }
 
-        $result = function () use ($customerId) {
-            return $this->customerTokenService->revokeCustomerAccessToken($customerId);
-        };
-
-        return $this->valueFactory->create($result);
+        return $this->customerTokenService->revokeCustomerAccessToken($customerId);
     }
 }
