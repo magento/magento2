@@ -46,6 +46,8 @@ class CategoryTree implements ResolverInterface
     }
 
     /**
+     * Get category id
+     *
      * @param array $args
      * @return int
      * @throws GraphQlInputException
