@@ -501,14 +501,6 @@ class Storage extends \Magento\Framework\DataObject
         // create thumbnail
         $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
 
-        $result['cookie'] = [
-            'name' => $this->getSession()->getName(),
-            'value' => $this->getSession()->getSessionId(),
-            'lifetime' => $this->getSession()->getCookieLifetime(),
-            'path' => $this->getSession()->getCookiePath(),
-            'domain' => $this->getSession()->getCookieDomain(),
-        ];
-
         return $result;
     }
 
@@ -567,10 +559,10 @@ class Storage extends \Magento\Framework\DataObject
      * Create thumbnail for image and save it to thumbnails directory
      *
      * @param string $source Image path to be resized
-     * @param bool $keepRation Keep aspect ratio or not
+     * @param bool $keepRatio Keep aspect ratio or not
      * @return bool|string Resized filepath or false if errors were occurred
      */
-    public function resizeFile($source, $keepRation = true)
+    public function resizeFile($source, $keepRatio = true)
     {
         $realPath = $this->_directory->getRelativePath($source);
         if (!$this->_directory->isFile($realPath) || !$this->_directory->isExist($realPath)) {
@@ -587,7 +579,7 @@ class Storage extends \Magento\Framework\DataObject
         }
         $image = $this->_imageFactory->create();
         $image->open($source);
-        $image->keepAspectRatio($keepRation);
+        $image->keepAspectRatio($keepRatio);
         $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
         $dest = $targetDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         $image->save($dest);

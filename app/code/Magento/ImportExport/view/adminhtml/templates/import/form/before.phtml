@@ -178,9 +178,13 @@ require([
                 .loader('show');
             var form = jQuery('#edit_form')
                 .one('invalid-form.validate', function(e){jQuery('body').loader('hide')});
-            newActionUrl = (newActionUrl ? newActionUrl : form.attr('action')) +
-                (form.attr('action').lastIndexOf('?') != -1 ? '&' : '?')+
-                'form_key=' + encodeURIComponent(form.find('[name="form_key"]').val());
+
+            newActionUrl = (newActionUrl ? newActionUrl : form.attr('action'));
+            if (newActionUrl.lastIndexOf('form_key') === -1) {
+                newActionUrl = newActionUrl +
+                    (newActionUrl.lastIndexOf('?') !== -1 ? '&' : '?') +
+                    'form_key=' + encodeURIComponent(form.find('[name="form_key"]').val());
+            }
 
             form.trigger('save', [{
                 action: newActionUrl,

@@ -22,7 +22,7 @@ define([
             opened: false,
             level: 0,
             visible: true,
-            initializeFieldsetDataByDefault: false,    /* Data in some fieldsets should be initialized before open */
+            initializeFieldsetDataByDefault: false, /* Data in some fieldsets should be initialized before open */
             disabled: false,
             listens: {
                 'opened': 'onVisibilityChange'
@@ -77,9 +77,9 @@ define([
             elem.initContainer(this);
 
             elem.on({
-                'update':   this.onChildrenUpdate,
-                'loading':  this.onContentLoading,
-                'error':  this.onChildrenError
+                'update': this.onChildrenUpdate,
+                'loading': this.onContentLoading,
+                'error': this.onChildrenError
             });
 
             if (this.disabled) {
@@ -155,9 +155,40 @@ define([
          * @param {String} message - error message.
          */
         onChildrenError: function (message) {
-            var hasErrors = this.elems.some('error');
+            var hasErrors = false;
+
+            if (!message) {
+                hasErrors = this._isChildrenHasErrors(hasErrors, this);
+            }
 
             this.error(hasErrors || message);
+        },
+
+        /**
+         * Returns errors of children if exist
+         *
+         * @param {Boolean} hasErrors
+         * @param {*} container
+         * @return {Boolean}
+         * @private
+         */
+        _isChildrenHasErrors: function (hasErrors, container) {
+            var self = this;
+
+            if (hasErrors === false && container.hasOwnProperty('elems')) {
+                hasErrors = container.elems.some('error');
+
+                if (hasErrors === false && container.hasOwnProperty('_elems')) {
+                    container._elems.forEach(function (child) {
+
+                        if (hasErrors === false) {
+                            hasErrors = self._isChildrenHasErrors(hasErrors, child);
+                        }
+                    });
+                }
+            }
+
+            return hasErrors;
         },
 
         /**

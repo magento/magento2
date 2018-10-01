@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddVariableToWYSIWYGNewsletterTest">
         <annotations>
             <features value="Newsletter"/>
@@ -15,6 +15,7 @@
             <title value="Admin should be able to add variable to WYSIWYG Editor of Newsletter"/>
             <description value="Admin should be able to add variable to WYSIWYG Editor Newsletter"/>
             <testCaseId value="MAGETWO-84379"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

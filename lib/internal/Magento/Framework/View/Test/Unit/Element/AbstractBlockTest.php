@@ -290,9 +290,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
                 'expectsDispatchEvent' => $this->exactly(2),
-                'expectsCacheLoad' => $this->once(),
+                'expectsCacheLoad' => $this->never(),
                 'expectsCacheSave' => $this->never(),
-                'expectedResult' => 'dataFromCache',
+                'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => 120,

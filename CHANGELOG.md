@@ -1,3 +1,7 @@
+2.3.0
+=============
+To get detailed information about changes in Magento 2.3.0, see the [Release Notes](https://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html)
+
 2.1.0
 =============
 To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
@@ -1977,7 +1981,7 @@ Tests:
     * [#686](https://github.com/magento/magento2/issues/686) -- Product save validation errors in the admin don't hide the overlay
     * [#702](https://github.com/magento/magento2/issues/702) -- Base table or view not found
     * [#652](https://github.com/magento/magento2/issues/652) -- Multishipping checkout not to change the Billing address js issue
-    * [#648](https://github.com/magento/magento2/issues/648) -- An equal (=) sign in the hash of the product page to to break the tabs functionality
+    * [#648](https://github.com/magento/magento2/issues/648) -- An equal (=) sign in the hash of the product page to break the tabs functionality
 * Service Contracts:
     * Refactored usage of new API of the Customer module
     * Implemented Service Contracts for the Sales module

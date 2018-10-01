@@ -7,40 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
 
 /**
- * UrlRewrite field resolver, used for GraphQL request processing.
+ * Returns URL rewrites list for the specified product
  */
 class UrlRewrite implements ResolverInterface
 {
-    private $urlFinder;
     /**
-     * @var ValueFactory
+     * @var UrlFinderInterface
      */
-    private $valueFactory;
+    private $urlFinder;
 
     /**
-     * @param ValueFactory $valueFactory
      * @param UrlFinderInterface $urlFinder
      */
     public function __construct(
-        ValueFactory $valueFactory,
         UrlFinderInterface $urlFinder
     ) {
-        $this->valueFactory = $valueFactory;
         $this->urlFinder = $urlFinder;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -48,23 +43,20 @@ class UrlRewrite implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ): array {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new GraphQlInputException(__('"model" value should be specified'));
         }
 
         /** @var AbstractModel $entity */
         $entity = $value['model'];
         $entityId = $entity->getEntityId();
-        
-        $urlRewritesCollection = $this->urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $entityId]);
+
+        $urlRewriteCollection = $this->urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $entityId]);
         $urlRewrites = [];
 
         /** @var UrlRewriteDTO $urlRewrite */
-        foreach ($urlRewritesCollection as $urlRewrite) {
+        foreach ($urlRewriteCollection as $urlRewrite) {
             if ($urlRewrite->getRedirectType() !== 0) {
                 continue;
             }
@@ -75,11 +67,7 @@ class UrlRewrite implements ResolverInterface
             ];
         }
 
-        $result = function () use ($urlRewrites) {
-            return $urlRewrites;
-        };
-
-        return $this->valueFactory->create($result);
+        return $urlRewrites;
     }
 
     /**

@@ -19,7 +19,7 @@ class Website extends \Magento\Backend\Block\Template
     {
         $itemId = $this->getRequest()->getParam('website_id');
 
-        $this->setTemplate('system/store/delete_website.phtml');
+        $this->setTemplate('Magento_Backend::system/store/delete_website.phtml');
         $this->setAction($this->getUrl('adminhtml/*/deleteWebsitePost', ['website_id' => $itemId]));
         $this->addChild(
             'confirm_deletion_button',

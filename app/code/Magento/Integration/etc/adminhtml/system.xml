@@ -13,48 +13,48 @@
             <resource>Magento_Integration::config_oauth</resource>
             <group id="access_token_lifetime" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Access Token Expiration</label>
-                <field id="customer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="customer" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Customer Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
                 </field>
-                <field id="admin" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="admin" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Admin Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
                 </field>
             </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cleanup Settings</label>
-                <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="cleanup_probability" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Cleanup Probability</label>
                     <comment>Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup</comment>
                 </field>
-                <field id="expiration_period" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="expiration_period" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Expiration Period</label>
                     <comment>Cleanup entries older than X minutes.</comment>
                 </field>
             </group>
             <group id="consumer" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Consumer Settings</label>
-                <field id="expiration_period" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Expiration Period</label>
                     <comment>Consumer key/secret will expire if not used within X seconds after Oauth token exchange starts.</comment>
                 </field>
-                <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="post_maxredirects" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>OAuth consumer credentials HTTP Post maxredirects</label>
                     <comment>Number of maximum redirects for OAuth consumer credentials Post request.</comment>
                 </field>
-                <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="post_timeout" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>OAuth consumer credentials HTTP Post timeout</label>
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                 </field>
             </group>
             <group id="authentication_lock" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Authentication Locks</label>
-                <field id="max_failures_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="max_failures_count" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Login Failures to Lock Out Account</label>
                     <comment>Maximum Number of authentication failures to lock out account.</comment>
                 </field>
-                <field id="timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="timeout" translate="label" type="text comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lockout Time (seconds)</label>
                     <comment>Period of time in seconds after which account will be unlocked.</comment>
                 </field>

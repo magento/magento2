@@ -1075,7 +1075,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 return $e;
             }
@@ -1956,21 +1956,17 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _validate()
     {
-        $customerId = $this->getSession()->getCustomerId();
-        if ($customerId === null) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a customer'));
-        }
-
         if (!$this->getSession()->getStore()->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please select a store'));
         }
         $items = $this->getQuote()->getAllItems();
 
-        if (count($items) == 0) {
+        if (count($items) === 0) {
             $this->_errors[] = __('Please specify order items.');
         }
 
         foreach ($items as $item) {
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
                 $this->_errors = array_merge($this->_errors, $messages);
@@ -2002,7 +1998,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             foreach ($this->_errors as $error) {
                 $logger->error($error);
-                $this->messageManager->addError($error);
+                $this->messageManager->addErrorMessage($error);
             }
 
             throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));

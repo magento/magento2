@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
@@ -564,6 +564,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Getter whether the payment can be voided
+     *
      * @return bool
      */
     public function canVoidPayment()
@@ -880,7 +881,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPayment()
     {
@@ -1008,13 +1009,31 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Add a comment to order
+     *
      * Different or default status may be specified
      *
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
+     * @deprecated
+     * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
+    {
+        return $this->addCommentToStatusHistory($comment, $status, false);
+    }
+    
+    /**
+     * Add a comment to order status history
+     *
+     * Different or default status may be specified
+     *
+     * @param string $comment
+     * @param bool|string $status
+     * @param bool $isVisibleOnFront
+     * @return OrderStatusHistoryInterface
+     */
+    public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
         if (false === $status) {
             $status = $this->getStatus();
@@ -1029,6 +1048,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $comment
         )->setEntityName(
             $this->entityType
+        )->setIsVisibleOnFront(
+            $isVisibleOnFront
         );
         $this->addStatusHistory($history);
         return $history;
@@ -1070,6 +1091,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Hold order
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -1215,6 +1238,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /*********************** ADDRESSES ***************************/
 
     /**
+     * Returns address collection instance
+     *
      * @return Collection
      */
     public function getAddressesCollection()
@@ -1229,6 +1254,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns address by id
+     *
      * @param mixed $addressId
      * @return false
      */
@@ -1243,6 +1270,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Add address to order
+     *
      * @param \Magento\Sales\Model\Order\Address $address
      * @return $this
      */
@@ -1257,9 +1286,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns items collection
+     *
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getItemsCollection($filterByTypes = [], $nonChildrenOnly = false)
     {
@@ -1284,7 +1315,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get random items collection without related children
      *
      * @param int $limit
-     * @return ImportCollection
+     * @return ItemCollection
      */
     public function getParentItemsRandomCollection($limit = 1)
     {
@@ -1296,7 +1327,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
-     * @return ImportCollection
+     * @return ItemCollection
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
@@ -1329,6 +1360,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns all order items
+     *
      * @return \Magento\Sales\Model\Order\Item[]
      */
     public function getAllItems()
@@ -1343,6 +1376,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns all visible items
+     *
      * @return array
      */
     public function getAllVisibleItems()
@@ -1374,6 +1409,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns Item By QuoteItem Id
+     *
      * @param mixed $quoteItemId
      * @return  \Magento\Framework\DataObject|null
      */
@@ -1388,6 +1425,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Add item to order
+     *
      * @param \Magento\Sales\Model\Order\Item $item
      * @return $this
      */
@@ -1403,6 +1442,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /*********************** PAYMENTS ***************************/
 
     /**
+     * Returns payment collection
+     *
      * @return PaymentCollection
      */
     public function getPaymentsCollection()
@@ -1417,6 +1458,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns all payments
+     *
      * @return array
      */
     public function getAllPayments()
@@ -1431,6 +1474,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns payment by id
+     *
      * @param mixed $paymentId
      * @return Payment|false
      */
@@ -1445,7 +1490,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
@@ -1512,6 +1557,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns status history by id
+     *
      * @param mixed $statusId
      * @return string|false
      */
@@ -1527,6 +1574,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Set the order status history object and the order object to each other
+     *
      * Adds the object to the status history collection, which is automatically saved when the order is saved.
      * See the entity_id attribute backend model.
      * Or the history record can be saved standalone after this.
@@ -1546,6 +1594,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns real order id
+     *
      * @return string
      */
     public function getRealOrderId()
@@ -1574,9 +1624,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Get formatted price value including order currency rate to order website currency
      *
-     * @param   float $price
-     * @param   bool  $addBrackets
-     * @return  string
+     * @param float $price
+     * @param bool $addBrackets
+     * @return string
      */
     public function formatPrice($price, $addBrackets = false)
     {
@@ -1584,6 +1634,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Format price precision
+     *
      * @param float $price
      * @param int $precision
      * @param bool $addBrackets
@@ -1597,8 +1649,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve text formatted price value including order rate
      *
-     * @param   float $price
-     * @return  string
+     * @param float $price
+     * @return string
      */
     public function formatPriceTxt($price)
     {
@@ -1619,6 +1671,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Format base price
+     *
      * @param float $price
      * @return string
      */
@@ -1628,6 +1682,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Format Base Price Precision
+     *
      * @param float $price
      * @param int $precision
      * @return string
@@ -1638,6 +1694,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Is Currency Different
+     *
      * @return bool
      */
     public function isCurrencyDifferent()
@@ -1670,6 +1728,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns object data
+     *
      * @param string $key
      * @param null|string|int $index
      * @return mixed
@@ -1810,6 +1870,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns customer name
+     *
      * @return string
      */
     public function getCustomerName()
@@ -1837,8 +1899,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Get formatted order created date in store timezone
      *
-     * @param   string $format date format type (short|medium|long|full)
-     * @return  string
+     * @param string $format date format type (short|medium|long|full)
+     * @return string
      */
     public function getCreatedAtFormatted($format)
     {
@@ -1852,6 +1914,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns email customer note
+     *
      * @return string
      */
     public function getEmailCustomerNote()
@@ -1863,6 +1927,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns store group name
+     *
      * @return string
      */
     public function getStoreGroupName()
@@ -1876,7 +1942,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Resets all data in object
-     * so after another load it will be complete new object
+     *
+     * So after another load it will be complete new object
      *
      * @return $this
      */
@@ -1900,6 +1967,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Get order is not virtual
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -1942,6 +2011,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns order items
+     *
      * @return \Magento\Sales\Api\Data\OrderItemInterface[]
      */
     public function getItems()
@@ -1956,7 +2027,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function setItems($items)
@@ -1965,6 +2036,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns order addresses
+     *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
      */
     public function getAddresses()
@@ -1979,6 +2052,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Returns status history
+     *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]|null
      */
     public function getStatusHistories()
@@ -1993,7 +2068,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
      */
@@ -2003,7 +2078,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
      * @return $this
@@ -2486,7 +2561,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -3304,7 +3379,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStatusHistories(array $statusHistories = null)
     {
@@ -3312,7 +3387,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStatus($status)
     {
@@ -3320,7 +3395,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCouponCode($code)
     {
@@ -3328,7 +3403,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProtectCode($code)
     {
@@ -3336,7 +3411,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingDescription($description)
     {
@@ -3344,7 +3419,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsVirtual($isVirtual)
     {
@@ -3352,7 +3427,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($id)
     {
@@ -3360,7 +3435,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($id)
     {
@@ -3368,7 +3443,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -3376,7 +3451,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountCanceled($baseDiscountCanceled)
     {
@@ -3384,7 +3459,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountInvoiced($baseDiscountInvoiced)
     {
@@ -3392,7 +3467,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountRefunded($baseDiscountRefunded)
     {
@@ -3400,7 +3475,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseGrandTotal($amount)
     {
@@ -3408,7 +3483,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingAmount($amount)
     {
@@ -3416,7 +3491,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingCanceled($baseShippingCanceled)
     {
@@ -3424,7 +3499,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingInvoiced($baseShippingInvoiced)
     {
@@ -3432,7 +3507,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingRefunded($baseShippingRefunded)
     {
@@ -3440,7 +3515,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingTaxAmount($amount)
     {
@@ -3448,7 +3523,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingTaxRefunded($baseShippingTaxRefunded)
     {
@@ -3456,7 +3531,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotal($amount)
     {
@@ -3464,7 +3539,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalCanceled($baseSubtotalCanceled)
     {
@@ -3472,7 +3547,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalInvoiced($baseSubtotalInvoiced)
     {
@@ -3480,7 +3555,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalRefunded($baseSubtotalRefunded)
     {
@@ -3488,7 +3563,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxAmount($amount)
     {
@@ -3496,7 +3571,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxCanceled($baseTaxCanceled)
     {
@@ -3504,7 +3579,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxInvoiced($baseTaxInvoiced)
     {
@@ -3512,7 +3587,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxRefunded($baseTaxRefunded)
     {
@@ -3520,7 +3595,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToGlobalRate($rate)
     {
@@ -3528,7 +3603,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToOrderRate($rate)
     {
@@ -3536,7 +3611,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalCanceled($baseTotalCanceled)
     {
@@ -3544,7 +3619,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalInvoiced($baseTotalInvoiced)
     {
@@ -3552,7 +3627,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalInvoicedCost($baseTotalInvoicedCost)
     {
@@ -3560,7 +3635,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalOfflineRefunded($baseTotalOfflineRefunded)
     {
@@ -3568,7 +3643,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalOnlineRefunded($baseTotalOnlineRefunded)
     {
@@ -3576,7 +3651,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalPaid($baseTotalPaid)
     {
@@ -3584,7 +3659,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalQtyOrdered($baseTotalQtyOrdered)
     {
@@ -3592,7 +3667,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalRefunded($baseTotalRefunded)
     {
@@ -3600,7 +3675,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -3608,7 +3683,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountCanceled($discountCanceled)
     {
@@ -3616,7 +3691,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountInvoiced($discountInvoiced)
     {
@@ -3624,7 +3699,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountRefunded($discountRefunded)
     {
@@ -3632,7 +3707,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGrandTotal($amount)
     {
@@ -3640,7 +3715,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAmount($amount)
     {
@@ -3648,7 +3723,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingCanceled($shippingCanceled)
     {
@@ -3656,7 +3731,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingInvoiced($shippingInvoiced)
     {
@@ -3664,7 +3739,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingRefunded($shippingRefunded)
     {
@@ -3672,7 +3747,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingTaxAmount($amount)
     {
@@ -3680,7 +3755,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingTaxRefunded($shippingTaxRefunded)
     {
@@ -3688,7 +3763,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToBaseRate($rate)
     {
@@ -3696,7 +3771,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToOrderRate($rate)
     {
@@ -3704,7 +3779,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotal($amount)
     {
@@ -3712,7 +3787,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalCanceled($subtotalCanceled)
     {
@@ -3720,7 +3795,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalInvoiced($subtotalInvoiced)
     {
@@ -3728,7 +3803,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalRefunded($subtotalRefunded)
     {
@@ -3736,7 +3811,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxAmount($amount)
     {
@@ -3744,7 +3819,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxCanceled($taxCanceled)
     {
@@ -3752,7 +3827,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxInvoiced($taxInvoiced)
     {
@@ -3760,7 +3835,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxRefunded($taxRefunded)
     {
@@ -3768,7 +3843,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalCanceled($totalCanceled)
     {
@@ -3776,7 +3851,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalInvoiced($totalInvoiced)
     {
@@ -3784,7 +3859,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalOfflineRefunded($totalOfflineRefunded)
     {
@@ -3792,7 +3867,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalOnlineRefunded($totalOnlineRefunded)
     {
@@ -3800,7 +3875,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalPaid($totalPaid)
     {
@@ -3808,7 +3883,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalQtyOrdered($totalQtyOrdered)
     {
@@ -3816,7 +3891,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalRefunded($totalRefunded)
     {
@@ -3824,7 +3899,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCanShipPartially($flag)
     {
@@ -3832,7 +3907,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCanShipPartiallyItem($flag)
     {
@@ -3840,7 +3915,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerIsGuest($customerIsGuest)
     {
@@ -3848,7 +3923,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerNoteNotify($customerNoteNotify)
     {
@@ -3856,7 +3931,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBillingAddressId($id)
     {
@@ -3864,7 +3939,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerGroupId($id)
     {
@@ -3872,7 +3947,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEditIncrement($editIncrement)
     {
@@ -3880,7 +3955,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmailSent($emailSent)
     {
@@ -3888,7 +3963,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setForcedShipmentWithInvoice($forcedShipmentWithInvoice)
     {
@@ -3896,7 +3971,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPaymentAuthExpiration($paymentAuthExpiration)
     {
@@ -3904,7 +3979,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuoteAddressId($id)
     {
@@ -3912,7 +3987,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuoteId($id)
     {
@@ -3920,7 +3995,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdjustmentNegative($adjustmentNegative)
     {
@@ -3928,7 +4003,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdjustmentPositive($adjustmentPositive)
     {
@@ -3936,7 +4011,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseAdjustmentNegative($baseAdjustmentNegative)
     {
@@ -3944,7 +4019,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseAdjustmentPositive($baseAdjustmentPositive)
     {
@@ -3952,7 +4027,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingDiscountAmount($amount)
     {
@@ -3960,7 +4035,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalInclTax($amount)
     {
@@ -3968,7 +4043,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalDue($baseTotalDue)
     {
@@ -3976,7 +4051,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPaymentAuthorizationAmount($amount)
     {
@@ -3984,7 +4059,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingDiscountAmount($amount)
     {
@@ -3992,7 +4067,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalInclTax($amount)
     {
@@ -4000,7 +4075,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalDue($totalDue)
     {
@@ -4008,7 +4083,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeight($weight)
     {
@@ -4016,7 +4091,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerDob($customerDob)
     {
@@ -4024,7 +4099,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIncrementId($id)
     {
@@ -4032,7 +4107,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAppliedRuleIds($appliedRuleIds)
     {
@@ -4040,7 +4115,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseCurrencyCode($code)
     {
@@ -4048,7 +4123,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerEmail($customerEmail)
     {
@@ -4056,7 +4131,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerFirstname($customerFirstname)
     {
@@ -4064,7 +4139,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerLastname($customerLastname)
     {
@@ -4072,7 +4147,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerMiddlename($customerMiddlename)
     {
@@ -4080,7 +4155,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerPrefix($customerPrefix)
     {
@@ -4088,7 +4163,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerSuffix($customerSuffix)
     {
@@ -4096,7 +4171,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerTaxvat($customerTaxvat)
     {
@@ -4104,7 +4179,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountDescription($description)
     {
@@ -4112,7 +4187,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtCustomerId($id)
     {
@@ -4120,7 +4195,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtOrderId($id)
     {
@@ -4128,7 +4203,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGlobalCurrencyCode($code)
     {
@@ -4136,7 +4211,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setHoldBeforeState($holdBeforeState)
     {
@@ -4144,7 +4219,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setHoldBeforeStatus($holdBeforeStatus)
     {
@@ -4152,7 +4227,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderCurrencyCode($code)
     {
@@ -4160,7 +4235,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOriginalIncrementId($id)
     {
@@ -4168,7 +4243,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRelationChildId($id)
     {
@@ -4176,7 +4251,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRelationChildRealId($realId)
     {
@@ -4184,7 +4259,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRelationParentId($id)
     {
@@ -4192,7 +4267,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRelationParentRealId($realId)
     {
@@ -4200,7 +4275,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRemoteIp($remoteIp)
     {
@@ -4208,7 +4283,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreCurrencyCode($code)
     {
@@ -4216,7 +4291,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreName($storeName)
     {
@@ -4224,7 +4299,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setXForwardedFor($xForwardedFor)
     {
@@ -4232,7 +4307,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerNote($customerNote)
     {
@@ -4240,7 +4315,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -4248,7 +4323,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalItemCount($totalItemCount)
     {
@@ -4256,7 +4331,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerGender($customerGender)
     {
@@ -4264,7 +4339,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -4272,7 +4347,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -4280,7 +4355,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingDiscountTaxCompensationAmount($amount)
     {
@@ -4288,7 +4363,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
@@ -4296,7 +4371,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced)
     {
@@ -4304,7 +4379,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
@@ -4315,7 +4390,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
@@ -4326,7 +4401,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
@@ -4337,7 +4412,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingInclTax($amount)
     {
@@ -4345,7 +4420,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingInclTax($amount)
     {

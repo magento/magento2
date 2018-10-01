@@ -175,6 +175,7 @@ class Indexer
 
         if (!empty($updateData)) {
             $updateData += ['entity_id' => $productId];
+            $updateData += ['row_id' => $productId];
             $updateFields = [];
             foreach ($updateData as $key => $value) {
                 $updateFields[$key] = $key;
