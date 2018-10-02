@@ -48,7 +48,9 @@ class StockSourceLink extends AbstractExtensibleModel implements StockSourceLink
      */
     public function getStockId(): ?int
     {
-        return $this->getData(self::STOCK_ID);
+        return $this->getData(self::STOCK_ID) === null ?
+            null:
+            (int)$this->getData(self::STOCK_ID);
     }
 
     /**

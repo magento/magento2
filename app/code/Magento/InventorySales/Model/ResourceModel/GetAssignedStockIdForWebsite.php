@@ -48,6 +48,6 @@ class GetAssignedStockIdForWebsite implements GetAssignedStockIdForWebsiteInterf
         if (count($result) === 0) {
             return null;
         }
-        return reset($result);
+        return (int)reset($result);
     }
 }
