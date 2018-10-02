@@ -190,12 +190,17 @@ class Dom
             /* override node value */
             if ($this->_isTextNode($node)) {
                 /* skip the case when the matched node has children, otherwise they get overridden */
-                if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode) || $this->_isCdataNode($matchedNode)) {
+                if (!$matchedNode->hasChildNodes()
+                    || $this->_isTextNode($matchedNode)
+                    || $this->_isCdataNode($matchedNode)
+                ) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
-            } elseif ($this->_isCdataNode($node) && $this->_isTextNode($matchedNode) && $this->_findCdataSection($node)) {
+            } elseif ($this->_isCdataNode($node) && $this->_isTextNode($matchedNode)) {
                 /* Replace text node with CDATA section */
-                $matchedNode->nodeValue = $this->_findCdataSection($node)->nodeValue;
+                if ($this->_findCdataSection($node)) {
+                    $matchedNode->nodeValue = $this->_findCdataSection($node)->nodeValue;
+                }
             } elseif ($this->_isCdataNode($node) && $this->_isCdataNode($matchedNode)) {
                 /* Replace CDATA with new one */
                 $this->_replaceCdataNode($matchedNode, $node);
@@ -227,8 +232,9 @@ class Dom
     }
 
     /**
-     * Check if the node content is CDATA (probably surrounded with text nodes)
-     * @param $node
+     * Check if the node content is CDATA (probably surrounded with text nodes) or just text node
+     *
+     * @param \DOMNode $node
      * @return bool
      */
     protected function _isCdataNode($node)
@@ -246,7 +252,8 @@ class Dom
 
     /**
      * Finds CDATA section from given node children
-     * @param $node
+     *
+     * @param \DOMNode $node
      * @return \DOMCdataSection|null
      */
     protected function _findCdataSection($node)
@@ -260,8 +267,9 @@ class Dom
 
     /**
      * Replaces CDATA section in $oldNode with $newNode's
-     * @param $oldNode
-     * @param $newNode
+     *
+     * @param \DOMNode $oldNode
+     * @param \DOMNode $newNode
      */
     protected function _replaceCdataNode($oldNode, $newNode)
     {
