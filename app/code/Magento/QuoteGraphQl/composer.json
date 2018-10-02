@@ -11,8 +11,7 @@
         "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
