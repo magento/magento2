@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+ Copyright (c) Vaimo Group. All rights reserved.
+ See LICENSE_VAIMO.txt for license details.
+-->
+<root>
+    <node>
+        <subnode>Some Other Phrase</subnode>
+    </node>
+</root>
