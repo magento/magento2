@@ -5,7 +5,7 @@
      - Information on your environment,
      - Steps to reproduce,
      - Expected and actual results,
-	Fields marked with (*) are required. Please don't remove the template.
+    Fields marked with (*) are required. Please don't remove the template.
 
     Please also have a look at our guidelines article before adding a new issue https://github.com/magento/magento2/wiki/Issue-reporting-guidelines
 -->
