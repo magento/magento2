@@ -50,6 +50,11 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var \Closure
+     */
+    private $proceed;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -77,9 +82,12 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
             CollectionFilterPlugin::class,
             ['queryFactory' => $this->queryFactoryMock]
         );
+        $this->proceed = function () {
+            return null;
+        };
     }
 
-    public function testAfterFilter()
+    public function testAroundFilter()
     {
         $queryText = 'Test Query';
 
@@ -96,9 +104,31 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
             ->method('addSearchFilter')
             ->with($queryText);
 
-        $this->plugin->afterFilter(
+        $this->plugin->aroundFilter(
             $this->collectionFilterMock,
-            null,
+            $this->proceed,
+            $this->collectionMock,
+            $this->categoryMock
+        );
+    }
+
+    public function testAroundFilterWithoutLimitation()
+    {
+        $queryText = 'Test Query';
+
+        $this->queryFactoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->queryMock);
+        $this->queryMock->expects($this->once())
+            ->method('isQueryTextShort')
+            ->willReturn(true);
+        $this->collectionMock->expects($this->never())
+            ->method('addSearchFilter')
+            ->with($queryText);
+
+        $this->plugin->aroundFilter(
+            $this->collectionFilterMock,
+            $this->proceed,
             $this->collectionMock,
             $this->categoryMock
         );
