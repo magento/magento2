@@ -59,7 +59,8 @@ class DeleteById implements DeleteByIdInterface
 
         if (null === $stock->getStockId()) {
             throw new CouldNotDeleteException(
-                __('There is no stock with "%fieldValue" for "%fieldName". Verify and try again.',
+                __(
+                    'There is no stock with "%fieldValue" for "%fieldName". Verify and try again.',
                     [
                         'fieldName' => StockInterface::STOCK_ID,
                         'fieldValue' => $stockId
