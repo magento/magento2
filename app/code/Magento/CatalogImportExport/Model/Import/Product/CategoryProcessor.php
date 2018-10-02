@@ -66,6 +66,8 @@ class CategoryProcessor
     }
 
     /**
+     * Initialize categories to be processed
+     *
      * @return $this
      */
     protected function initCategories()
