@@ -12,6 +12,9 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**

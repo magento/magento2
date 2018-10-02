@@ -6,7 +6,7 @@
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Product attribute adapter for elasticsearch context.
@@ -14,7 +14,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class AttributeAdapter
 {
     /**
-     * @var AbstractExtensibleModel
+     * @var CustomAttributesDataInterface
      */
     private $attribute;
 
@@ -24,11 +24,11 @@ class AttributeAdapter
     private $attributeCode;
 
     /**
-     * @param AbstractExtensibleModel $attribute
+     * @param CustomAttributesDataInterface $attribute
      * @param string $attributeCode
      */
     public function __construct(
-        AbstractExtensibleModel $attribute,
+        CustomAttributesDataInterface $attribute,
         string $attributeCode
     ) {
         $this->attribute = $attribute;
@@ -168,9 +168,9 @@ class AttributeAdapter
     /**
      * Get product attribute instance.
      *
-     * @return AbstractExtensibleModel|\Magento\Eav\Api\Data\AttributeInterface
+     * @return CustomAttributesDataInterface|\Magento\Eav\Api\Data\AttributeInterface
      */
-    private function getAttribute(): AbstractExtensibleModel
+    private function getAttribute(): CustomAttributesDataInterface
     {
         return $this->attribute;
     }

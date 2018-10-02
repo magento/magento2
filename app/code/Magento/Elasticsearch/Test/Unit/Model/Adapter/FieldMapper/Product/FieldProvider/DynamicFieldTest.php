@@ -24,6 +24,9 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class DynamicFieldTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -184,8 +187,8 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->will($this->returnCallback(
-                function($attribute)use ($categoryId) {
-                    static $callCount = array();
+                function ($attribute) use ($categoryId) {
+                    static $callCount = [];
                     $attributeCode = $attribute->getAttributeCode();
                     $callCount[$attributeCode] = !isset($callCount[$attributeCode]) ? 1 : ++$callCount[$attributeCode];
 
@@ -215,12 +218,12 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->method('getByAttributeCode')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function($code) use(
+                function ($code) use (
                     $categoryAttributeMock,
                     $positionAttributeMock,
                     $priceAttributeMock
                 ) {
-                    static $callCount = array();
+                    static $callCount = [];
                     $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
 
                     if ($code === 'position') {
@@ -236,15 +239,16 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function($type) use ($complexType) {
-                    static $callCount = array();
+                function ($type) use ($complexType) {
+                    static $callCount = [];
                     $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 
                     if ($type === 'string') {
                         return 'string';
-                    } if ($type === 'string') {
+                    }
+                    if ($type === 'string') {
                         return 'string';
-                    } elseif($type === 'float') {
+                    } elseif ($type === 'float') {
                         return 'float';
                     } else {
                         return $complexType;
@@ -252,10 +256,9 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                 }
             ));
 
-
         $this->assertEquals(
             $expected,
-            $this->provider->getFields(['storeId' => 1])
+            $this->provider->getFields(['websiteId' => 1])
         );
     }
 

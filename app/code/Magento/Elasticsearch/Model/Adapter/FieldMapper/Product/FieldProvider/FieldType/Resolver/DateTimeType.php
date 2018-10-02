@@ -29,7 +29,10 @@ class DateTimeType implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get datetime field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

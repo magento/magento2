@@ -20,6 +20,9 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface
     as FieldIndexResolver;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class StaticFieldTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -158,22 +161,22 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
             ->method('convert')
             ->with($this->anything())
             ->will($this->returnCallback(
-                function($type) use ($complexType) {
-                    static $callCount = array();
+                function ($type) use ($complexType) {
+                    static $callCount = [];
                     $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 
                     if ($type === 'string') {
                         return 'string';
-                    } if ($type === 'string') {
+                    }
+                    if ($type === 'string') {
                         return 'string';
-                    } elseif($type === 'float') {
+                    } elseif ($type === 'float') {
                         return 'float';
                     } else {
                         return $complexType;
                     }
                 }
             ));
-
 
         $this->assertEquals(
             $expected,

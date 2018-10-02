@@ -24,11 +24,16 @@ class CompositeResolver implements ResolverInterface
      */
     public function __construct(array $items)
     {
-        $this->items = $items;
+        $this->items = (function (ResolverInterface ...$items) {
+            return $items;
+        })(...$items);
     }
 
     /**
-     * {@inheritdoc}
+     * Get field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

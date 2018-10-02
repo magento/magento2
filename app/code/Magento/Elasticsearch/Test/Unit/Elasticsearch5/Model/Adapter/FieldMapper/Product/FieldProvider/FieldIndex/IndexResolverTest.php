@@ -13,11 +13,15 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
     as FieldTypeResolver;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class IndexResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver
+     * @var IndexResolver
      */
     private $resolver;
 
@@ -58,7 +62,7 @@ class IndexResolverTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver::class,
+            IndexResolver::class,
             [
                 'converter' => $this->converter,
                 'fieldTypeConverter' => $this->fieldTypeConverter,
@@ -71,7 +75,6 @@ class IndexResolverTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getFieldIndexProvider
      * @param $isSearchable
      * @param $isAlwaysIndexable
-     * @param $stringServiceFieldType
      * @param $isComplexType
      * @param $isIntegerType
      * @param $isBooleanType

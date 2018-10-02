@@ -1,10 +1,15 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter\DummyAttribute;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Provide attribute adapter.
@@ -16,14 +21,14 @@ class AttributeProvider
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    private $instanceName = null;
+    private $instanceName;
 
     /**
      * @var Config
@@ -36,20 +41,28 @@ class AttributeProvider
     private $cachedPool = [];
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Config $eavConfig
+     * @param LoggerInterface $logger
      * @param string $instanceName
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Config $eavConfig,
-        $instanceName = 'Magento\\Elasticsearch\\Model\\Adapter\\FieldMapper\\Product\\AttributeAdapter'
+        LoggerInterface $logger,
+        $instanceName = AttributeAdapter::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
         $this->eavConfig = $eavConfig;
+        $this->logger = $logger;
     }
 
     /**
@@ -57,12 +70,19 @@ class AttributeProvider
      *
      * @param string $attributeCode
      * @return AttributeAdapter
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getByAttributeCode(string $attributeCode): AttributeAdapter
     {
         if (!isset($this->cachedPool[$attributeCode])) {
-            $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
+            $attribute = null;
+            try {
+                $attribute = $this->eavConfig->getAttribute(
+                    ProductAttributeInterface::ENTITY_TYPE_CODE,
+                    $attributeCode
+                );
+            } catch (LocalizedException $exception) {
+                $this->logger->critical($exception);
+            }
             if (null === $attribute) {
                 $attribute = $this->objectManager->create(DummyAttribute::class);
             }

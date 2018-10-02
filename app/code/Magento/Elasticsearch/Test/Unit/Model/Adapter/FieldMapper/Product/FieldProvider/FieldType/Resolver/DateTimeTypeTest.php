@@ -10,11 +10,15 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
     as FieldTypeConverterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType
+     * @var DateTimeType
      */
     private $resolver;
 
@@ -38,7 +42,7 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType::class,
+            DateTimeType::class,
             [
                 'fieldTypeConverter' => $this->fieldTypeConverter,
             ]

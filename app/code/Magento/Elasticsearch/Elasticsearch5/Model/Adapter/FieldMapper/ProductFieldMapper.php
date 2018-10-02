@@ -107,7 +107,6 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param string $attributeCode
      * @param array $context
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFieldName($attributeCode, $context = [])
     {

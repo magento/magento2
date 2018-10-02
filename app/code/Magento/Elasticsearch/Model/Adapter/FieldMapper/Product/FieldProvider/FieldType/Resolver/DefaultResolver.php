@@ -29,7 +29,10 @@ class DefaultResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get default field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

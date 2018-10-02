@@ -12,11 +12,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class CategoryNameTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName
+     * @var CategoryName
      */
     private $resolver;
 
@@ -49,7 +53,7 @@ class CategoryNameTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName::class,
+            CategoryName::class,
             [
                 'storeManager' => $this->storeManager,
                 'coreRegistry' => $this->coreRegistry,

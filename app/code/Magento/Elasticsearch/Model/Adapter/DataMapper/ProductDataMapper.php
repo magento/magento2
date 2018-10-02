@@ -14,5 +14,4 @@ use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMap
  */
 class ProductDataMapper extends ElasticSearch5ProductDataMapper implements DataMapperInterface
 {
-    //
 }

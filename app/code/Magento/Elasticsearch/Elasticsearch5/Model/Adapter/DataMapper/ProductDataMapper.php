@@ -390,7 +390,7 @@ class ProductDataMapper implements DataMapperInterface
             foreach ($productPriceIndexData as $customerGroupId => $price) {
                 $fieldName = $this->fieldMapper->getFieldName(
                     'price',
-                    ['customerGroupId' => $customerGroupId]
+                    ['customerGroupId' => $customerGroupId, 'websiteId' => $storeId]
                 );
                 $result[$fieldName] = sprintf('%F', $price);
             }

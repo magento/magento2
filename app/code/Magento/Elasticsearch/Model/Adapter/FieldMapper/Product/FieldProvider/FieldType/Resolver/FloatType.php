@@ -29,7 +29,10 @@ class FloatType implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get float field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

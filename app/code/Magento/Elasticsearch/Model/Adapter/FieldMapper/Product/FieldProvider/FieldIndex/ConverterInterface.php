@@ -17,7 +17,7 @@ interface ConverterInterface
     public const INTERNAL_INDEX_VALUE = 'index';
 
     /**
-     * Get service field type.
+     * Get service field index type.
      *
      * @param string $internalType
      * @return string|boolean

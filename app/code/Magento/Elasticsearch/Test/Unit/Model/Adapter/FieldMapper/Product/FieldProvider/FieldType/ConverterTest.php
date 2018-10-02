@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\FieldProvider\Product\FieldType;
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -17,28 +19,16 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Set up test environment
      *
      * @return void
      */
     protected function setUp()
     {
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $objectManager = new ObjectManagerHelper($this);
 
         $this->converter = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter::class,
-            [
-                'logger' => $this->logger,
-            ]
+            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter::class
         );
     }
 

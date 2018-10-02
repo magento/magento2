@@ -14,7 +14,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
  * @api
  * @since 100.1.0
  *
- * @deprecated This class provide not full data about field type. Only basic rules apply on this class.
+ * @deprecated This class provide not full data about field type. Only basic rules apply in this class.
  * @see ResolverInterface
  */
 class FieldType
@@ -35,6 +35,7 @@ class FieldType
     /**#@-*/
 
     /**
+     *
      * @deprecated
      * @see ResolverInterface::getFieldType
      *

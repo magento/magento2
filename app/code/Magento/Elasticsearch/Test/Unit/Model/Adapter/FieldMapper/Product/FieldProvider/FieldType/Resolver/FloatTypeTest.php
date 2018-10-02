@@ -11,6 +11,9 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeConverterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class FloatTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**

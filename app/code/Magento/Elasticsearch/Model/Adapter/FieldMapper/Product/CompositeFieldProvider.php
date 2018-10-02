@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 
@@ -13,11 +17,13 @@ class CompositeFieldProvider implements FieldProviderInterface
     private $providers;
 
     /**
-     * @param array $providers
+     * @param FieldProviderInterface[] $providers
      */
     public function __construct(array $providers)
     {
-        $this->providers = $providers;
+        $this->providers = (function (FieldProviderInterface ...$providers) {
+            return $providers;
+        })(...$providers);
     }
 
     /**

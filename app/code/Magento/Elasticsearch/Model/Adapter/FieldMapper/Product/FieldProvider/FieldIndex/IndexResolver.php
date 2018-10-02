@@ -9,8 +9,8 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 
 /**
- * Field index resolver that provide index type for attribute in mapping.
- * For example we need to set 'no'/false in case when attribute must be present in index data,
+ * Field index resolver that provides index type for the attribute in mapping.
+ * For example, we need to set ‘no’/false in the case when attribute must be present in index data,
  * but stay as not indexable.
  */
 class IndexResolver implements ResolverInterface
@@ -34,7 +34,7 @@ class IndexResolver implements ResolverInterface
     public function getFieldIndex(AttributeAdapter $attribute)
     {
         $index = null;
-        if (!$attribute->isSearchable() && !$attribute->isAlwaysIndexable()) {
+        if (!($attribute->isSearchable() || $attribute->isAlwaysIndexable())) {
             $index = $this->converter->convert(ConverterInterface::INTERNAL_NO_INDEX_VALUE);
         }
 

@@ -13,6 +13,9 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class PositionTest extends \PHPUnit\Framework\TestCase
 {
     /**

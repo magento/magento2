@@ -7,10 +7,12 @@
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Resolver field name for Category name attribute.
@@ -28,13 +30,21 @@ class CategoryName implements ResolverInterface
     private $coreRegistry;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param LoggerInterface $logger
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
      */
     public function __construct(
+        LoggerInterface $logger,
         StoreManager $storeManager = null,
         Registry $coreRegistry = null
     ) {
+        $this->logger = $logger;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManager::class);
         $this->coreRegistry = $coreRegistry ?: ObjectManager::getInstance()
@@ -42,7 +52,11 @@ class CategoryName implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get field name.
+     *
+     * @param AttributeAdapter $attribute
+     * @param array $context
+     * @return string
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {
@@ -58,16 +72,20 @@ class CategoryName implements ResolverInterface
      *
      * @param array $context
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function resolveCategoryId($context): int
     {
         if (isset($context['categoryId'])) {
             $id = $context['categoryId'];
         } else {
-            $id = $this->coreRegistry->registry('current_category')
-                ? $this->coreRegistry->registry('current_category')->getId()
-                : $this->storeManager->getStore()->getRootCategoryId();
+            $id = \Magento\Catalog\Model\Category::ROOT_CATEGORY_ID;
+            try {
+                $id = $this->coreRegistry->registry('current_category')
+                    ? $this->coreRegistry->registry('current_category')->getId()
+                    : $this->storeManager->getStore()->getRootCategoryId();
+            } catch (LocalizedException $exception) {
+                $this->logger->critical($exception);
+            }
         }
 
         return $id;

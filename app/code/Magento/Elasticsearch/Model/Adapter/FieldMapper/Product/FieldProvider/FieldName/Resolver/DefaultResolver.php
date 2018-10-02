@@ -42,7 +42,11 @@ class DefaultResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get field name.
+     *
+     * @param AttributeAdapter $attribute
+     * @param array $context
+     * @return string
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {
@@ -82,6 +86,8 @@ class DefaultResolver implements ResolverInterface
     }
 
     /**
+     * Get field name for query type fields.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
@@ -98,6 +104,8 @@ class DefaultResolver implements ResolverInterface
     }
 
     /**
+     * Prepare field name for complex fields.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
@@ -105,9 +113,13 @@ class DefaultResolver implements ResolverInterface
      */
     private function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
     {
+        $stringTypeKey = $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING);
         switch ($frontendInput) {
             case 'select':
-                return in_array($fieldType, ['text', 'integer'], true) ? $attributeCode . '_value' : $attributeCode;
+            case 'multiselect':
+                return in_array($fieldType, [$stringTypeKey, 'integer'], true)
+                    ? $attributeCode . '_value'
+                    : $attributeCode;
             case 'boolean':
                 return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
             default:

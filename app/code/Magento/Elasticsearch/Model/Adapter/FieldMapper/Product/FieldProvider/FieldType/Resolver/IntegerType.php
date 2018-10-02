@@ -29,7 +29,10 @@ class IntegerType implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get integer field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

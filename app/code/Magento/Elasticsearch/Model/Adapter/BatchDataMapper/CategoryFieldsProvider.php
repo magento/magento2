@@ -71,7 +71,6 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
      * @param int $productId
      * @param array $categoryIndexData
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getProductCategoryData($productId, array $categoryIndexData)
     {

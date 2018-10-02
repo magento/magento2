@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
 use Magento\Eav\Model\Config;
@@ -16,7 +19,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldI
     as FieldIndexResolver;
 
 /**
- * Provide static fields for product.
+ * Provide static fields for mapping of product.
  */
 class StaticField implements FieldProviderInterface
 {
@@ -75,7 +78,10 @@ class StaticField implements FieldProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get static fields.
+     *
+     * @param array $context
+     * @return array
      */
     public function getFields(array $context = []): array
     {

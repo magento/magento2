@@ -29,7 +29,10 @@ class KeywordType implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get field type.
+     *
+     * @param AttributeAdapter $attribute
+     * @return string
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

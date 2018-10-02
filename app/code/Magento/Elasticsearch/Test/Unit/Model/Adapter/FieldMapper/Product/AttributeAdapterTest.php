@@ -6,11 +6,15 @@
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product;
 
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
     as FieldTypeConverterInterface;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -30,7 +34,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->attribute = $this->getMockBuilder(AbstractExtensibleModel::class)
+        $this->attribute = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsFilterable',
@@ -41,7 +45,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
                 'getFrontendInput',
                 'usesSource',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -114,7 +118,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsAlwaysIndexable($expected) {
+    public function testIsAlwaysIndexable($expected)
+    {
         $this->assertEquals(
             $expected,
             $this->adapter->isAlwaysIndexable()
@@ -127,7 +132,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsDateTimeType($backendType, $expected) {
+    public function testIsDateTimeType($backendType, $expected)
+    {
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
@@ -143,7 +149,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsFloatType($backendType, $expected) {
+    public function testIsFloatType($backendType, $expected)
+    {
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
@@ -159,7 +166,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsIntegerType($backendType, $expected) {
+    public function testIsIntegerType($backendType, $expected)
+    {
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
@@ -176,7 +184,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsBooleanType($frontendInput, $backendType, $expected) {
+    public function testIsBooleanType($frontendInput, $backendType, $expected)
+    {
         $this->attribute
             ->method('getBackendType')
             ->willReturn($backendType);
@@ -196,7 +205,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsComplexType($frontendInput, $usesSource, $expected) {
+    public function testIsComplexType($frontendInput, $usesSource, $expected)
+    {
         $this->attribute
             ->method('usesSource')
             ->willReturn($usesSource);
@@ -214,7 +224,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
-    public function testIsEavAttribute($expected) {
+    public function testIsEavAttribute($expected)
+    {
         $this->assertEquals(
             $expected,
             $this->adapter->isEavAttribute()

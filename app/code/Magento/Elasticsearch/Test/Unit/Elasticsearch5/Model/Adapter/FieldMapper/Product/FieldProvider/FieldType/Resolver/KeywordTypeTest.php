@@ -9,11 +9,15 @@ namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter\FieldMapp
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface as FieldTypeConverterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class KeywordTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType
+     * @var KeywordType
      */
     private $resolver;
 
@@ -37,7 +41,7 @@ class KeywordTypeTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType::class,
+            KeywordType::class,
             [
                 'fieldTypeConverter' => $this->fieldTypeConverter,
             ]

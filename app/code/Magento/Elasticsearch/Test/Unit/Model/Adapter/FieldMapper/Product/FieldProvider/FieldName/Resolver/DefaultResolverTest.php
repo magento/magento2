@@ -12,11 +12,15 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
     as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class DefaultResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver
+     * @var DefaultResolver
      */
     private $resolver;
 
@@ -48,7 +52,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver::class,
+            DefaultResolver::class,
             [
                 'fieldTypeResolver' => $this->fieldTypeResolver,
                 'fieldTypeConverter' => $this->fieldTypeConverter

@@ -20,15 +20,21 @@ class CompositeResolver implements ResolverInterface
     private $items;
 
     /**
-     * @param array $items
+     * @param ResolverInterface[] $items
      */
     public function __construct(array $items)
     {
-        $this->items = $items;
+        $this->items = (function (ResolverInterface ...$items) {
+            return $items;
+        })(...$items);
     }
 
     /**
-     * {@inheritdoc}
+     * Get field name.
+     *
+     * @param AttributeAdapter $attribute
+     * @param array $context
+     * @return string
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {

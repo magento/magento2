@@ -15,7 +15,11 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 class NotEavAttribute implements ResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * Get field name for not EAV attributes.
+     *
+     * @param AttributeAdapter $attribute
+     * @param array $context
+     * @return string
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {

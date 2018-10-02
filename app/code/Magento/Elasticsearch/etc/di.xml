@@ -403,6 +403,7 @@
         <arguments>
             <argument name="attributeAdapterProvider" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider</argument>
             <argument name="fieldProvider" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface</argument>
+            <argument name="fieldNameResolver" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver">
