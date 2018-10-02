@@ -10,7 +10,6 @@ namespace Magento\InventoryShipping\Model\ReturnProcessor;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
-use Magento\InventoryCatalogApi\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySalesApi\Model\ReturnProcessor\GetSourceDeductedOrderItemsInterface;
 use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemFactory;
 use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderItemsResult;
@@ -18,8 +17,8 @@ use Magento\InventorySalesApi\Model\ReturnProcessor\Result\SourceDeductedOrderIt
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\InventoryShipping\Model\GetItemsToDeductFromShipment;
 
 class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsInterface
 {
@@ -27,11 +26,6 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
      * @var GetSourceCodeByShipmentId
      */
     private $getSourceCodeByShipmentId;
-
-    /**
-     * @var GetSkusByProductIdsInterface
-     */
-    private $getSkusByProductIds;
 
     /**
      * @var StockByWebsiteIdResolverInterface
@@ -54,27 +48,32 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
     private $sourceDeductedOrderItemsResultFactory;
 
     /**
+     * @var GetItemsToDeductFromShipment
+     */
+    private $getItemsToDeductFromShipment;
+
+    /**
      * @param GetSourceCodeByShipmentId $getSourceCodeByShipmentId
-     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory
      * @param SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
+     * @param GetItemsToDeductFromShipment $getItemsToDeductFromShipment
      */
     public function __construct(
         GetSourceCodeByShipmentId $getSourceCodeByShipmentId,
-        GetSkusByProductIdsInterface $getSkusByProductIds,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
         SourceDeductedOrderItemFactory $sourceDeductedOrderItemFactory,
-        SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory
+        SourceDeductedOrderItemsResultFactory $sourceDeductedOrderItemsResultFactory,
+        GetItemsToDeductFromShipment $getItemsToDeductFromShipment
     ) {
         $this->getSourceCodeByShipmentId = $getSourceCodeByShipmentId;
-        $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
         $this->sourceDeductedOrderItemFactory = $sourceDeductedOrderItemFactory;
         $this->sourceDeductedOrderItemsResultFactory = $sourceDeductedOrderItemsResultFactory;
+        $this->getItemsToDeductFromShipment = $getItemsToDeductFromShipment;
     }
 
     /**
@@ -82,6 +81,7 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
      * @param array $returnToStockItems
      * @return SourceDeductedOrderItemsResult[]
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {
@@ -89,13 +89,10 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
         /** @var Shipment $shipment */
         foreach ($order->getShipmentsCollection() as $shipment) {
             $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
-            foreach ($shipment->getItems() as $item) {
-                if ($this->isValidItem($item->getOrderItem(), (float)$item->getQty(), $returnToStockItems)) {
-                    $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                        [$item->getProductId()]
-                    )[$item->getProductId()];
-                    $sources[$sourceCode][$itemSku] = ($sources[$sourceCode][$itemSku] ?? 0) + $item->getQty();
-                }
+            $shippedItems = $this->getItemsToDeductFromShipment->execute($shipment);
+            foreach ($shippedItems as $item) {
+                $sku = $item->getSku();
+                $sources[$sourceCode][$sku] = ($sources[$sourceCode][$sku] ?? 0) + $item->getQty();
             }
         }
         $websiteId = $order->getStore()->getWebsiteId();
@@ -186,19 +183,5 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
         }
 
         return $sourcesByPriority;
-    }
-
-    /**
-     * @param OrderItemInterface $orderItem
-     * @param float $qty
-     * @param array $returnToStockItems
-     * @return bool
-     */
-    private function isValidItem(OrderItemInterface $orderItem, float $qty, array $returnToStockItems): bool
-    {
-        $parentItemId = $orderItem->getParentItemId();
-
-        return (in_array($orderItem->getId(), $returnToStockItems)
-                || in_array($parentItemId, $returnToStockItems)) && $qty;
     }
 }
