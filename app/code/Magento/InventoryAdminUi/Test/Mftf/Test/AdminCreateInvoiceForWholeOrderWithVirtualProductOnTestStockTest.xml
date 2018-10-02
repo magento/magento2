@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateInvoiceForWholeOrderWithVirtualProductOnTestStockTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Admin user created invoice for whole order with Virtual product on Test stock"/>
+            <title value="Admin user created invoice for whole order with Virtual product on Test stock"/>
+            <description value="Admin user created invoice for whole order with Virtual product on Test stock"/>
+            <testCaseId value="1594"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
+
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock2">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource2"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="VirtualMsiProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$createProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        </actionGroup>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultQuantityField1"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillDefaultQuantityField2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="100" stepKey="fillDefaultQuantityField3"/>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct1"/>
+        <waitForPageLoad stepKey="waitForSimpleProductGridPageLoad"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront1">
+            <argument name="Customer" value="$$createCustomer1$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory1.name$$)}}" stepKey="navigateToCategoryPage1"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addVirtualProductToCart1">
+            <argument name="product" value="$$createProduct1$$"/>
+            <argument name="quantity" value="5"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout1"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad1"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment1"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible1"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress1"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder1"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced1"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber1"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage1"/>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent1"/>
+
+        <fillField userInput="$grabOrderNumber1" selector="{{OrdersGridSection.search}}" stepKey="fillCodeField2"/>
+        <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad21"/>
+        <click selector="//a[ancestor::tr[contains(., '$grabOrderNumber1')]]" stepKey="clickEditCustomStock1"/>
+        <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad1"/>
+
+        <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment"/>
+        <closeAdminNotification stepKey="closeAdminNotificationInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+
+        <!--Check Invoice Data-->
+        <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingInvoice1"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.customerName}}" userInput="{{MsiCustomer1.firstname}}" stepKey="seeCustomerName"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.customerEmail}}" userInput="{{MsiCustomer1.email}}" stepKey="seeCustomerEmail"/>
+
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="seeBillingAddressStreet"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{US_Address_TX.city}}" stepKey="seeBillingAddressCity"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{US_Address_TX.country_id}}" stepKey="seeBillingAddressCountry"/>
+        <see selector="{{AdminInvoiceAddressInformationSection.billingAddress}}" userInput="{{US_Address_TX.postcode}}" stepKey="seeBillingAddressPostcode"/>
+
+        <!--Submit Invoice-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <!--Invoice created successfully-->
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$grabOrderNumber1" stepKey="seePageNameMatchesOrderIdAfterInvoice"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderPendingInvoice2"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInput" stepKey="goToProductGridFilterResultsByInputEditProduct2">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$createProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource1.source[name]$$ : 95" stepKey="seeSourceIdInGrid1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource2.source[name]$$ : 100" stepKey="seeSourceIdInGrid2"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock1.stock[name]$$ : 195" stepKey="seeSourceIdInGrid3"/>
+    </test>
+</tests>

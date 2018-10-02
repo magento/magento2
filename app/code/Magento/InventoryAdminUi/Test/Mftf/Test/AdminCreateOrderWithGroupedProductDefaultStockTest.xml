@@ -18,9 +18,6 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="MSI-1631"/>
-            </skip>
         </annotations>
 
         <before>
@@ -79,7 +76,6 @@
         <comment userInput="Create grouped product." stepKey="createGroupedProductComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
@@ -90,7 +86,6 @@
         <comment userInput="Add simple and virtual products to grouped product." stepKey="assignSimpleAndVirtualToGroupedProductComment"/>
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
-        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalTaAddSimpleProduct"/>
