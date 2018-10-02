@@ -517,10 +517,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
+        
+        $productEntityJoinField = $this->getProductEntityLinkField();
+
         $select = $this->_connection->select()->from(
             ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                "mgvte.{$this->getProductEntityLinkField()}",
+                "mgvte.$productEntityJoinField",
                 'mgvte.value_id'
             ]
         )->joinLeft(
@@ -532,7 +535,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             ]
         )->joinLeft(
             ['mgv' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value')],
-            '(mg.value_id = mgv.value_id)',
+            "(mg.value_id = mgv.value_id) and (mgvte.$productEntityJoinField = mgv.$productEntityJoinField)",
             [
                 'mgv.label',
                 'mgv.position',
