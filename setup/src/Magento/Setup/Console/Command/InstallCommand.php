@@ -18,7 +18,6 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
-
 /**
  * Command to install Magento application
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
