@@ -81,6 +81,7 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
      * @param array $returnToStockItems
      * @return SourceDeductedOrderItemsResult[]
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(OrderInterface $order, array $returnToStockItems): array
     {
@@ -90,7 +91,8 @@ class GetShippedItemsPerSourceByPriority implements GetSourceDeductedOrderItemsI
             $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
             $shippedItems = $this->getItemsToDeductFromShipment->execute($shipment);
             foreach ($shippedItems as $item) {
-                $sources[$sourceCode][$item->getSku()] = ($sources[$sourceCode][$item->getSku()] ?? 0) + $item->getQty();
+                $sku = $item->getSku();
+                $sources[$sourceCode][$sku] = ($sources[$sourceCode][$sku] ?? 0) + $item->getQty();
             }
         }
         $websiteId = $order->getStore()->getWebsiteId();
