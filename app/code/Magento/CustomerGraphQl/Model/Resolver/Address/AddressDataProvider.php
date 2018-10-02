@@ -60,6 +60,24 @@ class AddressDataProvider
     }
 
     /**
+     * Curate shipping and billing default options
+     *
+     * @param array $address
+     * @param AddressInterface $addressObject
+     * @return null
+     */
+    private function curateAddressDefaultValues(array $address, AddressInterface $addressObject) : array
+    {
+        $customerModel = $this->customerFactory->create();
+        $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());
+        $address[CustomerInterface::DEFAULT_BILLING] =
+            ($addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
+        $address[CustomerInterface::DEFAULT_SHIPPING] =
+            ($addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
+        return $address;
+    }
+
+    /**
      * Transform single customer address data from object to in array format
      *
      * @param AddressInterface $addressObject
@@ -72,12 +90,7 @@ class AddressDataProvider
             AddressRepositoryInterface::class,
             'getById'
         );
-        $customerModel = $this->customerFactory->create();
-        $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());
-        $address[CustomerInterface::DEFAULT_BILLING] =
-            ($addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
-        $address[CustomerInterface::DEFAULT_SHIPPING] =
-            ($addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
+        $address = $this->curateAddressDefaultValues($address, $addressObject);
 
         if (isset($address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
             $address = array_merge($address, $address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY]);
