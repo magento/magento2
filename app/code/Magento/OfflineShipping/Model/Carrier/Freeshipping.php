@@ -97,9 +97,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
             $method->setCost('0.00');
 
             $result->append($method);
-        }
-        elseif ($this->getConfigData('showmethod'))
-        {
+        } elseif ($this->getConfigData('showmethod')) {
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier($this->_code);
             $error->setCarrierTitle($this->getConfigData('title'));
@@ -110,7 +108,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
                 )
             );
             return $error;
-        } 
+        }
         return $result;
     }
 
