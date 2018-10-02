@@ -145,4 +145,3 @@ class CustomerDataProvider
         return $this->encryptor->validateHash($password, $hash);
     }
 }
-
