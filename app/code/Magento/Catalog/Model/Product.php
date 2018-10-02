@@ -498,7 +498,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get a list of custom attribute codes that belongs to product attribute set.
+     * Get a list of custom attribute codes that belongs to product attribute set
+     *
      * If attribute set not specified for product will return all product attribute codes.
      *
      * @return string[]
@@ -662,7 +663,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve type instance of the product.
+     * Retrieve type instance of the product
+     *
      * Type instance implements product type depended logic and is a singleton shared by all products of the same type.
      *
      * @return \Magento\Catalog\Model\Product\Type\AbstractType
@@ -2217,7 +2219,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Prepare product custom options.
+     * Prepare product custom options
+     *
      * To be sure that all product custom options does not has ID and has product instance.
      *
      * @return \Magento\Catalog\Model\Product
