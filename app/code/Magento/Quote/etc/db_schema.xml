@@ -37,9 +37,9 @@
                 comment="Store Currency Code"/>
         <column xsi:type="varchar" name="quote_currency_code" nullable="true" length="255"
                 comment="Quote Currency Code"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="varchar" name="checkout_method" nullable="true" length="255" comment="Checkout Method"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
@@ -68,19 +68,19 @@
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="255" comment="Coupon Code"/>
         <column xsi:type="varchar" name="global_currency_code" nullable="true" length="255"
                 comment="Global Currency Code"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Quote Rate"/>
         <column xsi:type="varchar" name="customer_taxvat" nullable="true" length="255" comment="Customer Taxvat"/>
         <column xsi:type="varchar" name="customer_gender" nullable="true" length="255" comment="Customer Gender"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Subtotal With Discount"/>
-        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal With Discount"/>
         <column xsi:type="int" name="is_changed" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Is Changed"/>
@@ -143,13 +143,13 @@
                 comment="Shipping Description"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Weight"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Subtotal With Discount"/>
-        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Base Subtotal With Discount"/>
         <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Tax Amount"/>
@@ -167,9 +167,9 @@
                 default="0" comment="Discount Amount"/>
         <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="text" name="customer_notes" nullable="true" comment="Customer Notes"/>
         <column xsi:type="text" name="applied_taxes" nullable="true" comment="Applied Taxes"/>
@@ -179,9 +179,9 @@
                 nullable="true" comment="Shipping Discount Amount"/>
         <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Total Incl Tax"/>
         <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
@@ -372,9 +372,9 @@
                 comment="Base Cost"/>
         <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
-        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price Incl Tax"/>
-        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
         <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Row Total Incl Tax"/>
