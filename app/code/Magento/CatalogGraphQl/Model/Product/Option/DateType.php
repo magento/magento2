@@ -38,7 +38,7 @@ class DateType extends ProductDateOptionType
      * @return []
      * @throws LocalizedException
      */
-    protected function formatValues($values)
+    private function formatValues($values)
     {
         if (isset($values[$this->getOption()->getId()])) {
             $value = $values[$this->getOption()->getId()];
