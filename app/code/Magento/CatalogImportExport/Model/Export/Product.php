@@ -543,14 +543,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.store_id'
             ]
         )->where(
-            "mgvte.{$this->getProductEntityLinkField()} IN (?)",
+            "mgvte.$productEntityJoinField IN (?)",
             $productIds
         );
 
         $rowMediaGallery = [];
         $stmt = $this->_connection->query($select);
         while ($mediaRow = $stmt->fetch()) {
-            $rowMediaGallery[$mediaRow[$this->getProductEntityLinkField()]][] = [
+            $rowMediaGallery[$mediaRow[$productEntityJoinField]][] = [
                 '_media_attribute_id' => $mediaRow['attribute_id'],
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],
