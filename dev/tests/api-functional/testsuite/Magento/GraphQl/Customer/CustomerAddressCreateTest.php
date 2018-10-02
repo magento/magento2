@@ -45,7 +45,7 @@ class CustomerAddressCreateTest extends GraphQlAbstract
             'prefix' => 'Mr.',
             'suffix' => 'Jr.',
             'vat_id' => '1',
-            'default_shipping' => false,
+            'default_shipping' => true,
             'default_billing' => false
         ];
         $defaultShippingText = $newAddress['default_shipping'] ? "true": "false";
@@ -172,56 +172,20 @@ MUTATION;
      */
     public function testAddCustomerAddressWithMissingAttributeWithValidCredentials()
     {
-        $newAddress = [
-            'region' => [
-                'region' => 'Alaska',
-                'region_id' => 4,
-                'region_code' => 'AK'
-            ],
-            'region_id' => 4,
-            'country_id' => 'US',
-            'street' => ['Line 1 Street', 'Line 2'],
-            'company' => 'Company name',
-            'telephone' => '123456789',
-            'fax' => '123123123',
-            'postcode' => '7777',
-            'city' => 'City Name',
-            'firstname' => '', //empty firstname
-            'lastname' => 'Phillis',
-            'middlename' => 'A',
-            'prefix' => 'Mr.',
-            'suffix' => 'Jr.',
-            'vat_id' => '1',
-            'default_shipping' => false,
-            'default_billing' => false
-        ];
-        $defaultShippingText = $newAddress['default_shipping'] ? "true": "false";
-        $defaultBillingText = $newAddress['default_billing'] ? "true": "false";
         $mutation
             = <<<MUTATION
 mutation {
   customerAddressCreate(input: {
-    region: {
-        region: "{$newAddress['region']['region']}"
-        region_id: {$newAddress['region']['region_id']}
-        region_code: "{$newAddress['region']['region_code']}"
-    }
-    region_id: {$newAddress['region_id']}
-    country_id: {$newAddress['country_id']}
-    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
-    company: "{$newAddress['company']}"
-    telephone: "{$newAddress['telephone']}"
-    fax: "{$newAddress['fax']}"
-    postcode: "{$newAddress['postcode']}"
-    city: "{$newAddress['city']}"
-    firstname: "{$newAddress['firstname']}"
-    lastname: "{$newAddress['lastname']}"
-    middlename: "{$newAddress['middlename']}"
-    prefix: "{$newAddress['prefix']}"
-    suffix: "{$newAddress['suffix']}"
-    vat_id: "{$newAddress['vat_id']}"
-    default_shipping: {$defaultShippingText}
-    default_billing: {$defaultBillingText}
+    region_id: 4
+    country_id: US
+    street: ["Line 1 Street","Line 2"]
+    company: "Company name"
+    telephone: "123456789"
+    fax: "123123123"
+    postcode: "7777"
+    city: "City Name"
+    firstname: ""
+    lastname: "Phillis"
   }) {
     id
     customer_id

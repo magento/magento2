@@ -8,7 +8,11 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver\Address;
 
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 
@@ -28,15 +32,31 @@ class AddressDataProvider
     private $jsonSerializer;
 
     /**
+     * @var CustomerResourceModel
+     */
+    private $customerResourceModel;
+
+    /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param SerializerInterface $jsonSerializer
+     * @param CustomerResourceModel $customerResourceModel
+     * @param CustomerFactory $customerFactory
      */
     public function __construct(
         ServiceOutputProcessor $serviceOutputProcessor,
-        SerializerInterface $jsonSerializer
+        SerializerInterface $jsonSerializer,
+        CustomerResourceModel $customerResourceModel,
+        CustomerFactory $customerFactory
     ) {
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->jsonSerializer = $jsonSerializer;
+        $this->customerResourceModel = $customerResourceModel;
+        $this->customerFactory = $customerFactory;
     }
 
     /**
@@ -52,12 +72,19 @@ class AddressDataProvider
             AddressRepositoryInterface::class,
             'getById'
         );
-        if (isset($address['extension_attributes'])) {
-            $address = array_merge($address, $address['extension_attributes']);
+        $customerModel = $this->customerFactory->create();
+        $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());
+        $address[CustomerInterface::DEFAULT_BILLING] =
+            ($addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
+        $address[CustomerInterface::DEFAULT_SHIPPING] =
+            ($addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
+
+        if (isset($address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            $address = array_merge($address, $address[CustomAttributesDataInterface::EXTENSION_ATTRIBUTES_KEY]);
         }
         $customAttributes = [];
-        if (isset($address['custom_attributes'])) {
-            foreach ($address['custom_attributes'] as $attribute) {
+        if (isset($address[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
+            foreach ($address[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
                     $isArray = true;

@@ -181,31 +181,6 @@ MUTATION;
     {
         $userName = 'customer@example.com';
         $password = 'password';
-        $updateAddress = [
-            'region' => [
-                'region' => 'Alaska',
-                'region_id' => 4,
-                'region_code' => 'AK'
-            ],
-            'region_id' => 4,
-            'country_id' => 'US',
-            'street' => ['Line 1 Street', 'Line 2'],
-            'company' => 'Company Name',
-            'telephone' => '123456789',
-            'fax' => '123123123',
-            'postcode' => '7777',
-            'city' => 'City Name',
-            'firstname' => '', //empty name
-            'lastname' => 'Phillis',
-            'middlename' => 'A',
-            'prefix' => 'Mr.',
-            'suffix' => 'Jr.',
-            'vat_id' => '1',
-            'default_shipping' => true,
-            'default_billing' => true
-        ];
-        $defaultShippingText = $updateAddress['default_shipping'] ? "true": "false";
-        $defaultBillingText = $updateAddress['default_billing'] ? "true": "false";
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get($userName);
@@ -218,27 +193,8 @@ MUTATION;
             = <<<MUTATION
 mutation {
   customerAddressUpdate(id: {$addressId}, input: {
-    region: {
-        region: "{$updateAddress['region']['region']}"
-        region_id: {$updateAddress['region']['region_id']}
-        region_code: "{$updateAddress['region']['region_code']}"
-    }
-    region_id: {$updateAddress['region_id']}
-    country_id: {$updateAddress['country_id']}
-    street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
-    company: "{$updateAddress['company']}"
-    telephone: "{$updateAddress['telephone']}"
-    fax: "{$updateAddress['fax']}"
-    postcode: "{$updateAddress['postcode']}"
-    city: "{$updateAddress['city']}"
-    firstname: "{$updateAddress['firstname']}"
-    lastname: "{$updateAddress['lastname']}"
-    middlename: "{$updateAddress['middlename']}"
-    prefix: "{$updateAddress['prefix']}"
-    suffix: "{$updateAddress['suffix']}"
-    vat_id: "{$updateAddress['vat_id']}"
-    default_shipping: {$defaultShippingText}
-    default_billing: {$defaultBillingText}
+    firstname: ""
+    lastname: "Phillis"
   }) {
     id
     customer_id

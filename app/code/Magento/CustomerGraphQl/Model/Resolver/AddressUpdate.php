@@ -10,7 +10,6 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -33,11 +32,6 @@ class AddressUpdate implements ResolverInterface
     private $addressRepositoryInterface;
 
     /**
-     * @var AddressInterfaceFactory
-     */
-    private $addressInterfaceFactory;
-
-    /**
      * @var AddressDataProvider
      */
     private $addressDataProvider;
@@ -49,18 +43,15 @@ class AddressUpdate implements ResolverInterface
 
     /**
      * @param AddressRepositoryInterface $addressRepositoryInterface
-     * @param AddressInterfaceFactory $addressInterfaceFactory
      * @param AddressDataProvider $addressDataProvider
      * @param AddressConfigProvider $addressConfigProvider
      */
     public function __construct(
         AddressRepositoryInterface $addressRepositoryInterface,
-        AddressInterfaceFactory $addressInterfaceFactory,
         AddressDataProvider $addressDataProvider,
         AddressConfigProvider $addressConfigProvider
     ) {
         $this->addressRepositoryInterface = $addressRepositoryInterface;
-        $this->addressInterfaceFactory = $addressInterfaceFactory;
         $this->addressDataProvider = $addressDataProvider;
         $this->addressConfigProvider = $addressConfigProvider;
     }
