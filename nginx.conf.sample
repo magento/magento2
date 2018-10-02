@@ -33,6 +33,11 @@ charset UTF-8;
 error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
 
+# Deny access to sensitive files
+location /.user.ini {
+    deny all;
+}
+
 # PHP entry point for setup application
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
