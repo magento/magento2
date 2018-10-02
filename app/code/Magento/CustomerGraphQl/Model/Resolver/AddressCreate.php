@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
