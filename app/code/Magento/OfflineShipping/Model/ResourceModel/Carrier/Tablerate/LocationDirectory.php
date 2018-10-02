@@ -154,12 +154,12 @@ class LocationDirectory
     /**
      * Retrieve region id.
      *
-     * @param string $countryId
+     * @param int $countryId
      * @param string $regionCode
      * @return string
      * @deprecated
      */
-    public function getRegionId(string $countryId, string $regionCode): string
+    public function getRegionId($countryId, $regionCode)
     {
         $this->loadRegions();
 
