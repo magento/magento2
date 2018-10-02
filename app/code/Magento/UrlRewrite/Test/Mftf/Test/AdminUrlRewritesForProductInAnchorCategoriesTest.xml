@@ -35,8 +35,6 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="simpleSubCategory3" stepKey="deletesimpleSubCategory3"/>
-            <deleteData createDataKey="simpleSubCategory2" stepKey="deletesimpleSubCategory2"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
@@ -46,36 +44,36 @@
 
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathSearchField}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue1"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue2"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue3"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeValue4"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
 
         <!-- 3. Edit Category 1 for DEFAULT Store View: -->
-        <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView">
+        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
-            <argument name="CatName" value="SimpleSubCategory.name"/>
+            <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
         </actionGroup>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}"  stepKey="uncheckRedirect2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$-new" stepKey="changeURLKey"/>
-
+        <checkOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="checkUrlKeyRedirect"/>
         <!-- 4. Save Category 1 -->
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaved"/>
 
         <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathSearchField}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue1"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue2"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue3"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue4"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue5"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue6"/>
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumns}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="seeInListValue7"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
     </test>
 </tests>
