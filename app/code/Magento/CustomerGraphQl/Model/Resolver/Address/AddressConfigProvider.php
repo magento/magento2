@@ -13,7 +13,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Eav\Model\Config;
 
 /**
- * Customers Address, used for GraphQL request processing.
+ * Customers address configuration, used for GraphQL request processing.
  */
 class AddressConfigProvider
 {

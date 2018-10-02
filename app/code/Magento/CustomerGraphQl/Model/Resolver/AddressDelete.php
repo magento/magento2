@@ -20,7 +20,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Customers Address, used for GraphQL request processing.
+ * Customers address delete, used for GraphQL request processing.
  */
 class AddressDelete implements ResolverInterface
 {

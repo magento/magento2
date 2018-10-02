@@ -24,7 +24,7 @@ use Magento\CustomerGraphQl\Model\Resolver\Address\AddressDataProvider;
 use Magento\CustomerGraphQl\Model\Resolver\Address\AddressConfigProvider;
 
 /**
- * Customers Address, used for GraphQL request processing.
+ * Customers address update, used for GraphQL request processing.
  */
 class AddressUpdate implements ResolverInterface
 {
