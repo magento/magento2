@@ -58,7 +58,14 @@ class DeleteById implements DeleteByIdInterface
         $this->stockResource->load($stock, $stockId, StockInterface::STOCK_ID);
 
         if (null === $stock->getStockId()) {
-            return;
+            throw new CouldNotDeleteException(
+                __('There is no stock with "%fieldValue" for "%fieldName". Verify and try again.',
+                    [
+                        'fieldName' => StockInterface::STOCK_ID,
+                        'fieldValue' => $stockId
+                    ]
+                )
+            );
         }
 
         try {
