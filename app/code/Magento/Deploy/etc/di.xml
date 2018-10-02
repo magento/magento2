@@ -78,6 +78,9 @@
                     <item name="production" xsi:type="array">
                         <item name="dev/debug/debug_logging" xsi:type="string">0</item>
                     </item>
+                    <item name="developer" xsi:type="array">
+                        <item name="dev/debug/debug_logging" xsi:type="null" />
+                    </item>
                 </item>
             </argument>
         </arguments>

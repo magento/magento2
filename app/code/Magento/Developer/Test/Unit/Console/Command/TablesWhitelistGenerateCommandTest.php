@@ -45,6 +45,9 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $jsonPersistorMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
@@ -76,6 +79,47 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'moduleName' => 'SomeModule',
                 'whitelist' => [
+                    'primary' => [
+                        'table' =>
+                            [
+                                'patch_list' =>
+                                    [
+                                        'column' =>
+                                            [
+                                                'patch_id' =>
+                                                    [
+                                                        'type' => 'int',
+                                                        'name' => 'patch_id',
+                                                        'identity' => 'true',
+                                                        'comment' => 'Patch Auto Increment',
+                                                    ],
+                                                'patch_name' =>
+                                                    [
+                                                        'type' => 'varchar',
+                                                        'name' => 'patch_name',
+                                                        'length' => '1024',
+                                                        'nullable' => 'false',
+                                                        'comment' => 'Patch Class Name',
+                                                    ],
+                                            ],
+                                        'constraint' =>
+                                            [
+                                                'PRIMARY' =>
+                                                    [
+                                                        'column' =>
+                                                            [
+                                                                'patch_id' => 'patch_id',
+                                                            ],
+                                                        'type' => 'primary',
+                                                        'name' => 'PRIMARY',
+                                                    ],
+                                            ],
+                                        'name' => 'patch_list',
+                                        'resource' => 'default',
+                                        'comment' => 'List of data/schema patches',
+                                    ],
+                            ],
+                    ],
                     'SomeModule' => [
                         'table' => [
                             'first_table' => [
@@ -149,6 +193,47 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'moduleName' => false,
                 'whitelist' => [
+                    'primary' => [
+                        'table' =>
+                            [
+                                'patch_list' =>
+                                    [
+                                        'column' =>
+                                            [
+                                                'patch_id' =>
+                                                    [
+                                                        'type' => 'int',
+                                                        'name' => 'patch_id',
+                                                        'identity' => 'true',
+                                                        'comment' => 'Patch Auto Increment',
+                                                    ],
+                                                'patch_name' =>
+                                                    [
+                                                        'type' => 'varchar',
+                                                        'name' => 'patch_name',
+                                                        'length' => '1024',
+                                                        'nullable' => 'false',
+                                                        'comment' => 'Patch Class Name',
+                                                    ],
+                                            ],
+                                        'constraint' =>
+                                            [
+                                                'PRIMARY' =>
+                                                    [
+                                                        'column' =>
+                                                            [
+                                                                'patch_id' => 'patch_id',
+                                                            ],
+                                                        'type' => 'primary',
+                                                        'name' => 'PRIMARY',
+                                                    ],
+                                            ],
+                                        'name' => 'patch_list',
+                                        'resource' => 'default',
+                                        'comment' => 'List of data/schema patches',
+                                    ],
+                            ],
+                    ],
                     'SomeModule' => [
                         'table' => [
                             'first_table' => [
@@ -303,10 +388,14 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
             $this->componentRegistrarMock->expects(self::once())
                 ->method('getPaths')
                 ->willReturn(['SomeModule' => 1, 'Module2' => 2]);
-            $this->readerCompositeMock->expects(self::exactly(2))
+            $this->readerCompositeMock->expects(self::exactly(3))
                 ->method('read')
-                ->withConsecutive(['SomeModule'], ['Module2'])
-                ->willReturnOnConsecutiveCalls($whiteListTables['SomeModule'], $whiteListTables['Module2']);
+                ->withConsecutive(['SomeModule'], ['primary'], ['Module2'])
+                ->willReturnOnConsecutiveCalls(
+                    $whiteListTables['SomeModule'],
+                    $whiteListTables['primary'],
+                    $whiteListTables['Module2']
+                );
             $this->jsonPersistorMock->expects(self::exactly(2))
                 ->method('persist')
                 ->withConsecutive(
@@ -320,10 +409,10 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                     ]
                 );
         } else {
-            $this->readerCompositeMock->expects(self::once())
+            $this->readerCompositeMock->expects(self::exactly(2))
                 ->method('read')
-                ->with($moduleName)
-                ->willReturn($whiteListTables['SomeModule']);
+                ->withConsecutive([$moduleName], ['primary'])
+                ->willReturnOnConsecutiveCalls($whiteListTables['SomeModule'], $whiteListTables['primary']);
             $this->jsonPersistorMock->expects(self::once())
                 ->method('persist')
                 ->with(

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxQuoteCartLoggedInSimple">
         <annotations>
             <features value="Tax"/>
@@ -248,8 +248,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-297"/>
             <group value="Tax"/>
-            <group value="skip"/>
-            <!-- skipped due to MAGETWO-90539 -->
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -356,8 +354,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-298"/>
             <group value="Tax"/>
-            <group value="skip"/>
-            <!-- Skipped due to MAGETWO-90539 -->
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

@@ -18,6 +18,8 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
  * Class SelectContainerBuilder
  * Class is responsible for SelectContainer creation and filling it with all required data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
+ *             will replace it as the default search engine.
  */
 class SelectContainerBuilder
 {

@@ -15,21 +15,21 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 class Elasticsearch implements ClientInterface
 {
     /**
-     * Elasticsearch Client instance
+     * Elasticsearch Client instances
      *
      * @var \Elasticsearch\Client[]
      */
-    protected $client;
+    private $client;
 
     /**
      * @var array
      */
-    protected $clientOptions;
+    private $clientOptions;
 
     /**
      * @var bool
      */
-    protected $pingResult;
+    private $pingResult;
 
     /**
      * Initialize Elasticsearch Client
@@ -57,6 +57,11 @@ class Elasticsearch implements ClientInterface
         $this->clientOptions = $options;
     }
 
+    /**
+     * Get Elasticsearch Client
+     *
+     * @return \Elasticsearch\Client
+     */
     private function getClient()
     {
         $pid = getmypid();
@@ -66,6 +71,7 @@ class Elasticsearch implements ClientInterface
         }
         return $this->client[$pid];
     }
+
     /**
      * Ping the Elasticsearch client
      *

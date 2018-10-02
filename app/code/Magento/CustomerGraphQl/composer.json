@@ -7,6 +7,7 @@
     "magento/module-customer": "*",
     "magento/module-authorization": "*",
     "magento/newsletter": "*",
+    "magento/module-integration": "*",
     "magento/framework": "*"
   },
   "suggest": {

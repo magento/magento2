@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -13,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SubtotalTest extends \PHPUnit\Framework\TestCase
+class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Object Manager
@@ -27,12 +29,23 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
+    public static function setUpBeforeClass()
+    {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
     protected function getCustomerById($id)
@@ -46,6 +59,7 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
@@ -61,8 +75,12 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load($fixtureCustomerId);
         /** @var \Magento\Customer\Model\Group $customerGroup */
-        $customerGroup = $this->objectManager->create(\Magento\Customer\Model\Group::class)
-            ->load('custom_group', 'customer_group_code');
+        $customerGroup = $this->objectManager->create(
+            \Magento\Customer\Model\Group::class
+        )->load(
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -160,6 +178,7 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
@@ -177,7 +196,10 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Customer\Model\Group $customerGroup */
         $customerGroup = $this->objectManager->create(
             \Magento\Customer\Model\Group::class
-        )->load('custom_group', 'customer_group_code');
+        )->load(
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 

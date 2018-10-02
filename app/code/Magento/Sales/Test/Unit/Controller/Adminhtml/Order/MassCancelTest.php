@@ -90,6 +90,9 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
      */
     private $orderManagementMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -201,11 +204,11 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
         $this->orderManagementMock->expects($this->at(1))->method('cancel')->with($order2id)->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) cannot be canceled.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('We canceled 1 order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -251,7 +254,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
         $this->orderManagementMock->expects($this->atLeastOnce())->method('cancel')->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('You cannot cancel the order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -283,7 +286,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
         $this->orderManagementMock->expects($this->atLeastOnce())->method('cancel')->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Can not cancel');
 
         $this->massAction->execute();

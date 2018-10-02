@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ApiSalesRule" type="SalesRule">
         <data key="name" unique="suffix">salesRule</data>
         <data key="description">Sales Rule Descritpion</data>
@@ -52,5 +52,12 @@
         <array key="website_ids">
             <item>1</item>
         </array>
+    </entity>
+    <entity name="TestSalesRule" type="SalesRule">
+        <data key="name" unique="suffix">TestSalesRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
     </entity>
 </entities>
