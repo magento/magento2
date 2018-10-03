@@ -75,7 +75,7 @@ class CategoryTree
     }
 
     /**
-     * Get category tree
+     * Returns categories tree starting from parent $rootCategoryId
      *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
