@@ -83,6 +83,8 @@ class CategoryTree
     }
 
     /**
+     * Returns categories tree starting from parent $rootCategoryId
+     *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
      * @return array
@@ -107,6 +109,8 @@ class CategoryTree
     }
 
     /**
+     * Iterates through category tree
+     *
      * @param \Iterator $iterator
      * @return array
      */
@@ -119,6 +123,7 @@ class CategoryTree
             $iterator->next();
             $nextCategory = $iterator->current();
             $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
+            $tree[$category->getId()]['model'] = $category;
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->processTree($iterator);
             }
@@ -128,6 +133,8 @@ class CategoryTree
     }
 
     /**
+     * Joins EAV attributes recursively
+     *
      * @param Collection $collection
      * @param FieldNode $fieldNode
      * @return void

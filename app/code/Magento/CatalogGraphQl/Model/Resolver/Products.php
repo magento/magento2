@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
@@ -51,13 +52,15 @@ class Products implements ResolverInterface
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
+     * @param SearchFilter $searchFilter
+     * @param Filters $filtersDataProvider
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
         SearchFilter $searchFilter,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
+        Filters $filtersDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
@@ -100,10 +103,10 @@ class Products implements ResolverInterface
 
         $currentPage = $searchCriteria->getCurrentPage();
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
-            $currentPage = new GraphQlInputException(
+            throw new GraphQlInputException(
                 __(
-                    'currentPage value %1 specified is greater than the number of pages available.',
-                    [$maxPages]
+                    'currentPage value %1 specified is greater than the %2 page(s) available.',
+                    [$currentPage, $maxPages]
                 )
             );
         }
@@ -113,7 +116,8 @@ class Products implements ResolverInterface
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage
+                'current_page' => $currentPage,
+                'total_pages' => $maxPages
             ],
             'filters' => $this->filtersDataProvider->getData($layerType)
         ];
