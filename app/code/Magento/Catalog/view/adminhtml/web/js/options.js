@@ -200,13 +200,13 @@ define([
                             optionsValues.push(this.name + '=' + jQuery(this).val());
                         }
                     });
-            jQuery('<input>')
-                .attr({
-                    type: 'hidden',
-                    name: 'serialized_options'
-                })
-                .val(JSON.stringify(optionsValues))
-                .prependTo(editForm);
+                jQuery('<input>')
+                    .attr({
+                        type: 'hidden',
+                        name: 'serialized_options'
+                    })
+                    .val(JSON.stringify(optionsValues))
+                    .prependTo(editForm);
             }
             tableBody = optionContainer.detach();
         });
