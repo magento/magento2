@@ -327,7 +327,8 @@ class Save extends Attribute
             $serializedOptions = json_decode($data['serialized_options'], JSON_OBJECT_AS_ARRAY);
             foreach ($serializedOptions as $serializedOption) {
                 $option = [];
-                parse_str($serializedOption, $option);
+                $serializedOptionWithParsedAmpersand = str_replace('&', '%26', $serializedOption);
+                parse_str($serializedOptionWithParsedAmpersand, $option);
                 $data = array_replace_recursive($data, $option);
             }
         }
