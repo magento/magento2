@@ -43,9 +43,7 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
     }
 
     /**
-     * Whether the header should be attached to the response
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function canApply()
     {

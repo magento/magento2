@@ -95,13 +95,7 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * Get Items
-     *
-     * @param QueryInterface $query
-     *
-     * @return array|\Magento\Search\Model\QueryResult[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function getItems(QueryInterface $query)
     {

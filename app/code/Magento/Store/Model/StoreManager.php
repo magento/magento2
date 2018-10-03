@@ -117,9 +117,7 @@ class StoreManager implements
     }
 
     /**
-     * Set current default store
-     *
-     * @param string $store
+     * @inheritdoc
      */
     public function setCurrentStore($store)
     {
@@ -127,9 +125,7 @@ class StoreManager implements
     }
 
     /**
-     * Allow or disallow single store mode
-     *
-     * @param bool $value
+     * @inheritdoc
      */
     public function setIsSingleStoreModeAllowed($value)
     {

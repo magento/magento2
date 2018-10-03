@@ -95,10 +95,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get Config
-     *
-     * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @inheritdoc
      */
     public function getConfig()
     {

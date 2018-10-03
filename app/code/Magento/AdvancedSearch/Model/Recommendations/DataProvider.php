@@ -87,11 +87,7 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
-     * Get Items
-     *
-     * @param QueryInterface $query
-     *
-     * @return array|\Magento\Search\Model\QueryResult[]
+     * @inheritdoc
      */
     public function getItems(QueryInterface $query)
     {

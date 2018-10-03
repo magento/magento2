@@ -152,9 +152,7 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
-     * Default Scope Id
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getDefaultScopeId()
     {

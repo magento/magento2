@@ -43,9 +43,7 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
     }
 
     /**
-     * Whether the header should be attached to the response
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function canApply()
     {

@@ -273,9 +273,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * Get Feeds
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getFeeds()
     {
@@ -283,9 +281,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * Is Auth Required
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
