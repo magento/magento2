@@ -221,6 +221,7 @@
         "magento/module-tax": "*",
         "magento/module-tax-import-export": "*",
         "magento/module-theme": "*",
+        "magento/module-theme-graph-ql": "*",
         "magento/module-translation": "*",
         "magento/module-ui": "*",
         "magento/module-ups": "*",
