@@ -184,6 +184,7 @@ define([
         editForm.on('beforeSubmit', function () {
             var optionsValues = [],
                 optionContainer = optionPanel.find('table tbody');
+
             if (optionPanel.hasClass(activePanelClass)) {
                 optionContainer.find('input')
                     .each(function () {
