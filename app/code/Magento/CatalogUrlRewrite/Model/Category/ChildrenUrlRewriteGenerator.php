@@ -71,7 +71,8 @@ class ChildrenUrlRewriteGenerator
     public function generate($storeId, Category $category, $rootCategoryId = null)
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
-        if ($childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true)) {
+        $childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
+        if ($childrenIds) {
             foreach ($childrenIds as $childId) {
                 /** @var Category $childCategory */
                 $childCategory = $this->categoryRepository->get($childId, $storeId);
