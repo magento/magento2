@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter\DummyAttribute;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -66,23 +65,15 @@ class AttributeProvider
     }
 
     /**
-     * Create class instance with specified parameters
-     *
-     * @param string $attributeCode
-     * @return AttributeAdapter
+     * {@inheritdoc}
      */
     public function getByAttributeCode(string $attributeCode): AttributeAdapter
     {
         if (!isset($this->cachedPool[$attributeCode])) {
-            $attribute = null;
-            try {
-                $attribute = $this->eavConfig->getAttribute(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $attributeCode
-                );
-            } catch (LocalizedException $exception) {
-                $this->logger->critical($exception);
-            }
+            $attribute = $this->eavConfig->getAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeCode
+            );
             if (null === $attribute) {
                 $attribute = $this->objectManager->create(DummyAttribute::class);
             }

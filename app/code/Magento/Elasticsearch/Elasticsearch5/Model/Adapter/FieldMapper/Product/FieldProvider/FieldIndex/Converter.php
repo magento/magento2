@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Field type converter from internal index type to elastic service.
@@ -32,12 +31,12 @@ class Converter implements ConverterInterface
      *
      * @param string $internalType
      * @return string|boolean
-     * @throws LocalizedException
+     * @throws \DomainException
      */
     public function convert(string $internalType)
     {
         if (!isset($this->mapping[$internalType])) {
-            throw new LocalizedException(__('Unsupported internal field index type: %1', $internalType));
+            throw new \DomainException(sprintf('Unsupported internal field index type: %s', $internalType));
         }
         return $this->mapping[$internalType];
     }

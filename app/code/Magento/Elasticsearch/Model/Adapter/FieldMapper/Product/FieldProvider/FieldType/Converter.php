@@ -5,8 +5,6 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Field type converter from internal data types to elastic service.
  */
@@ -39,12 +37,12 @@ class Converter implements ConverterInterface
      *
      * @param string $internalType
      * @return string
-     * @throws LocalizedException
+     * @throws \DomainException
      */
     public function convert(string $internalType): string
     {
         if (!isset($this->mapping[$internalType])) {
-            throw new LocalizedException(__('Unsupported internal field type: %1', $internalType));
+            throw new \DomainException(sprintf('Unsupported internal field type: %s', $internalType));
         }
         return $this->mapping[$internalType];
     }

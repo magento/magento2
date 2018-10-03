@@ -21,9 +21,14 @@ class CompositeFieldProvider implements FieldProviderInterface
      */
     public function __construct(array $providers)
     {
-        $this->providers = (function (FieldProviderInterface ...$providers) {
-            return $providers;
-        })(...$providers);
+        foreach ($providers as $provider) {
+            if (!$provider instanceof FieldProviderInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Instance of the field provider is expected, got %s instead.', get_class($provider))
+                );
+            }
+        }
+        $this->providers = $providers;
     }
 
     /**

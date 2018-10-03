@@ -24,9 +24,14 @@ class CompositeResolver implements ResolverInterface
      */
     public function __construct(array $items)
     {
-        $this->items = (function (ResolverInterface ...$items) {
-            return $items;
-        })(...$items);
+        foreach ($items as $item) {
+            if (!$item instanceof ResolverInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Instance of the field type resolver is expected, got %s instead.', get_class($item))
+                );
+            }
+        }
+        $this->items = $items;
     }
 
     /**

@@ -16,8 +16,6 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldI
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 
 /**
  * Provide dynamic fields for product.
@@ -66,11 +64,6 @@ class DynamicField implements FieldProviderInterface
     private $fieldNameResolver;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param FieldTypeConverterInterface $fieldTypeConverter
      * @param IndexTypeConverterInterface $indexTypeConverter
      * @param GroupRepositoryInterface $groupRepository
@@ -78,7 +71,6 @@ class DynamicField implements FieldProviderInterface
      * @param CategoryListInterface $categoryList
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -87,8 +79,7 @@ class DynamicField implements FieldProviderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CategoryListInterface $categoryList,
         FieldNameResolver $fieldNameResolver,
-        AttributeProvider $attributeAdapterProvider,
-        LoggerInterface $logger
+        AttributeProvider $attributeAdapterProvider
     ) {
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -97,14 +88,10 @@ class DynamicField implements FieldProviderInterface
         $this->categoryList = $categoryList;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
-        $this->logger = $logger;
     }
 
     /**
-     * Get mapping for dynamic fields.
-     *
-     * @param array $context
-     * @return array
+     * {@inheritdoc}
      */
     public function getFields(array $context = []): array
     {
@@ -132,21 +119,17 @@ class DynamicField implements FieldProviderInterface
             ];
         }
 
-        try {
-            $groups = $this->groupRepository->getList($searchCriteria)->getItems();
-            $priceAttribute = $this->attributeAdapterProvider->getByAttributeCode('price');
-            foreach ($groups as $group) {
-                $groupPriceKey = $this->fieldNameResolver->getFieldName(
-                    $priceAttribute,
-                    ['customerGroupId' => $group->getId(), 'websiteId' => $context['websiteId']]
-                );
-                $allAttributes[$groupPriceKey] = [
-                    'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_FLOAT),
-                    'store' => true
-                ];
-            }
-        } catch (LocalizedException $exception) {
-            $this->logger->critical($exception);
+        $groups = $this->groupRepository->getList($searchCriteria)->getItems();
+        $priceAttribute = $this->attributeAdapterProvider->getByAttributeCode('price');
+        foreach ($groups as $group) {
+            $groupPriceKey = $this->fieldNameResolver->getFieldName(
+                $priceAttribute,
+                ['customerGroupId' => $group->getId(), 'websiteId' => $context['websiteId']]
+            );
+            $allAttributes[$groupPriceKey] = [
+                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_FLOAT),
+                'store' => true
+            ];
         }
 
         return $allAttributes;
