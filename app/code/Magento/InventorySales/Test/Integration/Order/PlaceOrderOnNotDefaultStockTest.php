@@ -120,8 +120,10 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
         $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
-        $this->getStockItemConfiguration = Bootstrap::getObjectManager()->get(GetStockItemConfigurationInterface::class);
-        $this->saveStockItemConfiguration = Bootstrap::getObjectManager()->get(SaveStockItemConfigurationInterface::class);
+        $this->getStockItemConfiguration =
+            Bootstrap::getObjectManager()->get(GetStockItemConfigurationInterface::class);
+        $this->saveStockItemConfiguration =
+            Bootstrap::getObjectManager()->get(SaveStockItemConfigurationInterface::class);
     }
 
     /**
