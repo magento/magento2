@@ -265,7 +265,8 @@ class Processor
             $host = 'localhost';
         }
 
-        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off') || $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off')
+            || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
         if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
