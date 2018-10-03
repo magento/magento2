@@ -44,6 +44,7 @@ class ExtractDataFromCategoryTree
             $iterator->next();
             $nextCategory = $iterator->current();
             $tree[$category->getId()] = $this->categoryHydrator->hydrateCategory($category);
+            $tree[$category->getId()]['model'] = $category;
             if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
                 $tree[$category->getId()]['children'] = $this->execute($iterator);
             }
