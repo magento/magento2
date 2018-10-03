@@ -133,9 +133,7 @@ class StoreManager implements
     }
 
     /**
-     * Check if store has only one store view
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function hasSingleStore()
     {
@@ -144,9 +142,7 @@ class StoreManager implements
     }
 
     /**
-     * Check if system is run in the single store mode
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isSingleStoreMode()
     {
@@ -154,11 +150,7 @@ class StoreManager implements
     }
 
     /**
-     * Retrieve application store object
-     *
-     * @param null|string|bool|int|\Magento\Store\Api\Data\StoreInterface $storeId
-     * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws NoSuchEntityException If given store doesn't exist.
+     * @inheritdoc
      */
     public function getStore($storeId = null)
     {
@@ -182,11 +174,7 @@ class StoreManager implements
     }
 
     /**
-     * Retrieve stores array
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Store\Api\Data\StoreInterface[]
+     * @inheritdoc
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
