@@ -200,6 +200,5 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         }
 
         return $optionsData;
-
     }
 }
