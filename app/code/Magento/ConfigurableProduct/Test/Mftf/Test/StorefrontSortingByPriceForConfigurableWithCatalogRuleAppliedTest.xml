@@ -95,6 +95,8 @@
             <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
                 <argument name="option" value="Yes"/>
             </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         </before>
 
         <after>
