@@ -143,7 +143,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 2.2;
 
-        $this->setStockItemIsConfigIsDecimal($sku, $stockId);
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -175,7 +175,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.2;
 
-        $this->setStockItemIsConfigIsDecimal($sku, $stockId);
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -208,7 +208,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.5;
 
-        $this->setStockItemIsConfigIsDecimal($sku, $stockId);
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -243,7 +243,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
         $stockId = 30;
         $quoteItemQty = 6.5;
 
-        $this->setStockItemIsConfigIsDecimal($sku, $stockId);
+        $this->setStockItemConfigIsDecimal($sku, $stockId);
         $cart = $this->getCartByStockId($stockId);
         $product = $this->productRepository->get($sku);
         $cartItem = $this->getCartItem($product, $quoteItemQty, (int)$cart->getId());
@@ -329,7 +329,7 @@ class PlaceOrderOnNotDefaultStockTest extends TestCase
      * @param $sku
      * @param $stockId
      */
-    private function setStockItemIsConfigIsDecimal(string $sku, int $stockId): void
+    private function setStockItemConfigIsDecimal(string $sku, int $stockId): void
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $stockItemConfiguration->setIsQtyDecimal(true);
