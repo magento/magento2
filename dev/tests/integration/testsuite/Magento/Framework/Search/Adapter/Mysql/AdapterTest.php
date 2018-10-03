@@ -11,6 +11,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class AdapterTest
@@ -42,6 +43,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     protected $searchEngine = EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
 
+    /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -63,6 +69,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adapter = $this->createAdapter();
+
+        $this->productVisibility = Bootstrap::getObjectManager()->get(Visibility::class);
 
         $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
         $indexer->load('catalogsearch_fulltext');
@@ -535,10 +543,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
-        $visibility = [
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-        ];
+        $visibility = $this->productVisibility->getVisibleInSearchIds();
 
         $firstOption = $selectOptions->getFirstItem();
         $firstOptionId = $firstOption->getId();

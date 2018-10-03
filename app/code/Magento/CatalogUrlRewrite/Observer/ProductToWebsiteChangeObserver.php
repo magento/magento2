@@ -13,6 +13,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\App\ObjectManager;
 
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
@@ -37,21 +38,29 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
     protected $request;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param ProductRepositoryInterface $productRepository
      * @param RequestInterface $request
+     * @param Visibility|null $productVisibility
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
         ProductRepositoryInterface $productRepository,
-        RequestInterface $request
+        RequestInterface $request,
+        Visibility $productVisibility = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productRepository = $productRepository;
         $this->request = $request;
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -73,7 +82,7 @@ class ProductToWebsiteChangeObserver implements ObserverInterface
                 UrlRewrite::ENTITY_ID => $product->getId(),
                 UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             ]);
-            if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
+            if (!in_array($product->getVisibility(), $this->productVisibility->getNotVisibleInSiteIds())) {
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }

@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -24,23 +25,30 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Visibility
+     */
+    private $productVisibility;
+
+    /**
      * AbstractEav constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null $connectionName
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param \Magento\Catalog\Model\Product\Visibility|null $productVisibility
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connectionName = null
+        $connectionName = null,
+        Visibility $productVisibility = null
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -139,7 +147,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             []
         );
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $condition = $connection->quoteInto('NOT IN (?)', $this->productVisibility->getNotVisibleInSiteIds());
         $this->_addAttributeToSelect(
             $select,
             'visibility',

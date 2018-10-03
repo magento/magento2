@@ -26,10 +26,16 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $productCollectionFactory;
 
+    /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
     protected function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+        $this->productVisibility = Bootstrap::getObjectManager()->get(Visibility::class);
     }
 
     /**
@@ -72,7 +78,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
         /** @var ProductCollection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection
-            ->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
+            ->setVisibility($this->productVisibility->getVisibleInCatalogIds())
             ->setOrder(ProductInterface::PRICE, Collection::SORT_ORDER_DESC);
 
         /** @var Product[] $items */
@@ -104,7 +110,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
         /** @var ProductCollection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection
-            ->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
+            ->setVisibility($this->productVisibility->getVisibleInCatalogIds())
             ->setOrder(ProductInterface::PRICE, Collection::SORT_ORDER_DESC);
 
         /** @var Product[] $items */

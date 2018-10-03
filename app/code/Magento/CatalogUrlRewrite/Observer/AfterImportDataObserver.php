@@ -150,6 +150,11 @@ class AfterImportDataObserver implements ObserverInterface
     private $categoryCollectionFactory;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * Array of invoked categories during url rewrites generation.
      *
      * @var array
@@ -167,6 +172,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlFinderInterface $urlFinder
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
+     * @param Visibility|null $productVisibility
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,7 +185,8 @@ class AfterImportDataObserver implements ObserverInterface
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryCollectionFactory $categoryCollectionFactory = null
+        CategoryCollectionFactory $categoryCollectionFactory = null,
+        Visibility $productVisibility = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -195,6 +202,7 @@ class AfterImportDataObserver implements ObserverInterface
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
         $this->categoryCollectionFactory = $categoryCollectionFactory ?:
             ObjectManager::getInstance()->get(CategoryCollectionFactory::class);
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -291,8 +299,11 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function addProductToImport($product, $storeId)
     {
-        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
-            return $this;
+        $visibilityOptionArray = $this->productVisibility->getOptionArray();
+        foreach ($this->productVisibility->getNotVisibleInSiteIds() as $notVisibleId) {
+            if ($product->getVisibility() == (string)$visibilityOptionArray[$notVisibleId]) {
+                return $this;
+            }
         }
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];

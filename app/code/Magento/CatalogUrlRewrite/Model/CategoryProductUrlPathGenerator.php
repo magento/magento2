@@ -7,6 +7,7 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ProductUrlRewriteGenerator
@@ -20,12 +21,20 @@ class CategoryProductUrlPathGenerator
     private $productScopeRewriteGenerator;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * @param ProductScopeRewriteGenerator $productScopeRewriteGenerator
+     * @param Visibility|null $productVisibility
      */
     public function __construct(
-        ProductScopeRewriteGenerator $productScopeRewriteGenerator
+        ProductScopeRewriteGenerator $productScopeRewriteGenerator,
+        Visibility $productVisibility = null
     ) {
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator;
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -37,7 +46,7 @@ class CategoryProductUrlPathGenerator
      */
     public function generate(Product $product, $rootCategoryId = null)
     {
-        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
+        if (in_array($product->getVisibility(), $this->productVisibility->getNotVisibleInSiteIds())) {
             return [];
         }
 

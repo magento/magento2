@@ -14,6 +14,7 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class AbstractAction
@@ -113,6 +114,11 @@ abstract class AbstractAction
     protected $tableMaintainer;
 
     /**
+     * @var Visibility
+     */
+    protected $productVisibility;
+
+    /**
      * @var string
      * @since 101.0.0
      */
@@ -130,6 +136,7 @@ abstract class AbstractAction
      * @param QueryGenerator $queryGenerator
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
+     * @param Visibility|null $productVisibility
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -137,7 +144,8 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Config $config,
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null
+        TableMaintainer $tableMaintainer = null,
+        Visibility $productVisibility = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -146,6 +154,7 @@ abstract class AbstractAction
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -316,11 +325,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->productVisibility->getVisibleInSiteIds()
             )->columns(
                 [
                     'category_id' => 'cc.entity_id',
@@ -559,11 +564,7 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->where(
             $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-            [
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-            ]
+            $this->productVisibility->getVisibleInSiteIds()
         )->where(
             $this->connection->getIfNullSql('ccas.value', 'ccad.value') . ' = ?',
             1
@@ -780,11 +781,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->productVisibility->getVisibleInSiteIds()
             )->group(
                 'cp.entity_id'
             )->columns(
