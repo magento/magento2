@@ -7,44 +7,63 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingMethod;
 
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Model\ShippingMethodManagementInterface;
+use Magento\QuoteGraphQl\Model\Authorization\IsCartMutationAllowedForCurrentUser;
 
+/**
+ * Class SetShippingMethodsOnCart
+ *
+ * Mutation resolver for setting shipping methods for shopping cart
+ */
 class SetShippingMethodsOnCart implements ResolverInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
     /**
      * @var MaskedQuoteIdToQuoteIdInterface
      */
     private $maskedQuoteIdToQuoteId;
-
     /**
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
+     * @var ShippingMethodManagementInterface
+     */
+    private $shippingMethodManagement;
+
+    /**
+     * @var IsCartMutationAllowedForCurrentUser
+     */
+    private $isCartMutationAllowedForCurrentUser;
+
+    /**
      * SetShippingMethodsOnCart constructor.
      * @param ArrayManager $arrayManager
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+     * @param ShippingMethodManagementInterface $shippingMethodManagement
      */
     public function __construct(
         ArrayManager $arrayManager,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        ShippingMethodManagementInterface $shippingMethodManagement,
+        IsCartMutationAllowedForCurrentUser $isCartMutationAllowedForCurrentUser
     ) {
         $this->arrayManager = $arrayManager;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->cartRepository = $cartRepository;
+        $this->shippingMethodManagement = $shippingMethodManagement;
+        $this->isCartMutationAllowedForCurrentUser = $isCartMutationAllowedForCurrentUser;
     }
 
     /**
@@ -56,50 +75,56 @@ class SetShippingMethodsOnCart implements ResolverInterface
         $maskedCartId = $this->arrayManager->get('input/cart_id', $args);
 
         if (!$maskedCartId) {
-            // TODO: throw an exception
+            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
 
         if (!$shippingMethods) {
-            // TODO: throw an exception?
+            throw new GraphQlInputException(__('Required parameter "shipping_methods" is missing'));
         }
 
-        foreach ($shippingMethods as $shippingMethod) {
-            if (empty($shippingMethod['cart_address_id'])) {
-                // TODO: throw input exception
-            }
+        $shippingMethod = reset($shippingMethods); // TODO: provide implementation for multishipping
 
-            if (empty($shippingMethod['shipping_method_code'])) {
-                // TODO: throw input exception
-            }
-
-            // TODO: move to a separate class
-            // TODO: check current customer can apply operations on specified cart
+        if (!$shippingMethod['shipping_carrier_code']) { // FIXME: check the E_WARNING here
+            throw new GraphQlInputException(__('Required parameter "shipping_carrier_code" is missing'));
         }
 
-        $quoteId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
-        $quote = $this->cartRepository->get($quoteId); // TODO: catch no such entity exception
-        $this->setShippingMethods($shippingMethods, $quote);
-
-        $quote->collectTotals();
-        $quote->save();
-        //$this->cartRepository->save($quote);
-
-        return 'Success!';
-    }
-
-    private function setShippingMethods($shippingMethods, CartInterface $quote)
-    {
-        $addresses = $quote->getAllShippingAddresses();
-        /** @var  \Magento\Quote\Model\Quote\Address $address */
-        foreach ($addresses as $address) {
-            $addressId = $address->getId();
-            $shippingMethodForAddress = array_search($addressId, array_column($shippingMethods, 'cart_address_id'));
-            if ($shippingMethodForAddress !== false) {
-                $address->setShippingMethod($shippingMethods[$shippingMethodForAddress]['shipping_method_code']);
-//                $address->setCollectShippingRates(1);
-                $address->save();
-            }
+        if (!$shippingMethod['shipping_method_code']) { // FIXME: check the E_WARNING here
+            throw new GraphQlInputException(__('Required parameter "shipping_method_code" is missing'));
         }
-        // TODO: make sure that shipping method is assigned for all addresses
+
+        try {
+            $cartId = $this->maskedQuoteIdToQuoteId->execute((string) $maskedCartId);
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $maskedCartId])
+            );
+        }
+
+        if (false === $this->isCartMutationAllowedForCurrentUser->execute($cartId)) {
+            throw new GraphQlAuthorizationException(
+                __(
+                    'The current user cannot perform operations on cart "%masked_cart_id"',
+                    ['masked_cart_id' => $maskedCartId]
+                )
+            );
+        }
+
+        try {
+            $this->shippingMethodManagement->set(
+                $cartId,
+                $shippingMethods['shipping_carrier_code'],
+                $shippingMethods['shipping_method_code']
+            );
+        } catch (InputException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        } catch (CouldNotSaveException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        } catch (StateException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
+        }
+
+        return 'Success!'; // TODO we should return cart here
     }
 }
