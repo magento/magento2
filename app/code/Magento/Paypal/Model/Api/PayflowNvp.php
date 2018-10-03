@@ -136,6 +136,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'CVV2MATCH' => 'cvv2_check_result',
 
         'USERSELECTEDFUNDINGSOURCE' => 'funding_source',
+
+        'NOSHIPPING' => 'suppress_shipping',
+        'REQBILLINGADDRESS' => 'require_billing_address',
     ];
 
     /**
@@ -248,6 +251,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'PAYFLOWCOLOR',
         'LOCALECODE',
         'USERSELECTEDFUNDINGSOURCE',
+        'NOSHIPPING',
+        'REQBILLINGADDRESS',
     ];
 
     /**
@@ -727,6 +732,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * Additional response processing.
+     *
      * Hack to cut off length from API type response params.
      *
      * @param  array $response
@@ -784,7 +790,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Set specific data when negative line item case
+     * Set specific data when negative line item case.
+     *
      * @return void
      */
     protected function _setSpecificForNegativeLineItems()

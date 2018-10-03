@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver\Cart;
+namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
