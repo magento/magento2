@@ -200,10 +200,12 @@ class ImageUploader
     {
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
+        
+        $destinationImageName = $this->getNewFileName($imageName);
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $baseImagePath = $this->getFilePath($basePath, $destinationImageName);
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
-
+       
         try {
             $this->coreFileStorageDatabase->copyFile(
                 $baseTmpImagePath,
@@ -275,5 +277,31 @@ class ImageUploader
         }
 
         return $result;
+    }
+    
+    /**
+     * Get new file name if the same is already exists
+     *
+     * @param string $imageName
+     * @return string
+     */
+    
+    public function getNewFileName($imageName)
+    {
+        $basePath = $this->getBasePath();
+        $destinationFile = $this->mediaDirectory->getAbsolutePath($this->getFilePath($basePath, $imageName));
+        
+        $fileInfo = pathinfo($destinationFile);
+        if (file_exists($destinationFile)) {
+            $index = 1;
+            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
+            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
+                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
+                $index++;
+            }
+            return $baseName;
+        }
+        
+        return $fileInfo['basename'];
     }
 }
