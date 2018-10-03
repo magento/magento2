@@ -9,6 +9,8 @@ namespace Magento\Framework\Image\Adapter;
 
 /**
  * Interface UploadConfigInterface
+ * @deprecated because new interface was introduced
+ * @see \Magento\Backend\Model\Image\ImageUploadConfigInterface;
  */
 interface UploadConfigInterface
 {

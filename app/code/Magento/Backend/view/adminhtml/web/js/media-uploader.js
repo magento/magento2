@@ -35,7 +35,10 @@ define([
         _create: function () {
             var
                 self = this,
-                progressTmpl = mageTemplate('[data-template="uploader"]');
+                progressTmpl = mageTemplate('[data-template="uploader"]'),
+                resizeConfig = {
+                    action: 'resize'
+                };
 
             this.element.find('input[type=file]').fileupload({
                 dataType: 'json',
@@ -120,14 +123,19 @@ define([
                 stop: fileUploader.uploaderConfig.stop
             });
 
+            if (typeof this.options.isResizeEnabled !== 'undefined' && this.options.isResizeEnabled === true) {
+                resizeConfig.maxWidth = this.options.maxWidth;
+                resizeConfig.maxHeight = this.options.maxHeight;
+            }
+
             this.element.find('input[type=file]').fileupload('option', {
                 process: [{
                     action: 'load',
                     fileTypes: /^image\/(gif|jpeg|png)$/,
                     maxFileSize: this.options.maxFileSize
-                }, {
-                    action: 'resize'
-                }, {
+                },
+                resizeConfig,
+                {
                     action: 'save'
                 }]
             });

@@ -10,6 +10,7 @@ namespace Magento\Backend\Block\Media;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Image\Adapter\UploadConfigInterface;
+use Magento\Backend\Model\Image\ImageUploadConfigInterface;
 
 /**
  * Adminhtml media library uploader
@@ -39,9 +40,9 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $jsonEncoder;
 
     /**
-     * @var UploadConfigInterface
+     * @var ImageUploadConfigInterface
      */
-    private $imageConfig;
+    private $imageUploadConfig;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -49,18 +50,19 @@ class Uploader extends \Magento\Backend\Block\Widget
      * @param array $data
      * @param Json $jsonEncoder
      * @param UploadConfigInterface $imageConfig
+     * @param ImageUploadConfigInterface $imageUploadConfig
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
         Json $jsonEncoder = null,
-        UploadConfigInterface $imageConfig = null
+        UploadConfigInterface $imageConfig = null,
+        ImageUploadConfigInterface $imageUploadConfig  = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
-        $this->imageConfig = $imageConfig ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
-
+        $this->imageUploadConfig = $imageUploadConfig ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -111,7 +113,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     public function getImageUploadMaxWidth()
     {
-        return $this->imageConfig->getMaxWidth();
+        return $this->imageUploadConfig->getMaxWidth();
     }
 
     /**
@@ -121,7 +123,17 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     public function getImageUploadMaxHeight()
     {
-        return $this->imageConfig->getMaxHeight();
+        return $this->imageUploadConfig->getMaxHeight();
+    }
+
+    /**
+     * Get image resize configuration
+     *
+     * @return bool
+     */
+    public function getIsResizeEnabled(): bool
+    {
+        return $this->imageUploadConfig->isResizeEnabled();
     }
 
     /**
