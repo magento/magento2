@@ -29,10 +29,10 @@ class DeleteCustomerUsage
      * @param int $customerId
      * @param int $updatedTimeUsed
      */
-    public function deleteCustomerTimeUsage($ruleId, $customerId, $updatedTimeUsed)
+    public function execute($ruleId, $customerId, $updatedTimeUsed)
     {
         $connection = $this->_customerRuleDetails->getConnection();
-        if ($updatedTimeUsed == 0) {
+        if ($updatedTimeUsed === 0) {
             $connection->delete(
                 $connection->getTableName('salesrule_customer'),
                 ['rule_id = ?' => $ruleId, 'customer_id = ?' => $customerId]
