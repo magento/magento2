@@ -12,6 +12,7 @@ type Mutation {
     setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingMethod\\SetShippingMethodsOnCart")
+    addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
 
 input SetShippingAddressesOnCartInput {
@@ -90,6 +91,7 @@ type ApplyCouponToCartOutput {
 }
 
 type Cart {
+    items: [CartItemInterface]
     applied_coupon: AppliedCoupon
     addresses: [CartAddress]!
 }
@@ -151,4 +153,61 @@ input RemoveCouponFromCartInput {
 
 type RemoveCouponFromCartOutput {
     cart: Cart
+}
+
+input AddSimpleProductsToCartInput {
+    cart_id: String!
+    cartItems: [SimpleProductCartItemInput!]!
+}
+
+input SimpleProductCartItemInput {
+    data: CartItemInput!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input CustomizableOptionInput {
+    id: Int!
+    value: String!
+}
+
+type AddSimpleProductsToCartOutput {
+    cart: Cart!
+}
+
+type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+}
+
+input CartItemInput {
+    sku: String!
+    qty: Float!
+}
+
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
+    id: String!
+    qty: Float!
+    product: ProductInterface!
+}
+
+type SelectedCustomizableOption {
+    id: Int!
+    label: String!
+    type: String!
+    is_required: Int!
+    values: [SelectedCustomizableOptionValue!]!
+    sort_order: Int!
+}
+
+type SelectedCustomizableOptionValue {
+    id: Int!
+    label: String!
+    value: String!
+    price: CartItemSelectedOptionValuePrice!
+    sort_order: Int!
+}
+
+type CartItemSelectedOptionValuePrice {
+    value: Float!
+    units: String!
+    type: PriceTypeEnum!
 }

@@ -205,7 +205,9 @@ class ProductViewTest extends GraphQlAbstract
             }
             short_description
             sku
-            small_image
+            small_image {
+                path
+            }
             small_image_label
             special_from_date
             special_price
@@ -484,7 +486,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
