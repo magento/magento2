@@ -13,8 +13,6 @@ define([
         },
 
         /**
-         * Get sales channels grouped by type
-         *
          * @param {Object} record - Record object
          * @returns {Array} Result array
          */

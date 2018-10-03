@@ -77,6 +77,8 @@ class StockDataProvider extends DataProvider
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchCriteriaBuilder $apiSearchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
+     * @param array $meta
+     * @param array $data
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
