@@ -176,7 +176,7 @@ class SidResolver implements SidResolverInterface
         if ($this->_useSessionInUrl === null) {
             //Using config value by default, can be overridden by using the
             //setter.
-            $this->_useSessionInUrl = $this->scopeConfig->getValue(
+            $this->_useSessionInUrl = $this->scopeConfig->isSetFlag(
                 self::XML_PATH_USE_FRONTEND_SID,
                 $this->_scopeType
             );

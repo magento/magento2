@@ -205,11 +205,7 @@ class StoreManager implements
     }
 
     /**
-     * Retrieve application website object
-     *
-     * @param null|bool|int|string|\Magento\Store\Api\Data\WebsiteInterface $websiteId
-     * @return \Magento\Store\Api\Data\WebsiteInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function getWebsite($websiteId = null)
     {
@@ -229,11 +225,7 @@ class StoreManager implements
     }
 
     /**
-     * Get loaded websites
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     * @inheritdoc
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
@@ -252,9 +244,7 @@ class StoreManager implements
     }
 
     /**
-     * Reinitialize store list
-     *
-     * @return void
+     * @inheritdoc
      */
     public function reinitStores()
     {
@@ -267,10 +257,7 @@ class StoreManager implements
     }
 
     /**
-     * Retrieve default store for default group and website
-     *
-     * @return \Magento\Store\Api\Data\StoreInterface|null
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getDefaultStoreView()
     {
@@ -280,12 +267,7 @@ class StoreManager implements
     }
 
     /**
-     * Retrieve application store group object
-     *
-     * @param null|\Magento\Store\Api\Data\GroupInterface|string $groupId
-     *
-     * @return \Magento\Store\Api\Data\GroupInterface
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function getGroup($groupId = null)
     {
@@ -300,10 +282,7 @@ class StoreManager implements
     }
 
     /**
-     * Prepare array of store groups
-     *
-     * @param bool $withDefault
-     * @return \Magento\Store\Api\Data\GroupInterface[]
+     * @inheritdoc
      */
     public function getGroups($withDefault = false)
     {
@@ -345,11 +324,7 @@ class StoreManager implements
     }
 
     /**
-     * Get assigned to website store
-     *
-     * @param int $websiteId
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getStoreByWebsiteId($websiteId)
     {

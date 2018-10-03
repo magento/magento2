@@ -121,9 +121,7 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * Is Results Count Enabled
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isResultsCountEnabled()
     {

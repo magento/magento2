@@ -94,12 +94,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     }
 
     /**
-     * Get Custom Attribute
-     *
-     * @param string $attributeCode
-     *
-     * @return \Magento\Framework\Api\AttributeInterface|null
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function getCustomAttribute($attributeCode)
     {
