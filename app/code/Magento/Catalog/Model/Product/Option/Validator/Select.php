@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Select validator class
+ */
 class Select extends DefaultValidator
 {
     /**
