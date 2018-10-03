@@ -38,6 +38,11 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $idsBySku = [];
 
     /**
+     * Page size to iterate collection
+     */
+    private $pageSize = 10000;
+
+    /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param string $limitIdsBySkuValues
@@ -72,8 +77,14 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
 
-            foreach ($collection as $item) {
-                $this->idsBySku[strtolower(trim($item->getSku()))][$item->getData($linkField)] = $item->getTypeId();
+            $collection->setPageSize($this->pageSize);
+            $pages = $collection->getLastPageNumber();
+            for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+                $collection->setCurPage($currentPage);
+                foreach ($collection->getItems() as $item) {
+                    $this->idsBySku[strtolower(trim($item->getSku()))][$item->getData($linkField)] = $item->getTypeId();
+                }
+                $collection->clear();
             }
         }
 
