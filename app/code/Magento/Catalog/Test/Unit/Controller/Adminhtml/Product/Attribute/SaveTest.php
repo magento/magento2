@@ -191,7 +191,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
-                ['serialized_options', null, ''],
+                ['serialized_options', '[]', ''],
             ]);
         $this->formDataSerializerMock->expects($this->once())
             ->method('unserialize')
@@ -221,7 +221,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
-                ['serialized_options', null, ''],
+                ['serialized_options', '[]', ''],
             ]);
         $this->formDataSerializerMock->expects($this->once())
             ->method('unserialize')
@@ -281,7 +281,7 @@ class SaveTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, true],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
         $this->formDataSerializerMock->expects($this->once())
             ->method('unserialize')

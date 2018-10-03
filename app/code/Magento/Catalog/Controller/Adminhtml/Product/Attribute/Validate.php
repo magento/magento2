@@ -149,7 +149,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * Throws Exception if not unique values into options.
-     * 
+     *
      * @param array $optionsValues
      * @param array $deletedOptions
      * @return bool

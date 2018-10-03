@@ -130,7 +130,7 @@ class ValidateTest extends AttributeTest
                 ['frontend_label', null, 'test_frontend_label'],
                 ['attribute_code', null, 'test_attribute_code'],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
@@ -181,7 +181,7 @@ class ValidateTest extends AttributeTest
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
                 ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
 
         $this->formDataSerializer->expects($this->once())
@@ -321,7 +321,7 @@ class ValidateTest extends AttributeTest
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
                 ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
 
         $this->formDataSerializer->expects($this->once())
@@ -433,7 +433,7 @@ class ValidateTest extends AttributeTest
                 ['attribute_code', null, 'test_attribute_code'],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
                 ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', null, $serializedOptions],
+                ['serialized_options', '[]', $serializedOptions],
             ]);
 
         $this->formDataSerializer->expects($this->once())

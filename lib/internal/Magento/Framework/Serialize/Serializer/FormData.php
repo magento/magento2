@@ -32,7 +32,6 @@ class FormData
      * Provides form data from the serialized data.
      *
      * @param string $serializedData
-     *
      * @return array
      * @throws \InvalidArgumentException
      */
