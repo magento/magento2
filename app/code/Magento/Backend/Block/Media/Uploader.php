@@ -62,7 +62,8 @@ class Uploader extends \Magento\Backend\Block\Widget
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
-        $this->imageUploadConfig = $imageUploadConfig ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
+        $this->imageUploadConfig = $imageUploadConfig
+            ?: ObjectManager::getInstance()->get(ImageUploadConfigInterface::class);
         parent::__construct($context, $data);
     }
 
