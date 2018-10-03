@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+
             <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
             <createData entity="VirtualMsiProduct" stepKey="virtualProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
@@ -38,8 +40,6 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$virtualProduct1.sku$$"/>
         </actionGroup>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns1"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns1"/>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage1"/>
 
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{VirtualMsiProduct.quantity}}" stepKey="fillSourceQtyField1"/>

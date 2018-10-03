@@ -29,4 +29,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction" type="Magento\InventoryShipping\Controller\Adminhtml\Order\Shipment\NewAction"/>
 </config>

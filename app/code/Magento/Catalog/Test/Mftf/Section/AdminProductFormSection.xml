@@ -6,15 +6,18 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
+        <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="RequiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
-        <element name="enableProductAttributeLabel" type="text" selector="//label[text()='Enable Product']"/>
-        <element name="enableProductAttributeLabelWrapper" type="text" selector="//label[text()='Enable Product']/parent::span"/>
+        <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
+        <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
         <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
         <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
         <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
@@ -41,7 +44,10 @@
         <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
         <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
         <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
-        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//label[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
+        <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
     </section>
     <section name="ProductInWebsitesSection">
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
@@ -111,7 +117,7 @@
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
         <element name="UploadImage" type="file" selector=".fileupload" />
         <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
-        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
         <element name="CreateFolder" type="button" selector="#new_folder" />
         <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
         <element name="CancelBtn" type="button" selector="#cancel" />

@@ -14,4 +14,13 @@
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Get"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface"
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Delete"/>
+
+    <type name="Magento\InventoryCatalogApi\Api\BulkInventoryTransferInterface">
+        <plugin name="inventory_bulk_transfer_low_quantity_notification"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkConfigurationTransferInterfacePlugin"/>
+    </type>
+    <type name="Magento\InventoryCatalogApi\Api\BulkSourceAssignInterface">
+        <plugin name="inventory_bulk_source_assign_low_quantity_notification"
+                type="Magento\InventoryLowQuantityNotification\Plugin\InventoryCatalogApi\BulkSourceAssignInterfacePlugin"/>
+    </type>
 </config>

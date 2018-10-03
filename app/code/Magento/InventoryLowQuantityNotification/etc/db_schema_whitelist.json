@@ -6,7 +6,6 @@
       "notify_stock_qty": true
     },
     "constraint": {
-      "FK_B83B2F43C515D94DE6B92EEF9143CBA8": true,
       "PRIMARY": true
     }
   },

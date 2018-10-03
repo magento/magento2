@@ -18,8 +18,9 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="single_mode"/>
-            <!-- SKIPPED DUE TO BUG: https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/1535 -->
-            <group value="skip"/>
+            <skip>
+                <issueId value="MSI-1535"/>
+            </skip>
         </annotations>
         
         <before>

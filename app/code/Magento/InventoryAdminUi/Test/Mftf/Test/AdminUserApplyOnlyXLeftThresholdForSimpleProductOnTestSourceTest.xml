@@ -22,6 +22,7 @@
         <before>
             <comment userInput="Fill config 'Only X left Threshold'." stepKey="fillConfigComment"/>
             <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 500" stepKey="fillConfigValue"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
 
             <comment userInput="Perform reindex and cache flush after fill 'Only X left Threshold' configuration config." stepKey="reindexCacheFlushAfterFillThresholdConfigComment"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterFillThresholdConfig"/>

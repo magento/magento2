@@ -99,8 +99,8 @@ class BulkSourceUnassign implements BulkSourceUnassignInterface
         }
 
         $res = $this->bulkSourceUnassign->execute($skus, $sourceCodes);
-        $this->sourceIndexer->executeList($sourceCodes);
 
+        $this->sourceIndexer->executeList($sourceCodes);
         if (in_array($this->defaultSourceProvider->getCode(), $sourceCodes, true)) {
             $this->reindexLegacy($skus);
         }

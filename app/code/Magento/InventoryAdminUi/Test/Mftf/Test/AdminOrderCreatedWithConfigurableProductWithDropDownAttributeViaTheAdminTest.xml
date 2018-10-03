@@ -18,6 +18,9 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
         </annotations>
         
         <before>
@@ -110,6 +113,7 @@
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
 
+        <conditionalClick selector="button[data-index='confirm_button']" dependentSelector="button[data-index='confirm_button']" visible="true" stepKey="clickOnConfirmButton1"/>
         <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear1" />
         <waitForPageLoad stepKey="waitUntilPageIsReady1" />
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
@@ -137,11 +141,11 @@
         <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad10"/>
 
-        <click selector="tbody tr .col-sku" stepKey="clickOnSku1"/>
+        <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad11"/>
 
-        <fillField selector="tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
-        <click selector=".action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
+        <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
+        <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad12"/>
 
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">

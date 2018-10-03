@@ -17,7 +17,6 @@
             <collapsible>true</collapsible>
             <opened>true</opened>
             <dataScope>data.sources</dataScope>
-            <visible>0</visible>
         </settings>
         <container name="assign_sources_container" component="Magento_Ui/js/form/components/group" sortOrder="10">
             <argument name="data" xsi:type="array">
@@ -42,9 +41,6 @@
                         <item name="additionalForGroup" xsi:type="boolean">true</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
                         <item name="dataScope" xsi:type="string"/>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.product.stock_data.manage_stock</item>
-                        </item>
                     </item>
                 </argument>
             </container>
@@ -93,9 +89,6 @@
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
                 <columnsHeader>true</columnsHeader>
-                <imports>
-                    <link name="visible">${ $.provider }:data.product.stock_data.manage_stock</link>
-                </imports>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
                 <argument name="data" xsi:type="array">
@@ -134,6 +127,10 @@
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
                         <label translate="true">Source Item Status</label>
+                        <disabled>true</disabled>
+                        <imports>
+                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <select>
@@ -155,7 +152,13 @@
                         <label translate="true">Qty</label>
                         <validation>
                             <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="less-than-equals-to" xsi:type="number">99999999</rule>
+                            <rule name="validate-number" xsi:type="boolean">true</rule>
                         </validation>
+                        <disabled>true</disabled>
+                        <imports>
+                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
+                        </imports>
                     </settings>
                 </field>
                 <field name="actionDelete" formElement="actionDelete" sortOrder="90">

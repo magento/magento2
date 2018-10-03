@@ -8,9 +8,11 @@
      visible="visible"
      css="$data.additionalClasses"
      attr="'data-index': index">
-    <span class="admin__field-label" if="$data.label" visible="$data.labelVisible">
-        <label translate="label" attr="'data-config-scope': $data.scopeLabel, for: uid" />
-    </span>
+    <div class="admin__field-label" if="$data.label" visible="$data.labelVisible">
+        <label attr="for: uid">
+            <span translate="label" attr="'data-config-scope': $data.scopeLabel" />
+        </label>
+    </div>
     <div class="admin__field-control"
          css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
         <render args="elementTmpl" ifnot="hasAddons()"/>

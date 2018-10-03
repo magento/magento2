@@ -16,7 +16,7 @@
                  selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sku'] span[name='items[{{arg1}}][sku]']"
                  parameterized="true"/>
         <element name="qtyToShip" type="text"
-                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='qtyToShip'] span[data-index='qtyToShip']"
+                 selector="tr[data-repeat-index='{{arg1}}'] td[data-index='qtyToShip'] div[data-index='qtyToShip']"
                  parameterized="true"/>
         <element name="availableSourcesSource" type="text"
                  selector="tr[data-repeat-index='{{arg1}}'] td[data-index='sources'] table[data-index='sources'] tr.data-row[data-repeat-index='{{arg2}}'] span[data-index='sourceName']"

@@ -859,7 +859,7 @@ class Image extends AbstractHelper
      */
     protected function getAttribute($name)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return $this->attributes[$name] ?? null;
     }
 
     /**

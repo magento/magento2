@@ -18,9 +18,13 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="MSI-1631"/>
+            </skip>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
             <createData entity="FullSource1" stepKey="customSource"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
             <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
@@ -74,7 +78,7 @@
 
         <comment userInput="Create grouped product." stepKey="createGroupedProductComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
@@ -88,22 +92,22 @@
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalTaAddSimpleProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindSimpleProduct">
             <argument name="sku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSimpleProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSimpleProduct"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddVirtualProduct"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalToAddVirtualProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindVirtualProduct">
             <argument name="sku" value="$$virtualProduct.sku$$"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
 
@@ -119,7 +123,7 @@
         </actionGroup>
 
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
         <comment userInput="Add grouped product to order." stepKey="addGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductSimpleOptionToOrder">
@@ -127,6 +131,9 @@
             <argument name="option" value="$$simpleProduct$$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+
         <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductVirtualOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$virtualProduct$$"/>

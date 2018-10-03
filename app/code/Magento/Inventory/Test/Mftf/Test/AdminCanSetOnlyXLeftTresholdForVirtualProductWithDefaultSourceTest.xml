@@ -17,9 +17,7 @@
             <testCaseId value="1501"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
-            <group value="multi_source"/>
-            <!-- SKIPPED DUE TO BUG: https://app.zenhub.com/workspace/o/magento-engcom/msi/issues/1535 -->
-            <group value="skip"/>
+            <group value="multi_mode"/>
         </annotations>
         
         <before>
@@ -88,21 +86,27 @@
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
 
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToOrder">
             <argument name="product" value="$$virtualProduct1$$"/>
         </actionGroup>
 
+        <fillField selector=".item-qty" userInput="5" stepKey="fillQtyField1"/>
+        <click selector=".order-discounts button[title='Update Items and Quantities']" stepKey="clickOnUpdateItems1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
         <comment userInput="Submit order." stepKey="submitOrderComment"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
 
+        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+
         <amOnPage url="/$$virtualProduct1.product[sku]$$.html" stepKey="amOnProductPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
 
         <see selector=".availability.only" userInput="Only 5 left" stepKey="seeCurrentProductQuantity1"/>
     </test>

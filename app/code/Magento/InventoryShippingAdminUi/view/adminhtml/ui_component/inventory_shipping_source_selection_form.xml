@@ -120,6 +120,7 @@
                         <dataType>text</dataType>
                         <dataScope>product</dataScope>
                         <label translate="true">Product</label>
+                        <labelVisible>false</labelVisible>
                     </settings>
                 </field>
                 <field name="sku" formElement="input" sortOrder="20">
@@ -128,14 +129,16 @@
                         <dataType>text</dataType>
                         <dataScope>sku</dataScope>
                         <label translate="true">SKU</label>
+                        <labelVisible>false</labelVisible>
                     </settings>
                 </field>
                 <field name="qtyToShip" formElement="input" sortOrder="30">
                     <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <elementTmpl>ui/form/element/html</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>qtyToShip</dataScope>
                         <label translate="true">Qty To Ship</label>
+                        <labelVisible>false</labelVisible>
                     </settings>
                 </field>
                 <dynamicRows name="sources" sortOrder="40">
@@ -173,6 +176,7 @@
                                 <dataType>text</dataType>
                                 <dataScope>sourceName</dataScope>
                                 <label translate="true">Source</label>
+                                <labelVisible>false</labelVisible>
                             </settings>
                         </field>
                         <field name="qtyAvailable" formElement="input" sortOrder="20">
@@ -180,6 +184,7 @@
                                 <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                                 <dataType>text</dataType>
                                 <dataScope>qtyAvailable</dataScope>
+                                <labelVisible>false</labelVisible>
                                 <label translate="true">Qty Available</label>
                             </settings>
                         </field>
@@ -202,6 +207,7 @@
                                     <link name="toggleDisable">ns = ${ $.ns }, index = sourceCode:value</link>
                                 </imports>
                                 <disabled>true</disabled>
+                                <labelVisible>false</labelVisible>
                             </settings>
                         </field>
                     </container>

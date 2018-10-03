@@ -14,6 +14,7 @@
                 <arguments>
                     <argument name="view_model"
                               xsi:type="object">Magento\InventoryCatalogAdminUi\ViewModel\SourcesSelection</argument>
+                    <argument name="show_only_assigned_sources" xsi:type="boolean">true</argument>
                     <argument name="button_title" xsi:type="string">Unassign sources</argument>
                     <argument name="submit_url" xsi:type="string">inventorycatalog/source/bulkUnassignPost</argument>
                 </arguments>

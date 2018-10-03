@@ -63,6 +63,8 @@ class BulkSourceUnassign
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
 
+        $connection->beginTransaction();
+
         $count = (int) $connection->delete($tableName, [
             SourceItemInterface::SOURCE_CODE . ' IN (?)' => $sourceCodes,
             SourceItemInterface::SKU . ' IN (?)' => $skus,
@@ -72,6 +74,8 @@ class BulkSourceUnassign
         if (in_array($this->defaultSourceProvider->getCode(), $sourceCodes)) {
             $this->bulkZeroLegacyStockItem->execute($skus);
         }
+
+        $connection->commit();
 
         return $count;
     }

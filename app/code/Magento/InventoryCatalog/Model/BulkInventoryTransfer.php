@@ -113,11 +113,11 @@ class BulkInventoryTransfer implements BulkInventoryTransferInterface
             $unassignFromOrigin
         );
 
-        $productIds = array_values($this->getProductIdsBySkus->execute($skus));
         $this->sourceIndexer->executeList([$originSource, $destinationSource]);
 
         if (($this->defaultSourceProvider->getCode() === $originSource) ||
             ($this->defaultSourceProvider->getCode() === $destinationSource)) {
+            $productIds = array_values($this->getProductIdsBySkus->execute($skus));
             $this->reindexLegacy($productIds);
         }
 
