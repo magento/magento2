@@ -28,8 +28,8 @@ class CompositeResolver implements ResolverInterface
             if (!$item instanceof ResolverInterface) {
                 throw new \InvalidArgumentException(
                     sprintf('Instance of the field type resolver is expected, got %s instead.', get_class($item))
-               );
-           }
+                );
+            }
         }
         $this->items = $items;
     }

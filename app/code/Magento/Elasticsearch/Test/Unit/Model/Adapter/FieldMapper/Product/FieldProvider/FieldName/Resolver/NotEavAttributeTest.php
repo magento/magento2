@@ -6,12 +6,9 @@
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -19,7 +16,7 @@ use Magento\Store\Api\Data\StoreInterface;
 class NotEavAttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute
+     * @var NotEavAttribute
      */
     private $resolver;
 
@@ -33,7 +30,7 @@ class NotEavAttributeTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->resolver = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute::class
+            NotEavAttribute::class
         );
     }
 

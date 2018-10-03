@@ -9,6 +9,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Dummy class for Not EAV attribute.
+ * @SuppressWarnings(PHPMD)
  */
 class DummyAttribute implements CustomAttributesDataInterface
 {
