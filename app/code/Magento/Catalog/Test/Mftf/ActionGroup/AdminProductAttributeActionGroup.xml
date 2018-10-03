@@ -14,7 +14,7 @@
         </arguments>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
-        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}"
+        <fillField selector="{{AdminProductAttributeGridSection.gridFilterAttributeCode}}"
                    userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
