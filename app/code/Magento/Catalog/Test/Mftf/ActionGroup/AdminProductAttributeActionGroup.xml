@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="deleteProductAttribute">
+        <arguments>
+            <argument name="ProductAttribute"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
+        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilterInput}}"
+                   userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
+        <click selector="{{AttributePropertiesSection.deleteAttribute}}" stepKey="deleteAttribute"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForDeleteConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to do this?
+" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteAttribute"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterDeleteAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeDeleteSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
