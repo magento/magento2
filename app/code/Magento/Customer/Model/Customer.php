@@ -359,13 +359,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $this->setId($customerId);
         }
 
-        // Need to use attribute set or future updates can cause data loss
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(
-                CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
-            );
-        }
-
         return $this;
     }
 
@@ -962,6 +955,16 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve attribute set id for customer.
+     *
+     * @return int
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
+    }
+
+    /**
      * Set store to customer
      *
      * @param \Magento\Store\Model\Store $store
@@ -1050,22 +1053,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
         return parent::beforeDelete();
-    }
-
-    /**
-     * Processing object before save data
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        // Need to use attribute set or future updates can cause data loss
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(
-                CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
-            );
-        }
-        return parent::beforeSave();
     }
 
     /**
