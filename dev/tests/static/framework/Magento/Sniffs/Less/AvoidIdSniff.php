@@ -25,6 +25,35 @@ class AvoidIdSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
+     * Tokens that can appear in a selector
+     *
+     * @var array
+     */
+    private $selectorTokens = [
+        T_HASH,
+        T_WHITESPACE,
+        T_STRING_CONCAT,
+        T_OPEN_PARENTHESIS,
+        T_CLOSE_PARENTHESIS,
+        T_OPEN_SQUARE_BRACKET,
+        T_CLOSE_SQUARE_BRACKET,
+        T_DOUBLE_QUOTED_STRING,
+        T_CONSTANT_ENCAPSED_STRING,
+        T_DOUBLE_COLON,
+        T_COLON,
+        T_EQUAL,
+        T_MUL_EQUAL,
+        T_OR_EQUAL,
+        T_STRING,
+        T_NONE,
+        T_DOLLAR,
+        T_GREATER_THAN,
+        T_PLUS,
+        T_NS_SEPARATOR,
+        T_LNUMBER,
+    ];
+
+    /**
      * @inheritdoc
      */
     public function register()
@@ -33,6 +62,8 @@ class AvoidIdSniff implements Sniff
     }
 
     /**
+     * @inheritdoc
+     *
      * Will flag any selector that looks like the following:
      * #foo[bar],
      * #foo[bar=bash],
@@ -53,39 +84,16 @@ class AvoidIdSniff implements Sniff
      * div#foo {
      *     blah: 'abc';
      * }
-     *
-     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
-        $nextToken = $phpcsFile->findNext([
-            T_HASH,
-            T_WHITESPACE,
-            T_STRING_CONCAT,
-            T_OPEN_PARENTHESIS,
-            T_CLOSE_PARENTHESIS,
-            T_OPEN_SQUARE_BRACKET,
-            T_CLOSE_SQUARE_BRACKET,
-            T_DOUBLE_QUOTED_STRING,
-            T_CONSTANT_ENCAPSED_STRING,
-            T_DOUBLE_COLON,
-            T_COLON,
-            T_EQUAL,
-            T_MUL_EQUAL,
-            T_OR_EQUAL,
-            T_STRING,
-            T_NONE,
-            T_DOLLAR,
-            T_GREATER_THAN,
-            T_PLUS,
-            T_NS_SEPARATOR,
-            T_LNUMBER,
-        ], $stackPtr + 1, null, true);
+        // Find the next non-selector token
+        $nextToken = $phpcsFile->findNext($this->selectorTokens, $stackPtr + 1, null, true);
 
         // Anything except a { or a , means this is not a selector
-        if (in_array($tokens[$nextToken]['code'], [T_OPEN_CURLY_BRACKET, T_COMMA])) {
+        if ($nextToken !== false && in_array($tokens[$nextToken]['code'], [T_OPEN_CURLY_BRACKET, T_COMMA])) {
             $phpcsFile->addError('Id selector is used', $stackPtr, 'IdSelectorUsage');
         }
     }
