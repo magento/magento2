@@ -1292,6 +1292,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address from Factory
+     *
      * @return Address
      */
     protected function _createAddressInstance()
@@ -1300,6 +1302,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create Address Collection from Factory
+     *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected function _createAddressCollection()
@@ -1308,6 +1312,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get Template Types
+     *
      * @return array
      */
     protected function getTemplateTypes()

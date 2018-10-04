@@ -161,7 +161,14 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * Create or update a customer.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $passwordHash
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\InputException If bad input is provided
+     * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -293,7 +300,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve customer.
+     *
+     * @param string $email
+     * @param int|null $websiteId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function get($email, $websiteId = null)
     {
@@ -302,7 +315,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * Get customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($customerId)
     {
@@ -311,7 +329,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Retrieve customers which match a specified criteria.
+     *
      * {@inheritdoc}
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -351,7 +375,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * Delete customer.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function delete(CustomerInterface $customer)
     {
@@ -359,7 +387,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * Delete customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteById($customerId)
     {
