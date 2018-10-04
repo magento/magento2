@@ -47,7 +47,7 @@
         <column xsi:type="int" name="source_item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="varchar" name="source_code" nullable="false" length="255"/>
         <column xsi:type="varchar" name="sku" nullable="false" length="64"/>
-        <column xsi:type="decimal" name="quantity" scale="4" precision="10" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="quantity" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0"/>
         <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0"/>

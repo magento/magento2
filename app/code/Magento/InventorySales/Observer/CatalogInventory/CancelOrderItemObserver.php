@@ -96,7 +96,7 @@ class CancelOrderItemObserver implements ObserverInterface
         $qty = $item->getQtyToCancel();
         if ($this->canCancelOrderItem($item) && $qty) {
             try {
-                $productSku = $this->getSkusByProductIds->execute(
+                $productSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
                     [$item->getProductId()]
                 )[$item->getProductId()];
             } catch (NoSuchEntityException $e) {

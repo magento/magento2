@@ -82,11 +82,14 @@ class SourceItems extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $product = $this->locator->getProduct();
+
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'visible' => !$this->isSingleSourceMode->execute(),
+                        'visible' => !$this->isSingleSourceMode->execute() &&
+                            $this->isSourceItemManagementAllowedForProductType->execute($product->getTypeId()),
                     ],
                 ],
             ]

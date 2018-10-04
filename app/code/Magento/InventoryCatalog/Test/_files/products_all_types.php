@@ -24,38 +24,30 @@ $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 
 $productTypes = [
-    Bundle::TYPE_CODE,
-    Configurable::TYPE_CODE,
-    Downloadable::TYPE_DOWNLOADABLE,
-    Grouped::TYPE_CODE,
-    Simple::TYPE_SIMPLE,
-    Simple::TYPE_VIRTUAL,
+    Bundle::TYPE_CODE => ['price_view' => 1, 'price_type' => Price::PRICE_TYPE_FIXED],
+    Configurable::TYPE_CODE => [],
+    Downloadable::TYPE_DOWNLOADABLE => [],
+    Grouped::TYPE_CODE => [],
+    Simple::TYPE_SIMPLE => [],
+    Simple::TYPE_VIRTUAL => [],
 ];
 
-foreach ($productTypes as $productType) {
+foreach ($productTypes as $productType => $additionalProductData) {
+    $attrProductData = [
+        'attribute_set_id' => 4,
+        'type_id' => $productType,
+        'name' => $productType . '_name',
+        'sku' => $productType . '_sku',
+        'price' => 10,
+        'visibility' => Visibility::VISIBILITY_BOTH,
+        'status' => Status::STATUS_ENABLED,
+    ];
+
+    if (!empty($additionalProductData)) {
+        $attrProductData = array_merge($attrProductData, $additionalProductData);
+    }
+
     /** @var $product ProductInterface */
-    $product = $productFactory->create(
-        [
-            'data' => [
-                'attribute_set_id' => 4,
-                'type_id' => $productType,
-                'name' => $productType . '_name',
-                'sku' => $productType . '_sku',
-                'price' => 10,
-                'visibility' => Visibility::VISIBILITY_BOTH,
-                'status' => Status::STATUS_ENABLED,
-                'custom_attributes' => [
-                    'price_type' => [
-                        'attribute_code' => 'price_type',
-                        'value' => Price::PRICE_TYPE_FIXED
-                    ],
-                    'price_view' => [
-                        'attribute_code' => 'price_view',
-                        'value' => '1',
-                    ],
-                ],
-            ]
-        ]
-    );
+    $product = $productFactory->create(['data' => $attrProductData]);
     $productRepository->save($product);
 }
