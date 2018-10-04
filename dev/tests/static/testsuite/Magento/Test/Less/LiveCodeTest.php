@@ -52,7 +52,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $codeSniffer->setExtensions([LessWrapper::LESS_FILE_EXTENSION]);
 
-        $fileList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__, __DIR__);
+        $fileList = ['/Users/nathsmit/Sites/pagebuilder/app/myfile.less'];//PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__, __DIR__);
 
         $result = $codeSniffer->run($this->filterFiles($fileList));
 

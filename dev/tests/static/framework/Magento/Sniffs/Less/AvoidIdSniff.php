@@ -39,6 +39,7 @@ class AvoidIdSniff implements Sniff
      * #foo[bar~=bash],
      * #foo[bar$=bash],
      * #foo[bar*=bash],
+     * #foo[bar|=bash],
      * #foo[bar='bash'],
      * #foo:hover,
      * #foo:nth-last-of-type(n),
@@ -48,6 +49,7 @@ class AvoidIdSniff implements Sniff
      * #foo ~ div,
      * #foo\3Abar ~ div,
      * #foo\:bar ~ div,
+     * #foo.bar .baz,
      * div#foo {
      *     blah: 'abc';
      * }
@@ -72,6 +74,7 @@ class AvoidIdSniff implements Sniff
             T_COLON,
             T_EQUAL,
             T_MUL_EQUAL,
+            T_OR_EQUAL,
             T_STRING,
             T_NONE,
             T_DOLLAR,
