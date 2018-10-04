@@ -21,8 +21,7 @@
         <waitForPageLoad stepKey="waitForAttributeEditPageLoad" />
         <click selector="{{AttributePropertiesSection.deleteAttribute}}" stepKey="deleteAttribute"/>
         <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForDeleteConfirmation"/>
-        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to do this?
-" stepKey="seeConfirmationMessage"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to do this?" stepKey="seeConfirmationMessage"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteAttribute"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterDeleteAttribute"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the product attribute." stepKey="seeDeleteSuccessMessage"/>

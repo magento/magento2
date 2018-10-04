@@ -11,6 +11,6 @@
     <section name="AdminManageSwatchSection">
         <element name="adminInputByIndex" type="input" selector="optionvisual[value][option_{{var}}][0]" parameterized="true"/>
         <element name="addSwatch" type="button" selector="#add_new_swatch_visual_option_button" timeout="30"/>
-        <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
+        <element name="chooseColorRow" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
     </section>
 </sections>

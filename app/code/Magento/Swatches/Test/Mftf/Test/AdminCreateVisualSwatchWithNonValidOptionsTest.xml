@@ -14,7 +14,7 @@
             <description value="Admin should be able to create swatch product attribute"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-95487"/>
-            <group value="Swatches"/>
+            <group value="swatches"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -51,9 +51,8 @@
         <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch">
             <argument name="index" value="0"/>
         </actionGroup>
-        <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex">
-            <argument name="nthColorPicker" value="1"/>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('1')}}" stepKey="clickChooseColor"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillHex">
             <argument name="hexColor" value="ff0000"/>
         </actionGroup>
 
@@ -61,7 +60,7 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
 
         <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.save}}" stepKey="clickSave1"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave1"/>
         <waitForElementVisible selector="{{AdminMessagesSection.error}}" stepKey="waitForError"/>
 
         <!-- Fill options data -->
@@ -69,7 +68,7 @@
                    userInput="red" stepKey="fillAdmin"/>
 
         <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.save}}" stepKey="clickSave2"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave2"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}"
                                stepKey="waitForSuccessMessage"/>
     </test>

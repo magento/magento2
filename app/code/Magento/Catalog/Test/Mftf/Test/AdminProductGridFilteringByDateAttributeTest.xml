@@ -31,9 +31,9 @@
         <click selector="{{AdminProductAttributeGridSection.search}}" stepKey="searchForAttributeFromGrid"/>
         <click selector="{{AdminProductAttributeGridSection.firstRow}}" stepKey="clickOnAttributeRow"/>
         <waitForPageLoad stepKey="wait2"/>
-        <click selector="{{AttributePropertiesSection.advancedProperties}}" stepKey="openAdvancedPropertiesTab"/>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="openAdvancedPropertiesTab"/>
         <selectOption selector="#is_filterable_in_grid" userInput="Yes" stepKey="isFilterableInGrid"/>
-        <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
