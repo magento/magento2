@@ -105,7 +105,6 @@
         <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment"/>
         <closeAdminNotification stepKey="closeAdminNotificationInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
-        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
 
         <!--Check Invoice Data-->
@@ -120,7 +119,7 @@
 
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad1"/>
         <!--Invoice created successfully-->
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
