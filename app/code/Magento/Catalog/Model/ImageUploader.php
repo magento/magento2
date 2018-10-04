@@ -163,7 +163,7 @@ class ImageUploader
     }
 
     /**
-     * Retrieve base path
+     * Retrieve allowed extensions
      *
      * @return string[]
      */
@@ -173,6 +173,8 @@ class ImageUploader
     }
 
     /**
+     * Retrieve allowed mime types
+     *
      * @return string[]
      */
     public function getAllowedMimeTypes()
