@@ -129,6 +129,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
 
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
