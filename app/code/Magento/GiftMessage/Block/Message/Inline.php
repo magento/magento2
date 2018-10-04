@@ -139,7 +139,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Define checkout type
      *
-     * @param $type string
+     * @param string $type
      * @return $this
      * @codeCoverageIgnore
      */
@@ -278,6 +278,8 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Call method getItemsHasMessages
+     *
      * @deprecated Misspelled method
      * @see getItemsHasMessages
      */
