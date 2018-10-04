@@ -1172,6 +1172,7 @@ define([
         submit : function()
         {
             var $editForm = jQuery('#edit_form');
+
             if ($editForm.valid()) {
                 $editForm.trigger('processStart');
                 $editForm.trigger('submitOrder');
