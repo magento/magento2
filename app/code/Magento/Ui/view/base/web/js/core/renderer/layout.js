@@ -306,12 +306,12 @@ define([
                 var cIds = Object.keys(children);
                 if (cIds) {
                     _.each(cIds, function (cId) {
-                        if (typeof children[cId] === 'object'
-                            && children[cId].hasOwnProperty('config')
-                            && typeof children[cId].config === 'object'
-                            && children[cId].config.hasOwnProperty('componentDisabled')
-                            && children[cId].config.componentDisabled === true) {
-                            delete children[cId];
+                        if (typeof children[cId] === 'object' &&
+                            children[cId].hasOwnProperty('config') &&
+                            typeof children[cId].config === 'object' &&
+                            children[cId].config.hasOwnProperty('componentDisabled') &&
+                            children[cId].config.componentDisabled === true) {
+                                delete children[cId];
                         }
                     });
                 }
