@@ -62,7 +62,8 @@ class UpdateCouponUsages
         $this->ruleCustomerFactory = $ruleCustomerFactory;
         $this->coupon = $coupon;
         $this->couponUsage = $couponUsage;
-        $this->deleteCustomerRuleUsage = $deleteCustomerRuleUsage ? : ObjectManager::getInstance()->get(DeleteCustomerUsage::class);
+        $this->deleteCustomerRuleUsage = $deleteCustomerRuleUsage ? :
+            ObjectManager::getInstance()->get(DeleteCustomerUsage::class);
     }
 
     /**

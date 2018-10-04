@@ -6,7 +6,6 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
-
 class DeleteCustomerUsage
 {
     /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Customer */
@@ -18,8 +17,7 @@ class DeleteCustomerUsage
      */
     public function __construct(
         Customer $customerRuleDetails
-    )
-    {
+    ) {
         $this->_customerRuleDetails = $customerRuleDetails;
     }
 
@@ -39,5 +37,5 @@ class DeleteCustomerUsage
             );
         }
     }
-
 }
+
