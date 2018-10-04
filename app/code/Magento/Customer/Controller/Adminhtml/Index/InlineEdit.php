@@ -6,14 +6,16 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Test\Block\Form\Login;
-use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Message\MessageInterface;
 
 /**
+ * Customer inline edit action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
@@ -102,7 +104,11 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     }
 
     /**
+     * Inline edit action execute
+     *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -250,7 +256,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     protected function getErrorMessages()
     {
         $messages = [];
-        foreach ($this->getMessageManager()->getMessages()->getItems() as $error) {
+        foreach ($this->getMessageManager()->getMessages()->getErrors() as $error) {
             $messages[] = $error->getText();
         }
         return $messages;
@@ -263,7 +269,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      */
     protected function isErrorExists()
     {
-        return (bool)$this->getMessageManager()->getMessages(true)->getCount();
+        return (bool)$this->getMessageManager()->getMessages(true)->getCountByType(MessageInterface::TYPE_ERROR);
     }
 
     /**
