@@ -17,10 +17,11 @@ use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Framework\App\ObjectManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
-    as FieldNameResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
+ * Don't use this product data mapper class.
+ *
  * @deprecated 100.2.0
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
  */
@@ -89,7 +90,7 @@ class ProductDataMapper implements DataMapperInterface
     private $attributeAdapterProvider;
 
     /**
-     * @var FieldNameResolver
+     * @var ResolverInterface
      */
     private $fieldNameResolver;
 
@@ -103,7 +104,7 @@ class ProductDataMapper implements DataMapperInterface
      * @param StoreManagerInterface $storeManager
      * @param DateFieldType $dateFieldType
      * @param AttributeProvider|null $attributeAdapterProvider
-     * @param FieldNameResolver|null $fieldNameResolver
+     * @param ResolverInterface|null $fieldNameResolver
      */
     public function __construct(
         Builder $builder,
@@ -113,7 +114,7 @@ class ProductDataMapper implements DataMapperInterface
         StoreManagerInterface $storeManager,
         DateFieldType $dateFieldType,
         AttributeProvider $attributeAdapterProvider = null,
-        FieldNameResolver $fieldNameResolver = null
+        ResolverInterface $fieldNameResolver = null
     ) {
         $this->builder = $builder;
         $this->attributeContainer = $attributeContainer;
@@ -124,7 +125,7 @@ class ProductDataMapper implements DataMapperInterface
         $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
             ->get(AttributeProvider::class);
         $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(FieldNameResolver::class);
+            ->get(ResolverInterface::class);
 
         $this->mediaGalleryRoles = [
             self::MEDIA_ROLE_IMAGE,
@@ -226,6 +227,8 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
+     * Check value.
+     *
      * @param mixed $value
      * @param Attribute $attribute
      * @param string $storeId
@@ -316,6 +319,8 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
+     * Get media role image.
+     *
      * @param string $file
      * @param array $roles
      * @return string
@@ -326,6 +331,8 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
+     * Get media role small image.
+     *
      * @param string $file
      * @param array $roles
      * @return string
@@ -336,6 +343,8 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
+     * Get media role thumbnail.
+     *
      * @param string $file
      * @param array $roles
      * @return string
@@ -346,6 +355,8 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
+     * Get media role swatch image.
+     *
      * @param string $file
      * @param array $roles
      * @return string

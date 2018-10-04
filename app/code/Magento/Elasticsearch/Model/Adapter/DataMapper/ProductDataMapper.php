@@ -9,6 +9,8 @@ use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper as ElasticSearch5ProductDataMapper;
 
 /**
+ * Don't use this product data mapper class.
+ *
  * @deprecated 100.2.0
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
  */

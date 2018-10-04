@@ -10,8 +10,7 @@ use Magento\Eav\Model\Config;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
-    as FieldNameResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
@@ -59,7 +58,7 @@ class ProductFieldMapper implements FieldMapperInterface
     private $attributeAdapterProvider;
 
     /**
-     * @var FieldNameResolver
+     * @var ResolverInterface
      */
     private $fieldNameResolver;
 
@@ -74,7 +73,7 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param CustomerSession $customerSession
      * @param StoreManager $storeManager
      * @param Registry $coreRegistry
-     * @param FieldNameResolver|null $fieldNameResolver
+     * @param ResolverInterface|null $fieldNameResolver
      * @param AttributeProvider|null $attributeAdapterProvider
      * @param FieldProviderInterface|null $fieldProvider
      */
@@ -84,7 +83,7 @@ class ProductFieldMapper implements FieldMapperInterface
         CustomerSession $customerSession,
         StoreManager $storeManager,
         Registry $coreRegistry,
-        FieldNameResolver $fieldNameResolver = null,
+        ResolverInterface $fieldNameResolver = null,
         AttributeProvider $attributeAdapterProvider = null,
         FieldProviderInterface $fieldProvider = null
     ) {
@@ -94,7 +93,7 @@ class ProductFieldMapper implements FieldMapperInterface
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
         $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(FieldNameResolver::class);
+            ->get(ResolverInterface::class);
         $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
             ->get(AttributeProvider::class);
         $this->fieldProvider = $fieldProvider ?: ObjectManager::getInstance()

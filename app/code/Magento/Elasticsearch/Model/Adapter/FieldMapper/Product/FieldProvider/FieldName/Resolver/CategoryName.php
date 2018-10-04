@@ -58,7 +58,7 @@ class CategoryName implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     private function resolveCategoryId($context): int
     {

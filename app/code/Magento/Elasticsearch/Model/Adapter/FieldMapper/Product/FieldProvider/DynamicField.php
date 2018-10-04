@@ -91,7 +91,7 @@ class DynamicField implements FieldProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFields(array $context = []): array
     {

@@ -284,8 +284,8 @@ class Elasticsearch
      * Checks whether Elasticsearch index and alias exists.
      *
      * @param int $storeId
-     * @param bool $checkAlias
      * @param string $mappedIndexerId
+     * @param bool $checkAlias
      * @return $this
      */
     public function checkIndex(

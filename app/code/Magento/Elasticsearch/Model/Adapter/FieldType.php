@@ -35,6 +35,7 @@ class FieldType
     /**#@-*/
 
     /**
+     * Get field type.
      *
      * @deprecated
      * @see ResolverInterface::getFieldType

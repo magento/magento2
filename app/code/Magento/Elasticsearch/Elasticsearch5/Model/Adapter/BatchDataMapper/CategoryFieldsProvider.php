@@ -10,8 +10,7 @@ use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Framework\App\ObjectManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
-    as FieldNameResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 
 /**
  * Provide data mapping for categories fields
@@ -29,29 +28,29 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
     private $attributeAdapterProvider;
 
     /**
-     * @var FieldNameResolver
+     * @var ResolverInterface
      */
     private $fieldNameResolver;
 
     /**
      * @param Index $resourceIndex
      * @param AttributeProvider|null $attributeAdapterProvider
-     * @param FieldNameResolver|null $fieldNameResolver
+     * @param ResolverInterface|null $fieldNameResolver
      */
     public function __construct(
         Index $resourceIndex,
         AttributeProvider $attributeAdapterProvider = null,
-        FieldNameResolver $fieldNameResolver = null
+        ResolverInterface $fieldNameResolver = null
     ) {
         $this->resourceIndex = $resourceIndex;
         $this->attributeAdapterProvider = $attributeAdapterProvider ?: ObjectManager::getInstance()
             ->get(AttributeProvider::class);
         $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(FieldNameResolver::class);
+            ->get(ResolverInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFields(array $productIds, $storeId)
     {

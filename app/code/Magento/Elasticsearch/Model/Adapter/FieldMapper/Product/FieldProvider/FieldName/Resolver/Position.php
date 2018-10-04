@@ -54,7 +54,7 @@ class Position implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     private function resolveCategoryId($context)
     {

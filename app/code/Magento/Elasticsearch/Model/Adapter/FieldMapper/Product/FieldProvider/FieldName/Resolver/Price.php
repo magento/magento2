@@ -42,7 +42,7 @@ class Price implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {

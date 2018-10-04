@@ -52,7 +52,7 @@ class IndexResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFieldIndex(AttributeAdapter $attribute)
     {

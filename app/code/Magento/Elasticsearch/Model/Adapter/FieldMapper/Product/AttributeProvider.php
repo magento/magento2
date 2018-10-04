@@ -65,7 +65,7 @@ class AttributeProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getByAttributeCode(string $attributeCode): AttributeAdapter
     {
