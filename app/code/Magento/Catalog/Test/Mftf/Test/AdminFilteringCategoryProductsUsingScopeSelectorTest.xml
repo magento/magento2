@@ -129,7 +129,11 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption('Default Store View')}}"
                stepKey="clickStoreView"/>
+        <waitForElement selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                        stepKey="waitForModalAccept"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="clickActionAccept"/>
+        <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                                  stepKey="waitForNotVisibleModalAccept"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad2"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
@@ -148,8 +152,12 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption('secondStoreView')}}"
                stepKey="clickStoreView1"/>
+        <waitForElement selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                        stepKey="waitForModalAccept1"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
                stepKey="clickActionAccept1"/>
+        <waitForElementNotVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}"
+                                  stepKey="waitForNotVisibleModalAccept1"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad4"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
