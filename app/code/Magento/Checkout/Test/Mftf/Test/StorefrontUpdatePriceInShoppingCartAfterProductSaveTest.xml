@@ -30,6 +30,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setDefaultCustomerDataLifetime"/>
+            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Go to product page-->
