@@ -22,6 +22,7 @@
 
         <before>
             <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
             <createData entity="FullSource1" stepKey="customSource"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
             <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
@@ -84,22 +85,21 @@
         </actionGroup>
 
         <comment userInput="Add simple and virtual products to grouped product." stepKey="assignSimpleAndVirtualToGroupedProductComment"/>
-        <scrollToTopOfPage stepKey="scroolToTopOfPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection1"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalTaAddSimpleProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindSimpleProduct">
             <argument name="sku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
-
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSimpleProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSimpleProduct"/>
+
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection2"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddVirtualProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalToAddVirtualProduct"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProductsToFindVirtualProduct">
             <argument name="sku" value="$$virtualProduct.sku$$"/>
         </actionGroup>
@@ -107,7 +107,7 @@
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectVirtualProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addVirtualProduct"/>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]"  stepKey="searchAndSelectCategory"/>
 
@@ -121,16 +121,17 @@
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
 
-        <comment userInput="Add grouped product to order." stepKey="addGroupedProductToOrderComment"/>
-        <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductSimpleOptionToOrder">
+        <comment userInput="Add Simple Grouped product to order." stepKey="addSimpleGroupedProductToOrderComment"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$simpleProduct$$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
 
-        <actionGroup ref="addGroupedProductOptionToOrder" stepKey="addGroupedProductVirtualOptionToOrder">
+        <comment userInput="Add Virtual Grouped product to order." stepKey="addVirtualGroupedProductToOrderComment"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$virtualProduct$$"/>
             <argument name="quantity" value="2"/>
