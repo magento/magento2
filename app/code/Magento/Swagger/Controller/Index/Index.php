@@ -7,6 +7,7 @@ namespace Magento\Swagger\Controller\Index;
 
 /**
  * Class Index
+ *
  * @package Magento\Swagger\Controller\Index
  */
 class Index extends \Magento\Framework\App\Action\Action

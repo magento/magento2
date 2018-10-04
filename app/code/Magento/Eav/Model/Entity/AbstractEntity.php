@@ -602,13 +602,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $firstSort = $firstAttribute->getSortWeight((int) $this->_sortingSetId);
         $secondSort = $secondAttribute->getSortWeight((int) $this->_sortingSetId);
 
-        if ($firstSort > $secondSort) {
-            return 1;
-        } elseif ($firstSort < $secondSort) {
-            return -1;
-        }
-
-        return 0;
+        return $firstSort <=> $secondSort;
     }
 
     /**

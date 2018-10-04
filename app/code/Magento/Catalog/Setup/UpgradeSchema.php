@@ -144,6 +144,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.2.6', '<')) {
             $this->addStoreIdFieldForWebsiteIndexTable($setup);
+            $this->removeIndexFromPriceIndexTable($setup);
         }
 
         $setup->endSetup();
@@ -817,6 +818,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'nullable' => false,
                 'comment' => 'Default store id for website '
             ]
+        );
+    }
+
+    /**
+     * Table "catalog_product_index_price_tmp" used as template of "catalog_product_index_price" table
+     * for create temporary tables during indexation. Indexes are removed from performance perspective
+     * @param SchemaSetupInterface $setup
+     */
+    private function removeIndexFromPriceIndexTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['customer_group_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['website_id'])
+        );
+        $setup->getConnection()->dropIndex(
+            $setup->getTable('catalog_product_index_price_tmp'),
+            $setup->getIdxName('catalog_product_index_price_tmp', ['min_price'])
         );
     }
 }

@@ -134,14 +134,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
         <arguments>
             <argument name="priceModifiers" xsi:type="array">
                 <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
             </argument>
         </arguments>
     </type>
-
     <virtualType name="CatalogRuleCustomConditionProvider" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProvider">
         <arguments>
             <argument name="customConditionProcessors" xsi:type="array">

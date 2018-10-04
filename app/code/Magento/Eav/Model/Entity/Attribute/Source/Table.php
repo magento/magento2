@@ -167,7 +167,9 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $optionsText = [];
         foreach ($options as $item) {
             if (in_array($item['value'], $value)) {
-                $optionsText[] = $this->escaper->escapeHtml($item['label']);
+                $optionsText[] = ($this->_attribute->getIsHtmlAllowedOnFront())
+                    ? $item['label']
+                    : $this->escaper->escapeHtml($item['label']);
             }
         }
 

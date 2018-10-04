@@ -330,9 +330,7 @@ define([
             }
 
             if (this.defaultPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -442,13 +440,9 @@ define([
                     return initialize;
                 }));
 
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             } else if (this.hasInitialPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -849,7 +843,8 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData;
+                recordsData,
+                lastRecordIndex;
 
             if (this.deleteProperty) {
                 recordsData = this.recordData();
@@ -868,12 +863,13 @@ define([
                 this.update = true;
 
                 if (~~this.currentPage() === this.pages()) {
+                    lastRecordIndex = this.startIndex + this.getChildItems().length - 1;
                     lastRecord =
                         _.findWhere(this.elems(), {
-                            index: this.startIndex + this.getChildItems().length - 1
+                            index: lastRecordIndex
                         }) ||
                         _.findWhere(this.elems(), {
-                            index: (this.startIndex + this.getChildItems().length - 1).toString()
+                            index: lastRecordIndex.toString()
                         });
 
                     lastRecord.destroy();
@@ -1134,6 +1130,18 @@ define([
             });
 
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+        },
+
+        /**
+         * Set the changed property if the current page is different
+         * than the default state
+         *
+         * @return void
+         */
+        setChangedForCurrentPage: function () {
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
         }
     });
 });

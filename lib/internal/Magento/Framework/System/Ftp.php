@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\System;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Class to work with remote FTP server
  */
@@ -58,7 +56,8 @@ class Ftp
         $dir = explode("/", $path);
         $path = "";
         $ret = true;
-        for ($i = 0; $i < count($dir); $i++) {
+        $dirCount = count($dir);
+        for ($i = 0; $i < $dirCount; $i++) {
             $path .= "/" . $dir[$i];
             if (!@ftp_chdir($this->_conn, $path)) {
                 @ftp_chdir($this->_conn, "/");
@@ -107,6 +106,12 @@ class Ftp
         if ($data['scheme'] != 'ftp') {
             throw new \Exception("Support for scheme unsupported: '{$data['scheme']}'");
         }
+        
+        // Decode user & password strings from URL
+        foreach (array_intersect(array_keys($data), ['user','pass']) as $key) {
+            $data[$key] = urldecode($data[$key]);
+        }
+        
         return $data;
     }
 
@@ -123,7 +128,7 @@ class Ftp
     public function connect($string, $timeout = 900)
     {
         $params = $this->validateConnectionString($string);
-        $port = isset($params['port']) ? intval($params['port']) : 21;
+        $port = isset($params['port']) ? (int)$params['port'] : 21;
 
         $this->_conn = ftp_connect($params['host'], $port, $timeout);
 
@@ -184,7 +189,7 @@ class Ftp
         if (empty($data[1])) {
             return false;
         }
-        if (intval($data[0]) != 257) {
+        if ((int)$data[0] != 257) {
             return false;
         }
         $out = trim($data[1], '"');

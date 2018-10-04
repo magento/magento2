@@ -19,6 +19,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -531,6 +533,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests Customizable Options price values including negative value.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
@@ -540,14 +544,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $options = $this->_model->getOptions();
         $this->assertNotEmpty($options);
         $expectedValue = [
-            '3-1-select' => 3000.00,
+            '3-1-select' => -3000.00,
             '3-2-select' => 5000.00,
             '4-1-radio' => 600.234,
             '4-2-radio' => 40000.00
         ];
         foreach ($options as $option) {
+            if (!$option->getValues()) {
+                continue;
+            }
             foreach ($option->getValues() as $value) {
-                $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
+                $this->assertEquals($expectedValue[$value->getSku()], (float)$value->getPrice());
             }
         }
     }

@@ -292,6 +292,6 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getAllIds()
     {
-        return  $this->collection->getAllIds();
+        return  $this->getCollection()->getAllIds();
     }
 }

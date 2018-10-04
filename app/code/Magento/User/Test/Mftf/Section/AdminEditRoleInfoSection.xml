@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminEditRoleInfoSection">
+        <element name="roleName" type="input" selector="#role_name"/>
+        <element name="password" type="input" selector="#current_password"/>
+        <element name="roleResourcesTab" type="button" selector="#role_info_tabs_account"/>
+        <element name="backButton" type="button" selector="button[title='Back']"/>
+        <element name="resetButton" type="button" selector="button[title='Reset']"/>
+        <element name="deleteButton" type="button" selector="button[title='Delete Role']"/>
+        <element name="saveButton" type="button" selector="button[title='Save Role']"/>
+        <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+        <element name="resourceAccess" type="select" selector="#all"/>
+        <element name="activeResourceAccessOptionByLabel" type="select" selector="//*[@id='all']/option[text()='{{resource}}' and @selected]" parameterized="true"/>
+        <element name="resourceAccessOptionByLabel" type="select" selector="//*[@id='all']/option[text()='{{resource}}']" parameterized="true"/>
+        <element name="resource" type="checkbox" selector="//*[@data-role='resource-tree']//li[@data-id='{{resource}}']/a/*[contains(@class, 'jstree-checkbox')]" parameterized="true"/>
+    </section>
+</sections>

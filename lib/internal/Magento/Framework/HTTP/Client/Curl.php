@@ -435,7 +435,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             if (count($line) != 3) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
-            $this->_responseStatus = intval($line[1]);
+            $this->_responseStatus = (int)$line[1];
         } else {
             $name = $value = '';
             $out = explode(": ", trim($data), 2);

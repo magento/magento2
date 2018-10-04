@@ -6,73 +6,176 @@
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\BaseFinalPrice;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 
 /**
- * Downloadable products Price indexer resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Downloadable Product Price Indexer Resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+class Price implements DimensionalIndexerInterface
 {
     /**
-     * @param null|int|array $entityIds
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @var BaseFinalPrice
      */
-    protected function reindex($entityIds = null)
-    {
-        if ($this->hasEntity() || !empty($entityIds)) {
-            $this->_prepareFinalPriceData($entityIds);
-            $this->_applyCustomOption();
-            $this->_applyDownloadableLink();
-            $this->_movePriceDataToIndexTable();
-        }
+    private $baseFinalPrice;
 
-        return $this;
+    /**
+     * @var IndexTableStructureFactory
+     */
+    private $indexTableStructureFactory;
+
+    /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
+     * @var BasePriceModifier
+     */
+    private $basePriceModifier;
+
+    /**
+     * @param BaseFinalPrice $baseFinalPrice
+     * @param IndexTableStructureFactory $indexTableStructureFactory
+     * @param TableMaintainer $tableMaintainer
+     * @param MetadataPool $metadataPool
+     * @param Config $eavConfig
+     * @param ResourceConnection $resource
+     * @param BasePriceModifier $basePriceModifier
+     * @param string $connectionName
+     */
+    public function __construct(
+        BaseFinalPrice $baseFinalPrice,
+        IndexTableStructureFactory $indexTableStructureFactory,
+        TableMaintainer $tableMaintainer,
+        MetadataPool $metadataPool,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        BasePriceModifier $basePriceModifier,
+        $connectionName = 'indexer'
+    ) {
+        $this->baseFinalPrice = $baseFinalPrice;
+        $this->indexTableStructureFactory = $indexTableStructureFactory;
+        $this->tableMaintainer = $tableMaintainer;
+        $this->connectionName = $connectionName;
+        $this->metadataPool = $metadataPool;
+        $this->resource = $resource;
+        $this->eavConfig = $eavConfig;
+        $this->basePriceModifier = $basePriceModifier;
     }
 
     /**
-     * Retrieve downloadable links price temporary index table name
+     * {@inheritdoc}
      *
-     * @see _prepareDefaultFinalPriceTable()
-     *
-     * @return string
+     * @throws \Exception
      */
-    protected function _getDownloadableLinkPriceTable()
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
-        return $this->tableStrategy->getTableName('catalog_product_index_price_downlod');
-    }
-
-    /**
-     * Prepare downloadable links price temporary index table
-     *
-     * @return $this
-     */
-    protected function _prepareDownloadableLinkPriceTable()
-    {
-        $this->getConnection()->delete($this->_getDownloadableLinkPriceTable());
-        return $this;
+        $temporaryPriceTable = $this->indexTableStructureFactory->create([
+            'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
+            'entityField' => 'entity_id',
+            'customerGroupField' => 'customer_group_id',
+            'websiteField' => 'website_id',
+            'taxClassField' => 'tax_class_id',
+            'originalPriceField' => 'price',
+            'finalPriceField' => 'final_price',
+            'minPriceField' => 'min_price',
+            'maxPriceField' => 'max_price',
+            'tierPriceField' => 'tier_price',
+        ]);
+        $this->fillFinalPrice($dimensions, $entityIds, $temporaryPriceTable);
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
+        $this->applyDownloadableLink($temporaryPriceTable, $dimensions);
     }
 
     /**
      * Calculate and apply Downloadable links price to index
      *
+     * @param IndexTableStructure $temporaryPriceTable
+     * @param array $dimensions
      * @return $this
+     * @throws \Exception
      */
-    protected function _applyDownloadableLink()
+    private function applyDownloadableLink(
+        IndexTableStructure $temporaryPriceTable,
+        array $dimensions
+    ) {
+        $temporaryDownloadableTableName = 'catalog_product_index_price_downlod_temp';
+        $this->getConnection()->createTemporaryTableLike(
+            $temporaryDownloadableTableName,
+            $this->getTable('catalog_product_index_price_downlod_tmp'),
+            true
+        );
+        $this->fillTemporaryTable($temporaryDownloadableTableName, $dimensions);
+        $this->updateTemporaryDownloadableTable($temporaryPriceTable->getTableName(), $temporaryDownloadableTableName);
+        $this->getConnection()->delete($temporaryDownloadableTableName);
+        return $this;
+    }
+
+    /**
+     * Retrieve catalog_product attribute instance by attribute code
+     *
+     * @param string $attributeCode
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getAttribute($attributeCode)
     {
-        $connection = $this->getConnection();
-        $table = $this->_getDownloadableLinkPriceTable();
-        $finalPriceTable = $this->_getDefaultFinalPriceTable();
+        return $this->eavConfig->getAttribute(Product::ENTITY, $attributeCode);
+    }
 
-        $this->_prepareDownloadableLinkPriceTable();
+    /**
+     * Put data into catalog product price indexer Downloadable links price  temp table
+     *
+     * @param string $temporaryDownloadableTableName
+     * @param array $dimensions
+     * @return void
+     * @throws \Exception
+     */
+    private function fillTemporaryTable(string $temporaryDownloadableTableName, array $dimensions)
+    {
+        $dlType = $this->getAttribute('links_purchased_separately');
+        $ifPrice = $this->getConnection()->getIfNullSql('dlpw.price_id', 'dlpd.price');
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
-        $dlType = $this->_getAttribute('links_purchased_separately');
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-
-        $ifPrice = $connection->getIfNullSql('dlpw.price_id', 'dlpd.price');
-
-        $select = $connection->select()->from(
-            ['i' => $finalPriceTable],
+        $select = $this->getConnection()->select()->from(
+            ['i' => $this->tableMaintainer->getMainTmpTable($dimensions)],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['dl' => $dlType->getBackend()->getTable()],
@@ -101,30 +204,87 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
                 'max_price' => new \Zend_Db_Expr('SUM(' . $ifPrice . ')'),
             ]
         );
+        $query = $select->insertFromSelect($temporaryDownloadableTableName);
+        $this->getConnection()->query($query);
+    }
 
-        $query = $select->insertFromSelect($table);
-        $connection->query($query);
+    /**
+     * Update data in the catalog product price indexer temp table
+     *
+     * @param string $temporaryPriceTableName
+     * @param string $temporaryDownloadableTableName
+     * @return void
+     */
+    private function updateTemporaryDownloadableTable(
+        string $temporaryPriceTableName,
+        string $temporaryDownloadableTableName
+    ) {
+        $ifTierPrice = $this->getConnection()->getCheckSql(
+            'i.tier_price IS NOT NULL',
+            '(i.tier_price + id.min_price)',
+            'NULL'
+        );
 
-        $ifTierPrice = $connection->getCheckSql('i.tier_price IS NOT NULL', '(i.tier_price + id.min_price)', 'NULL');
-
-        $select = $connection->select()->join(
-            ['id' => $table],
+        $selectForCrossUpdate = $this->getConnection()->select()->join(
+            ['id' => $temporaryDownloadableTableName],
             'i.entity_id = id.entity_id AND i.customer_group_id = id.customer_group_id' .
             ' AND i.website_id = id.website_id',
             []
-        )->columns(
+        );
+        // adds price of custom option, that was applied in DefaultPrice::_applyCustomOption
+        $selectForCrossUpdate->columns(
             [
                 'min_price' => new \Zend_Db_Expr('i.min_price + id.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price + id.max_price'),
                 'tier_price' => new \Zend_Db_Expr($ifTierPrice),
             ]
         );
+        $query = $selectForCrossUpdate->crossUpdateFromSelect(['i' => $temporaryPriceTableName]);
+        $this->getConnection()->query($query);
+    }
 
-        $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
-        $connection->query($query);
+    /**
+     * Fill final price
+     *
+     * @param array $dimensions
+     * @param \Traversable $entityIds
+     * @param IndexTableStructure $temporaryPriceTable
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function fillFinalPrice(
+        array $dimensions,
+        \Traversable $entityIds,
+        IndexTableStructure $temporaryPriceTable
+    ) {
+        $select = $this->baseFinalPrice->getQuery($dimensions, Type::TYPE_DOWNLOADABLE, iterator_to_array($entityIds));
+        $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
+        $this->tableMaintainer->getConnection()->query($query);
+    }
 
-        $connection->delete($table);
+    /**
+     * Get connection
+     *
+     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
+     */
+    private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface
+    {
+        if ($this->connection === null) {
+            $this->connection = $this->resource->getConnection($this->connectionName);
+        }
 
-        return $this;
+        return $this->connection;
+    }
+
+    /**
+     * Get table
+     *
+     * @param string $tableName
+     * @return string
+     */
+    private function getTable($tableName)
+    {
+        return $this->resource->getTableName($tableName, $this->connectionName);
     }
 }

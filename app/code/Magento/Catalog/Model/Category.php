@@ -71,6 +71,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
+    /**
+     * Category Store Id
+     */
+    const STORE_ID = 'store_id';
+
     /**#@+
      * Constants
      */
@@ -588,12 +593,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * If store id is underfined for category return current active store id
      *
-     * @return integer
+     * @return int
      */
     public function getStoreId()
     {
-        if ($this->hasData('store_id')) {
-            return (int)$this->_getData('store_id');
+        if ($this->hasData(self::STORE_ID)) {
+            return (int)$this->_getData(self::STORE_ID);
         }
         return (int)$this->_storeManager->getStore()->getId();
     }
@@ -609,7 +614,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!is_numeric($storeId)) {
             $storeId = $this->_storeManager->getStore($storeId)->getId();
         }
-        $this->setData('store_id', $storeId);
+        $this->setData(self::STORE_ID, $storeId);
         $this->getResource()->setStoreId($storeId);
         return $this;
     }
@@ -721,7 +726,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             return $parentId;
         }
         $parentIds = $this->getParentIds();
-        return intval(array_pop($parentIds));
+        return (int)array_pop($parentIds);
     }
 
     /**

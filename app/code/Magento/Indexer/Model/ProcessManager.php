@@ -21,23 +21,29 @@ class ProcessManager
     /** @var \Magento\Framework\App\ResourceConnection */
     private $resource;
 
+    /** @var \Magento\Framework\Registry */
+    private $registry;
+
     /** @var int|null */
     private $threadsCount;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\Registry $registry
      * @param int|null $threadsCount
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource = null,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\Registry $registry = null,
         int $threadsCount = null
     ) {
-        if (null === $resource) {
-            $resource = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\ResourceConnection::class
+        $this->resource = $resource;
+        if (null === $registry) {
+            $registry = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Registry::class
             );
         }
-        $this->resource = $resource;
+        $this->registry = $registry;
         $this->threadsCount = (int)$threadsCount;
     }
 
@@ -48,7 +54,7 @@ class ProcessManager
      */
     public function execute($userFunctions)
     {
-        if ($this->threadsCount > 1 && $this->isCanBeParalleled()) {
+        if ($this->threadsCount > 1 && $this->isCanBeParalleled() && !$this->isSetupMode() && PHP_SAPI == 'cli') {
             $this->multiThreadsExecute($userFunctions);
         } else {
             $this->simpleThreadExecute($userFunctions);
@@ -56,7 +62,7 @@ class ProcessManager
     }
 
     /**
-     * Execute user functions in in singleThreads mode
+     * Execute user functions in singleThreads mode
      *
      * @param \Traversable $userFunctions
      */
@@ -68,7 +74,7 @@ class ProcessManager
     }
 
     /**
-     * Execute user functions in in multiThreads mode
+     * Execute user functions in multiThreads mode
      *
      * @param \Traversable $userFunctions
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -104,6 +110,16 @@ class ProcessManager
     private function isCanBeParalleled()
     {
         return function_exists('pcntl_fork');
+    }
+
+    /**
+     * Is setup mode
+     *
+     * @return bool
+     */
+    private function isSetupMode()
+    {
+        return $this->registry->registry('setup-mode-enabled') ?: false;
     }
 
     /**

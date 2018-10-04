@@ -19,7 +19,7 @@
         "magento/module-swatches-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.2",
+    "version": "100.2.4",
     "license": [
         "proprietary"
     ],

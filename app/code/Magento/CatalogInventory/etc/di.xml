@@ -125,7 +125,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\SimpleProductPrice">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
         <arguments>
             <argument name="priceModifiers" xsi:type="array">
                 <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>

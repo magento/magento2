@@ -183,7 +183,7 @@ class TableMaintainer
     public function createTablesForDimensions(array $dimensions)
     {
         $mainTableName = $this->getMainTable($dimensions);
-        //Create index table for dimensions based on on main replica table
+        //Create index table for dimensions based on main replica table
         //Using main replica table is necessary for backward capability and TableResolver plugin work
         $this->createTable(
             $this->getTable(self::MAIN_INDEX_TABLE . $this->additionalTableSuffix),
@@ -251,9 +251,10 @@ class TableMaintainer
      */
     public function createMainTmpTable(array $dimensions)
     {
-        $originTableName = $this->getMainTable($dimensions);
+        // Create temporary table based on template table catalog_product_index_price_tmp without indexes
+        $templateTableName = $this->resource->getTableName(self::MAIN_INDEX_TABLE . '_tmp');
         $temporaryTableName = $this->getMainTable($dimensions) . $this->tmpTableSuffix;
-        $this->getConnection()->createTemporaryTableLike($temporaryTableName, $originTableName, true);
+        $this->getConnection()->createTemporaryTableLike($temporaryTableName, $templateTableName, true);
         $this->mainTmpTable[$this->getArrayKeyForTmpTable($dimensions)] = $temporaryTableName;
     }
 

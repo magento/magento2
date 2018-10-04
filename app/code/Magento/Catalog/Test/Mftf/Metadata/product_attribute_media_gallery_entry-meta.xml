@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductAttributeMediaGalleryEntry" dataType="media_gallery_entries" type="create">
+        <field key="id">integer</field>
+        <field key="media_type" required="true">string</field>
+        <field key="label" required="true">string</field>
+        <field key="position" required="true">integer</field>
+        <field key="disabled" required="true">boolean</field>
+        <array key="types">
+            <value>string</value>
+        </array>
+        <field key="file">string</field>
+        <field key="content">image_content</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+    <operation name="CreateImageContent" dataType="image_content" type="create">
+        <field key="base64_Encoded_data">string</field>
+        <field key="type" required="true">string</field>
+        <field key="name" required="true">string</field>
+    </operation>
+</operations>
