@@ -7,35 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
+use Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SetShippingAddressOnCart\MultiShipping;
+use Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SetShippingAddressOnCart\SingleShipping;
 
 /**
  * @inheritdoc
  */
 class SetShippingAddressesOnCart implements ResolverInterface
 {
-    /**
-     * @var ShippingAddressManagementInterface
-     */
-    private $shippingAddressManagement;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var Address
-     */
-    private $addressModel;
     /**
      * @var DataObjectHelper
      */
@@ -47,24 +33,39 @@ class SetShippingAddressesOnCart implements ResolverInterface
     private $maskedQuoteIdToQuoteId;
 
     /**
-     * @param ShippingAddressManagementInterface $shippingAddressManagement
-     * @param AddressRepositoryInterface $addressRepository
-     * @param Address $addressModel
+     * @var MultiShipping
+     */
+    private $multiShipping;
+
+    /**
+     * @var SingleShipping
+     */
+    private $singleShipping;
+
+    /**
+     * @var ShippingAddressManagementInterface
+     */
+    private $shippingAddressManagement;
+
+    /**
      * @param DataObjectHelper $dataObjectHelper
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+     * @param MultiShipping $multiShipping
+     * @param SingleShipping $singleShipping
+     * @param ShippingAddressManagementInterface $shippingAddressManagement
      */
     public function __construct(
-        ShippingAddressManagementInterface $shippingAddressManagement,
-        AddressRepositoryInterface $addressRepository,
-        Address $addressModel,
         DataObjectHelper $dataObjectHelper,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
+        MultiShipping $multiShipping,
+        SingleShipping $singleShipping,
+        ShippingAddressManagementInterface  $shippingAddressManagement
     ) {
-        $this->shippingAddressManagement = $shippingAddressManagement;
-        $this->addressRepository = $addressRepository;
-        $this->addressModel = $addressModel;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
+        $this->multiShipping = $multiShipping;
+        $this->singleShipping = $singleShipping;
+        $this->shippingAddressManagement = $shippingAddressManagement;
     }
 
     /**
@@ -78,7 +79,7 @@ class SetShippingAddressesOnCart implements ResolverInterface
         $maskedCartId = $args['input']['cart_id'];
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
 
-        $customerAddressId = $args['input']['customer_address_id'] ?? 0;
+        $customerAddressId = $args['input']['customer_address_id'] ?? null;
         $address = $args['input']['address'] ?? null;
         $cartItems = $args['input']['cart_items'] ?? [];
 
@@ -86,19 +87,61 @@ class SetShippingAddressesOnCart implements ResolverInterface
             throw new GraphQlInputException(__('Query should contain either address id or address input.'));
         }
 
+        //TODO: how to determine whether is multi shipping or not
         if (!$cartItems) {
-            if($customerAddressId) {
-                $customerAddress = $this->addressRepository->getById($customerAddressId);
-                $shippingAddress = $this->addressModel->importCustomerAddressData($customerAddress);
-                $this->shippingAddressManagement->assign($cartId, $shippingAddress);
-            } else {
-                $shippingAddress = $this->addressModel->addData($address);
-                $this->shippingAddressManagement->assign($cartId, $shippingAddress);
-            }
+            //TODO: assign cart items
+            $this->singleShipping->setAddress($cartId, $customerAddressId, $address);
         } else {
-            //TODO: implement multi shipping address assign flow
+            $this->multiShipping->setAddress($cartId, $cartItems, $customerAddressId, $address);
         }
 
-        return [];
+        //TODO: implement Cart object in the separate resolver
+        $shippingAddress = $this->shippingAddressManagement->get($cartId);
+        return [
+            'cart' => [
+                'applied_coupon' => [
+                    'code' => ''
+                ],
+                'addresses' => [[
+                    'firstname' => $shippingAddress->getFirstname(),
+                    'lastname' => $shippingAddress->getLastname(),
+                    'company' => $shippingAddress->getCompany(),
+                    'street' => $shippingAddress->getStreet(),
+                    'city' => $shippingAddress->getCity(),
+                    'region' => [
+                        'code' => $shippingAddress->getRegionCode(),
+                        'label' => $shippingAddress->getRegion()
+                    ],
+                    'country' => [
+                        'code' => $shippingAddress->getCountryId(),
+                        'label' => ''
+                    ],
+                    'postcode' => $shippingAddress->getPostcode(),
+                    'telephone' => $shippingAddress->getTelephone(),
+                    'address_type' => 'SHIPPING',
+                    'selected_shipping_method' => [
+                        'code' => 'test',
+                        'label' => 'test',
+                        'free_shipping' => 'test',
+                        'error_message' => 'test'
+                    ],
+                    'available_shipping_methods' => [[
+                        'code' => 'test',
+                        'label' => 'test',
+                        'free_shipping' => 'test',
+                        'error_message' => 'test'
+                    ]],
+                    'items_weight' => [0],
+                    'customer_notes' => $shippingAddress->getLastname(),
+                    'cart_items' => [[
+                        'cart_item_id' => '',
+                            'quantity' => 0
+                    ]],
+                    'applied_coupon' => [
+                        'code' => ''
+                    ]
+                ]]
+            ]
+        ];
     }
 }
