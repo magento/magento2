@@ -12,4 +12,7 @@
     <type name="Magento\Sales\Model\ResourceModel\Order">
         <plugin name="authorization" type="Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization" />
     </type>
+    <type name="Magento\Sales\Api\ShipmentRepositoryInterface">
+        <plugin name="convert_blob_to_string" type="Magento\Sales\Plugin\ShippingLabelConverter" />
+    </type>
 </config>

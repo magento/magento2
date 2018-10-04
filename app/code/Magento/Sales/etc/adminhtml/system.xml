@@ -401,7 +401,7 @@
             </group>
         </section>
         <section id="rss">
-            <group id="order" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Order</label>
                 <field id="status" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Customer Order Status Notification</label>
@@ -410,7 +410,7 @@
             </group>
         </section>
         <section id="dev">
-            <group id="grid" type="text" sortOrder="131" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="grid" translate="label" type="text" sortOrder="131" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Grid Settings</label>
                 <field id="async_indexing" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Asynchronous indexing</label>

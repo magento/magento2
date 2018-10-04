@@ -69,6 +69,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get field name.
+     *
      * @param string $attributeCode
      * @param array $context
      * @return string
@@ -107,6 +109,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get all attributes types.
+     *
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -135,7 +139,7 @@ class ProductFieldMapper implements FieldMapperInterface
                 if ($attribute->getIsFilterable() || $attribute->getIsFilterableInSearch()) {
                     $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
                 } else if ($allAttributes[$attributeCode]['type'] === FieldType::ES_DATA_TYPE_TEXT) {
-                    $allAttributes[$attributeCode]['index'] = 'no';
+                    $allAttributes[$attributeCode]['index'] = false;
                 }
             } else if ($attributeCode == "category_ids") {
                 $allAttributes[$attributeCode] = [
@@ -159,6 +163,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Is attribute used in advanced search.
+     *
      * @param Object $attribute
      * @return bool
      */
@@ -170,6 +176,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get refined field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode
@@ -179,6 +187,7 @@ class ProductFieldMapper implements FieldMapperInterface
     {
         switch ($frontendInput) {
             case 'select':
+            case 'multiselect':
                 return in_array($fieldType, ['text','integer'], true) ? $attributeCode . '_value' : $attributeCode;
             case 'boolean':
                 return $fieldType === 'integer' ? $attributeCode . '_value' : $attributeCode;
@@ -188,6 +197,8 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
+     * Get query type field name.
+     *
      * @param string $frontendInput
      * @param string $fieldType
      * @param string $attributeCode

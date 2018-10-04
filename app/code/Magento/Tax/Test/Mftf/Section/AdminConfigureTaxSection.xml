@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigureTaxSection">
         <!-- on page /admin/admin/system_config/edit/section/tax/ -->
         <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
@@ -35,6 +35,7 @@
         <element name="taxDisplayProductPricesDisabled" type="select" selector="#tax_display_type[disabled='disabled']"/>
         <element name="taxDisplayProductPricesInherit" type="checkbox" selector="#tax_display_type_inherit"/>
 
+        <element name="taxSalesDisplay" type="block" selector=".config.admin__collapsible-block#tax_sales_display" timeout="30"/>
         <element name="shoppingCartDisplay" type="block" selector="#tax_cart_display-head" timeout="30"/>
         <element name="systemValueIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal input[type='checkbox']"/>
         <element name="dropdownIncludeTaxTotalCart" type="checkbox" selector="#row_tax_cart_display_grandtotal select"/>
