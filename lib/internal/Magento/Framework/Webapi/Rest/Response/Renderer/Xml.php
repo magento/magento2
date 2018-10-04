@@ -111,7 +111,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
             /** Without the following transformation boolean values are rendered incorrectly */
             $value = $value ? 'true' : 'false';
         }
-        return $value;
+        return (string) $value;
     }
 
     /**
