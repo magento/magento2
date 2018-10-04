@@ -224,7 +224,7 @@ define([
          */
         build: function (parent, node, name) {
             var defaults    = parent && parent.childDefaults || {},
-                children = this.filterDisabledChildren(node.children),
+                children    = this.filterDisabledChildren(node.children),
                 type        = getNodeType(parent, node),
                 dataScope   = getDataScope(parent, node),
                 component,
