@@ -360,7 +360,11 @@ define([
                 index = 1,
                 allowedProducts,
                 i,
-                j;
+                j,
+                basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
+                optionFinalPrice,
+                optionPriceDiff,
+                optionPrices = this.options.spConfig.optionPrices;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -374,6 +378,7 @@ define([
             if (options) {
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
+                    optionPriceDiff = 0;
 
                     /* eslint-disable max-depth */
                     if (prevConfig) {
@@ -387,6 +392,20 @@ define([
                         }
                     } else {
                         allowedProducts = options[i].products.slice(0);
+
+                        if (typeof allowedProducts[0] !== 'undefined' &&
+                            typeof optionPrices[allowedProducts[0]] !== 'undefined') {
+
+                            optionFinalPrice = parseFloat(optionPrices[allowedProducts[0]].finalPrice.amount);
+                            optionPriceDiff = optionFinalPrice - basePrice;
+
+                            if (optionPriceDiff !== 0) {
+                                options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
+                                    optionPriceDiff,
+                                    this.options.priceFormat,
+                                    true);
+                            }
+                        }
                     }
 
                     if (allowedProducts.length > 0) {
@@ -394,7 +413,7 @@ define([
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
                         if (typeof options[i].price !== 'undefined') {
-                            element.options[index].setAttribute('price', options[i].prices);
+                            element.options[index].setAttribute('price', options[i].price);
                         }
 
                         element.options[index].config = options[i];

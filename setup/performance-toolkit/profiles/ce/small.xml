@@ -23,9 +23,6 @@
                     <attribute>
                         <options>8</options>
                     </attribute>
-                    <attribute>
-                        <options>5</options>
-                    </attribute>
                 </attributes>
                 <sku>Configurable Product %s</sku>
                 <products>16</products>
@@ -44,8 +41,8 @@
         <cart_price_rules_floor>2</cart_price_rules_floor>
 
         <product_attribute_sets>10</product_attribute_sets> <!-- Number of product attribute sets -->
-        <product_attribute_sets_attributes>10</product_attribute_sets_attributes> <!-- Number of attributes per set -->
-        <product_attribute_sets_attributes_values>2</product_attribute_sets_attributes_values> <!-- Number of values per attribute -->
+        <product_attribute_sets_attributes>5</product_attribute_sets_attributes> <!-- Number of attributes per set -->
+        <product_attribute_sets_attributes_values>5</product_attribute_sets_attributes_values> <!-- Number of values per attribute -->
 
         <order_quotes_enable>true</order_quotes_enable>
         <order_simple_product_count_from>2</order_simple_product_count_from>
