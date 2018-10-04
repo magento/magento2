@@ -50,7 +50,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFields(array $productIds, $storeId)
     {
