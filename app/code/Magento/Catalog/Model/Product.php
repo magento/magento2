@@ -498,9 +498,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get a list of custom attribute codes that belongs to product attribute set
+     * Get a list of custom attribute codes that belongs to product attribute set.
      *
-     * If attribute set not specified for product will return all product attribute codes.
+     * If attribute set not specified for product will return all product attribute codes
      *
      * @return string[]
      */
@@ -527,9 +527,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return $this->getData(self::STORE_ID);
+            return (int)$this->getData(self::STORE_ID);
         }
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -587,6 +587,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get visibility status
      *
+     * @codeCoverageIgnoreStart
      * @see \Magento\Catalog\Model\Product\Visibility
      *
      * @return int
@@ -663,7 +664,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve type instance of the product
+     * Retrieve type instance of the product.
      *
      * Type instance implements product type depended logic and is a singleton shared by all products of the same type.
      *
@@ -827,9 +828,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve product attributes. If $groupId is null - retrieve all product attributes
+     * Retrieve product attributes
      *
-     * @param int|null $groupId Retrieve attributes of the specified group
+     * If $groupId is null - retrieve all product attributes
+     *
+     * @param int $groupId Retrieve attributes of the specified group
      * @param bool $skipSuper Not used
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -920,7 +923,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Check/set if options can be affected when saving product. If value specified, it will be set.
+     * Check/set if options can be affected when saving product
+     *
+     * If value specified, it will be set.
      *
      * @param   bool|null $value
      * @return  bool
@@ -980,7 +985,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return (float)$this->getData('qty');
     }
 
     /**
@@ -1039,7 +1044,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Clear cache related with product and protect delete from not admin. Register indexing event before delete product
+     * Clear cache related with product and protect delete from not admin
+     *
+     * Register indexing event before delete product
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1549,13 +1556,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Add image to media gallery
      *
-     * @param string $file File path of image in file system
-     * @param null|string|array $mediaAttribute Code of attribute with type 'media_image'
-     *                                          Leave blank if image should be only in gallery
-     * @param bool $move If true, it will move source file
-     * @param bool $exclude Mark image as disabled in product page view
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param string $file file path of image in file system
+     * @param string|array $mediaAttribute code of attribute with type 'media_image',
+     * leave blank if image should be only in gallery
+     * @param bool $move if true, it will move source file
+     * @param bool $exclude mark image as disabled in product page view
+     * @return \Magento\Catalog\Model\Product
      */
     public function addImageToMediaGallery($file, $mediaAttribute = null, $move = false, $exclude = true)
     {
@@ -1998,7 +2004,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set Options
+     * Set product options
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
@@ -2555,7 +2561,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get Extension Attributes
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
      */
@@ -2565,7 +2571,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set Extension Attributes
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
@@ -2598,7 +2604,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get Media Gallery
+     * Returns media gallery entries
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -2615,7 +2621,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set Media Gallery
+     * Set media gallery entries
      *
      * @param ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
@@ -2660,7 +2666,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get Product Link Repository
+     * Returns link repository instance
      *
      * @return ProductLinkRepositoryInterface
      */
@@ -2674,7 +2680,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get Media Gallery Processor
+     * Returns media gallery processor instance
      *
      * @return Product\Gallery\Processor
      */
