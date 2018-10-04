@@ -41,7 +41,7 @@
                     table="product_alert_price" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" name="PRODUCT_ALERT_PRICE_STORE_ID_STORE_STORE_ID"
-                    table="product_alert_stock" column="website_id" referenceTable="store"
+                    table="product_alert_stock" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
         <index name="PRODUCT_ALERT_PRICE_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
@@ -82,7 +82,7 @@
                     table="product_alert_stock" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" name="PRODUCT_ALERT_STOCK_STORE_ID_STORE_STORE_ID"
-                    table="product_alert_stock" column="website_id" referenceTable="store"
+                    table="product_alert_stock" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" name="PRODUCT_ALERT_STOCK_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
                     table="product_alert_stock" column="customer_id" referenceTable="customer_entity"
