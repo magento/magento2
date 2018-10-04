@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/grid/columns/column'
-], function (Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'underscore'
+], function (Column, _) {
     'use strict';
 
     return Column.extend({
