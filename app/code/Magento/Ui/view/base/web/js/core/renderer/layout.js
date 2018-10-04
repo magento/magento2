@@ -301,9 +301,11 @@ define([
          * @returns {*}
          */
         filterDisabledChildren: function (children) {
+            var cIds;
+            
             //cleanup children config.componentDisabled = true
             if (children && typeof children === 'object') {
-                var cIds = Object.keys(children);
+                cIds = Object.keys(children);
                 if (cIds) {
                     _.each(cIds, function (cId) {
                         if (typeof children[cId] === 'object' &&
