@@ -39,13 +39,23 @@ $debug = function ($val) {
 
 if (php_sapi_name() === 'cli-server') {
     $debug("URI: {$_SERVER["REQUEST_URI"]}");
+    if($_SERVER["REQUEST_URI"] == '/'|| strpos($_SERVER["REQUEST_URI"],'/admin') !==false){
+        return false;
+    }
+    
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.
     }
 
     $path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
     $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
-    $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
+    $route = parse_url(substr($_SERVER["REQUEST_URI"], 1));
+    if(isset($route["path"])){
+       $route = $route["path"];
+    }else{
+        return false;
+    }
+    
     $pathinfo = pathinfo($route);
     $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 
