@@ -36,7 +36,17 @@ define([
          * @param position
          */
         shiftNextPagesPositions: function (position) {
-            console.log("todo: shifting positions to right on next pages related data");
+            var recordData = this.recordData();
+            if (~~this.currentPage() === this.pages()) {
+                return false;
+            } else {
+                var startIndex = ~~this.currentPage() * this.pageSize,
+                    offset = position - startIndex + 1;
+                for (var index = startIndex; index < recordData.length; index++) {
+                    recordData[index].position = index + offset;
+                }
+                this.recordData(recordData);
+            }
         },
 
 
@@ -47,30 +57,36 @@ define([
          * @param event
          */
         updateGridPosition: function (data, event) {
-            var inputValue = ~~event.target.value,
+            var inputValue = parseInt(event.target.value),
                 recordData = this.recordData(),
                 record,
+                previousValue,
                 updatedRecord;
 
             record = this.elems().find(function (obj) {
                 return obj.dataScope === data.parentScope
-            }).data();
+            });
 
-            if (inputValue === ~~record.positionCalculated) {
+            previousValue = this.getCalculatedPosition(record);
+
+            if (isNaN(inputValue) || inputValue < 0 || inputValue === previousValue) {
                 return false;
             }
 
             this.elems([]);
 
-            updatedRecord = this.getUpdatedRecordIndex(recordData, record.id);
+            updatedRecord = this.getUpdatedRecordIndex(recordData, record.data().id);
 
             if (inputValue >= this.recordData().size() - 1) {
                 recordData[updatedRecord].position = this.getGlobalMaxPosition() + 1;
             } else {
-                recordData[updatedRecord].position = inputValue;
                 recordData.forEach(function (value, index) {
-                    if (~~value.id !== ~~record.id) {
-                        recordData[index].position = (index !== inputValue) ? index : index + 1;
+                    if (~~value.id === ~~record.data().id) {
+                        recordData[index].position = inputValue;
+                    } else if (inputValue > previousValue && index <= inputValue) {
+                        recordData[index].position = index - 1;
+                    } else if (inputValue < previousValue && index >= inputValue) {
+                        recordData[index].position = index + 1;
                     }
                 });
             }
@@ -203,7 +219,5 @@ define([
                 return ~~r.position
             }));
         }
-
-
     });
 });

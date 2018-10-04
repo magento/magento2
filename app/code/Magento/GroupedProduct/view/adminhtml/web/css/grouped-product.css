@@ -67,9 +67,8 @@
     text-overflow: ellipsis;
 }
 
-
 .position {
-    width:90px;
+    width: 100px;
 }
 
 .icon-rearrange-position > span {
@@ -91,6 +90,11 @@
     speak: none;
 }
 
+.position > * {
+    float: left;
+    margin: 3px;
+}
+
 .position-widget-input {
     text-align: center;
     width: 40px;
@@ -102,4 +106,9 @@
 
 .icon-backward:before {
     content: '\e619';
+}
+
+.icon-rearrange-position, .icon-rearrange-position:hover   {
+    color: #d9d9d9;
+    text-decoration: none;
 }
