@@ -151,6 +151,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $address->setCustomerAddressId(null);
         }
 
+        if (!$billingAddress->getCustomerAddressId()) {
+            $billingAddress->setCustomerAddressId(null);
+        }
+
         if (!$address->getCountryId()) {
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
