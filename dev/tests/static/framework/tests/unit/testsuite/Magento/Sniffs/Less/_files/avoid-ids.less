@@ -1,0 +1,34 @@
+#foo[bar],
+#foo[bar=bash],
+#foo[bar~=bash],
+#foo[bar$=bash],
+#foo[bar*=bash],
+#foo[bar|=bash],
+#foo[bar='bash'],
+#foo:hover,
+#foo:nth-last-of-type(n),
+#foo::before,
+#foo + div,
+#foo > div,
+#foo ~ div,
+#foo\3Abar ~ div,
+#foo\:bar ~ div,
+#foo.bar .baz,
+div#foo {
+    blah: 'abc';
+}
+
+.my #foo,
+#foo .blah,
+.my #foo .blah {
+    some: 'stuff';
+}
+.blah {
+    #bar .baz();
+    .foo #bar .baz();
+    #bar .baz();
+
+    #bar .baz;
+    .foo #bar .baz;
+    #bar .baz;
+}
