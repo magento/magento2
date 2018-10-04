@@ -42,7 +42,6 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
         $this->orderManagement = $orderManagement ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Sales\Api\OrderManagementInterface::class
         );
-        $this->orderManagement = $orderManagement;
     }
 
     /**
