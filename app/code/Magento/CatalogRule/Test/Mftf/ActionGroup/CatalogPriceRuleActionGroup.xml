@@ -50,6 +50,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
 
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickToDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForElementVisible"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickToConfirm"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
