@@ -36,9 +36,16 @@ define([
             var
                 self = this,
                 progressTmpl = mageTemplate('[data-template="uploader"]'),
-                resizeConfig = {
-                    action: 'resize'
+                isResizeEnabled = this.options.isResizeEnabled,
+                resizeConfiguration = {
+                    action: 'resize',
+                    maxWidth: this.options.maxWidth,
+                    maxHeight: this.options.maxHeight
                 };
+
+            if (isResizeEnabled === 0) {
+                resizeConfiguration = {action: 'resize'};
+            }
 
             this.element.find('input[type=file]').fileupload({
                 dataType: 'json',
@@ -123,18 +130,13 @@ define([
                 stop: fileUploader.uploaderConfig.stop
             });
 
-            if (typeof this.options.isResizeEnabled !== 'undefined' && this.options.isResizeEnabled === true) {
-                resizeConfig.maxWidth = this.options.maxWidth;
-                resizeConfig.maxHeight = this.options.maxHeight;
-            }
-
             this.element.find('input[type=file]').fileupload('option', {
                 process: [{
                     action: 'load',
                     fileTypes: /^image\/(gif|jpeg|png)$/,
                     maxFileSize: this.options.maxFileSize
                 },
-                resizeConfig,
+                resizeConfiguration,
                 {
                     action: 'save'
                 }]

@@ -130,11 +130,11 @@ class Uploader extends \Magento\Backend\Block\Widget
     /**
      * Get image resize configuration
      *
-     * @return bool
+     * @return int
      */
-    public function getIsResizeEnabled(): bool
+    public function getIsResizeEnabled(): int
     {
-        return $this->imageUploadConfig->isResizeEnabled();
+        return (int)$this->imageUploadConfig->isResizeEnabled();
     }
 
     /**
