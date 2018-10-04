@@ -1386,10 +1386,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Get Scope Type Name
-     *
-     * @return string
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeTypeName()
     {
@@ -1397,9 +1394,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\Store\Api\Data\StoreExtensionInterface|null
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {

@@ -82,9 +82,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get data
-     *
-     * @return mixed
+     * @inheritdoc
      */
     public function getData()
     {
@@ -97,10 +95,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Meta
-     *
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function getMeta()
     {
@@ -112,9 +107,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Data Provider name
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
@@ -122,9 +115,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get config data
-     *
-     * @return mixed
+     * @inheritdoc
      */
     public function getConfigData()
     {
@@ -132,11 +123,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Set config data
-     *
-     * @param mixed $config
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function setConfigData($config)
     {
@@ -146,13 +133,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Field Meta Info
-     *
-     * @param string $fieldSetName
-     * @param string $fieldName
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
@@ -160,12 +141,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Field Set Meta Info
-     *
-     * @param string $fieldSetName
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
@@ -173,12 +149,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Fields Meta Info
-     *
-     * @param string $fieldSetName
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
@@ -186,9 +157,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Primary Field Name
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getPrimaryFieldName()
     {
@@ -196,9 +165,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Request Field Name
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getRequestFieldName()
     {
@@ -206,47 +173,28 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Add Filter
-     *
-     * @param \Magento\Framework\Api\Filter $filter
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
     }
 
     /**
-     * Add Order
-     *
-     * @param string $field
-     * @param string $direction
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function addOrder($field, $direction)
     {
     }
 
     /**
-     * Set Limit
-     *
-     * @param int $offset
-     * @param int $size
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function setLimit($offset, $size)
     {
     }
 
     /**
-     * Get Search Criteria
-     *
-     * @return SearchCriteriaInterface
+     * @inheritdoc
      */
     public function getSearchCriteria()
     {
@@ -254,9 +202,7 @@ class NotificationDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get Search Result
-     *
-     * @return SearchResultInterface
+     * @inheritdoc
      */
     public function getSearchResult()
     {

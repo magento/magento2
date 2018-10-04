@@ -942,11 +942,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Gets an array of child transactions for the transaction.
-     *
-     * @param string $createdAt
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -954,11 +950,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Sets the parent ID for the transaction.
-     *
-     * @param int $id
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -966,11 +958,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Sets the order ID for the transaction.
-     *
-     * @param int $id
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -978,11 +966,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Sets the payment ID for the transaction.
-     *
-     * @param int $id
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setPaymentId($id)
     {
@@ -990,11 +974,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Sets the value of the is-closed flag for the transaction.
-     *
-     * @param int $isClosed
-     *
-     * @return TransactionInterface|Transaction
+     * @inheritdoc
      */
     public function setIsClosed($isClosed)
     {
@@ -1002,9 +982,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -1012,10 +990,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes)
     {
