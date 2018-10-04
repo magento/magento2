@@ -48,13 +48,13 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param string $idsLimit
-     * @param int $batchSize [optional]
+     * @param int $batchSize defines how many items can be processed by one request
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         $idsLimit,
-        $batchSize = 5000
+        int $batchSize = 5000
     ) {
         $this->metadataPool = $metadataPool;
         $this->collectionFactory = $collectionFactory;
