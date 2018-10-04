@@ -505,7 +505,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get a list of custom attribute codes that belongs to product attribute set.
      *
-     * If attribute set not specified for product will return all product attribute codes.
+     * If attribute set not specified for product will return all product attribute codes
      *
      * @return string[]
      */
@@ -532,9 +532,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData(self::STORE_ID)) {
-            return $this->getData(self::STORE_ID);
+            return (int)$this->getData(self::STORE_ID);
         }
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -590,10 +590,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get visibility status.
+     * Get visibility status
      *
-     * @see \Magento\Catalog\Model\Product\Visibility
      * @codeCoverageIgnoreStart
+     * @see \Magento\Catalog\Model\Product\Visibility
      *
      * @return int
      */
@@ -829,12 +829,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve product attributes.
+     * Retrieve product attributes
      *
-     * If $groupId is null - retrieve all product attributes.
+     * If $groupId is null - retrieve all product attributes
      *
-     * @param int $groupId Retrieve attributes of the specified group.
-     * @param bool $skipSuper Not used.
+     * @param int $groupId Retrieve attributes of the specified group
+     * @param bool $skipSuper Not used
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -924,7 +924,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Check/set if options can be affected when saving product.
+     * Check/set if options can be affected when saving product
      *
      * If value specified, it will be set.
      *
@@ -986,7 +986,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return (float)$this->getData('qty');
     }
 
     /**
@@ -1045,9 +1045,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Clear cache related with product and protect delete from not admin.
+     * Clear cache related with product and protect delete from not admin
      *
-     * Register indexing event before delete product.
+     * Register indexing event before delete product
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -1554,12 +1554,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Add image to media gallery.
+     * Add image to media gallery
      *
-     * @param string $file Path in file system.
-     * @param string|array $mediaAttribute Attribute code. Leave blank if image should be only in gallery.
-     * @param boolean $move If true, it will move source file.
-     * @param boolean $exclude Mark image as disabled in product page view.
+     * @param string $file file path of image in file system
+     * @param string|array $mediaAttribute code of attribute with type 'media_image',
+     * leave blank if image should be only in gallery
+     * @param bool $move if true, it will move source file
+     * @param bool $exclude mark image as disabled in product page view
      * @return \Magento\Catalog\Model\Product
      */
     public function addImageToMediaGallery($file, $mediaAttribute = null, $move = false, $exclude = true)
@@ -1720,9 +1721,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Check is a virtual product.
+     * Check is a virtual product
      *
-     * Data helper wrapper.
+     * Data helper wrapper
      *
      * @return bool
      */
@@ -1812,11 +1813,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Save current attribute with code and assign new value.
+     * Save current attribute with code $code and assign new value
      *
-     * @param string $code
-     * @param mixed $value
-     * @param int $store Store ID.
+     * @param string $code Attribute code
+     * @param mixed $value New attribute value
+     * @param int $store Store ID
      * @return void
      */
     public function addAttributeUpdate($code, $value, $store)
@@ -1885,7 +1886,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Custom function for other modules.
+     * Custom function for other modules
      *
      * @return string
      */
@@ -2005,9 +2006,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @inheritdoc
-     *
-     * Set product custom options to data array.
+     * Set product options
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
@@ -2032,9 +2031,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Add custom option information to product
      *
-     * @param string $code
-     * @param mixed $value
-     * @param int|Product $product
+     * @param string $code Option code
+     * @param mixed $value Value of the option
+     * @param int|Product $product Product ID
      * @return $this
      */
     public function addCustomOption($code, $value, $product = null)
@@ -2230,7 +2229,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Prepare product custom options.
      *
-     * To be sure that all product custom options does not has ID and has product instance.
+     * To be sure that all product custom options does not has ID and has product instance
      *
      * @return \Magento\Catalog\Model\Product
      */
@@ -2566,8 +2565,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @inheritdoc
      *
-     * Returns extension attributes from data array.
-     *
      * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
      */
     public function getExtensionAttributes()
@@ -2577,8 +2574,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @inheritdoc
-     *
-     * Set extension attributes to data array.
      *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
@@ -2591,7 +2586,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * Converts to media gallery entry.
+     * Convert array to media gallery interface
      *
      * @param array $mediaGallery
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
@@ -2610,9 +2605,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @inheritdoc
-     *
-     * Returns media gallery images.
+     * Returns media gallery entries
      *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
      */
@@ -2628,9 +2621,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @inheritdoc
-     *
-     * Set media gallery images.
+     * Set media gallery entries
      *
      * @param ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
@@ -2674,7 +2665,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Returns product link repository.
+     * Returns link repository instance
      *
      * @return ProductLinkRepositoryInterface
      */
@@ -2688,7 +2679,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Returns media gallery processor.
+     * Returns media gallery processor instance
      *
      * @return Product\Gallery\Processor
      */
