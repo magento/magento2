@@ -48,7 +48,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param string $idsLimit
-     * @param int $batchSize defines how many items can be processed by one request
+     * @param int $batchSize defines how many items can be processed by one iteration
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -86,7 +86,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             $pages = $collection->getLastPageNumber();
             for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
                 $collection->setCurPage($currentPage);
-                foreach ($collection->getItems() as $item) {
+                foreach ($collection->getIterator() as $item) {
                     $sku = strtolower(trim($item->getSku()));
                     $itemIdentifier = $item->getData($linkField);
                     $this->idsBySku[$sku][$itemIdentifier] = $item->getTypeId();
