@@ -142,8 +142,7 @@ class StockDataProvider extends DataProvider
             } else {
                 $data = [];
             }
-        }
-        if ('inventory_stock_listing_data_stock' === $this->name) {
+        } elseif ('inventory_stock_listing_data_stock' === $this->name) {
             if ($data['totalRecords'] > 0) {
                 foreach ($data['items'] as $index => $stock) {
                     $data['items'][$index]['assigned_sources'] = $this->getAssignedSourcesById($stock['stock_id']);
@@ -220,7 +219,7 @@ class StockDataProvider extends DataProvider
         $sourcesData = [];
         foreach ($sources as $source) {
             $sourcesData[] = [
-                'source_code' => $source->getSourceCode(),
+                'sourceCode' => $source->getSourceCode(),
                 'name' => $source->getName()
             ];
         }

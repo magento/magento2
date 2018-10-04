@@ -21,7 +21,7 @@ define([
 
             _.each(record[this.index], function (source) {
                 result.push({
-                    source_code: source.source_code,
+                    sourceCode: source.sourceCode,
                     name: source.name
                 });
             });
