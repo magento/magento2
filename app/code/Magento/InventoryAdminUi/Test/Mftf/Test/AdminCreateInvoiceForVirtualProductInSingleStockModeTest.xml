@@ -63,9 +63,9 @@
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector=".cart-item-qty" userInput="50" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector=".update-cart-item" stepKey="updateQtyInMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad4"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
