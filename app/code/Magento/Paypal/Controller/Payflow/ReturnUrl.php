@@ -68,6 +68,7 @@ class ReturnUrl extends Payflow implements CsrfAwareActionInterface
             if ($order->getIncrementId()) {
                 if ($this->checkOrderState($order)) {
                     $redirectBlock->setData('goto_success_page', true);
+                    $this->_eventManager->dispatch('paypal_checkout_success', ['order' => $order]);
                 } else {
                     if ($this->checkPaymentMethod($order)) {
                         $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
