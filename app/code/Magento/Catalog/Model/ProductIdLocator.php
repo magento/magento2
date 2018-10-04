@@ -38,23 +38,28 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $idsBySku = [];
 
     /**
-     * Page size to iterate collection
+     * Batch size to iterate collection
+     *
+     * @var int
      */
-    private $pageSize = 10000;
+    private $batchSize;
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
-     * @param string $limitIdsBySkuValues
+     * @param string $idsLimit
+     * @param int $batchSize [optional]
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
-        $idsLimit
+        $idsLimit,
+        $batchSize = 5000
     ) {
         $this->metadataPool = $metadataPool;
         $this->collectionFactory = $collectionFactory;
         $this->idsLimit = (int)$idsLimit;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -77,12 +82,14 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
 
-            $collection->setPageSize($this->pageSize);
+            $collection->setPageSize($this->batchSize);
             $pages = $collection->getLastPageNumber();
             for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
                 $collection->setCurPage($currentPage);
                 foreach ($collection->getItems() as $item) {
-                    $this->idsBySku[strtolower(trim($item->getSku()))][$item->getData($linkField)] = $item->getTypeId();
+                    $sku = strtolower(trim($item->getSku()));
+                    $itemIdentifier = $item->getData($linkField);
+                    $this->idsBySku[$sku][$itemIdentifier] = $item->getTypeId();
                 }
                 $collection->clear();
             }
