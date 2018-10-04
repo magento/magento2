@@ -7,20 +7,23 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminOrderCreatedForGuestCustomerWithConfigurableProductWithDropDownAttributeViaTheAdminTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Add Order"/>
             <title value="Create an Order for a Guest Customer with a Configurable Product with Drop Down Attributes via the Admin."/>
             <description value="You should be able to place an Order using a Configurable Product with Drop Down Attributes that is assigned to a Source with a Stock."/>
-            <testCaseId value=""/>
+            <testCaseId value="1313"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
-        
+
         <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
@@ -108,7 +111,8 @@
         <waitForPageLoad stepKey="waitUntilPageIsReady" />
 
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
-        <conditionalClick selector="button[data-index='confirm_button']" dependentSelector="button[data-index='confirm_button']" visible="true" stepKey="clickOnConfirm1"/>
+
+        <conditionalClick selector="button[data-index='confirm_button']" dependentSelector="button[data-index='confirm_button']" visible="true" stepKey="clickOnConfirmButton1"/>
         <waitForLoadingMaskToDisappear stepKey="waitUntilMaskDisappear1" />
         <waitForPageLoad stepKey="waitUntilPageIsReady1" />
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage1"/>
@@ -118,47 +122,49 @@
 
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickOnCreateNewOrder1"/>
 
-        <click selector="button[title='Create New Customer']" stepKey="clickOnCreateNewCustomer1"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <fillField selector="#sales_order_create_customer_grid_filter_email" userInput="$$createCustomer1.customer[email]$$" stepKey="enterTheEmailAddress1"/>
+        <click selector=".admin__filter-actions button[title='Search']" stepKey="clickOnSearch1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+
+        <click selector="#sales_order_create_customer_grid_table tbody tr" stepKey="clickOnTheFirstRow1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
 
-        <fillField selector="#email" userInput="{{MsiCustomer1.email}}" stepKey="fillEmailAddress1"/>
-
         <click selector="#add_products" stepKey="clickOnAddProductsButton1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{colorProductAttribute2.name}}" stepKey="fillProductSkuField1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad8"/>
-        <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad9"/>
+        <click selector="#order-search button[title='Search']" stepKey="clickOnSearch2"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad10"/>
 
         <click selector="#order-search tbody tr .col-sku" stepKey="clickOnSku1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad10"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad11"/>
 
         <fillField selector="#order-search tr .qty" userInput="5" stepKey="fillProductQuantity2"/>
         <click selector="#order-search .action-add" stepKey="clickOnAddSelectedProductsToOrder1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad11"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad12"/>
 
         <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
-            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="customer" value="$$createCustomer1$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
 
         <click selector=".admin__field-shipping-same-as-billing label" stepKey="clickOnSameAsBillingAddress1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad12"/>
+        <waitForPageLoad stepKey="waitForPageLoad13"/>
 
         <click selector="#order-shipping-method-summary a" stepKey="clickOnGetShippingMethodsAndRates1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad13"/>
+        <waitForPageLoad stepKey="waitForPageLoad14"/>
 
         <click selector=".admin__order-shipment-methods-options-list li label" stepKey="clickOnFixedShippingRate1"/>
-        <waitForPageLoad time="10" stepKey="waitForPageLoad14"/>
+        <waitForPageLoad stepKey="waitForPageLoad15"/>
 
         <click selector=".order-totals-actions .save" stepKey="clickOnSubmitOrder1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+        <waitForPageLoad stepKey="waitForPageLoad16"/>
 
         <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>
@@ -166,7 +172,7 @@
         <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
 
         <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation">
-            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="customer" value="$$createCustomer1$$"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
@@ -175,20 +181,20 @@
         <see selector=".edit-order-table .qty-table" userInput="Ordered 5" stepKey="seeQuantity1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad16"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad17"/>
 
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
 
         <fillField userInput="$grabTheOrderId1" selector="{{OrdersGridSection.search}}" stepKey="fillCodeField2"/>
         <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
-        <waitForPageLoad time="5" stepKey="waitForPageLoad17"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad18"/>
 
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.firstname}}" stepKey="seeFirstName1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.lastname}}" stepKey="seeLastName1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad18"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults3">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
