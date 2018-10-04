@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Product entity resource model
@@ -90,6 +91,11 @@ class Product extends AbstractResource
     private $tableMaintainer;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -101,6 +107,7 @@ class Product extends AbstractResource
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
      * @param TableMaintainer|null $tableMaintainer
+     * @param Visibility|null $productVisibility
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +122,8 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableMaintainer $tableMaintainer = null
+        TableMaintainer $tableMaintainer = null,
+        Visibility $productVisibility = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -131,6 +139,7 @@ class Product extends AbstractResource
         );
         $this->connectionName  = 'catalog';
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -406,8 +415,8 @@ class Product extends AbstractResource
             'product_id = ? AND is_parent = 1',
             $entityId
         )->where(
-            'visibility != ?',
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+            'visibility NOT IN (?)',
+            $this->productVisibility->getNotVisibleInSiteIds()
         );
     }
 

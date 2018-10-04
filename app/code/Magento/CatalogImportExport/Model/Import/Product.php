@@ -740,6 +740,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productRepository;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -784,6 +789,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @param Visibility|null $productVisibility
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -831,7 +837,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         MediaGalleryProcessor $mediaProcessor = null,
         StockItemImporterInterface $stockItemImporter = null,
         DateTimeFactory $dateTimeFactory = null,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        Visibility $productVisibility = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -887,6 +894,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->productVisibility = $productVisibility ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Visibility::class);
     }
 
     /**
@@ -2548,10 +2557,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        $notVisibleOptionArray = [];
+        if (!empty($rowData[self::COL_VISIBILITY])) {
+            $visibilityOptionArray = $this->productVisibility->getOptionArray();
+            foreach ($this->productVisibility->getNotVisibleInSiteIds() as $notVisibleId) {
+                $notVisibleOptionArray[] = (string)$visibilityOptionArray[$notVisibleId];
+            }
+        }
+
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
-            || $rowData[self::COL_VISIBILITY]
-            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
+            || !in_array($rowData[self::COL_VISIBILITY], $notVisibleOptionArray));
     }
 
     /**

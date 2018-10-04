@@ -83,11 +83,21 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     }
 
     /**
+     * Retrieve not visible in site ids array
+     *
+     * @return string[]
+     */
+    public function getNotVisibleInSiteIds()
+    {
+        return [self::VISIBILITY_NOT_VISIBLE];
+    }
+
+    /**
      * Retrieve option array
      *
      * @return array
      */
-    public static function getOptionArray()
+    public function getOptionArray()
     {
         return [
             self::VISIBILITY_NOT_VISIBLE => __('Not Visible Individually'),
@@ -102,9 +112,9 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @return array
      */
-    public static function getAllOption()
+    public function getAllOption()
     {
-        $options = self::getOptionArray();
+        $options = $this->getOptionArray();
         array_unshift($options, ['value' => '', 'label' => '']);
         return $options;
     }
@@ -114,10 +124,10 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      *
      * @return array
      */
-    public static function getAllOptions()
+    public function getAllOptions()
     {
         $res = [];
-        foreach (self::getOptionArray() as $index => $value) {
+        foreach ($this->getOptionArray() as $index => $value) {
             $res[] = ['value' => $index, 'label' => $value];
         }
         return $res;
@@ -129,9 +139,9 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * @param int $optionId
      * @return string
      */
-    public static function getOptionText($optionId)
+    public function getOptionText($optionId)
     {
-        $options = self::getOptionArray();
+        $options = $this->getOptionArray();
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
 

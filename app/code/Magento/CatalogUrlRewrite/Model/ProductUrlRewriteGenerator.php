@@ -79,12 +79,18 @@ class ProductUrlRewriteGenerator
     private $productScopeRewriteGenerator;
 
     /**
+     * @var Visibility
+     */
+    private $productVisibility;
+
+    /**
      * @param \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Product\Visibility|null $productVisibility
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -92,7 +98,8 @@ class ProductUrlRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         ObjectRegistryFactory $objectRegistryFactory,
         StoreViewService $storeViewService,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Visibility $productVisibility = null
     ) {
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
@@ -100,6 +107,7 @@ class ProductUrlRewriteGenerator
         $this->objectRegistryFactory = $objectRegistryFactory;
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
+        $this->productVisibility = $productVisibility ?: ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
@@ -127,7 +135,7 @@ class ProductUrlRewriteGenerator
      */
     public function generate(Product $product, $rootCategoryId = null)
     {
-        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
+        if (in_array($product->getVisibility(), $this->productVisibility->getNotVisibleInSiteIds())) {
             return [];
         }
 
