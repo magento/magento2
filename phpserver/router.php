@@ -39,12 +39,18 @@ $debug = function ($val) {
 
 if (php_sapi_name() === 'cli-server') {
     $debug("URI: {$_SERVER["REQUEST_URI"]}");
-    $admin = isset($etcConfig['backend']['frontName']) ? $etcConfig['backend']['frontName'] : 'NO-CONFIG';
-
+   
+    $admin = 'NO-CONFIG';
+    if(file_exists($_SERVER['DOCUMENT_ROOT'].'/../app/etc/env.php')) {
+        $etcConfig = include $_SERVER['DOCUMENT_ROOT'].'/../app/etc/env.php';
+        $admin = isset($etcConfig['backend']['frontName']) ? $etcConfig['backend']['frontName'] : 'NO-CONFIG';
+    }
+    
      if($_SERVER["REQUEST_URI"] == '/'|| strpos($_SERVER["REQUEST_URI"],$admin) !==false)
-     {
+    {
         return false;
     }
+    
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.
     }
