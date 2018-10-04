@@ -16,9 +16,9 @@
         <data key="code" unique="suffix">website</data>
         <data key="sort_order">2</data>
     </entity>
-    <entity name="SecondCustomWebSite" type="website">
-        <data key="name" unique="suffix">website</data>
-        <data key="code" unique="suffix">website</data>
-        <data key="sort_order">3</data>
+    <entity name="SecondWebsite" type="website">
+        <data key="name" unique="suffix">Second Website </data>
+        <data key="code" unique="suffix">second_website_</data>
+        <data key="sort_order">10</data>
     </entity>
 </entities>

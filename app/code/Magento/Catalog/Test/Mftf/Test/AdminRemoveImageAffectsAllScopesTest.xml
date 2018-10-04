@@ -16,14 +16,14 @@
             <description value="Product image should be deleted from all scopes"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95344"/>
-            <group value="Catalog"/>
+            <group value="catalog"/>
         </annotations>
         <before>
-            <!--Create 2 websites (with stores, store views)-->
+            <!-- login to admin, create default category and product -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <createData entity="_defaultCategory" stepKey="category"/>
-            <createData entity="_defaultProduct" stepKey="product">
-                <requiredEntity createDataKey="category"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
 
             <!-- Create first custom website, store, store view -->
@@ -45,19 +45,19 @@
 
             <!-- Create second custom website, store, store view -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
-                <argument name="newWebsiteName" value="{{SecondCustomWebSite.name}}"/>
-                <argument name="websiteCode" value="{{SecondCustomWebSite.code}}"/>
+                <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+                <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
             </actionGroup>
 
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
-                <argument name="website" value="{{SecondCustomWebSite.name}}"/>
-                <argument name="storeGroupName" value="{{SecondCustomStoreGroup.name}}"/>
-                <argument name="storeGroupCode" value="{{SecondCustomStoreGroup.code}}"/>
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
             </actionGroup>
 
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
-                <argument name="storeGroup" value="SecondCustomStoreGroup"/>
-                <argument name="customStore" value="SecondCustomStore"/>
+                <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
         </before>
 
@@ -68,22 +68,27 @@
             </actionGroup>
 
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                <argument name="websiteName" value="{{SecondCustomWebSite.name}}"/>
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
             </actionGroup>
 
-            <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
-            <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteFirstProduct"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!--Create product-->
+        <!-- Open product index page, clear filters and change gridview to default view -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
 
         <!--Open created product-->
-        <click selector="{{AdminProductGridSection.productGridNameProduct($$product.name$$)}}" stepKey="createdProduct"/>
-        <waitForPageLoad stepKey="waitForOpenedCreatedProduct"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
 
         <!-- Add image to product -->
         <actionGroup ref="addProductImage" stepKey="addFirstImageForProduct">
@@ -96,18 +101,20 @@
         </actionGroup>
 
         <!--"Product in Websites": select both Websites-->
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite1">
+        <actionGroup ref="ProductSetWebsite" stepKey="productSetWebsite1">
             <argument name="website" value="CustomWebSite"/>
         </actionGroup>
-        <actionGroup ref="ProductSetWebsite" stepKey="ProductSetWebsite2">
-            <argument name="website" value="SecondCustomWebSite"/>
+        <actionGroup ref="ProductSetWebsite" stepKey="productSetWebsite2">
+            <argument name="website" value="SecondWebsite"/>
         </actionGroup>
 
-        <!--Go to "Catalog" -> "Products". Open created product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
-        <click selector="{{AdminProductGridSection.productGridNameProduct($$product.name$$)}}" stepKey="openCreatedProduct"/>
-        <waitForPageLoad stepKey="waitForCreatedProductOpened"/>
+        <!--Open created product-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct1">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductPage1">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
 
         <!--Delete Image 1-->
         <actionGroup ref="RemoveProductImage" stepKey="removeProductImage"/>
@@ -127,7 +134,7 @@
 
         <!--Switch to "Store view 2"-->
         <actionGroup ref="SwitchToTheNewStoreView" stepKey="selectSecondStoreView">
-            <argument name="storeViewName" value="SecondCustomStore"/>
+            <argument name="storeViewName" value="SecondStoreUnique"/>
         </actionGroup>
 
         <!-- Verify that Image 1 is deleted from the Second Store View list -->

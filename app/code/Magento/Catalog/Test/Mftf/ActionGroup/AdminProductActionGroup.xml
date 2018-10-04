@@ -96,7 +96,7 @@
         <arguments>
             <argument name="storeViewName" defaultValue="_defaultStore"/>
         </arguments>
-        <scrollTo selector="{{AdminProductContentSection.pageHeader}}" stepKey="scrollToUp"/>
+        <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToUp"/>
         <waitForElementVisible selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="waitForElementBecomeVisible"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName.name)}}" stepKey="chooseStoreView"/>
@@ -107,13 +107,13 @@
     <!--Set product to website-->
     <actionGroup name="ProductSetWebsite">
         <arguments>
-            <argument name="website" defaultValue="_defaultWebsite"/>
+            <argument name="website" defaultValue="DefaultWebsite"/>
         </arguments>
         <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ClickTpOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="SelectWebsite"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForPageLoad time='60' stepKey="waitForPageOpened1"/>
     </actionGroup>
 
