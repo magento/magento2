@@ -104,7 +104,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->baseTmpPath = 'base/tmp/';
         $this->basePath =  'base/real/';
         $this->allowedExtensions = ['.jpg'];
-        $this->allowedMimeTypes = ['image/jpg'];
+        $this->allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
         $this->imageUploader =
             new \Magento\Catalog\Model\ImageUploader(
