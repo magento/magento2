@@ -11,6 +11,9 @@ use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
 use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 
+/**
+ * Class for initialization downloadable info from request.
+ */
 class Downloadable
 {
     /**
@@ -92,6 +95,8 @@ class Downloadable
                     }
                 }
                 $extension->setDownloadableProductLinks($links);
+            } else {
+                $extension->setDownloadableProductLinks([]);
             }
             if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
                 $samples = [];
@@ -107,6 +112,8 @@ class Downloadable
                     }
                 }
                 $extension->setDownloadableProductSamples($samples);
+            } else {
+                $extension->setDownloadableProductSamples([]);
             }
             $product->setExtensionAttributes($extension);
             if ($product->getLinksPurchasedSeparately()) {
