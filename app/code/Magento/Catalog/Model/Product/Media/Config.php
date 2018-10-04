@@ -32,6 +32,11 @@ class Config implements ConfigInterface
     private $attributeHelper;
 
     /**
+     * @var string[]
+     */
+    private $mediaAttributeCodes;
+
+    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)
@@ -173,7 +178,10 @@ class Config implements ConfigInterface
      */
     public function getMediaAttributeCodes()
     {
-        return $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+        if (!isset($this->mediaAttributeCodes)) {
+            $this->mediaAttributeCodes = $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+        }
+        return $this->mediaAttributeCodes;
     }
 
     /**
