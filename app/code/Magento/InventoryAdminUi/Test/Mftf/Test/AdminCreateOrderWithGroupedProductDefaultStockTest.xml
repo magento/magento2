@@ -85,7 +85,7 @@
 
         <comment userInput="Add simple and virtual products to grouped product." stepKey="assignSimpleAndVirtualToGroupedProductComment"/>
         <scrollToTopOfPage stepKey="scroolToTopOfPage"/>
-        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection1"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddSimpleProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalTaAddSimpleProduct"/>
@@ -96,6 +96,7 @@
 
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSimpleProduct"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSimpleProduct"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection2"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroupToAddVirtualProduct"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModalToAddVirtualProduct"/>
