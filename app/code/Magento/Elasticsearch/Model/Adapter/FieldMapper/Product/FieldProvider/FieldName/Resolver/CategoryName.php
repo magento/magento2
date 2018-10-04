@@ -71,6 +71,6 @@ class CategoryName implements ResolverInterface
                 : $this->storeManager->getStore()->getRootCategoryId();
         }
 
-        return $id;
+        return (int)$id;
     }
 }
