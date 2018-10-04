@@ -107,6 +107,18 @@ class Categories implements ResolverInterface
             /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
             foreach ($this->collection as $item) {
                 if (in_array($item->getId(), $categoryIds)) {
+
+                    // Try to extract all requested fields from the loaded collection data
+                    $categories[$item->getId()] = $item->getData();
+                    $categories[$item->getId()]['id'] = $item->getId();
+                    $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
+                    $extractedFields = array_keys($categories[$item->getId()]);
+                    $foundFields = array_intersect($requestedFields, $extractedFields);
+                    if (count($requestedFields) === count($foundFields)) {
+                        continue;
+                    }
+
+                    // If not all requested fields were extracted from the collection, start more complex extraction
                     $categories[$item->getId()] = $this->dataObjectProcessor->buildOutputDataArray(
                         $item,
                         CategoryInterface::class
