@@ -74,7 +74,8 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         $this->accountManagement = $accountManagement;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
-        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ManagerInterface::class);
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ManagerInterface::class);
     }
 
     /**
