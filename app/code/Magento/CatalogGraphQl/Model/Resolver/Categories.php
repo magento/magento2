@@ -79,7 +79,7 @@ class Categories implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
@@ -114,6 +114,7 @@ class Categories implements ResolverInterface
                     $categories[$item->getId()] = $this->customAttributesFlattener
                         ->flatten($categories[$item->getId()]);
                     $categories[$item->getId()]['product_count'] = $item->getProductCount();
+                    $categories[$item->getId()]['model'] = $item;
                 }
             }
 

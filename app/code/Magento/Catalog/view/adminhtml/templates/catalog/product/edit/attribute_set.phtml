@@ -14,7 +14,7 @@
 <% } %>
 <ul data-mage-init='{"menu":[]}'>
     <% _.each(data.items, function(value) { %>
-    <li <%- data.optionData(value) %>><a href="#"><%- value.label %></a></li>
+    <li <%= data.optionData(value) %>><a href="#"><%- value.label %></a></li>
     <% }); %>
 </ul>
 <% if (!data.term && data.items.length && !data.allShown()) { %>
