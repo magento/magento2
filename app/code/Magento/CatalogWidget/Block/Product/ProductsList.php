@@ -397,7 +397,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Returns PriceCurrencyInterface instance
      *
      * @return PriceCurrencyInterface
-     *
      * @deprecated 100.2.0
      */
     private function getPriceCurrency()
