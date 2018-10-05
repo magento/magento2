@@ -10,17 +10,13 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Product\Image;
 
 /**
  * Builds parameters array used to build Image Asset
  */
 class ParamsBuilder
 {
-    /**
-     * @var int
-     */
-    private $defaultQuality = 80;
-
     /**
      * @var array
      */
@@ -100,11 +96,12 @@ class ParamsBuilder
         $transparency = $imageArguments['transparency'] ?? $this->defaultKeepTransparency;
         $background = $imageArguments['background'] ?? $this->defaultBackground;
         $angle = $imageArguments['angle'] ?? $this->defaultAngle;
+        $quality = (int) $this->scopeConfig->getValue(Image::XML_PATH_JPEG_QUALITY);
 
         return [
             'background' => (array) $background,
             'angle' => $angle,
-            'quality' => $this->defaultQuality,
+            'quality' => $quality,
             'keep_aspect_ratio' => (bool) $aspectRatio,
             'keep_frame' => (bool) $frame,
             'keep_transparency' => (bool) $transparency,

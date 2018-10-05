@@ -298,6 +298,7 @@ class Image extends AbstractHelper
      *
      * @param int $quality
      * @return $this
+     * @deprecated
      */
     public function setQuality($quality)
     {

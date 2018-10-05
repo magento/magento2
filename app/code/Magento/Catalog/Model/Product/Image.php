@@ -25,6 +25,11 @@ use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 class Image extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Config path for the jpeg image quality value
+     */
+    const XML_PATH_JPEG_QUALITY = 'system/upload_configuration/jpeg_quality';
+
+    /**
      * @var int
      */
     protected $_width;
@@ -38,8 +43,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
+     * @deprecated
      */
-    protected $_quality = 80;
+    protected $_quality = null;
 
     /**
      * @var bool
@@ -289,6 +295,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
+     * @deprecated
      */
     public function setQuality($quality)
     {
@@ -303,7 +310,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getQuality()
     {
-        return $this->_quality;
+        return $this->_quality === null
+            ? $this->_scopeConfig->getValue(self::XML_PATH_JPEG_QUALITY)
+            : $this->_quality;
     }
 
     /**
@@ -461,7 +470,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_processor->keepTransparency($this->_keepTransparency);
         $this->_processor->constrainOnly($this->_constrainOnly);
         $this->_processor->backgroundColor($this->_backgroundColor);
-        $this->_processor->quality($this->_quality);
+        $this->_processor->quality($this->getQuality());
         return $this->_processor;
     }
 
@@ -843,7 +852,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 'transparency' => $this->_keepTransparency,
                 'background' => $this->_backgroundColor,
                 'angle' => $this->_angle,
-                'quality' => $this->_quality
+                'quality' => $this->getQuality()
             ]
         );
     }
