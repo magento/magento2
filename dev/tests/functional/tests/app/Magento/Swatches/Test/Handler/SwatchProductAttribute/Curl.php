@@ -38,12 +38,14 @@ class Curl extends CatalogProductAttributeCurl implements SwatchProductAttribute
      */
     protected function changeStructureOfTheData(array $data)
     {
-        $data = parent::changeStructureOfTheData($data);
         $data['optiontext'] = $data['option'];
         $data['swatchtext'] = [
             'value' => $data['option']['value']
         ];
+        $data['serialized_options'] = $this->getSerializeOptions($data, ['optiontext', 'swatchtext']);
         unset($data['option']);
+        $data = parent::changeStructureOfTheData($data);
+
         return $data;
     }
 }
