@@ -86,7 +86,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         return [
             ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
-            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
+            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '’']],
             ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }

@@ -21,16 +21,16 @@ return [
     ],
     'attributes_with_type_modelName_and_invalid_value' => [
         '<?xml version="1.0"?><config><entity name="Name/one" model="model_one" '
-            . 'entityAttributeFilterType="model_one"/><entityType entity="Name/one" name="name_one" model="1"/>'
-            . ' <fileFormat name="name_one" model="model1"/></config>',
+            . 'entityAttributeFilterType="model_one"/><entityType entity="Name/one" name="name_one" model="true-123"/>'
+            . ' <fileFormat name="name_one" model="true-123"/></config>',
         [
-            "Element 'entityType', attribute 'model': [facet 'pattern'] The value '1' is not accepted by the " .
-            "pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
-            "Element 'entityType', attribute 'model': '1' is not a valid value of the atomic type" .
+            "Element 'entityType', attribute 'model': [facet 'pattern'] The value 'true-123' is not accepted by the " .
+            "pattern '[A-Za-z0-9_\\\\]+'.\nLine: 1\n",
+            "Element 'entityType', attribute 'model': 'true-123' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n",
-            "Element 'fileFormat', attribute 'model': [facet 'pattern'] The value 'model1' is not " .
-            "accepted by the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
-            "Element 'fileFormat', attribute 'model': 'model1' is not a valid " .
+            "Element 'fileFormat', attribute 'model': [facet 'pattern'] The value 'true-123' is not " .
+            "accepted by the pattern '[A-Za-z0-9_\\\\]+'.\nLine: 1\n",
+            "Element 'fileFormat', attribute 'model': 'true-123' is not a valid " .
             "value of the atomic type 'modelName'.\nLine: 1\n"
         ],
     ],
