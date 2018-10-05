@@ -139,6 +139,145 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Retrieve gallery options in JSON format
+     *
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function getGalleryOptionsJson()
+    {
+        $optionItems = null;
+
+        if ($this->getVar("gallery/nav")) {
+            $optionItems['nav'] = $this->escapeHtml($this->getVar("gallery/nav"));
+        }
+        if ($this->getVar("gallery/loop")) {
+            $optionItems['loop'] = filter_var($this->getVar("gallery/loop"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/keyboard")) {
+            $optionItems['keyboard'] = filter_var($this->getVar("gallery/keyboard"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/arrows")) {
+            $optionItems['arrows'] = filter_var($this->getVar("gallery/arrows"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/caption")) {
+            $optionItems['showCaption'] = filter_var($this->getVar("gallery/caption"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/allowfullscreen")) {
+            $optionItems['allowfullscreen'] = filter_var(
+                $this->getVar("gallery/allowfullscreen"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/navdir")) {
+            $optionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/navdir"));
+        }
+        if ($this->getVar("gallery/navarrows")) {
+            $optionItems['navarrows'] = filter_var($this->getVar("gallery/navarrows"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/navtype")) {
+            $optionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/navtype"));
+        }
+        if ($this->getVar("gallery/thumbmargin")) {
+            $optionItems['thumbmargin'] = filter_var($this->getVar("gallery/thumbmargin"), FILTER_VALIDATE_INT);
+        }
+        if ($this->getVar("gallery/transition/effect")) {
+            $optionItems['transition'] = $this->escapeHtml($this->getVar("gallery/transition/effect"));
+        }
+        if ($this->getVar("gallery/transition/duration")) {
+            $optionItems['transitionduration'] = filter_var(
+                $this->getVar("gallery/transition/duration"),
+                FILTER_VALIDATE_INT
+            );
+        }
+
+        $optionItems['width'] = filter_var(
+            $this->getImageAttribute('product_page_image_medium', 'width'),
+            FILTER_VALIDATE_INT
+        );
+        $optionItems['thumbwidth'] = filter_var(
+            $this->getImageAttribute('product_page_image_small', 'width'),
+            FILTER_VALIDATE_INT
+        );
+        $imgHeight = $this->getImageAttribute('product_page_image_medium', 'height')
+            ?: $this->getImageAttribute('product_page_image_medium', 'width');
+        if ($imgHeight) {
+            $optionItems['height'] = filter_var($imgHeight, FILTER_VALIDATE_INT);
+        }
+        $thumbHeight = $this->getImageAttribute('product_page_image_small', 'height')
+            ?: $this->getImageAttribute('product_page_image_small', 'width');
+        if ($thumbHeight) {
+            $optionItems['thumbheight'] = filter_var($thumbHeight, FILTER_VALIDATE_INT);
+        }
+
+        return json_encode($optionItems);
+    }
+
+    /**
+     * Retrieve gallery fullscreen options in JSON format
+     *
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function getGalleryFSOptionsJson()
+    {
+        $fsOptionItems = null;
+
+        if ($this->getVar("gallery/fullscreen/nav")) {
+            $fsOptionItems['nav'] = $this->escapeHtml($this->getVar("gallery/fullscreen/nav"));
+        }
+        if ($this->getVar("gallery/fullscreen/loop")) {
+            $fsOptionItems['loop'] = filter_var($this->getVar("gallery/fullscreen/loop"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/fullscreen/keyboard")) {
+            $fsOptionItems['keyboard'] = filter_var(
+                $this->getVar("gallery/fullscreen/keyboard"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/arrows")) {
+            $fsOptionItems['arrows'] = filter_var($this->getVar("gallery/fullscreen/arrows"), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($this->getVar("gallery/fullscreen/caption")) {
+            $fsOptionItems['showCaption'] = filter_var(
+                $this->getVar("gallery/fullscreen/caption"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/navdir")) {
+            $fsOptionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navdir"));
+        }
+        if ($this->getVar("gallery/fullscreen/navarrows")) {
+            $fsOptionItems['navarrows'] = filter_var(
+                $this->getVar("gallery/fullscreen/navarrows"),
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/navtype")) {
+            $fsOptionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navtype"));
+        }
+        if ($this->getVar("gallery/fullscreen/thumbmargin")) {
+            $fsOptionItems['thumbmargin'] = filter_var(
+                $this->getVar("gallery/fullscreen/thumbmargin"),
+                FILTER_VALIDATE_INT
+            );
+        }
+        if ($this->getVar("gallery/fullscreen/transition/effect")) {
+            $fsOptionItems['transition'] = $this->escapeHtml($this->getVar("gallery/fullscreen/transition/effect"));
+        }
+        if ($this->getVar("gallery/fullscreen/transition/duration")) {
+            $fsOptionItems['transitionduration'] = filter_var(
+                $this->getVar("gallery/fullscreen/transition/duration"),
+                FILTER_VALIDATE_INT
+            );
+        }
+
+        return json_encode($fsOptionItems);
+    }
+
+    /**
      * Retrieve gallery url
      *
      * @param null|\Magento\Framework\DataObject $image

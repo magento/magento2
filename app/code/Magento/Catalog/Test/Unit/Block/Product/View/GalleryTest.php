@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,6 +39,26 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $jsonEncoderMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+
+    /**
+     * @var \Magento\Framework\View\Config
+     */
+    protected $viewConfig;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
 
     protected function setUp()
     {
@@ -75,6 +98,26 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())
             ->method('getRegistry')
             ->willReturn($this->registry);
+
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
+        $this->context->expects($this->any())
+            ->method('getEscaper')
+            ->willReturn($this->escaper);
+        $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->viewConfig->expects($this->any())
+            ->method('getViewConfig')
+            ->willReturn($this->configView);
+        $this->context->expects($this->any())
+            ->method('getViewConfig')
+            ->willReturn($this->viewConfig);
     }
 
     public function testGetGalleryImagesJsonWithLabel()
@@ -261,5 +304,110 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new \ArrayIterator($items));
 
         return $collectionMock;
+    }
+
+    public function testGalleryOptions()
+    {
+        $configMap = [
+            ['Magento_Catalog', 'gallery/nav', 'thumbs'],
+            ['Magento_Catalog', 'gallery/loop', 'false'],
+            ['Magento_Catalog', 'gallery/keyboard', 'true'],
+            ['Magento_Catalog', 'gallery/arrows', 'true'],
+            ['Magento_Catalog', 'gallery/caption', 'false'],
+            ['Magento_Catalog', 'gallery/allowfullscreen', 'true'],
+            ['Magento_Catalog', 'gallery/navdir', 'horizontal'],
+            ['Magento_Catalog', 'gallery/navarrows', 'true'],
+            ['Magento_Catalog', 'gallery/navtype', 'slides'],
+            ['Magento_Catalog', 'gallery/thumbmargin', '5'],
+            ['Magento_Catalog', 'gallery/transition/effect', 'slide'],
+            ['Magento_Catalog', 'gallery/transition/duration', '500'],
+        ];
+
+        $mediaAttributesMap = [
+            [
+                'Magento_Catalog',
+                \Magento\Catalog\Helper\Image::MEDIA_TYPE_CONFIG_NODE,
+                'product_page_image_medium',
+                [
+                    'height' => 100,
+                    'width' => 200
+                ]
+            ],
+            [
+                'Magento_Catalog',
+                \Magento\Catalog\Helper\Image::MEDIA_TYPE_CONFIG_NODE,
+                'product_page_image_small',
+                [
+                    'height' => 300,
+                    'width' => 400
+                ]
+            ],
+        ];
+
+        $this->configView->expects($this->any())
+            ->method('getVarValue')
+            ->will($this->returnValueMap($configMap));
+        $this->configView->expects($this->any())
+            ->method('getMediaAttributes')
+            ->will($this->returnValueMap($mediaAttributesMap));
+
+        $json = $this->model->getGalleryOptionsJson();
+        $decodedJson = json_decode($json, true);
+
+        $this->assertEquals('thumbs', $decodedJson['nav']);
+        $this->assertEquals(false, $decodedJson['loop']);
+        $this->assertEquals(true, $decodedJson['keyboard']);
+        $this->assertEquals(true, $decodedJson['arrows']);
+        $this->assertEquals(false, $decodedJson['showCaption']);
+        $this->assertEquals(true, $decodedJson['allowfullscreen']);
+        $this->assertEquals('horizontal', $decodedJson['navdir']);
+        $this->assertEquals(true, $decodedJson['navarrows']);
+        $this->assertEquals('slides', $decodedJson['navtype']);
+        $this->assertEquals(5, $decodedJson['thumbmargin']);
+        $this->assertEquals('slide', $decodedJson['transition']);
+        $this->assertEquals(500, $decodedJson['transitionduration']);
+        $this->assertEquals(100, $decodedJson['height']);
+        $this->assertEquals(200, $decodedJson['width']);
+        $this->assertEquals(300, $decodedJson['thumbheight']);
+        $this->assertEquals(400, $decodedJson['thumbwidth']);
+    }
+
+    public function testGalleryFSOptions()
+    {
+        $configMap = [
+            ['Magento_Catalog', 'gallery/fullscreen/nav', 'false'],
+            ['Magento_Catalog', 'gallery/fullscreen/loop', 'true'],
+            ['Magento_Catalog', 'gallery/fullscreen/keyboard', 'false'],
+            ['Magento_Catalog', 'gallery/fullscreen/arrows', 'false'],
+            ['Magento_Catalog', 'gallery/fullscreen/caption', 'true'],
+            ['Magento_Catalog', 'gallery/fullscreen/navdir', 'vertical'],
+            ['Magento_Catalog', 'gallery/fullscreen/navarrows', 'false'],
+            ['Magento_Catalog', 'gallery/fullscreen/navtype', 'thumbs'],
+            ['Magento_Catalog', 'gallery/fullscreen/thumbmargin', '10'],
+            ['Magento_Catalog', 'gallery/fullscreen/transition/effect', 'dissolve'],
+            ['Magento_Catalog', 'gallery/fullscreen/transition/duration', '300']
+        ];
+
+        $this->configView->expects($this->any())
+            ->method('getVarValue')
+            ->will($this->returnValueMap($configMap));
+
+        $json = $this->model->getGalleryFSOptionsJson();
+        $decodedJson = json_decode($json, true);
+
+        //Note, this tests the special case for nav variable set to false. It
+        //Should not be converted to boolean.
+        $this->assertEquals('false', $decodedJson['nav']);
+
+        $this->assertEquals(true, $decodedJson['loop']);
+        $this->assertEquals(false, $decodedJson['arrows']);
+        $this->assertEquals(false, $decodedJson['keyboard']);
+        $this->assertEquals(true, $decodedJson['showCaption']);
+        $this->assertEquals('vertical', $decodedJson['navdir']);
+        $this->assertEquals(false, $decodedJson['navarrows']);
+        $this->assertEquals(10, $decodedJson['thumbmargin']);
+        $this->assertEquals('thumbs', $decodedJson['navtype']);
+        $this->assertEquals('dissolve', $decodedJson['transition']);
+        $this->assertEquals(300, $decodedJson['transitionduration']);
     }
 }
