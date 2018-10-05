@@ -96,7 +96,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
      *
      * @expectedException \Exception
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage {"message":"Invoice Document Validation Error(s):\nThe invoice can't be created without products. Add products and try again."}
+     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
      * @codingStandardsIgnoreEnd
      * @magentoApiDataFixture Magento/Sales/_files/order_with_bundle.php
      */
@@ -119,6 +119,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         ];
 
         $requestData = [
+            'orderId' => $existingOrder->getId(),
             'notify' => true,
             'appendComment' => true,
             'items' => [
@@ -129,6 +130,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
             ],
             'comment' => [
                 'comment' => 'Test offline',
+                'isVisibleOnFront' => 1,
             ],
         ];
 
@@ -140,7 +142,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
      *
      * @expectedException \Exception
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage {"message":"Invoice Document Validation Error(s):\nThe invoice can't be created without products. Add products and try again."}
+     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
      * @codingStandardsIgnoreEnd
      * @magentoApiDataFixture Magento/Sales/_files/order_configurable_product.php
      */
@@ -163,6 +165,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         ];
 
         $requestData = [
+            'orderId' => $existingOrder->getId(),
             'notify' => true,
             'appendComment' => true,
             'items' => [
@@ -173,6 +176,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
             ],
             'comment' => [
                 'comment' => 'Test offline',
+                'isVisibleOnFront' => 1,
             ],
         ];
 

@@ -125,6 +125,8 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
+     * Creates an invoice based on the order and quantities provided
+     *
      * @param Order $order
      * @param array $qtys
      * @return \Magento\Sales\Model\Order\Invoice
@@ -192,8 +194,7 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
-     * Check if order item can be invoiced. Dummy item can be invoiced or with his children or
-     * with parent item which is included to invoice
+     * Check if order item can be invoiced.
      *
      * @param \Magento\Sales\Api\Data\OrderItemInterface $item
      * @param array $qtys
