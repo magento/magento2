@@ -73,14 +73,15 @@
 
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteFirstProduct"/>
+
+            <!-- Open product index page, clear filters and change gridview to default view -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+            <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
-        <!-- Open product index page, clear filters and change gridview to default view -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
-        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminDataGridToDefaultView"/>
 
         <!--Open created product-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
