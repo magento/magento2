@@ -7,10 +7,10 @@
 namespace Magento\ReleaseNotification\Controller\Adminhtml\Notification;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Psr\Log\LoggerInterface;
 
 /**

@@ -1291,7 +1291,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // process linked product positions
                 $this->_connection->insertOnDuplicate(
                     $resource->getAttributeTypeTable('int'),
-                    $positionRows, ['value']
+                    $positionRows,
+                    ['value']
                 );
             }
         }
@@ -2456,7 +2457,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function isNeedToValidateUrlKey($rowData)
     {
         $urlKey = $this->getUrlKey($rowData);
-        
+
         return (!empty($urlKey))
             && (empty($rowData[self::COL_VISIBILITY])
             || $rowData[self::COL_VISIBILITY]
@@ -2571,7 +2572,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function parseAttributesWithWrappedValues($attributesData)
     {
         $attributes = [];
-        preg_match_all('~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
+        preg_match_all(
+            '~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
             $attributesData,
             $matches
         );
@@ -2769,7 +2771,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::URL_KEY])) {
             return $this->productUrl->formatUrlKey($rowData[self::URL_KEY]);
         }
-        
+
         /**
          * If the product exists, assume it already has a URL Key and even
          * if a name is provided in the import data, it should not be used

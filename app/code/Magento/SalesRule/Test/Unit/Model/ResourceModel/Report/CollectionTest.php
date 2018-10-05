@@ -85,8 +85,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->ruleFactory = $this->createPartialMock(\Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class, ['create']);
 
         $this->object = new \Magento\SalesRule\Model\ResourceModel\Report\Collection(
-            $this->entityFactory, $this->loggerMock, $this->fetchStrategy,
-            $this->eventManager, $this->reportResource, $this->ruleFactory
+            $this->entityFactory,
+            $this->loggerMock,
+            $this->fetchStrategy,
+            $this->eventManager,
+            $this->reportResource,
+            $this->ruleFactory
         );
     }
 

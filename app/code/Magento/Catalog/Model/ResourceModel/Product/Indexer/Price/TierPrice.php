@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice as TierPriceResourceModel;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice as TierPriceResourceModel;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Class for filling tier price index table.
@@ -82,7 +82,7 @@ class TierPrice extends AbstractDb
             [false, false], //specific website; specific customer group
         ];
         foreach ($tierPriceVariations as $variation) {
-            list ($isAllWebsites, $isAllCustomerGroups) = $variation;
+            list($isAllWebsites, $isAllCustomerGroups) = $variation;
             $select = $this->getTierPriceSelect($isAllWebsites, $isAllCustomerGroups, $entityIds);
             $query = $select->insertFromSelect($this->getMainTable());
             $this->getConnection()->query($query);

@@ -6,7 +6,7 @@
  */
 namespace Magento\Store\Test\Unit\Model\Resolver;
 
-use \Magento\Store\Model\Resolver\Website;
+use Magento\Store\Model\Resolver\Website;
 
 /**
  * Test class for \Magento\Store\Model\Resolver\Website

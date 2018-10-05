@@ -5,16 +5,16 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Storage;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
-use PHPUnit\Framework\TestCase;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class DbStorageTest extends TestCase
 {

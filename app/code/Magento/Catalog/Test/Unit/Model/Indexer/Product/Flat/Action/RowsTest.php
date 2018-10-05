@@ -78,14 +78,16 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $this->_flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
 
         $this->_model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class, [
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class,
+            [
             'resource' => $this->_resource,
             'storeManager' => $this->_storeManager,
             'productHelper' => $this->_productIndexerHelper,
             'flatItemEraser' => $this->_flatItemEraser,
             'flatItemWriter' => $this->_flatItemWriter,
             'flatTableBuilder' => $this->_flatTableBuilder
-        ]);
+        ]
+        );
     }
 
     /**

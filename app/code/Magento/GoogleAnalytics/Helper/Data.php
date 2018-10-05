@@ -5,8 +5,8 @@
  */
 namespace Magento\GoogleAnalytics\Helper;
 
-use Magento\Store\Model\Store;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * GoogleAnalytics data helper

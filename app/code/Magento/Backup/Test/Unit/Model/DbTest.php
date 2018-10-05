@@ -194,7 +194,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->method('getTableDataSql')
             ->with($tableName, $rowsCount, 0)
             ->willReturn($dataSql);
-         $this->dbResourceMock->expects($this->once())
+        $this->dbResourceMock->expects($this->once())
              ->method('getTableStatus')
              ->with($tableName)
              ->willReturn($tableStatus);

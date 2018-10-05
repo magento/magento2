@@ -7,7 +7,7 @@
 namespace Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Fieldset element renderer

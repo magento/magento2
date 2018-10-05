@@ -8,8 +8,8 @@ namespace Magento\Payment\Test\Unit\Model\Method;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Payment\Test\Unit\Model\Method\AbstractMethod\Stub;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class AbstractMethodTest

@@ -7,15 +7,15 @@
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
+use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\Module\Dir;
-use Magento\Sales\Exception\DocumentValidationException;
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
-use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * DHL International (API v1.4)
@@ -1924,7 +1924,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
         if (($origCountry == $destCountry && $isDomestic)
-            || ($this->_carrierHelper->isCountryInEU($origCountryCode)
+            || (
+                $this->_carrierHelper->isCountryInEU($origCountryCode)
                 && $this->_carrierHelper->isCountryInEU($destCountryCode)
             )
         ) {

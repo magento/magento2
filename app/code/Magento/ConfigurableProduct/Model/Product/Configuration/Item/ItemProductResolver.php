@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Product\Configuration\Item;
 
-use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\Product;
 
 /**
  * {@inheritdoc}

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Address;
 
+use Magento\Backend\Model\Session\Quote as QuoteSession;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Customer\Model\Metadata\FormFactory as CustomerFormFactory;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
@@ -17,11 +18,10 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Address\Form;
+use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Backend\Model\Session\Quote as QuoteSession;
-use Magento\Sales\Model\AdminOrder\Create;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

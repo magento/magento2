@@ -5,18 +5,16 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Config\Model\Config\PathValidator;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Config\Model\Config\PathValidator;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Config\App\Config\Type\System;
-use Magento\Framework\App\Config;
 
 /**
  * Processor facade for config:set command.
@@ -137,7 +135,8 @@ class ProcessorFacade
 
         $processor =
             $lock
-                ? ( $lockTarget == ConfigFilePool::APP_ENV
+                ? (
+                    $lockTarget == ConfigFilePool::APP_ENV
                     ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
                     : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK_CONFIG)
                 )
@@ -145,7 +144,8 @@ class ProcessorFacade
 
         $message =
             $lock
-                ? ( $lockTarget == ConfigFilePool::APP_ENV
+                ? (
+                    $lockTarget == ConfigFilePool::APP_ENV
                     ? 'Value was saved in app/etc/env.php and locked.'
                     : 'Value was saved in app/etc/config.php and locked.'
                 )

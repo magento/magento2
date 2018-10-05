@@ -5,15 +5,15 @@
  */
 namespace Magento\Catalog\Model\CustomOptions;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Catalog\Api\Data\CustomOptionInterface;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {

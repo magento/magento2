@@ -12,8 +12,8 @@ namespace Magento\Store\Block;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\Group;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Store\Model\Group;
 
 /**
  * @api

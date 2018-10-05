@@ -5,17 +5,17 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
-use Magento\Framework\Registry;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Payment\Block\Transparent\Iframe;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
-use Magento\Framework\Session\Generic as Session;
 
 /**
  * Class Response
@@ -87,8 +87,8 @@ class Response extends \Magento\Framework\App\Action\Action
         $this->responseValidator = $responseValidator;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
-        $this->sessionTransparent = $sessionTransparent ? : $this->_objectManager->get(Session::class);
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+        $this->sessionTransparent = $sessionTransparent ?: $this->_objectManager->get(Session::class);
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
     }
 
     /**

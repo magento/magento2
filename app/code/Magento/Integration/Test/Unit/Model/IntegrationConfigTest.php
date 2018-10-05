@@ -6,8 +6,8 @@
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\IntegrationConfig;
 use Magento\Integration\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\IntegrationConfig;
 
 /**
  * Unit test for \Magento\Integration\Model\IntegrationConfig

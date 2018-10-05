@@ -116,7 +116,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
             ->method('isConfirmationRequired')
             ->with($websiteId, $customerId, $customerEmail)
             ->willReturn($isConfirmationRequired);
-        
+
         $this->confirmation->setData('name', 'confirmation');
         $result = $this->confirmation->prepareDataSource($dataSource);
 

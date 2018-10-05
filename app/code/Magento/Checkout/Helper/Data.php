@@ -7,9 +7,9 @@ namespace Magento\Checkout\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Sales\Api\PaymentFailuresInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Checkout default helper
@@ -88,7 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->priceCurrency = $priceCurrency;
-        $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(PaymentFailuresInterface::class);
         parent::__construct($context);
     }

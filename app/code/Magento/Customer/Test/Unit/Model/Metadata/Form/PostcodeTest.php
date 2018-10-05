@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
-use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Customer\Model\Metadata\Form\Postcode;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class PostcodeTest extends AbstractFormTestCase
 {

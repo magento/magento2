@@ -7,12 +7,12 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
-use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
+use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Framework\App\RequestInterface;
-use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 

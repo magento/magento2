@@ -5,15 +5,15 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
-use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogInventory\Model\StockManagement;
-use Magento\CatalogInventory\Model\StockRegistryStorage;
-use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
-use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\CatalogInventory\Model\StockManagement;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\CatalogInventory\Model\StockState;
 
 /**
  * Test for \Magento\CatalogInventory\Model\StockManagement

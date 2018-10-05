@@ -6,11 +6,11 @@
 namespace Magento\Signifyd\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Payment\Api\PaymentVerificationInterface;
-use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Signifyd\Model\PaymentVerificationFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
 {

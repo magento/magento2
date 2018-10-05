@@ -6,8 +6,8 @@
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Indexer;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Class ReindexProduct. Add configurable sub-products to reindex

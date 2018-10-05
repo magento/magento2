@@ -7,10 +7,10 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 
 /**
  * Catalog product copier. Creates product duplicate

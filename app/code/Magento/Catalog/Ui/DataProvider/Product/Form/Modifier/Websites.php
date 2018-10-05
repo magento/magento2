@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Ui\Component\Form;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
 
 /**
  * Class Websites customizes websites panel

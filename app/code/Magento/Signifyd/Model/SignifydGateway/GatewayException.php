@@ -10,5 +10,4 @@ namespace Magento\Signifyd\Model\SignifydGateway;
  */
 class GatewayException extends \Exception
 {
-
 }

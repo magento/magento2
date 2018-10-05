@@ -85,9 +85,11 @@ $order = $block->getShipment()->getOrder();
                                 window.packaging.sendCreateLabelRequest();
                             });
                             window.packaging.setLabelCreatedCallback(function () {
-                                setLocation("<?php echo $block->escapeUrl($block->getUrl(
+                                setLocation("<?php echo $block->escapeUrl(
+    $block->getUrl(
                                     'adminhtml/order_shipment/view',
-                                    ['shipment_id' => $block->getShipment()->getId()])
+                                    ['shipment_id' => $block->getShipment()->getId()]
+)
                                 ); ?>");
                             });
                         };

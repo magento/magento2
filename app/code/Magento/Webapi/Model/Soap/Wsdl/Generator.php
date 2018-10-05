@@ -6,13 +6,13 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Webapi\Authorization;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
+use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
-use Magento\Framework\Webapi\Authorization;
-use Magento\Webapi\Model\ServiceMetadata;
-use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * WSDL generator.

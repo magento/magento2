@@ -7,10 +7,10 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

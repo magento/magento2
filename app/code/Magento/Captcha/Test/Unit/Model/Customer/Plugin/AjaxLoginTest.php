@@ -192,8 +192,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'username' => 'name',
-                'requestData' =>
-                    [
+                'requestData' => [
                         'username' => 'name',
                         'captcha_string' => 'string',
                         'captcha_form_id' => $this->formIds[0]
@@ -201,8 +200,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'username' => null,
-                'requestData' =>
-                    [
+                'requestData' => [
                         'username' => null,
                         'captcha_string' => 'string',
                         'captcha_form_id' => $this->formIds[0]
@@ -210,8 +208,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'username' => 'name',
-                'requestData' =>
-                    [
+                'requestData' => [
                         'username' => 'name',
                         'captcha_string' => 'string',
                         'captcha_form_id' => null

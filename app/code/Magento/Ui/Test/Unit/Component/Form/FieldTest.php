@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Form;
 
-use Magento\Ui\Component\Form\Field;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Field;
 
 /**
  * Class FieldTest

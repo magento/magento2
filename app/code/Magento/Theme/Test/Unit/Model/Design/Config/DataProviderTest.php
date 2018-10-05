@@ -9,9 +9,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Theme\Model\Design\Config\DataLoader;
 use Magento\Theme\Model\Design\Config\DataProvider;
-use Magento\Theme\Model\Design\Config\MetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 
 /**

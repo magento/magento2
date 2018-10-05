@@ -8,8 +8,8 @@ namespace Magento\Checkout\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -123,7 +123,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             $checkoutConnection->rollBack();
             throw $e;
         }
-        
+
         return $orderId;
     }
 

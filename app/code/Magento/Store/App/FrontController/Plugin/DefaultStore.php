@@ -5,8 +5,8 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
-use \Magento\Store\Model\StoreResolver\ReaderList;
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreResolver\ReaderList;
 
 /**
  * Plugin to set default store for admin area.

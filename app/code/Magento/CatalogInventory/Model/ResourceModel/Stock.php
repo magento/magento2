@@ -147,7 +147,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
         foreach ($this->getConnection()->fetchAll($selectProducts) as $p) {
             $items[$p['product_id']]['type_id'] = $p['type_id'];
         }
-        
+
         return $items;
     }
 

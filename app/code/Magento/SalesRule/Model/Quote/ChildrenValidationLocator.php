@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
-use \Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 
 /**
  * Class ChildrenValidationLocator

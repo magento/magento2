@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Observer\DataAssignObserver;
@@ -12,7 +13,6 @@ use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * Class PaymentDataBuilderTest

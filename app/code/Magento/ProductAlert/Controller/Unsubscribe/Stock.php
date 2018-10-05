@@ -5,12 +5,12 @@
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
-use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 
 class Stock extends UnsubscribeController
 {

@@ -5,10 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
-use Magento\Store\Model\Store;
-use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Store\Model\Store;
 
 /**
  * Export Advanced Pricing
@@ -412,7 +412,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 ImportAdvancedPricing::COL_TIER_PRICE                  => 'ap.value',
                 ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE => 'ap.percentage_value',
                 'product_link_id'                                      => 'ap.'
-                    .$productEntityLinkField,
+                    . $productEntityLinkField,
             ];
             if ($exportFilter) {
                 if (array_key_exists('tier_price', $exportFilter)) {
@@ -431,7 +431,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         $selectFields
                     )
                     ->where(
-                        'ap.'.$productEntityLinkField.' IN (?)',
+                        'ap.' . $productEntityLinkField . ' IN (?)',
                         $productLinksIds
                     );
 
@@ -476,7 +476,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
 
             if ($storeName && $currencyCode) {
-                $code = $storeName.' ['.$currencyCode.']';
+                $code = $storeName . ' [' . $currencyCode . ']';
             } else {
                 $code = $storeName;
             }

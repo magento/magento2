@@ -137,15 +137,13 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 ['main_table.attribute_id', 'main_table.attribute_code'],
                 [
                     [
-                        'in' =>
-                            [
+                        'in' => [
                                 'attribute_id',
                                 'boolean_attribute',
                             ],
                     ],
                     [
-                        'in' =>
-                            [
+                        'in' => [
                                 'related_tgtr_position_behavior',
                                 'related_tgtr_position_limit',
                                 'upsell_tgtr_position_behavior',

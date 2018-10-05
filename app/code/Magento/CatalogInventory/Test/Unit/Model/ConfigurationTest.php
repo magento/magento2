@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
-use \Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Class ConfigurationTest

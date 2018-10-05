@@ -9,10 +9,10 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogRule\Model\Rule\Condition\Combine;
-use Magento\Framework\Exception\InputException;
 use Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor;
 use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Applies catalog price rule conditions to product collection as filters

@@ -227,7 +227,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
                 return true;
             }
         }
-        
+
         return false;
     }
 

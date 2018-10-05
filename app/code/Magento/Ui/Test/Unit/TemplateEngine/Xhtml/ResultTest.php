@@ -7,8 +7,8 @@
 namespace Magento\Ui\Test\Unit\TemplateEngine\Xhtml;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Ui\TemplateEngine\Xhtml\Result;

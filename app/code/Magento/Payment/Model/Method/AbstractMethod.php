@@ -8,6 +8,7 @@
 
 namespace Magento\Payment\Model\Method;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
@@ -15,7 +16,6 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentMethodInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Directory\Helper\Data as DirectoryHelper;
 
 /**
  * Payment method abstract model

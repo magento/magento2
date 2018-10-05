@@ -57,15 +57,13 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
         $this->synReaderModel->expects($this->once())
             ->method('loadByPhrase')
             ->with($phrase)
-            ->willReturnSelf()
-        ;
+            ->willReturnSelf();
         $this->synReaderModel->expects($this->once())
             ->method('getData')
             ->willReturn([
                 ['synonyms' => 'british,english'],
                 ['synonyms' => 'queen,monarch'],
-            ])
-        ;
+            ]);
 
         $actual = $this->synonymAnalyzer->getSynonymsForPhrase($phrase);
         $this->assertEquals($expected, $actual);

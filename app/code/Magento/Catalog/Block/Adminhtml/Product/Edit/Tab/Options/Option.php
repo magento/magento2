@@ -12,8 +12,8 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 
 use Magento\Backend\Block\Widget;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

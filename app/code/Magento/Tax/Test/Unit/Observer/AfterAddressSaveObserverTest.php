@@ -77,7 +77,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isCatalogPriceDisplayAffectedByTax'])
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
             ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()

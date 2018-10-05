@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\BatchProviderInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

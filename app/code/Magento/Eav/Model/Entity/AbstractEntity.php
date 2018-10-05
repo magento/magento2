@@ -12,17 +12,17 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -519,7 +519,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeSetId = $object->getAttributeSetId() ?: 0;
         $storeId = $object->getStoreId() ?: 0;
         return $storeId . '-' . $attributeSetId;
-     }
+    }
 
     /**
      * Retrieve partial load flag
@@ -824,9 +824,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $prefix = (string) $this->getEntityType()->getValueTablePrefix();
             if (!empty($prefix)) {
                 $this->_valueTablePrefix = $prefix;
-                /**
-                 * entity type prefix include DB table name prefix
-                 */
+            /**
+             * entity type prefix include DB table name prefix
+             */
                 //$this->_resource->getTableName($prefix);
             } else {
                 $this->_valueTablePrefix = $this->getEntityTable();
@@ -1020,7 +1020,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         } else {
             $object->isObjectNew(true);
         }
-
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;

@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
-use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Search\Request\FilterInterface;
 
 /**
  * Class CustomAttributeFilterSelector

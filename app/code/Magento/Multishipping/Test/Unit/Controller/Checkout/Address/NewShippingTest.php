@@ -115,7 +115,8 @@ class NewShippingTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageMock);
         $this->controller = $objectManager->getObject(
             \Magento\Multishipping\Controller\Checkout\Address\NewShipping::class,
-            ['context' => $contextMock]);
+            ['context' => $contextMock]
+        );
     }
 
     /**

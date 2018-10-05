@@ -8,7 +8,7 @@
 ?>
 <form action="<?= $block->escapeUrl($block->getContinueUrl()); ?>" method="post">
     <div class="multicheckout success">
-        <p><?= $block->escapeHtml(__('For successfully order items, you\'ll receive a confirmation email including '.
+        <p><?= $block->escapeHtml(__('For successfully order items, you\'ll receive a confirmation email including ' .
                 'order numbers, tracking information and more details.')) ?></p>
         <?php if ($orderIds = $block->getOrderIds()) : ?>
             <h3><?= $block->escapeHtml(__('Successfully ordered'))?></h3>

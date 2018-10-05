@@ -7,8 +7,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
-use Magento\Framework\App\ResourceConnection;
-
 class Eraser
 {
     /**

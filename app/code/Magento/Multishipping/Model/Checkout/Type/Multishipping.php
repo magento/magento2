@@ -6,13 +6,13 @@
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Directory\Model\AllowedCountries;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -901,7 +901,8 @@ class Multishipping extends \Magento\Framework\DataObject
 
         if ($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
         ) {
             $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
         } else {
@@ -1081,7 +1082,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     protected function isAddressIdApplicable($addressId)
     {
-        $applicableAddressIds = array_map(function($address) {
+        $applicableAddressIds = array_map(function ($address) {
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());

@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Controller\Account;
 
+use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Checkout\Model\Session;
 use Magento\Sales\Api\OrderCustomerDelegateInterface;
 
 /**

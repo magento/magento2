@@ -6,8 +6,6 @@
 
 namespace Magento\User\Test\Unit\Model;
 
-use Magento\Framework\Serialize\Serializer\Json;
-
 /**
  * Test class for \Magento\User\Model\User testing
  *

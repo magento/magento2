@@ -7,8 +7,8 @@ namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Deploy\Model\ConfigWriter;
-use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;

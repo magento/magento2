@@ -8,7 +8,6 @@ namespace Magento\Bundle\Model;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
-use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;

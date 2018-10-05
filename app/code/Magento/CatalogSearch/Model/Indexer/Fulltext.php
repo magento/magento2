@@ -11,8 +11,8 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Indexer\Model\ProcessManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide functionality for Fulltext Search indexing.

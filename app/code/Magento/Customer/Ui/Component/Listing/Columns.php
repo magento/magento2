@@ -5,12 +5,12 @@
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Customer\Ui\Component\ColumnFactory;
-use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Customer\Ui\Component\ColumnFactory;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {

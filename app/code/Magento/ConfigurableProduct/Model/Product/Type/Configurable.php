@@ -668,7 +668,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $attributeData['attribute_id'] = $configurableAttribute->getAttributeId();
                 } elseif (!empty($attributeData['attribute_id'])) {
                     $attribute = $this->_eavConfig->getAttribute(
-                        \Magento\Catalog\Model\Product::ENTITY, $attributeData['attribute_id']
+                        \Magento\Catalog\Model\Product::ENTITY,
+                        $attributeData['attribute_id']
                     );
                     $attributeData['attribute_id'] = $attribute->getId();
                     if (!$this->canUseAttribute($attribute)) {
@@ -1437,7 +1438,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
 
         $usedAttributes = array_map(
-            function($attr) {
+            function ($attr) {
                 return $attr->getAttributeCode();
             },
             $this->getUsedProductAttributes($product)

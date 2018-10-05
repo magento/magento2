@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Model\MessageGenerators;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Signifyd\Model\MessageGeneratorInterface;
 
 /**
  * Creates instance of message generator based on received type of message.

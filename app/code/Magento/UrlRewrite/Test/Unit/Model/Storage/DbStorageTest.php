@@ -64,7 +64,8 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,

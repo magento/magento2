@@ -8,8 +8,8 @@
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout\Address;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,7 +80,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
         $this->searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class, [
+            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            [
                 'multishipping' => $this->multishippingMock,
                 'addressRepository' => $this->addressRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -157,7 +158,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     public function testGetAlreadyExistingAddress()
     {
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class, [
+            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            [
                 'addressRepository' => $this->addressRepositoryMock,
                 'filterBuilder' => $this->filterBuilderMock,
                 'data' => [

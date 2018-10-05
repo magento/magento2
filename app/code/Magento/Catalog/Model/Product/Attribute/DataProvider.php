@@ -5,14 +5,14 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute as EavAttribute;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Field;
-use Magento\Ui\Component\Form\Element\DataType\Text;
-use Magento\Store\Model\Store;
 
 /**
  * Data provider for the form of adding new product attribute.

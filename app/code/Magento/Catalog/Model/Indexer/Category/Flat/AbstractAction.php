@@ -9,7 +9,6 @@
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 
 class AbstractAction
 {
@@ -218,6 +217,7 @@ class AbstractAction
                         break;
                     }
                     // fall-through intentional
+                    // no break
                 case \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL:
                     $options = $column['PRECISION'] . ',' . $column['SCALE'];
                     $isUnsigned = null;

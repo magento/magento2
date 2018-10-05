@@ -6,11 +6,11 @@
 namespace Magento\Widget\Setup;
 
 use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade data for widget module.

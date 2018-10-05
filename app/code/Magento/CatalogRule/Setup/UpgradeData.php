@@ -6,14 +6,14 @@
 
 namespace Magento\CatalogRule\Setup;
 
+use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\CatalogRule\Api\Data\RuleInterface;
 
 class UpgradeData implements UpgradeDataInterface
 {

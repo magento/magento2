@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\Deploy\Test\Unit\Service;
 
 use Magento\Deploy\Service\DeployStaticFile;
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
+use Magento\Framework\View\Asset\Repository;
 use PHPUnit_Framework_MockObject_Matcher_InvokedCount as InvokedCount;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class DeployStaticFileTest extends \PHPUnit\Framework\TestCase
 {
@@ -132,12 +132,12 @@ class DeployStaticFileTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'file1',
-                ['replace' => 'any value',],
+                ['replace' => 'any value'],
                 self::once()
             ],
             [
                 'file1',
-                ['replace' => false,],
+                ['replace' => false],
                 self::once()
             ],
             [

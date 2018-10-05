@@ -5,9 +5,9 @@
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
-use Magento\Weee\Helper\Data as WeeeHelper;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Weee\Helper\Data as WeeeHelper;
 
 class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
 {
@@ -120,11 +120,11 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
                 $title = (string)$one['title'];
-                $one['base_row_amount'] = $invoice->roundPrice($one['base_row_amount'] * $ratio, $title.'_base');
+                $one['base_row_amount'] = $invoice->roundPrice($one['base_row_amount'] * $ratio, $title . '_base');
                 $one['row_amount'] = $invoice->roundPrice($one['row_amount'] * $ratio, $title);
                 $one['base_row_amount_incl_tax'] = $invoice->roundPrice(
                     $one['base_row_amount_incl_tax'] * $ratio,
-                    $title.'_base'
+                    $title . '_base'
                 );
                 $one['row_amount_incl_tax'] = $invoice->roundPrice($one['row_amount_incl_tax'] * $ratio, $title);
 

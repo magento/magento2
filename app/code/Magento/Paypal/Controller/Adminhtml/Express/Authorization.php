@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Express;
 
+use Magento\Backend\App\Action;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
@@ -15,7 +16,6 @@ use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Paypal\Model\Adminhtml\Express;
-use Magento\Backend\App\Action;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order;

@@ -244,7 +244,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
-        
+
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')

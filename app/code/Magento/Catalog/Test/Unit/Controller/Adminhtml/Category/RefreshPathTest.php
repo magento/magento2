@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

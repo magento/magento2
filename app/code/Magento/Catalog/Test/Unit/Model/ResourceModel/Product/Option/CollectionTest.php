@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,7 +89,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->optionsFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class, ['create']);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $this->joinProcessor = $this->getMockBuilder(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class)
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resourceMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class, ['getConnection', '__wakeup', 'getMainTable', 'getTable']);

@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Category\Product\PositionResolver;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PositionResolverTest extends \PHPUnit\Framework\TestCase
 {

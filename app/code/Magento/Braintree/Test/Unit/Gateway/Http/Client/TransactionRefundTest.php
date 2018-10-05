@@ -9,12 +9,12 @@ namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Braintree\Result\Successful;
 use Magento\Braintree\Gateway\Http\Client\TransactionRefund;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\TransferInterface;
-use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Payment\Model\Method\Logger;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;

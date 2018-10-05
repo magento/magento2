@@ -10,12 +10,12 @@ use Magento\CatalogInventory\Model\Configuration as CatalogInventoryConfiguratio
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 

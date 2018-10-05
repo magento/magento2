@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Block;
 
-use Magento\Backend\Model\GlobalSearch\SearchEntityFactory;
 use Magento\Backend\Model\GlobalSearch\SearchEntity;
+use Magento\Backend\Model\GlobalSearch\SearchEntityFactory;
 use Magento\Framework\App\ObjectManager;
 
 /**

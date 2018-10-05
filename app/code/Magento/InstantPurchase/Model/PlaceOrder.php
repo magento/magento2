@@ -15,7 +15,7 @@ use Magento\InstantPurchase\Model\QuoteManagement\QuoteFilling;
 use Magento\InstantPurchase\Model\QuoteManagement\ShippingConfiguration;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Store\Model\Store;
-use \Throwable;
+use Throwable;
 
 /**
  * Place an order using instant purchase option.

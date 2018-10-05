@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\CustomerData;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Default item

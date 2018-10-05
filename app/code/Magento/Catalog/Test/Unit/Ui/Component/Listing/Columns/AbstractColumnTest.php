@@ -7,9 +7,9 @@ namespace Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponent\Processor;
 
 /**
  * Class AbstractColumnTest

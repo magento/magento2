@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  *  Extender of product identities for child of configurable products

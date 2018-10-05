@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface as ConnectionAdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Grid;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 
 /**
  * Unit tests for \Magento\Sales\Model\ResourceModel\Grid class

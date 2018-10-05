@@ -463,7 +463,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-        
+
         $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(

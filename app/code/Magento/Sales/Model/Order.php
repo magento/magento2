@@ -1015,7 +1015,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         return $this->addCommentToStatusHistory($comment, $status, false);
     }
-    
+
     /**
      * Add a comment to order status history
      * Different or default status may be specified

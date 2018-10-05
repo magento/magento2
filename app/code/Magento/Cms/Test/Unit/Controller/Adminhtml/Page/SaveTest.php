@@ -165,7 +165,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('addSuccessMessage')
             ->with(__('You saved the page.'));
 
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
@@ -173,7 +173,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
@@ -203,7 +203,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('This page no longer exists.'));
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 

@@ -26,7 +26,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
      */
     protected $pro;
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected  $apiMock;
+    protected $apiMock;
 
     protected function setUp()
     {
@@ -215,7 +215,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
-            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount', ])
+            ->setMethods(['__wakeup', 'getTransactionId', 'getDataUsingMethod', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount'])
             ->getMock();
 
         $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);

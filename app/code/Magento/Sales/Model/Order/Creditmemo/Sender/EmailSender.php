@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Sender;
 
-use Magento\Sales\Model\Order\Email\Sender;
-use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
 use Magento\Framework\DataObject;
+use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
+use Magento\Sales\Model\Order\Email\Sender;
 
 /**
  * Email notification sender for Creditmemo.

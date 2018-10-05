@@ -10,8 +10,8 @@ namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Store\Model\ScopeInterface;
 use Magento\User\Model\User;

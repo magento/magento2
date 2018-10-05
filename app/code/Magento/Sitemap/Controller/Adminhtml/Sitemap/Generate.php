@@ -7,8 +7,8 @@
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action;
-use Magento\Store\Model\App\Emulation;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\App\Emulation;
 
 class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {

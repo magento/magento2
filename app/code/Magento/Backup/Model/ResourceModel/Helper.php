@@ -349,7 +349,7 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getTableTriggersSql($tableName, $addDropIfExists = false, $stripDefiner = true)
     {
         $script = "--\n-- Triggers structure for table `{$tableName}`\n--\n";
-        $triggers = $this->getConnection()->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')->fetchAll();
+        $triggers = $this->getConnection()->query('SHOW TRIGGERS LIKE \'' . $tableName . '\'')->fetchAll();
 
         if (!$triggers) {
             return '';
@@ -360,7 +360,7 @@ class Helper extends \Magento\Framework\DB\Helper
             }
             $script .= "delimiter ;;\n";
 
-            $triggerData = $this->getConnection()->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])->fetch();
+            $triggerData = $this->getConnection()->query('SHOW CREATE TRIGGER ' . $trigger['Trigger'])->fetch();
             if ($stripDefiner) {
                 $cleanedScript = preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
                 $script .= $cleanedScript . "\n";

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Plugin;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class OrderSaveTest extends \PHPUnit\Framework\TestCase
 {

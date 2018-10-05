@@ -139,7 +139,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         if ($import->isReportEntityType()) {
             $this->load($this->getLastItemId());
-             $this->setExecutionTime(self::IMPORT_FAILED);
+            $this->setExecutionTime(self::IMPORT_FAILED);
             $this->save();
         }
         return $this;

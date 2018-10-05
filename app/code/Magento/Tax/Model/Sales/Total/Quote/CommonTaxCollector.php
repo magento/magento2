@@ -8,21 +8,19 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
-use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
+use Magento\Tax\Api\Data\QuoteDetailsInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
-use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
-use Magento\Tax\Api\Data\QuoteDetailsInterface;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
 /**
  * Tax totals calculation model
@@ -546,7 +544,7 @@ class CommonTaxCollector extends AbstractTotal
     protected function processAppliedTaxes(
         QuoteAddress\Total $total,
         ShippingAssignmentInterface $shippingAssignment,
-        Array $itemsByType
+        array $itemsByType
     ) {
         $total->setAppliedTaxes([]);
         $allAppliedTaxesArray = [];

@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage as CategoryStoragePlugin;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Product;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductResourceModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Model\StorageInterface;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

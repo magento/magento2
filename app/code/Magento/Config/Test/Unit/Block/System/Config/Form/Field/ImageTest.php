@@ -87,7 +87,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ],
                 '_elementType' => 'field',
                 'path' => 'catalog/placeholder',
-            ]);
+            ]
+        );
 
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']

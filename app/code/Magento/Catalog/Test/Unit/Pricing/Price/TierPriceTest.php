@@ -8,12 +8,12 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Test for \Magento\Catalog\Pricing\Price\TierPrice
@@ -119,7 +119,8 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $convertedExpectedValue = $expectedValue - 1;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                 function ($arg) {
                     return $arg -1;
                 }
@@ -264,7 +265,8 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                 function ($arg) {
                     return round(0.5 * $arg, 2);
                 }
@@ -425,6 +427,5 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ['0.7', 0.7],
             ['0.0000000', 1]
         ];
-
     }
 }

@@ -5,9 +5,9 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form;
 

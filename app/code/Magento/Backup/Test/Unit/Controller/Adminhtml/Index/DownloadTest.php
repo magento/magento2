@@ -5,8 +5,8 @@
  */
 namespace Magento\Backup\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @covers \Magento\Backup\Controller\Adminhtml\Index\Download

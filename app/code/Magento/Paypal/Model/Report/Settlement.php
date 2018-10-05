@@ -418,7 +418,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         $bodyItem = [];
         $lineCount = count($line);
         for ($i = 1, $count = $lineCount; $i < $count; $i++) {
-            if(isset($rowMap[$sectionColumns[$i]])) {
+            if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }

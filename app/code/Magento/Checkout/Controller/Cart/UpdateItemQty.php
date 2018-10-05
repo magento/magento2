@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Item;
 use Psr\Log\LoggerInterface;
 

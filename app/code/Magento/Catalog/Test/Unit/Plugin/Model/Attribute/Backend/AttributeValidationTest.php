@@ -7,12 +7,12 @@
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Attribute\Backend;
 
 use Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class AttributeValidationTest extends \PHPUnit\Framework\TestCase
 {

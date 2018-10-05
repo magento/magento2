@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Setup;
 
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore

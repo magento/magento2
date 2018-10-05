@@ -5,10 +5,9 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Backend\App\ConfigInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Model\CustomerAuthUpdate;
-use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
@@ -110,7 +109,7 @@ class Authentication implements AuthenticationInterface
             $customerSecure->setFirstFailure($this->dateTime->formatDate($now));
             $failuresNum = 1;
             $customerSecure->setLockExpires(null);
-            // otherwise lock customer
+        // otherwise lock customer
         } elseif ($failuresNum >= $maxFailures) {
             $customerSecure->setLockExpires($this->dateTime->formatDate($now->add($lockThreshInterval)));
         }

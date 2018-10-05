@@ -5,14 +5,14 @@
  */
 namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
-use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterfaceFactory;
 use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface;
+use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterfaceFactory;
 use Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee;
 
 /**

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Quote;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class ToOrderConverterTest
@@ -152,7 +152,7 @@ class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($itemsAppliedTaxes);
 
         $orderExtensionAttributeMock = $this->setupOrderExtensionAttributeMock();
-        
+
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();

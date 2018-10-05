@@ -11,12 +11,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\CreditmemoCommentRepositoryInterface;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterfaceFactory;
-use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 use Psr\Log\LoggerInterface;
 
 /**

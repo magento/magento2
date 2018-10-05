@@ -14,5 +14,4 @@ use Magento\Multishipping\Block\Checkout\Results;
  */
 class Success extends Results implements ArgumentInterface
 {
-
 }

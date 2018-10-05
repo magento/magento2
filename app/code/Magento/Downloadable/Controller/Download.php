@@ -67,7 +67,7 @@ abstract class Download extends \Magento\Framework\App\Action\Action
             $contentDisposition = \Zend_Mime::DISPOSITION_ATTACHMENT;
         }
 
-        $response->setHeader('Content-Disposition', $contentDisposition  . '; filename=' . $fileName);
+        $response->setHeader('Content-Disposition', $contentDisposition . '; filename=' . $fileName);
         //Rendering
         $response->clearBody();
         $response->sendHeaders();

@@ -59,7 +59,8 @@ class Website
         ];
 
         if ($this->storeManager->hasSingleStore()
-            || ($eavAttribute->getEntityAttribute() && $eavAttribute->getEntityAttribute()->isScopeGlobal()
+            || (
+                $eavAttribute->getEntityAttribute() && $eavAttribute->getEntityAttribute()->isScopeGlobal()
             )
         ) {
             return $this->websites = $websites;

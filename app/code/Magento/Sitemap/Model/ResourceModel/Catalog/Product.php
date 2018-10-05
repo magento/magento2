@@ -5,11 +5,11 @@
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
+use Magento\Catalog\Helper\Product as HelperProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Store\Model\Store;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Catalog\Helper\Product as HelperProduct;
+use Magento\Store\Model\Store;
 
 /**
  * Sitemap resource product collection model
@@ -90,7 +90,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Catalog\Helper\Image
      */
     private $catalogImageHelper;
-    
+
     /**
      * Scope Config
      *

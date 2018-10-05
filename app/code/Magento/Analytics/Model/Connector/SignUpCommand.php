@@ -9,9 +9,9 @@ use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SignUpCommand

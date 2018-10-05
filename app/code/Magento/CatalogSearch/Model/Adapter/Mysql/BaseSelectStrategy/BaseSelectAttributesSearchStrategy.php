@@ -7,10 +7,10 @@
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy;
 
 use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class BaseSelectAttributesSearchStrategy

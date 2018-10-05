@@ -64,6 +64,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://magento.com/rss/feed/index/type/rss_feed'));
         $this->assertEquals(
             'http://magento.com/rss/feed/index/type/rss_feed',
-            $this->urlBuilder->getUrl(['type' => 'rss_feed']));
+            $this->urlBuilder->getUrl(['type' => 'rss_feed'])
+        );
     }
 }

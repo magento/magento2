@@ -6,11 +6,11 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-use Magento\Newsletter\Controller\Adminhtml\Subscriber;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Newsletter\Controller\Adminhtml\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 class MassDelete extends Subscriber
 {
@@ -18,7 +18,7 @@ class MassDelete extends Subscriber
      * @var SubscriberFactory
      */
     private $subscriberFactory;
-    
+
     /**
      * @param Context $context
      * @param FileFactory $fileFactory
@@ -31,7 +31,7 @@ class MassDelete extends Subscriber
         $this->subscriberFactory = $subscriberFactory ?: ObjectManager::getInstance()->get(SubscriberFactory::class);
         parent::__construct($context, $fileFactory);
     }
-    
+
     /**
      * Delete one or more subscribers action
      *

@@ -6,13 +6,13 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend\TierPrice;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Unit tests for \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler

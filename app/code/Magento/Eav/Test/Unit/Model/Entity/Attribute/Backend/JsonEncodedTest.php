@@ -96,7 +96,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         // save twice
         $this->model->beforeSave($product);
         $this->model->beforeSave($product);
-        
+
         // check it is encoded only once
         $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }

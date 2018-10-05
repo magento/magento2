@@ -65,8 +65,10 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $this->product->expects($this->atLeastOnce())
             ->method('getPreconfiguredValues')
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]]))
+            ->will(
+                $this->returnValue(
+                new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]])
+            )
             );
 
         $option = $this->createMock(\Magento\Bundle\Model\Option::class);

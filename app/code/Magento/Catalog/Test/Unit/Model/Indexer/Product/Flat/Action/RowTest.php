@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */ 
+ */
 class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -119,14 +119,16 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $productMetadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
             'resource'         => $this->resource,
             'storeManager'     => $this->storeManager,
             'productHelper'    => $this->productIndexerHelper,
             'flatItemEraser'   => $this->flatItemEraser,
             'flatItemWriter'   => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder,
-        ]);
+        ]
+        );
 
         $objectManager->setBackwardCompatibleProperty($this->model, 'metadataPool', $metadataPool);
     }

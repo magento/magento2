@@ -5,14 +5,14 @@
  */
 namespace Magento\ReleaseNotification\Test\Unit\Model\Condition;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Config\DataInterfaceFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\ReleaseNotification\Model\Viewer\Log;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class CanViewNotificationTest

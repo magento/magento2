@@ -84,7 +84,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        
+
         $this->assertEquals(
             $objectResourceMock,
             $this->model->afterDelete($subjectMock, $objectResourceMock, $websiteMock)

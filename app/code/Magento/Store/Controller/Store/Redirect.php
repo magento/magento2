@@ -10,11 +10,11 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreResolver;
-use Magento\Framework\Session\SidResolverInterface;
-use Magento\Framework\Session\Generic as Session;
 
 /**
  * Builds correct url to target store and performs redirect.

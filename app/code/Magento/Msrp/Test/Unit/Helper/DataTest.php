@@ -52,7 +52,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $convertedFinalPrice = 200;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                 function ($arg) {
                     return round(2 * $arg, 2);
                 }

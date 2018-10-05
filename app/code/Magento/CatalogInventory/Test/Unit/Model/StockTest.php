@@ -57,30 +57,30 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        
+
         $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
-        
+
         $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->extensionFactory = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->customAttributeFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIdFieldName'])
             ->getMockForAbstractClass();
-        
+
         $this->resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -118,7 +118,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
                 return true;
             })
         );
-            
+
         $this->stockModel->$methodName();
         $this->assertTrue(
             ($isCalledWithRightPrefix && $isObjectNameRight),

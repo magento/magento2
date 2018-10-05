@@ -5,14 +5,14 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Action\Redirect;
-use Magento\Framework\App\ActionInterface;
 
 /**
  * UrlRewrite Controller Router

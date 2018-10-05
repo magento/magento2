@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Collection;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class ProductLimitationTest

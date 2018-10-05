@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Framework\App\Http\Context;
-use Magento\Framework\Indexer\Dimension;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Replace catalog_product_index_price table name on the table name segmented per dimension.

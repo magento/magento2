@@ -66,7 +66,7 @@ class ProfilerDisableCommand extends Command
     {
         $this->filesystem->rm(BP . '/' . self::PROFILER_FLAG_FILE);
         if (!$this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {
-            $output->writeln('<info>'. self::SUCCESS_MESSAGE . '</info>');
+            $output->writeln('<info>' . self::SUCCESS_MESSAGE . '</info>');
             return;
         }
         $output->writeln('<error>Something went wrong while disabling the profiler.</error>');

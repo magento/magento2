@@ -7,7 +7,6 @@ namespace Magento\InstantPurchase\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Instant purchase configuration.

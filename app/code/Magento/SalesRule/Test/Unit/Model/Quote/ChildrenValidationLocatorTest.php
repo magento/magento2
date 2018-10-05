@@ -9,7 +9,6 @@ namespace Magento\SalesRule\Test\Unit\Model\Quote;
 
 use Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
-use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 
 /**

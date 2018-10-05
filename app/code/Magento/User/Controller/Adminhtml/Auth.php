@@ -5,11 +5,11 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-use Magento\Framework\Encryption\Helper\Security;
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Context;
-use Magento\User\Model\UserFactory;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\User\Model\UserFactory;
 
 /**
  * \Magento\User Auth controller

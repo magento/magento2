@@ -29,7 +29,7 @@ abstract class AbstractEnable extends Field
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
         return parent::getUiId($arg1, $arg2, $arg3, $arg4, $arg5)
-            . 'data-enable="' . $this->getDataAttributeName(). '" ';
+            . 'data-enable="' . $this->getDataAttributeName() . '" ';
     }
 
     /**

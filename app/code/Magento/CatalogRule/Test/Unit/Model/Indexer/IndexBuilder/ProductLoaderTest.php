@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\IndexBuilder;
 
-use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class ProductLoaderTest extends \PHPUnit\Framework\TestCase
 {

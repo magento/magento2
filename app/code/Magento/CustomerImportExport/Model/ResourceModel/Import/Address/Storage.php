@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Address;
 
+use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator as CollectionIterator;
-use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Storage to check existing addresses.
@@ -97,7 +97,7 @@ class Storage
         $collection->removeAttributeToSelect();
         $select = $collection->getSelect();
         $tableId = array_keys($select->getPart(Select::FROM))[0];
-        $select->where($tableId .'.parent_id in (?)', $customerIds);
+        $select->where($tableId . '.parent_id in (?)', $customerIds);
 
         $this->collectionIterator->iterate(
             $collection,

@@ -5,12 +5,12 @@
  */
 namespace Magento\Downloadable\Test\Unit\Observer;
 
-use Magento\Downloadable\Observer\SetLinkStatusObserver;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection as LinkItemCollection;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection as LinkItemCollection;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Observer\SetLinkStatusObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

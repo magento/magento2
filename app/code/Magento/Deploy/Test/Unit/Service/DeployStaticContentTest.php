@@ -7,11 +7,11 @@ namespace Magento\Deploy\Test\Unit\Service;
 
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
+use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Service\Bundle;
 use Magento\Deploy\Service\DeployPackage;
 use Magento\Deploy\Service\DeployRequireJsConfig;
 use Magento\Deploy\Service\DeployStaticContent;
-use Magento\Deploy\Process\QueueFactory;
 use Magento\Deploy\Service\DeployTranslationsDictionary;
 use Magento\Deploy\Service\MinifyTemplates;
 use Magento\Deploy\Strategy\CompactDeploy;
@@ -20,9 +20,9 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-use Psr\Log\LoggerInterface;
-
 use PHPUnit_Framework_MockObject_MockObject as Mock;
+
+use Psr\Log\LoggerInterface;
 
 /**
  * Static Content deploy service class unit tests

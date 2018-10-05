@@ -6,7 +6,6 @@
 namespace Magento\Payment\Model;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Store\Model\ScopeInterface;
 
 /**

@@ -5,20 +5,20 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
+use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Model\Config\PathValidator;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Config\Model\Config\PathValidator;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Config\App\Config\Type\System;
-use Magento\Framework\App\Config;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

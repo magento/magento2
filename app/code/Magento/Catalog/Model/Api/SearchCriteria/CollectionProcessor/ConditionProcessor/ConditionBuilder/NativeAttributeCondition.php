@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
-use Magento\Framework\Api\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 /**
  * Based on Magento\Framework\Api\Filter builds condition

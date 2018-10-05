@@ -7,8 +7,8 @@
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
-use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Shipping\Model\Simplexml\Element;
 
 class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
 {

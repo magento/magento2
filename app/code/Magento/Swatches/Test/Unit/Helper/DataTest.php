@@ -475,13 +475,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->setMethods(['hasData', 'getMediaGalleryEntries'])
                 ->getMock();
 
-           /* $simpleProduct = $this->getMock(
-                \Magento\Catalog\Model\Product::class,
-                ['hasData', 'getMediaGalleryEntries'],
-                [],
-                '',
-                false
-            );*/
+            /* $simpleProduct = $this->getMock(
+                 \Magento\Catalog\Model\Product::class,
+                 ['hasData', 'getMediaGalleryEntries'],
+                 [],
+                 '',
+                 false
+             );*/
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];

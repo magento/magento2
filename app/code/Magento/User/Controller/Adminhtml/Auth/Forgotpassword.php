@@ -6,16 +6,16 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
-use Magento\Security\Model\SecurityManager;
-use Magento\Framework\App\ObjectManager;
 use Magento\Backend\App\Action\Context;
-use Magento\User\Model\UserFactory;
-use Magento\User\Model\ResourceModel\User\CollectionFactory;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Security\Model\PasswordResetRequestEvent;
-use Magento\Framework\Exception\SecurityViolationException;
+use Magento\Security\Model\SecurityManager;
 use Magento\User\Controller\Adminhtml\Auth;
-use Magento\Backend\Helper\Data;
+use Magento\User\Model\ResourceModel\User\CollectionFactory;
+use Magento\User\Model\UserFactory;
 
 class Forgotpassword extends Auth
 {

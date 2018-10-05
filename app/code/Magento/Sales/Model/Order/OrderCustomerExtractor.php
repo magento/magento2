@@ -9,15 +9,14 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Order;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\DataObject\Copy as CopyService;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as AddressFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerFactory;
+use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
+use Magento\Framework\DataObject\Copy as CopyService;
 use Magento\Quote\Api\Data\AddressInterfaceFactory as QuoteAddressFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 
 /**

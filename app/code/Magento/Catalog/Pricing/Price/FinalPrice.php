@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**

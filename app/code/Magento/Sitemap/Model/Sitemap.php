@@ -10,8 +10,8 @@ namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
-use Magento\Robots\Model\Config\Value;
 use Magento\Framework\DataObject;
+use Magento\Robots\Model\Config\Value;
 
 /**
  * Sitemap model

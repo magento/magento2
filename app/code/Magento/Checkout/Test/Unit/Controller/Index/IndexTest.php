@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Controller\Index;
 
+use Magento\Checkout\Controller\Index\Index;
+use Magento\Checkout\Helper\Data;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Result\Page;
+use Magento\Quote\Model\Quote;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker as InvocationMocker;
 use PHPUnit_Framework_MockObject_Matcher_InvokedCount as InvokedCount;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Checkout\Helper\Data;
-use Magento\Quote\Model\Quote;
-use Magento\Framework\View\Result\Page;
-use Magento\Checkout\Controller\Index\Index;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

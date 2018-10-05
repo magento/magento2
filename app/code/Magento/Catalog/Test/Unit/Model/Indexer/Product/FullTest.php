@@ -8,8 +8,8 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product;
 
 use Magento\Catalog\Model\Indexer\Product\Full;
 use Magento\Framework\Indexer\IndexerInterface;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\TestCase;
 
 class FullTest extends TestCase
 {
@@ -27,7 +27,7 @@ class FullTest extends TestCase
      * @var Full
      */
     private $full;
-    
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

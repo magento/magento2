@@ -7,9 +7,9 @@ namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Model\Customer;
 
+use Magento\InstantPurchase\Model\BillingAddressChoose\BillingAddressChooserInterface;
 use Magento\InstantPurchase\Model\PaymentMethodChoose\PaymentTokenChooserInterface;
 use Magento\InstantPurchase\Model\ShippingAddressChoose\ShippingAddressChooserInterface;
-use Magento\InstantPurchase\Model\BillingAddressChoose\BillingAddressChooserInterface;
 use Magento\InstantPurchase\Model\ShippingMethodChoose\ShippingMethodChooserInterface;
 use Magento\Store\Model\Store;
 

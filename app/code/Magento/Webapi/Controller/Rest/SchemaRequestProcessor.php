@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Webapi\Model\Rest\Swagger\Generator;
-use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
+use Magento\Framework\Webapi\Rest\Response as RestResponse;
+use Magento\Webapi\Model\Rest\Swagger\Generator;
 
 /**
  * REST request processor for synchronous "schema" requests
  */
 class SchemaRequestProcessor implements RequestProcessorInterface
 {
-
     const PROCESSOR_PATH = 'schema';
 
     /**

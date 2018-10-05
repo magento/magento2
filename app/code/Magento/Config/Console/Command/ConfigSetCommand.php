@@ -9,8 +9,8 @@ namespace Magento\Config\Console\Command;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -163,7 +163,6 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-
                 $lock = $input->getOption(static::OPTION_LOCK_ENV)
                     || $input->getOption(static::OPTION_LOCK_CONFIG)
                     || $input->getOption(static::OPTION_LOCK);

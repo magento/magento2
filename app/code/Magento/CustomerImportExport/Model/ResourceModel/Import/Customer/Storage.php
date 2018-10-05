@@ -5,12 +5,12 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
-use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 
 /**
  * Helper class to help dealing with existent customers.
@@ -120,7 +120,7 @@ class Storage
         $select = $collection->getSelect();
         $customerTableId = array_keys($select->getPart(Select::FROM))[0];
         $select->where(
-            $customerTableId .'.email in (?)',
+            $customerTableId . '.email in (?)',
             array_map(
                 function (array $customer) {
                     return $customer['email'];
@@ -209,7 +209,7 @@ class Storage
             ) {
                 //Only looking for customers we don't already have ID for.
                 //We need unique identifiers.
-                $uniqueKey = $email .'_' .$websiteId;
+                $uniqueKey = $email . '_' . $websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
                     'website_id' => $websiteId

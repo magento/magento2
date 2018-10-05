@@ -6,13 +6,13 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 class CustomerGroup

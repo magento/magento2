@@ -6,13 +6,13 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\Data\ShipmentCommentInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentCommentSearchResultInterfaceFactory;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Comment;
 use Magento\Sales\Model\Order\Shipment\CommentRepository;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 use Psr\Log\LoggerInterface;
 

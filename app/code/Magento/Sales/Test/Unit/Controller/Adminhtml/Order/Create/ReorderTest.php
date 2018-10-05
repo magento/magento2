@@ -16,10 +16,10 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Create\Reorder;
+use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 /**
  * Class ReorderTest

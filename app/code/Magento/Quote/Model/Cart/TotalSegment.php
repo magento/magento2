@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Quote\Api\Data\TotalSegmentInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Quote\Api\Data\TotalSegmentInterface;
 
 /**
  * Extensible Cart Totals

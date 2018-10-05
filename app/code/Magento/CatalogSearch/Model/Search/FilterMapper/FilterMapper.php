@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
 /**
  * Class FilterMapper

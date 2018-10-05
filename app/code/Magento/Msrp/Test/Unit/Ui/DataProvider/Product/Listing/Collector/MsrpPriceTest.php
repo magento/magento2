@@ -5,15 +5,14 @@
  */
 namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Eav;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalRowSizeEstimator;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Decimal;
-use Magento\Store\Api\StoreManagementInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Decimal;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalRowSizeEstimator;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Api\StoreManagementInterface;
 
 class DecimalRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {

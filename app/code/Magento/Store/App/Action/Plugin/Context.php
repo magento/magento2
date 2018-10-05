@@ -6,16 +6,15 @@
 
 namespace Magento\Store\App\Action\Plugin;
 
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Action\AbstractAction;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin

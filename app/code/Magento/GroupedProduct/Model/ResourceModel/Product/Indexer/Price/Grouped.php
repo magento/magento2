@@ -8,15 +8,15 @@
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 
 /**
  * Calculate minimal and maximal prices for Grouped products

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
-use Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Class ProductIdentitiesExtenderTest

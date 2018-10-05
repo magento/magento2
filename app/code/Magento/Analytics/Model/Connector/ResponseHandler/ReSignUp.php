@@ -19,7 +19,7 @@ class ReSignUp implements ResponseHandlerInterface
      * @var AnalyticsToken
      */
     private $analyticsToken;
-    
+
     /**
      * @var SubscriptionHandler
      */

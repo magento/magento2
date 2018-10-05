@@ -896,7 +896,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function saveImageInfoToCache(array $imageInfo, string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $this->_cacheManager->save(
             $this->serializer->serialize($imageInfo),
             $imagePath,
@@ -912,7 +912,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function loadImageInfoFromCache(string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $cacheData = $this->_cacheManager->load($imagePath);
         if (!$cacheData) {
             return false;

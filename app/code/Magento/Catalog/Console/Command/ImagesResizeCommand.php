@@ -6,22 +6,22 @@
 namespace Magento\Catalog\Console\Command;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\Image\CacheFactory;
+use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Framework\Console\Cli;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
-use Magento\Catalog\Model\Product\Image;
-use Magento\Catalog\Model\Product\ImageFactory as ProductImageFactory;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -151,7 +151,7 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Framework\Exception\CouldNotSaveException(__('Could not save the creditmemo comment.'))
             );
 
-         $this->commentRepository->save($this->commentMock);
+        $this->commentRepository->save($this->commentMock);
     }
 
     public function testSaveSendCatchException()

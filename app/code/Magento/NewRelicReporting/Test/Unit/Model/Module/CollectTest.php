@@ -5,11 +5,10 @@
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Module;
 
-use Magento\NewRelicReporting\Model\Module\Collect;
 use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Manager;
-use Magento\NewRelicReporting\Model\Module;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\NewRelicReporting\Model\Module\Collect;
 
 /**
  * Class CollectTest
@@ -86,7 +85,8 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataWithoutRefresh()
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock = $this->createMock(\Magento\NewRelicReporting\Model\Module::class);
@@ -175,7 +175,8 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataRefresh($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
@@ -265,7 +266,8 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     public function testGetModuleDataRefreshOrStatement($data)
     {
         $moduleCollectionMock = $this->getMockBuilder(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class)
+            \Magento\NewRelicReporting\Model\ResourceModel\Module\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */

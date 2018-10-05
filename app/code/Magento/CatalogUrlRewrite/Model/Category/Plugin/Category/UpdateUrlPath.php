@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
  * Generate and save url-rewrites for category if its parent have specified url-key for different store views

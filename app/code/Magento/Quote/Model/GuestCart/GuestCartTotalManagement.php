@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\GuestCartTotalManagementInterface;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * @inheritDoc

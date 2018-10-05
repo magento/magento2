@@ -7,9 +7,9 @@
 namespace Magento\Store\Model\Indexer;
 
 use Magento\Framework\Indexer\Dimension;
-use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Store\Model\Store;
 
 class WebsiteDimensionProvider implements DimensionProviderInterface

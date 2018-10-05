@@ -6,8 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Operations;
 
-use Magento\Framework\ObjectManager\ObjectManager;
-use Magento\Payment\Model\Method;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class CaptureOperationTest extends \PHPUnit\Framework\TestCase

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Test for class \Magento\Indexer\Model\ModeSwitcherInterface.
@@ -131,8 +131,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
                     'indexer' => 'indexer_title',
                     'mode'    => 'store',
                 ],
-                'output'        =>
-                    sprintf(
+                'output'        => sprintf(
                         'Dimensions mode for indexer "%s" was changed from \'%s\' to \'%s\'',
                         'indexer_title',
                         'none',
@@ -147,8 +146,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
                     'indexer' => 'indexer_title',
                     'mode'    => 'none',
                 ],
-                'output'        =>
-                    sprintf(
+                'output'        => sprintf(
                         'Dimensions mode for indexer "%s" has not been changed',
                         'indexer_title'
                     ) . PHP_EOL

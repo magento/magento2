@@ -10,26 +10,26 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\LocalizedExceptionFactory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\CartFactory;
+use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Express as PaypalExpress;
 use Magento\Paypal\Model\ProFactory;
-use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Paypal\Model\Config;
-use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Provides ability to make an authorization calls to Paypal API from admin.

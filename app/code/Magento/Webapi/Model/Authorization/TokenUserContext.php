@@ -8,13 +8,13 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\Webapi\Request;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Framework\Webapi\Request;
-use Magento\Framework\Stdlib\DateTime\DateTime as Date;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * A user context determined by tokens in a HTTP request Authorization header.

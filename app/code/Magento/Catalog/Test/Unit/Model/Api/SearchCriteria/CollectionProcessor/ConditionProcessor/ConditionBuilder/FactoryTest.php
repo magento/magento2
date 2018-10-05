@@ -5,17 +5,16 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
-use Magento\Framework\Api\Filter;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
-
     private $productResourceMock;
 
     private $eavConfigMock;

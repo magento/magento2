@@ -6,10 +6,10 @@
 
 namespace Magento\PageCache\Test\Unit\Model\System\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\System\Config\Backend\AccessList;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class AccessListTest extends TestCase
 {

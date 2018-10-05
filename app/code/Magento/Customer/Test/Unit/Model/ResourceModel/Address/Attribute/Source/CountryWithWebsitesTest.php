@@ -9,11 +9,11 @@ namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Sourc
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Tests for \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites

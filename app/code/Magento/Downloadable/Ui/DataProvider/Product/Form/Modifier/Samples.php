@@ -5,15 +5,15 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Source\TypeUpload;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 
 /**

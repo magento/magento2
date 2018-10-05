@@ -6,8 +6,8 @@
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api

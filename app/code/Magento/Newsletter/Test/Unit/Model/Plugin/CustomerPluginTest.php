@@ -5,9 +5,9 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
 

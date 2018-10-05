@@ -321,7 +321,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         $sender = 'Sender';
         $senderValues = ['name' => $sender, 'email' => $sender];
         $storeIds = [1, 2];
-        
+
         $this->senderResolverMock
             ->expects($this->once())
             ->method('resolve')
@@ -360,7 +360,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsite')
             ->with($customerWebsiteId)
             ->willReturn($websiteMock);
-    
+
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
@@ -466,7 +466,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsite')
             ->with($customerWebsiteId)
             ->willReturn($websiteMock);
-    
+
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)

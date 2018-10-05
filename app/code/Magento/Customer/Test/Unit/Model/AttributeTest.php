@@ -144,7 +144,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->getMock();
         $this->extensionAttributesFactory = $this->getMockBuilder(
-            \Magento\Framework\Api\ExtensionAttributesFactory::class)
+            \Magento\Framework\Api\ExtensionAttributesFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
@@ -177,7 +178,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
         $this->reservedAttributeListMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product\ReservedAttributeList::class)
+            \Magento\Catalog\Model\Product\ReservedAttributeList::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->resolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)

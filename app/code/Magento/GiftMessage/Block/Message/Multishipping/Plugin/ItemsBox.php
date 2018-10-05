@@ -5,9 +5,9 @@
  */
 namespace Magento\GiftMessage\Block\Message\Multishipping\Plugin;
 
-use Magento\Multishipping\Block\Checkout\Shipping as ShippingBlock;
-use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\Framework\DataObject;
+use Magento\GiftMessage\Helper\Message as MessageHelper;
+use Magento\Multishipping\Block\Checkout\Shipping as ShippingBlock;
 
 /**
  * Multishipping items box plugin

@@ -6,8 +6,8 @@
 namespace Magento\Wishlist\Controller\Shared;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Model\ItemCarrier;
 
 class Allcart extends \Magento\Framework\App\Action\Action
 {

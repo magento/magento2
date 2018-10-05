@@ -5,16 +5,16 @@
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-use Magento\Eav\Model\AttributeManagement;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
-use Magento\Eav\Api\AttributeSetRepositoryInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
-use Magento\Eav\Model\Config;
-use Magento\Eav\Model\ConfigFactory;
 use Magento\Eav\Api\AttributeGroupRepositoryInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Eav\Model\AttributeManagement;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ConfigFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

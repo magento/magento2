@@ -5,10 +5,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassDelete
@@ -63,7 +63,7 @@ class MassDelete extends \Magento\Backend\App\Action
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        
+
         return $resultRedirect->setPath('*/*/');
     }
 }

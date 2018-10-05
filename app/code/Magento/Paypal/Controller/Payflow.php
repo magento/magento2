@@ -73,7 +73,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         $this->_logger = $logger;
         $this->_payflowModelFactory = $payflowModelFactory;
         $this->_checkoutHelper = $checkoutHelper;
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
     }
 
     /**

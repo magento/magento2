@@ -12,9 +12,9 @@ use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
-use Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver;
 use Magento\Store\Model\ScopeInterface;
 
 /**

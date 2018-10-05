@@ -7,9 +7,9 @@ namespace Magento\Customer\Test\Unit\Controller\Plugin;
 
 use Magento\Customer\Controller\Plugin\Account;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

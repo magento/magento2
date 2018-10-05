@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
 /**
  * Reindex information about rule relations with customer groups and websites.

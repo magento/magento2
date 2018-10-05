@@ -5,8 +5,8 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\Exception;
 
-use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\Framework\Phrase;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 /**
  * Class UrlAlreadyExistsExceptionTest

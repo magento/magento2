@@ -8,10 +8,10 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection as AttributeOptionCollection;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Escaper;
 
 /**
  * Tests \Magento\Eav\Model\Entity\Attribute\Source\Table.

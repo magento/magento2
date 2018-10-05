@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Ui\Component\DataProvider;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Class Document

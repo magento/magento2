@@ -114,7 +114,8 @@ class StockItem
          * qty of child products are declared just during add process
          * exception for updating also managed by product type
          */
-        if ($result->getHasQtyOptionUpdate() && (!$quoteItem->getParentItem() ||
+        if ($result->getHasQtyOptionUpdate() && (
+            !$quoteItem->getParentItem() ||
                 $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
                     $quoteItem->getParentItem()->getProduct()
                 )

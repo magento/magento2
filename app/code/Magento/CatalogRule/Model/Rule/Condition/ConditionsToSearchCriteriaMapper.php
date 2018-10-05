@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Rule\Model\Condition\ConditionInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 use Magento\Framework\Api\CombinedFilterGroup as FilterGroup;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Exception\InputException;
+use Magento\Rule\Model\Condition\ConditionInterface;
 
 /**
  * Maps catalog price rule conditions to search criteria

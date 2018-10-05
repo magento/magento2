@@ -189,7 +189,7 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'http://redirect-url.com';
         $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
-        
+
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)

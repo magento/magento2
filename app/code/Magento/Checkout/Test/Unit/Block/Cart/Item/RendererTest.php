@@ -7,9 +7,9 @@ namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

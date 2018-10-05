@@ -5,10 +5,10 @@
  */
 namespace Magento\Captcha\Observer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -90,7 +90,6 @@ class CheckUserLoginObserver implements ObserverInterface
      */
     private function getCustomerRepository()
     {
-
         if (!($this->customerRepository instanceof \Magento\Customer\Api\CustomerRepositoryInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Customer\Api\CustomerRepositoryInterface::class
@@ -107,7 +106,6 @@ class CheckUserLoginObserver implements ObserverInterface
      */
     private function getAuthentication()
     {
-
         if (!($this->authentication instanceof AuthenticationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 AuthenticationInterface::class

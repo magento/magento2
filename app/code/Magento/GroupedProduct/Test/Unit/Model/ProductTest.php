@@ -8,7 +8,7 @@
 
 namespace Magento\GroupedProduct\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -285,7 +285,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'data' => ['id' => 1]
             ]
         );
-
     }
 
     /**

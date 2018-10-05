@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**

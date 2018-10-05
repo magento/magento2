@@ -5,19 +5,19 @@
  */
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Region;
 
-use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\DataObject;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CollectionTest

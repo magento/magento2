@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * @api

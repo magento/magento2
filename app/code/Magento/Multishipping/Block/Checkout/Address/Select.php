@@ -5,9 +5,9 @@
  */
 namespace Magento\Multishipping\Block\Checkout\Address;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Helper\Address as CustomerAddressHelper;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Helper\Address as CustomerAddressHelper;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Select

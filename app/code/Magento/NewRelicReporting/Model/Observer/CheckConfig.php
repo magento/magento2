@@ -7,8 +7,8 @@ namespace Magento\NewRelicReporting\Model\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\NewRelicReporting\Model\Config;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**

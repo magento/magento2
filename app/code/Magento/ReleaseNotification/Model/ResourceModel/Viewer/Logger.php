@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ReleaseNotification\Model\ResourceModel\Viewer;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\ReleaseNotification\Model\Viewer\Log;
 use Magento\ReleaseNotification\Model\Viewer\LogFactory;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Release notification viewer log data logger.

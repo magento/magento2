@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Model\Service;
 
-use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Class OrderService
@@ -84,7 +84,7 @@ class OrderService implements OrderManagementInterface
         $this->notifier = $notifier;
         $this->eventManager = $eventManager;
         $this->orderCommentSender = $orderCommentSender;
-        $this->paymentFailures = $paymentFailures ? : \Magento\Framework\App\ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
     }
 

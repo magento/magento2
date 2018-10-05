@@ -8,8 +8,8 @@
 namespace Magento\LayeredNavigation\Observer\Edit\Tab\Front;
 
 use Magento\Config\Model\Config\Source;
-use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Module\Manager;
 
 class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
 {

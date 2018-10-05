@@ -5,9 +5,9 @@
  */
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class RulesApplier
@@ -78,7 +78,7 @@ class RulesApplier
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
                 if (!$this->childrenValidationLocator->isChildrenValidationRequired($item)) {
-                     continue;
+                    continue;
                 }
                 $childItems = $item->getChildren();
                 $isContinue = true;
