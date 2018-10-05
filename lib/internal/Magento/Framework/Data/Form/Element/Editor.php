@@ -542,4 +542,12 @@ class Editor extends Textarea
                 </script>';
         return $jsString;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHtmlId()
+    {
+        return parent::getHtmlId() . '${ $.wysiwygUniqueSuffix }';
+    }
 }

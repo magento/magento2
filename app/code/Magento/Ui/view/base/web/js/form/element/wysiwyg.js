@@ -20,6 +20,7 @@ define([
     return Abstract.extend({
         defaults: {
             elementSelector: 'textarea',
+            suffixRegExpPattern: '\\${ \\$.wysiwygUniqueSuffix }',
             value: '',
             $wysiwygEditorButton: '',
             links: {
@@ -61,12 +62,23 @@ define([
             return this;
         },
 
-        /**
-         * @inheritdoc
-         */
-        destroy: function () {
+        /** @inheritdoc */
+        initConfig: function (config) {
+            var pattern = config.suffixRegExpPattern || this.constructor.defaults.suffixRegExpPattern;
+
+            config.content = config.content.replace(new RegExp(pattern, 'g'), this.getUniqueSuffix(config));
             this._super();
-            wysiwyg.removeEvents(this.wysiwygId);
+
+            return this;
+        },
+
+        /**
+         * Build unique id based on name, underscore separated.
+         *
+         * @param {Object} config
+         */
+        getUniqueSuffix: function (config) {
+            return config.name.replace(/(\.|-)/g, '_');
         },
 
         /**
