@@ -92,17 +92,18 @@
         <waitForPageLoad stepKey="waitForPageLoad8"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad9"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad10"/>
         <scrollToTopOfPage stepKey="scrollToTopMessage" />
-        <waitForPageLoad stepKey="waitForPageLoad10"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <waitForPageLoad stepKey="waitForPageLoad12"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="checkOrderId"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="checkUserName"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
-        <waitForPageLoad stepKey="waitForPageLoad12"/>
+        <waitForPageLoad stepKey="waitForPageLoad13"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus"/>
 
         <comment userInput="Check product sources quantity and salable quantity after invoice been created." stepKey="checkProductQtyAfterInvoiceCreatedComment"/>
