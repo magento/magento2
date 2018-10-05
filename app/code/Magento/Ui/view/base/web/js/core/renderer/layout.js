@@ -302,7 +302,7 @@ define([
          */
         filterDisabledChildren: function (children) {
             var cIds;
-            
+
             //cleanup children config.componentDisabled = true
             if (children && typeof children === 'object') {
                 cIds = Object.keys(children);
@@ -313,7 +313,7 @@ define([
                             typeof children[cId].config === 'object' &&
                             children[cId].config.hasOwnProperty('componentDisabled') &&
                             children[cId].config.componentDisabled === true) {
-                                delete children[cId];
+                            delete children[cId];
                         }
                     });
                 }
