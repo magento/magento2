@@ -32,6 +32,6 @@ class DiscountCalculator
                 $discount = min($price->getDiscountPercent(), $discount ?: $price->getDiscountPercent());
             }
         }
-        return (null !== $discount) ?  $discount/100 * $value : $value;
+        return (null !== $discount) ? $discount/100 * $value : $value;
     }
 }

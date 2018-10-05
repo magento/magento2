@@ -5,10 +5,9 @@
  */
 namespace Magento\Ui\Component\Form\Element;
 
-use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 

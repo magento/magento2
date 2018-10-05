@@ -7,9 +7,9 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
+use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\AbstractEntity;
-use Magento\CustomerImportExport\Model\Import\Address;
 
 /**
  * Class AddressTest

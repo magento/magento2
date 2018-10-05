@@ -7,8 +7,8 @@
 namespace Magento\Sales\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Sales\Model\ResourceModel\GridPool;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\ResourceModel\GridPool;
 
 /**
  * Class GridProcessAddressChange

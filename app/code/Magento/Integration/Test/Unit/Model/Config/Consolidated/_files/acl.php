@@ -8,8 +8,7 @@ return [
     [
         'id' => 'Magento_Backend::admin',
         'title' => 'Magento Admin (Root)',
-        'children' =>
-            [
+        'children' => [
                 [
                     'id' => 'Magento_Customer::manageParent',
                     'title' => 'Magento Webapi',

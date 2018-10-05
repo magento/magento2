@@ -5,7 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Block\Cart\Item\Renderer;
 
-use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Framework\DataObject\IdentityInterface;
 

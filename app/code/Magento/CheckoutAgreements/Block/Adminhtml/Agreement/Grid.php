@@ -5,8 +5,8 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Grid\CollectionFactory as GridCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -36,10 +36,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         array $data = [],
         GridCollectionFactory $gridColFactory = null
     ) {
-
         $this->_collectionFactory = $collectionFactory;
         $this->gridCollectionFactory = $gridColFactory
-            ? : ObjectManager::getInstance()->get(GridCollectionFactory::class);
+            ?: ObjectManager::getInstance()->get(GridCollectionFactory::class);
 
         parent::__construct($context, $backendHelper, $data);
     }

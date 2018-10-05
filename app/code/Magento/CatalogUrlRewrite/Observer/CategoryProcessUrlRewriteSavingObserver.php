@@ -12,10 +12,10 @@ use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
-use Magento\Store\Model\ResourceModel\Group\Collection as StoreGroupCollection;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ResourceModel\Group\Collection as StoreGroupCollection;
+use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved

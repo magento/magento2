@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
@@ -166,18 +166,14 @@ class UrlRewriteHandler
         foreach ($categoryIds as $categoryId) {
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::ENTITY_ID =>
-                        $categoryId,
-                    UrlRewrite::ENTITY_TYPE =>
-                        CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::ENTITY_ID => $categoryId,
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::METADATA =>
-                        $this->serializer->serialize(['category_id' => $categoryId]),
-                    UrlRewrite::ENTITY_TYPE =>
-                        ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
         }

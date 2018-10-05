@@ -5,13 +5,13 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
-use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassHold

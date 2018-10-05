@@ -12,7 +12,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
-use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultMerger;
 
 /**

@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
+use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 
 class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 {

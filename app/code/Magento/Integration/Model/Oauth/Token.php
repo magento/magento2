@@ -8,7 +8,6 @@ namespace Magento\Integration\Model\Oauth;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Exception as OauthException;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
-use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenCollection;
 
 /**
  * oAuth token model

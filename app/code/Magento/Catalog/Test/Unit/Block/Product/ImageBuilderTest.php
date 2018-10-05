@@ -126,7 +126,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateMultipleCalls($data)
     {
-        list ($firstCall, $secondCall) = array_values($data);
+        list($firstCall, $secondCall) = array_values($data);
 
         $imageId = 'test_image_id';
 

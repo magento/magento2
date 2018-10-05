@@ -184,7 +184,8 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Controller\Result\RedirectFactory::class)
+            \Magento\Framework\Controller\Result\RedirectFactory::class
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

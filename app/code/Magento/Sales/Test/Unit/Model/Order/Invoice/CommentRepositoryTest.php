@@ -6,13 +6,13 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\Data\InvoiceCommentInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceCommentSearchResultInterfaceFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Comment;
 use Magento\Sales\Model\Order\Invoice\CommentRepository;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 use Psr\Log\LoggerInterface;
 

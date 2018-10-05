@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
+use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class UrlTest extends \PHPUnit\Framework\TestCase

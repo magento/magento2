@@ -5,13 +5,13 @@
  */
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
 
-use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
-use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 
 class StorageTest extends \PHPUnit\Framework\TestCase
 {

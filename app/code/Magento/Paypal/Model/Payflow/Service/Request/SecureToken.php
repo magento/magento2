@@ -42,7 +42,6 @@ class SecureToken
         Random $mathRandom,
         Transparent $transparent
     ) {
-
         $this->url = $url;
         $this->mathRandom = $mathRandom;
         $this->transparent = $transparent;

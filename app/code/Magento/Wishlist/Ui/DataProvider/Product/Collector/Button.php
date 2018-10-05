@@ -8,11 +8,8 @@ namespace Magento\Wishlist\Ui\DataProvider\Product\Collector;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductRenderInfoDtoInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
-use Magento\Catalog\Model\ProductRenderInfoDto;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
-use Magento\Catalog\Ui\DataProvider\Product\ProductRenderInfoProviderInterface;
 use Magento\Wishlist\Helper\Data;
 
 /**

@@ -133,7 +133,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 if (!in_array($alias, array_keys($collection->getSelect()->getPart('from')))) {
                     $collection->joinAttribute(
                         $attribute->getAttributeCode(),
-                        'catalog_product/'.$attribute->getAttributeCode(),
+                        'catalog_product/' . $attribute->getAttributeCode(),
                         'entity_id'
                     );
                 }

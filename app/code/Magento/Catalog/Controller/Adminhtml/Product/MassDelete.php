@@ -6,12 +6,12 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Ui\Component\MassAction\Filter;
 
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {

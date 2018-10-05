@@ -6,10 +6,10 @@
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -102,8 +102,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         return [
             'get_all'                => [
                 'command' => [],
-                'output'  =>
-                    sprintf(
+                'output'  => sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'
                     ) . 'none' . PHP_EOL .
@@ -117,8 +116,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1'],
                 ],
-                'output'  =>
-                    sprintf(
+                'output'  => sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'
                     ) . 'none' . PHP_EOL
@@ -128,8 +126,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1', 'indexer_2'],
                 ],
-                'output'  =>
-                    sprintf(
+                'output'  => sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'
                     ) . 'none' . PHP_EOL .

@@ -7,8 +7,6 @@
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
-use Magento\Catalog\Model\Product\OptionFactory;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**

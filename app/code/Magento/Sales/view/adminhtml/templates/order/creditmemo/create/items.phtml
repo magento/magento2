@@ -48,10 +48,10 @@
             <?php endif; ?>
             <?php $i = 0; foreach ($_items as $_item): ?>
                 <?php if ($_item->getOrderItem()->getParentItem()) {
-                continue;
-            } else {
-                $i++;
-            } ?>
+    continue;
+} else {
+    $i++;
+} ?>
                 <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
                     <?= $block->getItemHtml($_item) ?>
                     <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>

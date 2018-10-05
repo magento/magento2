@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Block\DataProviders;
 
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Provides address attribute data into template.
@@ -36,7 +36,6 @@ class AddressAttributeData implements ArgumentInterface
         AddressMetadataInterface $addressMetadata,
         Escaper $escaper
     ) {
-
         $this->addressMetadata = $addressMetadata;
         $this->escaper = $escaper;
     }

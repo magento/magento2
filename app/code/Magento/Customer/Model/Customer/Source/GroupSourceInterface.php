@@ -13,5 +13,4 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 interface GroupSourceInterface extends OptionSourceInterface
 {
-
 }

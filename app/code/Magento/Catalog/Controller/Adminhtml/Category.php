@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml;
 
-use Magento\Store\Model\Store;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
-use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Backend\App\Action;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Registry;
-use Magento\Cms\Model\Wysiwyg\Config;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\Controller\Result\Json;
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog category controller

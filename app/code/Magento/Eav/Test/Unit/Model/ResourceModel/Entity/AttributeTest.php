@@ -301,7 +301,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         )->with(
             true
         )->will(
-            $this->returnValue([
+            $this->returnValue(
+                [
                 new \Magento\Framework\DataObject(['id' => 0]),
                 new \Magento\Framework\DataObject(['id' => 1]), ]
             )

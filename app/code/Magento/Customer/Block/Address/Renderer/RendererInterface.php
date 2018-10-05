@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Block\Address\Renderer;
 
-use Magento\Directory\Model\Country\Format;
 use Magento\Customer\Model\Address\AddressModelInterface;
+use Magento\Directory\Model\Country\Format;
 
 /**
  * Address renderer interface

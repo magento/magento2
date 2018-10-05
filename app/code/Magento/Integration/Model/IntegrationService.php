@@ -5,10 +5,9 @@
  */
 namespace Magento\Integration\Model;
 
-use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\IntegrationFactory;
-use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
+use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Integration Service.

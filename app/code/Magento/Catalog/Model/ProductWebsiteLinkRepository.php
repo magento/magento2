@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Catalog\Api\Data\ProductWebsiteLinkInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
 class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface
 {

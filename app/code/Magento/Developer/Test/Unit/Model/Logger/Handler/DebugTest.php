@@ -7,13 +7,13 @@ namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
 
 use Magento\Developer\Model\Logger\Handler\Debug;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class DebugTest

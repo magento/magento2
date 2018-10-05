@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data;
 
-use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Model\InfoInterface;
 
 /**

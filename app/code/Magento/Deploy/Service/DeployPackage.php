@@ -6,15 +6,12 @@
 
 namespace Magento\Deploy\Service;
 
+use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\View\Asset\ContentProcessorException;
-use Magento\Deploy\Console\InputValidator;
-use Magento\Framework\View\Design\Theme\ListInterface;
-use Magento\Framework\View\DesignInterface;
 use Psr\Log\LoggerInterface;
 
 /**

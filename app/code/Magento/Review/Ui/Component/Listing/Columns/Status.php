@@ -6,10 +6,10 @@
 namespace Magento\Review\Ui\Component\Listing\Columns;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Review\Helper\Data as StatusSource;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Status

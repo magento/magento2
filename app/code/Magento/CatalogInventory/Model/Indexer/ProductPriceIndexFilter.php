@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Model\Indexer;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Model\Stock;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class for filter product price index.

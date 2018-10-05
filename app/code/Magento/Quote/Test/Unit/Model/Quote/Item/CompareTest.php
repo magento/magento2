@@ -118,10 +118,13 @@ class CompareTest extends \PHPUnit\Framework\TestCase
 
         $this->itemMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue([
+            ->will($this->returnValue(
+                [
                     $this->getOptionMock('option-1', 1),
                     $this->getOptionMock('option-2', 'option-value'),
-                    $this->getOptionMock('option-3', json_encode([
+                    $this->getOptionMock(
+                        'option-3',
+                        json_encode([
                             'value' => 'value-1',
                             'qty' => 2,
                         ])
@@ -129,7 +132,8 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             ));
         $this->comparedMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue([
+            ->will(
+                $this->returnValue([
                     $this->getOptionMock('option-4', 1),
                     $this->getOptionMock('option-2', 'option-value'),
                     $this->getOptionMock('option-3', json_encode([
@@ -154,10 +158,13 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
         $this->itemMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue([
+            ->will($this->returnValue(
+                [
                     $this->getOptionMock('option-1', 1),
                     $this->getOptionMock('option-2', 'option-value'),
-                    $this->getOptionMock('option-3', json_encode([
+                    $this->getOptionMock(
+                        'option-3',
+                        json_encode([
                             'value' => 'value-1',
                             'qty' => 2,
                         ])
@@ -182,10 +189,13 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
         $this->comparedMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue([
+            ->will($this->returnValue(
+                [
                     $this->getOptionMock('option-1', 1),
                     $this->getOptionMock('option-2', 'option-value'),
-                    $this->getOptionMock('option-3', json_encode([
+                    $this->getOptionMock(
+                        'option-3',
+                        json_encode([
                             'value' => 'value-1',
                             'qty' => 2,
                         ])
@@ -230,7 +240,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                     $this->getOptionMock('option-1', $comparedOptionValue)
                 ]
             );
-        
+
         $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }

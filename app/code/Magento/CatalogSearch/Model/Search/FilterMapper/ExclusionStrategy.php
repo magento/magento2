@@ -6,16 +6,16 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
-use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**

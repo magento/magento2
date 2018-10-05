@@ -5,15 +5,15 @@
  */
 namespace Magento\ProductAlert\Controller\Add;
 
-use Magento\ProductAlert\Controller\Add as AddController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\UrlInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\ProductAlert\Controller\Add as AddController;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Price extends AddController
 {

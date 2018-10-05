@@ -6,8 +6,8 @@
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Model\ConfigInterface as ModelConfigInterface;
 use Magento\Webapi\Model\Config\Converter;
+use Magento\Webapi\Model\ConfigInterface as ModelConfigInterface;
 
 /**
  * Webapi Config Model for Rest.

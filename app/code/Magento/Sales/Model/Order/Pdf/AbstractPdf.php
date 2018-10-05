@@ -1055,12 +1055,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
     /**
      * Set page font.
-     * 
+     *
      * column array format
      * font         string; font style, optional: bold, italic, regular
      * font_file    string; path to font file (optional for use your custom font)
      * font_size    int; font size (default 10)
-     * 
+     *
      * @param \Zend_Pdf_Page $page
      * @param array $column
      * @return \Zend_Pdf_Resource_Font

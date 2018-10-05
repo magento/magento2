@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Customize Price field

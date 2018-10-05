@@ -5,13 +5,13 @@
  */
 namespace Magento\ReleaseNotification\Model\Condition;
 
-use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Config\DataInterfaceFactory;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
+use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 
 /**
  * Class CanViewNotification
@@ -110,7 +110,7 @@ class CanViewNotification implements VisibilityConditionInterface
                 '<='
             );
         }
-        
+
         return (bool)$value;
     }
 

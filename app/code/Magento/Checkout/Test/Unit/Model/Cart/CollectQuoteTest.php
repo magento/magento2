@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model\Cart;
 
+use Magento\Checkout\Model\Cart\CollectQuote;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\RegionInterface;
-use Magento\Checkout\Model\Cart\CollectQuote;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;

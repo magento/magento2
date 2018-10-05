@@ -5,14 +5,14 @@
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
-use Magento\Quote\Model\Quote;
+use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Checkout\Helper\Data;
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
-use Magento\Checkout\Model\Type\Onepage;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class OrderPlace

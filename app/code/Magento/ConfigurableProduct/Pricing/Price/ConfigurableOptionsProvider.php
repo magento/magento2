@@ -7,11 +7,11 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
-use Magento\Framework\App\ResourceConnection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\RequestSafetyInterface;
+use Magento\Framework\App\ResourceConnection;
 
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {

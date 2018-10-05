@@ -43,7 +43,8 @@ class MenuCategoryDataTest extends \PHPUnit\Framework\TestCase
 
         $layerResolver = $this->createMock(\Magento\Catalog\Model\Layer\Resolver::class);
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
-        $this->_observer = (new ObjectManager($this))->getObject(\Magento\Catalog\Observer\MenuCategoryData::class,
+        $this->_observer = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Observer\MenuCategoryData::class,
             [
                 'layerResolver' => $layerResolver,
                 'catalogCategory' => $this->_catalogCategory,

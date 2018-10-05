@@ -27,7 +27,7 @@ class ConfigSetProcessorFactory
      * lock - save and lock configuration
      */
     const TYPE_DEFAULT = 'default';
-    
+
     /**
      * @deprecated
      * @see TYPE_LOCK_ENV or TYPE_LOCK_CONFIG

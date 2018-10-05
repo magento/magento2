@@ -9,10 +9,10 @@ namespace Magento\Braintree\Gateway\Validator;
 
 use Braintree\Error\ErrorCollection;
 use Braintree\Error\Validation;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\Braintree\Gateway\SubjectReader;
 
 /**
  * This validator decorates the general response validator to handle specific cases like

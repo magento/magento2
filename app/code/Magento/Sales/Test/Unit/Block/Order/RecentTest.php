@@ -5,14 +5,14 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Order;
 
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Customer\Model\Session;
-use Magento\Sales\Model\Order\Config;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Layout;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class RecentTest extends \PHPUnit\Framework\TestCase
 {

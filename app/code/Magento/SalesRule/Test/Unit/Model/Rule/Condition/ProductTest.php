@@ -6,24 +6,24 @@
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Directory\Model\CurrencyFactory;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\AttributeLoaderInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ScopeResolverInterface;
-use \Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\DB\Select;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Format;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use \Magento\Rule\Model\Condition\Context;
-use \Magento\Backend\Helper\Data;
-use \Magento\Eav\Model\Config;
-use \Magento\Catalog\Model\ProductFactory;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Eav\Model\Entity\AbstractEntity;
-use \Magento\Catalog\Model\ResourceModel\Product;
-use \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
-use \Magento\Framework\Locale\FormatInterface;
-use \Magento\Eav\Model\Entity\AttributeLoaderInterface;
-use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
+use Magento\Rule\Model\Condition\Context;
+use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -261,7 +261,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData',])
+            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
             ->getMock();
 
         $product->expects($this->any())
@@ -284,7 +284,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', 'getProduct',])
+            ->setMethods(['getPrice', 'getProduct'])
             ->getMockForAbstractClass();
 
         $item->expects($this->any())

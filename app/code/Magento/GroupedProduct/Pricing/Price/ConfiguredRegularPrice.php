@@ -9,8 +9,8 @@ namespace Magento\GroupedProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
-use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Configured regular price model.

@@ -6,13 +6,13 @@
 
 namespace Magento\Indexer\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Model\ModeSwitcherInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to set indexer dimensions mode

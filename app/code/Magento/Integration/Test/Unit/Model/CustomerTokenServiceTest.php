@@ -6,9 +6,6 @@
 
 namespace Magento\Integration\Test\Unit\Model;
 
-use Magento\Integration\Model\Integration;
-use Magento\Integration\Model\Oauth\Token;
-
 class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\CustomerTokenService */

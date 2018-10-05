@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Indexer\Model\Indexer;
 
 /**

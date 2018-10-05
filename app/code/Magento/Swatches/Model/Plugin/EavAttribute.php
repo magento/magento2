@@ -9,8 +9,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Plugin model for Catalog Resource Attribute

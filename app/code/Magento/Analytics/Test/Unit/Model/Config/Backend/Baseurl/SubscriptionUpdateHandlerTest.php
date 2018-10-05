@@ -67,7 +67,7 @@ class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();

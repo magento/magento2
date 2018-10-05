@@ -7,7 +7,6 @@
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
 use Magento\Paypal\Block\Express\Review;
-use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

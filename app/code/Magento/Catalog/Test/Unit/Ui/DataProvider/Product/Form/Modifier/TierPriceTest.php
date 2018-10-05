@@ -7,9 +7,9 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 
 /**
  * Class TierPriceTest.

@@ -5,9 +5,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
-use Magento\Catalog\Model\Product;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Directory\Model\Currency;
 
 /**
  * Adminhtml customer orders grid block

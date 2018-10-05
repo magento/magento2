@@ -5,10 +5,10 @@
  */
 namespace Magento\PageCache\Model\Cache;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\UrlInterface;
 use Zend\Uri\Uri;
 use Zend\Uri\UriFactory;
 

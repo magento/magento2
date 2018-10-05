@@ -46,7 +46,7 @@ class CreateHandler implements ExtensionInterface
             $link->setId(null);
             $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
         }
-        
+
         return $entity;
     }
 }

@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * As Low As shows minimal value of Tier Prices

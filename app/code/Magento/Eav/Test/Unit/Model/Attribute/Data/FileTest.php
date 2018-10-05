@@ -35,8 +35,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\File(
-            $timezoneMock, $loggerMock, $localeResolverMock,
-            $this->urlEncoder, $this->fileValidatorMock, $filesystemMock
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $this->urlEncoder,
+            $this->fileValidatorMock,
+            $filesystemMock
         );
     }
 
@@ -105,7 +109,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $fileIsValid, $expectedResult
+        $value,
+        $originalValue,
+        $isRequired,
+        $isAjaxRequest,
+        $rules,
+        $fileIsValid,
+        $expectedResult
     ) {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
@@ -262,7 +272,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-};
+}
 
 /**
  * Mocking of std function to test validation

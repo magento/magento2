@@ -9,12 +9,12 @@ namespace Magento\Contact\Controller\Index;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject;
 
 class Post extends \Magento\Contact\Controller\Index
 {

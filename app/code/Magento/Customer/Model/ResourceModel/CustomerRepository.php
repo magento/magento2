@@ -7,13 +7,13 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Customer\NotificationStorage;
+use Magento\Customer\Model\Delegation\Data\NewOperation;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\ObjectManager;
 
 /**

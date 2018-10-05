@@ -5,13 +5,13 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

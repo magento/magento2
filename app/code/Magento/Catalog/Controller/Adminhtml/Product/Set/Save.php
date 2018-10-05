@@ -22,22 +22,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
-    
+
     /*
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
      */
     private $attributeSetFactory;
-    
+
     /*
      * @var \Magento\Framework\Filter\FilterManager
      */
     private $filterManager;
-    
+
     /*
      * @var \Magento\Framework\Json\Helper\Data
      */
     private $jsonHelper;
-    
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry

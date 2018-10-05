@@ -10,13 +10,11 @@
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

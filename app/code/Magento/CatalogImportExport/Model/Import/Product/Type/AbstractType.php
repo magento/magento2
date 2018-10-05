@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**

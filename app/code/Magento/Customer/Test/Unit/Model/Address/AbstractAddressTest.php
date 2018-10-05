@@ -6,8 +6,6 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
-use Magento\Store\Model\ScopeInterface;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

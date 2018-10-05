@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
-use Magento\Framework\Data\Collection;
 use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollection;
+use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**

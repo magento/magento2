@@ -6,15 +6,15 @@
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
-use Magento\Catalog\Api\Data\ProductRenderInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
+use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Helper\ImageFactory;
-use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

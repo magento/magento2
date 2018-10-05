@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer;
 
-use Magento\ImportExport\Model\Import;
-
 /**
  * Backup grid item renderer
  */
@@ -22,7 +20,7 @@ class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     {
         $result = '';
         if ($row->getData('error_file') != '') {
-            $result = '<p> ' . $row->getData('error_file') .  '</p><a href="'
+            $result = '<p> ' . $row->getData('error_file') . '</p><a href="'
                 . $this->getUrl('*/*/download', ['filename' => $row->getData('error_file')]) . '">'
                 . __('Download')
                 . '</a>';

@@ -12,10 +12,10 @@ use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

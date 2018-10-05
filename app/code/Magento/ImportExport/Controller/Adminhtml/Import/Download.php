@@ -5,9 +5,9 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Download sample file controller

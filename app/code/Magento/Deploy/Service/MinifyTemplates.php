@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Service;
 
-use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\View\Template\Html\MinifierInterface;
 
 /**
  * Minify PHTML templates service

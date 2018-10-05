@@ -5,8 +5,8 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 
 class GetFilter extends ExportController
 {

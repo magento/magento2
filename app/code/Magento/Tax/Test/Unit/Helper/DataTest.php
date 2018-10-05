@@ -171,7 +171,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $appliedTaxesMocks = [];
             foreach ($appliedTaxesData as $appliedTaxData) {
                 $appliedTaxesMock = $this->getMockBuilder(
-                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
+                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class
+                )
                     ->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
@@ -259,7 +260,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg, 2);
                     }
@@ -270,7 +272,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         foreach ($result as $index => $appliedTax) {
             $expectedTax = $expectedResults[$index];
             foreach ($appliedTax as $attr => $value) {
-                $this->assertEquals($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
+                $this->assertEquals($expectedTax[$attr], $value, "The " . $attr . " of tax does not match");
             }
         }
     }
@@ -481,9 +483,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param bool $displayPriceIncludingTax
      * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
      */
-    public function testIsCatalogPriceDisplayAffectedByTax($expected, $displayBothPrices, $priceIncludesTax,
-        $isCrossBorderTradeEnabled, $displayPriceIncludingTax)
-    {
+    public function testIsCatalogPriceDisplayAffectedByTax(
+        $expected,
+        $displayBothPrices,
+        $priceIncludesTax,
+        $isCrossBorderTradeEnabled,
+        $displayPriceIncludingTax
+    ) {
         if ($displayBothPrices == true) {
             $this->taxConfigMock->expects($this->at(0))
                 ->method('getPriceDisplayType')

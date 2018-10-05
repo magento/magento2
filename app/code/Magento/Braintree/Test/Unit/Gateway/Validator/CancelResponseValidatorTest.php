@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Result\Error;
-use Magento\Braintree\Gateway\Validator\CancelResponseValidator;
-use PHPUnit\Framework\TestCase;
-use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Validator\CancelResponseValidator;
+use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CancelResponseValidatorTest extends TestCase
@@ -59,7 +59,8 @@ class CancelResponseValidatorTest extends TestCase
     public function testValidateSuccessfulTransaction()
     {
         /** @var ResultInterface|MockObject $result */
-        $result = $this->getMockForAbstractClass(ResultInterface::class);$result->method('isValid')
+        $result = $this->getMockForAbstractClass(ResultInterface::class);
+        $result->method('isValid')
             ->willReturn(true);
 
         $this->generalValidator->method('validate')

@@ -6,10 +6,10 @@
 namespace Magento\Customer\Controller\Plugin;
 
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\Controller\ResultInterface;
 
 class Account

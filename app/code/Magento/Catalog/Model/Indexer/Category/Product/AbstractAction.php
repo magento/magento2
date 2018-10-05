@@ -16,7 +16,6 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Class AbstractAction
@@ -373,13 +372,13 @@ abstract class AbstractAction
             []
         )->joinLeft(
             ['child_cpsd' => $this->getTable('catalog_product_entity_int')],
-            'child_cpsd.' . $linkField . ' = '. 'relation_product_entity.' . $linkField
+            'child_cpsd.' . $linkField . ' = ' . 'relation_product_entity.' . $linkField
             . ' AND child_cpsd.store_id = 0'
             . ' AND child_cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['child_cpss' => $this->getTable('catalog_product_entity_int')],
-            'child_cpss.' . $linkField . ' = '. 'relation_product_entity.' . $linkField . ''
+            'child_cpss.' . $linkField . ' = ' . 'relation_product_entity.' . $linkField . ''
             . ' AND child_cpss.attribute_id = child_cpsd.attribute_id'
             . ' AND child_cpss.store_id = ' . $store->getId(),
             []

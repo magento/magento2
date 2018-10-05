@@ -6,9 +6,9 @@
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountConfirmation;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

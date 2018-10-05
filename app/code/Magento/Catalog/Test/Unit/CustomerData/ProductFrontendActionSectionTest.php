@@ -6,10 +6,10 @@
 namespace Magento\Catalog\Test\Unit\CustomerData;
 
 use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
+use Magento\Catalog\CustomerData\ProductFrontendActionSection;
 use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
 use Magento\Framework\App\Config;
 use Psr\Log\LoggerInterface;
-use Magento\Catalog\CustomerData\ProductFrontendActionSection;
 
 class ProductFrontendActionSectionTest extends \PHPUnit\Framework\TestCase
 {

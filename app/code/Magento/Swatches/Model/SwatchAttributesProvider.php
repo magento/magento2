@@ -6,8 +6,8 @@
 
 namespace Magento\Swatches\Model;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;

@@ -5,15 +5,15 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Store\Model\Store;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

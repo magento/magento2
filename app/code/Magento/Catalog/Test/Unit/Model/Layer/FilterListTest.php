@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
-use \Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Layer\FilterList;
 
 class FilterListTest extends \PHPUnit\Framework\TestCase
 {

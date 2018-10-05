@@ -13,7 +13,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\Swagger\Block\Index;
-use Magento\SwaggerWebapi\Model\SchemaType\Rest;
 
 class IndexTest extends \PHPUnit\Framework\TestCase
 {

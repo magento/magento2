@@ -5,9 +5,9 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * Class DescriptorDataBuilder

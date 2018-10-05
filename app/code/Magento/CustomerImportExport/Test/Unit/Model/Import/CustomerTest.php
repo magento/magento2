@@ -94,7 +94,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
                     'getCustomerStorage'
-                ])
+                ]
+            )
             ->getMock();
 
         $errorAggregator = $this->createPartialMock(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class, ['hasToBeTerminated']);

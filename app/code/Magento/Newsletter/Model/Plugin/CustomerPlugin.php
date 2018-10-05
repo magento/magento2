@@ -6,12 +6,12 @@
 namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 class CustomerPlugin
 {

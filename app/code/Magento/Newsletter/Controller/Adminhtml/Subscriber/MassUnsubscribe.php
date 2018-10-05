@@ -6,11 +6,11 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-use Magento\Newsletter\Controller\Adminhtml\Subscriber;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Newsletter\Controller\Adminhtml\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 class MassUnsubscribe extends Subscriber
 {
@@ -18,7 +18,7 @@ class MassUnsubscribe extends Subscriber
      * @var SubscriberFactory
      */
     private $subscriberFactory;
-    
+
     /**
      * @param Context $context
      * @param FileFactory $fileFactory
@@ -32,7 +32,7 @@ class MassUnsubscribe extends Subscriber
         $this->subscriberFactory = $subscriberFactory ?: ObjectManager::getInstance()->get(SubscriberFactory::class);
         parent::__construct($context, $fileFactory);
     }
-    
+
     /**
      * Unsubscribe one or more subscribers action
      *

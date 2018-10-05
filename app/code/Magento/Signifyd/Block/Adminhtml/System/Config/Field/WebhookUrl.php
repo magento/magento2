@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Block\Adminhtml\System\Config\Field;
 
-use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 

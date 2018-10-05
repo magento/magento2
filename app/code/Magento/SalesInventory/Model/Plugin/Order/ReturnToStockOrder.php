@@ -6,10 +6,10 @@
 namespace Magento\SalesInventory\Model\Plugin\Order;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Class ReturnToStock

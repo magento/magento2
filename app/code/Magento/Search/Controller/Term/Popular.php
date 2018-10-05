@@ -9,8 +9,8 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Model\ScopeInterface;
 
 class Popular extends Action
 {

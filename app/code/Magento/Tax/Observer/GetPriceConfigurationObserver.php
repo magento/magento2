@@ -5,9 +5,9 @@
  */
 namespace Magento\Tax\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Event\ObserverInterface;
 
 class GetPriceConfigurationObserver implements ObserverInterface
 {

@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Component\Filters;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
  * Apply modifiers to filter

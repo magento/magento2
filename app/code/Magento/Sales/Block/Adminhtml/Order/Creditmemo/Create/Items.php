@@ -63,7 +63,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Update Totals'), 'class' => 'update-totals-button secondary', 'onclick' => $onclick]
         );
-        
+
         if ($this->getCreditmemo()->canRefund()) {
             if ($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) {
                 $this->addChild(

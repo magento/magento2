@@ -8,9 +8,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
+use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {

@@ -5,22 +5,22 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\ProductLink\Link as ProductLink;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
-use Magento\Catalog\Model\Product\LinkTypeProvider;
-use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
-use Magento\Catalog\Model\ProductLink\Link as ProductLink;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

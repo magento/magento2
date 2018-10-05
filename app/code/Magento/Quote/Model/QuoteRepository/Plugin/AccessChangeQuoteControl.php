@@ -6,9 +6,9 @@
 
 namespace Magento\Quote\Model\QuoteRepository\Plugin;
 
-use Magento\Quote\Api\ChangeQuoteControlInterface;
 use Magento\Framework\Exception\StateException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\ChangeQuoteControlInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**

@@ -33,7 +33,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
             ]
         );
     }
-    
+
     public function testGetOverriddenValueIsCustomer()
     {
         $retValue = 'retValue';

@@ -7,13 +7,12 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CheckoutCart;
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 

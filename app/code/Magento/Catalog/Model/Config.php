@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model;
+
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**

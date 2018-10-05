@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogRule\Model\Indexer\IndexBuilder;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Product loader that gets products by ids via product repository

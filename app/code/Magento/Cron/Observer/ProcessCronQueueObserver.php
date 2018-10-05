@@ -9,10 +9,10 @@
  */
 namespace Magento\Cron\Observer;
 
+use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
-use \Magento\Cron\Model\Schedule;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
 
@@ -201,7 +201,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
         $currentTime = $this->dateTime->gmtTimestamp();
         $jobGroupsRoot = $this->_config->getJobs();
         // sort jobs groups to start from used in separated process
@@ -255,7 +254,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function lockGroup($groupId, callable $callback)
     {
-
         if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
                 sprintf(

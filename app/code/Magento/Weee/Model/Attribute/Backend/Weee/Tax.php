@@ -5,8 +5,8 @@
  */
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Exception\LocalizedException;
 
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {

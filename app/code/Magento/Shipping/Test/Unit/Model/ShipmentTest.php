@@ -8,7 +8,6 @@
 
 namespace Magento\Shipping\Test\Unit\Model;
 
-use \Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -35,7 +34,8 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             'context' => $this->createMock(\Magento\Framework\Model\Context::class),
             'registry' => $this->createMock(\Magento\Framework\Registry::class),
             'localeDate' => $this->createMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            ),
             'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
             'orderRepository' => $this->orderRepository,
             'shipmentItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class),

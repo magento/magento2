@@ -7,8 +7,8 @@ namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey as DataFormKey;
-use Magento\PageCache\Observer\FlushFormKey;
 use Magento\Framework\Event\Observer;
+use Magento\PageCache\Observer\FlushFormKey;
 
 class FlushFormKeyTest extends \PHPUnit\Framework\TestCase
 {

@@ -1165,7 +1165,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataWithVisibleAttributes()
     {
-
         $firstAttributesBundle = $this->getAttributeMock(
             'customer',
             [

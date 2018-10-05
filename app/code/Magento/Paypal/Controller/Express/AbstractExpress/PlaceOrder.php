@@ -63,7 +63,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         );
 
         $this->agreementsValidator = $agreementValidator;
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(PaymentFailuresInterface::class);
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
     }
 
     /**

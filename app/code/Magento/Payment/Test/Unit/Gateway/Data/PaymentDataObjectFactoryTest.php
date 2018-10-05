@@ -5,10 +5,9 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data;
 
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
+use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Sales\Model\Order;
 
 /**

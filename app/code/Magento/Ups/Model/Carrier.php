@@ -837,9 +837,8 @@ XMLRequest;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->CurrencyCode
                                 );
-                            }
-                            else {
-                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;                            
+                            } else {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
                                 );
@@ -848,15 +847,14 @@ XMLRequest;
                             $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes");
                             $includeTaxesActive = $this->getConfigFlag(
                                     'include_taxes'
-                                ) && !empty($includeTaxesArr);                              
+                                ) && !empty($includeTaxesArr);
                             if ($includeTaxesActive) {
                                 $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
                                 );
-                            }
-                            else {
-                                $cost = $shipElement->TotalCharges->MonetaryValue;                            
+                            } else {
+                                $cost = $shipElement->TotalCharges->MonetaryValue;
                                 $responseCurrencyCode = $this->mapCurrencyCode(
                                     (string)$shipElement->TotalCharges->CurrencyCode
                                 );

@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice;
 
-use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**

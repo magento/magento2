@@ -56,7 +56,6 @@ class FlatrateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'isSetFlag', 'getValue'])

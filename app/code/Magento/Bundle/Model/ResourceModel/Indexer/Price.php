@@ -6,16 +6,16 @@
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
-use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Bundle products Price indexer resource model

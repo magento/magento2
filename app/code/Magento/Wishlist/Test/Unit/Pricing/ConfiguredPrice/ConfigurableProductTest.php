@@ -36,7 +36,7 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfoInterface::class)
             ->getMockForAbstractClass();
-        
+
         $this->saleableItem = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->setMethods([
                 'getPriceInfo',

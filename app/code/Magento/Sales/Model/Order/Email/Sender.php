@@ -6,9 +6,9 @@
 namespace Magento\Sales\Model\Order\Email;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
-use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class Sender

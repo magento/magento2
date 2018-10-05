@@ -8,10 +8,10 @@ namespace Magento\Customer\Model\App\Action;
 
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\GroupManagement;
-use Magento\Framework\App\Action\AbstractAction;
-use Magento\Framework\App\RequestInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin

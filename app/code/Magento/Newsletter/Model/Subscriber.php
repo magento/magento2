@@ -7,12 +7,12 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Subscriber model

@@ -5,15 +5,15 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder;
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
  * Class UrlRewriteFinderTest

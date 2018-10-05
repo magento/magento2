@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogInventory\Model\Plugin;
 
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\Framework\Model\AbstractModel;
 
 /**

@@ -5,31 +5,30 @@
  */
 namespace Magento\Ups\Test\Unit\Model;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Ups\Model\Carrier;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateResultErrorFactory;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Xml\Security;
-use Magento\Shipping\Model\Simplexml\ElementFactory;
-use Magento\Shipping\Model\Rate\ResultFactory as RateResultFactory;
-use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
-use Magento\Quote\Model\Quote\Address\RateResult\Method;
-use Magento\Shipping\Model\Rate\Result as RateResult;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Shipping\Model\Tracking\ResultFactory as TrackResultFactory;
-use Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackingResultErrorFactory;
-use Magento\Shipping\Model\Tracking\Result\StatusFactory;
-use Magento\Directory\Model\RegionFactory;
+use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
-use Magento\Directory\Model\CurrencyFactory;
 use Magento\Directory\Model\Currency;
-use Magento\Directory\Helper\Data;
-use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\Ups\Helper\Config;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateResultErrorFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\Method;
+use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
+use Magento\Shipping\Model\Rate\Result as RateResult;
+use Magento\Shipping\Model\Rate\ResultFactory as RateResultFactory;
+use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackingResultErrorFactory;
+use Magento\Shipping\Model\Tracking\Result\StatusFactory;
+use Magento\Shipping\Model\Tracking\ResultFactory as TrackResultFactory;
+use Magento\Ups\Helper\Config;
+use Magento\Ups\Model\Carrier;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,9 +68,8 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        
+
         $scopeMock = $this->getMockBuilder(ScopeConfigInterface::class)
                     ->disableOriginalConstructor()
                     ->getMock();
@@ -116,7 +114,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
         $priceInterfaceMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $rateMethodMock = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceInterfaceMock])
             ->setMethods(null)
@@ -151,16 +149,16 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getData'])
             ->getMock();
-            
+
         $countryMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-            
+
         $countryFactoryMock = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-            
+
         $countryFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($countryMock);
@@ -197,7 +195,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
         $stockRegistryMock = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-            
+
         $formatInterfaceMock = $this->getMockBuilder(FormatInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -232,11 +230,11 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        
+
         $this->model->expects($this->any())
              ->method('canCollectRates')
              ->willReturn(true);
-             
+
         $this->model->expects($this->any())
              ->method('_getBaseCurrencyRate')
              ->willReturn(1.00);
@@ -271,15 +269,15 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/negotiated_active' => $this->negotiatedactive,
             'carriers/ups/include_taxes' => $this->include_taxes,
         ];
-       
+
         if (isset($pathMap[$path])) {
             if ($pathMap[$path]) {
-                 return(true);
+                return(true);
             }
         }
         return(false);
     }
-    
+
     /**
      * @param int $neg
      * @param int $tax
@@ -298,7 +296,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
         $this->model->expects($this->any())
              ->method('_getCachedQuotes')
              ->willReturn($response);
-  
+
         $rates = $this->model->collectRates($this->rateRequest)->getAllRates();
         $this->assertEquals($expectedprice, $rates[0]->getData('cost'));
         $this->assertEquals($method, $rates[0]->getData('method'));

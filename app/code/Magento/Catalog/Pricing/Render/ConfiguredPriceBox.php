@@ -8,11 +8,11 @@ namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
-use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;

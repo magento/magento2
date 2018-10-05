@@ -5,10 +5,10 @@
  */
 namespace Magento\Multishipping\Block\DataProviders;
 
-use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Checkout\Model\CompositeConfigProvider;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Framework\Serialize\Serializer\Json as Serializer;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Quote\Model\Quote\Address;
 
 /**

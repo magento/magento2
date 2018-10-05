@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Helper\Data as MultishippingHelper;
 use Magento\Quote\Model\Quote\Item;

@@ -9,10 +9,10 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 

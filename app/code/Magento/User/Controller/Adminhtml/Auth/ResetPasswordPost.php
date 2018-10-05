@@ -6,10 +6,10 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
-use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\User\Controller\Adminhtml\Auth;
 use Magento\User\Model\UserFactory;
 
 class ResetPasswordPost extends Auth

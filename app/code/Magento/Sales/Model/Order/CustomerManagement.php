@@ -9,9 +9,9 @@ namespace Magento\Sales\Model\Order;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as QuoteAddressFactory;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**

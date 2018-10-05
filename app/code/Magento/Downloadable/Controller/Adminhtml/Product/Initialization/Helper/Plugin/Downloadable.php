@@ -5,11 +5,11 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\Framework\App\RequestInterface;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Model\Link\Builder as LinkBuilder;
 use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
-use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
-use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
+use Magento\Framework\App\RequestInterface;
 
 class Downloadable
 {

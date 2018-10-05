@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

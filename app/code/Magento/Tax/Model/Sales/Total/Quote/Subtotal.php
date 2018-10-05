@@ -9,8 +9,8 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address;
 
 class Subtotal extends CommonTaxCollector
 {

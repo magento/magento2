@@ -5,30 +5,30 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Customer\Model\Registration;
-use Magento\Framework\Escaper;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\InputException;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\Registration;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -408,7 +408,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                     'If you are a registered VAT customer, please <a href="%1">click here</a> to enter your shipping address for proper VAT calculation.',
                     $this->urlModel->getUrl('customer/address/edit')
                 );
-                // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
             } else {
                 // @codingStandardsIgnoreStart
                 $message = __(

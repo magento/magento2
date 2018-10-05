@@ -5,14 +5,14 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\Order;
 
-use Magento\Paypal\Model\Adminhtml\Express;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\Order\View;
+use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Exception\LocalizedException;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ViewTest extends TestCase
 {

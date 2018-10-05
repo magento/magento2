@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class for fast retrieval of all product images

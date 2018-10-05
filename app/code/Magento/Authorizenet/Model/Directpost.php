@@ -190,7 +190,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         $this->orderSender = $orderSender;
         $this->transactionRepository = $transactionRepository;
         $this->_code = static::METHOD_CODE;
-        $this->paymentFailures = $paymentFailures ? : ObjectManager::getInstance()
+        $this->paymentFailures = $paymentFailures ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Api\PaymentFailuresInterface::class);
 
         parent::__construct(
@@ -491,6 +491,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::ACTION_AUTHORIZE:
                 $requestType = self::REQUEST_TYPE_AUTH_ONLY;
                 //intentional
+                // no break
             case self::ACTION_AUTHORIZE_CAPTURE:
                 $requestType = $requestType ?: self::REQUEST_TYPE_AUTH_CAPTURE;
                 $payment = $this->getInfoInstance();

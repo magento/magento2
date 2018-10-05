@@ -6,7 +6,6 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\Downloads;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 

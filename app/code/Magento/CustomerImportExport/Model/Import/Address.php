@@ -6,11 +6,11 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source as Sources;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
-use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
 
 /**
  * Customer address import

@@ -26,7 +26,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Image(
-            $timezoneMock, $loggerMock, $localeResolverMock, $urlEncoder, $fileValidatorMock, $filesystemMock
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $urlEncoder,
+            $fileValidatorMock,
+            $filesystemMock
         );
     }
 
@@ -45,7 +50,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $expectedResult
+        $value,
+        $originalValue,
+        $isRequired,
+        $isAjaxRequest,
+        $rules,
+        $expectedResult
     ) {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
@@ -159,4 +169,4 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-};
+}

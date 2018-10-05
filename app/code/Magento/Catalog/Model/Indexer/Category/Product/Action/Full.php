@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Indexer\Model\ProcessManager;
 
 /**

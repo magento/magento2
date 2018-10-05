@@ -24,9 +24,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
-use Magento\Sales\Model\AdminOrder\Create;
-use Magento\Sales\Model\AdminOrder\Product;
 use Magento\Quote\Model\QuoteFactory;
+use Magento\Sales\Model\AdminOrder\Create;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -182,7 +181,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
-                ['group_id' => 1], CustomerInterface::class
+                ['group_id' => 1],
+                CustomerInterface::class
             );
 
         $this->formFactory->method('create')

@@ -6,7 +6,6 @@
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
 
 use Magento\Framework\App\Config;
-use Magento\GoogleAdwords\Block\Code;
 
 /**
  * Test reading for cron parameters from data base storage

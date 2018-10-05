@@ -8,14 +8,14 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,12 +119,12 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
             ->willReturn($this->scope);
-        
+
         $this->optionSelectBuilder->expects($this->any())
             ->method('getSelect')
             ->with($this->abstractAttribute, 4, $this->scope)
             ->willReturn($this->select);
-        
+
         $this->attributeResource->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -161,7 +161,7 @@ class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
                 ['value' => 14, 'label' => 'Option Value for index 14'],
                 ['value' => 15, 'label' => 'Option Value for index 15']
             ]);
-        
+
         $this->abstractAttribute->expects($this->any())
             ->method('getSource')
             ->willReturn($source);

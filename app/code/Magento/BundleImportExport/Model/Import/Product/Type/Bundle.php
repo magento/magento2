@@ -8,12 +8,12 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Bundle\Model\ResourceModel\Bundle as BundleResourceModel;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Bundle\Model\ResourceModel\Bundle as BundleResourceModel;
 
 /**
  * Class Bundle

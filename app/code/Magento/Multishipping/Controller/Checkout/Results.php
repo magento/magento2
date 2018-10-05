@@ -10,5 +10,4 @@ namespace Magento\Multishipping\Controller\Checkout;
  */
 class Results extends Success
 {
-
 }

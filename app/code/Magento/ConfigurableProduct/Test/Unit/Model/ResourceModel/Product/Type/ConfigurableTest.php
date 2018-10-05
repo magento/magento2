@@ -5,18 +5,18 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
-use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

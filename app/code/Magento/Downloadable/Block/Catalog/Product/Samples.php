@@ -8,8 +8,8 @@
 
 namespace Magento\Downloadable\Block\Catalog\Product;
 
-use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
 use Magento\Downloadable\Api\Data\SampleInterface;
+use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
 
 /**
  * Downloadable Product Samples part block

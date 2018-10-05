@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Abstract plugin for indexers

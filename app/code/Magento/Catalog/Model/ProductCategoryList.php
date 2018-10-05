@@ -5,12 +5,11 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
-use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Provides info about product categories.

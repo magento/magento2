@@ -6,13 +6,13 @@
 namespace Magento\Paypal\Block\Adminhtml\Order;
 
 use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Sales\Block\Adminhtml\Order\View as OrderView;
 use Magento\Sales\Helper\Reorder;
 use Magento\Sales\Model\Config;
 use Magento\Sales\Model\Order;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Adminhtml sales order view

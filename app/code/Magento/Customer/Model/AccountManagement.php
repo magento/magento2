@@ -17,6 +17,7 @@ use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -44,14 +45,13 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
+use Magento\Framework\Session\SaveHandlerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
-use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 
 /**
  * Handle various customer account actions
@@ -587,7 +587,7 @@ class AccountManagement implements AccountManagementInterface
                     break;
                 default:
                     throw new InputException(__(
-                        'Invalid value of "%value" provided for the %fieldName field. '.
+                        'Invalid value of "%value" provided for the %fieldName field. ' .
                         'Possible values: %template1 or %template2.',
                         [
                             'value' => $template,
@@ -618,7 +618,6 @@ class AccountManagement implements AccountManagementInterface
      */
     private function matchCustomerByRpToken(string $rpToken): CustomerInterface
     {
-
         $this->searchCriteriaBuilder->addFilter(
             'rp_token',
             $rpToken

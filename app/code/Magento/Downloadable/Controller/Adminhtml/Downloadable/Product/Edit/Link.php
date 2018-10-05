@@ -71,7 +71,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
         //Rendering
         $response->clearBody();
         $response->sendHeaders();
-        
+
         $helper->output();
     }
 

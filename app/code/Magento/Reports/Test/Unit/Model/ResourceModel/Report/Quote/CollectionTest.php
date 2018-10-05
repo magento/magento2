@@ -5,9 +5,8 @@
  */
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Quote;
 
-use Magento\Framework\App\ResourceConnection;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Reports\Model\ResourceModel\Quote\Collection as Collection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Reports\Model\ResourceModel\Quote\Collection as Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,10 +6,10 @@
 namespace Magento\Authorizenet\Helper\Backend;
 
 use Magento\Authorizenet\Helper\Data as FrontendDataHelper;
-use Magento\Framework\App\Helper\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Sales\Model\OrderFactory;
 use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Authorize.net Backend Data Helper

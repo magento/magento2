@@ -6,7 +6,7 @@
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Ui\Component\Filters;
+use Magento\Ui\Component\Filters;
 
 /**
  * Unit tests for \Magento\Ui\Component\Filters class

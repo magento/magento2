@@ -234,7 +234,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Import\AbstractEntity::class
+                            'The entity adapter object must be an instance of %1 or %2.',
+                            \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class,
+                            \Magento\ImportExport\Model\Import\AbstractEntity::class
                         )
                     );
                 }

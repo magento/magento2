@@ -6,13 +6,13 @@
 
 namespace Magento\Wishlist\Test\Unit\DataProvider\Product\Collector;
 
-use Magento\Catalog\Api\Data\ProductRenderExtensionFactory;
-use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
-use Magento\Wishlist\Helper\Data;
-use Magento\Catalog\Api\Data\ProductRenderInterface;
-use Magento\Catalog\Api\Data\ProductRenderExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
+use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductRenderExtensionFactory;
+use Magento\Catalog\Api\Data\ProductRenderExtensionInterface;
+use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Ui\DataProvider\Product\Collector\Button;
 
 /**
@@ -66,7 +66,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $buttonInterfaceMock = $this->getMockBuilder(ButtonInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $productRendererMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($productRendererExtensionMock);

@@ -5,16 +5,16 @@
  */
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Config\App\Config\Type\System\Reader;
-use Magento\Framework\Serialize\Serializer\Sensitive as SensitiveSerializer;
-use Magento\Framework\Serialize\Serializer\SensitiveFactory as SensitiveSerializerFactory;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Serialize\Serializer\Sensitive as SensitiveSerializer;
+use Magento\Framework\Serialize\Serializer\SensitiveFactory as SensitiveSerializerFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Store\Model\ScopeInterface as StoreScope;

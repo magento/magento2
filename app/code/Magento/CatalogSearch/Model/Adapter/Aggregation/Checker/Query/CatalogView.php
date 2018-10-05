@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query;
 
-use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Request checker for catalog view.

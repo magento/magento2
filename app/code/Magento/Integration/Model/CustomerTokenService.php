@@ -7,13 +7,12 @@
 namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token as Token;
+use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
-use Magento\Integration\Model\Oauth\Token\RequestThrottler;
-use Magento\Framework\Exception\AuthenticationException;
 
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {

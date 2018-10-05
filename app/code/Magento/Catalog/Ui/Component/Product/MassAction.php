@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Ui\Component\Product;
 
 use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\AbstractComponent;
 
 /**

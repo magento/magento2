@@ -5,11 +5,11 @@
  */
 namespace Magento\Sales\CustomerData;
 
-use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Returns information for "Recently Ordered" widget.

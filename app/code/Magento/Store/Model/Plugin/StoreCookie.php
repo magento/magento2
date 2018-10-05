@@ -6,14 +6,14 @@
 
 namespace Magento\Store\Model\Plugin;
 
-use Magento\Store\Api\StoreCookieManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\StoreIsInactiveException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use \InvalidArgumentException;
-use Magento\Store\Api\StoreResolverInterface;
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreIsInactiveException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StoreCookie

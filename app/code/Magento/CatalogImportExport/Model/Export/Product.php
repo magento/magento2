@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\ImportExport\Model\Import;
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 
 /**
  * Export entity product model
@@ -773,9 +773,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 case 'g':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'm':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;

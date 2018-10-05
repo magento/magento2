@@ -6,10 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Controller disables some types of cache

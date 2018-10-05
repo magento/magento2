@@ -5,17 +5,17 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Adminhtml;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Pro;
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
-use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use PHPUnit\Framework\TestCase;
 
 class ExpressTest extends TestCase

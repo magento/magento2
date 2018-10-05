@@ -82,7 +82,7 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     public function streetLine2DataProvider()
     {
         return [
-            [['Street Line 1', 'Street Line 2',], 'Street Line 2'], //$street, $expected
+            [['Street Line 1', 'Street Line 2'], 'Street Line 2'], //$street, $expected
             [['Street Line 1'], ''],
             [null, '']
         ];

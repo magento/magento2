@@ -76,8 +76,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $handlerPool,
             $collectionFactory,
             [
-                'fieldsets' => ['test_fieldset' =>
-                    [
+                'fieldsets' => ['test_fieldset' => [
                         'fields' => [
                             'first_field' => [
                                 'name' => 'firstField',

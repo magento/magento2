@@ -5,16 +5,16 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedProduct\Columns;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Attributes as AttributesColumn;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -7,12 +7,12 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\DB\Select;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**

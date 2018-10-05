@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * This builder is used for correct store resolving and used only to retrieve correct store ID.

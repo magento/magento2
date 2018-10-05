@@ -6,9 +6,9 @@
  */
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\System\Store;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\Model\View\Result\Page;
 use Magento\Backend\Controller\Adminhtml\System\Store\Index;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;

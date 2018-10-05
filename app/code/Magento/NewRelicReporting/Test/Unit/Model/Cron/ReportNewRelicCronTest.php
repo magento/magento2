@@ -144,7 +144,6 @@ class ReportNewRelicCronTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportNewRelicCron()
     {
-
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
@@ -184,7 +183,6 @@ class ReportNewRelicCronTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportNewRelicCronRequestFailed()
     {
-
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);

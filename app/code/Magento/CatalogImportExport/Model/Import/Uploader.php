@@ -6,8 +6,8 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Import entity product model

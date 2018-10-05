@@ -8,9 +8,9 @@ namespace Magento\Developer\Console\Command;
 
 use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * CLI Command to enable Magento profiler.
@@ -88,7 +88,7 @@ class ProfilerEnableCommand extends Command
 
         $this->filesystem->write(BP . '/' . self::PROFILER_FLAG_FILE, $type);
         if ($this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {
-            $output->write('<info>'. sprintf(self::SUCCESS_MESSAGE, $type) . '</info>');
+            $output->write('<info>' . sprintf(self::SUCCESS_MESSAGE, $type) . '</info>');
             if ($type == 'csvfile') {
                 $output->write(
                     '<info> ' . sprintf(

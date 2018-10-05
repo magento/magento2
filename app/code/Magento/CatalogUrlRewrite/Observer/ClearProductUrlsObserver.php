@@ -6,11 +6,10 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Framework\App\ResourceConnection;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Class ClearProductUrlsObserver

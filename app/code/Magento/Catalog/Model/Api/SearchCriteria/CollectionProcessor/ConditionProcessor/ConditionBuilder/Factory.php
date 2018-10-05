@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
  * Creates appropriate condition builder based on filter field

@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Connector;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Analytics\Model\Connector\SignUpCommand;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class SignUpCommandTest

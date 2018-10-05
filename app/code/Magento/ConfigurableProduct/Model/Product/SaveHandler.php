@@ -6,12 +6,12 @@
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
 /**
  * Class SaveHandler

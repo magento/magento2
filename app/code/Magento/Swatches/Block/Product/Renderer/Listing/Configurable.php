@@ -144,7 +144,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         $this->unsetData('allow_products');
         return parent::getJsonConfig();
     }
-    
+
     /**
      * Composes configuration for js price format
      *

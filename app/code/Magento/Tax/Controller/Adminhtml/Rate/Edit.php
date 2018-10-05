@@ -6,9 +6,9 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
-use Magento\Framework\Controller\ResultFactory;
 
 class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
 {

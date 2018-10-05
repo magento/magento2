@@ -8,8 +8,8 @@ namespace Magento\Review\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
-use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
+use Magento\Review\Model\ReviewFactory;
 
 /**
  * Reviews admin controller

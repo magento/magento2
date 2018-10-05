@@ -6,9 +6,9 @@
 declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 
 class DimensionModeConfiguration
 {

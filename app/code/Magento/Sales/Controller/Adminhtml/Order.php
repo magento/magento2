@@ -6,10 +6,10 @@
 namespace Magento\Sales\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface;
 
 /**

@@ -5,15 +5,15 @@
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Source;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\Source;
 
 /**
  * Class FrontendCompilationTest

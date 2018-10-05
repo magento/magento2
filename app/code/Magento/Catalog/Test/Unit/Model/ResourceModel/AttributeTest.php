@@ -9,18 +9,18 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\ResourceConnections\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Attribute\LockValidatorInterface;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -109,7 +109,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
             ->getMock();
-         $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
+        $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

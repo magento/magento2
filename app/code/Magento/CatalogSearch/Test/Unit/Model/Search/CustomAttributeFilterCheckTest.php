@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
-use Magento\Eav\Model\Config;
-use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
-use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Search\Request\FilterInterface;
+use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\FilterInterface;
 
 class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
 {

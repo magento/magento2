@@ -5,8 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Export\Adapter;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Abstract adapter model

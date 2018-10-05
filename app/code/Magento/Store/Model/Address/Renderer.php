@@ -6,9 +6,9 @@
 
 namespace Magento\Store\Model\Address;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\DataObject;
 
 /**
  * Class Renderer used for formatting a store address

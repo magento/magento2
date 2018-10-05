@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\Guarantee;
 
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\GuaranteeCreationServiceInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;

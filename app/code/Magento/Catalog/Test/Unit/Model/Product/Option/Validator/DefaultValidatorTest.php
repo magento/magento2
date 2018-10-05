@@ -83,7 +83,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
         $valueMock->expects($this->any())->method('getType')->will($this->returnValue($type));
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-       // $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
+        // $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
         $this->assertEquals($result, $this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());

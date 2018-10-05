@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to show indexers dimension modes

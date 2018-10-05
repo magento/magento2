@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Rebuilds catalog price rule conditions tree

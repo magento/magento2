@@ -10,10 +10,10 @@ namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Catalog product option select type model

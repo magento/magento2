@@ -216,7 +216,8 @@ class TierPriceValidator
     {
         if (null === $price->getPrice()
             || $price->getPrice() < 0
-            || ($price->getPriceType() === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
+            || (
+                $price->getPriceType() === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 && $price->getPrice() > 100
             )
         ) {

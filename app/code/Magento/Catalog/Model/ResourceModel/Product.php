@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Product entity resource model

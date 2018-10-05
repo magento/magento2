@@ -7,7 +7,6 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 
 /**
  * Test for \Magento\Sales\Model\Order\InvoiceValidator class

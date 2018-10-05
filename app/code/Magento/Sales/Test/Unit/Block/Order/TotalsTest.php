@@ -25,7 +25,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->block = new Totals($this->context, new Registry);
+        $this->block = new Totals($this->context, new Registry());
         $this->block->setOrder($this->createMock(Order::class));
     }
 

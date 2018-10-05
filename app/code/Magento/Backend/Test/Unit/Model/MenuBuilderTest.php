@@ -40,6 +40,6 @@ class MenuBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function afterGetResultDataProvider()
     {
-        return [[true, 1], [false, 0],];
+        return [[true, 1], [false, 0]];
     }
 }

@@ -6,8 +6,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
 
 class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store

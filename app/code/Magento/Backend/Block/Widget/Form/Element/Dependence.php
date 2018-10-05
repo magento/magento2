@@ -128,7 +128,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         $params = $this->_getDependsJson();
 
         if ($this->_configOptions) {
-            $params .= ', ' .  $this->_jsonEncoder->encode($this->_configOptions);
+            $params .= ', ' . $this->_jsonEncoder->encode($this->_configOptions);
         }
 
         return "<script>

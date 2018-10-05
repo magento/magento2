@@ -9,9 +9,9 @@ namespace Magento\CatalogSearch\Controller\Result;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\PopularSearchTerms;
+use Magento\Search\Model\QueryFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Index extends \Magento\Framework\App\Action\Action
 {

@@ -367,8 +367,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                         'height' => 50,
                     ],
                 ],
-                'encodedSizeConfig' =>
-                    '{"swatchImage":{"width":30,"height":30},"swatchThumb":{"height":50,"width":50}}',
+                'encodedSizeConfig' => '{"swatchImage":{"width":30,"height":30},"swatchThumb":{"height":50,"width":50}}',
             ],
         ];
     }

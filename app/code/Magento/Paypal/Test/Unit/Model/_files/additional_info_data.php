@@ -78,7 +78,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => NULL,
+                'value' => null,
             ]
         ],
     ],
@@ -147,7 +147,7 @@ return [
             ],
             'last_trans_id' => [
                 'label' => 'Last Transaction ID',
-                'value' => NULL,
+                'value' => null,
             ]
         ]
     ]

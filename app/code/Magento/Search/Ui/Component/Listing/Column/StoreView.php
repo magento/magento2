@@ -5,11 +5,10 @@
  */
 namespace Magento\Search\Ui\Component\Listing\Column;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class StoreView
@@ -65,7 +64,6 @@ class StoreView extends Column
      */
     protected function prepareItem(array $item)
     {
-
         if ($item['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             return __('All Store Views');
         }

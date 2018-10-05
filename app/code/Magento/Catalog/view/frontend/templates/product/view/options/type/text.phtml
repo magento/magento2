@@ -35,9 +35,11 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             <input type="text"
                    id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                    class="input-text product-custom-option"
-                   <?php if (!empty($_textValidate)) {?>
+                   <?php if (!empty($_textValidate)) {
+                ?>
                    data-validate="<?= $block->escapeHtml(json_encode($_textValidate)) ?>"
-                   <?php } ?>
+                   <?php
+            } ?>
                    name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
                    data-selector="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
                    value="<?= $block->escapeHtml($block->getDefaultValue()) ?>"/>
@@ -53,9 +55,11 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             ?>
             <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                       class="product-custom-option"
-                    <?php if (!empty($_textAreaValidate)) {?>
+                    <?php if (!empty($_textAreaValidate)) {
+                ?>
                         data-validate="<?= $block->escapeHtml(json_encode($_textAreaValidate)) ?>"
-                    <?php } ?>
+                    <?php
+            } ?>
                       name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
                       data-selector="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
                       rows="5"

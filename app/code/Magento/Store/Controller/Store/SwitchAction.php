@@ -15,8 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
 

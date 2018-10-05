@@ -6,9 +6,9 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

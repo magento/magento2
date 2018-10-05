@@ -8,8 +8,6 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-use Magento\Sales\Model\ResourceModel\Order;
-
 /**
  * Class OrderTest
  *

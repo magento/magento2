@@ -7,12 +7,12 @@
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Quote\Model\ChangeQuoteControl;
-use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
-use Magento\Quote\Model\Quote;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\ChangeQuoteControl;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 {

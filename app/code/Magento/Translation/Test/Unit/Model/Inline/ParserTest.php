@@ -5,15 +5,15 @@
  */
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
-use Magento\Translation\Model\Inline\Parser;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
-use Magento\Translation\Model\ResourceModel\StringUtils;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Translation\Model\Inline\CacheManager;
+use Magento\Translation\Model\Inline\Parser;
+use Magento\Translation\Model\ResourceModel\StringUtils;
+use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
 
 /**
  * Class ParserTest to test \Magento\Translation\Model\Inline\Parser

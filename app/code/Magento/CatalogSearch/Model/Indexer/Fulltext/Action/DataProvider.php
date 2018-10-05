@@ -185,7 +185,6 @@ class DataProvider
         $lastProductId = 0,
         $batch = 100
     ) {
-
         $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch);
         if ($productIds === null) {
             $select->where(

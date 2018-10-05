@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Store view service

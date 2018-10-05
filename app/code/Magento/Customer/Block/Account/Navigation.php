@@ -6,8 +6,7 @@
 
 namespace Magento\Customer\Block\Account;
 
-use \Magento\Framework\View\Element\Html\Links;
-use \Magento\Customer\Block\Account\SortLinkInterface;
+use Magento\Framework\View\Element\Html\Links;
 
 /**
  * Class for sorting links in navigation panels.
@@ -50,6 +49,6 @@ class Navigation extends Links
             return 0;
         }
 
-         return ($firstLink->getSortOrder() < $secondLink->getSortOrder()) ? 1 : -1;
+        return ($firstLink->getSortOrder() < $secondLink->getSortOrder()) ? 1 : -1;
     }
 }

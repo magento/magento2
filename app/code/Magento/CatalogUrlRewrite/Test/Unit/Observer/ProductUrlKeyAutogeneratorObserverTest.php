@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 
 /**
  * Unit tests for \Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver class

@@ -6,8 +6,8 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Indexer\IndexerInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * An Abstract class for all Indexer related commands.

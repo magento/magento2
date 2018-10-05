@@ -5,13 +5,13 @@
  */
 namespace Magento\ProductAlert\Controller\Add;
 
-use Magento\ProductAlert\Controller\Add as AddController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Add as AddController;
 
 class Stock extends AddController
 {

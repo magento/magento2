@@ -6,20 +6,20 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\SelectContainer;
 
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
-use Magento\Framework\Search\RequestInterface;
-use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
 use Magento\CatalogSearch\Model\Search\FiltersExtractor;
+use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

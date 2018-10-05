@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column\Invoice;
 
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class State

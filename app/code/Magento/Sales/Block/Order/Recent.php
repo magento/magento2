@@ -5,12 +5,12 @@
  */
 namespace Magento\Sales\Block\Order;
 
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Customer\Model\Session;
-use Magento\Sales\Model\Order\Config;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales order history block

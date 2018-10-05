@@ -5,14 +5,14 @@
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * Shopping cart item render block

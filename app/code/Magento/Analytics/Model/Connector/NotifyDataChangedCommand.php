@@ -6,11 +6,11 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
-use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Store;
-use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Psr\Log\LoggerInterface;
 
 /**
  * Command notifies MBI about that data collection was finished.

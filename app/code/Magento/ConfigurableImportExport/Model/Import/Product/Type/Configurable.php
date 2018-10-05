@@ -43,16 +43,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @var array
      */
     protected $_messageTemplates = [
-        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER =>
-            'Attribute with code "%s" is not super',
-        self::ERROR_INVALID_OPTION_VALUE =>
-            'Invalid option value for attribute "%s"',
-        self::ERROR_INVALID_WEBSITE =>
-            'Invalid website code for super attribute',
-        self::ERROR_DUPLICATED_VARIATIONS =>
-            'SKU %s contains duplicated variations',
-        self::ERROR_UNIDENTIFIABLE_VARIATION =>
-            'Configurable variation "%s" is unidentifiable',
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with code "%s" is not super',
+        self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
+        self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
+        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
 
     /**
@@ -461,7 +456,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
                 $subEntityId = $this->connection->fetchOne(
                     $this->connection->select()->from(
-                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
+                        ['entity_id']
                     )->where($metadata->getLinkField() . ' = ?', $assocId)
                 );
                 $this->_superAttributesData['relation'][] = [
@@ -488,7 +484,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif(!empty($rowData['store_view_code'])) {
+        } elseif (!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',

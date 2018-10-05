@@ -8,12 +8,12 @@ namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
-use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model

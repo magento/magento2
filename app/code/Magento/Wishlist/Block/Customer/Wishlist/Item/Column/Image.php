@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Wishlist block customer item cart column

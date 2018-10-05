@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use Magento\Ui\Component\MassAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\MassAction;
 
 /**
  * Class MassActionTest
