@@ -12,7 +12,7 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Storefront"/>
-            <title value="Customer Checkout"/>
+            <title value="Customer can place order with new addresses that was edited during checkout with several conditions"/>
             <description value="Customer can place order with new addresses."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-67837"/>
@@ -51,24 +51,19 @@
         <!--Click "Save Addresses" -->
         <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
-        <dontSeeElement selector="{{CheckoutShippingSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
+        <dontSeeElement selector="{{CheckoutNewAddressModalPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
 
         <!--Select Shipping Rate "Flat Rate"-->
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
 
-        <!--Click "Edit" for the new address and clear required fields-->
-        <click selector="{{CheckoutShippingSection.editNewAddress}}" stepKey="editNewAddress"/>
-        <clearField selector="._show {{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
-        <clearField selector="._show {{CheckoutShippingSection.lastName}}" stepKey="clearFieldLastName"/>
-        <clearField selector="._show {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
-        <clearField selector="._show {{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
-        <clearField selector="._show {{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>
-        <selectOption selector="._show {{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
-        <clearField selector="._show {{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
+        <click selector="{{CheckoutShippingSection.editActiveAddress}}" stepKey="editNewAddress"/>
+        <actionGroup ref="clearCheckoutAddressPopupFieldsActionGroup" stepKey="clearRequiredFields">
+            <argument name="classPrefix" value="._show"/>
+        </actionGroup>
 
         <!--Close Popup and click next-->
-        <click selector="{{CheckoutShippingSection.closeAddressModalPopup}}" stepKey="closePopup"/>
+        <click selector="{{CheckoutNewAddressModalPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
 
@@ -80,14 +75,17 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
 
         <!--Verify New addresses in Customer's Address Book-->
-        <amOnPage url="customer/address/" stepKey="goToCustomerAddressBook"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToCustomerAddressBook"/>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
-             selector="{{StorefrontCustomerAddressBookSection.addressesList}}" stepKey="checkNewAddresses"/>
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddresses"/>
         <!--Order review page has address that was created during checkout-->
-        <amOnPage url="sales/order/view/order_id/$grabOrderNumber" stepKey="goToOrderReviewPage"/>
+        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
              selector="{{StorefrontCustomerOrderViewSection.shippingAddress}}" stepKey="checkShippingAddress"/>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
              selector="{{StorefrontCustomerOrderViewSection.billingAddress}}" stepKey="checkBillingAddress"/>
+
+        <!--Logout from customer account-->
+        <amOnPage url="customer/account/logout/" stepKey="logoutCustomer"/>
     </test>
 </tests>
