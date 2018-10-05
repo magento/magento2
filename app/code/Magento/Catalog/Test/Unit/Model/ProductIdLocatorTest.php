@@ -60,7 +60,7 @@ class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
         $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->setMethods(
                 [
-                    'getIterator',
+                    'getItems',
                     'addFieldToFilter',
                     'setPageSize',
                     'getLastPageNumber',
@@ -78,7 +78,7 @@ class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::SKU, ['in' => $skus])->willReturnSelf();
-        $collection->expects($this->atLeastOnce())->method('getIterator')->willReturn(new \ArrayIterator([$product]));
+        $collection->expects($this->atLeastOnce())->method('getItems')->willReturn([$product]);
         $collection->expects($this->atLeastOnce())->method('setPageSize')->willReturnSelf();
         $collection->expects($this->atLeastOnce())->method('getLastPageNumber')->willReturn(1);
         $collection->expects($this->atLeastOnce())->method('setCurPage')->with(1)->willReturnSelf();

@@ -86,7 +86,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             $pages = $collection->getLastPageNumber();
             for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
                 $collection->setCurPage($currentPage);
-                foreach ($collection->getIterator() as $item) {
+                foreach ($collection->getItems() as $item) {
                     $sku = strtolower(trim($item->getSku()));
                     $itemIdentifier = $item->getData($linkField);
                     $this->idsBySku[$sku][$itemIdentifier] = $item->getTypeId();
