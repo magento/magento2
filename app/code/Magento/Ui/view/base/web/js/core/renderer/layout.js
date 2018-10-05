@@ -306,6 +306,7 @@ define([
             //cleanup children config.componentDisabled = true
             if (children && typeof children === 'object') {
                 cIds = Object.keys(children);
+
                 if (cIds) {
                     _.each(cIds, function (cId) {
                         if (typeof children[cId] === 'object' &&
