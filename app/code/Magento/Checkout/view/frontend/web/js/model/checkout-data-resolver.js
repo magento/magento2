@@ -66,14 +66,15 @@ define([
          * Resolve shipping address. Used local storage
          */
         resolveShippingAddress: function () {
+            var newCustomerShippingAddress;
+
             if (!checkoutData.getShippingAddressFromData() &&
                 window.checkoutConfig.shippingAddressFromData
             ) {
                 checkoutData.setShippingAddressFromData(window.checkoutConfig.shippingAddressFromData);
             }
 
-            var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
-
+            newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
@@ -201,15 +202,17 @@ define([
          * Resolve billing address. Used local storage
          */
         resolveBillingAddress: function () {
+            var selectedBillingAddress,
+                newCustomerBillingAddressData;
+
             if (!checkoutData.getBillingAddressFromData() &&
                 window.checkoutConfig.billingAddressFromData
             ) {
                 checkoutData.setBillingAddressFromData(window.checkoutConfig.billingAddressFromData);
             }
 
-            var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
-                newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
-
+            selectedBillingAddress = checkoutData.getSelectedBillingAddress();
+            newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
             if (selectedBillingAddress) {
                 if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) { //eslint-disable-line
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));

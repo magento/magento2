@@ -17,6 +17,8 @@ define([
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
+    var validatedEmail;
+
     if (!checkoutData.getValidatedEmailValue() &&
         window.checkoutConfig.validatedEmailValue
     ) {
@@ -24,8 +26,7 @@ define([
         checkoutData.setValidatedEmailValue(window.checkoutConfig.validatedEmailValue);
     }
 
-    var validatedEmail = checkoutData.getValidatedEmailValue();
-
+    validatedEmail = checkoutData.getValidatedEmailValue();
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
     }
