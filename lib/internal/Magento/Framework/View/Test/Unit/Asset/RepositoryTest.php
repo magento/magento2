@@ -71,6 +71,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $remoteFactoryMock;
+    
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
 
     /**
      * {@inheritDoc}
@@ -111,6 +116,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $repositoryMapMock = $this->createPartialMock(\Magento\Framework\View\Asset\File::class, ['getMap']);
         $repositoryMapMock->method('getMap')->willReturn([]);
@@ -128,7 +136,8 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             'fileFactory' => $this->fileFactoryMock,
             'fallbackContextFactory' => $this->fallbackFactoryMock,
             'contextFactory' => $this->contextFactoryMock,
-            'remoteFactory' => $this->remoteFactoryMock
+            'remoteFactory' => $this->remoteFactoryMock,
+            'storeManager' => $this->storeManagerMock
         ]);
     }
 
