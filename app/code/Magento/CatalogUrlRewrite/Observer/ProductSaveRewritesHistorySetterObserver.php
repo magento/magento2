@@ -6,15 +6,15 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 
 /**
- * Class ProductUrlKeyAutogeneratorObserver
+ * Class ProductSaveRewritesHistorySetterObserver
  *
  * @package Magento\CatalogUrlRewrite\Observer
  */
-class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
+class ProductSaveRewritesHistorySetterObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
@@ -30,7 +30,7 @@ class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Generate url_key and set it on the Product
+     * Always set save_rewrites_history to 1 for API calls so there will always be created a SEO rewrite for the old url
      *
      * @param  \Magento\Framework\Event\Observer $observer
      * @return void
@@ -43,7 +43,7 @@ class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
         $product = $observer->getEvent()->getProduct();
         $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
         if (null !== $urlKey) {
-            $product->setUrlKey($urlKey);
+            $product->setSaveRewritesHistory(1);
         }
     }
 }
