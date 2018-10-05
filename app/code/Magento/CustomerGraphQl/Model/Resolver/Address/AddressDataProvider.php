@@ -64,16 +64,18 @@ class AddressDataProvider
      *
      * @param array $address
      * @param AddressInterface $addressObject
-     * @return null
+     * @return array
      */
     private function curateAddressDefaultValues(array $address, AddressInterface $addressObject) : array
     {
         $customerModel = $this->customerFactory->create();
         $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());
         $address[CustomerInterface::DEFAULT_BILLING] =
-            ($addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
+            ($customerModel->getDefaultBillingAddress()
+                && $addressObject->getId() == $customerModel->getDefaultBillingAddress()->getId()) ? true : false;
         $address[CustomerInterface::DEFAULT_SHIPPING] =
-            ($addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
+            ($customerModel->getDefaultShippingAddress()
+                && $addressObject->getId() == $customerModel->getDefaultShippingAddress()->getId()) ? true : false;
         return $address;
     }
 
