@@ -219,6 +219,47 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Test', $arg->getName());
     }
 
+    public function testSimpleConstructorPropertiesWithObjectsArray()
+    {
+        $data = ['simpleConstructor' => [
+            'entityId' => 15,
+            'name' => 'Test',
+            'customers' => [
+                ['entity_id' => 1, 'name' => 'test 1'],
+                ['entity_id' => 2, 'name' => 'test 2'],
+            ]
+        ]];
+        $result = $this->serviceInputProcessor->process(
+            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        /** @var SimpleConstructor $arg */
+        $arg = $result[0];
+
+        $this->assertTrue($arg instanceof SimpleConstructor);
+        $this->assertEquals(15, $arg->getEntityId());
+        $this->assertEquals('Test', $arg->getName());
+        $customersCount = count($data['simpleConstructor']['customers']);
+        $customers = $arg->getCustomers();
+        $this->assertEquals($customersCount, count($customers));
+
+        for ($i = 0; $i < $customersCount - 1; $i++) {
+            $this->assertTrue(isset($customers[$i]));
+            $customer = $customers[$i];
+            $this->assertTrue($customer instanceof Simple);
+            $this->assertEquals(
+                $data['simpleConstructor']['customers'][$i]['entity_id'],
+                $customer->getEntityId()
+            );
+            $this->assertEquals(
+                $data['simpleConstructor']['customers'][$i]['name'],
+                $customer->getName()
+            );
+        }
+    }
+
     public function testSimpleArrayProperties()
     {
         $data = ['ids' => [1, 2, 3, 4]];
