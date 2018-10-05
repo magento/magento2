@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCreditMemoTotalSection">
         <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td/span/span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[data-ui-id='order-items-submit-button']" timeout="30"/>
     </section>
 </sections>

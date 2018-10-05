@@ -18,7 +18,7 @@ class AssertOrderCancelMassActionFailMessage extends AbstractConstraint
     /**
      * Text value to be checked
      */
-    const FAIL_CANCEL_MESSAGE = 'You cannot cancel the order(s).';
+    const FAIL_CANCEL_MESSAGE = '1 order(s) cannot be canceled.';
 
     /**
      * Assert cancel fail message is displayed on order index page

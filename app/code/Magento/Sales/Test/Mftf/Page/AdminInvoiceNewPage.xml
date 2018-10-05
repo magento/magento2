@@ -12,5 +12,6 @@
         <section name="AdminInvoiceNewSection"/>
         <section name="AdminInvoiceMainActionsSection"/>
         <section name="AdminInvoiceTotalSection"/>
+        <section name="AdminInvoiceItemsSection"/>
     </page>
 </pages>
