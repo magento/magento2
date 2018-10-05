@@ -44,5 +44,9 @@
         <selectOption stepKey="selectCounty" selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="{{Address.country_id}}"/>
         <waitForPageLoad stepKey="waitForFormUpdate2"/>
     </actionGroup>
-
+    <!--Filling address without second address field and without state field-->
+    <actionGroup name="LoggedInCheckoutWithOneAddressFieldWithoutStateField" extends="LoggedInCheckoutFillNewBillingAddressActionGroup">
+        <remove keyForRemoval="fillStreetAddress2"/>
+        <remove keyForRemoval="selectState"/>
+    </actionGroup>
 </actionGroups>

@@ -32,5 +32,8 @@
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
+        <element name="newAddressModalPopup" type="block" selector=".modal-popup.modal-slide._inner-scroll"/>
+        <element name="editNewAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
+        <element name="closeAddressModalPopup" type="button" selector=".action-hide-popup"/>
     </section>
 </sections>

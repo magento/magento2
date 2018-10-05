@@ -24,4 +24,7 @@
         <element name="country" type="select" selector="#country"/>
         <element name="saveAddress" type="button" selector="[data-action='save-address']" timeout="30"/>
     </section>
+    <section name="StorefrontCustomerAddressBookSection">
+        <element name="addressesList" type="text" selector="//ol[@class='items addresses']//li[@class='item']" />
+    </section>
 </sections>
