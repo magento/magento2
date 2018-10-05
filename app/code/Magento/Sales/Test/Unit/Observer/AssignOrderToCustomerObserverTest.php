@@ -72,7 +72,7 @@ class AssignOrderToCustomerObserverTest extends \PHPUnit\Framework\TestCase
         $this->orderRepositoryMock->expects($this->once())->method('get')->with($orderId)
             ->willReturn($orderMock);
 
-        if (is_null($customerId)) {
+        if (!$customerId) {
             $this->orderRepositoryMock->expects($this->once())->method('save')->with($orderMock);
         } else {
             $this->orderRepositoryMock->expects($this->never())->method('save')->with($orderMock);
