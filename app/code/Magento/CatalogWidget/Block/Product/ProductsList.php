@@ -227,7 +227,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * Before rendering html, but after trying to load cache
      *
-     * {@inheritdoc}
+     * @return $this
      */
     protected function _beforeToHtml()
     {
