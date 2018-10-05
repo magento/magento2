@@ -53,6 +53,17 @@ class Config implements ConfigInterface
                 sprintf('Config element "%s" is not declared in GraphQL schema', $configElementName)
             );
         }
+
+        //limiting the data from config array that is cached
+        if (isset($data['fields'])) {
+           foreach ($data['fields'] as $fieldName => $fieldConfig) {
+               $arrayOfAttributesRequested = \Magento\Framework\GraphQl\Query\FieldExtractor::$fieldsUsedInQuery;
+               if (!isset($arrayOfAttributesRequested[$fieldName])) {
+                   unset($data['fields'][$fieldName]);
+               }
+           }
+        }
+
         return $this->configElementFactory->createFromConfigData($data);
     }
 

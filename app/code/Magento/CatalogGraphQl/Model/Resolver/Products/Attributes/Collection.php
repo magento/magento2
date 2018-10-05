@@ -64,6 +64,9 @@ class Collection
                     ['eq' => '1']
                 ]
             );
+            $arrayOfAttributesRequested = \Magento\Framework\GraphQl\Query\FieldExtractor::$fieldsUsedInQuery;
+            //$this->collection->addFieldToFilter('attribute_code', ['eq' => 'cost1']);
+            //do a filter only by fields requested
         }
 
         return $this->collection->load();

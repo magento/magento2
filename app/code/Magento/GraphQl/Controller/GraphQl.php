@@ -100,10 +100,18 @@ class GraphQl implements FrontControllerInterface
             /** @var Http $request */
             $this->requestProcessor->processHeaders($request);
             $data = $this->jsonSerializer->unserialize($request->getContent());
+
+            $source = isset($data['query']) ? $data['query'] : '';
+
+            $documentNode = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($source ?: '', 'GraphQL'));
+            // We have to extract queried field names to avoid instantiation of non necessary fields in webonyx schema
+            // FieldExtractor class needs to be rewritten it was copied from \GraphQL\Language\Printer
+            \Magento\Framework\GraphQl\Query\FieldExtractor::doExtract($documentNode);
+
             $schema = $this->schemaGenerator->generate();
             $result = $this->queryProcessor->process(
                 $schema,
-                isset($data['query']) ? $data['query'] : '',
+                $source,
                 $this->resolverContext,
                 isset($data['variables']) ? $data['variables'] : []
             );
