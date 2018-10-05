@@ -60,16 +60,17 @@
             <argument name="checkQuantity" value="1"/>
         </actionGroup>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
-        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector=".cart-item-qty" userInput="50" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector=".update-cart-item" stepKey="updateQtyInMiniCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad4"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
@@ -85,23 +86,24 @@
         <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="950" stepKey="checkSalableQtyAfterPlaceOrder"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad9"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <wait stepKey="timeout" time="10" />
+        <waitForPageLoad time="60" stepKey="waitForPageLoad10"/>
         <scrollToTopOfPage stepKey="scrollToTopMessage" />
-        <waitForPageLoad time="30" stepKey="waitFroInvoiceSelectionPageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-        <waitForLoadingMaskToDisappear stepKey="waitInvoiceGridLoad" />
+        <waitForPageLoad stepKey="waitForPageLoad12"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="checkOrderId"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="checkUserName"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationSectionLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad13"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus"/>
 
         <comment userInput="Check product sources quantity and salable quantity after invoice been created." stepKey="checkProductQtyAfterInvoiceCreatedComment"/>
