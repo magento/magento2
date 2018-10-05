@@ -119,9 +119,8 @@
 
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoad1"/>
+        <waitForPageLoad time="120" stepKey="waitForPageLoad1"/>
         <!--Invoice created successfully-->
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$grabOrderNumber1" stepKey="seePageNameMatchesOrderIdAfterInvoice"/>
         <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderPendingInvoice2"/>
