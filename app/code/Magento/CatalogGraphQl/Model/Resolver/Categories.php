@@ -17,7 +17,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributes
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\CatalogGraphQl\Model\Category\Hydrator as CategoryHydrator;
 
 /**
  * Resolver for category objects the product is assigned to.
@@ -37,11 +37,6 @@ class Categories implements ResolverInterface
     private $categoryIds = [];
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-
-    /**
      * @var AttributesJoiner
      */
     private $attributesJoiner;
@@ -57,25 +52,29 @@ class Categories implements ResolverInterface
     private $valueFactory;
 
     /**
-     * Category constructor.
+     * @var CategoryHydrator
+     */
+    private $categoryHydrator;
+
+    /**
      * @param CollectionFactory $collectionFactory
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributesJoiner $attributesJoiner
      * @param CustomAttributesFlattener $customAttributesFlattener
      * @param ValueFactory $valueFactory
+     * @param CategoryHydrator $categoryHydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        DataObjectProcessor $dataObjectProcessor,
         AttributesJoiner $attributesJoiner,
         CustomAttributesFlattener $customAttributesFlattener,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        CategoryHydrator $categoryHydrator
     ) {
         $this->collection = $collectionFactory->create();
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->attributesJoiner = $attributesJoiner;
         $this->customAttributesFlattener = $customAttributesFlattener;
         $this->valueFactory = $valueFactory;
+        $this->categoryHydrator = $categoryHydrator;
     }
 
     /**
@@ -109,8 +108,7 @@ class Categories implements ResolverInterface
                 if (in_array($item->getId(), $categoryIds)) {
 
                     // Try to extract all requested fields from the loaded collection data
-                    $categories[$item->getId()] = $item->getData();
-                    $categories[$item->getId()]['id'] = $item->getId();
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
                     $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
                     $extractedFields = array_keys($categories[$item->getId()]);
                     $foundFields = array_intersect($requestedFields, $extractedFields);
@@ -119,13 +117,8 @@ class Categories implements ResolverInterface
                     }
 
                     // If not all requested fields were extracted from the collection, start more complex extraction
-                    $categories[$item->getId()] = $this->dataObjectProcessor->buildOutputDataArray(
-                        $item,
-                        CategoryInterface::class
-                    );
-                    $categories[$item->getId()] = $this->customAttributesFlattener
-                        ->flatten($categories[$item->getId()]);
-                    $categories[$item->getId()]['product_count'] = $item->getProductCount();
+                    $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item);
+
                 }
             }
 
