@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQl;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementFactoryInterface;
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 
 /**
  * Provides access to typing information for a configured GraphQL schema.
@@ -27,15 +28,23 @@ class Config implements ConfigInterface
     private $configElementFactory;
 
     /**
+     * @var QueryFields
+     */
+    private $queryFields;
+
+    /**
      * @param DataInterface $data
      * @param ConfigElementFactoryInterface $configElementFactory
+     * @param QueryFields $queryFields
      */
     public function __construct(
         DataInterface $data,
-        ConfigElementFactoryInterface $configElementFactory
+        ConfigElementFactoryInterface $configElementFactory,
+        QueryFields $queryFields
     ) {
         $this->configData = $data;
         $this->configElementFactory = $configElementFactory;
+        $this->queryFields = $queryFields;
     }
 
     /**
@@ -54,11 +63,10 @@ class Config implements ConfigInterface
             );
         }
 
-        //limiting the data from config array that is cached
-        if (isset($data['fields'])) {
+        $fieldsInQuery = $this->queryFields->getFieldsUsedInQuery();
+        if (isset($data['fields']) && !empty($fieldsInQuery)) {
            foreach ($data['fields'] as $fieldName => $fieldConfig) {
-               $arrayOfAttributesRequested = \Magento\Framework\GraphQl\Query\FieldExtractor::$fieldsUsedInQuery;
-               if (!isset($arrayOfAttributesRequested[$fieldName])) {
+               if (!isset($fieldsInQuery[$fieldName])) {
                    unset($data['fields'][$fieldName]);
                }
            }
