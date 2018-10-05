@@ -63,7 +63,17 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * Load product items by provided products SKUs.
+     * Products collection will be iterated by pages with the $this->batchSize as a page size (for a cases when to many
+     * products SKUs were provided in parameters.
+     * Loaded products will be chached in the $this->idsBySku variable, but in the end of the method these storage will
+     * be truncated to $idsLimit quantity.
+     * As a result array with the products data will be returned with the following scheme:
+     * $data['product_sku']['link_field_value' => 'product_type']
+     *
+     * @throws \Exception
      */
     public function retrieveProductIdsBySkus(array $skus)
     {

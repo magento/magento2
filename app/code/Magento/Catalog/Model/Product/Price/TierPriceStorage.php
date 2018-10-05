@@ -97,7 +97,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -107,7 +107,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -128,7 +128,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function replace(array $prices)
     {
@@ -144,7 +144,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $prices)
     {
