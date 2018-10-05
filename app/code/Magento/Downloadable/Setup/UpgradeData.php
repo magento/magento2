@@ -35,7 +35,7 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
