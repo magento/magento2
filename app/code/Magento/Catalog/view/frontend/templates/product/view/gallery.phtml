@@ -46,19 +46,29 @@
                 "options": {
                     "nav": "<?= $block->escapeHtml($block->getVar("gallery/nav")) ?>",
                     <?php if (($block->getVar("gallery/loop"))) : ?>
-                        "loop": <?= $block->escapeHtml($block->getVar("gallery/loop")) ?>,
+                        "loop": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/loop"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     <?php if (($block->getVar("gallery/keyboard"))) : ?>
-                        "keyboard": <?= $block->escapeHtml($block->getVar("gallery/keyboard")) ?>,
+                        "keyboard": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/keyboard"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     <?php if (($block->getVar("gallery/arrows"))) : ?>
-                        "arrows": <?= $block->escapeHtml($block->getVar("gallery/arrows")) ?>,
+                        "arrows": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/arrows"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     <?php if (($block->getVar("gallery/allowfullscreen"))) : ?>
-                        "allowfullscreen": <?= $block->escapeHtml($block->getVar("gallery/allowfullscreen")) ?>,
+                        "allowfullscreen": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/allowfullscreen"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
-                    <?php if (is_bool($block->getVar("gallery/caption"))) : ?>
-                        "showCaption": <?= /* @noEscape */ $block->getVar("gallery/caption") ? 'true' : 'false'; ?>,
+                    <?php if ($block->getVar("gallery/caption")) : ?>
+                        "showCaption": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/caption"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     <?php
                         $imgWidth = $block->getImageAttribute('product_page_image_medium', 'width');
@@ -88,7 +98,9 @@
                     <?php endif; ?>
                     "transition": "<?= $block->escapeHtml($block->getVar("gallery/transition/effect")) ?>",
                     <?php if (($block->getVar("gallery/navarrows"))) : ?>
-                        "navarrows": <?= $block->escapeHtml($block->getVar("gallery/navarrows")) ?>,
+                        "navarrows": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/navarrows"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     "navtype": "<?= $block->escapeHtml($block->getVar("gallery/navtype")) ?>",
                     "navdir": "<?= $block->escapeHtml($block->getVar("gallery/navdir")) ?>"
@@ -96,19 +108,26 @@
                 "fullscreen": {
                     "nav": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/nav")) ?>",
                     <?php if ($block->getVar("gallery/fullscreen/loop")) : ?>
-                        "loop": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/loop")) ?>,
+                        "loop": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/fullscreen/loop"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     "navdir": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/navdir")) ?>",
-                    <?php if ($block->getVar("gallery/transition/navarrows")) : ?>
-                        "navarrows": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/navarrows")) ?>,
+                    <?php if ($block->getVar("gallery/fullscreen/navarrows")) : ?>
+                        "navarrows": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/fullscreen/navarrows"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     "navtype": "<?= $block->escapeHtml($block->getVar("gallery/fullscreen/navtype")) ?>",
                     <?php if ($block->getVar("gallery/fullscreen/arrows")) : ?>
-                        "arrows": <?= $block->escapeHtml($block->getVar("gallery/fullscreen/arrows")) ?>,
+                        "arrows": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/fullscreen/arrows"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
-                    <?php if (is_bool($block->getVar("gallery/fullscreen/caption"))) : ?>
-                        <?php $showCaption = $block->getVar("gallery/fullscreen/caption") ? 'true' : 'false'; ?>
-                        "showCaption": <?= /* @noEscape */ $showCaption ?>,
+                    <?php if ($block->getVar("gallery/fullscreen/caption")) : ?>
+                        "showCaption": <?= /* @noEscape */
+                        filter_var($block->getVar("gallery/fullscreen/caption"), FILTER_VALIDATE_BOOLEAN)
+                        ? 'true' : 'false'; ?>,
                     <?php endif; ?>
                     <?php if ($block->getVar("gallery/fullscreen/transition/duration")) : ?>
                         "transitionduration": <?=
