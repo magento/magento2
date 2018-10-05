@@ -17,6 +17,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as 
  * Test class for \Magento\Sales\Model\Order
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
