@@ -6,6 +6,7 @@
 
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
+use Magento\Framework\App\Response\HttpInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Layout;
 use Magento\Checkout\Model\Session;
@@ -13,7 +14,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -52,7 +52,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
     private $requestMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $responseMock;
 
@@ -93,7 +93,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(HttpInterface::class)
             ->setMethods(['setBody'])
             ->getMockForAbstractClass();
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)

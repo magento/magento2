@@ -24,7 +24,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\HttpInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_responseMock;
 
@@ -87,7 +87,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->_redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->_responseMock = $this->createMock(\Magento\Framework\App\Response\HttpInterface::class);
 
         $this->pageConfigMock = $this->createPartialMock(\Magento\Framework\View\Page\Config::class, ['getConfig']);
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);

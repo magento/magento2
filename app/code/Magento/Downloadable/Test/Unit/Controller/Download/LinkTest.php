@@ -24,7 +24,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\HttpInterface
      */
     protected $response;
 
@@ -88,13 +88,20 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
+            \Magento\Framework\App\Response\HttpInterface::class,
             [
                 'setHttpResponseCode',
+                'getHttpResponseCode',
                 'clearBody',
                 'sendHeaders',
                 'sendResponse',
-                'setHeader'
+                'setHeader',
+                'getHeader',
+                'clearHeader',
+                'setStatusHeader',
+                'appendBody',
+                'setBody',
+                'setRedirect'
             ]
         );
         $this->session = $this->createPartialMock(\Magento\Customer\Model\Session::class, [

@@ -24,7 +24,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\HttpInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $responseMock;
 
@@ -58,7 +58,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\HttpInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)

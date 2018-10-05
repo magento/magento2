@@ -75,7 +75,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
         $this->_request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_request->expects($this->once())->method('getParam')->with('agreement')->will($this->returnValue(15));
 
-        $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $response = $this->createMock(\Magento\Framework\App\Response\HttpInterface::class);
 
         $redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
 

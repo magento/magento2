@@ -63,7 +63,7 @@ class ShippingSavedTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->checkoutMock);
         $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\HttpInterface::class);
         $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($requestMock);

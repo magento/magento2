@@ -61,10 +61,10 @@ interface RedirectInterface
     /**
      * Set redirect into response
      *
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param \Magento\Framework\App\Response\HttpInterface $response
      * @param string $path
      * @param array $arguments
      * @return void
      */
-    public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = []);
+    public function redirect(\Magento\Framework\App\Response\HttpInterface $response, $path, $arguments = []);
 }
