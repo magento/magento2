@@ -8,7 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="CheckoutNewAddressModalPopupSection">
+    <section name="StorefrontCheckoutAddressPopupSection">
         <element name="newAddressModalPopup" type="block" selector=".modal-popup.modal-slide._inner-scroll"/>
         <element name="closeAddressModalPopup" type="button" selector=".action-hide-popup"/>
     </section>
