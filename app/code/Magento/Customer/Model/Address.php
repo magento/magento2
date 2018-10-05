@@ -169,6 +169,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         return $this;
     }
 
+    /**
+     * Create address data object based on current address model.
+     *
+     * @param int|null $defaultBillingAddressId
+     * @param int|null $defaultShippingAddressId
+     * @return AddressInterface
+     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * the instance of Api/Data/AddressInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {

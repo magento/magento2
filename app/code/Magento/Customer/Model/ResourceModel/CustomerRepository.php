@@ -299,18 +299,46 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
     }
 
+    /**
+     * Retrieve customer.
+     *
+     * @param string $email
+     * @param int|null $websiteId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function get($email, $websiteId = null)
     {
         $customerModel = $this->customerRegistry->retrieveByEmail($email, $websiteId);
         return $customerModel->getDataModel();
     }
 
+    /**
+     * Get customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getById($customerId)
     {
         $customerModel = $this->customerRegistry->retrieve($customerId);
         return $customerModel->getDataModel();
     }
 
+    /**
+     * Retrieve customers which match a specified criteria.
+     *
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See http://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
+     * which call to use to get detailed information about all attributes for an object.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->searchResultsFactory->create();
@@ -348,11 +376,26 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         return $searchResults;
     }
 
+    /**
+     * Delete customer.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function delete(CustomerInterface $customer)
     {
         return $this->deleteById($customer->getId());
     }
 
+    /**
+     * Delete customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function deleteById($customerId)
     {
         $customerModel = $this->customerRegistry->retrieve($customerId);
