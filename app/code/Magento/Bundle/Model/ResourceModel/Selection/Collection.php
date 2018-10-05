@@ -145,22 +145,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Set store id for each collection item when collection was loaded
-     *
-     * @return $this
-     */
-    public function _afterLoad()
-    {
-        parent::_afterLoad();
-        if ($this->getStoreId() && $this->_items) {
-            foreach ($this->_items as $item) {
-                $item->setStoreId($this->getStoreId());
-            }
-        }
-        return $this;
-    }
-
-    /**
      * Initialize collection select
      *
      * @return $this|void
@@ -356,7 +340,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get Catalog Rule Processor.
+     *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     *
      * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
