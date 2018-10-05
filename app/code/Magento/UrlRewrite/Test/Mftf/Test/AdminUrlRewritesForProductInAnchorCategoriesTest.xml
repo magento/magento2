@@ -61,6 +61,7 @@
         <uncheckOption selector="{{AdminCategorySEOSection.urlKeyDefaultValueCheckbox}}"  stepKey="uncheckRedirect2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="$$simpleSubCategory1.custom_attributes[url_key]$$-new" stepKey="changeURLKey"/>
         <checkOption selector="{{AdminCategorySEOSection.urlKeyRedirectCheckbox}}"  stepKey="checkUrlKeyRedirect"/>
+
         <!-- 4. Save Category 1 -->
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaved"/>
