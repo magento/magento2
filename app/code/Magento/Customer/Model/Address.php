@@ -169,16 +169,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         return $this;
     }
 
-    /**
-     * Create address data object based on current address model.
-     *
-     * @param int|null $defaultBillingAddressId
-     * @param int|null $defaultShippingAddressId
-     * @return AddressInterface
-     * Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
-     * the instance of Api/Data/AddressInterface
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
         if ($this->getCustomerId() || $this->getParentId()) {
@@ -371,7 +361,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Get a list of custom attribute codes.
      *
-     * {@inheritdoc}
+     * By default, entity can be extended only using extension attributes functionality.
      *
      * @return string[]
      * @since 100.0.6
