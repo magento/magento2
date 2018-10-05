@@ -54,7 +54,7 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * Add tier price info to meta array. {@inheritdoc}
+     * Add tier price info to meta array.
      *
      * @since 101.1.0
      * @param array $meta
