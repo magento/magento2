@@ -139,9 +139,10 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\CatalogSearch\Controller\Advanced\Result $instance */
         $instance = $objectManager->getObject(
             \Magento\CatalogSearch\Controller\Advanced\Result::class,
-            ['context' => $contextMock,
-            'catalogSearchAdvanced' => $catalogSearchAdvanced,
-            'urlFactory' => $urlFactoryMock
+            [
+                'context'               => $contextMock,
+                'catalogSearchAdvanced' => $catalogSearchAdvanced,
+                'urlFactory'            => $urlFactoryMock
             ]
         );
         $this->assertEquals($redirectResultMock, $instance->execute());
@@ -151,9 +152,24 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     {
         $expectedQuery = 'notExistTerm';
 
-        $view = $this->createPartialMock(\Magento\Framework\App\View::class, ['loadLayout', 'renderLayout']);
+        $update = $this->createPartialMock(\Magento\Framework\View\Model\Layout\Merge::class, ['getHandles']);
+        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
+
+        $layout = $this->createPartialMock(\Magento\Framework\View\Result\Layout::class, ['getUpdate']);
+        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
+
+        $page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['initLayout']);
+
+        $view = $this->createPartialMock(
+            \Magento\Framework\App\View::class,
+            ['loadLayout', 'renderLayout', 'getPage', 'getLayout']
+        );
+
         $view->expects($this->once())->method('loadLayout')
             ->with([\Magento\CatalogSearch\Controller\Advanced\Result::DEFAULT_NO_RESULT_HANDLE]);
+
+        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
+        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
 
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
         $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));

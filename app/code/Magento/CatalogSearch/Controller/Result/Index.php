@@ -95,7 +95,9 @@ class Index extends \Magento\Framework\App\Action\Action
 
             $handles = null;
             if ($query->getNumResults() == 0) {
-                $handles = [static::DEFAULT_NO_RESULT_HANDLE];
+                $this->_view->getPage()->initLayout();
+                $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+                $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
             }
 
             if (empty($getAdditionalRequestParameters) &&
