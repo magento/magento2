@@ -441,7 +441,13 @@ define([
                 activePanel
                     .find('table input')
                     .each(function () {
-                        swatchValues.push(this.name + '=' + $(this).val());
+                        if (this.type === 'checkbox' || this.type === 'radio') {
+                            if (this.checked) {
+                                swatchValues.push(this.name + '=' + $(this).val());
+                            }
+                        } else {
+                            swatchValues.push(this.name + '=' + $(this).val());
+                        }
                     });
 
                 $('<input>')
