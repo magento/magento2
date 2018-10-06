@@ -48,7 +48,7 @@ class Validator
             $this->validateType($responseSchema);
         } catch (\InvalidArgumentException $e) {
             throw new \LogicException(
-                'Response schema definition has wrong annotations',
+                'Response schema definition has service class with wrong annotated methods',
                 $e->getCode(),
                 $e
             );
@@ -75,7 +75,7 @@ class Validator
             $this->validateType($requestSchema);
         } catch (\InvalidArgumentException $e) {
             throw new \LogicException(
-                'Response schema definition has wrong annotations',
+                'Request schema definition has service class with wrong annotated methods',
                 $e->getCode(),
                 $e
             );
