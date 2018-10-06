@@ -13,6 +13,7 @@ use Magento\Framework\Reflection\MethodsMap;
  */
 class Validator
 {
+    const INVALID_ANNOTATIONS = 123;
     /**
      * @var TypeProcessor
      */
@@ -47,7 +48,11 @@ class Validator
         try {
             $this->validateType($responseSchema);
         } catch (\InvalidArgumentException $e) {
-            throw $e;
+            throw new \LogicException(
+                'Response schema definition has wrong annotations',
+                self::INVALID_ANNOTATIONS,
+                $e
+            );
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -70,7 +75,11 @@ class Validator
         try {
             $this->validateType($requestSchema);
         } catch (\InvalidArgumentException $e) {
-            throw $e;
+            throw new \LogicException(
+                'Response schema definition has wrong annotations',
+                self::INVALID_ANNOTATIONS,
+                $e
+            );
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -94,8 +103,6 @@ class Validator
     {
         try {
             $this->methodsMap->getMethodParams($serviceName, $methodName);
-        } catch (\InvalidArgumentException $e) {
-            throw $e;
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -115,6 +122,7 @@ class Validator
      * @param string $typeName
      * @return $this
      * @throws \Exception In case when type is invalid
+     * @throws \InvalidArgumentException
      */
     protected function validateType($typeName)
     {
