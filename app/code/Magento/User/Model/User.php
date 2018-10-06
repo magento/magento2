@@ -435,7 +435,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function roleUserExists()
     {
         $result = $this->_getResource()->roleUserExists($this);
-        return is_array($result) && count($result) > 0 ? true : false;
+        return is_array($result) && count($result) > 0;
     }
 
     /**

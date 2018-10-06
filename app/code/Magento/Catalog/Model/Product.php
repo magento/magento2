@@ -2083,11 +2083,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function hasCustomOptions()
     {
-        if (count($this->_customOptions)) {
-            return true;
-        } else {
-            return false;
-        }
+        return count($this->_customOptions) > 0;
     }
 
     /**

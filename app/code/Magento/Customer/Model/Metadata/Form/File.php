@@ -246,8 +246,8 @@ class File extends AbstractData
         $attribute = $this->getAttribute();
         $label = $attribute->getStoreLabel();
 
-        $toDelete = !empty($value['delete']) ? true : false;
-        $toUpload = !empty($value['tmp_name']) ? true : false;
+        $toDelete = !empty($value['delete']);
+        $toUpload = !empty($value['tmp_name']);
 
         if (!$toUpload && !$toDelete && $this->_value) {
             return true;

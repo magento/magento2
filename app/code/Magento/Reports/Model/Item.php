@@ -84,7 +84,7 @@ class Item extends \Magento\Framework\DataObject
      */
     public function hasChildren()
     {
-        return count($this->_children) > 0 ? true : false;
+        return count($this->_children) > 0;
     }
 
     /**

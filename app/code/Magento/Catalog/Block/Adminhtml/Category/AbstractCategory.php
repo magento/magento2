@@ -102,6 +102,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     public function hasStoreRootCategory()
     {
         $root = $this->getRoot();
+        return $root && $root->getId();
         if ($root && $root->getId()) {
             return true;
         }

@@ -135,7 +135,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
             $lastUpdatedTime = strtotime($lastUpdatedTime);
         }
 
-        return $lastUpdatedTime <= ($currentTime - $lifetime) ? true : false;
+        return ($lastUpdatedTime <= ($currentTime - $lifetime));
     }
 
     /**

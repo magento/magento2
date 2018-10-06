@@ -134,7 +134,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where('attribute_set_id != :attribute_set_id');
         }
 
-        return !$connection->fetchOne($select, $bind) ? true : false;
+        return !$connection->fetchOne($select, $bind);
     }
 
     /**

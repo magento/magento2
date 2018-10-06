@@ -2339,16 +2339,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function hasVirtualItems()
     {
-        $hasVirtual = false;
         foreach ($this->getItemsCollection() as $item) {
             if ($item->getParentItemId()) {
                 continue;
             }
             if ($item->getProduct()->isVirtual()) {
-                $hasVirtual = true;
+                return true;
             }
         }
-        return $hasVirtual;
+        return false;
     }
 
     /**
