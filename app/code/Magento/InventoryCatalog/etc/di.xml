@@ -21,7 +21,7 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
-        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater"/>
+        <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\SourceItem\PriceIndexUpdater" sortOrder="20"/>
     </type>
     <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
         <plugin name="priceIndexUpdater" type="Magento\InventoryCatalog\Plugin\InventoryIndexer\Indexer\Stock\PriceIndexUpdater"/>
